@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A growing collection of small browser-based tools for creators, developers, and curious people.">
+  <title>Workbench — Useful Browser Tools</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Workbench home">
+        <span class="brand-mark" aria-hidden="true">W/</span>
+        <span class="brand-name">Workbench</span>
+      </a>
+      <nav class="topnav" aria-label="Primary navigation">
+        <a href="#tools">Tools</a>
+        <a href="#about">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Browser tools, no nonsense.</p>
+          <h1 id="page-title">Small tools that do one thing well.</h1>
+          <p class="hero-text">
+            A growing collection of generators and utilities that run directly in your browser.
+            No accounts, no installs, no bloated dashboards.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#tools">Browse tools</a>
+            <a class="button button-quiet" href="#about">What is this?</a>
+          </div>
+        </div>
+
+        <div class="hero-panel" aria-hidden="true">
+          <div class="terminal-strip"><span></span><span></span><span></span></div>
+          <div class="hero-grid">
+            <div class="hero-stat"><strong>03</strong><span>live tools</span></div>
+            <div class="hero-stat"><strong>0</strong><span>accounts needed</span></div>
+            <div class="hero-stat"><strong>∞</strong><span>more coming</span></div>
+          </div>
+          <div class="signal-lines">
+            <span>MAP / PIXEL / TEXTURE</span>
+            <span>LOCAL-FIRST</span>
+            <span>NO LOGIN</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="tool-section" id="tools" aria-labelledby="tools-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Current collection</p>
+            <h2 id="tools-title">Tools</h2>
+          </div>
+          <p class="section-note">More categories will be added over time.</p>
+        </div>
+
+        <div class="tool-grid">
+          <article class="tool-card tool-card-map">
+            <div class="tool-card-top">
+              <span class="tool-index">01</span>
+              <span class="tool-type">Worldbuilding</span>
+            </div>
+            <div class="tool-icon map-icon" aria-hidden="true">
+              <span class="map-line line-a"></span>
+              <span class="map-line line-b"></span>
+              <span class="map-dot dot-a"></span>
+              <span class="map-dot dot-b"></span>
+            </div>
+            <div class="tool-card-body">
+              <h3>RealmForge</h3>
+              <p>Generate procedural fantasy world maps with terrain, settlements, roads, rivers, biomes, and PNG export.</p>
+            </div>
+            <div class="tool-card-footer">
+              <span>Fantasy maps</span>
+              <a href="/tools/realmforge/">Open tool <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="tool-card tool-card-pixel">
+            <div class="tool-card-top">
+              <span class="tool-index">02</span>
+              <span class="tool-type">Game assets</span>
+            </div>
+            <div class="tool-icon pixel-icon" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="tool-card-body">
+              <h3>PixelForge</h3>
+              <p>Create pixel-art item sheets across multiple categories, reroll individual items, and export transparent PNGs.</p>
+            </div>
+            <div class="tool-card-footer">
+              <span>Pixel sprites</span>
+              <a href="/tools/pixelforge/">Open tool <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="tool-card tool-card-texture">
+            <div class="tool-card-top">
+              <span class="tool-index">03</span>
+              <span class="tool-type">Game assets</span>
+            </div>
+            <div class="tool-icon texture-icon" aria-hidden="true">
+              <span></span><span></span><span></span>
+              <span></span><span></span><span></span>
+              <span></span><span></span><span></span>
+            </div>
+            <div class="tool-card-body">
+              <h3>TextureForge</h3>
+              <p>Generate seamless pixel textures for stone, wood, water, metal, terrain, dungeon floors, sci-fi panels, and more.</p>
+            </div>
+            <div class="tool-card-footer">
+              <span>Seamless textures</span>
+              <a href="/tools/textureforge/">Open tool <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="tool-card tool-card-future">
+            <div class="tool-card-top">
+              <span class="tool-index">04+</span>
+              <span class="tool-type">In progress</span>
+            </div>
+            <div class="future-mark" aria-hidden="true">+</div>
+            <div class="tool-card-body">
+              <h3>More tools soon</h3>
+              <p>This site is meant to grow beyond one niche: creators, developers, productivity, files, data, and whatever else is worth building.</p>
+            </div>
+            <div class="tool-card-footer muted-footer">
+              <span>Next experiment</span>
+              <span>Unknown on purpose</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="about" id="about" aria-labelledby="about-title">
+        <div class="about-label"><span>ABOUT</span></div>
+        <div class="about-copy">
+          <h2 id="about-title">Built to be used, not signed up for.</h2>
+          <p>Workbench is a collection of small browser-based tools. Most of them run entirely on your device, which keeps things fast, simple, and usable without creating an account.</p>
+          <p>Some tools are practical. Some are creative. The only real rule is that they should be useful enough to keep around.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <span class="footer-brand">Workbench</span>
+        <span class="footer-muted">Useful things, one page at a time.</span>
+      </div>
+      <span class="footer-muted">Runs on the web.</span>
+    </footer>
+  </div>
+</body>
+</html>
