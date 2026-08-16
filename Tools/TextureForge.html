@@ -1,0 +1,215 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TextureForge</title>
+<style>
+body{margin:0;background:#0d1117;color:#eef3f8;font:14px system-ui}.app{max-width:1400px;margin:auto;padding:16px}
+.top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.sub{color:#98a7b6}
+button,select,input{background:#1c2430;color:#eef3f8;border:1px solid #2b3644;border-radius:8px;padding:8px}
+button{cursor:pointer;font-weight:650}.primary{background:#d2aa62;color:#181207}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:12px;margin-top:12px}.panel,.work{background:#151b23;border:1px solid #2b3644;border-radius:12px;padding:12px}
+.sec{border-bottom:1px solid #2b3644;padding-bottom:10px;margin-bottom:10px}.sec:last-child{border:0}
+h1{margin:0;font-size:22px}h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase}label{display:block;margin:8px 0 4px}
+.row{display:grid;grid-template-columns:1fr 42px;gap:8px;align-items:center}input[type=range]{width:100%}.v{color:#98a7b6;text-align:right;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.sheet{background:#0a0f15;padding:10px;border-radius:8px;overflow:auto}
+canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated;margin:auto}.meta,.hint{color:#98a7b6;font-size:12px;margin-top:8px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+</style></head><body><div class="app">
+<div class="top"><div><h1>TextureForge</h1><div class="sub">Offline seamless pixel texture generator.</div></div>
+<div class="actions"><button id="rand">Random Seed</button><button id="gen" class="primary">Generate</button><button id="exp">Export Selected</button><button id="sheetExp">Export Sheet</button></div></div>
+<div class="layout"><aside class="panel">
+<div class="sec"><h2>Generation</h2>
+<label>Seed</label><input id="seed" value="TEXTURE-001" style="width:100%">
+<label>Material</label><select id="mat" style="width:100%">
+<option value="stone">Stone</option><option value="brick">Brick</option><option value="wood">Wood</option><option value="dirt">Dirt</option>
+<option value="grass">Grass</option><option value="sand">Sand</option><option value="snow">Snow</option><option value="water">Water</option>
+<option value="lava">Lava</option><option value="metal">Metal</option><option value="cobble">Cobblestone</option><option value="tile">Dungeon Tile</option>
+<option value="scifi">Sci-Fi Panel</option><option value="crystal">Crystal Floor</option></select>
+<label>Texture size</label><select id="size" style="width:100%"><option>16</option><option selected>32</option><option>64</option><option>128</option></select>
+<label>Variations</label><select id="count" style="width:100%"><option>9</option><option selected>16</option><option>25</option></select>
+<label>Pattern scale</label><div class="row"><input id="scale" type="range" min="1" max="10" value="5"><span id="scaleV" class="v"></span></div>
+<label>Roughness</label><div class="row"><input id="rough" type="range" min="0" max="100" value="50"><span id="roughV" class="v"></span></div>
+<label>Cracks / detail</label><div class="row"><input id="detail" type="range" min="0" max="100" value="35"><span id="detailV" class="v"></span></div>
+<label>Highlights</label><div class="row"><input id="hi" type="range" min="0" max="100" value="45"><span id="hiV" class="v"></span></div></div>
+<div class="sec"><h2>Palette</h2><select id="pal" style="width:100%"><option value="natural">Natural</option><option value="dark">Dark</option><option value="warm">Warm</option><option value="cold">Cold</option><option value="toxic">Toxic</option></select></div>
+<div class="hint">Click a texture to select it. Double-click to reroll just that texture. The preview shows each tile repeated 3×3. Edge-crossing details wrap to the opposite side so the exported tile repeats continuously.</div>
+</aside><main class="work"><div class="sheet"><canvas id="c" width="720" height="720"></canvas></div><div id="meta" class="meta"></div></main></div>
+</div>
+<script>
+const $=x=>document.getElementById(x),C=$('c'),G=C.getContext('2d');
+['scale','rough','detail','hi'].forEach(id=>{const f=()=>$(id+'V').textContent=$(id).value;$(id).oninput=f;f()});
+const P={natural:['#282a2e','#65686d','#979994','#d5d0c4','#4d5147','#7d725e'],dark:['#0d1014','#272d35','#4b5561','#87919d','#171c22','#373d48'],warm:['#2c1b16','#7b4930','#b4774f','#d9b58a','#603426','#9b5d3b'],cold:['#111a24','#31536a','#6488a3','#bdd6e3','#243842','#7898aa'],toxic:['#111b13','#315137','#5d874d','#b4d66f','#24422d','#718f47']};
+function H(s){let h=2166136261>>>0;for(const ch of s){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function R(s){let a=H(s)||1;return()=>{a+=0x6D2B79F5;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+const ri=(r,a,b)=>Math.floor(a+r()*(b-a+1)),mix=(a,b,t)=>{let A=[1,3,5].map(i=>parseInt(a.slice(i,i+2),16)),B=[1,3,5].map(i=>parseInt(b.slice(i,i+2),16));return'#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')};
+
+function tile(sz,seed,m){
+  const r=R(seed),p=P[$('pal').value],c=document.createElement('canvas'),g=c.getContext('2d');
+  c.width=c.height=sz;g.imageSmoothingEnabled=false;
+  const sc=+$('scale').value,rough=+$('rough').value/100,det=+$('detail').value/100,hi=+$('hi').value/100;
+  const u=Math.max(2,Math.floor(sz/(8+sc)));
+
+  function repDraw(fn){
+    for(const dx of [-sz,0,sz])for(const dy of [-sz,0,sz]){
+      g.save();g.translate(dx,dy);fn();g.restore();
+    }
+  }
+  function rectW(x,y,w,h,col){
+    g.fillStyle=col;
+    repDraw(()=>g.fillRect(x,y,w,h));
+  }
+  function lineW(x1,y1,x2,y2,col,w=1){
+    g.strokeStyle=col;g.lineWidth=w;
+    repDraw(()=>{g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke()});
+  }
+  function ellipseW(x,y,rx,ry,col,stroke=null){
+    repDraw(()=>{
+      g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+      if(col){g.fillStyle=col;g.fill()}
+      if(stroke){g.strokeStyle=stroke;g.stroke()}
+    });
+  }
+  function polyW(points,col,stroke=null){
+    repDraw(()=>{
+      g.beginPath();points.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.closePath();
+      if(col){g.fillStyle=col;g.fill()}
+      if(stroke){g.strokeStyle=stroke;g.stroke()}
+    });
+  }
+  function bg(col,n=.2){
+    g.fillStyle=col;g.fillRect(0,0,sz,sz);
+    const count=Math.floor(sz*sz*n*.035);
+    for(let i=0;i<count;i++){
+      const x=ri(r,0,sz-1),y=ri(r,0,sz-1);
+      rectW(x,y,1,1,r()>.5?mix(col,p[3],.22):mix(col,p[0],.22));
+    }
+  }
+
+  if(m==='brick'){
+    bg(p[1],rough);
+    let bh=Math.max(4,u*2),bw=Math.max(8,u*4);
+    for(let y=0;y<sz;y+=bh){
+      let off=(Math.floor(y/bh)%2)*bw/2;
+      for(let x=-off;x<sz;x+=bw){
+        lineW(x,y,x+bw,y,p[0]);lineW(x,y,x,y+bh,p[0]);
+      }
+    }
+  }
+  else if(m==='wood'){
+    bg(p[5],rough*.6);
+    let n=Math.max(3,Math.floor(sz/(u*3)));
+    for(let i=1;i<n;i++)lineW(0,i*sz/n,sz,i*sz/n,p[0]);
+    for(let i=0;i<sz*.12*rough;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1),len=ri(r,3,Math.max(4,Math.floor(sz/3)));
+      lineW(x,y,x+len,y+(r()>.5?1:-1),mix(p[5],p[0],.5));
+    }
+  }
+  else if(m==='grass'){
+    bg(p[4],rough*.5);
+    for(let i=0;i<sz*.9;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1);
+      rectW(x,y,1,ri(r,1,3),r()>.5?p[4]:p[2]);
+    }
+  }
+  else if(m==='sand'){
+    bg(p[3],rough*.25);
+    for(let i=0;i<sz*.3;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1);
+      lineW(x,y,x+ri(r,3,Math.max(4,Math.floor(sz/4))),y,p[2]);
+    }
+  }
+  else if(m==='snow'){
+    bg(mix(p[3],'#ffffff',.6),rough*.18);
+    for(let i=0;i<sz*.16;i++)rectW(ri(r,0,sz-1),ri(r,0,sz-1),1,1,p[3]);
+  }
+  else if(m==='water'){
+    bg(p[2],rough*.12);
+    for(let y=ri(r,0,4);y<sz;y+=ri(r,3,7)){
+      for(let x=ri(r,0,5);x<sz;x+=ri(r,5,12)){
+        lineW(x,y,x+ri(r,2,7),y,p[3]);
+      }
+    }
+  }
+  else if(m==='lava'){
+    bg(p[0],rough*.2);
+    for(let i=0;i<sz*.22;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1);
+      let x2=x+ri(r,-6,6),y2=y+ri(r,3,10);
+      lineW(x,y,x2,y2,p[1],2);
+      if(r()<hi)lineW(x,y,x+(x2-x)*.7,y+(y2-y)*.7,p[3],1);
+    }
+  }
+  else if(m==='metal'||m==='scifi'){
+    bg(p[1],rough*.15);
+    let cell=Math.max(7,u*4);
+    for(let y=0;y<sz;y+=cell)for(let x=0;x<sz;x+=cell){
+      lineW(x,y,x+cell,y,p[0]);lineW(x,y,x,y+cell,p[0]);
+      rectW(x+2,y+2,1,1,p[3]);
+      if(m==='scifi'&&((x+y)/cell)%2===0)rectW(x+3,y+3,Math.max(2,Math.floor(cell/4)),2,p[2]);
+    }
+  }
+  else if(m==='cobble'){
+    bg(p[0],rough*.2);
+    let step=Math.max(5,u*3);
+    for(let y=0;y<sz;y+=step)for(let x=0;x<sz;x+=step){
+      let xx=x+((Math.floor(y/step)%2)*step*.5);
+      ellipseW(xx,y,step*.46,step*.34,mix(p[1],p[2],r()*.4),p[0]);
+    }
+  }
+  else if(m==='tile'){
+    bg(p[1],rough*.2);
+    let step=Math.max(6,u*4);
+    for(let y=0;y<sz;y+=step){
+      lineW(0,y,sz,y,p[0]);
+      for(let x=0;x<sz;x+=step)lineW(x,y,x,y+step,p[0]);
+    }
+  }
+  else if(m==='crystal'){
+    bg(p[1],rough*.18);
+    for(let i=0;i<sz*.16;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1),w=ri(r,2,Math.max(3,u*2)),h=ri(r,3,Math.max(4,u*3));
+      polyW([[x,y-h],[x+w,y],[x,y+h],[x-w,y]],mix(p[2],p[3],r()*.6));
+    }
+  }
+  else if(m==='stone'){
+    bg(p[1],rough*.55);
+    let count=Math.max(5,Math.floor(sz/(u*1.4)));
+    for(let i=0;i<count;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1),w=ri(r,u*2,u*4),h=ri(r,u*2,u*4);
+      let col=mix(p[1],p[2],r()*.35);
+      rectW(x,y,w,h,col);
+      lineW(x,y,x+w,y,p[0]);lineW(x,y,x,y+h,p[0]);
+    }
+  }
+  else if(m==='dirt'){
+    bg(p[5],rough*.7);
+    for(let i=0;i<sz*.45*rough;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1),rr=ri(r,1,Math.max(1,u));
+      rectW(x,y,rr,rr,mix(p[5],p[0],r()*.45));
+    }
+  }
+
+  // Wrapped cracks/details
+  if(!['water','grass','snow'].includes(m)){
+    for(let i=0;i<sz*det*.08;i++){
+      let x=ri(r,0,sz-1),y=ri(r,0,sz-1);
+      lineW(x,y,x+ri(r,-4,4),y+ri(r,2,7),mix(p[0],p[1],.25));
+    }
+  }
+
+  // Wrapped highlights
+  for(let i=0;i<sz*hi*.05;i++){
+    rectW(ri(r,0,sz-1),ri(r,0,sz-1),1,1,p[3]);
+  }
+
+  return c;
+}
+let arr=[],sel=0,cols=4,cell=160,seed='';
+function regen(){seed=$('seed').value||'TEXTURE';let n=+$('count').value,sz=+$('size').value,m=$('mat').value;cols=Math.ceil(Math.sqrt(n));arr=[];for(let i=0;i<n;i++)arr.push({seed:seed+'-'+i+'-'+$('scale').value+'-'+$('rough').value,canvas:tile(sz,seed+'-'+i+'-'+$('scale').value+'-'+$('rough').value,m),mat:m});draw()}
+function draw(){let n=arr.length,rows=Math.ceil(n/cols);cell=Math.max(120,Math.min(180,Math.floor(720/cols)));C.width=cols*cell;C.height=rows*cell;G.clearRect(0,0,C.width,C.height);G.imageSmoothingEnabled=false;arr.forEach((t,i)=>{let x=i%cols*cell,y=Math.floor(i/cols)*cell;if(i===sel){G.fillStyle='rgba(210,170,98,.12)';G.fillRect(x,y,cell,cell);G.strokeStyle='#d2aa62';G.lineWidth=2;G.strokeRect(x+1,y+1,cell-2,cell-2)}else{G.strokeStyle='rgba(150,170,190,.15)';G.strokeRect(x+.5,y+.5,cell-1,cell-1)}let d=Math.floor((cell-18)/3);for(let yy=0;yy<3;yy++)for(let xx=0;xx<3;xx++)G.drawImage(t.canvas,x+9+xx*d,y+9+yy*d,d,d)});$('meta').textContent=`${n} variations • ${$('size').value}×${$('size').value}px • seamless X/Y • selected ${sel+1}`}
+function idx(e){let r=C.getBoundingClientRect(),x=(e.clientX-r.left)*C.width/r.width,y=(e.clientY-r.top)*C.height/r.height;return Math.floor(y/cell)*cols+Math.floor(x/cell)}
+C.onclick=e=>{let i=idx(e);if(i<arr.length){sel=i;draw()}};C.ondblclick=e=>{let i=idx(e);if(i<arr.length){let sz=+$('size').value,m=$('mat').value,s=seed+'-'+i+'-'+Math.random();arr[i]={seed:s,canvas:tile(sz,s,m),mat:m};sel=i;draw()}};
+$('gen').onclick=regen;$('rand').onclick=()=>{$('seed').value='TEXTURE-'+Math.random().toString(36).slice(2,8).toUpperCase();regen()};
+$('exp').onclick=()=>{let a=document.createElement('a'),t=arr[sel];a.download=`textureforge-${t.mat}-${$('size').value}px.png`;a.href=t.canvas.toDataURL();a.click()};
+$('sheetExp').onclick=()=>{let sz=+$('size').value,rows=Math.ceil(arr.length/cols),o=document.createElement('canvas'),g=o.getContext('2d');o.width=cols*sz;o.height=rows*sz;arr.forEach((t,i)=>g.drawImage(t.canvas,i%cols*sz,Math.floor(i/cols)*sz));let a=document.createElement('a');a.download='textureforge-sheet.png';a.href=o.toDataURL();a.click()};
+['mat','size','count','pal'].forEach(id=>$(id).onchange=regen);regen();
+</script></body></html>
