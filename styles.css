@@ -267,6 +267,11 @@ a { color: inherit; }
   border-radius: 24px;
 }
 
+.tool-image {
+  object-fit: cover;
+  display: block;
+}
+
 .map-icon { position: relative; background: var(--green-soft); border: 1px solid #2d4633; }
 
 .map-line {
