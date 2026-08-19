@@ -1,0 +1,1354 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
+<title>Guildmaster | My Random Tools</title>
+<style>
+:root{--bg:#0b0e11;--p:#13181e;--p2:#191f26;--b:#2b3540;--t:#f1eee6;--m:#9ca6b0;--g:#e2b45c;--gr:#7eb38d;--r:#ce746d;--bl:#7ea3c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:14px system-ui,-apple-system,Segoe UI,sans-serif}
+button{font:inherit;cursor:pointer}.site{height:60px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--b)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--t);font-weight:800}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:var(--g);color:#17120a;font:800 12px Consolas}
+.site nav a{color:var(--m);text-decoration:none;margin-left:18px;font-size:13px}.game{max-width:1450px;margin:auto;padding:14px}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.top h1{margin:0;font-size:25px}.sub{color:var(--m);font-size:12px;margin-top:3px}
+.res{display:flex;gap:7px;flex-wrap:wrap}.res span{background:var(--p);border:1px solid var(--b);border-radius:9px;padding:8px 10px;font-size:12px}.res strong{color:var(--g)}
+.shell{display:grid;grid-template-columns:210px 1fr;gap:12px}.side{background:var(--p);border:1px solid var(--b);border-radius:12px;padding:8px;height:max-content;position:sticky;top:10px}
+.nav{width:100%;text-align:left;border:0;background:transparent;color:var(--m);padding:11px;border-radius:8px;font-weight:700}.nav:hover,.nav.on{background:#211b11;color:var(--g)}
+.page{display:none}.page.on{display:block}.panel{background:var(--p);border:1px solid var(--b);border-radius:12px;padding:14px}.panel+.panel{margin-top:12px}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:11px}.head h2,.head h3{margin:0}.head p{margin:3px 0 0;color:var(--m);font-size:11px}
+.btn{border:1px solid #3b4854;background:var(--p2);color:var(--t);border-radius:8px;padding:8px 10px;font-weight:700;font-size:12px}.btn.gold{background:var(--g);border-color:var(--g);color:#17120a}.btn:disabled{opacity:.4;cursor:not-allowed}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{background:#0f1419;border:1px solid var(--b);border-radius:10px;padding:10px}.name{font-weight:800}.muted{color:var(--m);font-size:11px;line-height:1.45}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.chip{border:1px solid var(--b);border-radius:999px;padding:3px 6px;color:var(--m);font-size:10px}
+.hero{cursor:pointer}.hero.on{border-color:var(--g)}.portrait{width:52px;height:52px;border:1px solid var(--b);background:var(--p2);border-radius:11px;display:grid;place-items:center;font-size:25px;overflow:hidden}
+.visualIcon{width:46px;height:46px;display:grid;place-items:center;border:1px solid var(--b);border-radius:10px;background:var(--p2);font-size:25px;flex:0 0 auto}
+.questVisual{height:82px;border:1px solid var(--b);border-radius:9px;margin-bottom:9px;display:flex;align-items:center;justify-content:center;font-size:42px;background:linear-gradient(135deg,#111820,#17150f)}
+.itemVisual{height:72px;border:1px solid var(--b);border-radius:9px;margin-bottom:8px;display:grid;place-items:center;font-size:34px;background:#0b1015}
+.partyMember{display:flex!important;align-items:center;gap:5px!important}
+.partyMember .miniClass{font-size:13px}
+.combatant{display:grid;grid-template-columns:50px 1fr;gap:9px;align-items:center;border:1px solid var(--b);border-radius:10px;padding:8px;background:#0c1116}
+.combatGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.combatSide{display:grid;gap:7px}
+.hpTrack{height:8px;border:1px solid var(--b);border-radius:999px;overflow:hidden;background:#070a0d;margin-top:5px}
+.hpFill{height:100%;background:var(--gr)}
+.enemy .hpFill{background:var(--r)}
+.lootStash{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:10px}
+.lootBox{border:1px solid var(--b);border-radius:8px;padding:8px;background:#0a0f13}
+.lootBox span{display:block;color:var(--m);font-size:9px;text-transform:uppercase}
+.lootBox strong{display:block;margin-top:3px}
+.dangerText{color:var(--r)}
+.healText{color:var(--gr)}
+.expeditionCard{cursor:pointer}
+.expeditionCard:hover{border-color:#53616d}
+.noticeStack{position:fixed;right:18px;bottom:18px;z-index:90;display:grid;gap:8px;max-width:min(380px,calc(100vw - 36px))}
+.notice{background:#171d23;border:1px solid #485561;border-radius:10px;padding:11px 13px;box-shadow:0 15px 45px #0009;animation:noticeIn .16s ease-out}
+.notice.bad{border-color:#744845}.notice.good{border-color:#41664c}.notice b{display:block;font-size:12px}.notice span{display:block;color:var(--m);font-size:11px;margin-top:2px}
+@keyframes noticeIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.heroTop{display:flex;gap:9px;align-items:center}.power{display:flex;justify-content:space-between;margin-top:8px;color:var(--m);font-size:10px}.power strong{color:var(--t)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.stat{border:1px solid var(--b);border-radius:8px;padding:8px;background:#0c1014}.stat span{color:var(--m);font-size:9px;text-transform:uppercase}.stat strong{display:block;font-size:17px;margin-top:3px}
+.roster,.quests,.inventory,.recipes,.active,.upgrades{display:grid;gap:9px}.roster{grid-template-columns:repeat(3,1fr)}.quests,.active{grid-template-columns:repeat(2,1fr)}.inventory{grid-template-columns:repeat(4,1fr)}.recipes,.upgrades{grid-template-columns:repeat(3,1fr)}
+.party{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.party button{border:1px solid var(--b);background:#0b0f13;color:var(--m);border-radius:999px;padding:5px 7px;font-size:10px}.party button.on{border-color:var(--g);color:var(--g)}
+.timer{color:var(--g);font:700 12px Consolas}
+.progressWrap{margin-top:9px}
+.progressMeta{display:flex;justify-content:space-between;gap:10px;color:var(--m);font-size:10px;margin-bottom:5px}
+.progressTrack{height:10px;background:#080b0e;border:1px solid var(--b);border-radius:999px;overflow:hidden}
+.progressFill{height:100%;width:0;background:var(--g);transition:width .35s linear}
+.saveState{color:var(--m);font-size:11px;margin-top:8px}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.slot{border:1px solid var(--b);border-radius:8px;padding:8px;min-height:58px;cursor:pointer}.slot small{color:var(--m)}.slot b{display:block;margin-top:4px;font-size:11px}
+.log{background:#090c0f;border:1px solid var(--b);border-radius:9px;padding:9px;max-height:260px;overflow:auto;font:11px/1.55 Consolas;color:#aeb7c0}.good{color:#8ac79a}.bad{color:#df857d}.rare{color:#7cace0}.epic{color:#b48bdd}.legendary{color:#e5b85f}
+.modalBg{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modalBg.on{display:flex}.modal{width:min(720px,100%);max-height:85vh;overflow:auto;background:var(--p);border:1px solid #44515d;border-radius:13px;padding:14px}
+.empty{text-align:center;color:var(--m);padding:22px;border:1px dashed var(--b);border-radius:9px}.mats{display:flex;gap:7px;flex-wrap:wrap}.mat{border:1px solid var(--b);border-radius:8px;padding:7px 9px}.mat b{color:var(--g)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto}.nav{width:auto;white-space:nowrap}.g2,.quests,.active{grid-template-columns:1fr}.roster{grid-template-columns:repeat(2,1fr)}.inventory,.recipes,.upgrades{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.roster,.inventory,.recipes,.upgrades,.g4,.stats{grid-template-columns:1fr}}
+</style></head><body>
+<header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
+<div class="game">
+<div class="top"><div><h1>Guildmaster</h1><div class="sub">Build a guild strong enough to take on the things sensible people avoid.</div></div>
+<div class="res"><span>Guild Lv. <strong id="lv"></strong></span><span>Gold <strong id="gold"></strong></span><span>Rep <strong id="rep"></strong></span></div></div>
+<div class="shell">
+<aside class="side">
+<button class="nav on" data-p="hall">Guild Hall</button><button class="nav" data-p="roster">Roster</button><button class="nav" data-p="quests">Quests</button>
+<button class="nav" data-p="dungeons">Dungeons</button><button class="nav" data-p="raids">Raids</button><button class="nav" data-p="inventory">Inventory</button>
+<button class="nav" data-p="crafting">Crafting</button><button class="nav" data-p="upgrades">Upgrades</button><button class="nav" data-p="settings">Settings</button>
+</aside>
+<main>
+<section class="page on" id="hall">
+<div class="g2">
+<div class="panel"><div class="head"><div><h2 id="guildName"></h2><p>Guild headquarters</p></div><button class="btn" id="rename">Rename</button></div>
+<div class="g4"><div class="stat"><span>Members</span><strong id="memberCount"></strong></div><div class="stat"><span>Total Power</span><strong id="totalPower"></strong></div><div class="stat"><span>Wins</span><strong id="wins"></strong></div><div class="stat"><span>Guild XP</span><strong id="guildXp"></strong></div></div></div>
+<div class="panel"><div class="head"><div><h3>Recruitment</h3><p>Your guild begins empty with 2 applicants. Recruiting is free. A fresh batch arrives every 15 minutes after the board is emptied, and Recruitment Hall upgrades increase the number of applicants per batch.</p></div><button class="btn" id="refreshRec">Refresh · 15g</button></div><div id="recruits" class="g2"></div></div>
+</div>
+<div class="panel"><div class="head"><div><h3>Active Missions</h3><p>Missions keep counting down while the site is closed.</p></div></div><div id="active" class="active"></div></div>
+<div class="panel"><div class="head"><h3>Guild Log</h3></div><div id="log" class="log"></div></div>
+</section>
+
+<section class="page" id="roster"><div class="panel"><div class="head"><div><h2>Roster</h2><p>Select an adventurer to manage their equipment.</p></div></div><div id="rosterList" class="roster"></div></div><div class="panel"><div id="heroDetail"></div></div></section>
+<section class="page" id="quests"><div class="panel"><div class="head"><div><h2>Quest Board</h2><p>Choose up to three available members.</p></div><button class="btn" onclick="refreshOffers('quest')">Refresh</button></div><div id="questList" class="quests"></div></div></section>
+<section class="page" id="dungeons"><div class="panel"><div class="head"><div><h2>Dungeons</h2><p>Unlocks at guild level 3. Better loot, longer missions.</p></div></div><div id="dungeonList" class="quests"></div></div></section>
+<section class="page" id="raids"><div class="panel"><div class="head"><div><h2>Raids</h2><p>Unlocks at guild level 6. High risk, high reward.</p></div></div><div id="raidList" class="quests"></div></div></section>
+<section class="page" id="inventory"><div class="panel"><div class="head"><h2>Inventory</h2></div><div id="matBar" class="mats"></div></div><div class="panel"><div id="items" class="inventory"></div></div></section>
+<section class="page" id="crafting">
+<div class="panel"><div class="head"><div><h2>Crafting</h2><p>Turn mission materials into equipment. Crafting continues while the site is closed.</p></div></div><div id="craftMats" class="mats"></div></div>
+<div class="panel"><div class="head"><div><h3>Crafting Queue</h3><p>Completed items are placed in inventory automatically.</p></div></div><div id="craftQueue" class="active"></div></div>
+<div class="panel"><div class="head"><div><h3>Known Recipes</h3><p>Recipes appear once you've discovered every normal resource they require. Boss materials are the exception: the recipe appears before you've obtained the boss drop.</p></div><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn recipeFilter on" onclick="setRecipeFilter('all',this)">All</button><button class="btn recipeFilter" onclick="setRecipeFilter('Weapon',this)">Weapons</button><button class="btn recipeFilter" onclick="setRecipeFilter('Armor',this)">Gear</button><button class="btn recipeFilter" onclick="setRecipeFilter('Ring',this)">Rings</button><button class="btn recipeFilter" onclick="setRecipeFilter('Amulet',this)">Amulets</button></div></div><div id="recipeList" class="recipes"></div></div>
+</section>
+<section class="page" id="upgrades"><div class="panel"><div class="head"><div><h2>Guild Upgrades</h2><p>Permanent bonuses for the whole guild.</p></div></div><div id="upgradeList" class="upgrades"></div></div></section>
+
+<section class="page" id="settings">
+<div class="panel">
+  <div class="head"><div><h2>Settings</h2><p>Save management and progression controls.</p></div></div>
+  <div class="g2">
+    <div class="card">
+      <div class="name">Save Data</div>
+      <div class="muted">Progress saves automatically in this browser.</div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="exportSave">Export Save</button>
+        <button class="btn" id="importSave">Import Save</button>
+      </div>
+      <div class="saveState" id="saveState">Autosave ready.</div>
+    </div>
+    <div class="card">
+      <div class="name dangerText">Reset Progress</div>
+      <div class="muted">Deletes your local Guildmaster save and starts from the beginning.</div>
+      <button class="btn" id="reset" style="margin-top:10px">Reset Guild</button>
+    </div>
+  </div>
+</div>
+</section>
+</main></div></div>
+
+<div class="modalBg" id="modal"><div class="modal"><div class="head"><h3 id="modalTitle"></h3><button class="btn" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
+<div class="modalBg" id="combatModal"><div class="modal"><div class="head"><div><h3 id="combatTitle">Expedition Combat</h3><div class="muted" id="combatSubtitle"></div></div><button class="btn" onclick="closeCombat()">Close</button></div><div id="combatBody"></div></div></div>
+<div class="noticeStack" id="noticeStack"></div>
+
+<script>
+const $=x=>document.getElementById(x);
+const C={
+Warrior:{hp:132,str:17,dex:9,int:5,def:15,mdef:7,spd:7,icon:'W',slots:['Weapon','Armor','Ring'],weapons:['Longsword','Greatsword','Battle Axe','Greataxe','Warhammer','Mace','Spear','Halberd']},
+Ranger:{hp:96,str:8,dex:18,int:7,def:9,mdef:8,spd:15,icon:'R',slots:['Weapon','Armor','Ring'],weapons:['Shortbow','Longbow','Recurve Bow','Light Crossbow','Heavy Crossbow','Hunting Bow']},
+Mage:{hp:74,str:4,dex:8,int:21,def:5,mdef:15,spd:10,icon:'M',slots:['Weapon','Armor','Amulet'],weapons:['Oak Staff','Arcane Staff','Wand','Crystal Wand','Orb','Spellbook','Scepter']},
+Cleric:{hp:104,str:9,dex:6,int:17,def:11,mdef:15,spd:8,icon:'C',slots:['Weapon','Armor','Amulet'],weapons:['Mace','Warhammer','Oak Staff','Holy Staff','Scepter','Wand']},
+Rogue:{hp:84,str:7,dex:20,int:6,def:7,mdef:8,spd:19,icon:'G',slots:['Weapon','Armor','Ring'],weapons:['Dagger','Knife','Dirk','Kris','Shortsword','Twin Blades']},
+Paladin:{hp:122,str:15,dex:7,int:11,def:18,mdef:13,spd:6,icon:'P',slots:['Weapon','Armor','Amulet'],weapons:['Longsword','Greatsword','Mace','Warhammer','Spear','Holy Sword']}
+};
+const classIcons={Warrior:'⚔️',Ranger:'🏹',Mage:'🔮',Cleric:'✚',Rogue:'🗡️',Paladin:'🛡️'};
+const WEAPONS={
+'Longsword':{scale:'str',type:'physical',base:12,icon:'🗡️'},
+'Greatsword':{scale:'str',type:'physical',base:17,icon:'⚔️'},
+'Battle Axe':{scale:'str',type:'physical',base:15,icon:'🪓'},
+'Greataxe':{scale:'str',type:'physical',base:18,icon:'🪓'},
+'Warhammer':{scale:'str',type:'physical',base:16,icon:'🔨'},
+'Mace':{scale:'str',type:'physical',base:12,icon:'🔨'},
+'Spear':{scale:'str',type:'physical',base:13,icon:'🔱'},
+'Halberd':{scale:'str',type:'physical',base:16,icon:'🔱'},
+'Holy Sword':{scale:'str',type:'lightning',base:15,icon:'⚔️'},
+'Shortbow':{scale:'dex',type:'physical',base:11,icon:'🏹'},
+'Longbow':{scale:'dex',type:'physical',base:14,icon:'🏹'},
+'Recurve Bow':{scale:'dex',type:'physical',base:13,icon:'🏹'},
+'Light Crossbow':{scale:'dex',type:'physical',base:14,icon:'🏹'},
+'Heavy Crossbow':{scale:'dex',type:'physical',base:17,icon:'🏹'},
+'Hunting Bow':{scale:'dex',type:'poison',base:12,icon:'🏹'},
+'Dagger':{scale:'dex',type:'physical',base:10,icon:'🗡️'},
+'Knife':{scale:'dex',type:'physical',base:8,icon:'🔪'},
+'Dirk':{scale:'dex',type:'physical',base:11,icon:'🗡️'},
+'Kris':{scale:'dex',type:'poison',base:10,icon:'🗡️'},
+'Shortsword':{scale:'dex',type:'physical',base:12,icon:'🗡️'},
+'Twin Blades':{scale:'dex',type:'physical',base:13,icon:'🗡️'},
+'Oak Staff':{scale:'int',type:'physical',base:9,icon:'🪄'},
+'Arcane Staff':{scale:'int',type:'lightning',base:15,icon:'🪄'},
+'Holy Staff':{scale:'int',type:'lightning',base:13,icon:'🪄'},
+'Wand':{scale:'int',type:'fire',base:12,icon:'🪄'},
+'Crystal Wand':{scale:'int',type:'ice',base:14,icon:'🪄'},
+'Orb':{scale:'int',type:'lightning',base:15,icon:'🔮'},
+'Spellbook':{scale:'int',type:'fire',base:16,icon:'📖'},
+'Scepter':{scale:'int',type:'ice',base:13,icon:'🪄'}
+};
+const ELEMENT_KEYS=['fire','ice','poison','lightning'];
+const RESOURCE_NAMES={Iron:'Iron',Wood:'Wood',Cloth:'Cloth',Crystal:'Crystal',Essence:'Essence',Herbs:'Herbs',Leather:'Leather',Bone:'Bone',Venom:'Venom',Emberstone:'Emberstone',FrostShard:'Frost Shard',StormCore:'Storm Core',Silver:'Silver',Obsidian:'Obsidian',ArcaneDust:'Arcane Dust',HolyWater:'Holy Water',ShadowSilk:'Shadow Silk',GoblinInsignia:'Goblin Insignia',WolfPelt:'Wolf Pelt',BanditToken:'Bandit Token',SlimeGel:'Slime Gel',GraveDust:'Grave Dust',SpiderSilk:'Spider Silk',GhoulIchor:'Ghoul Ichor',CultistRune:'Cultist Rune',DrakeScale:'Drake Scale',OgreHeart:'Ogre Heart',WraithEssence:'Wraith Essence',DemonHorn:'Demon Horn',CrownBone:'Crown Bone',BroodSilk:'Broodmother Silk',ColossusIchor:'Colossus Ichor',HighRune:'High Cultist Rune',AncientDrakeScale:'Ancient Drake Scale',WarOgreHeart:'War Ogre Heart',WraithLordCore:'Wraith Lord Core',AbyssalHorn:'Abyssal Demon Horn'};
+const ZONE_DROPS={quest:{Goblin:['Iron','GoblinInsignia'],Wolf:['Leather','WolfPelt','Herbs'],Bandit:['Cloth','BanditToken','Silver'],Slime:['SlimeGel','Herbs','Essence']},dungeon:{Skeleton:['Bone','GraveDust','Iron'],Spider:['SpiderSilk','Venom','ShadowSilk'],Ghoul:['GhoulIchor','Bone','Essence'],Cultist:['CultistRune','ArcaneDust','Crystal']},raid:{Drake:['DrakeScale','Emberstone'],Ogre:['OgreHeart','Obsidian'],Wraith:['WraithEssence','FrostShard'],Demon:['DemonHorn','StormCore']}};
+const BOSS_INFO={dungeon:{'Skeleton King':['💀','CrownBone'],'Broodmother':['🕷️','BroodSilk'],'Rotting Colossus':['🧟','ColossusIchor'],'High Cultist':['🧙','HighRune']},raid:{'Ancient Drake':['🐉','AncientDrakeScale'],'War Ogre':['👹','WarOgreHeart'],'Wraith Lord':['👻','WraithLordCore'],'Abyssal Demon':['😈','AbyssalHorn']}};
+
+const elementIcon={physical:'⚔️',fire:'🔥',ice:'❄️',poison:'☠️',lightning:'⚡'};
+
+const itemIcons={Weapon:'⚔️',Armor:'🛡️',Ring:'💍',Amulet:'📿'};
+const questIcons={quest:'🗺️',dungeon:'🏰',raid:'🐉'};
+const enemyPools={
+quest:[['Goblin','👺',22,8,3],['Wolf','🐺',18,9,2],['Bandit','🥷',25,9,4],['Slime','🟢',30,6,5]],
+dungeon:[['Skeleton','💀',38,12,6],['Spider','🕷️',32,14,4],['Ghoul','🧟',45,13,7],['Cultist','🧙',34,16,4]],
+raid:[['Drake','🐲',90,22,12],['Ogre','👹',105,20,14],['Wraith','👻',76,25,9],['Demon','😈',86,24,11]]
+};
+
+const FN=['Alden','Bryn','Cael','Dara','Eira','Fen','Garrick','Iris','Joren','Kael','Lysa','Mira','Nell','Orin','Rhea','Soren','Tarin','Veya'],LN=['Ashfall','Briar','Crowe','Dawn','Ember','Frost','Grey','Hearth','Ironwood','Rook','Stone','Thorne','Vale','West'];
+const traits=[
+{name:'Brave',hp:0,str:2,dex:0,int:0,def:0,mdef:0,spd:0},
+{name:'Stalwart',hp:14,str:0,dex:0,int:0,def:2,mdef:1,spd:0},
+{name:'Quick',hp:0,str:0,dex:2,int:0,def:0,mdef:0,spd:3},
+{name:'Tough',hp:20,str:1,dex:0,int:0,def:1,mdef:1,spd:0},
+{name:'Clever',hp:0,str:0,dex:0,int:3,def:0,mdef:1,spd:0},
+{name:'Balanced',hp:6,str:1,dex:1,int:1,def:1,mdef:1,spd:1}
+];
+const Q=[['Goblin Trouble','Clear a roadside goblin nest.'],['Missing Caravan','Find a caravan lost near the forest.'],['Bandit Hunt','Break up a bandit camp.'],['Ruined Watchtower','Investigate an abandoned border tower.'],['Graveyard Shift','Something keeps opening the graves.']];
+const D=[['Sunken Crypt','Descend through drowned burial halls.'],['Ashen Mine','Explore an abandoned mine.'],['Spider Warrens','Clear tunnels full of giant spiders.'],['Old King’s Vault','Open a sealed royal vault.']];
+const R=[['Bone Colossus','Destroy a walking siege engine made of bones.'],['Dragon of Red Peak','End a dragon’s very aggressive tax policy.'],['Hollow Court','Defeat an undead noble court.']];
+const rar=['Common','Uncommon','Rare','Epic','Legendary','Mythic'],rm={Common:1,Uncommon:1.06,Rare:1.14,Epic:1.26,Legendary:1.42,Mythic:1.65};
+const mats=['Iron','Wood','Cloth','Crystal','Essence'];
+const recipes=[
+['Iron Longsword','Weapon','Longsword',{Iron:8,Wood:2},1],
+['Iron Greatsword','Weapon','Greatsword',{Iron:12,Wood:2},2],
+['Iron Battle Axe','Weapon','Battle Axe',{Iron:10,Wood:4},1],
+['Iron Greataxe','Weapon','Greataxe',{Iron:14,Wood:5},3],
+['Iron Warhammer','Weapon','Warhammer',{Iron:12,Wood:4},2],
+['Iron Mace','Weapon','Mace',{Iron:8,Wood:3},1],
+['Iron Spear','Weapon','Spear',{Iron:7,Wood:6},1],
+['Iron Halberd','Weapon','Halberd',{Iron:12,Wood:7},3],
+['Holy Sword','Weapon','Holy Sword',{Iron:10,Crystal:3,HolyWater:2,StormCore:1},4],
+
+['Shortbow','Weapon','Shortbow',{Wood:7,Cloth:2},1],
+['Longbow','Weapon','Longbow',{Wood:10,Cloth:3},2],
+['Recurve Bow','Weapon','Recurve Bow',{Wood:9,Cloth:4},2],
+['Light Crossbow','Weapon','Light Crossbow',{Wood:9,Iron:5,Cloth:2},2],
+['Heavy Crossbow','Weapon','Heavy Crossbow',{Wood:11,Iron:8,Cloth:3},3],
+['Hunting Bow','Weapon','Hunting Bow',{Wood:8,Cloth:3,Venom:2,WolfPelt:2},3],
+
+['Dagger','Weapon','Dagger',{Iron:5,Cloth:1},1],
+['Knife','Weapon','Knife',{Iron:4,Wood:1},1],
+['Dirk','Weapon','Dirk',{Iron:6,Cloth:1},2],
+['Kris','Weapon','Kris',{Iron:6,Venom:2,ShadowSilk:1},3],
+['Shortsword','Weapon','Shortsword',{Iron:7,Wood:2},2],
+['Twin Blades','Weapon','Twin Blades',{Iron:12,Cloth:2},3],
+
+['Oak Staff','Weapon','Oak Staff',{Wood:8,Cloth:1},1],
+['Arcane Staff','Weapon','Arcane Staff',{Wood:8,ArcaneDust:3,Crystal:3,CultistRune:1},3],
+['Holy Staff','Weapon','Holy Staff',{Wood:7,Crystal:3,Essence:3},3],
+['Wand','Weapon','Wand',{Wood:4,Crystal:2},1],
+['Crystal Wand','Weapon','Crystal Wand',{Wood:3,Crystal:5},2],
+['Orb','Weapon','Orb',{Crystal:6,StormCore:2,ArcaneDust:2},3],
+['Spellbook','Weapon','Spellbook',{Cloth:5,Essence:4,Crystal:2},3],
+['Scepter','Weapon','Scepter',{Iron:4,Crystal:5,Essence:2},3],
+
+['Iron Mail','Armor','Mail',{Iron:10,Cloth:2},1],
+['Steel Cuirass','Armor','Cuirass',{Iron:14,Cloth:2},2],
+['Ranger Leathers','Armor','Leathers',{Cloth:8,Wood:2},1],
+['Mage Robes','Armor','Robes',{Cloth:10,Essence:1},1],
+['Knight Plate','Armor','Plate',{Iron:18,Cloth:3},3],
+['Scale Vest','Armor','Scale Vest',{Iron:12,Cloth:4},2],
+['Frostguard Plate','Armor','Plate',{Iron:16,FrostShard:4,Crystal:3},4],
+['Flameward Robes','Armor','Robes',{Cloth:12,Emberstone:4,ArcaneDust:2},4],
+
+['Iron Band','Ring','Band',{Iron:4},1],
+['Crystal Signet','Ring','Signet',{Iron:3,Crystal:3},2],
+['Runed Ring','Ring','Ring',{Iron:3,Essence:3},3],
+['Guardian Ring','Ring','Ring',{Iron:5,Crystal:2,Essence:2},4],
+
+['Wooden Charm','Amulet','Charm',{Wood:3,Cloth:2},1],
+['Crystal Pendant','Amulet','Pendant',{Crystal:4,Cloth:2},2],
+['Arcane Amulet','Amulet','Amulet',{Crystal:5,Essence:4},3],
+['Warden Amulet','Amulet','Amulet',{Iron:3,Crystal:4,Essence:4},4]
+,
+['Bone King Greatsword','Weapon','Greatsword',{Iron:14,Bone:8,CrownBone:1},5],
+['Broodmother Kris','Weapon','Kris',{Iron:7,Venom:5,BroodSilk:1},5],
+['Colossus Plate','Armor','Plate',{Iron:20,GhoulIchor:6,ColossusIchor:1},5],
+['High Cultist Scepter','Weapon','Scepter',{Crystal:7,ArcaneDust:6,HighRune:1},5],
+['Ancient Drake Greatsword','Weapon','Greatsword',{Iron:20,Emberstone:8,AncientDrakeScale:1},7],
+['War Ogre Hammer','Weapon','Warhammer',{Iron:22,Obsidian:8,WarOgreHeart:1},7],
+['Wraith Lord Amulet','Amulet','Amulet',{Crystal:9,FrostShard:7,WraithLordCore:1},7],
+['Abyssal Demon Ring','Ring','Ring',{Obsidian:8,StormCore:7,AbyssalHorn:1},7]];
+const upgrades=[
+['quarters','Guild Quarters','Adds one permanent guild member slot per level.',180,7],
+['recruit','Recruitment Hall','Adds one applicant to each recruitment batch.',260,4],
+['smith','Blacksmith','Improves crafted gear.',320,5],
+['training','Training Hall','More adventurer XP.',300,5],
+['storage','Storehouse','More materials from missions.',290,4],
+['board','Quest Office','Slightly improves gold and reputation gains.',310,5]
+];
+let s;
+const pick=a=>a[Math.floor(Math.random()*a.length)],rnd=(a,b)=>Math.floor(a+Math.random()*(b-a+1)),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+function notify(msg,type='bad'){
+  const stack=$('noticeStack');
+  if(!stack)return;
+  const n=document.createElement('div');
+  n.className='notice '+type;
+  n.innerHTML=`<b>${type==='good'?'Done':'Guildmaster'}</b><span>${msg}</span>`;
+  stack.appendChild(n);
+  setTimeout(()=>n.remove(),3200);
+}
+function fresh(){return{guild:'Ironhaven Guild',gold:110,rep:0,level:1,xp:0,wins:0,next:1,battleSeq:1,lastHiddenAt:0,members:[],recruits:[],inventory:[],memberCap:1,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0},missions:[],craftJobs:[],quests:[],dungeons:[],raids:[],up:{quarters:0,recruit:0,smith:0,training:0,storage:0,board:0},log:['Guild charter signed.'],selected:null}}
+let lastSave=0;
+function save(){
+  try{
+    const data=JSON.stringify(s);
+    const current=localStorage.getItem('guildmaster-v1');
+    if(current&&current!==data)localStorage.setItem('guildmaster-v1-backup',current);
+    localStorage.setItem('guildmaster-v1',data);
+    lastSave=Date.now();
+    const el=$('saveState');
+    if(el)el.textContent='Saved automatically · '+new Date(lastSave).toLocaleTimeString();
+  }catch(e){
+    const el=$('saveState');
+    if(el)el.textContent='Save failed in this browser.';
+  }
+}
+function load(){
+  try{
+    const raw=localStorage.getItem('guildmaster-v1');
+    s=raw?JSON.parse(raw):fresh();
+  }catch(e){
+    try{
+      const backup=localStorage.getItem('guildmaster-v1-backup');
+      s=backup?JSON.parse(backup):fresh();
+    }catch(e2){s=fresh()}
+  }
+  s.materials=Object.assign({Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0},s.materials||{});
+  Object.keys(RESOURCE_NAMES).forEach(k=>{if(s.materials[k]==null)s.materials[k]=0});
+  s.up=Object.assign({quarters:0,recruit:0,smith:0,training:0,storage:0,board:0},s.up||{});
+  s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];s.battleSeq=s.battleSeq||1;s.lastHiddenAt=s.lastHiddenAt||0;s.knownRecipes=Array.isArray(s.knownRecipes)?s.knownRecipes:[];s.discoveredResources=Array.isArray(s.discoveredResources)?s.discoveredResources:[];s.applicantCap=Math.max(2,s.applicantCap||2+(s.up.recruit||0));s.nextApplicantsAt=s.nextApplicantsAt||0;
+  s.memberCap=Math.max(s.memberCap||1,1+(s.up.quarters||0),(s.members||[]).length);
+  s.members=(s.members||[]).map(h=>{
+    if(Array.isArray(h.bonus)){
+      h.bonus={hp:h.bonus[0]||0,str:h.bonus[1]||0,dex:Math.floor((h.bonus[3]||0)*.8),int:h.bonus[1]||0,def:h.bonus[2]||0,mdef:Math.floor((h.bonus[2]||0)*.8),spd:h.bonus[3]||0,fire:0,ice:0,poison:0,lightning:0};
+    }
+    h.bonus=Object.assign({hp:0,str:0,dex:0,int:0,def:0,mdef:0,spd:0,fire:0,ice:0,poison:0,lightning:0},h.bonus||{});
+    return h;
+  });
+  s.inventory=(s.inventory||[]).map(it=>{
+    if(it.slot==='Weapon'&&!it.weaponType){
+      const allowed=Object.keys(WEAPONS);
+      const guess=allowed.find(w=>it.name&&it.name.includes(w))||pick(allowed);
+      const wd=WEAPONS[guess];
+      it.weaponType=guess;it.scale=wd.scale;it.damageType=wd.type;it.weaponPower=it.weaponPower||Math.max(8,Math.round((it.power||20)/4));
+    }
+    return it;
+  });
+
+  s.missions=Array.isArray(s.missions)?s.missions:[];s.missions.forEach(m=>{
+  m.battleNumber=Math.max(m.battleNumber||0,m.battle?.id||0);
+  if(m.lastRewardedBattleId===undefined)m.lastRewardedBattleId=null;
+  if(m.battle){m.battle.resolved=!!m.battle.resolved;m.battle.actionSeq=m.battle.actionSeq||0}
+});s.missions.forEach(m=>{if(m.battle){if(m.battle.resolved==null)m.battle.resolved=false;if(m.battle.actionSeq==null)m.battle.actionSeq=0}});
+  s.missions.forEach(m=>{
+    if(!m.start)m.start=Date.now();
+    if(!m.lastSim)m.lastSim=m.start;
+    if(m.kills==null)m.kills=0;
+    if(m.fights==null)m.fights=0;
+    if(m.goldEarned==null)m.goldEarned=0;
+    if(m.repEarned==null)m.repEarned=0;
+    if(!m.battle)m.battle=null;
+    if(!m.stash)m.stash={gold:0,rep:0,materials:{Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0},items:[]};
+    if(!m.partyState)m.partyState={};
+  });
+}
+function id(){return s.next++}
+function rr(b=0){
+  const r=Math.random()+b;
+  if(r>.9997)return'Mythic';
+  if(r>.997)return'Legendary';
+  if(r>.978)return'Epic';
+  if(r>.90)return'Rare';
+  if(r>.62)return'Uncommon';
+  return'Common';
+}
+function hero(){
+  let c=pick(Object.keys(C)),t=pick(traits),ra=rr(0),lv=Math.max(1,s.level-1+rnd(0,2));
+  return{
+    id:id(),name:pick(FN)+' '+pick(LN),class:c,rarity:ra,trait:t.name,level:lv,xp:0,busy:false,
+    equip:{Weapon:null,Armor:null,Ring:null,Amulet:null},
+    bonus:{
+      hp:t.hp+lv*3,
+      str:t.str+Math.floor(lv*.8),
+      dex:t.dex+Math.floor(lv*.8),
+      int:t.int+Math.floor(lv*.8),
+      def:t.def+Math.floor(lv*.7),
+      mdef:t.mdef+Math.floor(lv*.7),
+      spd:t.spd+Math.floor(lv*.35),
+      fire:0,ice:0,poison:0,lightning:0
+    }
+  };
+}
+function applyRarityBonuses(it,tier){
+  const rarity=it.rarity;
+  const simpleBonus={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Mythic:5}[rarity]||0;
+
+  if(simpleBonus>0){
+    if(it.stat==='regen')it.value+=Math.max(1,Math.floor(simpleBonus/2));
+    else if(it.stat==='lifesteal')it.value+=simpleBonus;
+    else it.value+=simpleBonus*2;
+  }
+
+  if(rarity==='Rare'||rarity==='Epic'||rarity==='Legendary'||rarity==='Mythic'){
+    const pool=['lifesteal','regen','fire','ice','poison','lightning','str','dex','int','mdef'];
+    it.secondaryStat=pick(pool);
+    if(it.secondaryStat==='lifesteal')it.secondaryValue=2+simpleBonus;
+    else if(it.secondaryStat==='regen')it.secondaryValue=Math.max(1,Math.floor(1+simpleBonus/2));
+    else if(['fire','ice','poison','lightning'].includes(it.secondaryStat))it.secondaryValue=4+simpleBonus*2;
+    else it.secondaryValue=1+simpleBonus;
+  }
+
+  if(rarity==='Legendary'||rarity==='Mythic'){
+    const tertiaryPool=['lifesteal','regen','fire','ice','poison','lightning','def','mdef'];
+    it.tertiaryStat=pick(tertiaryPool);
+    it.tertiaryValue=it.tertiaryStat==='lifesteal'?4+simpleBonus:it.tertiaryStat==='regen'?2+Math.floor(simpleBonus/2):6+simpleBonus*2;
+  }
+
+  if(rarity==='Mythic'){
+    it.mythicEffect=pick(['Executioner','Phoenix','Stormheart','Bloodbound','Frostborn']);
+  }
+
+  it.power=(it.power||0)+simpleBonus*8+(it.secondaryValue||0)*4+(it.tertiaryValue||0)*4;
+  return it;
+}
+
+function makeSpecificItem(slot,name,tier=1){
+  const ra=rr(tier*.004);
+  const it={id:id(),slot,rarity:ra,equipped:null};
+
+  if(slot==='Weapon'){
+    const w=WEAPONS[name];
+    it.weaponType=name;
+    it.scale=w.scale;
+    it.damageType=w.type;
+    it.weaponPower=Math.round((w.base+tier*2)*rm[ra]);
+    it.name=name;
+    it.stat=w.scale;
+    it.value=Math.max(1,Math.round((2+tier*.7)*rm[ra]));
+    it.power=it.weaponPower*4+it.value*4;
+    return applyRarityBonuses(it,tier);
+  }
+
+  if(slot==='Armor'){
+    it.name=name;
+    const armorProfiles={
+      'Mail':['def',8],
+      'Cuirass':['def',12],
+      'Leathers':['dex',5],
+      'Robes':['mdef',10],
+      'Plate':['def',16],
+      'Scale Vest':['def',11]
+    };
+    const key=Object.keys(armorProfiles).find(k=>name.includes(k))||'Mail';
+    it.stat=armorProfiles[key][0];
+    it.value=Math.round((armorProfiles[key][1]+tier*2)*rm[ra]);
+    it.power=it.value*4;
+    if(name.includes('Frostguard')){it.secondaryStat='ice';it.secondaryValue=12+tier*2}
+    if(name.includes('Flameward')){it.secondaryStat='fire';it.secondaryValue=12+tier*2}
+    return applyRarityBonuses(it,tier);
+  }
+
+  if(slot==='Ring'){
+    it.name=name;
+    it.stat=name.includes('Guardian')?'def':name.includes('Crystal')?'int':name.includes('Runed')?'mdef':'str';
+    it.value=Math.round((3+tier*1.6)*rm[ra]);
+    it.power=it.value*4;
+    return applyRarityBonuses(it,tier);
+  }
+
+  if(slot==='Amulet'){
+    it.name=name;
+    it.stat=name.includes('Warden')?'mdef':name.includes('Arcane')?'int':name.includes('Crystal')?'mdef':'hp';
+    it.value=it.stat==='hp'?Math.round((12+tier*4)*rm[ra]):Math.round((3+tier*1.8)*rm[ra]);
+    it.power=it.value*(it.stat==='hp'?2:4);
+    return applyRarityBonuses(it,tier);
+  }
+
+  return applyRarityBonuses(it,tier);
+}
+
+function item(slot,tier=1){
+  if(slot==='Weapon')return makeSpecificItem(slot,pick(Object.keys(WEAPONS)),tier);
+  if(slot==='Armor')return makeSpecificItem(slot,pick(['Mail','Cuirass','Leathers','Robes','Plate','Scale Vest']),tier);
+  if(slot==='Ring')return makeSpecificItem(slot,pick(['Band','Signet','Ring']),tier);
+  return makeSpecificItem('Amulet',pick(['Charm','Pendant','Amulet']),tier);
+}
+function hs(h){
+  const b=C[h.class];
+  const e={hp:0,str:0,dex:0,int:0,def:0,mdef:0,spd:0,regen:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,power:0};
+
+  Object.values(h.equip||{}).forEach(i=>{
+    if(!i)return;
+    const it=s.inventory.find(x=>x.id===i);
+    if(!it)return;
+    const add=(k,v)=>{if(k in e)e[k]+=v};
+    add(it.stat,it.value||0);
+    add(it.secondaryStat,it.secondaryValue||0);
+    e.power+=it.power||0;
+  });
+
+  const m=rm[h.rarity];
+  const bonus=h.bonus||{};
+  const hp=Math.round((b.hp+(bonus.hp||0)+e.hp)*m);
+  const str=Math.round((b.str+(bonus.str||0)+e.str)*m);
+  const dex=Math.round((b.dex+(bonus.dex||0)+e.dex)*m);
+  const intel=Math.round((b.int+(bonus.int||0)+e.int)*m);
+  const def=Math.round((b.def+(bonus.def||0)+e.def)*m);
+  const mdef=Math.round((b.mdef+(bonus.mdef||0)+e.mdef)*m);
+  const spd=Math.round((b.spd+(bonus.spd||0)+e.spd)*m);
+
+  const fire=Math.max(0,Math.round((bonus.fire||0)+e.fire));
+  const ice=Math.max(0,Math.round((bonus.ice||0)+e.ice));
+  const poison=Math.max(0,Math.round((bonus.poison||0)+e.poison));
+  const lightning=Math.max(0,Math.round((bonus.lightning||0)+e.lightning));
+
+  const power=Math.round(
+    hp*.12+str*2+dex*2+intel*2+def*1.8+mdef*1.8+spd*1.2+
+    (fire+ice+poison+lightning)*.45+e.power*.65+e.regen*5+e.lifesteal*3
+  );
+
+  return{hp,str,dex,int:intel,def,mdef,spd,regen:e.regen,lifesteal:e.lifesteal,fire,ice,poison,lightning,power};
+}
+function log(x){s.log.unshift(x);s.log=s.log.slice(0,50)}
+function xp(n){s.xp+=n;let need=100+(s.level-1)*80;while(s.xp>=need){s.xp-=need;s.level++;s.gold+=25+s.level*8;log('Guild reached level '+s.level+'.');need=100+(s.level-1)*80}}
+function applicantBatchSize(){return 2+(s.up.recruit||0)}
+function fillApplicants(){
+  const target=applicantBatchSize();
+  while(s.recruits.length<target)s.recruits.push(hero());
+  s.applicantCap=target;
+  s.nextApplicantsAt=Date.now()+15*60*1000;
+}
+function ensure(){
+  s.applicantCap=applicantBatchSize();
+  if(!s.recruits.length){
+    if(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt)fillApplicants();
+  }
+  if(!s.quests.length)refreshOffers('quest');
+  if(!s.dungeons.length)refreshOffers('dungeon');
+  if(!s.raids.length)refreshOffers('raid');
+}
+function refreshRec(pay=false){
+  if(pay)return notify('Applicants cannot be manually refreshed. New applicants arrive every 15 minutes.');
+  if(!s.recruits.length&&(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt))fillApplicants();
+  save();
+}
+function offer(type){
+ let src=type==='raid'?R:type==='dungeon'?D:Q,t=pick(src),idx=src.indexOf(t),lv=Math.max(type==='raid'?6:type==='dungeon'?3:1,s.level+rnd(-1,2)),mul=type==='raid'?2.5:type==='dungeon'?1.55:1;
+ let q={id:id(),type,name:t[0],desc:t[1],level:lv,target:Math.round((90+lv*58)*mul),gold:Math.round((35+lv*24)*mul),rep:Math.round((8+lv*6)*mul)};
+ if(type==='dungeon'){q.maxFights=5+lv;q.boss=['Skeleton King','Broodmother','Rotting Colossus','High Cultist'][idx%4]}
+ if(type==='raid'){q.maxFights=8+lv*2;q.boss=['Ancient Drake','War Ogre','Wraith Lord','Abyssal Demon'][idx%4]}
+ return q
+}
+function arr(type){return type==='raid'?s.raids:type==='dungeon'?s.dungeons:s.quests}
+function refreshOffers(type){let n=type==='raid'?3:type==='dungeon'?4:6,a=Array.from({length:n},()=>offer(type));if(type==='raid')s.raids=a;else if(type==='dungeon')s.dungeons=a;else s.quests=a;save();renderOffers(type)}
+function power(ids){return ids.reduce((z,i)=>{let h=s.members.find(x=>x.id===i);return z+(h?hs(h).power:0)},0)}
+function makeBoss(m){
+ const info=BOSS_INFO[m.type][m.boss],scale=1+m.level*.14,raid=m.type==='raid';
+ return{id:999,name:m.boss,icon:info[0],maxHp:Math.round((raid?420:220)*scale),hp:Math.round((raid?420:220)*scale),atk:Math.round((raid?38:24)*scale),def:Math.round((raid?23:15)*scale),mdef:Math.round((raid?25:15)*scale),fire:12,ice:12,poison:12,lightning:12,mage:true,boss:true}
+}
+function makeBossBattle(m){let b=makeBattle(m);b.resolved=false;b.actionSeq=0;b.enemies=[makeBoss(m)];b.boss=true;b.log=['⚠ BOSS: '+m.boss+' enters the battle.'];return b}
+function bossReward(m){let info=BOSS_INFO[m.type][m.boss],k=info[1];m.stash.materials[k]=(m.stash.materials[k]||0)+1;m.completed=true;m.bossDefeated=true;m.battle.log.unshift(m.boss+' dropped '+RESOURCE_NAMES[k]+'. Guaranteed boss drop; this material only comes from this boss.');log(m.name+' completed. '+m.boss+' defeated.');save()}
+function makeEnemy(type,level,index){
+  const base=pick(enemyPools[type]||enemyPools.quest);
+  const scale=1+level*.12;
+  const mageChance=type==='raid'?.32:type==='dungeon'?.2:.08;
+  return{
+    id:index+1,name:base[0],icon:base[1],
+    maxHp:Math.round(base[2]*scale*2.25),hp:Math.round(base[2]*scale*2.25),
+    atk:Math.round(base[3]*scale),def:Math.round(base[4]*scale*1.15),mdef:Math.round(base[4]*scale*1.08),
+    fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),
+    mage:Math.random()<mageChance
+  };
+}
+function ensurePartyState(m){
+  if(!m.partyState)m.partyState={};
+  m.party.forEach(hid=>{
+    const h=s.members.find(x=>x.id===hid);
+    if(!h)return;
+    const z=hs(h);
+    if(!m.partyState[hid]){
+      m.partyState[hid]={hp:z.hp,maxHp:z.hp};
+    }else{
+      const oldMax=m.partyState[hid].maxHp||z.hp;
+      const ratio=oldMax?m.partyState[hid].hp/oldMax:1;
+      m.partyState[hid].maxHp=z.hp;
+      m.partyState[hid].hp=Math.min(z.hp,Math.max(0,Math.round(z.hp*ratio)));
+    }
+  });
+}
+function makeBattle(m){
+  ensurePartyState(m);
+  const count=m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3);
+  const heroes=m.party.map(hid=>{
+    const h=s.members.find(x=>x.id===hid),z=hs(h),ps=m.partyState[hid];
+    const wep=s.inventory.find(x=>x.id===h.equip.Weapon);
+    const wd=wep&&WEAPONS[wep.weaponType]?WEAPONS[wep.weaponType]:null;
+    return{
+      id:h.id,name:h.name,class:h.class,level:h.level,maxHp:z.hp,
+      hp:Math.min(z.hp,Math.max(0,ps?ps.hp:z.hp)),
+      str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,spd:z.spd,
+      regen:z.regen||0,lifesteal:z.lifesteal||0,
+      fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,
+      weaponType:wep?.weaponType||null,
+      scale:wep?.scale||({Mage:'int',Cleric:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),
+      damageType:wep?.damageType||'physical',
+      weaponPower:wep?.weaponPower||(wd?.base||8)
+    };
+  });
+  return{
+    id:++m.battleNumber,
+    resolved:false,actionSeq:0,
+    heroes,
+    enemies:Array.from({length:count},(_,i)=>makeEnemy(m.type,m.level,i)),
+    phase:'heroes',turn:0,round:1,
+    log:['A new enemy group approaches.']
+  };
+}
+function syncPartyHp(m){
+  if(!m.battle)return;
+  ensurePartyState(m);
+  m.battle.heroes.forEach(h=>{
+    if(m.partyState[h.id]){
+      m.partyState[h.id].hp=Math.max(0,h.hp);
+      m.partyState[h.id].maxHp=h.maxHp;
+    }
+  });
+}
+function emptyStash(){return{gold:0,rep:0,materials:{Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0},items:[]}}
+function send(type,qid,ids){
+  let q=arr(type).find(x=>x.id===qid);
+  if(!q||!ids.length)return notify('Choose at least one guild member.');
+  let party=ids.slice(0,3).map(i=>s.members.find(x=>x.id===i)).filter(Boolean);
+  if(party.some(h=>h.busy))return notify('One of those guild members is already on an expedition.');
+  party.forEach(h=>h.busy=true);
+  const now=Date.now();
+  const mission={
+    ...q,id:id(),party:party.map(h=>h.id),start:now,lastSim:now,
+    kills:0,fights:0,goldEarned:0,repEarned:0,battle:null,
+    stash:emptyStash(),partyState:{},defeated:false,completed:false,bossDefeated:false,battleNumber:0,lastRewardedBattleId:null
+  };
+  ensurePartyState(mission);
+  mission.battle=makeBattle(mission);
+  s.missions.push(mission);
+  let a=arr(type),i=a.findIndex(x=>x.id===qid);a.splice(i,1,offer(type));
+  log('Expedition started: '+q.name+'.');
+  save();render();notify('Expedition started.','good');
+}
+function pendingCount(m){
+  return (m.stash?.items?.length||0)+Object.values(m.stash?.materials||{}).reduce((a,v)=>a+v,0);
+}
+function collectLoot(mid,quiet=false){
+  const m=s.missions.find(x=>x.id===mid);if(!m||!m.stash)return;
+  s.gold+=m.stash.gold||0;
+  s.rep+=m.stash.rep||0;
+  Object.entries(m.stash.materials||{}).forEach(([k,v])=>s.materials[k]=(s.materials[k]||0)+v);
+  (m.stash.items||[]).forEach(it=>s.inventory.push(it));
+  const summary=`${m.stash.gold||0}g, ${m.stash.rep||0} rep, ${pendingCount(m)} loot/material drops`;
+  m.stash=emptyStash();discoverRecipes();save();
+  if(!quiet)notify('Collected '+summary+'.','good');
+  renderResourcesLite();renderInv();renderActive();renderCombat();
+}
+function heroXpNeeded(level){return 100+(level-1)*85}
+
+function xpForEnemy(hero,encounterLevel,type){
+  const typeMult=type==='raid'?1.65:type==='dungeon'?1.3:1;
+  const diff=encounterLevel-hero.level;
+
+  // Equal-level enemies are worthwhile. Content below the hero's level
+  // falls off sharply, preventing trivial low-level farming.
+  let levelMult;
+  if(diff>=0)levelMult=Math.min(1.65,1+diff*.12);
+  else levelMult=Math.max(.12,1+diff*.22);
+
+  return Math.max(1,Math.round((3+encounterLevel*2.2)*typeMult*levelMult));
+}
+
+function grantFightRewards(m,enemySnapshots){
+  const defeated=(enemySnapshots||[]).slice();
+  m.fights++;
+  m.kills+=defeated.length;
+
+  const g=Math.random()<.16 ? 1 : 0;
+  const rp=Math.random()<.10 ? 1 : 0;
+  m.stash.gold+=g;
+  m.stash.rep+=rp;
+
+  defeated.forEach(enemy=>{
+    const lootChance=m.type==='raid'?.12:m.type==='dungeon'?.08:.04;
+    if(Math.random()>=lootChance)return;
+
+    const gearChance=m.type==='raid'?.015:m.type==='dungeon'?.006:.0015;
+    if(Math.random()<gearChance){
+      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),Math.max(1,m.level-1)));
+      return;
+    }
+
+    const pool=(ZONE_DROPS[m.type]&&ZONE_DROPS[m.type][enemy.name])||[];
+    if(pool.length){
+      const k=pick(pool);
+      m.stash.materials[k]=(m.stash.materials[k]||0)+1;
+    }
+  });
+
+  m.party.forEach(hid=>{
+    const hero=s.members.find(x=>x.id===hid);if(!hero)return;
+
+    const gained=defeated.reduce((sum)=>sum+xpForEnemy(hero,m.level,m.type),0);
+    hero.xp+=gained;
+
+    let need=heroXpNeeded(hero.level);
+    while(hero.xp>=need){
+      hero.xp-=need;
+      hero.level++;
+      hero.bonus.hp+=3;
+      if(hero.class==='Warrior'||hero.class==='Paladin')hero.bonus.str+=1;
+      if(hero.class==='Ranger'||hero.class==='Rogue')hero.bonus.dex+=1;
+      if(hero.class==='Mage'||hero.class==='Cleric')hero.bonus.int+=1;
+      if(hero.level%2===0){hero.bonus.def+=1;hero.bonus.mdef+=1}
+      need=heroXpNeeded(hero.level);
+    }
+  });
+
+  s.xp+=Math.max(1,Math.round(defeated.length*(1+m.level*.2)));
+  levelCheck();
+}
+
+function resolveLiveBattleOnce(m){
+  const b=m.battle;
+  if(!b||b.resolved)return false;
+  if(m.lastRewardedBattleId===b.id)return false;
+
+  b.resolved=true;
+  m.lastRewardedBattleId=b.id;
+  grantFightRewards(m,b.enemies.map(e=>({name:e.name})));
+  return true;
+}
+function living(a){return a.filter(x=>x.hp>0)}
+function elementalReduction(res){return clamp(1-(res||0)/100,.2,1)}
+function heroDamage(h,target){
+  const stat=h.scale==='dex'?h.dex:h.scale==='int'?h.int:h.str;
+  const base=h.weaponPower*.34+stat*.36;
+
+  if(h.damageType==='physical'){
+    return Math.max(1,Math.round(base*(.70+Math.random()*.16)-target.def*.72));
+  }
+
+  return Math.max(
+    1,
+    Math.round(
+      (base*(.72+Math.random()*.16)-target.mdef*.68)*
+      elementalReduction(target[h.damageType])
+    )
+  );
+}
+
+function playerHitCap(h,target,mult=1){
+  // At level 1, a normal action can remove at most 20% of a full enemy HP bar.
+  // The cap rises slowly with character level, but never reaches one-shot territory.
+  const lvl=Math.max(1,h.level||1);
+  const pct=Math.min(.42,.20+(lvl-1)*.008);
+  return Math.max(1,Math.floor(target.maxHp*pct*mult));
+}
+function heroAction(m,h){
+  const b=m.battle,targets=living(b.enemies);if(!targets.length)return;
+  const target=pick(targets);
+  let dmg=heroDamage(h,target);
+  let text='';
+
+  if(h.class==='Cleric'){
+    const ally=living(b.heroes).sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0];
+    if(ally&&ally.hp<ally.maxHp*.7){
+      const heal=Math.max(2,Math.round(h.int*.38+h.weaponPower*.12));
+      ally.hp=Math.min(ally.maxHp,ally.hp+heal);
+      text=`${h.name.split(' ')[0]} casts Heal on ${ally.name.split(' ')[0]} for ${heal}.`;
+      b.log.unshift(text);syncPartyHp(m);return;
+    }
+  }
+
+  let capMult=1;
+  if(h.class==='Rogue'&&Math.random()<.18){
+    dmg=Math.round(dmg*1.35);
+    capMult=1.3;
+    text='Critical! ';
+  }
+
+  if(h.class==='Mage'&&Math.random()<.14){
+    const elem=h.damageType==='physical'?'fire':h.damageType;
+    const hits=targets.map(t=>{
+      let aoe=Math.max(1,Math.round((h.int*.24+h.weaponPower*.16-t.mdef*.42)*elementalReduction(t[elem])));
+      aoe=Math.min(aoe,playerHitCap(h,t,.72));
+      t.hp=Math.max(0,t.hp-aoe);
+      return `${t.name} ${aoe}`;
+    });
+    b.log.unshift(`${h.name.split(' ')[0]} casts ${elementIcon[elem]} Arcane Burst: ${hits.join(' · ')}.`);
+    syncPartyHp(m);return;
+  }
+
+  dmg=Math.min(dmg,playerHitCap(h,target,capMult));
+  target.hp=Math.max(0,target.hp-dmg);
+
+  const weaponName=h.weaponType||'unarmed attack';
+  text+=`${h.name.split(' ')[0]} uses ${weaponName} (${String(h.scale).toUpperCase()}) for ${dmg} ${elementIcon[h.damageType]} ${h.damageType} damage.`;
+
+  if(h.lifesteal>0){
+    const heal=Math.max(1,Math.floor(dmg*h.lifesteal/100));
+    h.hp=Math.min(h.maxHp,h.hp+heal);
+    text+=` Lifesteal restores ${heal} HP.`;
+  }
+
+  b.log.unshift(text);b.log=b.log.slice(0,45);
+  syncPartyHp(m);
+}
+function enemyAction(m,e){
+  const b=m.battle,targets=living(b.heroes);if(!targets.length)return;
+
+  if(e.mage && Math.random()<.32){
+    const elem=pick(['fire','ice','poison','lightning']);
+    const hit=targets.map(target=>{
+      const raw=e.atk*1.05-target.mdef*.3;
+      const dmg=Math.max(2,Math.round(raw*elementalReduction(target[elem])));
+      target.hp=Math.max(0,target.hp-dmg);
+      return `${target.name.split(' ')[0]} ${dmg}`;
+    });
+    b.log.unshift(`⚠ ${e.name} casts ${elementIcon[elem]} ${elem.toUpperCase()} AOE: ${hit.join(' · ')}.`);
+    syncPartyHp(m);
+    return;
+  }
+
+  const target=pick(targets);
+  const dmg=Math.max(1,Math.round(e.atk*(.72+Math.random()*.32)-target.def*.34));
+  target.hp=Math.max(0,target.hp-dmg);
+  b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} physical damage.`);
+  b.log=b.log.slice(0,45);
+  syncPartyHp(m);
+}
+function applyRoundRegen(m){
+  const b=m.battle;
+  b.heroes.forEach(h=>{
+    if(h.hp>0&&h.regen>0){
+      const heal=Math.min(h.regen,h.maxHp-h.hp);
+      if(heal>0){
+        h.hp+=heal;
+        b.log.unshift(`${h.name.split(' ')[0]} regenerates ${heal} HP.`);
+      }
+    }
+  });
+  syncPartyHp(m);
+}
+function expeditionDefeated(m){
+  syncPartyHp(m);
+  m.defeated=true;
+  m.battle.log.unshift('The entire party has fallen. The expedition can no longer continue.');
+  log(m.name+' expedition was defeated.');
+  save();
+}
+function finishCurrentFight(m){
+  const b=m.battle;
+  if(!b||b.resolved)return;
+
+  syncPartyHp(m);
+
+  if(b.boss){
+    b.resolved=true;
+    bossReward(m);
+    return;
+  }
+
+  if(!resolveLiveBattleOnce(m))return;
+
+  if((m.type==='dungeon'||m.type==='raid')&&m.maxFights&&m.fights>=m.maxFights){
+    m.battle=makeBossBattle(m);
+  }else{
+    m.battle=makeBattle(m);
+  }
+
+  m.lastSim=Date.now();
+  save();
+}
+
+function stepBattle(m){
+  if(!m||m.defeated||m.completed)return;
+  if(!m.battle)m.battle=makeBattle(m);
+
+  let b=m.battle;
+
+  // Resolve a completed fight before ANY new action.
+  if(!living(b.enemies).length){
+    finishCurrentFight(m);
+    return;
+  }
+
+  if(!living(b.heroes).length){
+    expeditionDefeated(m);
+    return;
+  }
+
+  if(b.phase==='heroes'){
+    const heroes=living(b.heroes);
+
+    if(b.turn>=heroes.length){
+      b.phase='enemies';
+      b.turn=0;
+      return;
+    }
+
+    const actor=heroes[b.turn];
+    heroAction(m,actor);b.actionSeq=(b.actionSeq||0)+1;
+
+    // Final enemy died from this exact action: transition NOW.
+    if(!living(b.enemies).length){
+      finishCurrentFight(m);
+      return;
+    }
+
+    b.turn++;
+    if(b.turn>=heroes.length){
+      b.phase='enemies';
+      b.turn=0;
+    }
+  }else{
+    const enemies=living(b.enemies);
+
+    if(b.turn>=enemies.length){
+      b.phase='heroes';
+      b.turn=0;
+      b.round++;
+      applyRoundRegen(m);
+      return;
+    }
+
+    const actor=enemies[b.turn];
+    enemyAction(m,actor);b.actionSeq=(b.actionSeq||0)+1;
+
+    if(!living(b.heroes).length){
+      expeditionDefeated(m);
+      return;
+    }
+
+    b.turn++;
+    if(b.turn>=enemies.length){
+      b.phase='heroes';
+      b.turn=0;
+      b.round++;
+      applyRoundRegen(m);
+    }
+  }
+
+  m.lastSim=Date.now();
+}
+function offlineEnemySnapshot(m){
+  const pool=enemyPools[m.type]||enemyPools.quest;
+  const count=m.type==='raid'?3:m.type==='dungeon'?2:1;
+  return Array.from({length:count},()=>({name:pick(pool)[0]}));
+}
+
+function offlineCatchup(hiddenMs){
+  if(!hiddenMs||hiddenMs<60000)return;
+
+  s.missions.forEach(m=>{
+    if(m.defeated||m.completed)return;
+
+    ensurePartyState(m);
+    const ratio=clamp(power(m.party)/Math.max(1,m.target),.3,2.2);
+    const secondsPerFight=clamp(180/ratio,m.type==='raid'?130:90,m.type==='raid'?300:250);
+    let fights=Math.floor(hiddenMs/1000/secondsPerFight);
+
+    fights=Math.min(fights,100);
+    if(m.maxFights)fights=Math.min(fights,Math.max(0,m.maxFights-m.fights));
+    if(fights<=0)return;
+
+    const party=s.members.filter(h=>m.party.includes(h.id));
+    const healer=party.some(h=>h.class==='Cleric')?.35:0;
+    const sustain=party.reduce((sum,h)=>{const z=hs(h);return sum+(z.regen||0)*.012+(z.lifesteal||0)*.004},0);
+
+    let completed=0;
+    for(let i=0;i<fights;i++){
+      const totalHp=m.party.reduce((sum,id)=>sum+(m.partyState[id]?.hp||0),0);
+      const maxHp=m.party.reduce((sum,id)=>sum+(m.partyState[id]?.maxHp||1),0);
+      let hpRatio=maxHp?totalHp/maxHp:0;
+
+      hpRatio-=clamp((.13/ratio)*(1-healer)-sustain,.02,.32);
+      if(hpRatio<=0){
+        m.party.forEach(id=>{if(m.partyState[id])m.partyState[id].hp=0});
+        m.defeated=true;
+        break;
+      }
+
+      m.party.forEach(id=>{
+        const ps=m.partyState[id];
+        if(ps)ps.hp=Math.max(1,Math.round(ps.maxHp*hpRatio));
+      });
+
+      grantFightRewards(m,offlineEnemySnapshot(m));
+      completed++;
+    }
+
+    // One fresh battle is created only after the full offline simulation.
+    // Nothing in offline progress can touch/reward the visible live battle.
+    if(!m.defeated){
+      if(m.maxFights&&m.fights>=m.maxFights)m.battle=makeBossBattle(m);
+      else m.battle=makeBattle(m);
+      if(completed)m.battle.log.unshift(`Offline progress: ${completed} fights completed while away.`);
+      m.lastRewardedBattleId=null;
+    }
+  });
+
+  save();
+}
+
+function stopExpedition(mid){
+  const m=s.missions.find(x=>x.id===mid);if(!m)return;
+  collectLoot(mid,true);
+  m.party.forEach(hid=>{const h=s.members.find(x=>x.id===hid);if(h)h.busy=false});
+  s.missions=s.missions.filter(x=>x.id!==mid);
+  log('Expedition ended: '+m.name+'. '+m.fights+' fights completed.');
+  save();closeCombat();render();notify('Party returned with all unclaimed loot.','good');
+}
+function complete(){}
+function recruit(i){if(s.members.length>=s.memberCap)return notify('Your guild has no open member slots. Upgrade Guild Quarters first.');let x=s.recruits.find(v=>v.id===i);if(!x)return;s.members.push(x);s.recruits=s.recruits.filter(v=>v.id!==i);if(!s.recruits.length)s.nextApplicantsAt=Date.now()+15*60*1000;log(x.name+' joined the guild.');save();render();notify(x.name+' joined for free.','good')}
+function dismissHero(hid){
+  const h=s.members.find(x=>x.id===hid);if(!h)return;
+  if(h.busy)return notify('You cannot dismiss someone who is on an expedition.');
+  
+  showModal('Dismiss Guild Member',`<div class="card"><div class="name">Dismiss ${h.name}?</div><div class="muted">Their equipped items will return to inventory.</div><button class="btn" style="margin-top:10px" onclick="confirmDismiss(${hid})">Dismiss</button></div>`);
+}
+function confirmDismiss(hid){
+  const h=s.members.find(x=>x.id===hid);if(!h)return;
+  Object.values(h.equip||{}).forEach(itemId=>{const it=s.inventory.find(x=>x.id===itemId);if(it)it.equipped=null});
+  s.members=s.members.filter(x=>x.id!==hid);
+  if(s.selected===hid)s.selected=s.members[0]?.id||null;
+  log(h.name+' left the guild.');
+  save();closeModal();render();notify('Guild member dismissed.','good');
+}
+function equip(hid,iid){let h=s.members.find(x=>x.id===hid),it=s.inventory.find(x=>x.id===iid);if(!h||!it)return;let old=s.inventory.find(x=>x.id===h.equip[it.slot]);if(old)old.equipped=null;if(it.equipped){let o=s.members.find(x=>x.id===it.equipped);if(o)o.equip[it.slot]=null}h.equip[it.slot]=it.id;it.equipped=h.id;save();closeModal();renderRoster()}
+function equipModal(hid,slot){
+  const h=s.members.find(x=>x.id===hid);
+  let a=s.inventory.filter(x=>x.slot===slot&&!x.equipped);
+  if(slot==='Weapon'&&h)a=a.filter(it=>C[h.class].weapons.includes(it.weaponType));
+  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${it.rarity.toLowerCase()}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${it.rarity} · ${statText(it)}</div><button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+const BOSS_RESOURCE_SOURCE={"CrownBone": "Skeleton King", "BroodSilk": "Broodmother", "ColossusIchor": "Rotting Colossus", "HighRune": "High Cultist", "AncientDrakeScale": "Ancient Drake", "WarOgreHeart": "War Ogre", "WraithLordCore": "Wraith Lord", "AbyssalHorn": "Abyssal Demon"};
+const BOSS_RESOURCES=new Set(['CrownBone','BroodSilk','ColossusIchor','HighRune','AncientDrakeScale','WarOgreHeart','WraithLordCore','AbyssalHorn']);
+
+function markResourceFound(k){
+  if(k&&!s.discoveredResources.includes(k))s.discoveredResources.push(k);
+}
+
+function syncDiscoveredResources(){
+  Object.entries(s.materials||{}).forEach(([k,v])=>{if(v>0)markResourceFound(k)});
+}
+
+function recipeVisible(r){
+  const required=Object.keys(r[3]);
+  const normal=required.filter(k=>!BOSS_RESOURCES.has(k));
+  const bosses=required.filter(k=>BOSS_RESOURCES.has(k));
+
+  // Every ordinary ingredient must have been discovered at least once.
+  if(!normal.every(k=>s.discoveredResources.includes(k)))return false;
+
+  // Boss materials are intentionally exempt. Once all other ingredients
+  // are known, the player can see what boss material the recipe needs.
+  return true;
+}
+
+function discoverRecipes(){
+  syncDiscoveredResources();
+}
+
+function craft(i){
+  const r=recipes[i];
+  if(!r||s.level<r[4])return;
+  for(const [k,v] of Object.entries(r[3]))if(s.materials[k]<v)return notify('Not enough crafting materials.');
+  Object.entries(r[3]).forEach(([k,v])=>s.materials[k]-=v);
+
+  const seconds=18+r[4]*12;
+  const now=Date.now();
+  s.craftJobs.push({id:id(),recipe:i,start:now,end:now+seconds*1000});
+  log('Started crafting '+r[0]+'.');
+  save();render();
+}
+function completeCrafting(){
+  const now=Date.now();
+  const ready=s.craftJobs.filter(j=>j.end<=now);
+  if(!ready.length)return false;
+  ready.forEach(j=>{
+    const r=recipes[j.recipe];
+    if(!r)return;
+    let it=makeSpecificItem(r[1],r[2],r[4]+(s.up.smith||0));
+    it.name=r[0];
+    s.inventory.push(it);
+    log('Finished crafting '+it.name+' ['+it.rarity+'].');
+  });
+  s.craftJobs=s.craftJobs.filter(j=>j.end>now);
+  save();
+  return true;
+}
+function upgrade(k){
+  let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=Math.round(u[3]*Math.pow(1.72,l));
+  if(l>=u[4])return;
+  if(s.gold<c)return notify('Not enough gold.');
+  s.gold-=c;s.up[k]=l+1;
+  if(k==='quarters')s.memberCap=1+s.up.quarters;if(k==='recruit')s.applicantCap=applicantBatchSize();
+  save();render();
+}
+function statName(k){
+  return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',hp:'HP',spd:'SPD',regen:'Regen',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res'}[k]||String(k).toUpperCase();
+}
+function statText(it){
+  let main=it.stat==='regen'?'+'+it.value+' HP / round':it.stat==='lifesteal'?it.value+'% lifesteal':'+'+it.value+' '+statName(it.stat);
+  if(it.secondaryStat)main+=' · +'+it.secondaryValue+' '+statName(it.secondaryStat);
+  if(it.tertiaryStat)main+=' · +'+it.tertiaryValue+' '+statName(it.tertiaryStat);
+  if(it.mythicEffect)main+=' · Mythic: '+it.mythicEffect;
+  if(it.slot==='Weapon')main+=' · '+it.weaponType+' · scales '+String(it.scale||'str').toUpperCase()+' · '+elementIcon[it.damageType||'physical']+' '+(it.damageType||'physical');
+  return main;
+}
+function rarityClass(x){return x==='Rare'?'rare':x==='Epic'?'epic':x==='Legendary'||x==='Mythic'?'legendary':''}
+function fmt(ms){let z=Math.max(0,Math.ceil(ms/1000)),m=Math.floor(z/60),q=z%60;return m?m+':'+String(q).padStart(2,'0'):q+'s'}
+function render(){completeCrafting();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;$('guildXp').textContent=s.xp;renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderInv();renderCraftQueue();renderCraft();renderUp();save()}
+function applicantTimeLeft(){
+  if(s.recruits.length)return'Current applicants remain until recruited.';
+  const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
+  if(ms<=0)return'New applicants are arriving...';
+  const sec=Math.ceil(ms/1000),min=Math.floor(sec/60),rem=sec%60;
+  return`Next applicants in ${min}:${String(rem).padStart(2,'0')}`;
+}
+function renderRec(){
+  s.applicantCap=applicantBatchSize();
+  $('recruits').innerHTML=
+    `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><span class="chip">Batch every 15 min</span></div></div>`+
+    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card"><div class="heroTop"><div class="portrait">${classIcons[x.class]}</div><div><div class="name">${x.name}</div><div class="muted">${x.class} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>${x.trait}</span><strong>${z.power} power</strong></div><button class="btn gold" onclick="recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 15 minutes.</div>');
+}
+function renderActive(){
+  $('active').innerHTML=s.missions.length?s.missions.map(m=>{
+    const enemyHp=m.battle&&m.battle.enemies.length?m.battle.enemies.reduce((a,e)=>a+Math.max(0,e.hp),0):0;
+    const enemyMax=m.battle&&m.battle.enemies.length?m.battle.enemies.reduce((a,e)=>a+e.maxHp,0):1;
+    const pct=clamp(100-enemyHp/enemyMax*100,0,100);
+    const dropCount=pendingCount(m);const stash=(m.stash?.gold||0)+'g · '+(m.stash?.rep||0)+' rep · '+dropCount+' drops';
+    return `<div class="card expeditionCard" onclick="openCombat(${m.id})">
+      <div class="heroTop"><div class="visualIcon">${questIcons[m.type]}</div><div><div class="name">${m.name}</div><div class="muted">${m.party.map(id=>{const h=s.members.find(x=>x.id===id);return h?classIcons[h.class]+' '+h.name.split(' ')[0]:''}).join(' · ')}</div></div></div>
+      <div class="chips"><span class="chip">${m.fights}${m.maxFights?' / '+m.maxFights:''} fights</span><span class="chip">${m.kills} kills</span><span class="chip">Battle #${m.battle?.id||'-'}</span><span class="chip">${stash}</span>${m.completed?'<span class="chip good">Completed</span>':''}${m.defeated?'<span class="chip dangerText">Party defeated</span>':''}</div>
+      <div class="progressWrap"><div class="progressMeta"><span>${m.defeated?'Expedition stopped':'Current fight'}</span><span>${Math.round(pct)}%</span></div><div class="progressTrack"><div class="progressFill" style="width:${pct}%"></div></div></div>
+      <div class="muted" style="margin-top:7px">Click to ${m.defeated?'collect loot and return':'watch combat'}.</div>
+    </div>`;
+  }).join(''):'<div class="empty">No active expeditions.</div>';
+}
+function openCombat(mid){
+  const m=s.missions.find(x=>x.id===mid);if(!m)return;
+  $('combatModal').dataset.mission=mid;
+  $('combatModal').classList.add('on');
+  renderCombat();
+}
+function closeCombat(){$('combatModal').classList.remove('on')}
+function combatantHtml(x,enemy=false){
+  const pct=clamp(x.hp/x.maxHp*100,0,100);
+  const icon=enemy?x.icon:classIcons[x.class];
+  return `<div class="combatant ${enemy?'enemy':''}"><div class="visualIcon">${icon}</div><div><div class="name">${x.name}</div><div class="muted">${enemy?`Enemy · DEF ${x.def} · MDEF ${x.mdef}`:`${x.class} · ${x.weaponType||'Unarmed'} · ${String(x.scale||'str').toUpperCase()} scaling`} · ${Math.max(0,x.hp)} / ${x.maxHp} HP</div><div class="hpTrack"><div class="hpFill" style="width:${pct}%"></div></div></div></div>`;
+}
+function renderCombat(){
+  if(!$('combatModal').classList.contains('on'))return;
+  const mid=+$('combatModal').dataset.mission,m=s.missions.find(x=>x.id===mid);if(!m){closeCombat();return}
+  if(!m.battle)return;
+
+  $('combatTitle').textContent=m.name;
+  $('combatSubtitle').textContent=`${m.fights} fights · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · combat acts every 2 seconds`;
+
+  const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
+  $('combatBody').innerHTML=`
+    ${m.defeated?'<div class="card dangerText" style="margin-bottom:12px"><b>Party defeated.</b> Combat has stopped. Collect the expedition loot and return to the guild.</div>':''}
+    <div class="combatGrid">
+      <div><div class="muted" style="margin-bottom:6px">YOUR PARTY · HP PERSISTS BETWEEN FIGHTS</div><div class="combatSide">${m.battle.heroes.map(x=>combatantHtml(x,false)).join('')}</div></div>
+      <div><div class="muted" style="margin-bottom:6px">ENEMIES · ROUND ${m.battle.round}</div><div class="combatSide">${m.battle.enemies.map(x=>combatantHtml(x,true)).join('')}</div></div>
+    </div>
+
+    <div class="lootStash">
+      <div class="lootBox"><span>Unclaimed gold</span><strong>${m.stash.gold}</strong></div>
+      <div class="lootBox"><span>Unclaimed rep</span><strong>${m.stash.rep}</strong></div>
+      <div class="lootBox"><span>Materials</span><strong>${matTotal}</strong></div>
+      <div class="lootBox"><span>Items</span><strong>${m.stash.items.length}</strong></div>
+    </div>
+
+    <div style="margin-top:12px" class="log">${m.battle.log.map(x=>`<div class="${x.includes('⚠')?'dangerText':x.includes('heal')||x.includes('regenerates')?'healText':''}">${x}</div>`).join('')}</div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn gold" onclick="collectLoot(${m.id})" ${m.stash.gold===0&&m.stash.rep===0&&matTotal===0&&m.stash.items.length===0?'disabled':''}>Collect Loot</button>
+      <button class="btn" onclick="stopExpedition(${m.id})">${m.defeated?'Collect & Return':'Return to Guild'}</button>
+    </div>
+  `;
+}
+function renderLog(){$('log').innerHTML=s.log.map(x=>`<div>${x}</div>`).join('')}
+function renderRoster(){$('rosterList').innerHTML=s.members.map(h=>{let z=hs(h);return`<div class="card hero ${s.selected===h.id?'on':''}" onclick="s.selected=${h.id};save();renderRoster()"><div class="heroTop"><div class="portrait">${classIcons[h.class]}</div><div><div class="name">${h.name}</div><div class="muted">${h.class} · Lv. ${h.level}</div></div></div><div class="power"><span>${h.busy?'Away':h.trait} · XP ${h.xp}/${heroXpNeeded(h.level)}</span><strong>${z.power}</strong></div></div>`}).join('');let h=s.members.find(x=>x.id===s.selected)||s.members[0];if(!h)return;$('heroDetail').innerHTML=heroDetail(h)}
+function heroDetail(h){
+  let z=hs(h),slots=C[h.class].slots;
+  const wep=s.inventory.find(x=>x.id===h.equip.Weapon);
+  const scaling=wep?`${wep.weaponType} · ${String(wep.scale).toUpperCase()} scaling · ${elementIcon[wep.damageType||'physical']} ${wep.damageType}`:'No weapon equipped';
+
+  return `<div class="head"><div class="heroTop"><div class="portrait">${classIcons[h.class]}</div><div><h2>${h.name}</h2><p>${h.class} · ${h.rarity} · ${h.trait}</p></div></div><div><b>${z.power} power</b><br><button class="btn" style="margin-top:6px" onclick="dismissHero(${h.id})">Dismiss</button></div></div>
+  <div style="margin:10px 0 14px">
+    <div style="display:flex;justify-content:space-between;color:var(--m);font-size:11px;margin-bottom:5px">
+      <span>Level ${h.level} XP</span>
+      <span>${h.xp} / ${heroXpNeeded(h.level)}</span>
+    </div>
+    <div class="progressTrack"><div class="progressFill" style="width:${Math.min(100,h.xp/heroXpNeeded(h.level)*100)}%"></div></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><span>HP</span><strong>${z.hp}</strong></div>
+    <div class="stat"><span>STR</span><strong>${z.str}</strong></div>
+    <div class="stat"><span>DEX</span><strong>${z.dex}</strong></div>
+    <div class="stat"><span>INT</span><strong>${z.int}</strong></div>
+    <div class="stat"><span>SPD</span><strong>${z.spd}</strong></div>
+    <div class="stat"><span>DEF</span><strong>${z.def}</strong></div>
+    <div class="stat"><span>MDEF</span><strong>${z.mdef}</strong></div>
+    <div class="stat"><span>Fire Res</span><strong>${z.fire}%</strong></div>
+    <div class="stat"><span>Ice Res</span><strong>${z.ice}%</strong></div>
+    <div class="stat"><span>Poison Res</span><strong>${z.poison}%</strong></div>
+    <div class="stat"><span>Lightning Res</span><strong>${z.lightning}%</strong></div>
+    <div class="stat"><span>Regen</span><strong>${z.regen}</strong></div>
+    <div class="stat"><span>Lifesteal</span><strong>${z.lifesteal}%</strong></div>
+  </div>
+  <div class="chips"><span class="chip">${scaling}</span><span class="chip">Allowed weapons: ${C[h.class].weapons.join(', ')}</span></div>
+  <h3>Equipment</h3>
+  <div class="slots">${slots.map(k=>{
+    let it=s.inventory.find(x=>x.id===h.equip[k]);
+    return `<div class="slot" onclick="equipModal(${h.id},'${k}')"><div style="font-size:22px">${it&&it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[k]||'🎒'):(itemIcons[k]||'🎒')}</div><small>${k}</small><b>${it?it.name:'Empty'}</b>${it?`<small>${statText(it)}</small>`:''}</div>`;
+  }).join('')}</div>`;
+}
+function renderOffers(type){
+  let box=type==='raid'?'raidList':type==='dungeon'?'dungeonList':'questList';
+  if(type==='dungeon'&&s.level<3){$(box).innerHTML='<div class="empty">Reach guild level 3.</div>';return}
+  if(type==='raid'&&s.level<6){$(box).innerHTML='<div class="empty">Reach guild level 6.</div>';return}
+  $(box).innerHTML=arr(type).map(q=>`<div class="card quest" data-id="${q.id}">
+    <div class="questVisual">${questIcons[type]}</div>
+    <div class="name">${q.name}</div><div class="muted">${q.desc}</div>
+    <div class="chips"><span class="chip">Lv. ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless expedition</span>':`<span class="chip">${q.maxFights} encounters + boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
+    <div class="party">${s.members.filter(h=>!h.busy).map(h=>`<button class="partyMember" data-h="${h.id}" onclick="this.classList.toggle('on')"><span class="miniClass">${classIcons[h.class]}</span><span>${h.name.split(' ')[0]} · ${h.class} · ${h.class==='Mage'||h.class==='Cleric'?'INT '+hs(h).int:h.class==='Ranger'||h.class==='Rogue'?'DEX '+hs(h).dex:'STR '+hs(h).str} · ${hs(h).power}</span></button>`).join('')}</div>
+    <button class="btn gold" onclick="launch('${type}',${q.id},this)">Start Expedition</button>
+  </div>`).join('');
+}
+function launch(type,qid,b){let c=b.closest('.quest'),ids=[...c.querySelectorAll('.party button.on')].slice(0,3).map(x=>+x.dataset.h);send(type,qid,ids)}
+function matHtml(){let e=Object.entries(s.materials||{}).filter(([k,v])=>v>0);return e.length?e.map(([k,v])=>`<div class="mat">${RESOURCE_NAMES[k]||k} <b>${v}</b></div>`).join(''):'<div class="muted">No resources yet.</div>'}
+function renderInv(){
+  $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();
+  $('items').innerHTML=s.inventory.length?s.inventory.map(it=>{
+    const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;
+    return `<div class="card"><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${it.slot} · ${it.rarity}${owner?' · Equipped by '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`;
+  }).join(''):'<div class="empty">Inventory empty.</div>';
+}
+function renderCraftQueue(){
+  $('craftQueue').innerHTML=s.craftJobs.length?s.craftJobs.map(j=>{
+    const r=recipes[j.recipe];
+    const total=Math.max(1,j.end-j.start);
+    const pct=clamp((Date.now()-j.start)/total*100,0,100);
+    return `<div class="card"><div class="name">${r?r[0]:'Unknown recipe'}</div><div class="muted">${r?r[1]:'Equipment'} · crafting</div><div class="progressWrap"><div class="progressMeta"><span>${Math.floor(pct)}%</span><span class="timer" data-start="${j.start}" data-end="${j.end}">${fmt(j.end-Date.now())}</span></div><div class="progressTrack"><div class="progressFill" data-start="${j.start}" data-end="${j.end}" style="width:${pct}%"></div></div></div></div>`;
+  }).join(''):'<div class="empty">Nothing is being crafted.</div>';
+}
+let recipeFilter='all';
+function recipePreview(r){
+  const [displayName,slot,specificName,cost,tier]=r;
+  const parts=[];
+
+  if(slot==='Weapon'){
+    const w=WEAPONS[specificName];
+    if(w){
+      parts.push(`Weapon Power ${w.base+tier*2}`);
+      parts.push(`${String(w.scale).toUpperCase()} scaling`);
+      parts.push(`${elementIcon[w.type]||''} ${w.type} damage`);
+      parts.push(`+${Math.max(1,Math.round(2+tier*.7))} ${statName(w.scale)}`);
+    }
+  }else if(slot==='Armor'){
+    const armorProfiles={
+      'Mail':['def',8],
+      'Cuirass':['def',12],
+      'Leathers':['dex',5],
+      'Robes':['mdef',10],
+      'Plate':['def',16],
+      'Scale Vest':['def',11]
+    };
+    const key=Object.keys(armorProfiles).find(k=>specificName.includes(k))||'Mail';
+    const [stat,base]=armorProfiles[key];
+    parts.push(`+${base+tier*2} ${statName(stat)}`);
+
+    if(specificName.includes('Frostguard'))parts.push(`+${12+tier*2} Ice Res`);
+    if(specificName.includes('Flameward'))parts.push(`+${12+tier*2} Fire Res`);
+  }else if(slot==='Ring'){
+    let stat=specificName.includes('Guardian')?'def':specificName.includes('Crystal')?'int':specificName.includes('Runed')?'mdef':'str';
+    parts.push(`+${Math.round(3+tier*1.6)} ${statName(stat)}`);
+  }else if(slot==='Amulet'){
+    let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
+    const value=stat==='hp'?Math.round(12+tier*4):Math.round(3+tier*1.8);
+    parts.push(`+${value} ${statName(stat)}`);
+  }
+
+  return parts;
+}
+
+function setRecipeFilter(f,b){recipeFilter=f;document.querySelectorAll('.recipeFilter').forEach(x=>x.classList.remove('on'));if(b)b.classList.add('on');renderCraft()}
+function renderCraft(){
+ discoverRecipes();
+ let list=recipes.map((r,i)=>[r,i]).filter(([r,i])=>recipeVisible(r)&&(recipeFilter==='all'||r[1]===recipeFilter));
+ if(!list.length){$('recipeList').innerHTML='<div class="empty">No recipes discovered here yet. Find new crafting resources to reveal recipes.</div>';return}
+
+ $('recipeList').innerHTML=list.map(([r,i])=>{
+   let lv=s.level>=r[4],
+       mat=Object.entries(r[3]).every(([k,v])=>(s.materials[k]||0)>=v),
+       ok=lv&&mat,
+       wd=r[1]==='Weapon'?WEAPONS[r[2]]:null,
+       preview=recipePreview(r);
+
+   return `<div class="card">
+     <div class="itemVisual">${r[1]==='Weapon'?(WEAPONS[r[2]]?.icon||'⚔️'):(itemIcons[r[1]]||'🔨')}</div>
+     <div class="name">${r[0]}</div>
+     <div class="muted">${r[1]} · Guild Lv. ${r[4]}</div>
+
+     <div class="chips" style="margin-top:8px">
+       ${preview.map(x=>`<span class="chip">${x}</span>`).join('')}
+     </div>
+
+     <div class="chips" style="margin-top:10px">
+       ${Object.entries(r[3]).map(([k,v])=>`<span class="chip">${RESOURCE_NAMES[k]||k} ${v}${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?' · Boss: '+BOSS_RESOURCE_SOURCE[k]:''}</span>`).join('')}
+     </div>
+
+     <button class="btn ${ok?'gold':''}" ${ok?'':'disabled'} onclick="craft(${i})" style="margin-top:10px">
+       ${!lv?'Locked':!mat?'Missing materials':'Craft · '+(18+r[4]*12)+'s'}
+     </button>
+   </div>`;
+ }).join('')
+}
+function renderUp(){$('upgradeList').innerHTML=upgrades.map(u=>{let l=s.up[u[0]]||0,c=Math.round(u[3]*Math.pow(1.65,l));return`<div class="card"><div class="name">${u[1]}</div><div class="muted">${u[2]}</div><div class="chips"><span class="chip">${l}/${u[4]}</span></div><button class="btn ${s.gold>=c&&l<u[4]?'gold':''}" ${l>=u[4]?'disabled':''} onclick="upgrade('${u[0]}')">${l>=u[4]?'Maxed':'Upgrade · '+c+'g'}</button></div>`}).join('')}
+function showModal(t,b){$('modalTitle').textContent=t;$('modalBody').innerHTML=b;$('modal').classList.add('on')}function closeModal(){$('modal').classList.remove('on')}
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{let p=b.dataset.p;if(p==='dungeons'&&s.level<3)return notify('Dungeons unlock at guild level 3.');if(p==='raids'&&s.level<6)return notify('Raids unlock at guild level 6.');document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(p).classList.add('on')});
+$('refreshRec').onclick=()=>refreshRec(true);$('rename').onclick=()=>{let n=prompt('Guild name',s.guild);if(n){s.guild=n.trim().slice(0,40);save();render()}};
+$('exportSave').onclick=()=>{let a=document.createElement('a'),b=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});a.href=URL.createObjectURL(b);a.download='guildmaster-save.json';a.click()};
+$('importSave').onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{s=JSON.parse(r.result);save();render()}catch(e){notify('That save file is invalid.')}};r.readAsText(i.files[0])};i.click()};
+$('reset').onclick=()=>showModal('Reset Progress',`<div class="card"><div class="name dangerText">Delete all progress?</div><div class="muted">This cannot be undone unless you exported a save first.</div><button class="btn" style="margin-top:10px" onclick="confirmReset()">Reset Guild</button></div>`);
+function confirmReset(){
+  localStorage.removeItem('guildmaster-v1');
+  localStorage.removeItem('guildmaster-v1-backup');
+  s=fresh();ensure();save();closeModal();render();notify('Guild progress reset.','good');
+}
+function updateProgressUI(){
+  const now=Date.now();
+  document.querySelectorAll('.timer').forEach(x=>x.textContent=fmt(+x.dataset.end-now));
+  document.querySelectorAll('.progressFill[data-start]').forEach(x=>{
+    const start=+x.dataset.start,end=+x.dataset.end,total=Math.max(1,end-start);
+    const pct=clamp((now-start)/total*100,0,100);
+    x.style.width=pct+'%';
+    const label=x.closest('.progressWrap')?.querySelector('.progressMeta span:first-child');
+    if(label)label.textContent=Math.floor(pct)+'%';
+  });
+}
+setInterval(()=>{
+  completeCrafting();
+  s.missions.forEach(m=>stepBattle(m));
+  updateProgressUI();
+  renderActive();
+  renderCombat();
+},2000);
+setInterval(()=>{renderInv();renderCraftQueue();renderCraft();renderResourcesLite();save()},5000);
+function renderResourcesLite(){
+  $('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();
+}
+setInterval(save,5000);
+window.addEventListener('pagehide',()=>{s.lastHiddenAt=Date.now();save()});
+window.addEventListener('beforeunload',save);
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){
+    s.lastHiddenAt=Date.now();
+    save();
+  }else{
+    const elapsed=s.lastHiddenAt?Date.now()-s.lastHiddenAt:0;
+    s.lastHiddenAt=0;
+    offlineCatchup(elapsed);
+    render();
+  }
+});
+load();ensure();
+setInterval(()=>{
+  if(!s.recruits.length&&s.nextApplicantsAt&&Date.now()>=s.nextApplicantsAt){
+    fillApplicants();save();render();
+  }else if(document.getElementById('recruits')&&document.getElementById('recruits').closest('.page')?.classList.contains('active')){
+    renderRec();
+  }
+},1000);
+render();
+</script></body></html>
