@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
+<title>Guildmaster | My Random Tools</title>
+<style>
+:root{--bg:#0b0e11;--p:#13181e;--p2:#191f26;--b:#2b3540;--t:#f1eee6;--m:#9ca6b0;--g:#e2b45c;--gr:#7eb38d;--r:#ce746d;--bl:#7ea3c5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:14px system-ui,-apple-system,Segoe UI,sans-serif}
+button{font:inherit;cursor:pointer}.site{height:60px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--b)}
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--t);font-weight:800}.mark{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:var(--g);color:#17120a;font:800 12px Consolas}
+.site nav a{color:var(--m);text-decoration:none;margin-left:18px;font-size:13px}.game{max-width:1450px;margin:auto;padding:14px}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.top h1{margin:0;font-size:25px}.sub{color:var(--m);font-size:12px;margin-top:3px}
+.res{display:flex;gap:7px;flex-wrap:wrap}.res span{background:var(--p);border:1px solid var(--b);border-radius:9px;padding:8px 10px;font-size:12px}.res strong{color:var(--g)}
+.shell{display:grid;grid-template-columns:210px 1fr;gap:12px}.side{background:var(--p);border:1px solid var(--b);border-radius:12px;padding:8px;height:max-content;position:sticky;top:10px}
+.nav{width:100%;text-align:left;border:0;background:transparent;color:var(--m);padding:11px;border-radius:8px;font-weight:700}.nav:hover,.nav.on{background:#211b11;color:var(--g)}
+.page{display:none}.page.on{display:block}.panel{background:var(--p);border:1px solid var(--b);border-radius:12px;padding:14px}.panel+.panel{margin-top:12px}
+.head{display:flex;justify-content:space-between;gap:12px;align-items:flex-end;margin-bottom:11px}.head h2,.head h3{margin:0}.head p{margin:3px 0 0;color:var(--m);font-size:11px}
+.btn{border:1px solid #3b4854;background:var(--p2);color:var(--t);border-radius:8px;padding:8px 10px;font-weight:700;font-size:12px}.btn.gold{background:var(--g);border-color:var(--g);color:#17120a}.btn:disabled{opacity:.4;cursor:not-allowed}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{background:#0f1419;border:1px solid var(--b);border-radius:10px;padding:10px}.name{font-weight:800}.muted{color:var(--m);font-size:11px;line-height:1.45}.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}.chip{border:1px solid var(--b);border-radius:999px;padding:3px 6px;color:var(--m);font-size:10px}
+.hero{cursor:pointer}.hero.on{border-color:var(--g)}.portrait{width:42px;height:42px;border:1px solid var(--b);background:var(--p2);border-radius:9px;display:grid;place-items:center;font-weight:900}
+.heroTop{display:flex;gap:9px;align-items:center}.power{display:flex;justify-content:space-between;margin-top:8px;color:var(--m);font-size:10px}.power strong{color:var(--t)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.stat{border:1px solid var(--b);border-radius:8px;padding:8px;background:#0c1014}.stat span{color:var(--m);font-size:9px;text-transform:uppercase}.stat strong{display:block;font-size:17px;margin-top:3px}
+.roster,.quests,.inventory,.recipes,.active,.upgrades{display:grid;gap:9px}.roster{grid-template-columns:repeat(3,1fr)}.quests,.active{grid-template-columns:repeat(2,1fr)}.inventory{grid-template-columns:repeat(4,1fr)}.recipes,.upgrades{grid-template-columns:repeat(3,1fr)}
+.party{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}.party button{border:1px solid var(--b);background:#0b0f13;color:var(--m);border-radius:999px;padding:5px 7px;font-size:10px}.party button.on{border-color:var(--g);color:var(--g)}
+.timer{color:var(--g);font:700 12px Consolas}
+.progressWrap{margin-top:9px}
+.progressMeta{display:flex;justify-content:space-between;gap:10px;color:var(--m);font-size:10px;margin-bottom:5px}
+.progressTrack{height:10px;background:#080b0e;border:1px solid var(--b);border-radius:999px;overflow:hidden}
+.progressFill{height:100%;width:0;background:var(--g);transition:width .35s linear}
+.saveState{color:var(--m);font-size:11px;margin-top:8px}.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.slot{border:1px solid var(--b);border-radius:8px;padding:8px;min-height:58px;cursor:pointer}.slot small{color:var(--m)}.slot b{display:block;margin-top:4px;font-size:11px}
+.log{background:#090c0f;border:1px solid var(--b);border-radius:9px;padding:9px;max-height:260px;overflow:auto;font:11px/1.55 Consolas;color:#aeb7c0}.good{color:#8ac79a}.bad{color:#df857d}.rare{color:#7cace0}.epic{color:#b48bdd}.legendary{color:#e5b85f}
+.modalBg{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modalBg.on{display:flex}.modal{width:min(720px,100%);max-height:85vh;overflow:auto;background:var(--p);border:1px solid #44515d;border-radius:13px;padding:14px}
+.empty{text-align:center;color:var(--m);padding:22px;border:1px dashed var(--b);border-radius:9px}.mats{display:flex;gap:7px;flex-wrap:wrap}.mat{border:1px solid var(--b);border-radius:8px;padding:7px 9px}.mat b{color:var(--g)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto}.nav{width:auto;white-space:nowrap}.g2,.quests,.active{grid-template-columns:1fr}.roster{grid-template-columns:repeat(2,1fr)}.inventory,.recipes,.upgrades{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.roster,.inventory,.recipes,.upgrades,.g4,.stats{grid-template-columns:1fr}}
+</style></head><body>
+<header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
+<div class="game">
+<div class="top"><div><h1>Guildmaster</h1><div class="sub">Build a guild strong enough to take on the things sensible people avoid.</div></div>
+<div class="res"><span>Guild Lv. <strong id="lv"></strong></span><span>Gold <strong id="gold"></strong></span><span>Rep <strong id="rep"></strong></span></div></div>
+<div class="shell">
+<aside class="side">
+<button class="nav on" data-p="hall">Guild Hall</button><button class="nav" data-p="roster">Roster</button><button class="nav" data-p="quests">Quests</button>
+<button class="nav" data-p="dungeons">Dungeons</button><button class="nav" data-p="raids">Raids</button><button class="nav" data-p="inventory">Inventory</button>
+<button class="nav" data-p="crafting">Crafting</button><button class="nav" data-p="upgrades">Upgrades</button>
+</aside>
+<main>
+<section class="page on" id="hall">
+<div class="g2">
+<div class="panel"><div class="head"><div><h2 id="guildName"></h2><p>Guild headquarters</p></div><button class="btn" id="rename">Rename</button></div>
+<div class="g4"><div class="stat"><span>Members</span><strong id="memberCount"></strong></div><div class="stat"><span>Total Power</span><strong id="totalPower"></strong></div><div class="stat"><span>Wins</span><strong id="wins"></strong></div><div class="stat"><span>Guild XP</span><strong id="guildXp"></strong></div></div></div>
+<div class="panel"><div class="head"><div><h3>Recruitment</h3><p>Hire new guild members.</p></div><button class="btn" id="refreshRec">Refresh · 25g</button></div><div id="recruits" class="g2"></div></div>
+</div>
+<div class="panel"><div class="head"><div><h3>Active Missions</h3><p>Missions keep counting down while the site is closed.</p></div></div><div id="active" class="active"></div></div>
+<div class="panel"><div class="head"><h3>Guild Log</h3></div><div id="log" class="log"></div></div>
+</section>
+
+<section class="page" id="roster"><div class="panel"><div class="head"><div><h2>Roster</h2><p>Select an adventurer to manage their equipment.</p></div></div><div id="rosterList" class="roster"></div></div><div class="panel"><div id="heroDetail"></div></div></section>
+<section class="page" id="quests"><div class="panel"><div class="head"><div><h2>Quest Board</h2><p>Choose up to three available members.</p></div><button class="btn" onclick="refreshOffers('quest')">Refresh</button></div><div id="questList" class="quests"></div></div></section>
+<section class="page" id="dungeons"><div class="panel"><div class="head"><div><h2>Dungeons</h2><p>Unlocks at guild level 3. Better loot, longer missions.</p></div></div><div id="dungeonList" class="quests"></div></div></section>
+<section class="page" id="raids"><div class="panel"><div class="head"><div><h2>Raids</h2><p>Unlocks at guild level 6. High risk, high reward.</p></div></div><div id="raidList" class="quests"></div></div></section>
+<section class="page" id="inventory"><div class="panel"><div class="head"><h2>Inventory</h2></div><div id="matBar" class="mats"></div></div><div class="panel"><div id="items" class="inventory"></div></div></section>
+<section class="page" id="crafting">
+<div class="panel"><div class="head"><div><h2>Crafting</h2><p>Turn mission materials into equipment. Crafting continues while the site is closed.</p></div></div><div id="craftMats" class="mats"></div></div>
+<div class="panel"><div class="head"><div><h3>Crafting Queue</h3><p>Completed items are placed in inventory automatically.</p></div></div><div id="craftQueue" class="active"></div></div>
+<div class="panel"><div id="recipeList" class="recipes"></div></div>
+</section>
+<section class="page" id="upgrades"><div class="panel"><div class="head"><div><h2>Guild Upgrades</h2><p>Permanent bonuses for the whole guild.</p></div></div><div id="upgradeList" class="upgrades"></div></div>
+<div class="panel"><div class="head"><h3>Save</h3></div><button class="btn" id="exportSave">Export Save</button> <button class="btn" id="importSave">Import Save</button> <button class="btn" id="reset">Reset Guild</button><div class="saveState" id="saveState">Autosave ready.</div></div></section>
+</main></div></div>
+
+<div class="modalBg" id="modal"><div class="modal"><div class="head"><h3 id="modalTitle"></h3><button class="btn" onclick="closeModal()">Close</button></div><div id="modalBody"></div></div></div>
+
+<script>
+const $=x=>document.getElementById(x);
+const C={Warrior:[125,13,14,7,'W',['Weapon','Armor','Ring']],Ranger:[92,15,8,15,'R',['Weapon','Armor','Ring']],Mage:[72,21,5,10,'M',['Weapon','Armor','Amulet']],Cleric:[96,11,11,8,'C',['Weapon','Armor','Amulet']],Rogue:[82,17,7,18,'G',['Weapon','Armor','Ring']],Paladin:[118,12,17,6,'P',['Weapon','Armor','Amulet']]};
+const FN=['Alden','Bryn','Cael','Dara','Eira','Fen','Garrick','Iris','Joren','Kael','Lysa','Mira','Nell','Orin','Rhea','Soren','Tarin','Veya'],LN=['Ashfall','Briar','Crowe','Dawn','Ember','Frost','Grey','Hearth','Ironwood','Rook','Stone','Thorne','Vale','West'];
+const traits=[['Brave',0,2,0,0],['Stalwart',12,0,2,0],['Quick',0,0,0,3],['Tough',18,0,1,0],['Clever',0,2,0,1]];
+const Q=[['Goblin Trouble','Clear a roadside goblin nest.'],['Missing Caravan','Find a caravan lost near the forest.'],['Bandit Hunt','Break up a bandit camp.'],['Ruined Watchtower','Investigate an abandoned border tower.'],['Graveyard Shift','Something keeps opening the graves.']];
+const D=[['Sunken Crypt','Descend through drowned burial halls.'],['Ashen Mine','Explore an abandoned mine.'],['Spider Warrens','Clear tunnels full of giant spiders.'],['Old King’s Vault','Open a sealed royal vault.']];
+const R=[['Bone Colossus','Destroy a walking siege engine made of bones.'],['Dragon of Red Peak','End a dragon’s very aggressive tax policy.'],['Hollow Court','Defeat an undead noble court.']];
+const rar=['Common','Uncommon','Rare','Epic','Legendary'],rm={Common:1,Uncommon:1.08,Rare:1.18,Epic:1.32,Legendary:1.52};
+const mats=['Iron','Wood','Cloth','Crystal','Essence'];
+const recipes=[['Forged Weapon','Weapon',{Iron:5,Wood:2},1],['Reinforced Armor','Armor',{Iron:6,Cloth:3},1],['Silver Ring','Ring',{Iron:3,Crystal:2},2],['Arcane Amulet','Amulet',{Crystal:4,Essence:3},3],['Runed Weapon','Weapon',{Iron:6,Crystal:3,Essence:2},3]];
+const upgrades=[['recruit','Recruitment Hall','Improves recruit quality.',220,4],['smith','Blacksmith','Improves crafted gear.',260,5],['training','Training Hall','More adventurer XP.',250,5],['storage','Storehouse','More materials from missions.',240,4],['board','Quest Office','More gold and reputation.',230,5]];
+let s;
+const pick=a=>a[Math.floor(Math.random()*a.length)],rnd=(a,b)=>Math.floor(a+Math.random()*(b-a+1)),clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function fresh(){return{guild:'Ironhaven Guild',gold:450,rep:0,level:1,xp:0,wins:0,next:1,members:[],recruits:[],inventory:[],materials:{Iron:4,Wood:3,Cloth:3,Crystal:0,Essence:0},missions:[],craftJobs:[],quests:[],dungeons:[],raids:[],up:{recruit:0,smith:0,training:0,storage:0,board:0},log:['Guild charter signed.'],selected:null}}
+let lastSave=0;
+function save(){
+  try{
+    const data=JSON.stringify(s);
+    const current=localStorage.getItem('guildmaster-v1');
+    if(current&&current!==data)localStorage.setItem('guildmaster-v1-backup',current);
+    localStorage.setItem('guildmaster-v1',data);
+    lastSave=Date.now();
+    const el=$('saveState');
+    if(el)el.textContent='Saved automatically · '+new Date(lastSave).toLocaleTimeString();
+  }catch(e){
+    const el=$('saveState');
+    if(el)el.textContent='Save failed in this browser.';
+  }
+}
+function load(){
+  try{
+    const raw=localStorage.getItem('guildmaster-v1');
+    s=raw?JSON.parse(raw):fresh();
+  }catch(e){
+    try{
+      const backup=localStorage.getItem('guildmaster-v1-backup');
+      s=backup?JSON.parse(backup):fresh();
+    }catch(e2){s=fresh()}
+  }
+  s.materials=Object.assign({Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0},s.materials||{});
+  s.up=Object.assign({recruit:0,smith:0,training:0,storage:0,board:0},s.up||{});
+  s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];
+}
+function id(){return s.next++}
+function rr(b=0){let r=Math.random()+b;return r>.995?'Legendary':r>.94?'Epic':r>.78?'Rare':r>.48?'Uncommon':'Common'}
+function hero(){let c=pick(Object.keys(C)),t=pick(traits),ra=rr((s.up.recruit||0)*.025),lv=Math.max(1,s.level-1+rnd(0,2));return{id:id(),name:pick(FN)+' '+pick(LN),class:c,rarity:ra,trait:t[0],level:lv,xp:0,busy:false,equip:{Weapon:null,Armor:null,Ring:null,Amulet:null},bonus:[t[1]+lv*3,t[2]+lv,t[3]+lv,t[4]+Math.floor(lv/2)]}}
+function item(slot,tier=1){let ra=rr(tier*.02),stats={Weapon:['atk','spd'],Armor:['def','hp'],Ring:['spd','atk'],Amulet:['atk','def']},bases={Weapon:['Sword','Axe','Bow','Staff'],Armor:['Mail','Cuirass','Leathers','Robes'],Ring:['Band','Signet','Ring'],Amulet:['Charm','Pendant','Amulet']};let st=pick(stats[slot]),v=Math.round((rnd(4,8)+tier*4)*rm[ra]);return{id:id(),slot,rarity:ra,stat:st,value:v,power:v*4,name:pick(['Fine','Runed','Hardened','Ancient','Gilded'])+' '+pick(bases[slot]),equipped:null}}
+function hs(h){let b=C[h.class],e={hp:0,atk:0,def:0,spd:0,power:0};Object.values(h.equip).forEach(i=>{let it=s.inventory.find(x=>x.id===i);if(it){e[it.stat]+=it.value;e.power+=it.power}});let m=rm[h.rarity];let hp=Math.round((b[0]+h.bonus[0]+e.hp)*m),atk=Math.round((b[1]+h.bonus[1]+e.atk)*m),def=Math.round((b[2]+h.bonus[2]+e.def)*m),spd=Math.round((b[3]+h.bonus[3]+e.spd)*m);return{hp,atk,def,spd,power:Math.round(hp*.18+atk*2.6+def*2.2+spd*1.7+e.power*.8)}}
+function log(x){s.log.unshift(x);s.log=s.log.slice(0,50)}
+function xp(n){s.xp+=n;let need=100+(s.level-1)*80;while(s.xp>=need){s.xp-=need;s.level++;s.gold+=100+s.level*30;log('Guild reached level '+s.level+'.');need=100+(s.level-1)*80}}
+function ensure(){if(!s.members.length){for(let i=0;i<3;i++)s.members.push(hero());s.inventory.push(item('Weapon'),item('Armor'))}if(!s.recruits.length)refreshRec(false);if(!s.quests.length)refreshOffers('quest');if(!s.dungeons.length)refreshOffers('dungeon');if(!s.raids.length)refreshOffers('raid')}
+function refreshRec(pay=true){if(pay&&s.gold<25)return alert('Not enough gold.');if(pay)s.gold-=25;s.recruits=Array.from({length:4},hero);save();render()}
+function offer(type){let src=type==='raid'?R:type==='dungeon'?D:Q,t=pick(src),lv=Math.max(type==='raid'?6:type==='dungeon'?3:1,s.level+rnd(-1,2)),mul=type==='raid'?2.5:type==='dungeon'?1.55:1;return{id:id(),type,name:t[0],desc:t[1],level:lv,target:Math.round((90+lv*58)*mul),dur:type==='raid'?rnd(180,260):type==='dungeon'?rnd(90,150):rnd(35,80),gold:Math.round((35+lv*24)*mul),rep:Math.round((8+lv*6)*mul)}}
+function arr(type){return type==='raid'?s.raids:type==='dungeon'?s.dungeons:s.quests}
+function refreshOffers(type){let n=type==='raid'?3:type==='dungeon'?4:6,a=Array.from({length:n},()=>offer(type));if(type==='raid')s.raids=a;else if(type==='dungeon')s.dungeons=a;else s.quests=a;save();renderOffers(type)}
+function power(ids){return ids.reduce((z,i)=>{let h=s.members.find(x=>x.id===i);return z+(h?hs(h).power:0)},0)}
+function send(type,qid,ids){let q=arr(type).find(x=>x.id===qid);if(!q||!ids.length)return alert('Choose a party.');let party=ids.map(i=>s.members.find(x=>x.id===i));if(party.some(h=>h.busy))return alert('Someone is already away.');party.forEach(h=>h.busy=true);let now=Date.now();s.missions.push({...q,id:id(),party:ids,start:now,end:now+q.dur*1000});let a=arr(type),i=a.findIndex(x=>x.id===qid);a.splice(i,1,offer(type));log('Party departed for '+q.name+'.');save();render()}
+function complete(){let now=Date.now(),ready=s.missions.filter(m=>m.end<=now);ready.forEach(resolve);s.missions=s.missions.filter(m=>m.end>now);if(ready.length)save()}
+function resolve(m){let pp=power(m.party),ok=Math.random()<clamp(.25+(pp/m.target)*.48,.12,.96),heroes=m.party.map(i=>s.members.find(x=>x.id===i)).filter(Boolean);heroes.forEach(h=>h.busy=false);let lines=['Party power '+pp+' / target '+m.target];if(ok){let bm=1+(s.up.board||0)*.08,g=Math.round(m.gold*bm),rp=Math.round(m.rep*bm);s.gold+=g;s.rep+=rp;s.wins++;xp(Math.round(rp*1.4));lines.push('Mission successful. +'+g+' gold, +'+rp+' reputation.');let rolls=m.type==='raid'?5:m.type==='dungeon'?3:2;for(let i=0;i<rolls;i++){let pool=m.type==='raid'?['Iron','Crystal','Essence','Essence']:m.type==='dungeon'?mats:['Iron','Wood','Cloth','Crystal'],k=pick(pool),q=rnd(1,3)+Math.floor((s.up.storage||0)/2);s.materials[k]+=q;lines.push(k+' +'+q)}if(Math.random()<(m.type==='raid'?.95:m.type==='dungeon'?.7:.32)){let it=item(pick(['Weapon','Armor','Ring','Amulet']),Math.max(1,m.level-1));s.inventory.push(it);lines.push('Found '+it.name+'.')}heroes.forEach(h=>{h.xp+=Math.round((20+m.level*8)*(1+(s.up.training||0)*.12));let need=70+h.level*35;if(h.xp>=need){h.xp-=need;h.level++;h.bonus[0]+=4;h.bonus[1]++;h.bonus[2]++;lines.push(h.name+' reached level '+h.level+'.')}});s.wins++;log(m.name+' completed.')}else{lines.push('Mission failed. The party retreated.');log(m.name+' failed.')}showModal(ok?'Mission Complete':'Mission Failed',`<div class="log">${lines.map(x=>`<div>${x}</div>`).join('')}</div>`)}
+function recruit(i){let h=s.recruits.find(x=>x.id===i),cost=Math.round((95+h.level*22)*rm[h.rarity]);if(s.gold<cost)return alert('Not enough gold.');s.gold-=cost;s.members.push(h);s.recruits=s.recruits.filter(x=>x.id!==i);s.recruits.push(hero());log(h.name+' joined the guild.');save();render()}
+function equip(hid,iid){let h=s.members.find(x=>x.id===hid),it=s.inventory.find(x=>x.id===iid);if(!h||!it)return;let old=s.inventory.find(x=>x.id===h.equip[it.slot]);if(old)old.equipped=null;if(it.equipped){let o=s.members.find(x=>x.id===it.equipped);if(o)o.equip[it.slot]=null}h.equip[it.slot]=it.id;it.equipped=h.id;save();closeModal();renderRoster()}
+function equipModal(hid,slot){let a=s.inventory.filter(x=>x.slot===slot);showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${it.rarity.toLowerCase()}">${it.name}</div><div class="muted">${it.rarity} · +${it.value} ${it.stat.toUpperCase()}</div><button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+function craft(i){
+  let r=recipes[i];
+  if(s.level<r[3])return;
+  for(let [k,v] of Object.entries(r[2]))if(s.materials[k]<v)return alert('Not enough materials.');
+  Object.entries(r[2]).forEach(([k,v])=>s.materials[k]-=v);
+  const seconds=12+r[3]*8;
+  const now=Date.now();
+  s.craftJobs.push({id:id(),recipe:i,start:now,end:now+seconds*1000});
+  log('Started crafting '+r[0]+'.');
+  save();render();
+}
+function completeCrafting(){
+  const now=Date.now();
+  const ready=s.craftJobs.filter(j=>j.end<=now);
+  if(!ready.length)return false;
+  ready.forEach(j=>{
+    const r=recipes[j.recipe];
+    if(!r)return;
+    let it=item(r[1],r[3]+(s.up.smith||0));
+    it.name=r[0]+' '+it.name.split(' ').slice(-1)[0];
+    s.inventory.push(it);
+    log('Finished crafting '+it.name+'.');
+  });
+  s.craftJobs=s.craftJobs.filter(j=>j.end>now);
+  save();
+  return true;
+}
+function upgrade(k){let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=Math.round(u[3]*Math.pow(1.65,l));if(l>=u[4]||s.gold<c)return;s.gold-=c;s.up[k]=l+1;save();render()}
+function rarityClass(x){return x==='Rare'?'rare':x==='Epic'?'epic':x==='Legendary'?'legendary':''}
+function fmt(ms){let z=Math.max(0,Math.ceil(ms/1000)),m=Math.floor(z/60),q=z%60;return m?m+':'+String(q).padStart(2,'0'):q+'s'}
+function render(){complete();completeCrafting();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;$('guildXp').textContent=s.xp;renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderInv();renderCraftQueue();renderCraft();renderUp();save()}
+function renderRec(){$('recruits').innerHTML=s.recruits.map(h=>{let z=hs(h),cost=Math.round((95+h.level*22)*rm[h.rarity]);return`<div class="card"><div class="heroTop"><div class="portrait">${C[h.class][4]}</div><div><div class="name">${h.name}</div><div class="muted">${h.class} · <span class="${rarityClass(h.rarity)}">${h.rarity}</span></div></div></div><div class="power"><span>${h.trait}</span><strong>${z.power} power</strong></div><button class="btn gold" onclick="recruit(${h.id})">Recruit · ${cost}g</button></div>`}).join('')}
+function renderActive(){
+  $('active').innerHTML=s.missions.length?s.missions.map(m=>{
+    const start=m.start||(m.end-m.dur*1000);
+    const total=Math.max(1,m.end-start);
+    const pct=clamp((Date.now()-start)/total*100,0,100);
+    return `<div class="card"><div class="name">${m.name}</div><div class="muted">${m.type} · ${m.party.length} members</div><div class="progressWrap"><div class="progressMeta"><span>${Math.floor(pct)}%</span><span class="timer" data-start="${start}" data-end="${m.end}">${fmt(m.end-Date.now())}</span></div><div class="progressTrack"><div class="progressFill" data-start="${start}" data-end="${m.end}" style="width:${pct}%"></div></div></div></div>`;
+  }).join(''):'<div class="empty">No active missions.</div>';
+}
+function renderLog(){$('log').innerHTML=s.log.map(x=>`<div>${x}</div>`).join('')}
+function renderRoster(){$('rosterList').innerHTML=s.members.map(h=>{let z=hs(h);return`<div class="card hero ${s.selected===h.id?'on':''}" onclick="s.selected=${h.id};save();renderRoster()"><div class="heroTop"><div class="portrait">${C[h.class][4]}</div><div><div class="name">${h.name}</div><div class="muted">${h.class} · Lv. ${h.level}</div></div></div><div class="power"><span>${h.busy?'Away':h.trait}</span><strong>${z.power}</strong></div></div>`}).join('');let h=s.members.find(x=>x.id===s.selected)||s.members[0];if(!h)return;$('heroDetail').innerHTML=heroDetail(h)}
+function heroDetail(h){let z=hs(h),slots=C[h.class][5];return`<div class="head"><div><h2>${h.name}</h2><p>${h.class} · ${h.rarity} · ${h.trait}</p></div><b>${z.power} power</b></div><div class="stats"><div class="stat"><span>HP</span><strong>${z.hp}</strong></div><div class="stat"><span>ATK</span><strong>${z.atk}</strong></div><div class="stat"><span>DEF</span><strong>${z.def}</strong></div><div class="stat"><span>SPD</span><strong>${z.spd}</strong></div></div><h3>Equipment</h3><div class="slots">${slots.map(k=>{let it=s.inventory.find(x=>x.id===h.equip[k]);return`<div class="slot" onclick="equipModal(${h.id},'${k}')"><small>${k}</small><b>${it?it.name:'Empty'}</b>${it?`<small>+${it.value} ${it.stat.toUpperCase()}</small>`:''}</div>`}).join('')}</div>`}
+function renderOffers(type){let box=type==='raid'?'raidList':type==='dungeon'?'dungeonList':'questList';if(type==='dungeon'&&s.level<3){$(box).innerHTML='<div class="empty">Reach guild level 3.</div>';return}if(type==='raid'&&s.level<6){$(box).innerHTML='<div class="empty">Reach guild level 6.</div>';return}$(box).innerHTML=arr(type).map(q=>`<div class="card quest" data-id="${q.id}"><div class="name">${q.name}</div><div class="muted">${q.desc}</div><div class="chips"><span class="chip">Lv. ${q.level}</span><span class="chip">${q.gold}g</span><span class="chip">${q.rep} rep</span><span class="chip">Target ${q.target}</span><span class="chip">${fmt(q.dur*1000)}</span></div><div class="party">${s.members.filter(h=>!h.busy).map(h=>`<button data-h="${h.id}" onclick="this.classList.toggle('on')">${h.name.split(' ')[0]} ${hs(h).power}</button>`).join('')}</div><button class="btn gold" onclick="launch('${type}',${q.id},this)">Send Party</button></div>`).join('')}
+function launch(type,qid,b){let c=b.closest('.quest'),ids=[...c.querySelectorAll('.party button.on')].slice(0,3).map(x=>+x.dataset.h);send(type,qid,ids)}
+function matHtml(){return Object.entries(s.materials).map(([k,v])=>`<div class="mat">${k} <b>${v}</b></div>`).join('')}
+function renderInv(){$('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();$('items').innerHTML=s.inventory.length?s.inventory.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${it.slot} · ${it.rarity}${it.equipped?' · Equipped':''}</div><div class="good">+${it.value} ${it.stat.toUpperCase()}</div></div>`).join(''):'<div class="empty">Inventory empty.</div>'}
+function renderCraftQueue(){
+  $('craftQueue').innerHTML=s.craftJobs.length?s.craftJobs.map(j=>{
+    const r=recipes[j.recipe];
+    const total=Math.max(1,j.end-j.start);
+    const pct=clamp((Date.now()-j.start)/total*100,0,100);
+    return `<div class="card"><div class="name">${r?r[0]:'Unknown recipe'}</div><div class="muted">${r?r[1]:'Equipment'} · crafting</div><div class="progressWrap"><div class="progressMeta"><span>${Math.floor(pct)}%</span><span class="timer" data-start="${j.start}" data-end="${j.end}">${fmt(j.end-Date.now())}</span></div><div class="progressTrack"><div class="progressFill" data-start="${j.start}" data-end="${j.end}" style="width:${pct}%"></div></div></div></div>`;
+  }).join(''):'<div class="empty">Nothing is being crafted.</div>';
+}
+function renderCraft(){$('recipeList').innerHTML=recipes.map((r,i)=>{let ok=s.level>=r[3]&&Object.entries(r[2]).every(([k,v])=>s.materials[k]>=v);return`<div class="card"><div class="name">${r[0]}</div><div class="muted">${r[1]} · Guild Lv. ${r[3]}</div><div class="chips">${Object.entries(r[2]).map(([k,v])=>`<span class="chip">${k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''}" ${ok?'':'disabled'} onclick="craft(${i})">${s.level<r[3]?'Locked':'Craft · '+(12+r[3]*8)+'s'}</button></div>`}).join('')}
+function renderUp(){$('upgradeList').innerHTML=upgrades.map(u=>{let l=s.up[u[0]]||0,c=Math.round(u[3]*Math.pow(1.65,l));return`<div class="card"><div class="name">${u[1]}</div><div class="muted">${u[2]}</div><div class="chips"><span class="chip">${l}/${u[4]}</span></div><button class="btn ${s.gold>=c&&l<u[4]?'gold':''}" ${l>=u[4]?'disabled':''} onclick="upgrade('${u[0]}')">${l>=u[4]?'Maxed':'Upgrade · '+c+'g'}</button></div>`}).join('')}
+function showModal(t,b){$('modalTitle').textContent=t;$('modalBody').innerHTML=b;$('modal').classList.add('on')}function closeModal(){$('modal').classList.remove('on')}
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{let p=b.dataset.p;if(p==='dungeons'&&s.level<3)return alert('Dungeons unlock at guild level 3.');if(p==='raids'&&s.level<6)return alert('Raids unlock at guild level 6.');document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(p).classList.add('on')});
+$('refreshRec').onclick=()=>refreshRec(true);$('rename').onclick=()=>{let n=prompt('Guild name',s.guild);if(n){s.guild=n.trim().slice(0,40);save();render()}};
+$('exportSave').onclick=()=>{let a=document.createElement('a'),b=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});a.href=URL.createObjectURL(b);a.download='guildmaster-save.json';a.click()};
+$('importSave').onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{s=JSON.parse(r.result);save();render()}catch(e){alert('Invalid save.')}};r.readAsText(i.files[0])};i.click()};
+$('reset').onclick=()=>{if(confirm('Reset Guildmaster save?')){localStorage.removeItem('guildmaster-v1');s=fresh();ensure();save();render()}};
+function updateProgressUI(){
+  const now=Date.now();
+  document.querySelectorAll('.timer').forEach(x=>x.textContent=fmt(+x.dataset.end-now));
+  document.querySelectorAll('.progressFill').forEach(x=>{
+    const start=+x.dataset.start,end=+x.dataset.end,total=Math.max(1,end-start);
+    const pct=clamp((now-start)/total*100,0,100);
+    x.style.width=pct+'%';
+    const label=x.closest('.progressWrap')?.querySelector('.progressMeta span:first-child');
+    if(label)label.textContent=Math.floor(pct)+'%';
+  });
+}
+setInterval(()=>{
+  const beforeM=s.missions.length,beforeC=s.craftJobs.length;
+  complete();
+  completeCrafting();
+  if(beforeM!==s.missions.length||beforeC!==s.craftJobs.length)render();
+  else updateProgressUI();
+},500);
+setInterval(save,5000);
+window.addEventListener('pagehide',save);
+window.addEventListener('beforeunload',save);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
+load();ensure();render();
+</script></body></html>
