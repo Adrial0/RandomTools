@@ -1479,7 +1479,7 @@ setInterval(()=>{
   updateProgressUI();
   renderActive();
   renderCombat();
-},2000);
+},500);
 setInterval(()=>{renderInv();renderCraftQueue();renderCraft();renderResourcesLite();save()},5000);
 function renderResourcesLite(){
   $('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();
