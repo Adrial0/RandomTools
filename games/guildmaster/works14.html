@@ -172,15 +172,6 @@ Rogue:{hp:84,str:7,dex:20,int:6,def:7,mdef:8,threat:1,icon:'G',slots:['Weapon','
 Paladin:{hp:122,str:15,dex:7,int:11,def:18,mdef:13,threat:2,icon:'P',slots:['Weapon','Armor','Jewelry'],weapons:['Longsword','Greatsword','Mace','Warhammer','Spear','Holy Sword']}
 };
 
-const ASSET_BASE='images/';
-const ASSET_VERSION='1';
-
-function assetUrl(path){
-  if(!path)return '';
-  const clean=path.startsWith('images/')?path.slice(7):path;
-  return ASSET_BASE+clean+'?v='+ASSET_VERSION;
-}
-
 const ICONS={
   class:{
     Warrior:'images/classes/warrior.png',
@@ -339,10 +330,9 @@ const ICON_FALLBACKS={
 function iconPath(group,key){return ICONS[group]?.[key]||''}
 function iconFallback(group,key,fallback=''){return ICON_FALLBACKS[group]?.[key]||fallback}
 function gameIcon(group,key,fallback='',cls='gameAsset'){
-  const raw=iconPath(group,key),fb=iconFallback(group,key,fallback);
-  if(!raw)return `<span class="iconFallback ${cls}">${fb}</span>`;
-  const src=assetUrl(raw);
-  return `<span class="iconFallback ${cls}"><img class="${cls}" src="${src}" alt="" data-icon-group="${group}" data-icon-key="${key}" onerror="console.warn('Guildmaster icon missing:',this.src);this.style.display='none';this.nextElementSibling.style.display='inline'"><span style="display:none">${fb}</span></span>`;
+  const src=iconPath(group,key),fb=iconFallback(group,key,fallback);
+  if(!src)return `<span class="iconFallback ${cls}">${fb}</span>`;
+  return `<span class="iconFallback ${cls}"><img class="${cls}" src="${src}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span style="display:none">${fb}</span></span>`;
 }
 function classIcon(h,cls='gameAsset'){return h?.subclass?gameIcon('subclass',h.subclass,iconFallback('class',h.class),cls):gameIcon('class',h.class,iconFallback('class',h.class),cls)}
 function displayClass(h){return subclassDef(h)?.name||h.class}
