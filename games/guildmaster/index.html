@@ -403,6 +403,319 @@ body.windowOpen .side{overflow:hidden!important}
 .modalBg{overscroll-behavior:contain}
 .modalBg .modal{overscroll-behavior:contain}
 
+
+.questScene{
+  width:100%;
+  height:128px;
+  margin-bottom:9px;
+  border:1px solid #6a5434;
+  background-color:#17130e;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  overflow:hidden;
+  box-shadow:inset 0 0 18px rgba(0,0,0,.28);
+}
+.quest.card{overflow:hidden}
+.itemVisual{overflow:hidden!important;position:relative!important}
+.itemVisual>.iconFallback,
+.itemVisual .gameAsset,
+.itemVisual img{
+  max-width:100%!important;
+  max-height:100%!important;
+}
+.itemVisual>.iconFallback{
+  width:100%!important;
+  height:100%!important;
+}
+.itemVisual img{
+  width:auto!important;
+  height:auto!important;
+  object-fit:contain!important;
+  display:block!important;
+}
+.inventoryItemCard{overflow:hidden!important}
+.inventoryItemCard .itemVisual{flex:0 0 auto}
+
+
+.upgradeCard{
+  position:relative;
+  padding:12px!important;
+}
+.upgradeHeader{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:3px;
+}
+.upgradeHeader .name{
+  font-size:16px!important;
+}
+.upgradeLevel{
+  padding:3px 7px!important;
+  font-weight:700;
+  flex:0 0 auto;
+}
+.upgradeDesc{
+  margin-bottom:10px;
+  line-height:1.35;
+}
+.upgradeCosts{
+  display:grid;
+  gap:6px;
+  margin-top:8px;
+  padding-right:112px;
+}
+.upgradeCosts .chip{
+  width:max-content;
+  max-width:100%;
+}
+.upgradeAction{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  min-width:96px;
+}
+.upgradeGold.enough,
+.upgradeResourceProgress .enough{
+  color:#a7b982!important;
+  border-color:#5d7048!important;
+}
+.upgradeGold.missing,
+.upgradeResourceProgress .missing{
+  color:#df8f80!important;
+  border-color:#865044!important;
+}
+@media(max-width:700px){
+  .upgradeCosts{padding-right:0;padding-bottom:48px}
+  .upgradeAction{right:10px;bottom:10px}
+}
+
+
+.actionCard{
+  position:relative;
+  min-height:118px;
+  padding-right:126px!important;
+}
+.actionCard .actionButton{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  min-width:104px;
+}
+.actionRow{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  align-items:flex-end;
+  margin-top:10px;
+}
+.actionRowInfo{min-width:0;flex:1 1 auto}
+.actionRowButtons{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  flex:0 0 auto;
+}
+.actionRowButtons .btn{min-width:96px}
+.modalActionRow{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+.recruitActionCard{padding-right:118px!important}
+.recruitActionCard .recruitActionButton{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  min-width:96px;
+}
+.activeMissionHeader{
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  justify-content:flex-start!important;
+}
+.activeMissionHeader>div{flex:0 1 auto!important}
+.activeMissionHeader .claimAllButton{margin-left:0}
+.marketActionCard,.recipeActionCard,.runeActionCard,.equipActionCard{
+  position:relative;
+  padding-right:116px!important;
+  min-height:112px;
+}
+.marketActionCard .actionButton,
+.recipeActionCard .actionButton,
+.runeActionCard .actionButton,
+.equipActionCard .actionButton{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  min-width:96px;
+}
+@media(max-width:700px){
+  .actionCard,.recruitActionCard,.marketActionCard,.recipeActionCard,.runeActionCard,.equipActionCard{
+    padding-right:10px!important;
+    padding-bottom:56px!important;
+  }
+  .actionCard .actionButton,
+  .recruitActionCard .recruitActionButton,
+  .marketActionCard .actionButton,
+  .recipeActionCard .actionButton,
+  .runeActionCard .actionButton,
+  .equipActionCard .actionButton{
+    right:10px;
+    bottom:10px;
+  }
+  .actionRow{align-items:stretch;flex-direction:column}
+  .actionRowButtons{justify-content:flex-end}
+}
+
+
+/* Activity scene art must always span the full card width. The action button only
+   occupies the lower information area. */
+.quest.actionCard{
+  padding:10px!important;
+  padding-bottom:58px!important;
+}
+.quest.actionCard .questScene{
+  width:100%!important;
+  max-width:none!important;
+  margin-right:0!important;
+}
+.quest.actionCard .actionButton{
+  right:10px;
+  bottom:10px;
+}
+
+/* Guild Hall activity dashboard */
+.guildActivityDashboard{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:10px;
+}
+.guildActivityColumn{min-width:0}
+.guildActivityColumn .active{
+  grid-template-columns:1fr!important;
+}
+.guildActivityHead{
+  display:flex;
+  align-items:flex-end;
+  justify-content:flex-start!important;
+  gap:10px;
+}
+.guildActivityHead>div{flex:0 1 auto}
+.guildActivityHead .btn{flex:0 0 auto}
+
+/* Compact crafting recipe cards */
+#recipeList.recipes{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+.recipeCompact{
+  display:grid!important;
+  grid-template-columns:82px minmax(0,1fr);
+  grid-template-rows:auto auto;
+  gap:8px 10px;
+  padding:9px!important;
+  min-height:178px!important;
+  padding-right:9px!important;
+}
+.recipeCompactMain{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  min-width:0;
+}
+.recipeCompact .itemVisual{
+  width:72px!important;
+  height:72px!important;
+  min-height:72px!important;
+  margin:0 0 5px!important;
+}
+.recipeCompact .name{
+  font-size:13px!important;
+  line-height:1.1;
+}
+.recipeCompact .muted{
+  font-size:10px!important;
+  line-height:1.2;
+}
+.recipeCompactInfo{
+  min-width:0;
+}
+.recipeStatGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:5px;
+}
+.recipeStatGrid .chip{
+  width:100%;
+  padding:5px 7px!important;
+  font-size:11px!important;
+}
+.recipeCompactFooter{
+  grid-column:1/-1;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:8px;
+  border-top:1px solid rgba(121,93,55,.35);
+  padding-top:7px;
+}
+.recipeMaterials{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  min-width:0;
+}
+.recipeMaterials .chip{
+  font-size:10px!important;
+  padding:4px 6px!important;
+}
+.recipeCompactFooter .btn{
+  flex:0 0 auto;
+  min-width:100px;
+}
+
+/* Stat colors */
+.statSTR{color:#e26f62!important;font-weight:700}
+.statDEX{color:#84bf72!important;font-weight:700}
+.statINT{color:#6fa9e8!important;font-weight:700}
+
+@media(max-width:1100px){
+  .guildActivityDashboard{grid-template-columns:1fr}
+  #recipeList.recipes{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:650px){
+  #recipeList.recipes{grid-template-columns:1fr!important}
+}
+
+
+#roster.page.on{overflow:hidden!important}
+.rosterPageLayout{height:100%!important;min-height:0!important;align-items:stretch!important}
+.rosterListPanel,.rosterDetailPanel{height:100%!important;max-height:none!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain}
+.rosterDetailPanel{position:static!important}
+
+.inventoryItemCard{position:relative}
+.runeSlotRow{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.inventoryItemCard .runeSlotRow{position:absolute;top:7px;right:7px;margin:0;flex-direction:column}
+.runeSocket{width:24px;height:24px;display:grid;place-items:center;border:1px solid #655036;background:#17130e}
+.runeSocket.filled{border-color:#a9854d;background:#271e13}
+.runeSocket .gameAsset,.runeSocket img{max-width:20px!important;max-height:20px!important}
+.runeDetailRow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid rgba(121,93,55,.32);font-size:11px}
+
+.expeditionCard.failedMission{border-color:#a54d40!important;background:linear-gradient(180deg,rgba(135,42,35,.16),transparent 60px),#281914!important;box-shadow:0 0 0 1px rgba(183,69,56,.28),2px 3px 0 #100d09!important}
+.failedMission [data-active-defeated]{background:#54251f!important;border-color:#a54d40!important;color:#f0a394!important}
+.harvestCard.cappedHarvest{border-color:#a54d40!important;box-shadow:0 0 0 1px rgba(183,69,56,.25),1px 2px 0 #100d09!important}
+.harvestCard.cappedHarvest .progressFill{background:#a94e40!important}
+.harvestCapText{color:#df8f80!important;font-weight:700}
+.harvestProgress{margin-top:9px}
+#upgradeList.upgrades{display:grid!important}
+
 </style></head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -422,7 +735,16 @@ body.windowOpen .side{overflow:hidden!important}
 <div class="g4"><div class="stat"><span>Members</span><strong id="memberCount"></strong></div><div class="stat"><span>Total Power</span><strong id="totalPower"></strong></div><div class="stat"><span>Wins</span><strong id="wins"></strong></div><div class="stat"><span>Guild XP</span><strong id="guildXp"></strong></div></div></div>
 <div class="panel"><div class="head"><div><h3>Recruitment</h3><p>Your guild begins empty with 2 applicants. Recruiting is free. A fresh batch arrives every 5 minutes after the board is emptied, and Recruitment Hall upgrades increase the number of applicants per batch.</p></div></div><div id="recruits" class="g2"></div></div>
 </div>
-<div class="panel"><div class="head"><div><h3>Active Missions</h3><p>Missions keep counting down while the site is closed.</p></div><button class="btn gold" onclick="claimAllMissionLoot()">Claim All</button></div><div id="active" class="active"></div></div>
+<div class="guildActivityDashboard">
+  <div class="panel guildActivityColumn">
+    <div class="head guildActivityHead"><div><h3>Active Missions</h3><p>Expeditions, dungeons and raids currently underway.</p></div><button class="btn gold" onclick="claimAllMissionLoot()">Claim All</button></div>
+    <div id="active" class="active"></div>
+  </div>
+  <div class="panel guildActivityColumn">
+    <div class="head"><div><h3>Active Harvesting</h3><p>Gathering jobs currently underway.</p></div></div>
+    <div id="harvestActive" class="active"></div>
+  </div>
+</div>
 <div class="panel"><div class="head"><h3>Guild Log</h3></div><div id="log" class="log"></div></div>
 </section>
 
@@ -472,10 +794,7 @@ body.windowOpen .side{overflow:hidden!important}
   <div class="head"><div><h2>Harvesting</h2><p>Send guild members to gather resources while you manage the guild.</p></div></div>
   <div id="harvestList" class="quests"></div>
 </div>
-<div class="panel">
-  <div class="head"><div><h3>Active Harvesting</h3><p>Harvesting continues until you recall the workers.</p></div></div>
-  <div id="harvestActive" class="active"></div>
-</div>
+
 </section>
 <section class="page" id="dungeons"><div class="panel"><div class="head"><div><h2>Dungeons</h2><p>Unlocks at guild level 3. Better loot, longer missions.</p></div></div><div id="dungeonList" class="quests"></div></div></section>
 <section class="page" id="raids"><div class="panel"><div class="head"><div><h2>Raids</h2><p>Unlocks at guild level 6. High risk, high reward. Raids use a fixed 20-member party limit.</p></div></div><div id="raidList" class="quests"></div></div></section>
@@ -895,6 +1214,52 @@ const AREAS=[
 {id:'volcano',name:'Emberfall Volcano',level:40,icon:gameIcon('area','volcano','🌋','gameAsset areaAsset'),desc:'Molten caverns dominated by drakes and demons.',enemyPool:['Drake','Demon','Cultist']},
 {id:'voidlands',name:'The Voidlands',level:55,icon:gameIcon('area','voidlands','🌌','gameAsset areaAsset'),desc:'A warped endgame region filled with demons and wraiths.',enemyPool:['Demon','Wraith','Cultist']}
 ];
+
+const ACTIVITY_BACKGROUNDS={
+  expedition:{
+    forest:'images/backgrounds/greenwood-forest.png',
+    plains:'images/backgrounds/sunfield-plains.png',
+    desert:'images/backgrounds/ashen-desert.png',
+    swamp:'images/backgrounds/blackwater-swamp.png',
+    mountain:'images/backgrounds/ironpeak-mountains.png',
+    tundra:'images/backgrounds/frozen-tundra.png',
+    volcano:'images/backgrounds/emberfall-volcano.png',
+    voidlands:'images/backgrounds/voidlands.png'
+  },
+  dungeon:{
+    'Bone Crypt':'images/backgrounds/bone-crypt.png',
+    'Silken Depths':'images/backgrounds/silken-depths.png',
+    'Rotting Vault':'images/backgrounds/rotting-vault.png',
+    'Cultist Sanctum':'images/backgrounds/cultist-sanctum.png'
+  },
+  raid:{
+    'Drakefall Assault':'images/backgrounds/background13.png',
+    'Ogre Warcamp':'images/backgrounds/background14.png',
+    'Haunted Citadel':'images/backgrounds/background15.png',
+    'Abyss Gate':'images/backgrounds/background16.png'
+  },
+  harvest:{
+    logging:'images/backgrounds/background17.png',
+    fishing:'images/backgrounds/background18.png',
+    herbs:'images/backgrounds/background19.png',
+    hunting:'images/backgrounds/background20.png',
+    quarry:'images/backgrounds/background21.png',
+    copper:'images/backgrounds/background22.png',
+    deepwood:'images/backgrounds/background23.png',
+    crystal:'images/backgrounds/background24.png',
+    moonlake:'images/backgrounds/background25.png',
+    mithril:'images/backgrounds/background26.png',
+    obsidian:'images/backgrounds/background27.png'
+  }
+};
+function activityBackground(type,key){
+  const raw=ACTIVITY_BACKGROUNDS[type]?.[key];
+  return raw?assetUrl(raw):'';
+}
+function sceneBanner(type,key){
+  const url=activityBackground(type,key);
+  return `<div class="questScene"${url?` style="background-image:linear-gradient(rgba(13,10,7,.08),rgba(13,10,7,.28)),url('${url}')"`:''}></div>`;
+}
 
 const HARVEST_AREAS=[
 {id:'logging',name:'Whisperwood Logging Camp',icon:gameIcon('harvest','logging','🪵','gameAsset areaAsset'),skill:'woodcutting',req:1,kind:'Logging',cycle:30,resources:[['Wood',80],['Herbs',20]],desc:'Basic timber and woodland plants.'},
@@ -1554,17 +1919,22 @@ function pendingCount(m){
 }
 function claimAllMissionLoot(){
   const claimable=s.missions.filter(m=>m.stash&&((m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0));
-  if(!claimable.length)return notify('There is no mission loot to claim.');
-  let totalGold=0,totalRep=0,totalItems=0,totalMaterials=0;
-  claimable.forEach(m=>{
-    totalGold+=m.stash.gold||0;
-    totalRep+=m.stash.rep||0;
-    totalItems+=(m.stash.items||[]).length;
-    totalMaterials+=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
-    collectLoot(m.id,true);
-  });
+  const harvestable=s.harvestJobs.filter(j=>Object.values(j.stash||{}).some(v=>v>0));
+  if(!claimable.length&&!harvestable.length)return notify('There is no mission or harvesting loot to claim.');
+
+  const goldBefore=s.gold,repBefore=s.rep,invBefore=s.inventory.length,matBefore={...s.materials};
+  claimable.forEach(m=>collectLoot(m.id,true));
+  harvestable.forEach(j=>collectHarvest(j.id,true));
+
+  const parts=[];
+  const g=s.gold-goldBefore,r=s.rep-repBefore;
+  if(g)parts.push(`${g} gold`);
+  if(r)parts.push(`${r} rep`);
+  Object.keys(s.materials).forEach(k=>{const gained=(s.materials[k]||0)-(matBefore[k]||0);if(gained>0)parts.push(`${gained} ${RESOURCE_NAMES[k]||k}`)});
+  s.inventory.slice(invBefore).forEach(it=>parts.push(`${it.rarity} ${it.name}`));
+
   render();
-  notify(`Claimed all: ${totalGold}g, ${totalRep} rep, ${totalItems} items, ${totalMaterials} materials.`,'good');
+  notify(parts.length?'Claimed: '+parts.join(' · '):'Nothing could be collected — resource storage may be full.','good');
 }
 function collectLoot(mid,quiet=false){
   const m=s.missions.find(x=>x.id===mid);if(!m||!m.stash)return;
@@ -2074,7 +2444,7 @@ function stopExpedition(mid){
   const m=s.missions.find(x=>x.id===mid);if(!m)return;
   collectLoot(mid,true);
   m.party.forEach(hid=>{const h=s.members.find(x=>x.id===hid);if(h)h.busy=false});
-  s.missions=s.missions.filter(x=>x.id!==mid);activeMissionDomKey='';
+  s.missions=s.missions.filter(x=>x.id!==mid);activeMissionDomKey='__force__';
   log('Expedition ended: '+m.name+'. '+m.fights+' fights completed.');
   save();closeCombat();render();notify('Party returned with all unclaimed loot.','good');
 }
@@ -2135,7 +2505,7 @@ function equipModal(hid,slot){
   let a=s.inventory.filter(x=>itemEquipSlot(x)===slot&&!x.equipped);
   if(slot==='Weapon'&&h)a=a.filter(it=>allowedWeapons(h).includes(it.weaponType));
   const current=s.inventory.find(x=>x.id===h?.equip?.[slot]);
-  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${it.rarity} · ${statText(it)}</div>${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
 const BOSS_RESOURCE_SOURCE={"CrownBone": "Skeleton King", "BroodSilk": "Broodmother", "ColossusIchor": "Rotting Colossus", "HighRune": "High Cultist", "AncientDrakeScale": "Ancient Drake", "WarOgreHeart": "War Ogre", "WraithLordCore": "Wraith Lord", "AbyssalHorn": "Abyssal Demon"};
 const BOSS_RESOURCES=new Set(['CrownBone','BroodSilk','ColossusIchor','HighRune','AncientDrakeScale','WarOgreHeart','WraithLordCore','AbyssalHorn']);
 
@@ -2323,6 +2693,27 @@ function upgrade(k){
 function statName(k){
   return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',hp:'HP',regen:'Regen',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res'}[k]||String(k).toUpperCase();
 }
+function colorizeStatTerms(root=document){
+  if(!root)return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      const p=node.parentElement;
+      if(!p||['SCRIPT','STYLE','INPUT','TEXTAREA','SELECT','OPTION'].includes(p.tagName))return NodeFilter.FILTER_REJECT;
+      if(p.closest('.statSTR,.statDEX,.statINT'))return NodeFilter.FILTER_REJECT;
+      return /\b(STR|DEX|INT)\b/.test(node.nodeValue||'')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }
+  });
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(node=>{
+    const frag=document.createDocumentFragment();
+    node.nodeValue.split(/\b(STR|DEX|INT)\b/g).forEach(piece=>{
+      if(piece==='STR'||piece==='DEX'||piece==='INT'){
+        const span=document.createElement('span');span.className='stat'+piece;span.textContent=piece;frag.appendChild(span);
+      }else frag.appendChild(document.createTextNode(piece));
+    });
+    node.parentNode.replaceChild(frag,node);
+  });
+}
 function itemCompareValues(it){
   const out={power:it?.power||0,weaponPower:it?.slot==='Weapon'?(it.weaponPower||0):0,hp:0,str:0,dex:0,int:0,def:0,mdef:0,regen:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0};
   if(!it)return out;
@@ -2346,15 +2737,30 @@ function equipComparison(newItem,oldItem){
   });
   return parts.length?`<div class="equipCompare">${parts.join('')}</div>`:`<div class="equipCompare"><span class="equipSame">No numerical stat change</span></div>`;
 }
+function runeBonusText(id){
+  const r=RUNES[id];if(!r)return 'Unknown rune';
+  const suffix=['lifesteal','fire','ice','poison','lightning'].includes(r.stat)?'%':'';
+  return `+${r.value}${suffix} ${statName(r.stat)}`;
+}
+function runeSlotsHtml(it,compact=false){
+  const cap=runeSlots(it),equipped=it.runes||[];
+  if(cap<=0)return '';
+  return `<div class="runeSlotRow ${compact?'compactRuneSlots':''}">${Array.from({length:cap},(_,i)=>{
+    const id=equipped[i],r=id?RUNES[id]:null;
+    return `<span class="runeSocket ${id?'filled':''}" title="${id?(r?.name||id)+' · '+runeBonusText(id):'Empty rune slot'}">${id?runeIcon(id,'gameAsset'):''}</span>`;
+  }).join('')}</div>`;
+}
+function runeDetailsHtml(it){
+  const ids=it.runes||[];
+  if(!ids.length)return '<div class="muted">No runes socketed.</div>';
+  return ids.map(id=>{const r=RUNES[id];return `<div class="runeDetailRow"><span>${runeIcon(id,'gameAsset')} <b>${r?.name||id}</b></span><span>${runeBonusText(id)}</span></div>`}).join('');
+}
 function statText(it){
   let main=it.stat==='regen'?'+'+it.value+' HP / round':it.stat==='lifesteal'?it.value+'% lifesteal':'+'+it.value+' '+statName(it.stat);
   if(it.secondaryStat)main+=' · +'+it.secondaryValue+' '+statName(it.secondaryStat);
   if(it.tertiaryStat)main+=' · +'+it.tertiaryValue+' '+statName(it.tertiaryStat);
   if(it.mythicEffect)main+=' · Mythic: '+it.mythicEffect;
   if(it.slot==='Weapon')main+=' · '+it.weaponType+' · scales '+String(it.scale||'str').toUpperCase()+' · '+elementIcon[it.damageType||'physical']+' '+(it.damageType||'physical');
-  const cap=runeSlots(it),used=(it.runes||[]).length;
-  if(cap>0)main+=' · Runes '+used+'/'+cap;
-  if(used)main+=' · '+it.runes.map(id=>RUNES[id]?.name||id).join(', ');
   return main;
 }
 function rarityClass(x){return String(x||'Common').toLowerCase()}
@@ -2396,7 +2802,7 @@ function syncMusic(){
   else stopMusic();
 }
 
-function render(){completeCrafting();updateMusicUI();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;$('guildXp').textContent=s.xp;renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();save()}
+function render(){completeCrafting();updateMusicUI();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;$('guildXp').textContent=s.xp;renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
@@ -2419,9 +2825,9 @@ function recruitDetail(rid){
     </div>
     <div class="stats" style="margin-top:10px">
       <div class="stat"><span>HP</span><strong>${z.hp}</strong></div>
-      <div class="stat"><span>STR</span><strong>${z.str}</strong></div>
-      <div class="stat"><span>DEX</span><strong>${z.dex}</strong></div>
-      <div class="stat"><span>INT</span><strong>${z.int}</strong></div>
+      <div class="stat"><span class="statSTR">STR</span><strong>${z.str}</strong></div>
+      <div class="stat"><span class="statDEX">DEX</span><strong>${z.dex}</strong></div>
+      <div class="stat"><span class="statINT">INT</span><strong>${z.int}</strong></div>
       <div class="stat"><span>DEF</span><strong>${z.def}</strong></div>
       <div class="stat"><span>MDEF</span><strong>${z.mdef}</strong></div>
       <div class="stat"><span>Threat</span><strong>${z.threat.toFixed(1)}</strong></div>
@@ -2432,7 +2838,7 @@ function recruitDetail(rid){
     <div class="card"><div class="name">${h.trait}</div><div class="muted">${traitDef(h)?.desc||''}</div></div>
     <h3 style="margin-top:14px">Gathering Skills</h3>
     <div class="stats">${skills}</div>
-    <button class="btn gold" style="margin-top:12px" onclick="closeModal();recruit(${h.id})">Recruit · Free</button>
+    <div class="modalActionRow"><button class="btn gold" onclick="closeModal();recruit(${h.id})">Recruit · Free</button></div>
   `);
 }
 
@@ -2440,7 +2846,7 @@ function renderRec(){
   s.applicantCap=applicantBatchSize();
   $('recruits').innerHTML=
     `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Batch every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll · 50g</button></div></div></div>`+
-    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card" style="cursor:pointer" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>${x.trait}</span><strong>${z.power} power</strong></div><button class="btn gold" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
+    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>${x.trait}</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
 }
 let activeMissionDomKey='';
 function activeMissionKey(){
@@ -2481,6 +2887,7 @@ function buildActiveMissionDom(){
 }
 function updateActiveMissionCard(m){
   const card=document.querySelector(`[data-active-mission="${m.id}"]`);if(!card)return;
+  card.classList.toggle('failedMission',!!m.defeated);
   const enemyHp=m.battle&&m.battle.enemies.length?m.battle.enemies.reduce((a,e)=>a+Math.max(0,e.hp),0):0;
   const enemyMax=m.battle&&m.battle.enemies.length?m.battle.enemies.reduce((a,e)=>a+e.maxHp,0):1;
   const pct=clamp(100-enemyHp/enemyMax*100,0,100);
@@ -2502,8 +2909,8 @@ function updateActiveMissionCard(m){
   card.querySelector('[data-active-help]').textContent='Click the card to '+(m.defeated?'view the result':'watch combat')+'.';
 }
 function renderActive(){
-  const key=activeMissionKey();
-  if(key!==activeMissionDomKey||!$('active').querySelector('[data-active-mission]')&&s.missions.length)buildActiveMissionDom();
+  const key=activeMissionKey(),hasCards=!!$('active').querySelector('[data-active-mission]');
+  if(key!==activeMissionDomKey||(s.missions.length&&!hasCards)||(!s.missions.length&&hasCards))buildActiveMissionDom();
   s.missions.forEach(updateActiveMissionCard);
 }
 function openCombat(mid){combatDomKey='';
@@ -2596,11 +3003,12 @@ function renderCombat(){
   if($('combatDefeatedBanner'))$('combatDefeatedBanner').style.display=m.defeated?'block':'none';
 
   updateCombatLog(m);
+  colorizeStatTerms($('combatBody'));
 }
 function renderLog(){$('log').innerHTML=s.log.map(x=>`<div>${x}</div>`).join('')}
 function renameCharacter(hid){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
-  showModal('Rename Character',`<div class="card"><div class="muted">Choose a new name for this guild member.</div><input id="characterRenameInput" maxlength="30" value="${h.name.replace(/"/g,'&quot;')}" style="width:100%;margin-top:10px"><button class="btn gold" style="margin-top:10px" onclick="confirmCharacterRename(${h.id})">Save Name</button></div>`);
+  showModal('Rename Character',`<div class="card"><div class="muted">Choose a new name for this guild member.</div><input id="characterRenameInput" maxlength="30" value="${h.name.replace(/"/g,'&quot;')}" style="width:100%;margin-top:10px"><div class="modalActionRow"><button class="btn gold" onclick="confirmCharacterRename(${h.id})">Save Name</button></div></div>`);
   setTimeout(()=>{const el=$('characterRenameInput');if(el){el.focus();el.select()}},0);
 }
 function confirmCharacterRename(hid){
@@ -2666,7 +3074,7 @@ function chooseSubclass(hid){
   if(h.level<10)return notify('Subclass unlocks at level 10.');
   if(h.subclass)return showCharacterSkills(hid);
   const choices=SUBCLASSES[h.class]||[];
-  showModal('Choose '+h.class+' Specialization',`<div class="g2">${choices.map(x=>`<div class="card"><div class="name">${x.name}</div><div class="muted" style="margin-top:6px"><b>Passive:</b> ${x.passive}</div><div class="muted" style="margin-top:6px"><b>Active:</b> ${x.active}</div><button class="btn gold" style="margin-top:12px" onclick="selectSubclass(${h.id},'${x.id}')">Choose ${x.name}</button></div>`).join('')}</div>`);
+  showModal('Choose '+h.class+' Specialization',`<div class="g2">${choices.map(x=>`<div class="card"><div class="name">${x.name}</div><div class="muted" style="margin-top:6px"><b>Passive:</b> ${x.passive}</div><div class="muted" style="margin-top:6px"><b>Active:</b> ${x.active}</div><div class="modalActionRow"><button class="btn gold" onclick="selectSubclass(${h.id},'${x.id}')">Choose ${x.name}</button></div></div>`).join('')}</div>`);
 }
 function selectSubclass(hid,sid){
   const h=s.members.find(x=>x.id===hid);if(!h||h.level<10||h.subclass)return;
@@ -2747,9 +3155,9 @@ function heroDetail(h){
     <h3>Stats</h3>
     <div class="detailStats">
       <div class="stat"><span>HP</span><strong>${z.hp}</strong></div>
-      <div class="stat"><span>STR</span><strong>${z.str}</strong></div>
-      <div class="stat"><span>DEX</span><strong>${z.dex}</strong></div>
-      <div class="stat"><span>INT</span><strong>${z.int}</strong></div>
+      <div class="stat"><span class="statSTR">STR</span><strong>${z.str}</strong></div>
+      <div class="stat"><span class="statDEX">DEX</span><strong>${z.dex}</strong></div>
+      <div class="stat"><span class="statINT">INT</span><strong>${z.int}</strong></div>
       <div class="stat"><span>DEF</span><strong>${z.def}</strong></div>
       <div class="stat"><span>MDEF</span><strong>${z.mdef}</strong></div>
       <div class="stat"><span>Threat</span><strong>${z.threat.toFixed(1)}</strong></div>
@@ -2819,7 +3227,7 @@ function openHarvestPicker(areaId){
   showModal('Choose Harvesting Crew',`<div class="card"><div class="name">${a.icon} ${a.name}</div>
     <div class="muted">${SKILL_NAMES[a.skill]} Lv. ${a.req} required · choose up to ${gatheringPartySize()} workers.</div>
     <div class="party" id="harvestPartyPicker" style="margin-top:10px">${available.map(x=>`<button class="partyMember" data-h="${x.id}" onclick="toggleHarvestMember(this)"><span class="miniClass">${classIcons[x.class]}</span><span>${x.name} · ${SKILL_NAMES[a.skill]} Lv. ${gatheringSkill(x,a.skill).level}</span></button>`).join('')}</div>
-    <button class="btn gold" style="margin-top:12px" onclick="confirmHarvestParty('${areaId}')">Start Harvesting</button></div>`);
+    <div class="modalActionRow"><button class="btn gold" onclick="confirmHarvestParty('${areaId}')">Start Harvesting</button></div></div>`);
 }
 function toggleHarvestMember(btn){
   const selected=document.querySelectorAll('#harvestPartyPicker .partyMember.on');
@@ -2840,37 +3248,48 @@ function confirmHarvestParty(areaId){
   setAreaMode('harvest',harvestBtn);
 }
 function processHarvesting(){
-  const now=Date.now();let changed=false;
+  const now=Date.now(),cap=afkHarvestCap();let changed=false;
   s.harvestJobs.forEach(j=>{
     if(j.stopped)return;
-    const a=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!a)return;
-    const elapsed=now-(j.lastTick||j.start||now);
-    const cycles=Math.floor(elapsed/(a.cycle*1000));if(cycles<=0)return;
-    const offline=elapsed>Math.max(15000,a.cycle*2000);
-    let remaining=offline?Math.max(0,afkHarvestCap()-Object.values(j.stash||{}).reduce((x,v)=>x+v,0)):Infinity;
+    const area=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!area)return;
+    let stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
+
+    if(stashCount>=cap){
+      if(!j.capped){j.capped=true;changed=true}
+      j.lastTick=now;
+      return;
+    }
+    if(j.capped){j.capped=false;j.lastTick=now;changed=true}
+
+    const elapsed=now-(j.lastTick||j.start||now),cycles=Math.floor(elapsed/(area.cycle*1000));
+    if(cycles<=0)return;
     const crew=j.party.map(id=>s.members.find(x=>x.id===id)).filter(Boolean);
+
     for(let c=0;c<cycles;c++){
       for(const member of crew){
-        if(remaining<=0)break;
-        const sk=gatheringSkill(member,a.skill),k=weightedResource(a.resources);
-        j.stash[k]=(j.stash[k]||0)+1;markResourceFound(k);if(offline)remaining--;
-        if((!offline||remaining>0)&&Math.random()<gatheringBonusChance(sk.level)){j.stash[k]=(j.stash[k]||0)+1;if(offline)remaining--}
-        grantSkillXp(member,a.skill,1);
+        if(stashCount>=cap)break;
+        const sk=gatheringSkill(member,area.skill),k=weightedResource(area.resources);
+        j.stash[k]=(j.stash[k]||0)+1;stashCount++;markResourceFound(k);
+        if(stashCount<cap&&Math.random()<gatheringBonusChance(sk.level)){j.stash[k]=(j.stash[k]||0)+1;stashCount++}
+        grantSkillXp(member,area.skill,1);
       }
-      if(remaining<=0)break;
+      if(stashCount>=cap)break;
       j.cycles++;
     }
-    j.lastTick+=(cycles*a.cycle*1000);changed=true;
+
+    if(stashCount>=cap){j.capped=true;j.lastTick=now}
+    else j.lastTick+=(cycles*area.cycle*1000);
+    changed=true;
   });
   if(changed)save();
 }
-function collectHarvest(jid){
+function collectHarvest(jid,quiet=false){
   const j=s.harvestJobs.find(x=>x.id===jid);if(!j)return;
   let collected=0,left=0;
   Object.entries(j.stash||{}).forEach(([k,v])=>{const added=addStoredResource(k,v);collected+=added;j.stash[k]=v-added;left+=j.stash[k];if(j.stash[k]<=0)delete j.stash[k]});
-  save();renderHarvestActive();renderInv();renderCraft();
-  if(collected)notify('Collected '+collected+' resources.','good');
-  if(left)notify('Resource storage is full. '+left+' resources remain at the gathering site.');
+  if(collected&&j.capped){j.capped=false;j.lastTick=Date.now();}save();renderHarvestActive();renderInv();renderCraft();
+  if(!quiet&&collected)notify('Collected '+collected+' resources.','good');
+  if(!quiet&&left)notify('Resource storage is full. '+left+' resources remain at the gathering site.');
 }
 function stopHarvest(jid){
   const j=s.harvestJobs.find(x=>x.id===jid);if(!j)return;
@@ -2884,32 +3303,54 @@ function renderHarvestAreas(){
   if(!$('harvestList'))return;
   $('harvestList').innerHTML=HARVEST_AREAS.map(a=>{
     const qualified=s.members.filter(h=>!h.busy&&gatheringSkill(h,a.skill).level>=a.req).length;
-    return `<div class="card"><div class="questVisual">${a.icon}</div><div class="name">${a.name}</div>
+    return `<div class="card quest actionCard">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
       <div class="muted">${a.kind} · ${SKILL_NAMES[a.skill]} Lv. ${a.req} required</div><div class="muted" style="margin-top:5px">${a.desc}</div>
       <div class="chips">${a.resources.map(x=>`<span class="chip">${RESOURCE_NAMES[x[0]]||x[0]} ${x[1]}%</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${qualified} eligible</span></div>
-      <button class="btn ${qualified?'gold':''}" ${qualified?'':'disabled'} onclick="openHarvestPicker('${a.id}')">Send Workers</button></div>`;
+      <button class="btn ${qualified?'gold':''} actionButton" ${qualified?'':'disabled'} onclick="openHarvestPicker('${a.id}')">Start Harvesting</button></div>`;
   }).join('');
 }
 function renderHarvestActive(){
   if(!$('harvestActive'))return;
   processHarvesting();
+  const cap=afkHarvestCap();
   $('harvestActive').innerHTML=s.harvestJobs.length?s.harvestJobs.map(j=>{
-    const a=HARVEST_AREAS.find(x=>x.id===j.areaId),stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
+    const area=HARVEST_AREAS.find(x=>x.id===j.areaId),stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
     const names=j.party.map(id=>s.members.find(x=>x.id===id)?.name.split(' ')[0]).filter(Boolean).join(' · ');
-    return `<div class="card"><div class="heroTop"><div class="visualIcon">${a?.icon||'⛏️'}</div><div><div class="name">${a?.name||'Harvesting'}</div><div class="muted">${names}</div></div></div>
-      <div class="chips"><span class="chip">${j.cycles} cycles</span><span class="chip">${stashCount} resources waiting</span><span class="chip">Offline cap ${afkHarvestCap()}</span></div>
-      <div style="display:flex;gap:8px;margin-top:9px"><button class="btn gold" onclick="collectHarvest(${j.id})" ${stashCount?'':'disabled'}>Collect</button><button class="btn" onclick="stopHarvest(${j.id})">Recall Workers</button></div></div>`;
+    const capped=stashCount>=cap||j.capped,cycleMs=(area?.cycle||30)*1000,start=j.lastTick||Date.now();
+    return `<div class="card harvestCard ${capped?'cappedHarvest':''}" data-harvest-card="${j.id}">
+      <div class="heroTop"><div class="visualIcon">${area?.icon||'⛏️'}</div><div><div class="name">${area?.name||'Harvesting'}</div><div class="muted">${names}</div></div></div>
+      <div class="chips"><span class="chip">${j.cycles} cycles</span><span class="chip ${capped?'harvestCapText':''}">${stashCount}/${cap} resources</span></div>
+      <div class="progressWrap harvestProgress"><div class="progressMeta"><span data-harvest-label>${capped?'CAP REACHED':'Next harvest'}</span><span data-harvest-time>${capped?'FULL':fmt(cycleMs-(Date.now()-start))}</span></div><div class="progressTrack"><div class="progressFill" data-harvest-job="${j.id}" style="width:${capped?100:clamp((Date.now()-start)/cycleMs*100,0,100)}%"></div></div></div>
+      <div class="actionRow"><div class="actionRowInfo muted">${capped?'Harvesting paused until resources are collected.':'Gathering continues automatically.'}</div><div class="actionRowButtons"><button class="btn gold" onclick="collectHarvest(${j.id})" ${stashCount?'':'disabled'}>Collect</button><button class="btn" onclick="stopHarvest(${j.id})">Recall</button></div></div>
+    </div>`;
   }).join(''):'<div class="empty">No active harvesting jobs.</div>';
+}
+function refreshHarvestProgressUI(){
+  const now=Date.now(),cap=afkHarvestCap();
+  document.querySelectorAll('[data-harvest-job]').forEach(fill=>{
+    const j=s.harvestJobs.find(x=>x.id===+fill.dataset.harvestJob);if(!j)return;
+    const area=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!area)return;
+    const card=fill.closest('[data-harvest-card]'),stash=Object.values(j.stash||{}).reduce((x,v)=>x+v,0),capped=stash>=cap||j.capped;
+    card?.classList.toggle('cappedHarvest',capped);
+    const label=card?.querySelector('[data-harvest-label]'),time=card?.querySelector('[data-harvest-time]');
+    if(capped){fill.style.width='100%';if(label)label.textContent='CAP REACHED';if(time)time.textContent='FULL'}
+    else{
+      const total=area.cycle*1000,start=j.lastTick||now,pct=clamp((now-start)/total*100,0,100);
+      fill.style.width=pct+'%';if(label)label.textContent='Next harvest';if(time)time.textContent=fmt(total-(now-start));
+    }
+  });
 }
 
 function renderOffers(type){
  const box=type==='raid'?'raidList':type==='dungeon'?'dungeonList':'questList';
  $(box).innerHTML=arr(type).map(q=>{
-   const locked=false,visual=type==='quest'?(q.icon||'🗺️'):questIcons[type];
-   return `<div class="card quest" data-id="${q.id}">
-    <div class="questVisual">${visual}</div><div class="name">${q.name}</div><div class="muted">${q.desc}</div>
+   const locked=false;
+   const sceneType=type==='quest'?'expedition':type;
+   const sceneKey=type==='quest'?(AREAS.find(a=>a.name===q.name)?.id||q.areaId||q.id):q.name;
+   return `<div class="card quest actionCard" data-id="${q.id}">
+    ${sceneBanner(sceneType,sceneKey)}<div class="name">${q.name}</div><div class="muted">${q.desc}</div>
     <div class="chips"><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
-    <button class="btn gold" onclick="openPartyPicker('${type}',${q.id})">Start Expedition</button>
+    <button class="btn gold actionButton" onclick="openPartyPicker('${type}',${q.id})">${type==='raid'?'Start Raid':type==='dungeon'?'Start Dungeon':'Start Expedition'}</button>
    </div>`;
  }).join('');
 }
@@ -2930,7 +3371,7 @@ function updatePartyPresetButtons(){
 }
 function renamePartyPreset(index){
   const p=s.partyPresets[index];if(!p)return;
-  showModal('Rename Saved Party',`<div class="card"><input id="partyRenameInput" maxlength="24" value="${p.name.replace(/"/g,'&quot;')}" style="width:100%"><button class="btn gold" style="margin-top:10px" onclick="confirmPartyPresetRename(${index})">Save Name</button></div>`);
+  showModal('Rename Saved Party',`<div class="card"><input id="partyRenameInput" maxlength="24" value="${p.name.replace(/"/g,'&quot;')}" style="width:100%"><div class="modalActionRow"><button class="btn gold" onclick="confirmPartyPresetRename(${index})">Save Name</button></div></div>`);
   setTimeout(()=>{const el=$('partyRenameInput');if(el){el.focus();el.select()}},0);
 }
 function confirmPartyPresetRename(index){
@@ -2947,7 +3388,7 @@ function saveCurrentPartyPreset(){
   if(!ids.length)return notify('Select members before saving a party.');
   if(s.partyPresets.length>=8)return notify('Maximum 8 saved parties.');
   pendingPartyPresetIds=ids.slice();
-  showModal('Save Party',`<div class="card"><div class="muted">Name this party composition.</div><input id="newPartyNameInput" maxlength="24" value="Party ${s.partyPresets.length+1}" style="width:100%;margin-top:10px"><button class="btn gold" style="margin-top:10px" onclick="confirmSavePartyPreset()">Save Party</button></div>`);
+  showModal('Save Party',`<div class="card"><div class="muted">Name this party composition.</div><input id="newPartyNameInput" maxlength="24" value="Party ${s.partyPresets.length+1}" style="width:100%;margin-top:10px"><div class="modalActionRow"><button class="btn gold" onclick="confirmSavePartyPreset()">Save Party</button></div></div>`);
 }
 function confirmSavePartyPreset(){
   const ids=pendingPartyPresetIds.slice();
@@ -2988,7 +3429,7 @@ function openPartyPicker(type,qid){
    </div>
    <div style="margin-top:10px"><div class="muted" style="margin-bottom:6px">Saved parties available now</div><div id="partyPresetList" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
    <div class="party" id="expeditionPartyPicker" style="margin-top:10px">${available.map(h=>{const z=hs(h),p=h.class==='Mage'||h.class==='Priest'?'INT '+z.int:h.class==='Ranger'||h.class==='Rogue'?'DEX '+z.dex:'STR '+z.str;return `<button class="partyMember" data-h="${h.id}" onclick="toggleExpeditionMember(this)"><span class="miniClass">${classIcon(h)}</span><span>${h.name} · ${displayClass(h)} · ${p} · ${z.power} power</span></button>`}).join('')}</div>
-   <button class="btn gold" style="margin-top:12px" onclick="confirmExpeditionParty('${type}',${qid})">Send Party</button>
+   <div class="modalActionRow"><button class="btn gold" onclick="confirmExpeditionParty('${type}',${qid})">Send Party</button></div>
  </div>`);
  updatePartyPresetButtons();
 }
@@ -3016,7 +3457,7 @@ function openResourceSell(k){
       <input id="resourceSellAmount" type="number" min="1" max="${owned}" value="${initial}" oninput="let v=clamp(Math.floor(+this.value||1),1,${owned});this.value=v;$('resourceSellRange').value=v;$('resourceSellTotal').textContent=v+'g'" style="width:110px">
       <span class="chip">Value: <b id="resourceSellTotal">${initial}g</b></span>
     </div>
-    <button class="btn gold" style="margin-top:12px" onclick="sellResource('${k}')">Sell Resources</button>
+    <div class="modalActionRow"><button class="btn gold" onclick="sellResource('${k}')">Sell Resources</button></div>
   </div>`);
 }
 function sellResource(k){
@@ -3153,9 +3594,9 @@ function renderMarket(){
   $('marketItems').innerHTML=s.market.offers.length?s.market.offers.map(o=>{
     if(o.kind==='gear'){
       const it=o.item;
-      return `<div class="card"><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${itemEquipSlot(it)} · ${it.rarity}</div><div class="good">${statText(it)}</div><button class="btn gold" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
+      return `<div class="card marketActionCard"><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${itemEquipSlot(it)} · ${it.rarity}</div><div class="good">${statText(it)}</div><button class="btn gold actionButton" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
     }
-    return `<div class="card"><div class="itemVisual">${gameIcon('ui','package','📦','gameAsset itemAsset')}</div><div class="name">${o.qty}× ${RESOURCE_NAMES[o.resource]||o.resource}</div><div class="muted">Basic resource bundle</div><button class="btn gold" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
+    return `<div class="card marketActionCard"><div class="itemVisual">${gameIcon('ui','package','📦','gameAsset itemAsset')}</div><div class="name">${o.qty}× ${RESOURCE_NAMES[o.resource]||o.resource}</div><div class="muted">Basic resource bundle</div><button class="btn gold actionButton" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
   }).join(''):'<div class="empty">Market sold out. New stock arrives at the next refresh.</div>';
 }
 
@@ -3176,21 +3617,22 @@ function openInventoryEquip(iid){
     <div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div>
     <div class="name ${rarityClass(it.rarity)}">${it.name}</div>
     <div class="muted">${slot==='Jewelry'?'Jewelry':it.slot} · ${it.rarity} · ${statText(it)}</div>
-    ${(it.runes||[]).length?`<div class="chips" style="margin-top:8px">${it.runes.map(id=>`<span class="chip">${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join('')}</div>`:''}
+    ${runeSlotsHtml(it)}
+    ${runeSlots(it)>0?`<div class="detailSection" style="margin-top:10px"><h3>Runes</h3>${runeDetailsHtml(it)}</div>`:''}
     ${owner?`<div class="chip" style="margin-top:8px">Currently equipped by ${owner.name}</div>`:''}
-    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-      <button class="btn gold" onclick="sellItem(${it.id})">Sell · ${itemSellValue(it)}g</button>
+    <div class="modalActionRow">
       <button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button>
+      <button class="btn gold" onclick="sellItem(${it.id})">Sell · ${itemSellValue(it)}g</button>
     </div>
   </div>
   <h3 style="margin-top:14px">Equip on</h3>
   <div class="g2">${candidates.map(h=>{
     const current=s.inventory.find(x=>x.id===h.equip[slot]);
-    return `<div class="card">
+    return `<div class="card equipActionCard">
       <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div></div>
       <div class="muted" style="margin:7px 0">Current ${slot}: <b>${current?current.name:'Empty'}</b></div>
       ${equipComparison(it,current)}
-      <button class="btn ${it.equipped===h.id?'':'gold'}" ${it.equipped===h.id?'disabled':''} onclick="equip(${h.id},${it.id})">${it.equipped===h.id?'Already Equipped':'Equip Here'}</button>
+      <button class="btn ${it.equipped===h.id?'':'gold'} actionButton" ${it.equipped===h.id?'disabled':''} onclick="equip(${h.id},${it.id})">${it.equipped===h.id?'Already Equipped':'Equip Here'}</button>
     </div>`;
   }).join('')}</div>`);
 }
@@ -3199,7 +3641,7 @@ function renderInv(){
   const visible=s.inventory.filter(it=>inventoryShowEquipped||!it.equipped);
   $('items').innerHTML=visible.length?visible.map(it=>{
     const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;
-    return `<div class="card inventoryItemCard" style="cursor:pointer" onclick="openInventoryEquip(${it.id})"><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>
+    return `<div class="card inventoryItemCard" style="cursor:pointer" onclick="openInventoryEquip(${it.id})"><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}
       <div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${it.rarity}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`;
   }).join(''):'<div class="empty">'+(inventoryShowEquipped?'Inventory empty.':'No unequipped items. Use “Show Equipped” to include equipped gear.')+'</div>';
 }
@@ -3231,10 +3673,11 @@ function openEnchantItem(iid){
     <div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div>
     <div class="name ${rarityClass(it.rarity)}">${it.name}</div>
     <div class="muted">${it.rarity} · Rune slots ${used}/${cap}</div>
-    <div class="chips" style="margin-top:9px">${used?(it.runes||[]).map(id=>`<span class="chip">${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="muted">No runes socketed.</span>'}</div>
+    ${runeSlotsHtml(it)}
+    <div style="margin-top:8px">${runeDetailsHtml(it)}</div>
   </div>
   <h3 style="margin-top:14px">Available Runes</h3>
-  ${used>=cap?'<div class="empty">This item has no empty rune slots.</div>':available.length?`<div class="recipes">${available.map(id=>{const r=RUNES[id];return `<div class="card"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${r.desc} · Owned ${s.runes[id]||0}</div><button class="btn gold" onclick="socketRune(${it.id},'${id}')">Socket Rune</button></div>`}).join('')}</div>`:'<div class="empty">You have no crafted runes.</div>'}`);
+  ${used>=cap?'<div class="empty">This item has no empty rune slots.</div>':available.length?`<div class="recipes">${available.map(id=>{const r=RUNES[id];return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${r.desc} · Owned ${s.runes[id]||0}</div><button class="btn gold actionButton" onclick="socketRune(${it.id},'${id}')">Socket Rune</button></div>`}).join('')}</div>`:'<div class="empty">You have no crafted runes.</div>'}`);
 }
 function socketRune(iid,rid){
   const it=s.inventory.find(x=>x.id===iid),r=RUNES[rid];if(!it||!r)return;
@@ -3252,7 +3695,7 @@ function renderEnchanting(){
   $('runeInventory').innerHTML=owned.length?owned.map(([id,v])=>`<div class="mat">${runeIcon(id)} ${RUNES[id]?.name||id} <b>${v}</b></div>`).join(''):'<div class="muted">No runes crafted yet.</div>';
   $('runeRecipes').innerHTML=Object.entries(RUNES).map(([id,r])=>{
     const ok=Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v);
-    return `<div class="card"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''}" ${ok?'':'disabled'} onclick="craftRune('${id}')" style="margin-top:9px">Create Rune</button></div>`;
+    return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''} actionButton" ${ok?'':'disabled'} onclick="craftRune('${id}')">Create Rune</button></div>`;
   }).join('');
   const gear=s.inventory.filter(it=>!it.equipped);
   $('enchantItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openEnchantItem(${it.id})"`:''}><div class="itemVisual">${it.slot==='Weapon'?(WEAPONS[it.weaponType]?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items cannot be enchanted.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear available to enchant.</div>';
@@ -3335,43 +3778,87 @@ function renderCraft(){
  if(!list.length){$('recipeList').innerHTML='<div class="empty">No recipes discovered here yet. Find new crafting resources to reveal recipes.</div>';return}
 
  $('recipeList').innerHTML=list.map(([r,i])=>{
-   let lv=s.level>=r[4],
-       mat=Object.entries(r[3]).every(([k,v])=>(s.materials[k]||0)>=v),
-       ok=lv&&mat,
-       wd=r[1]==='Weapon'?WEAPONS[r[2]]:null,
-       preview=recipePreview(r);
+   const lv=s.level>=r[4],
+         mat=Object.entries(r[3]).every(([k,v])=>(s.materials[k]||0)>=v),
+         ok=lv&&mat,
+         preview=recipePreview(r);
 
-   return `<div class="card">
-     <div class="itemVisual">${r[1]==='Weapon'?(WEAPONS[r[2]]?.icon||'⚔️'):(itemIcons[r[1]]||'🔨')}</div>
-     <div class="name">${r[0]}</div>
-     <div class="muted">${r[1]} · Guild Lv. ${r[4]}</div>
-
-     <div class="chips" style="margin-top:8px">
-       ${preview.map(x=>`<span class="chip">${x}</span>`).join('')}
+   return `<div class="card recipeCompact">
+     <div class="recipeCompactMain">
+       <div class="itemVisual">${r[1]==='Weapon'?(WEAPONS[r[2]]?.icon||'⚔️'):(itemIcons[r[1]]||'🔨')}</div>
+       <div class="name">${r[0]}</div>
+       <div class="muted">${r[1]} · Guild Lv. ${r[4]}</div>
      </div>
 
-     <div class="chips" style="margin-top:10px">
-       ${Object.entries(r[3]).map(([k,v])=>`<span class="chip">${RESOURCE_NAMES[k]||k} ${v}${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?' · Boss: '+BOSS_RESOURCE_SOURCE[k]:''}</span>`).join('')}
+     <div class="recipeCompactInfo">
+       <div class="recipeStatGrid">${preview.map(x=>`<span class="chip">${x}</span>`).join('')}</div>
      </div>
 
-     <button class="btn ${ok?'gold':''}" ${ok?'':'disabled'} onclick="craft(${i})" style="margin-top:10px">
-       ${!lv?'Locked':!mat?'Missing materials':'Craft · '+(18+r[4]*12)+'s'}
-     </button>
+     <div class="recipeCompactFooter">
+       <div class="recipeMaterials">
+         ${Object.entries(r[3]).map(([k,v])=>`<span class="chip">${RESOURCE_NAMES[k]||k} ${v}${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?' · '+BOSS_RESOURCE_SOURCE[k]:''}</span>`).join('')}
+       </div>
+       <button class="btn ${ok?'gold':''}" ${ok?'':'disabled'} onclick="craft(${i})">
+         ${!lv?'Locked':!mat?'Missing materials':'Craft · '+Math.ceil(craftDuration(r)/1000)+'s'}
+       </button>
+     </div>
    </div>`;
- }).join('')
+ }).join('');
+ colorizeStatTerms($('recipeList'));
 }
 function renderUp(){
   $('upgradeList').innerHTML=upgrades.map(u=>{
     const l=s.up[u[0]]||0,c=upgradeCost(u,l),rc=upgradeResourceCost(u[0],l);
     const can=s.gold>=c&&hasUpgradeResources(rc)&&l<u[4];
-    return `<div class="card">
-      <div class="name">${u[1]}</div>
-      <div class="muted">${u[2]}</div>
-      <div class="chips"><span class="chip">${l}/${u[4]}</span><span class="chip ${s.gold>=c?'enough':'missing'}">${s.gold.toLocaleString()}/${c.toLocaleString()} Gold</span></div>
-      ${l<u[4]?`<div class="upgradeResourceProgress">${upgradeResourceProgressHtml(rc)}</div>`:''}
-      <button class="btn ${can?'gold':''}" ${l>=u[4]?'disabled':''} style="margin-top:9px" onclick="upgrade('${u[0]}')">${l>=u[4]?'Maxed':'Upgrade'}</button>
+    return `<div class="card upgradeCard" data-upgrade-key="${u[0]}">
+      <div class="upgradeHeader">
+        <div class="name">${u[1]}</div>
+        <span class="chip upgradeLevel">${l}/${u[4]}</span>
+      </div>
+
+      <div class="muted upgradeDesc">${u[2]}</div>
+
+      ${l<u[4]?`
+        <div class="upgradeCosts">
+          <span class="chip upgradeGold ${s.gold>=c?'enough':'missing'}" data-upgrade-gold>${s.gold.toLocaleString()}/${c.toLocaleString()} Gold</span>
+          <div class="upgradeResourceProgress" data-upgrade-resources>
+            ${upgradeResourceProgressHtml(rc)}
+          </div>
+        </div>
+      `:''}
+
+      <button class="btn ${can?'gold':''} upgradeAction" ${l>=u[4]?'disabled':''} onclick="upgrade('${u[0]}')">${l>=u[4]?'Maxed':'Upgrade'}</button>
     </div>`;
   }).join('');
+}
+
+function refreshUpgradeResourceUI(){
+  if(!$('upgradeList'))return;
+  upgrades.forEach(u=>{
+    const card=document.querySelector(`[data-upgrade-key="${u[0]}"]`);
+    if(!card)return;
+
+    const l=s.up[u[0]]||0;
+    if(l>=u[4])return;
+
+    const c=upgradeCost(u,l),rc=upgradeResourceCost(u[0],l);
+    const gold=card.querySelector('[data-upgrade-gold]');
+    const resources=card.querySelector('[data-upgrade-resources]');
+    const btn=card.querySelector('.upgradeAction');
+
+    if(gold){
+      gold.textContent=`${s.gold.toLocaleString()}/${c.toLocaleString()} Gold`;
+      gold.classList.toggle('enough',s.gold>=c);
+      gold.classList.toggle('missing',s.gold<c);
+    }
+    if(resources)resources.innerHTML=upgradeResourceProgressHtml(rc);
+
+    const can=s.gold>=c&&hasUpgradeResources(rc);
+    if(btn){
+      btn.classList.toggle('gold',can);
+      btn.disabled=false;
+    }
+  });
 }
 function syncWindowScrollLock(){
   const anyOpen=$('modal').classList.contains('on')||$('combatModal').classList.contains('on');
@@ -3381,6 +3868,7 @@ function showModal(t,b){
   $('modalTitle').textContent=t;
   $('modalBody').innerHTML=b;
   $('modal').classList.add('on');
+  colorizeStatTerms($('modalBody'));
   syncWindowScrollLock();
 }
 function closeModal(){
@@ -3390,11 +3878,11 @@ function closeModal(){
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('combatModal').addEventListener('click',e=>{if(e.target===$('combatModal'))closeCombat()});
 
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{let p=b.dataset.p;if(p==='dungeons'&&s.level<3)return notify('Dungeons unlock at guild level 3.');if(p==='raids'&&s.level<6)return notify('Raids unlock at guild level 6.');document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(p).classList.add('on')});
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{let p=b.dataset.p;if(p==='dungeons'&&s.level<3)return notify('Dungeons unlock at guild level 3.');if(p==='raids'&&s.level<6)return notify('Raids unlock at guild level 6.');document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(p).classList.add('on');if(p==='upgrades')renderUp()});
 $('rename').onclick=()=>{let n=prompt('Guild name',s.guild);if(n){s.guild=n.trim().slice(0,40);save();render()}};
 $('exportSave').onclick=()=>{let a=document.createElement('a'),b=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});a.href=URL.createObjectURL(b);a.download='guildmaster-save.json';a.click()};
 $('importSave').onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{s=JSON.parse(r.result);save();render()}catch(e){notify('That save file is invalid.')}};r.readAsText(i.files[0])};i.click()};
-$('reset').onclick=()=>showModal('Reset Progress',`<div class="card"><div class="name dangerText">Delete all progress?</div><div class="muted">This cannot be undone unless you exported a save first.</div><button class="btn" style="margin-top:10px" onclick="confirmReset()">Reset Guild</button></div>`);
+$('reset').onclick=()=>showModal('Reset Progress',`<div class="card"><div class="name dangerText">Delete all progress?</div><div class="muted">This cannot be undone unless you exported a save first.</div><div class="modalActionRow"><button class="btn" onclick="confirmReset()">Reset Guild</button></div></div>`);
 function confirmReset(){
   localStorage.removeItem('guildmaster-v1');
   localStorage.removeItem('guildmaster-v1-backup');
@@ -3418,8 +3906,10 @@ setInterval(()=>{
   updateProgressUI();
   renderActive();
   renderCombat();
+  refreshHarvestProgressUI();
+  refreshUpgradeResourceUI();
 },500);
-setInterval(()=>{renderInv();renderMarket();renderCraftQueue();renderCraft();if(workshopMode==='enchanting')renderEnchanting();renderResourcesLite();save()},5000);
+setInterval(()=>{renderInv();renderMarket();renderCraftQueue();renderCraft();if(workshopMode==='enchanting')renderEnchanting();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
 function renderResourcesLite(){
   $('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();
 }
