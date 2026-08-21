@@ -2238,7 +2238,7 @@ function load(){
       s=backup?JSON.parse(backup):fresh();
     }catch(e2){s=fresh()}
   }
-    if(s.musicEnabled===undefined)s.musicEnabled=true;if(s.musicVolume===undefined)s.musicVolume=.35;
+    if(s.musicEnabled===undefined)s.musicEnabled=true;if(s.musicVolume===undefined)s.musicVolume=.10;
   s.smithing=Object.assign({level:1,xp:0},s.smithing||{});
   s.inventoryAuto=Object.assign({mode:'off',rarity:'Common'},s.inventoryAuto||{});
   [...(s.members||[]),...(s.recruits||[])].forEach(h=>{if(h.class==='Cl'+'eric')h.class='Priest'});
