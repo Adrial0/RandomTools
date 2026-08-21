@@ -1972,7 +1972,9 @@ const ENEMY_DEFS={
 function enemyDef(name){return ENEMY_DEFS[name]||['❓',35,12,6,'physical',0]}
 const enemyPools={quest:Object.keys(ENEMY_DEFS).slice(0,40),dungeon:Object.keys(ENEMY_DEFS).slice(40,56),raid:Object.keys(ENEMY_DEFS).slice(56)};
 
-const FN=['Alden','Bryn','Cael','Dara','Eira','Fen','Garrick','Iris','Joren','Kael','Lysa','Mira','Nell','Orin','Rhea','Soren','Tarin','Veya'],LN=['Ashfall','Briar','Crowe','Dawn','Ember','Frost','Grey','Hearth','Ironwood','Rook','Stone','Thorne','Vale','West'];
+const FN=['Alden','Benjamin','Bryn','Cael','Dara','Eira','Fen','Garrick','Iris','Joren','Kael','Leo','Lucien','Lysa','Maeve','Mira','Nell','Orin','Rhea','Soren','Tarin','Veya']
+,LN=['Ashfall','Blackwood','Briar','Crowe','Dawn','Ember','Frost','Grey','Hearth','Ironwood','Rook','Stone','Stormborn','Thorne','Vale','West'];
+
 const traits=[
 {name:'Brave',desc:'+6% damage, but -5% MDEF.',hp:0,str:2,dex:0,int:0,def:0,mdef:0,damageMult:1.06,mdefMult:.95},
 {name:'Stalwart',desc:'+10% DEF, but -4% damage.',hp:10,str:0,dex:0,int:0,def:2,mdef:1,defMult:1.10,damageMult:.96},
