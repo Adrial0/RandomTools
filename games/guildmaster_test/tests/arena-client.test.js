@@ -23,13 +23,16 @@ assert.equal(snapshot.activeType,'powerStrike');
 assert.doesNotThrow(()=>JSON.stringify(snapshot),'Arena snapshots must be serializable');
 
 const online=JSON.parse(fs.readFileSync(require.resolve('../data/online.json'),'utf8'));
-assert.equal(online.enabled,false,'repository configuration stays disabled until project credentials are supplied');
+assert.equal(online.enabled,true,'Arena configuration is enabled after project credentials are supplied');
 assert.ok(!JSON.stringify(online).toLowerCase().includes('service_role'),'browser configuration must never contain a service-role key');
+assert.match(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/signInAnonymously\(\)/,'Arena should create an invisible anonymous identity');
 
 const migration=fs.readFileSync(require.resolve('../supabase/migrations/001_arena.sql'),'utf8');
 for(const table of ['profiles','arena_parties','arena_ratings','arena_matches'])assert.match(migration,new RegExp(`alter table public\\.${table} enable row level security`));
 assert.match(migration,/revoke all on public\.profiles, public\.arena_parties, public\.arena_ratings, public\.arena_matches from anon, authenticated/);
 assert.match(migration,/security definer/);
 assert.match(migration,/request_id uuid not null unique/,'match requests must be idempotent');
+const uniqueNames=fs.readFileSync(require.resolve('../supabase/migrations/003_unique_guild_names.sql'),'utf8');
+assert.match(uniqueNames,/unique index[\s\S]*lower\(guild_name\)/i,'guild names must be unique regardless of capitalization');
 
 console.log('Arena client and backend contract tests passed.');

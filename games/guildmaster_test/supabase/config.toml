@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.fight-arena]
 verify_jwt = true
+
+[functions.claim-guild-name]
+verify_jwt = true

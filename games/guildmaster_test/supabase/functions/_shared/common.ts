@@ -56,7 +56,7 @@ export function validateSnapshot(input:unknown){
 }
 
 export function safeGuildName(value:unknown){
-  const name=String(value||'Unnamed Guild').trim().replace(/\s+/g,' ').slice(0,40);
-  if(!name)return'Unnamed Guild';
+  const name=String(value||'').trim().replace(/\s+/g,' ');
+  if(!/^[A-Za-z0-9][A-Za-z0-9 '\-]{2,23}$/.test(name))throw new Error('Guild names require 3–24 letters, numbers, spaces, apostrophes or hyphens.');
   return name;
 }

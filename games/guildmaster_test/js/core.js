@@ -310,7 +310,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'Ironhaven Guild',gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,smithing:{level:1,xp:0},inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:4,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,smithing:{level:1,xp:0},inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:4,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -748,6 +748,7 @@ function migrateGuildProgression(){
   }
 }
 function ensure(){
+  if(s.guildNamed==null)s.guildNamed=!!String(s.guild||'').trim();
   migrateGuildProgression();
   normalizeOnboarding();
   s.applicantCap=applicantBatchSize();

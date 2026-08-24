@@ -12,8 +12,8 @@ function arenaSetConnection(text,state=''){
 function arenaMessage(message,type='bad'){notify(message,type)}
 function arenaAccountHtml(){
   if(!arenaConfig?.enabled)return `<div class="arenaSetupNotice"><div class="name">Online Arena is not configured</div><div class="muted">Create a Supabase project, copy <code>data/online.example.json</code> to <code>data/online.json</code>, and add the project URL and publishable key.</div></div>`;
-  if(!arenaSession)return `<div class="arenaLogin"><div><div class="name">Sign in to Arena</div><div class="muted">Enter your email. Supabase will send a secure sign-in link.</div></div><input id="arenaEmail" type="email" autocomplete="email" placeholder="you@example.com"><button class="btn gold" onclick="arenaSendMagicLink()">Send Sign-in Link</button></div>`;
-  return `<div class="arenaSignedIn"><div><div class="name">${arenaEscape(arenaSession.user.email||'Arena account')}</div><div class="muted">Rating ${arenaData.profile?.rating??1000} · ${arenaData.profile?.wins??0} wins / ${arenaData.profile?.losses??0} losses</div></div><button class="btn" onclick="arenaSignOut()">Sign Out</button></div>`;
+  if(!arenaSession)return `<div class="arenaSetupNotice"><div class="name">Creating Arena identity…</div><div class="muted">No login is required.</div></div>`;
+  return `<div class="arenaSignedIn"><div><div class="name">${arenaEscape(s.guild||'Unnamed Guild')}</div><div class="muted">Rating ${arenaData.profile?.rating??1000} · ${arenaData.profile?.wins??0} wins / ${arenaData.profile?.losses??0} losses</div></div></div>`;
 }
 function renderArenaAccount(){
   if($('arenaAccount'))$('arenaAccount').innerHTML=arenaAccountHtml();
@@ -28,21 +28,25 @@ async function initArenaOnline(){
   if(!arenaConfig.enabled){arenaSetConnection('Setup required');renderArenaAccount();return}
   if(!window.supabase?.createClient){arenaSetConnection('Client unavailable','bad');renderArenaAccount();return}
   arenaClient=window.supabase.createClient(arenaConfig.supabaseUrl,arenaConfig.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-  const {data}=await arenaClient.auth.getSession();arenaSession=data.session;
+  let {data}=await arenaClient.auth.getSession();arenaSession=data.session;
+  if(!arenaSession){
+    const created=await arenaClient.auth.signInAnonymously();
+    if(created.error){arenaSetConnection('Identity error','bad');renderArenaAccount();arenaMessage(created.error.message);return}
+    arenaSession=created.data.session;
+  }
   arenaClient.auth.onAuthStateChange((_event,session)=>{arenaSession=session;renderArenaAccount();if(session)refreshArenaData()});
-  arenaSetConnection(arenaSession?'Connected':'Sign-in required',arenaSession?'good':'');renderArenaAccount();
+  arenaSetConnection('Connected','good');renderArenaAccount();
+  if(s.guildNamed&&s.guild){
+    const claimed=await claimArenaGuildName(s.guild);
+    if(!claimed&&typeof openGuildNameModal==='function')openGuildNameModal(true,'That guild name is already used in the Arena. Choose a unique name to continue.');
+  }
   if(arenaSession)await refreshArenaData();
 }
-async function arenaSendMagicLink(){
-  if(!arenaClient||arenaBusy)return;
-  const email=$('arenaEmail')?.value.trim();if(!email)return arenaMessage('Enter an email address.');
-  arenaBusy=true;
-  const {error}=await arenaClient.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});
-  arenaBusy=false;
-  if(error)return arenaMessage(error.message);
-  arenaMessage('Sign-in link sent. Check your email.','good');
+async function claimArenaGuildName(name){
+  if(!arenaClient||!arenaSession)return true;
+  try{await arenaInvoke('claim-guild-name',{guildName:name});return true}
+  catch(err){arenaMessage(err.message);if(/already taken/i.test(err.message))$('guildNameInput')?.select();return false}
 }
-async function arenaSignOut(){if(arenaClient){await arenaClient.auth.signOut();arenaSession=null;arenaData={profile:null,defense:null,opponents:[],leaderboard:[],history:[]};arenaSetConnection('Sign-in required');renderArenaAccount()}}
 async function arenaInvoke(name,body={}){
   if(!arenaClient||!arenaSession)throw new Error('Sign in to Arena first.');
   const {data,error}=await arenaClient.functions.invoke(name,{body});

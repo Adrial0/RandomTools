@@ -11,6 +11,7 @@ function showModal(t,b){
   syncWindowScrollLock();
 }
 function closeModal(){
+  if($('modal').dataset.required==='true')return;
   $('modal').classList.remove('on');
   syncWindowScrollLock();
 }
@@ -24,14 +25,33 @@ document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));
   b.classList.add('on');$(p).classList.add('on');if(p==='upgrades')renderUp();
 });
-$('rename').onclick=()=>{let n=prompt('Guild name',s.guild);if(n){s.guild=n.trim().slice(0,40);save();render()}};
+$('rename').onclick=()=>openGuildNameModal(false);
+function validGuildName(name){return /^[A-Za-z0-9][A-Za-z0-9 '\-]{2,23}$/.test(name)}
+function openGuildNameModal(required=!s.guildNamed,message='Choose a unique name for your guild. This is how other players will recognize you in the Arena.'){
+  showModal(required?'Name Your Guild':'Rename Your Guild',`<div class="card"><div class="muted">${message}</div><input id="guildNameInput" maxlength="24" value="${String(s.guild||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" placeholder="Iron Wolves" style="width:100%;margin-top:10px"><div class="muted" style="margin-top:6px">3–24 characters: letters, numbers, spaces, apostrophes and hyphens.</div><div class="modalActionRow"><button class="btn gold" onclick="confirmGuildName()">${required?'Found Guild':'Save Name'}</button></div></div>`);
+  $('modal').dataset.required=required?'true':'false';
+  const close=$('modalTitle')?.parentElement?.querySelector('button');if(close)close.style.display=required?'none':'';
+  setTimeout(()=>$('guildNameInput')?.focus(),0);
+}
+async function confirmGuildName(){
+  const input=$('guildNameInput'),name=String(input?.value||'').trim().replace(/\s+/g,' ');
+  if(!validGuildName(name))return notify('Use 3–24 letters, numbers, spaces, apostrophes or hyphens.');
+  const oldName=s.guild;
+  if(typeof claimArenaGuildName==='function'){
+    const result=await claimArenaGuildName(name);
+    if(result===false)return;
+  }
+  s.guild=name;s.guildNamed=true;save();render();
+  $('modal').dataset.required='false';const close=$('modalTitle')?.parentElement?.querySelector('button');if(close)close.style.display='';closeModal();
+  notify(oldName?'Guild renamed.':'Guild founded.','good');
+}
 $('exportSave').onclick=()=>{let a=document.createElement('a'),b=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});a.href=URL.createObjectURL(b);a.download='guildmaster-save.json';a.click()};
 $('importSave').onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{s=JSON.parse(r.result);save();load();ensure();syncDiscoveredResources();repairDeadBattles();syncMusic();render()}catch(e){notify('That save file is invalid.')}};r.readAsText(i.files[0])};i.click()};
 $('reset').onclick=()=>showModal('Reset Progress',`<div class="card"><div class="name dangerText">Delete all progress?</div><div class="muted">This cannot be undone unless you exported a save first.</div><div class="modalActionRow"><button class="btn" onclick="confirmReset()">Reset Guild</button></div></div>`);
 function confirmReset(){
   localStorage.removeItem('guildmaster-v1');
   localStorage.removeItem('guildmaster-v1-backup');
-  s=fresh();ensure();save();closeModal();render();notify('Guild progress reset.','good');
+  s=fresh();ensure();save();$('modal').dataset.required='false';closeModal();render();openGuildNameModal(true);notify('Guild progress reset.','good');
 }
 let lastTimerTextUpdate=0;
 function updateProgressUI(now=Date.now()){
@@ -346,6 +366,7 @@ async function bootstrapGame(){
   }
   load();ensure();syncDiscoveredResources();repairDeadBattles();syncMusic();validateContentData();render();setupGuildhallBackground();
   if(typeof initArenaOnline==='function')initArenaOnline();
+  if(!s.guildNamed)openGuildNameModal(true);
 }
 bootstrapGame();
 setInterval(()=>{
