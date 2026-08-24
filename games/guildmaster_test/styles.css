@@ -1263,6 +1263,14 @@ body.windowOpen .side{overflow:hidden!important}
 .threatDrop{display:inline-flex;align-items:center;gap:3px;color:#aa9a79;font-size:9px}
 @media(max-width:600px){.threatIntelRow,.threatDrops{grid-template-columns:1fr}.enemyIntelList{grid-template-columns:1fr}}
 
+.combatReport{margin-top:9px!important}
+.combatReportHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.combatReportTable{display:grid;gap:2px;overflow-x:auto}
+.combatReportRow{display:grid;grid-template-columns:minmax(125px,1.4fr) repeat(5,minmax(72px,1fr));gap:5px;align-items:center;min-width:570px;padding:6px 7px;background:#1b1610;color:#c9b68d;font-size:10px}
+.combatReportRow.header{background:#302417;color:#e0c38b;font-size:9px;text-transform:uppercase;letter-spacing:.04em}
+.combatReportRow>span:not(:first-child){text-align:right}
+.combatReportRow small{display:block;color:#89795d;font-size:8px;margin-top:2px}
+
 
 /* v62: four combat bars need a little more vertical room. */
 .combatant.combatMini{

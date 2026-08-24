@@ -116,16 +116,21 @@ function refreshCombatActionBars(now=Date.now()){
     }
   });
 }
+let timerAnimationErrorReported=false;
+function updateFluidTimerBars(now=Date.now()){
+  try{updateProgressUI(now)}catch(err){if(!timerAnimationErrorReported){console.error('Progress timer update failed.',err);timerAnimationErrorReported=true}}
+  if(!window.GAME_DATA_READY||!s)return;
+  try{refreshHarvestProgressUI(now)}catch(err){if(!timerAnimationErrorReported){console.error('Harvest timer update failed.',err);timerAnimationErrorReported=true}}
+  try{refreshCombatActionBars(now)}catch(err){if(!timerAnimationErrorReported){console.error('Combat timer update failed.',err);timerAnimationErrorReported=true}}
+}
 function animateTimerBars(){
   const now=Date.now();
-  updateProgressUI(now);
-  if(window.GAME_DATA_READY&&s){
-    refreshHarvestProgressUI(now);
-    refreshCombatActionBars(now);
-  }
-  requestAnimationFrame(animateTimerBars);
+  try{updateFluidTimerBars(now)}finally{requestAnimationFrame(animateTimerBars)}
 }
 requestAnimationFrame(animateTimerBars);
+// Independent fallback keeps bars fluid if an embedded browser pauses or loses
+// its requestAnimationFrame callback while the page remains visible.
+setInterval(()=>{if(!document.hidden)updateFluidTimerBars(Date.now())},50);
 setInterval(()=>{
   if(!window.GAME_DATA_READY||!s)return;
   s.missions.forEach(m=>{stepBattle(m);if((m.type==='dungeon'||m.type==='raid')&&m.finiteStage>=m.maxFights&&!m.completed&&m.battle&&!m.battle.boss){console.error('Finite mission invariant failed',m);m.battle=makeBossBattle(m)}});

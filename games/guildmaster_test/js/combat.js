@@ -63,6 +63,7 @@ function bossItemDrop(m,rarity){
 }
 
 function bossReward(m){
+  ensureCombatReport(m).encounters++;
   const bossTpl=ENEMIES_DATA[m.boss]||{},k=(bossTpl.drops||[])[0];
   m.stash.materials[k]=(m.stash.materials[k]||0)+1;
   markResourceFound(k);
@@ -215,6 +216,7 @@ function makeBattle(m){
     round:cycle.round,
     log:[`Battle #${m.battleNumber}: a new enemy group approaches.`]
   };
+  ensureCombatReport(m);heroes.forEach(h=>heroReport(m,h.id));
   // A changed party/save can leave a cursor beyond the available actor list.
   if(battle.phase==='heroes'&&battle.turn>=battle.heroes.length){
     battle.phase='enemies';battle.turn=0;
@@ -410,6 +412,30 @@ function resolveLiveBattleOnce(m){
   return true;
 }
 function living(a){return a.filter(x=>x.hp>0)}
+function ensureCombatReport(m){
+  if(!m.combatReport||typeof m.combatReport!=='object')m.combatReport={startedAt:m.start||Date.now(),heroes:{},deaths:[],encounters:0};
+  if(!m.combatReport.heroes||typeof m.combatReport.heroes!=='object')m.combatReport.heroes={};
+  if(!Array.isArray(m.combatReport.deaths))m.combatReport.deaths=[];
+  return m.combatReport;
+}
+function heroReport(m,id){
+  const report=ensureCombatReport(m),member=s.members.find(h=>h.id===id),key=String(id);
+  if(!report.heroes[key])report.heroes[key]={id,name:member?.name||'Unknown',damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0};
+  if(member)report.heroes[key].name=member.name;
+  return report.heroes[key];
+}
+function addHeroMetric(m,id,key,amount=1){
+  if(id==null||!Number.isFinite(amount))return;
+  const row=heroReport(m,id);row[key]=(row[key]||0)+amount;
+}
+function recordHeroDamageTaken(m,target,amount){
+  if(!target||amount<=0)return;
+  addHeroMetric(m,target.id,'damageTaken',amount);
+  if(target.hp<=0){
+    const report=ensureCombatReport(m),already=report.deaths.some(x=>x.battleId===m.battle.id&&x.id===target.id);
+    if(!already){report.deaths.push({id:target.id,name:target.name,battleId:m.battle.id,order:report.deaths.length+1});addHeroMetric(m,target.id,'deaths',1)}
+  }
+}
 const STATUS_EFFECTS={
   bleed:{name:'Bleeding',icon:'🩸',damageType:'physical',maxStacks:3},
   burning:{name:'Burning',icon:'🔥',damageType:'fire',maxStacks:3},
@@ -422,7 +448,7 @@ function ensureStatuses(unit){
   if(!unit.statuses||typeof unit.statuses!=='object')unit.statuses={};
   return unit.statuses;
 }
-function applyStatus(m,target,type,{power=1,duration=6000,stacks=1,source='Unknown'}={}){
+function applyStatus(m,target,type,{power=1,duration=6000,stacks=1,source='Unknown',sourceId=null}={}){
   const def=STATUS_EFFECTS[type];if(!def||!target||target.hp<=0)return false;
   const now=Date.now(),statuses=ensureStatuses(target),current=statuses[type];
   if(current){
@@ -430,7 +456,9 @@ function applyStatus(m,target,type,{power=1,duration=6000,stacks=1,source='Unkno
     current.power=Math.max(current.power,power);
     current.expiresAt=Math.max(current.expiresAt,now+duration);
     current.source=source;
-  }else statuses[type]={type,stacks:Math.min(def.maxStacks,stacks),power:Math.max(1,Math.round(power)),source,nextTickAt:now+2000,expiresAt:now+duration};
+    if(sourceId!=null)current.sourceId=sourceId;
+  }else statuses[type]={type,stacks:Math.min(def.maxStacks,stacks),power:Math.max(1,Math.round(power)),source,sourceId,nextTickAt:now+2000,expiresAt:now+duration};
+  if(sourceId!=null&&m.battle.enemies.includes(target))addHeroMetric(m,sourceId,'statusesApplied',1);
   if(m.battle.heroes.includes(target)){
     m.mechanicsSeen=Array.isArray(m.mechanicsSeen)?m.mechanicsSeen:[];
     if(!m.mechanicsSeen.includes(type))m.mechanicsSeen.push(type);
@@ -438,10 +466,11 @@ function applyStatus(m,target,type,{power=1,duration=6000,stacks=1,source='Unkno
   m.battle.log.unshift(`${def.icon} ${target.name.split(' ')[0]} is ${def.name.toLowerCase()}${statuses[type].stacks>1?` (${statuses[type].stacks} stacks)`:''}.`);
   return true;
 }
-function cleanseStatuses(m,target,count=Infinity,label='Cleanse'){
+function cleanseStatuses(m,target,count=Infinity,label='Cleanse',sourceId=null){
   const statuses=ensureStatuses(target),keys=Object.keys(statuses).slice(0,count);
   if(!keys.length)return 0;
   keys.forEach(k=>delete statuses[k]);
+  if(sourceId!=null)addHeroMetric(m,sourceId,'cleanses',keys.length);
   m.battle.log.unshift(`✨ ${label} removes ${keys.map(k=>STATUS_EFFECTS[k]?.name||k).join(', ')} from ${target.name.split(' ')[0]}.`);
   return keys.length;
 }
@@ -454,6 +483,8 @@ function processStatusEffects(m,now=Date.now()){
       while(unit.hp>0&&now>=status.nextTickAt&&status.nextTickAt<=status.expiresAt){
         const damage=Math.max(1,Math.round(status.power*status.stacks));
         unit.hp=Math.max(0,unit.hp-damage);
+        if(b.enemies.includes(unit)&&status.sourceId!=null)addHeroMetric(m,status.sourceId,'statusDamage',damage);
+        if(b.heroes.includes(unit))recordHeroDamageTaken(m,unit,damage);
         b.log.unshift(`${def.icon} ${def.name} deals ${damage} damage to ${unit.name.split(' ')[0]}.`);
         status.nextTickAt+=2000;b.actionSeq=(b.actionSeq||0)+1;
       }
@@ -463,10 +494,11 @@ function processStatusEffects(m,now=Date.now()){
   b.log=b.log.slice(0,45);syncPartyHp(m);
 }
 function statusForDamageType(type){return({physical:'bleed',fire:'burning',poison:'poison',ice:'frostbite',lightning:'shocked',dark:'cursed'})[type]||null}
-function interruptEnemy(m,enemy,source){
+function interruptEnemy(m,enemy,source,sourceId=null){
   if(!enemy?.cast)return false;
   const ability=ENEMY_ABILITIES_DATA[enemy.cast.abilityId];
   enemy.cast=null;enemy.abilityReadyAt=Date.now()+3000;
+  if(sourceId!=null)addHeroMetric(m,sourceId,'interrupts',1);
   m.battle.log.unshift(`✦ ${source} interrupts ${enemy.name}'s ${ability?.name||'ability'}!`);
   return true;
 }
@@ -547,8 +579,11 @@ function cooldownProgress(h,type,now=Date.now()){
 function healAlly(m,h,ally,mult=1,label='Heal'){
   if(!ally)return false;
   const heal=Math.max(2,Math.round((h.int*.38+h.weaponPower*.12)*(h.healMult||1)*mult*2));
+  const before=ally.hp;
   ally.hp=Math.min(ally.maxHp,ally.hp+heal);
-  m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} on ${ally.name.split(' ')[0]} for ${heal}.`);
+  const effective=Math.max(0,ally.hp-before);
+  addHeroMetric(m,h.id,'healing',effective);
+  m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} on ${ally.name.split(' ')[0]} for ${effective}.`);
   syncPartyHp(m);
   return true;
 }
@@ -569,20 +604,25 @@ function heroBasicAttack(m,h){
     text+='Execute! ';
   }
 
+  const targetBefore=target.hp;
   target.hp=Math.max(0,target.hp-dmg);
+  addHeroMetric(m,h.id,'damage',Math.min(targetBefore,dmg));
+  if(text.includes('Critical!'))addHeroMetric(m,h.id,'criticalHits',1);
 
   if((h.cleave||0)>0){
     const secondary=targets.find(t=>t.id!==target.id&&t.hp>0);
     if(secondary){
       const splash=Math.max(1,Math.round(dmg*h.cleave));
+      const secondaryBefore=secondary.hp;
       secondary.hp=Math.max(0,secondary.hp-splash);
+      addHeroMetric(m,h.id,'damage',Math.min(secondaryBefore,splash));
       text+=`Cleave hits ${secondary.name} for ${splash}. `;
     }
   }
 
   const basicStatus=statusForDamageType(h.damageType);
   if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){
-    applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name});
+    applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name,sourceId:h.id});
     text+=`${STATUS_EFFECTS[basicStatus].name} applied. `;
   }
 
@@ -602,7 +642,9 @@ function heroBasicAttack(m,h){
 function activeDamageHit(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
   const dmg=Math.max(1,Math.round(heroDamage(h,target,element)*mult));
+  const before=target.hp;
   target.hp=Math.max(0,target.hp-dmg);
+  addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
   m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} for ${dmg} ${elementIcon[element||h.damageType]||''} ${element||h.damageType} damage.`);
   return true;
 }
@@ -617,30 +659,34 @@ function tryActiveSkill(m,h,now=Date.now()){
   let used=false;
 
   if(type==='greaterHeal'){
-    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.82)){used=healAlly(m,h,target,1.65,'Greater Heal');cleanseStatuses(m,target,Infinity,'Greater Heal')}
+    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.82)){used=healAlly(m,h,target,1.65,'Greater Heal');cleanseStatuses(m,target,Infinity,'Greater Heal',h.id)}
   }else if(type==='renew'){
-    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.88)){used=healAlly(m,h,target,.85,'Renew');cleanseStatuses(m,target,1,'Renew')}
+    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.88)){used=healAlly(m,h,target,.85,'Renew');cleanseStatuses(m,target,1,'Renew',h.id)}
   }else if(type==='Heal'){
     if(ally&&ally.hp<ally.maxHp*.70){used=healAlly(m,h,ally,1,'Heal')}
   }else if(type==='radiantAid'){
-    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.90)){used=healAlly(m,h,target,.75,'Radiant Aid');cleanseStatuses(m,target,1,'Radiant Aid')}
+    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.90)){used=healAlly(m,h,target,.75,'Radiant Aid');cleanseStatuses(m,target,1,'Radiant Aid',h.id)}
   }else if(type==='elementNova'){
     const elem=h.element||'fire';
     const hits=targets.map(t=>{
       const dmg=Math.max(1,Math.round(heroDamage(h,t,elem)*1.44));
+      const before=t.hp;
       t.hp=Math.max(0,t.hp-dmg);
+      addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
       const status=statusForDamageType(elem);
-      if(status&&['pyromancer','venomancer'].includes(h.subclass))applyStatus(m,t,status,{power:dmg*.14,duration:8000,source:h.name});
+      if(status&&['pyromancer','venomancer'].includes(h.subclass))applyStatus(m,t,status,{power:dmg*.14,duration:8000,source:h.name,sourceId:h.id});
       return `${t.name} ${dmg}`;
     });
-    if(h.subclass==='stormcaller')targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Storm Nova'));
+    if(h.subclass==='stormcaller')targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Storm Nova',h.id));
     b.log.unshift(`${h.name.split(' ')[0]} casts ${elementIcon[elem]} ${subclassDef(s.members.find(x=>x.id===h.id))?.name||'Elemental'} Nova: ${hits.join(' · ')}.`);
     used=true;
   }else if(type==='arcaneBurst'){
     const elem=h.damageType==='physical'?'fire':h.damageType;
     const hits=targets.map(t=>{
       const dmg=Math.max(1,Math.round(((h.int*.24+h.weaponPower*.16-t.mdef*.42)*elementalReduction(t[elem]))*2));
+      const before=t.hp;
       t.hp=Math.max(0,t.hp-dmg);
+      addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
       return `${t.name} ${dmg}`;
     });
     b.log.unshift(`${h.name.split(' ')[0]} casts ${elementIcon[elem]} Arcane Burst: ${hits.join(' · ')}.`);
@@ -651,7 +697,7 @@ function tryActiveSkill(m,h,now=Date.now()){
       x.buffs.battleShout=now+6000;
     });
     b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout! Party damage and Attack Speed increased for 6 seconds.`);
-    targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Battle Shout'));
+    targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Battle Shout',h.id));
     used=true;
   }else if(type==='shieldFaith'){
     if(!h.buffs)h.buffs={};
@@ -660,25 +706,28 @@ function tryActiveSkill(m,h,now=Date.now()){
     used=true;
   }else{
     const target=(['shieldSlam','preciseShot','backstab'].includes(type)&&targets.some(t=>t.cast))?targets.find(t=>t.cast):pick(targets);
-    if(type==='powerStrike'){used=activeDamageHit(m,h,target,2.0,'Power Strike');if(used)applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.15,duration:6000,source:h.name})}
-    else if(type==='shieldSlam'){used=activeDamageHit(m,h,target,1.70,'Shield Slam');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Shield Slam')}
-    else if(type==='preciseShot'){used=activeDamageHit(m,h,target,2.20,'Precise Shot');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Precise Shot')}
+    if(type==='powerStrike'){used=activeDamageHit(m,h,target,2.0,'Power Strike');if(used)applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.15,duration:6000,source:h.name,sourceId:h.id})}
+    else if(type==='shieldSlam'){used=activeDamageHit(m,h,target,1.70,'Shield Slam');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Shield Slam',h.id)}
+    else if(type==='preciseShot'){used=activeDamageHit(m,h,target,2.20,'Precise Shot');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Precise Shot',h.id)}
     else if(type==='wardenShot')used=activeDamageHit(m,h,target,1.50,'Warden Shot');
-    else if(type==='backstab'){used=activeDamageHit(m,h,target,2.40,'Backstab');if(used){interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Backstab');applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.18,duration:8000,source:h.name})}}
-    else if(type==='envenom'){used=activeDamageHit(m,h,target,1.90,'Envenom','poison');if(used)applyStatus(m,target,'poison',{power:heroDamage(h,target,'poison')*.18,duration:10000,source:h.name})}
+    else if(type==='backstab'){used=activeDamageHit(m,h,target,2.40,'Backstab');if(used){interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Backstab',h.id);applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.18,duration:8000,source:h.name,sourceId:h.id})}}
+    else if(type==='envenom'){used=activeDamageHit(m,h,target,1.90,'Envenom','poison');if(used)applyStatus(m,target,'poison',{power:heroDamage(h,target,'poison')*.18,duration:10000,source:h.name,sourceId:h.id})}
     else if(type==='smite')used=activeDamageHit(m,h,target,2.10,'Smite','holy');
     else if(type==='holyStrike')used=activeDamageHit(m,h,target,2.10,'Holy Strike','holy');
     else if(type==='companionStrike')used=activeDamageHit(m,h,target,1.10,'Companion Strike');
     else if(type==='flurry'){
       const d1=Math.max(1,Math.round(heroDamage(h,target)*1.40));
       const d2=Math.max(1,Math.round(heroDamage(h,target)*1.40));
+      const before=target.hp;
       target.hp=Math.max(0,target.hp-d1-d2);
+      addHeroMetric(m,h.id,'damage',Math.min(before,d1+d2));
       b.log.unshift(`${h.name.split(' ')[0]} uses Flurry for ${d1} + ${d2} damage.`);
       used=true;
     }
   }
 
   if(used){
+    addHeroMetric(m,h.id,'abilityUses',1);
     spendMana(h,type);
     startActiveCooldown(h,type,now);
     b.actionSeq=(b.actionSeq||0)+1;
@@ -705,10 +754,10 @@ function resolveEnemyAbility(m,e,abilityId,now=Date.now()){
   if(ab.type==='heal'){
     const heal=Math.max(1,Math.round(e.maxHp*(ab.power||.08)));e.hp=Math.min(e.maxHp,e.hp+heal);b.log.unshift(`${e.name} uses ${ab.name} and restores ${heal} HP.`);
   }else if(ab.type==='aoe'){
-    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));t.hp=Math.max(0,t.hp-dmg);applyAbilityStatus(t,dmg)});
+    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg)});
     b.log.unshift(`⚠ ${e.name} releases ${ab.name} on the whole party.`);
   }else{
-    const t=threatTarget(targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));t.hp=Math.max(0,t.hp-dmg);applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
+    const t=threatTarget(targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
   }
   e.mana=Math.max(0,(e.mana||0)-(ab.manaCost||0));e.abilityReadyAt=now+(ab.cooldown||7000);b.actionSeq=(b.actionSeq||0)+1;syncPartyHp(m);return true;
 }
@@ -755,7 +804,7 @@ function enemyAction(m,e){
       const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0);
       let dmg=Math.max(0,Math.round(afterDefense*elementalReduction(target[elem])));
       if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
-      target.hp=Math.max(0,target.hp-dmg);
+      const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
       return `${target.name.split(' ')[0]} ${dmg}`;
     });
     b.log.unshift(`⚠ ${e.name} casts ${elementIcon[elem]} ${elem.toUpperCase()} AOE: ${hit.join(' · ')}.`);
@@ -779,12 +828,14 @@ function enemyAction(m,e){
     dmg=Math.max(0,Math.round(mitigatedDamage(raw,target.mdef,target.block||0)*elementalReduction(target[elem])));
   }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute,target.def,target.block||0);
   if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
-  target.hp=Math.max(0,target.hp-dmg);
+  const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} ${elemental?elementIcon[elem]+' '+elem:'physical'} damage.`);
   if(target.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,target,e.basicStatus,{power:Math.max(1,dmg*.12),duration:8000,source:e.name});
   if(target.hp>0&&(target.counter||0)>0&&Math.random()<target.counter){
     const counter=Math.max(1,Math.round(heroDamage(target,e)*.55));
+    const enemyBefore=e.hp;
     e.hp=Math.max(0,e.hp-counter);
+    addHeroMetric(m,target.id,'damage',Math.min(enemyBefore,counter));
     b.log.unshift(`${target.name.split(' ')[0]} counters ${e.name} for ${counter}.`);
   }
   b.log=b.log.slice(0,45);
@@ -799,6 +850,7 @@ function applyTimedRegenTick(m){
       const heal=Math.min(h.regen,h.maxHp-h.hp);
       if(heal>0){
         h.hp+=heal;
+        addHeroMetric(m,h.id,'healing',heal);
         b.log.unshift(`${h.name.split(' ')[0]} regenerates ${heal} HP.`);
       }
     }
@@ -880,6 +932,7 @@ function finishCurrentFight(m){
   // Never reward the same battle twice.
   if(!b.resolved){
     b.resolved=true;
+    ensureCombatReport(m).encounters++;
     try{
       grantFightRewards(m,b.enemies.map(e=>({name:e.name})));
     }catch(err){
@@ -1080,6 +1133,7 @@ function offlineCatchup(hiddenMs){
       }
       completed++;
     }
+    if(completed){const report=ensureCombatReport(m);report.encounters+=completed;report.offlineEncounters=(report.offlineEncounters||0)+completed}
 
     if(!m.defeated){
       // Offline simulation resolves complete encounters, so resume at the start

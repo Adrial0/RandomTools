@@ -40,7 +40,6 @@ function completeOnboardingGoals(announce=true){
 }
 function setOnboardingFlag(flag){
   if(!s.onboarding)normalizeOnboarding();
-  if(s.onboarding.flags[flag])return;
   s.onboarding.flags[flag]=true;
   completeOnboardingGoals(true);
   save();

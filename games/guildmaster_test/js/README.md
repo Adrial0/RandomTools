@@ -19,4 +19,5 @@ Run the combat mechanic regression tests with:
 ```powershell
 node tests/combat-mechanics.test.js
 node tests/tactical-intel.test.js
+node tests/onboarding.test.js
 ```

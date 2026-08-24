@@ -299,6 +299,13 @@ function defeatAdviceHtml(m){
   const advice=m.defeatAdvice?.length?m.defeatAdvice:defeatAdviceFor(m);
   return `<b>Party defeated.</b> Combat has stopped.${advice.length?`<div class="defeatAdviceTitle">What to change next</div><ul class="defeatAdviceList">${advice.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}`;
 }
+function combatReportHtml(m){
+  const report=ensureCombatReport(m),rows=Object.values(report.heroes);
+  const duration=fmt(Date.now()-(report.startedAt||m.start||Date.now()));
+  const deathOrder=report.deaths.length?report.deaths.map((x,i)=>`${i+1}. ${x.name}`).join(' · '):'No recorded deaths';
+  return `<div class="combatReportHead"><div><div class="name">Mission Report</div><div class="muted">${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active</div></div><span class="chip">${deathOrder}</span></div>
+    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow"><span><b>${row.name}</b><small>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small></span><span>${Math.round(row.damage||0).toLocaleString()}</span><span>${Math.round(row.statusDamage||0).toLocaleString()}<small>${row.statusesApplied||0} applied</small></span><span>${Math.round(row.healing||0).toLocaleString()}</span><span>${Math.round(row.damageTaken||0).toLocaleString()}<small>${row.deaths||0} deaths</small></span><span>${row.interrupts||0} interrupts<small>${row.cleanses||0} cleanses</small></span></div>`).join('')}</div>`;
+}
 function buildCombatStructure(m){
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   const ordered=threatOrderedHeroes(m.battle.heroes);
@@ -317,6 +324,7 @@ function buildCombatStructure(m){
       </div>
     </div>
     <div class="log combatLog" id="combatLog"></div>
+    <div class="card combatReport" id="combatReport">${combatReportHtml(m)}</div>
     <div class="combatInspectPanel" id="combatInspectPanel"></div>
   `;
   combatDomKey=combatStructureKey(m);
@@ -384,6 +392,7 @@ function renderCombat(){
   if($('combatRep'))$('combatRep').textContent=m.stash.rep;
   if($('combatMaterials'))$('combatMaterials').textContent=matTotal;
   if($('combatItems'))$('combatItems').textContent=m.stash.items.length;
+  if($('combatReport'))$('combatReport').innerHTML=combatReportHtml(m);
   if($('combatDefeatedBanner')){
     $('combatDefeatedBanner').style.display=m.defeated?'block':'none';
     if(m.defeated)$('combatDefeatedBanner').innerHTML=defeatAdviceHtml(m);
