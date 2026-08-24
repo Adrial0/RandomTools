@@ -203,6 +203,7 @@ function makeBattle(m){
     x.def=Math.round(x.def*(1+partyDefense));
     x.mdef=Math.round(x.mdef*(1+partyDefense+partyMdef));
   });
+  assignPartyFormation(heroes);
   const cycle=ensureCombatCycle(m);
   const battle={
     id:++m.battleNumber,
@@ -227,6 +228,18 @@ function makeBattle(m){
     cycle.phase='heroes';cycle.heroTurn=0;cycle.enemyTurn=0;cycle.round=battle.round;
   }
   return battle;
+}
+function assignPartyFormation(heroes){
+  const livingHeroes=(heroes||[]).filter(Boolean);
+  if(!livingHeroes.length)return heroes;
+  const frontSlots=Math.max(1,Math.ceil(livingHeroes.length*.4));
+  const ranked=[...livingHeroes].sort((a,b)=>{
+    const durable=x=>(['Warrior','Paladin'].includes(x.class)?2:0)+(x.threat||1)+(x.def||0)/250+(x.block||0)/20;
+    return durable(b)-durable(a);
+  });
+  const frontIds=new Set(ranked.slice(0,frontSlots).map(x=>x.id));
+  livingHeroes.forEach(h=>h.row=frontIds.has(h.id)?'front':'back');
+  return heroes;
 }
 function syncPartyHp(m){
   if(!m.battle)return;
@@ -524,7 +537,11 @@ function heroDamage(h,target,forcedElement=null){
   const mult=(h.damageMult||1)*(h.partyDamageMult||1)*buffMult*((h.element&&element===h.element)?(h.elementMult||1):1);
   const variance=Math.max(0,h.damageVariance||0);
   const roll=(.70+Math.random()*.16)*(1-variance+Math.random()*variance*2);
-  const raw=base*roll*mult*(element==='physical'?1:(1+(h.elementalDamage||0)));
+  let synergy=1;
+  const statuses=target?.statuses||{};
+  if(h.subclass==='venomblade'&&statuses.poison)synergy+=.08*Math.min(3,statuses.poison.stacks||1);
+  if(h.subclass==='marksman'&&statuses.frostbite)synergy+=.18;
+  const raw=base*roll*mult*synergy*(element==='physical'?1:(1+(h.elementalDamage||0)));
 
   const protectionMult=1-clamp(target.protection||0,0,.6);
   if(element==='physical')return Math.max(1,Math.round(mitigatedDamage(raw,target.def,target.block||0,h.armorPen||0)*protectionMult));
@@ -745,6 +762,23 @@ function threatTarget(targets){
   }
   return targets[targets.length-1];
 }
+function weightedThreatTarget(targets){
+  if(!targets?.length)return null;
+  return threatTarget(targets);
+}
+function enemyTargetPool(e,targets){
+  const front=targets.filter(h=>h.row==='front'),back=targets.filter(h=>h.row==='back');
+  if(!front.length)return back.length?back:targets;
+  if(!back.length)return front;
+  if(e?.archetype==='skirmisher')return Math.random()<.68?back:front;
+  if(e?.archetype==='beast'&&Math.random()<.48){
+    const wounded=[...targets].sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp);
+    return [wounded[0]];
+  }
+  if(e?.archetype==='caster'&&Math.random()<.30)return back;
+  return Math.random()<.90?front:back;
+}
+function enemySingleTarget(e,targets){return weightedThreatTarget(enemyTargetPool(e,targets))}
 function resolveEnemyAbility(m,e,abilityId,now=Date.now()){
   const ab=ENEMY_ABILITIES_DATA[abilityId];if(!ab||e.hp<=0)return false;
   const b=m.battle,targets=living(b.heroes);if(!targets.length)return false;
@@ -757,7 +791,7 @@ function resolveEnemyAbility(m,e,abilityId,now=Date.now()){
     targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg)});
     b.log.unshift(`⚠ ${e.name} releases ${ab.name} on the whole party.`);
   }else{
-    const t=threatTarget(targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
+    const t=enemySingleTarget(e,targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
   }
   e.mana=Math.max(0,(e.mana||0)-(ab.manaCost||0));e.abilityReadyAt=now+(ab.cooldown||7000);b.actionSeq=(b.actionSeq||0)+1;syncPartyHp(m);return true;
 }
@@ -812,7 +846,7 @@ function enemyAction(m,e){
     return;
   }
 
-  const target=threatTarget(targets);
+  const target=enemySingleTarget(e,targets);
   if(Math.random()<Math.max(0,(target.physicalDodge||0)-(e.accuracy||0))){
     b.log.unshift(`${target.name.split(' ')[0]} dodges ${e.name}'s physical attack.`);
     b.log=b.log.slice(0,45);
@@ -888,10 +922,10 @@ function defeatAdviceFor(m){
 
   if(avgLevel&&avgLevel+1<m.level)advice.push(`Your party averaged level ${avgLevel.toFixed(1)} in a level ${m.level} area. Train in a lower-level expedition first.`);
   else if(partyPower<m.target*.85)advice.push(`Party power was ${partyPower} against the recommended ${m.target}. Improve equipment or bring a stronger full party.`);
-  if(!hasFrontline)advice.push('The party had no durable frontline. Add a Warrior, Paladin, or another high-threat defender to draw attacks.');
-  if((m.mechanicsSeen||[]).some(x=>STATUS_EFFECTS[x])&&!hasCleanser)advice.push('Harmful status effects wore the party down. Bring a Life Priest, Oracle, or Beacon to cleanse them.');
-  if((m.mechanicsSeen||[]).includes('casting')&&!hasInterrupter)advice.push('Enemy casts went uninterrupted. Guardian, Warlord, Marksman, Assassin, and Stormcaller abilities can stop them.');
-  if(!hasHealer)advice.push('The party had no reliable healer. A Priest or healing subclass can stabilize longer encounters.');
+  if(!hasFrontline)advice.push('The backline took sustained pressure after the party failed to establish a durable frontline.');
+  if((m.mechanicsSeen||[]).some(x=>STATUS_EFFECTS[x])&&!hasCleanser)advice.push('Harmful status effects remained active long enough to wear the party down.');
+  if((m.mechanicsSeen||[]).includes('casting')&&!hasInterrupter)advice.push('Several dangerous enemy casts completed without being interrupted.');
+  if(!hasHealer)advice.push('The party could not recover from damage across multiple encounters.');
   if(advice.length<3&&enemies.length)advice.push(physical>=magical?'These enemies dealt mostly physical damage. Prioritize DEF, Block, and heavier armor.':'These enemies dealt mostly magical damage. Prioritize MDEF and relevant elemental resistances.');
   if(advice.length<2)advice.push('Inspect the surviving enemies and adjust weapons, subclasses, or party composition before returning.');
   return advice.slice(0,3);
@@ -1086,6 +1120,25 @@ function offlineEnemySnapshot(m){
   const count=m.type==='raid'?3:m.type==='dungeon'?2:1;
   return Array.from({length:count},()=>({name:pick(pool)[0]}));
 }
+function offlineCompositionFactor(m,party){
+  const members=party||[];
+  const templates=(m.enemyPool||[]).map(name=>ENEMIES_DATA[name]||{});
+  const abilities=templates.map(e=>ENEMY_ABILITIES_DATA[e.ability]).filter(Boolean);
+  const hasFrontline=members.some(h=>['Warrior','Paladin'].includes(h.class)||hs(h).threat>=1.5);
+  const hasSustain=members.some(h=>h.class==='Priest'||['lifepriest','oracle','beacon'].includes(h.subclass));
+  const hasCleanse=members.some(h=>['lifepriest','oracle','beacon'].includes(h.subclass));
+  const hasInterrupt=members.some(h=>['guardian','warlord','marksman','assassin','stormcaller'].includes(h.subclass));
+  const backlinePressure=templates.some(e=>['skirmisher','beast'].includes(e.archetype));
+  const dangerousCasts=abilities.some(a=>(a.castTime||0)>=1800&&a.type!=='heal');
+  const harmfulStatuses=abilities.some(a=>a.status);
+  let factor=1;
+  if(!hasFrontline)factor*=backlinePressure?.62:.76;
+  if(!hasSustain)factor*=m.type==='quest'?.88:.72;
+  if(dangerousCasts&&!hasInterrupt)factor*=.78;
+  if(harmfulStatuses&&!hasCleanse)factor*=.82;
+  if(hasFrontline&&hasSustain)factor*=1.06;
+  return clamp(factor,.35,1.12);
+}
 
 function offlineCatchup(hiddenMs){
   if(!hiddenMs||hiddenMs<60000)return;
@@ -1096,7 +1149,9 @@ function offlineCatchup(hiddenMs){
     ensurePartyState(m);
     repairFiniteMissionState(m);
 
-    const ratio=clamp(power(m.party)/Math.max(1,m.target),.3,2.2);
+    const party=s.members.filter(h=>m.party.includes(h.id));
+    const composition=offlineCompositionFactor(m,party);
+    const ratio=clamp(power(m.party)*composition/Math.max(1,m.target),.3,2.2);
     const secondsPerFight=clamp(180/ratio,m.type==='raid'?130:90,m.type==='raid'?300:250);
     let possible=Math.floor(hiddenMs/1000/secondsPerFight);
     possible=Math.min(possible,100);
@@ -1106,7 +1161,6 @@ function offlineCatchup(hiddenMs){
     }
     if(possible<=0)return;
 
-    const party=s.members.filter(h=>m.party.includes(h.id));
     const healer=party.some(h=>h.class==='Priest')?.35:0;
     const sustain=party.reduce((sum,h)=>{const z=hs(h);return sum+(z.regen||0)*.012+(z.lifesteal||0)*.004},0);
 

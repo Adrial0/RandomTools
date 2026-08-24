@@ -128,6 +128,7 @@ function arenaHeroUnit(h,index,enemy=false){
 }
 function startArenaClientBattle(opponentPartyId,requestId,prepared){
   const now=Date.now(),heroes=prepared.attacker.members.map((h,i)=>arenaHeroUnit(h,i,false)),enemies=prepared.defender.members.map((h,i)=>arenaHeroUnit(h,i,true));
+  assignPartyFormation(heroes);
   const partyState={};heroes.forEach(h=>partyState[h.id]={hp:h.hp,maxHp:h.maxHp,mana:h.mana,maxMana:h.maxMana,cooldowns:{},nextAttackAt:h.nextAttackAt,attackStartedAt:h.attackStartedAt});
   arenaLiveMission={id:-1,type:'arena',name:`${prepared.attacker.guildName} vs ${prepared.defender.guildName}`,attackerGuild:prepared.attacker.guildName,defenderGuild:prepared.defender.guildName,opponentPartyId,requestId,party:heroes.map(h=>h.id),partyState,level:1,target:1,completed:false,defeated:false,fights:0,kills:0,start:now,lastSim:now,nextRegenAt:now+5000,stash:{gold:0,rep:0,materials:{},items:[]},combatReport:{startedAt:now,encounters:0,offlineEncounters:0,heroes:{},deaths:[]},battle:{id:1,resolved:false,actionSeq:0,kind:'arena',heroes,enemies,phase:'heroes',turn:0,round:1,log:['The Arena battle begins.']}};
   heroes.forEach(h=>arenaLiveMission.combatReport.heroes[String(h.id)]={id:h.id,name:h.name,damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0});
@@ -160,5 +161,4 @@ function renderArenaHistory(){
   const box=$('arenaHistory');if(!box)return;
   box.innerHTML=arenaData.history?.length?arenaData.history.map(x=>`<div class="arenaHistoryRow"><span class="${x.won?'good':'dangerText'}">${x.won?'Victory':'Defeat'}</span><span>${arenaEscape(x.opponent_guild)}</span><span>${x.rating_change>=0?'+':''}${x.rating_change} rating</span><small>${new Date(x.created_at).toLocaleString()}</small></div>`).join(''):'<div class="empty">No Arena matches yet.</div>';
 }
-
 

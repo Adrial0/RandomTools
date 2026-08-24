@@ -71,4 +71,35 @@ function mission(){
   assert.equal(m.battle.enemies[1].protection,0,'a bulwark does not protect itself');
 }
 
+{
+  const heroes=[
+    {id:1,class:'Priest',threat:.7,def:12,block:0},
+    {id:2,class:'Ranger',threat:.8,def:14,block:0},
+    {id:3,class:'Warrior',threat:2.2,def:40,block:3},
+    {id:4,class:'Mage',threat:.6,def:8,block:0},
+    {id:5,class:'Paladin',threat:2.4,def:38,block:4}
+  ];
+  context.assignPartyFormation(heroes);
+  assert.deepEqual(heroes.filter(h=>h.row==='front').map(h=>h.id).sort(),[3,5],'durable high-threat heroes form the frontline');
+  assert.deepEqual(heroes.filter(h=>h.row==='back').map(h=>h.id).sort(),[1,2,4],'fragile heroes remain in the back row');
+}
+
+{
+  const front={id:1,row:'front',threat:2},back={id:2,row:'back',threat:1};
+  const oldRandom=Math.random;
+  Math.random=()=>0;
+  assert.equal(context.enemySingleTarget({archetype:'brute'},[front,back]).id,front.id,'ordinary enemies are stopped by a living frontline');
+  assert.equal(context.enemySingleTarget({archetype:'skirmisher'},[front,back]).id,back.id,'skirmishers can deliberately pressure the back row');
+  Math.random=oldRandom;
+}
+
+{
+  context.ENEMIES_DATA={Backstabber:{archetype:'skirmisher',ability:'fireball'}};
+  context.hs=h=>({threat:h.threat||1});
+  const missionData={type:'dungeon',enemyPool:['Backstabber']};
+  const fragile=[{class:'Mage',subclass:null,threat:.6},{class:'Ranger',subclass:null,threat:.8}];
+  const balanced=[{class:'Warrior',subclass:'guardian',threat:2},{class:'Priest',subclass:'lifepriest',threat:.7}];
+  assert.ok(context.offlineCompositionFactor(missionData,balanced)>context.offlineCompositionFactor(missionData,fragile),'offline combat preserves the advantage of mechanic coverage');
+}
+
 console.log('Combat mechanic tests passed.');

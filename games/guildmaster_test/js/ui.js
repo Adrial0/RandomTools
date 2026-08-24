@@ -210,7 +210,7 @@ function combatDetailsHtml(x,enemy=false){
   return `<div class="combatDetailStats">
     <span>HP ${Math.max(0,x.hp)}/${x.maxHp}</span>${enemy?'':`<span>Mana ${Math.max(0,x.mana||0)}/${x.maxMana||0}</span><span>Mana Regen ${x.manaRegen||0}</span>${primaryActiveType(x)?`<span>${activeName(primaryActiveType(x))}: ${activeCooldownRemaining(x,primaryActiveType(x))<=0?'Ready':fmt(activeCooldownRemaining(x,primaryActiveType(x)))}</span>`:''}`}<span>DEF ${x.def||0}</span>
     <span>MDEF ${x.mdef||0}</span><span>Block ${x.block||0}</span>
-    <span>Threat ${(x.threat||1).toFixed(1)}</span><span>Attack ${x.weaponPower||0}</span><span>Attack Speed ${Math.round((x.attackSpeed||0)*100)}%</span><span>Attack Time ${(heroAttackIntervalMs(x)/1000).toFixed(2)}s</span><span>Regen ${x.regen||0}</span>
+    <span>Position ${x.row==='front'?'Front':'Back'}</span><span>Threat ${(x.threat||1).toFixed(1)}</span><span>Attack ${x.weaponPower||0}</span><span>Attack Speed ${Math.round((x.attackSpeed||0)*100)}%</span><span>Attack Time ${(heroAttackIntervalMs(x)/1000).toFixed(2)}s</span><span>Regen ${x.regen||0}</span>
     <span>Lifesteal ${x.lifesteal||0}%</span><span>Phys Dodge ${Math.round((x.physicalDodge||0)*100)}%</span>
     <span>Magic Dodge ${Math.round((x.magicalDodge||0)*100)}%</span><span>Armor Pen ${Math.round((x.armorPen||0)*100)}%</span>
     <span>Parry ${Math.round((x.parry||0)*100)}%</span><span>Crit ${Math.round((x.critBonus||0)*100)}%</span>
@@ -230,7 +230,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
     <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
       <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
-      <div class="combatMiniClass">${enemy?(x.boss?'BOSS':'Enemy'):(x.displayClass||x.class)}</div>
+      <div class="combatMiniClass">${enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`}</div>
       <div class="hpTrack"><div class="hpFill" style="width:${pct}%"></div></div>
       ${(!enemy||x.maxMana)?`<div class="manaTrack"><div class="manaFill" style="width:${clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)}%"></div></div>`:''}
       <div class="attackTrack" title="Attack timer"><div class="attackFill ${attackPct>=100?'ready':''}" style="width:${attackPct}%"></div></div>
@@ -283,9 +283,9 @@ function toggleCombatantDetails(e,el){
   renderCombatInspector(el);
 }
 function threatOrderedHeroes(heroes){
-  const sorted=[...heroes].sort((a,b)=>(b.threat||1)-(a.threat||1));
-  const front=sorted.slice(0,Math.ceil(sorted.length/2));
-  const back=sorted.slice(Math.ceil(sorted.length/2));
+  if((heroes||[]).some(h=>!h.row)&&typeof assignPartyFormation==='function')assignPartyFormation(heroes);
+  const front=[...heroes].filter(h=>h.row==='front').sort((a,b)=>(b.threat||1)-(a.threat||1));
+  const back=[...heroes].filter(h=>h.row!=='front').sort((a,b)=>(b.threat||1)-(a.threat||1));
   const out=[];
   const rows=Math.max(front.length,back.length);
   for(let i=0;i<rows;i++){
@@ -317,7 +317,7 @@ function buildCombatStructure(m){
     <div class="combatFixedTop">
       <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
       <div class="combatGrid">
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT COLUMN = HIGHER THREAT'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map(x=>combatantHtml(x.hero,false,x.front)).join('')}</div></div>
+        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT AND BACK ROW'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map(x=>combatantHtml(x.hero,false,x.front)).join('')}</div></div>
         <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${m.battle.enemies.map(x=>combatantHtml(x,true,false)).join('')}</div></div>
       </div>
       <div class="lootStash" style="display:${arenaMode?'none':'grid'}">
