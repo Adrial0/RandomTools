@@ -345,6 +345,7 @@ async function bootstrapGame(){
     return;
   }
   load();ensure();syncDiscoveredResources();repairDeadBattles();syncMusic();validateContentData();render();setupGuildhallBackground();
+  if(typeof initArenaOnline==='function')initArenaOnline();
 }
 bootstrapGame();
 setInterval(()=>{

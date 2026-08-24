@@ -1271,6 +1271,15 @@ body.windowOpen .side{overflow:hidden!important}
 .combatReportRow>span:not(:first-child){text-align:right}
 .combatReportRow small{display:block;color:#89795d;font-size:8px;margin-top:2px}
 
+.nav small{float:right;font-size:8px;color:#c99a45;text-transform:uppercase}
+.arenaHeaderPanel{margin-bottom:12px}.arenaTopGrid{align-items:start;margin-bottom:12px}.arenaSetupNotice,.arenaLogin,.arenaSignedIn{padding:11px;border:1px solid #5f482d;background:#211a12}
+.arenaLogin,.arenaSignedIn{display:flex;align-items:center;gap:9px;justify-content:space-between;flex-wrap:wrap}.arenaLogin input{min-width:240px;flex:1;padding:9px}
+.arenaDefenseSummary,.arenaResultTable{display:grid;gap:5px}.arenaMember,.arenaOpponent,.arenaHistoryRow,.arenaResultRow{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:8px;border:1px solid #4d3c28;background:#1c1711}
+.arenaMember small,.arenaHistoryRow small{color:#8f8064}.arenaOpponent+.arenaOpponent,.arenaHistoryRow+.arenaHistoryRow{margin-top:5px}
+.arenaLeaderboardRow{display:grid;grid-template-columns:60px minmax(130px,1fr) 100px 100px;gap:8px;padding:8px;background:#1c1711;border-bottom:1px solid #443522}.arenaLeaderboardRow.header{background:#302417;color:#dfc38d;text-transform:uppercase;font-size:9px}
+.arenaRatingChange{font-size:20px;font-weight:800;margin-bottom:10px}.arenaReplay{margin-top:10px;max-height:320px}.arenaPartyPicker{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:10px!important}
+@media(max-width:600px){.arenaPartyPicker{grid-template-columns:1fr}.arenaLeaderboardRow{grid-template-columns:45px minmax(90px,1fr) 70px 70px;font-size:9px}}
+
 
 /* v62: four combat bars need a little more vertical room. */
 .combatant.combatMini{

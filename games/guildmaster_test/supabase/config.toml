@@ -1,0 +1,10 @@
+project_id = "guildmaster"
+
+[functions.publish-party]
+verify_jwt = true
+
+[functions.arena-data]
+verify_jwt = true
+
+[functions.fight-arena]
+verify_jwt = true

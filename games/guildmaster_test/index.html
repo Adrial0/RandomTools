@@ -11,7 +11,7 @@
 <div class="res"><span>Guild Lv. <strong id="lv"></strong></span><span>Gold <strong id="gold"></strong></span><span>Reputation <strong id="rep"></strong></span></div></div>
 <div class="shell">
 <aside class="side">
-<button class="nav on" data-p="hall">Guild Hall</button><button class="nav" data-p="roster">Roster</button><button class="nav" data-p="quests">Expeditions</button><button class="nav" data-p="questboard">Quests</button><button class="nav" data-p="harvesting">Harvesting</button>
+<button class="nav on" data-p="hall">Guild Hall</button><button class="nav" data-p="roster">Roster</button><button class="nav" data-p="quests">Expeditions</button><button class="nav" data-p="arena">Arena <small>Beta</small></button><button class="nav" data-p="questboard">Quests</button><button class="nav" data-p="harvesting">Harvesting</button>
 <button class="nav" data-p="dungeons">Dungeons</button><button class="nav" data-p="raids">Raids</button><button class="nav" data-p="inventory">Inventory</button><button class="nav" data-p="market">Market</button>
 <button class="nav" data-p="crafting">Crafting</button><button class="nav" data-p="upgrades">Upgrades</button><button class="nav" data-p="settings">Settings</button>
 </aside>
@@ -111,6 +111,20 @@
 </section>
 <section class="page" id="dungeons"><div class="panel"><div class="head"><div><h2>Dungeons</h2><p>Unlocks at guild level 3. Better loot, longer missions.</p></div></div><div id="dungeonList" class="quests"></div></div></section>
 <section class="page" id="raids"><div class="panel"><div class="head"><div><h2>Raids</h2><p>Unlocks at guild level 6. High risk, high reward. Raids use a fixed 20-member party limit.</p></div></div><div id="raidList" class="quests"></div></div></section>
+<section class="page" id="arena">
+  <div class="panel arenaHeaderPanel">
+    <div class="head"><div><h2>Arena <span class="chip">Online Beta</span></h2><p>Publish a defensive party and challenge parties saved by other Guildmasters.</p></div><span class="chip" id="arenaConnectionState">Not connected</span></div>
+    <div id="arenaAccount"></div>
+  </div>
+  <div id="arenaOnlineContent" style="display:none">
+    <div class="g2 arenaTopGrid">
+      <div class="panel"><div class="head"><div><h3>Your Arena Defense</h3><p>Up to five members. Publishing replaces your previous defense.</p></div><button class="btn gold" onclick="openArenaPartyPicker()">Choose Party</button></div><div id="arenaDefense"></div></div>
+      <div class="panel"><div class="head"><div><h3>Ranked Opponents</h3><p>Server-resolved asynchronous battles against similarly rated defenses.</p></div><button class="btn" onclick="refreshArenaData()">Refresh</button></div><div id="arenaOpponents"></div></div>
+    </div>
+    <div class="panel"><div class="head"><div><h3>PvP Leaderboard</h3><p>Seasonal Arena rating. Match outcomes are calculated by the server.</p></div></div><div id="arenaLeaderboard"></div></div>
+    <div class="panel"><div class="head"><div><h3>Match History</h3><p>Your latest attacks and defenses.</p></div></div><div id="arenaHistory"></div></div>
+  </div>
+</section>
 <section class="page" id="inventory">
 <div class="panel">
   <div class="head">
@@ -241,5 +255,7 @@
 <script src="js/ui.js?v=5"></script>
 <script src="js/activities.js?v=5"></script>
 <script src="js/economy.js?v=5"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/arena.js?v=5"></script>
 <script src="js/app.js?v=5"></script>
 </body></html>
