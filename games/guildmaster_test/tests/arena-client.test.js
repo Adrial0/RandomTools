@@ -40,5 +40,6 @@ const fightFunction=fs.readFileSync(require.resolve('../supabase/functions/fight
 assert.match(fightFunction,/recent\?\.length\|\|0\)>=5/,'Arena should allow five challenges inside the rolling window');
 assert.match(fightFunction,/5\*60\*1000/,'Arena challenge window should last five minutes');
 assert.doesNotMatch(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/Skip to Result/,'Arena combat must not offer result skipping');
+assert.match(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/combatantHtml\(x,false,false,\{arena:true\}\)/,'Arena must reuse the normal combatant component');
 
 console.log('Arena client and backend contract tests passed.');

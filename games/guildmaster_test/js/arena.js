@@ -77,7 +77,7 @@ function arenaHeroSnapshot(h){
   const z=hs(h),weapon=s.inventory.find(it=>it.id===h.equip?.Weapon),wd=weaponDefForItem(weapon);
   return{
     sourceId:h.id,name:h.name,class:h.class,subclass:h.subclass||null,level:h.level,power:z.power,
-    maxHp:z.hp,str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,
+    maxHp:z.hp,maxMana:z.mana||0,manaRegen:z.manaRegen||0,str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,
     physicalDodge:z.physicalDodge||0,magicalDodge:z.magicalDodge||0,regen:z.regen||0,lifesteal:z.lifesteal||0,
     fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
     weaponPower:weapon?.weaponPower||wd?.base||8,damageType:weapon?.damageType||'physical',armorPen:z.armorPen||0,
@@ -119,8 +119,8 @@ async function fightArenaOpponent(partyId){
   }catch(err){arenaMessage(err.message)}finally{arenaBusy=false}
 }
 function showArenaResult(result){
-  const token=++arenaPlaybackToken,units=new Map((result.combatants||[]).map(x=>[x.id,{...x,hp:x.maxHp}]));
-  const card=x=>{const icon=x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset');return `<div class="combatant combatMini arenaCombatant" id="arenaUnit-${x.id}" data-arena-unit="${x.id}"><div class="visualIcon">${icon}</div><div class="combatMiniVitals"><div class="combatMiniNameRow"><div class="name combatantName">${arenaEscape(x.name)}</div><span class="combatantHp">${x.maxHp}/${x.maxHp}</span></div><div class="combatMiniClass">${arenaEscape(x.subclass||x.class)}</div><div class="hpTrack"><div class="hpFill" style="width:100%"></div></div><div class="attackTrack"><div class="attackFill" style="width:0%"></div></div>${x.activeType?'<div class="cooldownTrack"><div class="cooldownFill" style="width:0%"></div></div>':''}<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel">Casting</span></div><div class="combatStatusRow"></div></div><div class="arenaFloat"></div></div>`};
+  const now=Date.now(),token=++arenaPlaybackToken,units=new Map((result.combatants||[]).map(x=>[x.id,{...x,hp:x.maxHp,mana:x.maxMana||0,displayClass:x.subclass||x.class,cooldowns:{},attackStartedAt:now,nextAttackAt:now+(x.attackInterval||2500)}]));
+  const card=x=>{const html=combatantHtml(x,false,false,{arena:true});return html.replace('class="combatant ',`id="arenaUnit-${x.id}" data-arena-unit="${x.id}" class="combatant `).replace('<div class="combatFloat"></div>','<div class="arenaFloat"></div>')};
   $('combatTitle').textContent=`${result.attackerGuild} vs ${result.defenderGuild}`;
   $('combatSubtitle').textContent='Ranked Arena · live replay of the server-resolved fight';
   $('combatModal').dataset.mode='arena';
@@ -156,8 +156,8 @@ function arenaBarProgress(times,now){
 function updateArenaActionBars(units,battleTime,schedule){
   units.forEach((unit,id)=>{
     const el=$(`arenaUnit-${id}`);if(!el)return;
-    const attack=el.querySelector('.attackFill');if(attack)attack.style.width=(arenaBarProgress(schedule.attack[id],battleTime)*100).toFixed(3)+'%';
-    const active=el.querySelector('.cooldownFill');if(active)active.style.width=(arenaBarProgress(schedule.active[id],battleTime)*100).toFixed(3)+'%';
+    const attack=el.querySelector('.attackFill');if(attack)attack.style.setProperty('width',(arenaBarProgress(schedule.attack[id],battleTime)*100).toFixed(3)+'%','important');
+    const active=el.querySelector('.cooldownFill');if(active)active.style.setProperty('width',(arenaBarProgress(schedule.active[id],battleTime)*100).toFixed(3)+'%','important');
   });
 }
 function applyArenaEvent(event,units){

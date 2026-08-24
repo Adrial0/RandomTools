@@ -217,16 +217,16 @@ function combatDetailsHtml(x,enemy=false){
     <span>Crit Dmg +${Math.round((x.critDamage||0)*100)}%</span><span>Accuracy ${Math.round((x.accuracy||0)*100)}%</span><span>Status Chance ${Math.round((x.statusChance||0)*100)}%</span>${Object.values(ensureStatuses(x)).map(st=>`<span>${STATUS_EFFECTS[st.type]?.icon||'◆'} ${STATUS_EFFECTS[st.type]?.name||st.type} ×${st.stacks}</span>`).join('')}
   </div>`;
 }
-function combatantHtml(x,enemy=false,frontline=false){
+function combatantHtml(x,enemy=false,frontline=false,options={}){
   const pct=clamp(x.hp/x.maxHp*100,0,100);
   const icon=enemy?x.icon:(x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset'));
-  const side=enemy?'enemy':'hero';
+  const side=options.arena?`arena-${x.side}`:(enemy?'enemy':'hero');
   const key=`${side}-${x.id}`;
   const activeType=enemy?null:primaryActiveType(x);
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
   const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
-  return `<div class="combatant combatMini ${enemy?'enemy':''} ${frontline?'combatThreatFront':''}" data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" onclick="toggleCombatantDetails(event,this)">
+  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''}" ${options.arena?'':`data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
     <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
       <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>

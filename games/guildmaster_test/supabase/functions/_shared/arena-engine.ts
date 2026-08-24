@@ -66,6 +66,6 @@ export function resolveArenaBattle(attacker:any,defender:any,seed:number){
   const attackAlive=living(attack),defenseAlive=living(defense),attackRatio=attack.reduce((n,x)=>n+x.hp,0)/attack.reduce((n,x)=>n+x.maxHp,0),defenseRatio=defense.reduce((n,x)=>n+x.hp,0)/defense.reduce((n,x)=>n+x.maxHp,0);
   const attackerWon=defenseAlive.length===0||(attackAlive.length>0&&clock>=120000&&attackRatio>defenseRatio);
   const resultText=attackerWon?`${attacker.guildName} wins the Arena battle.`:`${defender.guildName} defends successfully.`;log(resultText);emit('result',null,null,0,resultText);
-  const combatants=[...attack,...defense].map(x=>({id:x.arenaId,name:x.name,class:x.class,subclass:x.subclass,side:x.side,maxHp:x.maxHp,attackInterval:x.attackInterval,activeType:x.activeType}));
+  const combatants=[...attack,...defense].map(x=>({id:x.arenaId,name:x.name,class:x.class,subclass:x.subclass,side:x.side,maxHp:x.maxHp,maxMana:x.maxMana||0,manaRegen:x.manaRegen||0,attackInterval:x.attackInterval,activeType:x.activeType}));
   return{attackerWon,durationMs:clock,replay,timeline,combatants,report:[...metrics.values()]};
 }
