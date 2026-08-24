@@ -114,7 +114,7 @@ async function fightArenaOpponent(partyId){
   const defense=arenaData.defense;if(!defense)return arenaMessage('Publish your Arena defense before challenging opponents.');
   arenaBusy=true;
   try{
-    const requestId=crypto.randomUUID(),prepared=await arenaInvoke('fight-arena',{opponentPartyId:partyId,requestId,prepare:true});
+    const requestId=crypto.randomUUID(),prepared=await arenaInvoke('arena-match',{opponentPartyId:partyId,requestId,prepare:true});
     startArenaClientBattle(partyId,requestId,prepared);
   }catch(err){arenaMessage(err.message)}finally{arenaBusy=false}
 }
@@ -138,7 +138,7 @@ async function finishArenaClientBattle(m,won){
   const report=Object.values(ensureCombatReport(m).heroes),replay=(m.battle?.log||[]).slice(0,80);
   ensureCombatReport(m).encounters=1;m.battle.log.unshift(won?'Your party wins the Arena battle.':'Your party was defeated in the Arena.');renderCombat();
   try{
-    const result=await arenaInvoke('fight-arena',{opponentPartyId:m.opponentPartyId,requestId:m.requestId,won,report,replay});
+    const result=await arenaInvoke('arena-match',{opponentPartyId:m.opponentPartyId,requestId:m.requestId,won,report,replay});
     m.arenaResult=result;arenaMessage(`${won?'Victory':'Defeat'} · Rating ${result.ratingChange>=0?'+':''}${result.ratingChange}` ,won?'good':'bad');await refreshArenaData(true);renderCombat();
   }catch(err){arenaMessage(err.message)}
 }
