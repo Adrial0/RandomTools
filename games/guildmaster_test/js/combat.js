@@ -95,7 +95,7 @@ function makeEnemy(type,level,index){
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
   const interval=Math.round(ar.attackInterval||2400);
-  return {id:index+1,name,icon:gameIcon('enemy',name,tpl.icon||'❓','gameAsset combatAsset'),archetype:tpl.archetype,ability:tpl.ability||null,drops:tpl.drops||['Iron'],maxHp:hp,hp,atk,def,mdef:Math.round(def*.94),block:0,fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),holy:rnd(0,18),dark:rnd(0,18),damageType:tpl.damageType||'physical',elementalMult:type==='raid'?1.30:type==='dungeon'?1.12:1.0,mage:maxMana>0,maxMana,mana:maxMana,manaRegen:ar.manaRegen||0,abilityReadyAt:0,attackInterval:interval,attackStartedAt:Date.now(),nextAttackAt:Date.now()+interval};
+  return {id:index+1,name,icon:gameIcon('enemy',name,tpl.icon||'❓','gameAsset combatAsset'),archetype:tpl.archetype,ability:tpl.ability||null,drops:tpl.drops||['Iron'],maxHp:hp,hp,atk,def,mdef:Math.round(def*.94),block:0,fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),holy:rnd(0,18),dark:rnd(0,18),damageType:tpl.damageType||'physical',elementalMult:type==='raid'?1.30:type==='dungeon'?1.12:1.0,mage:maxMana>0,maxMana,mana:maxMana,manaRegen:ar.manaRegen||0,abilityReadyAt:0,attackInterval:interval,attackStartedAt:Date.now(),nextAttackAt:Date.now()+interval,enrageThreshold:ar.enrageThreshold||0,enrageMult:ar.enrageMult||1,basicStatus:ar.basicStatus||null,basicStatusChance:ar.basicStatusChance||0,protectorAura:ar.protectorAura||0,executeThreshold:ar.executeThreshold||0,executeMult:ar.executeMult||1};
 }
 
 function ensurePartyState(m){
@@ -494,10 +494,11 @@ function heroDamage(h,target,forcedElement=null){
   const roll=(.70+Math.random()*.16)*(1-variance+Math.random()*variance*2);
   const raw=base*roll*mult*(element==='physical'?1:(1+(h.elementalDamage||0)));
 
-  if(element==='physical')return mitigatedDamage(raw,target.def,target.block||0,h.armorPen||0);
+  const protectionMult=1-clamp(target.protection||0,0,.6);
+  if(element==='physical')return Math.max(1,Math.round(mitigatedDamage(raw,target.def,target.block||0,h.armorPen||0)*protectionMult));
 
   const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0,h.armorPen||0);
-  return Math.max(0,Math.round(afterDefense*elementalReduction(target[element])));
+  return Math.max(0,Math.round(afterDefense*elementalReduction(target[element])*protectionMult));
 }
 
 
@@ -731,6 +732,12 @@ function processEnemyCasts(m,now=Date.now()){
     if(now>=e.cast.completeAt){const id=e.cast.abilityId;e.cast=null;resolveEnemyAbility(m,e,id,now)}
   });
 }
+function refreshEnemyTactics(m){
+  const enemies=living(m.battle?.enemies||[]);
+  enemies.forEach(target=>{
+    target.protection=clamp(enemies.filter(other=>other.id!==target.id).reduce((sum,other)=>sum+(other.protectorAura||0),0),0,.6);
+  });
+}
 function enemyAction(m,e){
   const b=m.battle,targets=living(b.heroes);if(!targets.length)return;
   if(e.cast)return;
@@ -743,7 +750,8 @@ function enemyAction(m,e){
       if(Math.random()<Math.max(0,(target.magicalDodge||0)-(e.accuracy||0))){
         return `${target.name.split(' ')[0]} dodged`;
       }
-      const raw=e.atk*1.05*(e.elementalMult||1);
+      const enraged=e.enrageThreshold&&e.hp/e.maxHp<=e.enrageThreshold?e.enrageMult||1:1;
+      const raw=e.atk*1.05*(e.elementalMult||1)*enraged;
       const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0);
       let dmg=Math.max(0,Math.round(afterDefense*elementalReduction(target[elem])));
       if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
@@ -755,7 +763,7 @@ function enemyAction(m,e){
     return;
   }
 
-  const target=pick(targets);
+  const target=threatTarget(targets);
   if(Math.random()<Math.max(0,(target.physicalDodge||0)-(e.accuracy||0))){
     b.log.unshift(`${target.name.split(' ')[0]} dodges ${e.name}'s physical attack.`);
     b.log=b.log.slice(0,45);
@@ -764,13 +772,16 @@ function enemyAction(m,e){
 
   if(Math.random()<(target.parry||0)){b.log.unshift(`${target.name.split(' ')[0]} parries ${e.name}'s attack.`);return;}
   let dmg;
+  const enraged=e.enrageThreshold&&e.hp/e.maxHp<=e.enrageThreshold?e.enrageMult||1:1;
+  const execute=e.executeThreshold&&target.hp/target.maxHp<=e.executeThreshold?e.executeMult||1:1;
   if(elemental){
-    const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1);
+    const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1)*enraged*execute;
     dmg=Math.max(0,Math.round(mitigatedDamage(raw,target.mdef,target.block||0)*elementalReduction(target[elem])));
-  }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32),target.def,target.block||0);
+  }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute,target.def,target.block||0);
   if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
   target.hp=Math.max(0,target.hp-dmg);
   b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} ${elemental?elementIcon[elem]+' '+elem:'physical'} damage.`);
+  if(target.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,target,e.basicStatus,{power:Math.max(1,dmg*.12),duration:8000,source:e.name});
   if(target.hp>0&&(target.counter||0)>0&&Math.random()<target.counter){
     const counter=Math.max(1,Math.round(heroDamage(target,e)*.55));
     e.hp=Math.max(0,e.hp-counter);
@@ -975,6 +986,7 @@ function stepBattle(m){
 
   processStatusEffects(m,now);
   processEnemyCasts(m,now);
+  refreshEnemyTactics(m);
 
   if(!living(b.enemies).length){finishCurrentFight(m);return}
   if(!living(b.heroes).length){expeditionDefeated(m);return}

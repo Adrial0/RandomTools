@@ -197,8 +197,9 @@ function openCombat(mid){combatDomKey='';
 function closeCombat(){closeCombatInspector();$('combatModal').classList.remove('on');combatDomKey='';syncWindowScrollLock()}
 function combatDetailsHtml(x,enemy=false){
   if(enemy){
+    const tactical=enemyTacticalProfile(x.name);
     return `<div class="combatDetailStats">
-      <span>HP ${Math.max(0,x.hp)}/${x.maxHp}</span>${x.maxMana?`<span>Mana ${Math.max(0,x.mana||0)}/${x.maxMana}</span>`:''}<span>Attack ${x.atk||0}</span><span>Attack Time ${(enemyAttackIntervalMs(x)/1000).toFixed(2)}s</span><span>Archetype ${x.archetype||'Unknown'}</span>${x.ability?`<span>Ability ${ENEMY_ABILITIES_DATA[x.ability]?.name||x.ability}</span>`:''}<span>Drops ${(x.drops||ENEMIES_DATA[x.name]?.drops||[]).map(k=>RESOURCE_NAMES[k]||k).join(', ')||'None'}</span>
+      <span>HP ${Math.max(0,x.hp)}/${x.maxHp}</span>${x.maxMana?`<span>Mana ${Math.max(0,x.mana||0)}/${x.maxMana}</span>`:''}<span>Attack ${x.atk||0}</span><span>Attack Time ${(enemyAttackIntervalMs(x)/1000).toFixed(2)}s</span><span>Role ${tactical.role}</span>${tactical.mechanics.map(m=>`<span>Mechanic ${m}</span>`).join('')}${x.ability?`<span>Ability ${ENEMY_ABILITIES_DATA[x.ability]?.name||x.ability}</span>`:''}<span>Drops ${(x.drops||ENEMIES_DATA[x.name]?.drops||[]).map(k=>RESOURCE_NAMES[k]||k).join(', ')||'None'}</span>
       <span>DEF ${x.def||0}</span><span>MDEF ${x.mdef||0}</span>
       <span>Block ${x.block||0}</span><span>Fire ${x.fire||0}%</span>
       <span>Ice ${x.ice||0}%</span><span>Poison ${x.poison||0}%</span>

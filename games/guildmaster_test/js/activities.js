@@ -277,6 +277,30 @@ function renderHarvestActive(){
     </div>`;
   }).join(''):'<div class="empty">No active harvesting jobs.</div>';
 }
+function missionThreatIntel(q,type){
+  const names=[...(q.enemyPool||[]),...(type!=='quest'&&q.boss?[q.boss]:[])];
+  const profiles=names.map(enemyTacticalProfile);
+  const damageTypes=[...new Set(profiles.flatMap(p=>p.damageTypes))];
+  const mechanics=[...new Set(profiles.flatMap(p=>p.mechanics))];
+  const counters=[...new Set(profiles.flatMap(p=>p.counters))];
+  const drops=[...new Set(profiles.flatMap(p=>p.drops))];
+  return{profiles,damageTypes,mechanics,counters,drops};
+}
+function threatIntelHtml(q,type){
+  const intel=missionThreatIntel(q,type);
+  const damage=intel.damageTypes.map(x=>`<span class="threatTag damage-${x}">${elementIcon[x]||''} ${x==='physical'?'Physical':x[0].toUpperCase()+x.slice(1)}</span>`).join('');
+  const mechanics=(intel.mechanics.length?intel.mechanics:['Direct attacks']).map(x=>`<span class="threatTag mechanic">${x}</span>`).join('');
+  const counters=intel.counters.map(x=>`<span class="threatTag counter">${x}</span>`).join('');
+  const enemies=intel.profiles.map(p=>`<span class="enemyIntel" title="${p.description}${p.ability?` Ability: ${p.ability}.`:''}">${p.name}<small>${p.role}</small></span>`).join('');
+  const drops=intel.drops.slice(0,8).map(k=>`<span class="threatDrop">${gameIcon('resource',k,'','gameAsset')} ${RESOURCE_NAMES[k]||k}</span>`).join('');
+  return `<div class="threatIntel">
+    <div class="threatIntelRow"><b>Damage</b><div>${damage}</div></div>
+    <div class="threatIntelRow"><b>Mechanics</b><div>${mechanics}</div></div>
+    <div class="threatIntelRow"><b>Recommended</b><div>${counters}</div></div>
+    <div class="enemyIntelList">${enemies}</div>
+    <div class="threatDrops"><b>Possible resources</b><div>${drops||'<span class="muted">Unknown</span>'}</div></div>
+  </div>`;
+}
 function renderOffers(type){
  const box=type==='raid'?'raidList':type==='dungeon'?'dungeonList':'questList';
  $(box).innerHTML=arr(type).map(q=>{
@@ -286,6 +310,7 @@ function renderOffers(type){
    return `<div class="card quest actionCard" data-id="${q.id}">
     ${sceneBanner(sceneType,sceneKey)}<div class="name">${q.name}</div><div class="muted">${q.desc}</div>
     <div class="chips"><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
+    ${threatIntelHtml(q,type)}
     <button class="btn ${occupied?'':'gold'} actionButton" ${occupied?'disabled':''} onclick="openPartyPicker('${type}',${q.id})">${occupied?'Party Deployed':type==='raid'?'Start Raid':type==='dungeon'?'Start Dungeon':'Start Expedition'}</button>
    </div>`;
  }).join('');

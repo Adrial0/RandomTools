@@ -59,4 +59,12 @@ function mission(){
   assert.ok(m.mechanicsSeen.includes('burning'),'party status exposure is recorded for defeat analysis');
 }
 
+{
+  const m=mission(),protectedEnemy=m.battle.enemies[0];
+  m.battle.enemies.push({id:2,name:'Protector',hp:100,maxHp:100,protectorAura:.15,statuses:{}});
+  context.refreshEnemyTactics(m);
+  assert.equal(protectedEnemy.protection,.15,'bulwarks protect other living enemies');
+  assert.equal(m.battle.enemies[1].protection,0,'a bulwark does not protect itself');
+}
+
 console.log('Combat mechanic tests passed.');

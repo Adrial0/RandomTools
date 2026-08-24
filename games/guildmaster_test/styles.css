@@ -1249,6 +1249,20 @@ body.windowOpen .side{overflow:hidden!important}
 .combatStatus.shocked{border-color:#a58a36;color:#ffe778}
 .combatStatus.cursed{border-color:#76519a;color:#d5a0ff}
 
+.threatIntel{margin:10px 0;padding:9px;border:1px solid #4f3d28;background:#19140e;display:grid;gap:7px}
+.threatIntelRow{display:grid;grid-template-columns:82px 1fr;gap:8px;align-items:start}
+.threatIntelRow>b,.threatDrops>b{color:#a99876;font-size:9px;text-transform:uppercase;letter-spacing:.06em;padding-top:3px}
+.threatIntelRow>div,.threatDrops>div{display:flex;gap:4px;flex-wrap:wrap}
+.threatTag{display:inline-flex;align-items:center;gap:3px;padding:2px 5px;border:1px solid #625039;background:#241c13;color:#cbb68d;font-size:9px}
+.threatTag.mechanic{border-color:#795347;color:#dda58f}
+.threatTag.counter{border-color:#566a42;color:#b8cf91}
+.enemyIntelList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding-top:6px;border-top:1px solid #413321}
+.enemyIntel{display:flex;justify-content:space-between;gap:6px;padding:4px 6px;background:#211a12;color:#c9b58c;font-size:10px}
+.enemyIntel small{color:#8f8064;font-size:9px}
+.threatDrops{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:start}
+.threatDrop{display:inline-flex;align-items:center;gap:3px;color:#aa9a79;font-size:9px}
+@media(max-width:600px){.threatIntelRow,.threatDrops{grid-template-columns:1fr}.enemyIntelList{grid-template-columns:1fr}}
+
 
 /* v62: four combat bars need a little more vertical room. */
 .combatant.combatMini{

@@ -191,6 +191,40 @@ const ENEMY_ARCHETYPES_DATA={};
 const ENEMY_ABILITIES_DATA={};
 const ENEMIES_DATA={};
 const enemyPools={quest:[],dungeon:[],raid:[]};
+const STATUS_TACTIC_LABELS={bleed:'Bleeding',burning:'Burning',poison:'Poison',frostbite:'Frostbite',shocked:'Shock',cursed:'Curse'};
+function enemyTacticalProfile(name){
+  const enemy=ENEMIES_DATA[name]||{},archetype=ENEMY_ARCHETYPES_DATA[enemy.archetype]||{};
+  const ability=enemy.ability?ENEMY_ABILITIES_DATA[enemy.ability]:null;
+  const mechanics=[];
+  if(ability?.castTime)mechanics.push('Casting');
+  if(ability?.type==='heal')mechanics.push('Healing');
+  if(ability?.type==='aoe')mechanics.push('Area damage');
+  if(ability?.status)mechanics.push(STATUS_TACTIC_LABELS[ability.status]||ability.status);
+  if(archetype.enrageThreshold)mechanics.push('Enrage');
+  if(archetype.protectorAura)mechanics.push('Protects allies');
+  if(archetype.basicStatus)mechanics.push(STATUS_TACTIC_LABELS[archetype.basicStatus]||archetype.basicStatus);
+  if(archetype.executeThreshold)mechanics.push('Execute');
+  const counters=[];
+  if(ability?.castTime)counters.push('Interrupt');
+  if(ability?.status)counters.push('Cleanse');
+  if(archetype.basicStatus)counters.push('Cleanse');
+  if(archetype.protectorAura)counters.push('Focus protector');
+  if(archetype.enrageThreshold)counters.push('Burst finish');
+  const damageTypes=[...new Set([enemy.damageType||'physical',ability?.damageType].filter(Boolean))];
+  if(damageTypes.includes('physical'))counters.push('DEF');
+  if(damageTypes.some(x=>x!=='physical'))counters.push('MDEF');
+  return{
+    name,
+    role:archetype.tacticalRole||'Enemy',
+    description:archetype.roleDescription||'A hostile combatant.',
+    counter:archetype.counter||'',
+    damageTypes,
+    ability:ability?.name||null,
+    mechanics:[...new Set(mechanics)],
+    counters:[...new Set(counters)],
+    drops:enemy.drops||[]
+  };
+}
 
 
 const RACES={};

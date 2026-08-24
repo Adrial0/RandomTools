@@ -103,14 +103,26 @@ function refreshCombatActionBars(now=Date.now()){
         bar.classList.toggle('ready',progress>=.9999);
         if(track)track.title=`${activeName(type)} · ${progress>=.9999?'Ready':fmt(activeCooldownRemaining(x,type,now))}`;
       }
+    }else{
+      const castTrack=el.querySelector('.castTrack'),castFill=el.querySelector('.castFill'),castLabel=el.querySelector('.castLabel');
+      if(castTrack){
+        castTrack.style.display=x.cast?'block':'none';
+        if(x.cast){
+          const total=Math.max(1,x.cast.completeAt-x.cast.startedAt),progress=clamp((now-x.cast.startedAt)/total,0,1);
+          if(castFill)castFill.style.width=(progress*100).toFixed(3)+'%';
+          if(castLabel)castLabel.textContent=`${ENEMY_ABILITIES_DATA[x.cast.abilityId]?.name||'Casting'} · ${fmt(x.cast.completeAt-now)}`;
+        }
+      }
     }
   });
 }
 function animateTimerBars(){
   const now=Date.now();
   updateProgressUI(now);
-  refreshHarvestProgressUI(now);
-  refreshCombatActionBars(now);
+  if(window.GAME_DATA_READY&&s){
+    refreshHarvestProgressUI(now);
+    refreshCombatActionBars(now);
+  }
   requestAnimationFrame(animateTimerBars);
 }
 requestAnimationFrame(animateTimerBars);
@@ -281,6 +293,13 @@ function validateContentData(){
   Object.entries(ENEMY_ABILITIES_DATA).forEach(([id,ability])=>{
     if(ability.status&&!STATUS_EFFECTS[ability.status])warnings.push('Enemy ability uses undefined status: '+id+' -> '+ability.status);
     if((ability.castTime||0)<0)warnings.push('Enemy ability has invalid cast time: '+id);
+  });
+  Object.entries(ENEMY_ARCHETYPES_DATA).forEach(([id,archetype])=>{
+    if(!archetype.tacticalRole)warnings.push('Enemy archetype has no tactical role: '+id);
+    if(!archetype.roleDescription)warnings.push('Enemy archetype has no tactical description: '+id);
+    if(!archetype.counter)warnings.push('Enemy archetype has no counter recommendation: '+id);
+    if(archetype.basicStatus&&!STATUS_EFFECTS[archetype.basicStatus])warnings.push('Enemy archetype uses undefined basic status: '+id+' -> '+archetype.basicStatus);
+    if((archetype.protectorAura||0)<0||(archetype.protectorAura||0)>.6)warnings.push('Enemy archetype has invalid protector aura: '+id);
   });
 
   HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>{
