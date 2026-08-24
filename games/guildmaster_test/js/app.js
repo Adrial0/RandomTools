@@ -278,6 +278,11 @@ function validateContentData(){
     (e.drops||[]).forEach(r=>{if(!RESOURCE_NAMES[r])warnings.push('Enemy drops undefined resource: '+n+' -> '+r)});
   });
 
+  Object.entries(ENEMY_ABILITIES_DATA).forEach(([id,ability])=>{
+    if(ability.status&&!STATUS_EFFECTS[ability.status])warnings.push('Enemy ability uses undefined status: '+id+' -> '+ability.status);
+    if((ability.castTime||0)<0)warnings.push('Enemy ability has invalid cast time: '+id);
+  });
+
   HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>{
     if(!RESOURCE_NAMES[r[0]])warnings.push('Gathering area yields undefined resource: '+a.name+' -> '+r[0]);
   }));

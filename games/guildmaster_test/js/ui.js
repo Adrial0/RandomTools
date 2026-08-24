@@ -42,7 +42,8 @@ function featureAccess(page){
   if(['hall','roster','quests','settings'].includes(page))return{revealed:true,locked:false};
   if(page==='inventory')return{revealed:hasExpedition,locked:false,revealHint:'Start your first expedition to reveal Inventory.'};
   if(['harvesting','crafting'].includes(page))return{revealed:hasResources,locked:false,revealHint:'Discover your first resource to reveal this feature.'};
-  if(['questboard','market','upgrades'].includes(page))return{revealed:s.level>=2,locked:false,revealHint:'Reach Guild Level 2 to reveal this feature.'};
+  if(page==='upgrades')return{revealed:hasResources||s.level>=2,locked:false,revealHint:'Discover your first resource to reveal Guild Upgrades.'};
+  if(['questboard','market'].includes(page))return{revealed:s.level>=2,locked:false,revealHint:'Reach Guild Level 2 to reveal this feature.'};
   if(page==='dungeons')return{revealed:s.level>=2,locked:s.level<3,lockLabel:'Lv. 3',lockReason:'Dungeons unlock at Guild Level 3.'};
   if(page==='raids')return{revealed:s.level>=3,locked:s.level<6,lockLabel:'Lv. 6',lockReason:'Raids unlock at Guild Level 6.'};
   return{revealed:true,locked:false};
@@ -201,7 +202,7 @@ function combatDetailsHtml(x,enemy=false){
       <span>DEF ${x.def||0}</span><span>MDEF ${x.mdef||0}</span>
       <span>Block ${x.block||0}</span><span>Fire ${x.fire||0}%</span>
       <span>Ice ${x.ice||0}%</span><span>Poison ${x.poison||0}%</span>
-      <span>Lightning ${x.lightning||0}%</span>${x.mage?'<span>Mage</span>':''}
+      <span>Lightning ${x.lightning||0}%</span>${x.mage?'<span>Mage</span>':''}${x.cast?`<span class="dangerText">Casting ${ENEMY_ABILITIES_DATA[x.cast.abilityId]?.name||'Ability'}</span>`:''}${Object.values(ensureStatuses(x)).map(st=>`<span>${STATUS_EFFECTS[st.type]?.icon||'◆'} ${STATUS_EFFECTS[st.type]?.name||st.type} ×${st.stacks}</span>`).join('')}
     </div>`;
   }
   return `<div class="combatDetailStats">
@@ -211,7 +212,7 @@ function combatDetailsHtml(x,enemy=false){
     <span>Lifesteal ${x.lifesteal||0}%</span><span>Phys Dodge ${Math.round((x.physicalDodge||0)*100)}%</span>
     <span>Magic Dodge ${Math.round((x.magicalDodge||0)*100)}%</span><span>Armor Pen ${Math.round((x.armorPen||0)*100)}%</span>
     <span>Parry ${Math.round((x.parry||0)*100)}%</span><span>Crit ${Math.round((x.critBonus||0)*100)}%</span>
-    <span>Crit Dmg +${Math.round((x.critDamage||0)*100)}%</span><span>Accuracy ${Math.round((x.accuracy||0)*100)}%</span>
+    <span>Crit Dmg +${Math.round((x.critDamage||0)*100)}%</span><span>Accuracy ${Math.round((x.accuracy||0)*100)}%</span><span>Status Chance ${Math.round((x.statusChance||0)*100)}%</span>${Object.values(ensureStatuses(x)).map(st=>`<span>${STATUS_EFFECTS[st.type]?.icon||'◆'} ${STATUS_EFFECTS[st.type]?.name||st.type} ×${st.stacks}</span>`).join('')}
   </div>`;
 }
 function combatantHtml(x,enemy=false,frontline=false){
@@ -232,6 +233,8 @@ function combatantHtml(x,enemy=false,frontline=false){
       ${(!enemy||x.maxMana)?`<div class="manaTrack"><div class="manaFill" style="width:${clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)}%"></div></div>`:''}
       <div class="attackTrack" title="Attack timer"><div class="attackFill ${attackPct>=100?'ready':''}" style="width:${attackPct}%"></div></div>
       ${activeType?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${activeName(activeType)} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
+      ${enemy?`<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel"></span></div>`:''}
+      <div class="combatStatusRow"></div>
     </div>
   </div>`;
 }
@@ -326,6 +329,15 @@ function updateCombatantDom(x,enemy){
   if(fill)fill.style.width=pct+'%';
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';
   if(attackFill)attackFill.style.width=(attackTimerProgress(x,enemy,Date.now())*100)+'%';
+  const statusRow=el.querySelector('.combatStatusRow');
+  if(statusRow)statusRow.innerHTML=Object.values(ensureStatuses(x)).map(status=>{const def=STATUS_EFFECTS[status.type];return `<span class="combatStatus ${status.type}" title="${def?.name||status.type} · ${status.stacks} stack${status.stacks===1?'':'s'} · ${fmt(status.expiresAt-Date.now())}">${def?.icon||'◆'}${status.stacks>1?status.stacks:''}</span>`}).join('');
+  if(enemy){
+    const track=el.querySelector('.castTrack'),fillCast=el.querySelector('.castFill'),label=el.querySelector('.castLabel');
+    if(track){
+      track.style.display=x.cast?'block':'none';
+      if(x.cast){const ability=ENEMY_ABILITIES_DATA[x.cast.abilityId],total=Math.max(1,x.cast.completeAt-x.cast.startedAt),pct=clamp((Date.now()-x.cast.startedAt)/total*100,0,100);if(fillCast)fillCast.style.width=pct+'%';if(label)label.textContent=ability?.name||'Casting'}
+    }
+  }
   const activeType=primaryActiveType(x);
   if(!enemy&&activeType&&!el.querySelector('.cooldownTrack')){
     const vitals=el.querySelector('.combatMiniVitals')||el.lastElementChild;

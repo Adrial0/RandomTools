@@ -45,6 +45,7 @@ function setOnboardingFlag(flag){
   completeOnboardingGoals(true);
   save();
   if(typeof updateNavigationLocks==='function')updateNavigationLocks();
+  if(typeof renderOnboardingGoals==='function')renderOnboardingGoals();
 }
 function toggleGuildGoals(){
   s.onboarding.collapsed=!s.onboarding.collapsed;

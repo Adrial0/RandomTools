@@ -3,6 +3,7 @@
     "name": "Regeneration",
     "manaCost": 0,
     "cooldown": 5000,
+    "castTime": 1800,
     "type": "heal",
     "power": 0.08
   },
@@ -10,62 +11,95 @@
     "name": "Fireball",
     "manaCost": 10,
     "cooldown": 7000,
+    "castTime": 2200,
     "type": "spell",
     "damageType": "fire",
-    "power": 1.45
+    "power": 1.45,
+    "status": "burning",
+    "statusChance": 0.8,
+    "statusPower": 0.16,
+    "statusDuration": 8000
   },
   "burning_strike": {
     "name": "Burning Strike",
     "manaCost": 6,
     "cooldown": 6500,
+    "castTime": 1200,
     "type": "spell",
     "damageType": "fire",
-    "power": 1.25
+    "power": 1.25,
+    "status": "burning",
+    "statusChance": 0.65,
+    "statusPower": 0.14
   },
   "poison_spit": {
     "name": "Poison Spit",
     "manaCost": 8,
     "cooldown": 6500,
+    "castTime": 2000,
     "type": "spell",
     "damageType": "poison",
-    "power": 1.35
+    "power": 1.35,
+    "status": "poison",
+    "statusChance": 0.85,
+    "statusPower": 0.15,
+    "statusDuration": 10000
   },
   "venom_strike": {
     "name": "Venom Strike",
     "manaCost": 5,
     "cooldown": 6000,
+    "castTime": 1000,
     "type": "spell",
     "damageType": "poison",
-    "power": 1.2
+    "power": 1.2,
+    "status": "poison",
+    "statusChance": 0.7,
+    "statusPower": 0.13,
+    "statusDuration": 8000
   },
   "frost_bolt": {
     "name": "Frost Bolt",
     "manaCost": 8,
     "cooldown": 7000,
+    "castTime": 1900,
     "type": "spell",
     "damageType": "ice",
-    "power": 1.35
+    "power": 1.35,
+    "status": "frostbite",
+    "statusChance": 0.7,
+    "statusPower": 0.12
   },
   "lightning_burst": {
     "name": "Lightning Burst",
     "manaCost": 12,
     "cooldown": 8500,
+    "castTime": 2600,
     "type": "aoe",
     "damageType": "lightning",
-    "power": 1.0
+    "power": 1.0,
+    "status": "shocked",
+    "statusChance": 0.6,
+    "statusPower": 0.12
   },
   "dark_bolt": {
     "name": "Dark Bolt",
     "manaCost": 9,
     "cooldown": 7000,
+    "castTime": 2100,
     "type": "spell",
     "damageType": "dark",
-    "power": 1.35
+    "power": 1.35,
+    "status": "cursed",
+    "statusChance": 0.75,
+    "statusPower": 0.14,
+    "statusDuration": 8000
   },
   "radiant_bolt": {
     "name": "Radiant Bolt",
     "manaCost": 9,
     "cooldown": 7000,
+    "castTime": 2100,
     "type": "spell",
     "damageType": "holy",
     "power": 1.35
@@ -74,8 +108,13 @@
     "name": "Cleave",
     "manaCost": 0,
     "cooldown": 7500,
+    "castTime": 1400,
     "type": "aoe",
     "damageType": "physical",
-    "power": 0.85
+    "power": 0.85,
+    "status": "bleed",
+    "statusChance": 0.55,
+    "statusPower": 0.12,
+    "statusDuration": 8000
   }
 }

@@ -13,3 +13,9 @@ Load order:
 7. `app.js` — event wiring, timers, data loading, validation, and bootstrap
 
 All scripts must load before `bootstrapGame()` runs at the end of `app.js`. When adding new code, place gameplay rules in the owning domain and keep startup/event wiring in `app.js`.
+
+Run the combat mechanic regression tests with:
+
+```powershell
+node tests/combat-mechanics.test.js
+```

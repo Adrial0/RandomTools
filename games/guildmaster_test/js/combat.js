@@ -176,7 +176,7 @@ function makeBattle(m){
       id:h.id,name:h.name,class:h.class,displayClass:displayClass(h),subclass:h.subclass||null,level:h.level,maxHp:z.hp,
       hp:Math.min(z.hp,Math.max(0,ps?ps.hp:z.hp)),
       mana:Math.min(z.mana,Math.max(0,ps?.mana??z.mana)),maxMana:z.mana,manaRegen:z.manaRegen,
-      cooldowns:Object.assign({},ps?.cooldowns||{}),buffs:{},baseAttackTime,attackSpeed:z.attackSpeed,nextAttackAt,attackStartedAt,
+      cooldowns:Object.assign({},ps?.cooldowns||{}),buffs:{},statuses:{},baseAttackTime,attackSpeed:z.attackSpeed,nextAttackAt,attackStartedAt,
       str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,physicalDodge:z.physicalDodge,magicalDodge:z.magicalDodge,
       regen:z.regen||0,lifesteal:z.lifesteal||0,damageMult:z.damageMult||1,healMult:z.healMult||1,critBonus:z.critBonus||0,element:z.element||null,elementMult:z.elementMult||1,activeType:z.activeType||null,
       fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
@@ -209,7 +209,7 @@ function makeBattle(m){
     kind:'normal',
     encounterNumber:(m.type==='dungeon'||m.type==='raid')?(Math.max(0,m.finiteStage||0)+1):null,
     heroes,
-    enemies:Array.from({length:count},(_,i)=>makeEnemy(m.type,m.level,i)),
+    enemies:Array.from({length:count},(_,i)=>({...makeEnemy(m.type,m.level,i),statuses:{},cast:null})),
     phase:cycle.phase,
     turn:cycle.phase==='heroes'?cycle.heroTurn:cycle.enemyTurn,
     round:cycle.round,
@@ -410,6 +410,66 @@ function resolveLiveBattleOnce(m){
   return true;
 }
 function living(a){return a.filter(x=>x.hp>0)}
+const STATUS_EFFECTS={
+  bleed:{name:'Bleeding',icon:'🩸',damageType:'physical',maxStacks:3},
+  burning:{name:'Burning',icon:'🔥',damageType:'fire',maxStacks:3},
+  poison:{name:'Poisoned',icon:'☠',damageType:'poison',maxStacks:3},
+  frostbite:{name:'Frostbite',icon:'❄',damageType:'ice',maxStacks:3},
+  shocked:{name:'Shocked',icon:'⚡',damageType:'lightning',maxStacks:3},
+  cursed:{name:'Cursed',icon:'◉',damageType:'dark',maxStacks:3}
+};
+function ensureStatuses(unit){
+  if(!unit.statuses||typeof unit.statuses!=='object')unit.statuses={};
+  return unit.statuses;
+}
+function applyStatus(m,target,type,{power=1,duration=6000,stacks=1,source='Unknown'}={}){
+  const def=STATUS_EFFECTS[type];if(!def||!target||target.hp<=0)return false;
+  const now=Date.now(),statuses=ensureStatuses(target),current=statuses[type];
+  if(current){
+    current.stacks=Math.min(def.maxStacks,current.stacks+stacks);
+    current.power=Math.max(current.power,power);
+    current.expiresAt=Math.max(current.expiresAt,now+duration);
+    current.source=source;
+  }else statuses[type]={type,stacks:Math.min(def.maxStacks,stacks),power:Math.max(1,Math.round(power)),source,nextTickAt:now+2000,expiresAt:now+duration};
+  if(m.battle.heroes.includes(target)){
+    m.mechanicsSeen=Array.isArray(m.mechanicsSeen)?m.mechanicsSeen:[];
+    if(!m.mechanicsSeen.includes(type))m.mechanicsSeen.push(type);
+  }
+  m.battle.log.unshift(`${def.icon} ${target.name.split(' ')[0]} is ${def.name.toLowerCase()}${statuses[type].stacks>1?` (${statuses[type].stacks} stacks)`:''}.`);
+  return true;
+}
+function cleanseStatuses(m,target,count=Infinity,label='Cleanse'){
+  const statuses=ensureStatuses(target),keys=Object.keys(statuses).slice(0,count);
+  if(!keys.length)return 0;
+  keys.forEach(k=>delete statuses[k]);
+  m.battle.log.unshift(`✨ ${label} removes ${keys.map(k=>STATUS_EFFECTS[k]?.name||k).join(', ')} from ${target.name.split(' ')[0]}.`);
+  return keys.length;
+}
+function processStatusEffects(m,now=Date.now()){
+  const b=m.battle;if(!b)return;
+  [...b.heroes,...b.enemies].forEach(unit=>{
+    const statuses=ensureStatuses(unit);
+    Object.entries(statuses).forEach(([type,status])=>{
+      const def=STATUS_EFFECTS[type];if(!def){delete statuses[type];return}
+      while(unit.hp>0&&now>=status.nextTickAt&&status.nextTickAt<=status.expiresAt){
+        const damage=Math.max(1,Math.round(status.power*status.stacks));
+        unit.hp=Math.max(0,unit.hp-damage);
+        b.log.unshift(`${def.icon} ${def.name} deals ${damage} damage to ${unit.name.split(' ')[0]}.`);
+        status.nextTickAt+=2000;b.actionSeq=(b.actionSeq||0)+1;
+      }
+      if(now>=status.expiresAt||unit.hp<=0)delete statuses[type];
+    });
+  });
+  b.log=b.log.slice(0,45);syncPartyHp(m);
+}
+function statusForDamageType(type){return({physical:'bleed',fire:'burning',poison:'poison',ice:'frostbite',lightning:'shocked',dark:'cursed'})[type]||null}
+function interruptEnemy(m,enemy,source){
+  if(!enemy?.cast)return false;
+  const ability=ENEMY_ABILITIES_DATA[enemy.cast.abilityId];
+  enemy.cast=null;enemy.abilityReadyAt=Date.now()+3000;
+  m.battle.log.unshift(`✦ ${source} interrupts ${enemy.name}'s ${ability?.name||'ability'}!`);
+  return true;
+}
 function elementalReduction(res){return clamp(1-(res||0)/100,.2,2)}
 function defenseReduction(defense){
   const d=Math.max(0,defense||0);
@@ -519,10 +579,10 @@ function heroBasicAttack(m,h){
     }
   }
 
-  if((h.statusChance||0)>0&&h.damageType!=='physical'&&Math.random()<h.statusChance){
-    const bonus=Math.max(1,Math.round(dmg*.18));
-    target.hp=Math.max(0,target.hp-bonus);
-    text+=`${String(h.damageType).toUpperCase()} surge deals ${bonus} bonus damage. `;
+  const basicStatus=statusForDamageType(h.damageType);
+  if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){
+    applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name});
+    text+=`${STATUS_EFFECTS[basicStatus].name} applied. `;
   }
 
   const weaponName=h.weaponType||'unarmed attack';
@@ -552,23 +612,27 @@ function tryActiveSkill(m,h,now=Date.now()){
   const targets=living(b.enemies);
   if(!targets.length)return false;
   const ally=lowestAlly(b);
+  const afflicted=living(b.heroes).filter(x=>Object.keys(ensureStatuses(x)).length).sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0]||null;
   let used=false;
 
   if(type==='greaterHeal'){
-    if(ally&&ally.hp<ally.maxHp*.82){used=healAlly(m,h,ally,1.65,'Greater Heal')}
+    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.82)){used=healAlly(m,h,target,1.65,'Greater Heal');cleanseStatuses(m,target,Infinity,'Greater Heal')}
   }else if(type==='renew'){
-    if(ally&&ally.hp<ally.maxHp*.88){used=healAlly(m,h,ally,.85,'Renew')}
+    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.88)){used=healAlly(m,h,target,.85,'Renew');cleanseStatuses(m,target,1,'Renew')}
   }else if(type==='Heal'){
     if(ally&&ally.hp<ally.maxHp*.70){used=healAlly(m,h,ally,1,'Heal')}
   }else if(type==='radiantAid'){
-    if(ally&&ally.hp<ally.maxHp*.90){used=healAlly(m,h,ally,.75,'Radiant Aid')}
+    const target=afflicted||ally;if(target&&(afflicted||target.hp<target.maxHp*.90)){used=healAlly(m,h,target,.75,'Radiant Aid');cleanseStatuses(m,target,1,'Radiant Aid')}
   }else if(type==='elementNova'){
     const elem=h.element||'fire';
     const hits=targets.map(t=>{
       const dmg=Math.max(1,Math.round(heroDamage(h,t,elem)*1.44));
       t.hp=Math.max(0,t.hp-dmg);
+      const status=statusForDamageType(elem);
+      if(status&&['pyromancer','venomancer'].includes(h.subclass))applyStatus(m,t,status,{power:dmg*.14,duration:8000,source:h.name});
       return `${t.name} ${dmg}`;
     });
+    if(h.subclass==='stormcaller')targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Storm Nova'));
     b.log.unshift(`${h.name.split(' ')[0]} casts ${elementIcon[elem]} ${subclassDef(s.members.find(x=>x.id===h.id))?.name||'Elemental'} Nova: ${hits.join(' · ')}.`);
     used=true;
   }else if(type==='arcaneBurst'){
@@ -586,6 +650,7 @@ function tryActiveSkill(m,h,now=Date.now()){
       x.buffs.battleShout=now+6000;
     });
     b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout! Party damage and Attack Speed increased for 6 seconds.`);
+    targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Battle Shout'));
     used=true;
   }else if(type==='shieldFaith'){
     if(!h.buffs)h.buffs={};
@@ -593,13 +658,13 @@ function tryActiveSkill(m,h,now=Date.now()){
     b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith! Damage taken reduced for 6 seconds.`);
     used=true;
   }else{
-    const target=pick(targets);
-    if(type==='powerStrike')used=activeDamageHit(m,h,target,2.0,'Power Strike');
-    else if(type==='shieldSlam')used=activeDamageHit(m,h,target,1.70,'Shield Slam');
-    else if(type==='preciseShot')used=activeDamageHit(m,h,target,2.20,'Precise Shot');
+    const target=(['shieldSlam','preciseShot','backstab'].includes(type)&&targets.some(t=>t.cast))?targets.find(t=>t.cast):pick(targets);
+    if(type==='powerStrike'){used=activeDamageHit(m,h,target,2.0,'Power Strike');if(used)applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.15,duration:6000,source:h.name})}
+    else if(type==='shieldSlam'){used=activeDamageHit(m,h,target,1.70,'Shield Slam');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Shield Slam')}
+    else if(type==='preciseShot'){used=activeDamageHit(m,h,target,2.20,'Precise Shot');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Precise Shot')}
     else if(type==='wardenShot')used=activeDamageHit(m,h,target,1.50,'Warden Shot');
-    else if(type==='backstab')used=activeDamageHit(m,h,target,2.40,'Backstab');
-    else if(type==='envenom')used=activeDamageHit(m,h,target,1.90,'Envenom','poison');
+    else if(type==='backstab'){used=activeDamageHit(m,h,target,2.40,'Backstab');if(used){interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Backstab');applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.18,duration:8000,source:h.name})}}
+    else if(type==='envenom'){used=activeDamageHit(m,h,target,1.90,'Envenom','poison');if(used)applyStatus(m,target,'poison',{power:heroDamage(h,target,'poison')*.18,duration:10000,source:h.name})}
     else if(type==='smite')used=activeDamageHit(m,h,target,2.10,'Smite','holy');
     else if(type==='holyStrike')used=activeDamageHit(m,h,target,2.10,'Holy Strike','holy');
     else if(type==='companionStrike')used=activeDamageHit(m,h,target,1.10,'Companion Strike');
@@ -630,16 +695,45 @@ function threatTarget(targets){
   }
   return targets[targets.length-1];
 }
-function tryEnemyAbility(m,e,now=Date.now()){
-  const id=e.ability,ab=id&&ENEMY_ABILITIES_DATA[id];if(!ab||e.hp<=0||now<(e.abilityReadyAt||0)||(e.mana||0)<(ab.manaCost||0))return false;
+function resolveEnemyAbility(m,e,abilityId,now=Date.now()){
+  const ab=ENEMY_ABILITIES_DATA[abilityId];if(!ab||e.hp<=0)return false;
   const b=m.battle,targets=living(b.heroes);if(!targets.length)return false;
-  if(ab.type==='heal'){const heal=Math.max(1,Math.round(e.maxHp*(ab.power||.08)));e.hp=Math.min(e.maxHp,e.hp+heal);b.log.unshift(`${e.name} uses ${ab.name} and restores ${heal} HP.`);}
-  else if(ab.type==='aoe'){targets.forEach(t=>{const raw=e.atk*(ab.power||1);const d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));t.hp=Math.max(0,t.hp-dmg)});b.log.unshift(`⚠ ${e.name} uses ${ab.name} on the whole party.`);}
-  else {const t=pick(targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));t.hp=Math.max(0,t.hp-dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);}
-  e.mana=Math.max(0,(e.mana||0)-(ab.manaCost||0));e.abilityReadyAt=now+(ab.cooldown||7000);syncPartyHp(m);return true;
+  const applyAbilityStatus=(target,damage)=>{
+    if(ab.status&&Math.random()<(ab.statusChance??1))applyStatus(m,target,ab.status,{power:Math.max(1,damage*(ab.statusPower||.14)),duration:ab.statusDuration||6000,source:e.name});
+  };
+  if(ab.type==='heal'){
+    const heal=Math.max(1,Math.round(e.maxHp*(ab.power||.08)));e.hp=Math.min(e.maxHp,e.hp+heal);b.log.unshift(`${e.name} uses ${ab.name} and restores ${heal} HP.`);
+  }else if(ab.type==='aoe'){
+    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));t.hp=Math.max(0,t.hp-dmg);applyAbilityStatus(t,dmg)});
+    b.log.unshift(`⚠ ${e.name} releases ${ab.name} on the whole party.`);
+  }else{
+    const t=threatTarget(targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));t.hp=Math.max(0,t.hp-dmg);applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
+  }
+  e.mana=Math.max(0,(e.mana||0)-(ab.manaCost||0));e.abilityReadyAt=now+(ab.cooldown||7000);b.actionSeq=(b.actionSeq||0)+1;syncPartyHp(m);return true;
+}
+function tryEnemyAbility(m,e,now=Date.now()){
+  if(e.cast)return true;
+  const id=e.ability,ab=id&&ENEMY_ABILITIES_DATA[id];if(!ab||e.hp<=0||now<(e.abilityReadyAt||0)||(e.mana||0)<(ab.manaCost||0))return false;
+  const castTime=Math.max(0,ab.castTime||0);
+  if(castTime){
+    e.cast={abilityId:id,startedAt:now,completeAt:now+castTime};
+    m.mechanicsSeen=Array.isArray(m.mechanicsSeen)?m.mechanicsSeen:[];
+    if(!m.mechanicsSeen.includes('casting'))m.mechanicsSeen.push('casting');
+    m.battle.log.unshift(`⚠ ${e.name} begins casting ${ab.name} (${(castTime/1000).toFixed(1)}s) — interrupt it!`);
+    return true;
+  }
+  return resolveEnemyAbility(m,e,id,now);
+}
+function processEnemyCasts(m,now=Date.now()){
+  const b=m.battle;if(!b)return;
+  b.enemies.forEach(e=>{
+    if(!e.cast||e.hp<=0)return;
+    if(now>=e.cast.completeAt){const id=e.cast.abilityId;e.cast=null;resolveEnemyAbility(m,e,id,now)}
+  });
 }
 function enemyAction(m,e){
   const b=m.battle,targets=living(b.heroes);if(!targets.length)return;
+  if(e.cast)return;
   if(tryEnemyAbility(m,e,Date.now()))return;
 
   const elem=e.damageType||'physical';
@@ -724,12 +818,16 @@ function defeatAdviceFor(m){
   const partyPower=party.reduce((sum,h)=>sum+hs(h).power,0);
   const hasFrontline=party.some(h=>['Warrior','Paladin'].includes(h.class)||hs(h).threat>=1.5);
   const hasHealer=party.some(h=>h.class==='Priest'||['lifepriest','oracle','beacon'].includes(h.subclass));
+  const hasCleanser=party.some(h=>['lifepriest','oracle','beacon'].includes(h.subclass));
+  const hasInterrupter=party.some(h=>['guardian','warlord','marksman','assassin','stormcaller'].includes(h.subclass));
   const physical=enemies.filter(e=>(e.damageType||'physical')==='physical').length;
   const magical=enemies.length-physical;
 
   if(avgLevel&&avgLevel+1<m.level)advice.push(`Your party averaged level ${avgLevel.toFixed(1)} in a level ${m.level} area. Train in a lower-level expedition first.`);
   else if(partyPower<m.target*.85)advice.push(`Party power was ${partyPower} against the recommended ${m.target}. Improve equipment or bring a stronger full party.`);
   if(!hasFrontline)advice.push('The party had no durable frontline. Add a Warrior, Paladin, or another high-threat defender to draw attacks.');
+  if((m.mechanicsSeen||[]).some(x=>STATUS_EFFECTS[x])&&!hasCleanser)advice.push('Harmful status effects wore the party down. Bring a Life Priest, Oracle, or Beacon to cleanse them.');
+  if((m.mechanicsSeen||[]).includes('casting')&&!hasInterrupter)advice.push('Enemy casts went uninterrupted. Guardian, Warlord, Marksman, Assassin, and Stormcaller abilities can stop them.');
   if(!hasHealer)advice.push('The party had no reliable healer. A Priest or healing subclass can stabilize longer encounters.');
   if(advice.length<3&&enemies.length)advice.push(physical>=magical?'These enemies dealt mostly physical damage. Prioritize DEF, Block, and heavier armor.':'These enemies dealt mostly magical damage. Prioritize MDEF and relevant elemental resistances.');
   if(advice.length<2)advice.push('Inspect the surviving enemies and adjust weapons, subclasses, or party composition before returning.');
@@ -874,6 +972,9 @@ function stepBattle(m){
   b.enemies?.forEach(enemy=>{
     if(!Number.isFinite(enemy.nextAttackAt))scheduleNextAttack(enemy,true,now);
   });
+
+  processStatusEffects(m,now);
+  processEnemyCasts(m,now);
 
   if(!living(b.enemies).length){finishCurrentFight(m);return}
   if(!living(b.heroes).length){expeditionDefeated(m);return}

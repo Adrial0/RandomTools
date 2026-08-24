@@ -1235,6 +1235,19 @@ body.windowOpen .side{overflow:hidden!important}
   background:#d57cff!important;
   box-shadow:0 0 7px rgba(213,124,255,.55)!important;
 }
+.combatant.combatMini{height:102px!important;min-height:102px!important;max-height:102px!important}
+.combatant.combatMini.enemy{height:94px!important;min-height:94px!important;max-height:94px!important}
+.castTrack{position:relative;height:12px;margin-top:3px;background:#21110e;border:1px solid #a34e38;overflow:hidden}
+.castFill{height:100%;width:0;background:#bd593e;transition:none}
+.castLabel{position:absolute;inset:0;display:grid;place-items:center;color:#ffe1bd;font:700 8px/1 ui-monospace,monospace;text-shadow:1px 1px #000}
+.combatStatusRow{display:flex;gap:3px;min-height:15px;margin-top:3px}
+.combatStatus{display:inline-grid;place-items:center;min-width:17px;height:15px;padding:0 3px;border:1px solid #765237;background:#1a120d;font:700 9px/1 ui-monospace,monospace}
+.combatStatus.bleed{border-color:#a84949;color:#ef9990}
+.combatStatus.burning{border-color:#bd6a2e;color:#ffb36b}
+.combatStatus.poison{border-color:#678c42;color:#b6dd77}
+.combatStatus.frostbite{border-color:#558aa6;color:#9bdcff}
+.combatStatus.shocked{border-color:#a58a36;color:#ffe778}
+.combatStatus.cursed{border-color:#76519a;color:#d5a0ff}
 
 
 /* v62: four combat bars need a little more vertical room. */
