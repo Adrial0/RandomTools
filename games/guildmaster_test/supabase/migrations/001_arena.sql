@@ -58,6 +58,7 @@ alter table public.arena_matches enable row level security;
 
 -- The browser uses authenticated Edge Functions, not direct table access.
 revoke all on public.profiles, public.arena_parties, public.arena_ratings, public.arena_matches from anon, authenticated;
+grant select, insert, update, delete on public.profiles, public.arena_parties, public.arena_ratings, public.arena_matches to service_role;
 
 create or replace function public.finalize_arena_match(
   p_request_id uuid,
