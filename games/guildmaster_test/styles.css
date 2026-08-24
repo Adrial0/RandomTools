@@ -1382,3 +1382,7 @@ body.windowOpen .side{overflow:hidden!important}
 .arenaCombatant.arenaAct{animation:arenaAct .24s ease-out}.arenaCombatant.arenaHit{animation:arenaHit .24s ease-out}
 @keyframes arenaAct{50%{transform:translateY(-3px);border-color:#d5a94f;box-shadow:0 0 12px rgba(213,169,79,.35)}}
 @keyframes arenaHit{50%{transform:translateX(3px);border-color:#b64d3d;box-shadow:0 0 12px rgba(182,77,61,.45)}}
+.combatant.combatMini{position:relative}.combatant.combatMini.combatAct{animation:arenaAct .24s ease-out}.combatant.combatMini.combatHit{animation:arenaHit .24s ease-out}.combatant.combatMini.combatHeal{animation:combatHeal .24s ease-out}
+.combatFloat{position:absolute;right:9px;top:31px;z-index:3;opacity:0;font-weight:900;pointer-events:none;text-shadow:0 1px 2px #000}.combatFloat.pop{animation:arenaFloat .35s ease-out}
+@keyframes combatHeal{50%{border-color:#579264;box-shadow:0 0 12px rgba(87,146,100,.4)}}
+.arenaQuota{padding:5px 0 9px}.arenaOpponent button:disabled{opacity:.45;cursor:not-allowed}

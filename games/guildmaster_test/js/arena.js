@@ -2,7 +2,7 @@
 let arenaClient=null;
 let arenaSession=null;
 let arenaConfig=null;
-let arenaData={profile:null,defense:null,opponents:[],leaderboard:[],history:[]};
+let arenaData={profile:null,defense:null,opponents:[],leaderboard:[],history:[],challengeQuota:{remaining:5,resetsAt:null}};
 let arenaBusy=false;
 let arenaPlaybackToken=0;
 
@@ -127,19 +127,43 @@ function showArenaResult(result){
   $('combatBody').innerHTML=`<div class="combatFixedTop"><div class="combatGrid"><div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">YOUR ARENA PARTY · ATTACKING</div><div class="combatSide compactCombatSide">${[...units.values()].filter(x=>x.side==='attack').map(card).join('')}</div></div><div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">OPPONENT PARTY · DEFENDING</div><div class="combatSide compactCombatSide">${[...units.values()].filter(x=>x.side==='defense').map(card).join('')}</div></div></div></div><div class="log combatLog arenaLiveLog" id="arenaLiveLog"></div><div class="card combatReport" id="arenaFinalResult"><div class="muted">Battle in progress…</div></div>`;
   $('combatModal').classList.add('on');syncWindowScrollLock();
   const events=result.timeline||[],started=performance.now();let cursor=0;
+  const schedule=arenaActionSchedule(events,units);
   function frame(now){
     if(token!==arenaPlaybackToken||!$('combatModal').classList.contains('on'))return;
     const battleTime=now-started;
+    updateArenaActionBars(units,battleTime,schedule);
     while(cursor<events.length&&events[cursor].time<=battleTime)applyArenaEvent(events[cursor++],units);
     if(cursor<events.length)requestAnimationFrame(frame);else renderArenaFinalResult(result);
   }
   requestAnimationFrame(frame);
 }
+function arenaActionSchedule(events,units){
+  const schedule={attack:{},active:{}};
+  units.forEach((_unit,id)=>{schedule.attack[id]=[];schedule.active[id]=[]});
+  events.forEach(event=>{
+    if(event.sourceId&&event.type==='attack')schedule.attack[event.sourceId]?.push(event.time);
+    if(event.sourceId&&event.type==='cast')schedule.active[event.sourceId]?.push(event.time);
+  });
+  return schedule;
+}
+function arenaBarProgress(times,now){
+  if(!times?.length)return 1;
+  let previous=0,next=null;
+  for(const time of times){if(time>now){next=time;break}previous=time}
+  if(next==null)return 1;
+  return clamp((now-previous)/Math.max(1,next-previous),0,1);
+}
+function updateArenaActionBars(units,battleTime,schedule){
+  units.forEach((unit,id)=>{
+    const el=$(`arenaUnit-${id}`);if(!el)return;
+    const attack=el.querySelector('.attackFill');if(attack)attack.style.width=(arenaBarProgress(schedule.attack[id],battleTime)*100).toFixed(3)+'%';
+    const active=el.querySelector('.cooldownFill');if(active)active.style.width=(arenaBarProgress(schedule.active[id],battleTime)*100).toFixed(3)+'%';
+  });
+}
 function applyArenaEvent(event,units){
   const source=units.get(event.sourceId),sourceEl=source?$(`arenaUnit-${source.id}`):null,target=units.get(event.targetId),el=target?$(`arenaUnit-${target.id}`):null;
   if(sourceEl){
     sourceEl.classList.remove('arenaAct');void sourceEl.offsetWidth;sourceEl.classList.add('arenaAct');setTimeout(()=>sourceEl.classList.remove('arenaAct'),240);
-    const attack=sourceEl.querySelector('.attackFill');if(attack&&['attack','ability'].includes(event.type)){attack.style.transition='none';attack.style.width='0%';requestAnimationFrame(()=>{attack.style.transition=`width ${Math.max(250,source.attackInterval||2500)}ms linear`;attack.style.width='100%'})}
     const cast=sourceEl.querySelector('.castTrack');if(cast&&event.type==='cast'){cast.style.display='block';const fill=cast.querySelector('.castFill');if(fill){fill.style.transition='none';fill.style.width='0%';requestAnimationFrame(()=>{fill.style.transition='width 700ms linear';fill.style.width='100%'})}}else if(cast&&['ability','interrupt'].includes(event.type))cast.style.display='none';
   }
   if(target&&event.targetHp!=null){
@@ -167,7 +191,8 @@ function renderArenaDefense(){
 }
 function renderArenaOpponents(){
   const box=$('arenaOpponents');if(!box)return;
-  box.innerHTML=arenaData.opponents?.length?arenaData.opponents.map(o=>`<div class="arenaOpponent"><div><div class="name">${arenaEscape(o.guild_name)}</div><div class="muted">Rating ${o.rating} · ${o.party_power} power · ${o.member_count} members</div></div><button class="btn gold" onclick="fightArenaOpponent('${o.party_id}')">Challenge</button></div>`).join(''):'<div class="empty">No eligible opponents have published a defense yet.</div>';
+  const quota=arenaData.challengeQuota||{remaining:5,resetsAt:null},reset=quota.resetsAt?` · Next attempt ${new Date(quota.resetsAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}`:'';
+  box.innerHTML=`<div class="muted arenaQuota">${quota.remaining} / 5 challenges available${reset}</div>`+(arenaData.opponents?.length?arenaData.opponents.map(o=>`<div class="arenaOpponent"><div><div class="name">${arenaEscape(o.guild_name)}</div><div class="muted">Rating ${o.rating} · ${o.party_power} power · ${o.member_count} members</div></div><button class="btn gold" ${quota.remaining<=0?'disabled':''} onclick="fightArenaOpponent('${o.party_id}')">Challenge</button></div>`).join(''):'<div class="empty">No eligible opponents have published a defense yet.</div>');
 }
 function renderArenaLeaderboard(){
   const box=$('arenaLeaderboard');if(!box)return;

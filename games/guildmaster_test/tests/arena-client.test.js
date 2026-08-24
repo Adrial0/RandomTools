@@ -36,5 +36,9 @@ assert.match(migration,/unique index[\s\S]*lower\(guild_name\)/i,'guild names mu
 assert.match(migration,/defender_rating_change,report,replay\)\s*values\([\s\S]*,delta,0,/i,'defensive matches must not change defender rating');
 const engine=fs.readFileSync(require.resolve('../supabase/functions/_shared/arena-engine.ts'),'utf8');
 assert.match(engine,/timeline/,'Arena battles must return a structured animation timeline');
+const fightFunction=fs.readFileSync(require.resolve('../supabase/functions/fight-arena/index.ts'),'utf8');
+assert.match(fightFunction,/recent\?\.length\|\|0\)>=5/,'Arena should allow five challenges inside the rolling window');
+assert.match(fightFunction,/5\*60\*1000/,'Arena challenge window should last five minutes');
+assert.doesNotMatch(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/Skip to Result/,'Arena combat must not offer result skipping');
 
 console.log('Arena client and backend contract tests passed.');

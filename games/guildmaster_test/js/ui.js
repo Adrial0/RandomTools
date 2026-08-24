@@ -226,7 +226,7 @@ function combatantHtml(x,enemy=false,frontline=false){
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
   const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
-  return `<div class="combatant combatMini ${enemy?'enemy':''} ${frontline?'combatThreatFront':''}" data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}" onclick="toggleCombatantDetails(event,this)">
+  return `<div class="combatant combatMini ${enemy?'enemy':''} ${frontline?'combatThreatFront':''}" data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" onclick="toggleCombatantDetails(event,this)">
     <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
       <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
@@ -238,6 +238,7 @@ function combatantHtml(x,enemy=false,frontline=false){
       ${enemy?`<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel"></span></div>`:''}
       <div class="combatStatusRow"></div>
     </div>
+    <div class="combatFloat"></div>
   </div>`;
 }
 function closeCombatInspector(){
@@ -334,11 +335,18 @@ function updateCombatantDom(x,enemy){
   const el=document.querySelector(`[data-combatant="${enemy?'enemy':'hero'}-${x.id}"]`);
   if(!el)return;
   const pct=clamp(x.hp/x.maxHp*100,0,100);
+  const previousHp=Number(el.dataset.lastHp),hpDelta=x.hp-previousHp;
+  if(Number.isFinite(previousHp)&&hpDelta!==0){
+    const float=el.querySelector('.combatFloat');
+    if(float){float.textContent=(hpDelta>0?'+':'−')+Math.abs(Math.round(hpDelta));float.className='combatFloat pop '+(hpDelta>0?'good':'dangerText');setTimeout(()=>float.classList.remove('pop'),350)}
+    el.classList.remove(hpDelta>0?'combatHeal':'combatHit');void el.offsetWidth;el.classList.add(hpDelta>0?'combatHeal':'combatHit');setTimeout(()=>el.classList.remove('combatHeal','combatHit'),240);
+  }
+  el.dataset.lastHp=x.hp;
   const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill');
   if(hp)hp.textContent=`${Math.max(0,x.hp)}/${x.maxHp}`;
   if(fill)fill.style.width=pct+'%';
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';
-  if(attackFill)attackFill.style.width=(attackTimerProgress(x,enemy,Date.now())*100)+'%';
+  if(attackFill){const attackPct=attackTimerProgress(x,enemy,Date.now())*100,previousAttack=Number(el.dataset.lastAttack);attackFill.style.width=attackPct+'%';if(Number.isFinite(previousAttack)&&attackPct+35<previousAttack){el.classList.remove('combatAct');void el.offsetWidth;el.classList.add('combatAct');setTimeout(()=>el.classList.remove('combatAct'),240)}el.dataset.lastAttack=attackPct}
   const statusRow=el.querySelector('.combatStatusRow');
   if(statusRow)statusRow.innerHTML=Object.values(ensureStatuses(x)).map(status=>{const def=STATUS_EFFECTS[status.type];return `<span class="combatStatus ${status.type}" title="${def?.name||status.type} · ${status.stacks} stack${status.stacks===1?'':'s'} · ${fmt(status.expiresAt-Date.now())}">${def?.icon||'◆'}${status.stacks>1?status.stacks:''}</span>`}).join('');
   if(enemy){
