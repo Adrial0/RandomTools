@@ -1,5 +1,4 @@
 import {authenticatedUser,errorText,json,preflight,validateSnapshot} from '../_shared/common.ts';
-import {resolveArenaBattle} from '../_shared/arena-engine.ts';
 
 Deno.serve(async(req)=>{
   const pre=preflight(req);if(pre)return pre;
@@ -20,10 +19,11 @@ Deno.serve(async(req)=>{
       throw new Error(`Five Arena challenges used. Another attempt becomes available at ${resetsAt}.`);
     }
     const attackSnapshot=validateSnapshot(attacker.snapshot),defenseSnapshot=validateSnapshot(defender.snapshot);
-    const seed=Math.floor(Math.random()*2147483646)+1,result=resolveArenaBattle(attackSnapshot,defenseSnapshot,seed);
-    const {data:finalized,error}=await admin.rpc('finalize_arena_match',{p_request_id:body.requestId,p_attacker:user.id,p_defender:defender.user_id,p_attacker_won:result.attackerWon,p_attacker_snapshot:attackSnapshot,p_defender_snapshot:defenseSnapshot,p_seed:seed,p_report:result.report,p_replay:result.replay});
+    if(body.prepare===true)return json({requestId:body.requestId,attacker:attackSnapshot,defender:defenseSnapshot});
+    if(typeof body.won!=='boolean')throw new Error('Arena result is required.');
+    const report=Array.isArray(body.report)?body.report.slice(0,20):[],replay=Array.isArray(body.replay)?body.replay.slice(0,80):[];
+    const {data:finalized,error}=await admin.rpc('finalize_arena_match',{p_request_id:body.requestId,p_attacker:user.id,p_defender:defender.user_id,p_attacker_won:body.won,p_attacker_snapshot:attackSnapshot,p_defender_snapshot:defenseSnapshot,p_seed:0,p_report:report,p_replay:replay});
     if(error)throw error;
-    const attackerReport=result.report.filter(x=>x.side==='attack');
-    return json({won:result.attackerWon,ratingChange:finalized.ratingChange,newRating:finalized.newRating,matchId:finalized.matchId,report:attackerReport,replay:result.replay,timeline:result.timeline,combatants:result.combatants,attackerGuild:attackSnapshot.guildName,defenderGuild:defenseSnapshot.guildName,durationMs:result.durationMs});
+    return json({won:body.won,ratingChange:finalized.ratingChange,newRating:finalized.newRating,matchId:finalized.matchId});
   }catch(err){return json({error:errorText(err)},400)}
 });

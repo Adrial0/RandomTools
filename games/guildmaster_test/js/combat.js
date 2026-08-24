@@ -897,6 +897,7 @@ function defeatAdviceFor(m){
   return advice.slice(0,3);
 }
 function expeditionDefeated(m){
+  if(m.type==='arena'){finishArenaClientBattle(m,false);return}
   syncPartyHp(m);
   m.defeated=true;
   m.defeatAdvice=defeatAdviceFor(m);
@@ -921,6 +922,7 @@ function createCurrentFiniteBattle(m){
 function finishCurrentFight(m){
   const b=m.battle;
   if(!b||living(b.enemies||[]).length)return;
+  if(m.type==='arena'){finishArenaClientBattle(m,true);return}
 
   syncPartyHp(m);
 

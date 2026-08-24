@@ -34,12 +34,13 @@ assert.match(migration,/security definer/);
 assert.match(migration,/request_id uuid not null unique/,'match requests must be idempotent');
 assert.match(migration,/unique index[\s\S]*lower\(guild_name\)/i,'guild names must be unique regardless of capitalization');
 assert.match(migration,/defender_rating_change,report,replay\)\s*values\([\s\S]*,delta,0,/i,'defensive matches must not change defender rating');
-const engine=fs.readFileSync(require.resolve('../supabase/functions/_shared/arena-engine.ts'),'utf8');
-assert.match(engine,/timeline/,'Arena battles must return a structured animation timeline');
 const fightFunction=fs.readFileSync(require.resolve('../supabase/functions/fight-arena/index.ts'),'utf8');
 assert.match(fightFunction,/recent\?\.length\|\|0\)>=5/,'Arena should allow five challenges inside the rolling window');
 assert.match(fightFunction,/5\*60\*1000/,'Arena challenge window should last five minutes');
 assert.doesNotMatch(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/Skip to Result/,'Arena combat must not offer result skipping');
-assert.match(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/combatantHtml\(x,false,false,\{arena:true\}\)/,'Arena must reuse the normal combatant component');
+const arenaClient=fs.readFileSync(require.resolve('../js/arena.js'),'utf8');
+assert.match(arenaClient,/type:'arena'/,'Arena must create a normal local combat mission');
+assert.match(fs.readFileSync(require.resolve('../js/app.js'),'utf8'),/stepBattle\(arenaLiveMission\)/,'Arena must use the normal combat step loop');
+assert.doesNotMatch(arenaClient,/timeline|showArenaResult|updateArenaActionBars/,'Arena must not maintain a separate replay renderer');
 
 console.log('Arena client and backend contract tests passed.');

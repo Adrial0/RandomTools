@@ -246,6 +246,7 @@ function closeCombatInspector(){
   if(p){p.classList.remove('on');p.dataset.side='';p.dataset.id=''}
 }
 function findLiveCombatant(side,id){
+  if($('combatModal').dataset.mode==='arena'&&typeof arenaLiveMission!=='undefined'&&arenaLiveMission?.battle)return side==='enemy'?arenaLiveMission.battle.enemies.find(x=>x.id===id):arenaLiveMission.battle.heroes.find(x=>x.id===id);
   const mid=+$('combatModal').dataset.mission,m=s.missions.find(x=>x.id===mid);
   if(!m?.battle)return null;
   return side==='enemy'?m.battle.enemies.find(x=>x.id===id):m.battle.heroes.find(x=>x.id===id);
@@ -309,16 +310,17 @@ function combatReportHtml(m){
     <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow"><span><b>${row.name}</b><small>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small></span><span>${Math.round(row.damage||0).toLocaleString()}</span><span>${Math.round(row.statusDamage||0).toLocaleString()}<small>${row.statusesApplied||0} applied</small></span><span>${Math.round(row.healing||0).toLocaleString()}</span><span>${Math.round(row.damageTaken||0).toLocaleString()}<small>${row.deaths||0} deaths</small></span><span>${row.interrupts||0} interrupts<small>${row.cleanses||0} cleanses</small></span></div>`).join('')}</div>`;
 }
 function buildCombatStructure(m){
+  const arenaMode=m.type==='arena';
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   const ordered=threatOrderedHeroes(m.battle.heroes);
   $('combatBody').innerHTML=`
     <div class="combatFixedTop">
-      <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?defeatAdviceHtml(m):''}</div>
+      <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
       <div class="combatGrid">
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">YOUR PARTY · FRONT COLUMN = HIGHER THREAT</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map(x=>combatantHtml(x.hero,false,x.front)).join('')}</div></div>
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">ENEMIES · REAL-TIME COMBAT</div><div class="combatSide compactCombatSide" id="combatEnemySide">${m.battle.enemies.map(x=>combatantHtml(x,true,false)).join('')}</div></div>
+        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT COLUMN = HIGHER THREAT'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map(x=>combatantHtml(x.hero,false,x.front)).join('')}</div></div>
+        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${m.battle.enemies.map(x=>combatantHtml(x,true,false)).join('')}</div></div>
       </div>
-      <div class="lootStash">
+      <div class="lootStash" style="display:${arenaMode?'none':'grid'}">
         <div class="lootBox"><span>Unclaimed gold</span><strong id="combatGold">${m.stash.gold}</strong></div>
         <div class="lootBox"><span>Unclaimed rep</span><strong id="combatRep">${m.stash.rep}</strong></div>
         <div class="lootBox"><span>Materials</span><strong id="combatMaterials">${matTotal}</strong></div>
@@ -383,12 +385,12 @@ function updateCombatLog(m){
 }
 function renderCombat(){
   if(!$('combatModal').classList.contains('on'))return;
-  if($('combatModal').dataset.mode==='arena')return;
-  const mid=+$('combatModal').dataset.mission,m=s.missions.find(x=>x.id===mid);if(!m){closeCombat();return}
+  const arenaMode=$('combatModal').dataset.mode==='arena';
+  const mid=+$('combatModal').dataset.mission,m=arenaMode?(typeof arenaLiveMission!=='undefined'?arenaLiveMission:null):s.missions.find(x=>x.id===mid);if(!m){closeCombat();return}
   if(!m.battle)return;
 
   $('combatTitle').textContent=m.name;
-  $('combatSubtitle').textContent=`${m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
+  $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
 
   const key=combatStructureKey(m);
   if(key!==combatDomKey||!$('combatLog'))buildCombatStructure(m);
@@ -405,7 +407,7 @@ function renderCombat(){
   if($('combatReport'))$('combatReport').innerHTML=combatReportHtml(m);
   if($('combatDefeatedBanner')){
     $('combatDefeatedBanner').style.display=m.defeated?'block':'none';
-    if(m.defeated)$('combatDefeatedBanner').innerHTML=defeatAdviceHtml(m);
+    if(m.defeated)$('combatDefeatedBanner').innerHTML=m.type==='arena'?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m);
   }
 
   updateCombatLog(m);

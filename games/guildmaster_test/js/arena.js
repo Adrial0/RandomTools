@@ -4,7 +4,6 @@ let arenaSession=null;
 let arenaConfig=null;
 let arenaData={profile:null,defense:null,opponents:[],leaderboard:[],history:[],challengeQuota:{remaining:5,resetsAt:null}};
 let arenaBusy=false;
-let arenaPlaybackToken=0;
 
 function arenaEscape(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
 function arenaSetConnection(text,state=''){
@@ -111,78 +110,37 @@ async function publishArenaParty(){
 }
 async function fightArenaOpponent(partyId){
   if(arenaBusy)return;
+  if(arenaLiveMission&&!arenaLiveMission.completed){watchArenaBattle();return arenaMessage('Finish your current Arena battle first.')}
   const defense=arenaData.defense;if(!defense)return arenaMessage('Publish your Arena defense before challenging opponents.');
   arenaBusy=true;
   try{
-    const result=await arenaInvoke('fight-arena',{opponentPartyId:partyId,requestId:crypto.randomUUID()});
-    showArenaResult(result);await refreshArenaData(true);
+    const requestId=crypto.randomUUID(),prepared=await arenaInvoke('fight-arena',{opponentPartyId:partyId,requestId,prepare:true});
+    startArenaClientBattle(partyId,requestId,prepared);
   }catch(err){arenaMessage(err.message)}finally{arenaBusy=false}
 }
-function showArenaResult(result){
-  const now=Date.now(),token=++arenaPlaybackToken,units=new Map((result.combatants||[]).map(x=>[x.id,{...x,hp:x.maxHp,mana:x.maxMana||0,displayClass:x.subclass||x.class,cooldowns:{},attackStartedAt:now,nextAttackAt:now+(x.attackInterval||2500)}]));
-  const card=x=>{const html=combatantHtml(x,false,false,{arena:true});return html.replace('class="combatant ',`id="arenaUnit-${x.id}" data-arena-unit="${x.id}" class="combatant `).replace('<div class="combatFloat"></div>','<div class="arenaFloat"></div>')};
-  $('combatTitle').textContent=`${result.attackerGuild} vs ${result.defenderGuild}`;
-  $('combatSubtitle').textContent='Ranked Arena · live replay of the server-resolved fight';
-  $('combatModal').dataset.mode='arena';
-  $('combatBody').innerHTML=`<div class="combatFixedTop"><div class="combatGrid"><div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">YOUR ARENA PARTY · ATTACKING</div><div class="combatSide compactCombatSide">${[...units.values()].filter(x=>x.side==='attack').map(card).join('')}</div></div><div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">OPPONENT PARTY · DEFENDING</div><div class="combatSide compactCombatSide">${[...units.values()].filter(x=>x.side==='defense').map(card).join('')}</div></div></div></div><div class="log combatLog arenaLiveLog" id="arenaLiveLog"></div><div class="card combatReport" id="arenaFinalResult"><div class="muted">Battle in progress…</div></div>`;
-  $('combatModal').classList.add('on');syncWindowScrollLock();
-  const events=result.timeline||[],started=performance.now();let cursor=0;
-  const schedule=arenaActionSchedule(events,units);
-  function frame(now){
-    if(token!==arenaPlaybackToken||!$('combatModal').classList.contains('on'))return;
-    const battleTime=now-started;
-    updateArenaActionBars(units,battleTime,schedule);
-    while(cursor<events.length&&events[cursor].time<=battleTime)applyArenaEvent(events[cursor++],units);
-    if(cursor<events.length)requestAnimationFrame(frame);else renderArenaFinalResult(result);
-  }
-  requestAnimationFrame(frame);
+let arenaLiveMission=null;
+function watchArenaBattle(){if(!arenaLiveMission)return;$('combatModal').dataset.mode='arena';$('combatModal').classList.add('on');combatDomKey='';syncWindowScrollLock();renderCombat()}
+function arenaHeroUnit(h,index,enemy=false){
+  const now=Date.now(),interval=Math.max(250,h.attackInterval||2500),main=h.class==='Mage'||h.class==='Priest'?h.int:h.class==='Ranger'||h.class==='Rogue'?h.dex:h.str;
+  const unit={...h,id:index+1,hp:h.maxHp,mana:h.maxMana||20+(h.int||0),maxMana:h.maxMana||20+(h.int||0),manaRegen:h.manaRegen||1,statuses:{},buffs:{},cooldowns:{},displayClass:h.subclass||h.class,baseAttackTime:interval/1000,attackSpeed:0,attackStartedAt:now,nextAttackAt:now+interval};
+  if(enemy)Object.assign(unit,{icon:h.subclass?gameIcon('subclass',h.subclass,iconFallback('class',h.class),'gameAsset combatAsset'):gameIcon('class',h.class,iconFallback('class',h.class),'gameAsset combatAsset'),atk:Math.max(1,Math.round((h.weaponPower||8)*.55+(main||1)*.45)),attackInterval:interval,mage:['Mage','Priest'].includes(h.class),ability:null,abilityReadyAt:0,drops:[],arenaHero:true});
+  return unit;
 }
-function arenaActionSchedule(events,units){
-  const schedule={attack:{},active:{}};
-  units.forEach((_unit,id)=>{schedule.attack[id]=[];schedule.active[id]=[]});
-  events.forEach(event=>{
-    if(event.sourceId&&event.type==='attack')schedule.attack[event.sourceId]?.push(event.time);
-    if(event.sourceId&&event.type==='cast')schedule.active[event.sourceId]?.push(event.time);
-  });
-  return schedule;
+function startArenaClientBattle(opponentPartyId,requestId,prepared){
+  const now=Date.now(),heroes=prepared.attacker.members.map((h,i)=>arenaHeroUnit(h,i,false)),enemies=prepared.defender.members.map((h,i)=>arenaHeroUnit(h,i,true));
+  const partyState={};heroes.forEach(h=>partyState[h.id]={hp:h.hp,maxHp:h.maxHp,mana:h.mana,maxMana:h.maxMana,cooldowns:{},nextAttackAt:h.nextAttackAt,attackStartedAt:h.attackStartedAt});
+  arenaLiveMission={id:-1,type:'arena',name:`${prepared.attacker.guildName} vs ${prepared.defender.guildName}`,attackerGuild:prepared.attacker.guildName,defenderGuild:prepared.defender.guildName,opponentPartyId,requestId,party:heroes.map(h=>h.id),partyState,level:1,target:1,completed:false,defeated:false,fights:0,kills:0,start:now,lastSim:now,nextRegenAt:now+5000,stash:{gold:0,rep:0,materials:{},items:[]},combatReport:{startedAt:now,encounters:0,offlineEncounters:0,heroes:{},deaths:[]},battle:{id:1,resolved:false,actionSeq:0,kind:'arena',heroes,enemies,phase:'heroes',turn:0,round:1,log:['The Arena battle begins.']}};
+  heroes.forEach(h=>arenaLiveMission.combatReport.heroes[String(h.id)]={id:h.id,name:h.name,damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0});
+  $('combatModal').dataset.mode='arena';$('combatModal').dataset.mission='';$('combatModal').classList.add('on');combatDomKey='';syncWindowScrollLock();renderCombat();
 }
-function arenaBarProgress(times,now){
-  if(!times?.length)return 1;
-  let previous=0,next=null;
-  for(const time of times){if(time>now){next=time;break}previous=time}
-  if(next==null)return 1;
-  return clamp((now-previous)/Math.max(1,next-previous),0,1);
-}
-function updateArenaActionBars(units,battleTime,schedule){
-  units.forEach((unit,id)=>{
-    const el=$(`arenaUnit-${id}`);if(!el)return;
-    const attack=el.querySelector('.attackFill');if(attack)attack.style.setProperty('width',(arenaBarProgress(schedule.attack[id],battleTime)*100).toFixed(3)+'%','important');
-    const active=el.querySelector('.cooldownFill');if(active)active.style.setProperty('width',(arenaBarProgress(schedule.active[id],battleTime)*100).toFixed(3)+'%','important');
-  });
-}
-function applyArenaEvent(event,units){
-  const source=units.get(event.sourceId),sourceEl=source?$(`arenaUnit-${source.id}`):null,target=units.get(event.targetId),el=target?$(`arenaUnit-${target.id}`):null;
-  if(sourceEl){
-    sourceEl.classList.remove('arenaAct');void sourceEl.offsetWidth;sourceEl.classList.add('arenaAct');setTimeout(()=>sourceEl.classList.remove('arenaAct'),240);
-    const cast=sourceEl.querySelector('.castTrack');if(cast&&event.type==='cast'){cast.style.display='block';const fill=cast.querySelector('.castFill');if(fill){fill.style.transition='none';fill.style.width='0%';requestAnimationFrame(()=>{fill.style.transition='width 700ms linear';fill.style.width='100%'})}}else if(cast&&['ability','interrupt'].includes(event.type))cast.style.display='none';
-  }
-  if(target&&event.targetHp!=null){
-    target.hp=event.targetHp;const pct=clamp(target.hp/target.maxHp*100,0,100);
-    const fill=el?.querySelector('.hpFill');if(fill)fill.style.width=pct+'%';
-    const text=el?.querySelector('.combatantHp');if(text)text.textContent=`${Math.max(0,target.hp)}/${target.maxHp}`;
-    el?.classList.toggle('defeated',target.hp<=0);
-    const float=el?.querySelector('.arenaFloat');if(float&&event.amount){float.textContent=(event.type==='heal'?'+':'−')+event.amount;float.className='arenaFloat pop '+(event.type==='heal'?'good':'dangerText');setTimeout(()=>float.classList.remove('pop'),350)}
-    if(el&&event.type!=='heal'){el.classList.remove('arenaHit');void el.offsetWidth;el.classList.add('arenaHit');setTimeout(()=>el.classList.remove('arenaHit'),240)}
-    const statuses=el?.querySelector('.combatStatusRow');if(statuses&&event.type==='status')statuses.innerHTML='<span class="combatStatus burning" title="Damage over time">◆</span>';
-  }
-  const log=$('arenaLiveLog');if(log&&event.text){const line=document.createElement('div');line.textContent=event.text;line.className='arenaEvent '+event.type;log.prepend(line);while(log.children.length>7)log.lastElementChild.remove()}
-}
-function renderArenaFinalResult(result){
-  if($('arenaFinalResult')?.dataset.done)return;
-  const box=$('arenaFinalResult');if(!box)return;box.dataset.done='true';
-  const rows=(result.report||[]).map(x=>`<div class="arenaResultRow"><span>${arenaEscape(x.name)}</span><span>${x.damage||0} damage</span><span>${x.healing||0} healing</span><span>${x.interrupts||0} interrupts</span></div>`).join('');
-  box.innerHTML=`<div class="arenaResultReveal ${result.won?'victory':'defeat'}"><h2>${result.won?'Arena Victory':'Arena Defeat'}</h2><div class="arenaRatingChange ${result.ratingChange>=0?'good':'dangerText'}">${result.ratingChange===0?'Rating unchanged':`Rating ${result.ratingChange>0?'+':''}${result.ratingChange}`} · ${result.newRating}</div><div class="arenaResultTable">${rows}</div></div>`;
-  box.scrollIntoView({behavior:'smooth',block:'nearest'});
+async function finishArenaClientBattle(m,won){
+  if(!m||m.completed)return;m.completed=true;m.defeated=!won;
+  const report=Object.values(ensureCombatReport(m).heroes),replay=(m.battle?.log||[]).slice(0,80);
+  ensureCombatReport(m).encounters=1;m.battle.log.unshift(won?'Your party wins the Arena battle.':'Your party was defeated in the Arena.');renderCombat();
+  try{
+    const result=await arenaInvoke('fight-arena',{opponentPartyId:m.opponentPartyId,requestId:m.requestId,won,report,replay});
+    m.arenaResult=result;arenaMessage(`${won?'Victory':'Defeat'} · Rating ${result.ratingChange>=0?'+':''}${result.ratingChange}` ,won?'good':'bad');await refreshArenaData(true);renderCombat();
+  }catch(err){arenaMessage(err.message)}
 }
 function renderArenaData(){renderArenaDefense();renderArenaOpponents();renderArenaLeaderboard();renderArenaHistory()}
 function renderArenaDefense(){
