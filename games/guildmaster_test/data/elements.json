@@ -1,0 +1,37 @@
+{
+  "physical": {
+    "name": "Physical",
+    "image": "images/elements/physical.png",
+    "fallback": "⚔️"
+  },
+  "fire": {
+    "name": "Fire",
+    "image": "images/elements/fire.png",
+    "fallback": "🔥"
+  },
+  "holy": {
+    "name": "Holy",
+    "image": "images/elements/holy.png",
+    "fallback": "✨"
+  },
+  "dark": {
+    "name": "Dark",
+    "image": "images/elements/dark.png",
+    "fallback": "🌑"
+  },
+  "ice": {
+    "name": "Ice",
+    "image": "images/elements/ice.png",
+    "fallback": "❄️"
+  },
+  "poison": {
+    "name": "Poison",
+    "image": "images/elements/poison.png",
+    "fallback": "☠️"
+  },
+  "lightning": {
+    "name": "Lightning",
+    "image": "images/elements/lightning.png",
+    "fallback": "⚡"
+  }
+}

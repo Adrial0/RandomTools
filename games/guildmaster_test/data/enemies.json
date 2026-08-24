@@ -1,7 +1,7 @@
 {
   "Forest Goblin": {
     "name": "Forest Goblin",
-    "icon": "\ud83d\udc7a",
+    "icon": "👺",
     "archetype": "brute",
     "baseHp": 24,
     "baseAttack": 8,
@@ -11,11 +11,12 @@
     "drops": [
       "GoblinInsignia",
       "Iron"
-    ]
+    ],
+    "image": "images/enemies/goblin.png"
   },
   "Grey Wolf": {
     "name": "Grey Wolf",
-    "icon": "\ud83d\udc3a",
+    "icon": "🐺",
     "archetype": "beast",
     "baseHp": 20,
     "baseAttack": 9,
@@ -25,11 +26,12 @@
     "drops": [
       "Leather",
       "WolfPelt"
-    ]
+    ],
+    "image": "images/enemies/wolf.png"
   },
   "Thornback Boar": {
     "name": "Thornback Boar",
-    "icon": "\ud83d\udc17",
+    "icon": "🐗",
     "archetype": "beast",
     "baseHp": 30,
     "baseAttack": 9,
@@ -40,11 +42,12 @@
       "Leather",
       "WolfPelt",
       "Sandglass"
-    ]
+    ],
+    "image": ""
   },
   "Moss Slime": {
     "name": "Moss Slime",
-    "icon": "\ud83d\udfe2",
+    "icon": "🟢",
     "archetype": "tank",
     "baseHp": 32,
     "baseAttack": 7,
@@ -54,11 +57,12 @@
     "drops": [
       "SlimeGel",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/slime.png"
   },
   "Briar Wisp": {
     "name": "Briar Wisp",
-    "icon": "\ud83e\uddda",
+    "icon": "🧚",
     "archetype": "brute",
     "baseHp": 20,
     "baseAttack": 10,
@@ -68,11 +72,12 @@
     "drops": [
       "Essence",
       "HolyWater"
-    ]
+    ],
+    "image": ""
   },
   "Highway Bandit": {
     "name": "Highway Bandit",
-    "icon": "\ud83e\udd77",
+    "icon": "🥷",
     "archetype": "brute",
     "baseHp": 27,
     "baseAttack": 10,
@@ -83,11 +88,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": "images/enemies/bandit.png"
   },
   "Prairie Wolf": {
     "name": "Prairie Wolf",
-    "icon": "\ud83d\udc3a",
+    "icon": "🐺",
     "archetype": "beast",
     "baseHp": 22,
     "baseAttack": 10,
@@ -97,11 +103,12 @@
     "drops": [
       "Leather",
       "WolfPelt"
-    ]
+    ],
+    "image": "images/enemies/wolf.png"
   },
   "Sunfield Raider": {
     "name": "Sunfield Raider",
-    "icon": "\ud83d\udde1\ufe0f",
+    "icon": "🗡️",
     "archetype": "brute",
     "baseHp": 29,
     "baseAttack": 11,
@@ -112,11 +119,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Dust Hawk": {
     "name": "Dust Hawk",
-    "icon": "\ud83e\udd85",
+    "icon": "🦅",
     "archetype": "beast",
     "baseHp": 21,
     "baseAttack": 11,
@@ -126,11 +134,12 @@
     "drops": [
       "Leather",
       "Cloth"
-    ]
+    ],
+    "image": ""
   },
   "Spark Imp": {
     "name": "Spark Imp",
-    "icon": "\u26a1",
+    "icon": "⚡",
     "archetype": "brute",
     "baseHp": 23,
     "baseAttack": 10,
@@ -139,11 +148,12 @@
     "ability": "lightning_burst",
     "drops": [
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Dune Raider": {
     "name": "Dune Raider",
-    "icon": "\ud83c\udfdc\ufe0f",
+    "icon": "🏜️",
     "archetype": "brute",
     "baseHp": 31,
     "baseAttack": 12,
@@ -154,11 +164,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Sand Scorpion": {
     "name": "Sand Scorpion",
-    "icon": "\ud83e\udd82",
+    "icon": "🦂",
     "archetype": "brute",
     "baseHp": 28,
     "baseAttack": 11,
@@ -169,11 +180,12 @@
       "Venom",
       "Leather",
       "Sunstone"
-    ]
+    ],
+    "image": ""
   },
   "Cinder Slime": {
     "name": "Cinder Slime",
-    "icon": "\ud83d\udfe0",
+    "icon": "🟠",
     "archetype": "brute",
     "baseHp": 35,
     "baseAttack": 10,
@@ -184,11 +196,12 @@
       "SlimeGel",
       "Essence",
       "Sunstone"
-    ]
+    ],
+    "image": "images/enemies/slime.png"
   },
   "Ash Vulture": {
     "name": "Ash Vulture",
-    "icon": "\ud83e\udd85",
+    "icon": "🦅",
     "archetype": "brute",
     "baseHp": 27,
     "baseAttack": 12,
@@ -199,11 +212,12 @@
       "Leather",
       "Cloth",
       "Sunstone"
-    ]
+    ],
+    "image": ""
   },
   "Sun Cultist": {
     "name": "Sun Cultist",
-    "icon": "\ud83e\uddd9",
+    "icon": "🧙",
     "archetype": "brute",
     "baseHp": 29,
     "baseAttack": 13,
@@ -214,11 +228,12 @@
       "ArcaneDust",
       "CultistRune",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/cultist.png"
   },
   "Bog Spider": {
     "name": "Bog Spider",
-    "icon": "\ud83d\udd77\ufe0f",
+    "icon": "🕷️",
     "archetype": "beast",
     "baseHp": 34,
     "baseAttack": 13,
@@ -229,11 +244,12 @@
       "SpiderSilk",
       "ShadowSilk",
       "Venom"
-    ]
+    ],
+    "image": "images/enemies/spider.png"
   },
   "Marsh Ghoul": {
     "name": "Marsh Ghoul",
-    "icon": "\ud83e\udddf",
+    "icon": "🧟",
     "archetype": "brute",
     "baseHp": 42,
     "baseAttack": 13,
@@ -244,11 +260,12 @@
       "Bone",
       "GhoulIchor",
       "GraveDust"
-    ]
+    ],
+    "image": "images/enemies/ghoul.png"
   },
   "Fen Leech": {
     "name": "Fen Leech",
-    "icon": "\ud83e\udeb1",
+    "icon": "🪱",
     "archetype": "brute",
     "baseHp": 38,
     "baseAttack": 12,
@@ -259,11 +276,12 @@
       "Venom",
       "Leather",
       "Nightshade"
-    ]
+    ],
+    "image": ""
   },
   "Bog Lurker": {
     "name": "Bog Lurker",
-    "icon": "\ud83d\udc0a",
+    "icon": "🐊",
     "archetype": "brute",
     "baseHp": 46,
     "baseAttack": 14,
@@ -273,11 +291,12 @@
     "drops": [
       "Iron",
       "Nightshade"
-    ]
+    ],
+    "image": ""
   },
   "Mire Witch": {
     "name": "Mire Witch",
-    "icon": "\ud83e\uddd9",
+    "icon": "🧙",
     "archetype": "brute",
     "baseHp": 32,
     "baseAttack": 15,
@@ -288,11 +307,12 @@
       "ArcaneDust",
       "CultistRune",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Peak Ogre": {
     "name": "Peak Ogre",
-    "icon": "\ud83d\udc79",
+    "icon": "👹",
     "archetype": "brute",
     "baseHp": 55,
     "baseAttack": 16,
@@ -303,11 +323,12 @@
       "OgreHeart",
       "Iron",
       "StarMetal"
-    ]
+    ],
+    "image": "images/enemies/ogre.png"
   },
   "Stone Drake": {
     "name": "Stone Drake",
-    "icon": "\ud83d\udc32",
+    "icon": "🐲",
     "archetype": "brute",
     "baseHp": 48,
     "baseAttack": 17,
@@ -318,11 +339,12 @@
       "DrakeScale",
       "Emberstone",
       "StarMetal"
-    ]
+    ],
+    "image": "images/enemies/drake.png"
   },
   "Cliff Raider": {
     "name": "Cliff Raider",
-    "icon": "\ud83e\ude93",
+    "icon": "🪓",
     "archetype": "brute",
     "baseHp": 43,
     "baseAttack": 17,
@@ -333,11 +355,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Thunder Roc": {
     "name": "Thunder Roc",
-    "icon": "\ud83e\udd85",
+    "icon": "🦅",
     "archetype": "beast",
     "baseHp": 40,
     "baseAttack": 18,
@@ -349,11 +372,12 @@
       "Cloth",
       "StarMetal",
       "StormCore"
-    ]
+    ],
+    "image": ""
   },
   "Granite Golem": {
     "name": "Granite Golem",
-    "icon": "\ud83d\uddff",
+    "icon": "🗿",
     "archetype": "brute",
     "baseHp": 62,
     "baseAttack": 14,
@@ -364,11 +388,12 @@
       "Stone",
       "Obsidian",
       "StarMetal"
-    ]
+    ],
+    "image": ""
   },
   "Frost Wraith": {
     "name": "Frost Wraith",
-    "icon": "\ud83d\udc7b",
+    "icon": "👻",
     "archetype": "brute",
     "baseHp": 48,
     "baseAttack": 20,
@@ -379,11 +404,12 @@
       "WraithEssence",
       "FrostShard",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/wraith.png"
   },
   "Icebound Ghoul": {
     "name": "Icebound Ghoul",
-    "icon": "\ud83e\udddf",
+    "icon": "🧟",
     "archetype": "brute",
     "baseHp": 58,
     "baseAttack": 18,
@@ -394,11 +420,12 @@
       "Bone",
       "GhoulIchor",
       "GraveDust"
-    ]
+    ],
+    "image": "images/enemies/ghoul.png"
   },
   "Snow Stalker": {
     "name": "Snow Stalker",
-    "icon": "\ud83d\udc3a",
+    "icon": "🐺",
     "archetype": "brute",
     "baseHp": 47,
     "baseAttack": 20,
@@ -409,11 +436,12 @@
       "Leather",
       "WolfPelt",
       "GlacialOre"
-    ]
+    ],
+    "image": ""
   },
   "Glacial Elemental": {
     "name": "Glacial Elemental",
-    "icon": "\u2744\ufe0f",
+    "icon": "❄️",
     "archetype": "brute",
     "baseHp": 55,
     "baseAttack": 21,
@@ -424,11 +452,12 @@
       "Crystal",
       "Essence",
       "GlacialOre"
-    ]
+    ],
+    "image": ""
   },
   "Whitefang Yeti": {
     "name": "Whitefang Yeti",
-    "icon": "\ud83d\udc3b",
+    "icon": "🐻",
     "archetype": "beast",
     "baseHp": 68,
     "baseAttack": 19,
@@ -439,11 +468,12 @@
       "Leather",
       "WolfPelt",
       "GlacialOre"
-    ]
+    ],
+    "image": ""
   },
   "Ember Drake": {
     "name": "Ember Drake",
-    "icon": "\ud83d\udc32",
+    "icon": "🐲",
     "archetype": "brute",
     "baseHp": 72,
     "baseAttack": 23,
@@ -455,11 +485,12 @@
       "Emberstone",
       "CinderOre",
       "MagmaCore"
-    ]
+    ],
+    "image": "images/enemies/drake.png"
   },
   "Lava Hound": {
     "name": "Lava Hound",
-    "icon": "\ud83d\udc15",
+    "icon": "🐕",
     "archetype": "beast",
     "baseHp": 62,
     "baseAttack": 22,
@@ -470,11 +501,12 @@
       "Leather",
       "WolfPelt",
       "CinderOre"
-    ]
+    ],
+    "image": ""
   },
   "Cinder Demon": {
     "name": "Cinder Demon",
-    "icon": "\ud83d\ude08",
+    "icon": "😈",
     "archetype": "brute",
     "baseHp": 68,
     "baseAttack": 24,
@@ -485,11 +517,12 @@
       "DemonHorn",
       "Essence",
       "CinderOre"
-    ]
+    ],
+    "image": "images/enemies/demon.png"
   },
   "Magma Elemental": {
     "name": "Magma Elemental",
-    "icon": "\ud83c\udf0b",
+    "icon": "🌋",
     "archetype": "tank",
     "baseHp": 80,
     "baseAttack": 21,
@@ -500,11 +533,12 @@
       "Crystal",
       "Essence",
       "CinderOre"
-    ]
+    ],
+    "image": ""
   },
   "Obsidian Brute": {
     "name": "Obsidian Brute",
-    "icon": "\ud83e\udea8",
+    "icon": "🪨",
     "archetype": "tank",
     "baseHp": 88,
     "baseAttack": 20,
@@ -515,11 +549,12 @@
       "OgreHeart",
       "Iron",
       "CinderOre"
-    ]
+    ],
+    "image": ""
   },
   "Void Demon": {
     "name": "Void Demon",
-    "icon": "\ud83d\ude08",
+    "icon": "😈",
     "archetype": "skirmisher",
     "baseHp": 88,
     "baseAttack": 27,
@@ -530,11 +565,12 @@
       "DemonHorn",
       "Essence",
       "Voidstone"
-    ]
+    ],
+    "image": "images/enemies/demon.png"
   },
   "Astral Wraith": {
     "name": "Astral Wraith",
-    "icon": "\ud83d\udc7b",
+    "icon": "👻",
     "archetype": "skirmisher",
     "baseHp": 76,
     "baseAttack": 29,
@@ -545,11 +581,12 @@
       "WraithEssence",
       "FrostShard",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/wraith.png"
   },
   "Voidling": {
     "name": "Voidling",
-    "icon": "\ud83c\udf11",
+    "icon": "🌑",
     "archetype": "skirmisher",
     "baseHp": 70,
     "baseAttack": 28,
@@ -560,11 +597,12 @@
       "AetherCrystal",
       "Voidstone",
       "AstralThread"
-    ]
+    ],
+    "image": ""
   },
   "Aether Horror": {
     "name": "Aether Horror",
-    "icon": "\ud83d\udc41\ufe0f",
+    "icon": "👁️",
     "archetype": "tank",
     "baseHp": 94,
     "baseAttack": 28,
@@ -575,11 +613,12 @@
       "AetherCrystal",
       "Voidstone",
       "AstralThread"
-    ]
+    ],
+    "image": ""
   },
   "Warped Knight": {
     "name": "Warped Knight",
-    "icon": "\ud83d\udee1\ufe0f",
+    "icon": "🛡️",
     "archetype": "tank",
     "baseHp": 105,
     "baseAttack": 26,
@@ -590,11 +629,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Crypt Skeleton": {
     "name": "Crypt Skeleton",
-    "icon": "\ud83d\udc80",
+    "icon": "💀",
     "archetype": "brute",
     "baseHp": 42,
     "baseAttack": 13,
@@ -605,11 +645,12 @@
       "Bone",
       "GraveDust",
       "Iron"
-    ]
+    ],
+    "image": "images/enemies/skeleton.png"
   },
   "Bone Guard": {
     "name": "Bone Guard",
-    "icon": "\ud83d\udee1\ufe0f",
+    "icon": "🛡️",
     "archetype": "brute",
     "baseHp": 52,
     "baseAttack": 14,
@@ -620,11 +661,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Grave Acolyte": {
     "name": "Grave Acolyte",
-    "icon": "\ud83d\udd6f\ufe0f",
+    "icon": "🕯️",
     "archetype": "caster",
     "baseHp": 38,
     "baseAttack": 16,
@@ -635,11 +677,12 @@
       "ArcaneDust",
       "CultistRune",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Restless Spirit": {
     "name": "Restless Spirit",
-    "icon": "\ud83d\udc7b",
+    "icon": "👻",
     "archetype": "caster",
     "baseHp": 36,
     "baseAttack": 17,
@@ -650,11 +693,12 @@
       "WraithEssence",
       "FrostShard",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Brood Spider": {
     "name": "Brood Spider",
-    "icon": "\ud83d\udd77\ufe0f",
+    "icon": "🕷️",
     "archetype": "caster",
     "baseHp": 38,
     "baseAttack": 16,
@@ -665,11 +709,12 @@
       "SpiderSilk",
       "ShadowSilk",
       "Venom"
-    ]
+    ],
+    "image": "images/enemies/spider.png"
   },
   "Venomfang": {
     "name": "Venomfang",
-    "icon": "\ud83e\udd82",
+    "icon": "🦂",
     "archetype": "caster",
     "baseHp": 36,
     "baseAttack": 17,
@@ -678,11 +723,12 @@
     "ability": "poison_spit",
     "drops": [
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Webbed Husk": {
     "name": "Webbed Husk",
-    "icon": "\ud83e\udddf",
+    "icon": "🧟",
     "archetype": "brute",
     "baseHp": 48,
     "baseAttack": 14,
@@ -693,11 +739,12 @@
       "SpiderSilk",
       "ShadowSilk",
       "Venom"
-    ]
+    ],
+    "image": ""
   },
   "Silk Stalker": {
     "name": "Silk Stalker",
-    "icon": "\ud83d\udd78\ufe0f",
+    "icon": "🕸️",
     "archetype": "caster",
     "baseHp": 42,
     "baseAttack": 16,
@@ -707,11 +754,12 @@
     "drops": [
       "Leather",
       "WolfPelt"
-    ]
+    ],
+    "image": ""
   },
   "Plague Ghoul": {
     "name": "Plague Ghoul",
-    "icon": "\ud83e\udddf",
+    "icon": "🧟",
     "archetype": "caster",
     "baseHp": 54,
     "baseAttack": 16,
@@ -722,11 +770,12 @@
       "Bone",
       "GhoulIchor",
       "GraveDust"
-    ]
+    ],
+    "image": "images/enemies/ghoul.png"
   },
   "Rot Slime": {
     "name": "Rot Slime",
-    "icon": "\ud83d\udfe2",
+    "icon": "🟢",
     "archetype": "caster",
     "baseHp": 58,
     "baseAttack": 15,
@@ -736,11 +785,12 @@
     "drops": [
       "SlimeGel",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/slime.png"
   },
   "Blight Priest": {
     "name": "Blight Priest",
-    "icon": "\u2620\ufe0f",
+    "icon": "☠️",
     "archetype": "caster",
     "baseHp": 44,
     "baseAttack": 19,
@@ -751,11 +801,12 @@
       "ArcaneDust",
       "CultistRune",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Vault Abomination": {
     "name": "Vault Abomination",
-    "icon": "\ud83e\udddf",
+    "icon": "🧟",
     "archetype": "brute",
     "baseHp": 68,
     "baseAttack": 17,
@@ -766,11 +817,12 @@
       "Bone",
       "GhoulIchor",
       "GraveDust"
-    ]
+    ],
+    "image": ""
   },
   "Fanatic": {
     "name": "Fanatic",
-    "icon": "\ud83e\uddd9",
+    "icon": "🧙",
     "archetype": "brute",
     "baseHp": 48,
     "baseAttack": 20,
@@ -781,11 +833,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Dark Acolyte": {
     "name": "Dark Acolyte",
-    "icon": "\ud83c\udf11",
+    "icon": "🌑",
     "archetype": "caster",
     "baseHp": 44,
     "baseAttack": 22,
@@ -796,11 +849,12 @@
       "ArcaneDust",
       "CultistRune",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Fallen Templar": {
     "name": "Fallen Templar",
-    "icon": "\u2694\ufe0f",
+    "icon": "⚔️",
     "archetype": "caster",
     "baseHp": 62,
     "baseAttack": 19,
@@ -811,11 +865,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Ritual Seer": {
     "name": "Ritual Seer",
-    "icon": "\ud83d\udd2e",
+    "icon": "🔮",
     "archetype": "caster",
     "baseHp": 46,
     "baseAttack": 23,
@@ -826,11 +881,12 @@
       "ArcaneDust",
       "CultistRune",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Flame Drake": {
     "name": "Flame Drake",
-    "icon": "\ud83d\udc32",
+    "icon": "🐲",
     "archetype": "caster",
     "baseHp": 96,
     "baseAttack": 26,
@@ -840,11 +896,12 @@
     "drops": [
       "DrakeScale",
       "Emberstone"
-    ]
+    ],
+    "image": "images/enemies/drake.png"
   },
   "Drake Whelp": {
     "name": "Drake Whelp",
-    "icon": "\ud83d\udc09",
+    "icon": "🐉",
     "archetype": "caster",
     "baseHp": 82,
     "baseAttack": 25,
@@ -854,11 +911,12 @@
     "drops": [
       "DrakeScale",
       "Emberstone"
-    ]
+    ],
+    "image": "images/enemies/drake.png"
   },
   "Ashscale Guardian": {
     "name": "Ashscale Guardian",
-    "icon": "\ud83d\udee1\ufe0f",
+    "icon": "🛡️",
     "archetype": "tank",
     "baseHp": 110,
     "baseAttack": 24,
@@ -869,11 +927,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Inferno Wyvern": {
     "name": "Inferno Wyvern",
-    "icon": "\ud83d\udd25",
+    "icon": "🔥",
     "archetype": "caster",
     "baseHp": 90,
     "baseAttack": 28,
@@ -883,11 +942,12 @@
     "drops": [
       "DrakeScale",
       "Emberstone"
-    ]
+    ],
+    "image": ""
   },
   "War Ogre Brute": {
     "name": "War Ogre Brute",
-    "icon": "\ud83d\udc79",
+    "icon": "👹",
     "archetype": "tank",
     "baseHp": 125,
     "baseAttack": 27,
@@ -897,11 +957,12 @@
     "drops": [
       "OgreHeart",
       "Iron"
-    ]
+    ],
+    "image": "images/enemies/ogre.png"
   },
   "Ogre Firecaller": {
     "name": "Ogre Firecaller",
-    "icon": "\ud83d\udd25",
+    "icon": "🔥",
     "archetype": "caster",
     "baseHp": 102,
     "baseAttack": 29,
@@ -911,11 +972,12 @@
     "drops": [
       "OgreHeart",
       "Iron"
-    ]
+    ],
+    "image": "images/enemies/ogre.png"
   },
   "Ironhide Ogre": {
     "name": "Ironhide Ogre",
-    "icon": "\ud83e\udea8",
+    "icon": "🪨",
     "archetype": "tank",
     "baseHp": 138,
     "baseAttack": 25,
@@ -925,11 +987,12 @@
     "drops": [
       "OgreHeart",
       "Iron"
-    ]
+    ],
+    "image": "images/enemies/ogre.png"
   },
   "Warcamp Shaman": {
     "name": "Warcamp Shaman",
-    "icon": "\u26a1",
+    "icon": "⚡",
     "archetype": "caster",
     "baseHp": 98,
     "baseAttack": 30,
@@ -938,11 +1001,12 @@
     "ability": "lightning_burst",
     "drops": [
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Citadel Wraith": {
     "name": "Citadel Wraith",
-    "icon": "\ud83d\udc7b",
+    "icon": "👻",
     "archetype": "caster",
     "baseHp": 94,
     "baseAttack": 31,
@@ -953,11 +1017,12 @@
       "WraithEssence",
       "FrostShard",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/wraith.png"
   },
   "Dread Knight": {
     "name": "Dread Knight",
-    "icon": "\u2694\ufe0f",
+    "icon": "⚔️",
     "archetype": "caster",
     "baseHp": 122,
     "baseAttack": 28,
@@ -968,11 +1033,12 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Soul Reaper": {
     "name": "Soul Reaper",
-    "icon": "\ud83d\udc80",
+    "icon": "💀",
     "archetype": "caster",
     "baseHp": 102,
     "baseAttack": 32,
@@ -983,11 +1049,12 @@
       "WraithEssence",
       "FrostShard",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Haunting Choir": {
     "name": "Haunting Choir",
-    "icon": "\ud83c\udf11",
+    "icon": "🌑",
     "archetype": "caster",
     "baseHp": 88,
     "baseAttack": 33,
@@ -998,11 +1065,12 @@
       "WraithEssence",
       "FrostShard",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Abyss Demon": {
     "name": "Abyss Demon",
-    "icon": "\ud83d\ude08",
+    "icon": "😈",
     "archetype": "caster",
     "baseHp": 110,
     "baseAttack": 33,
@@ -1012,11 +1080,12 @@
     "drops": [
       "DemonHorn",
       "Essence"
-    ]
+    ],
+    "image": "images/enemies/demon.png"
   },
   "Hellfire Fiend": {
     "name": "Hellfire Fiend",
-    "icon": "\ud83d\udd25",
+    "icon": "🔥",
     "archetype": "caster",
     "baseHp": 108,
     "baseAttack": 34,
@@ -1026,11 +1095,12 @@
     "drops": [
       "DemonHorn",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Void Herald": {
     "name": "Void Herald",
-    "icon": "\ud83c\udf11",
+    "icon": "🌑",
     "archetype": "caster",
     "baseHp": 100,
     "baseAttack": 35,
@@ -1040,11 +1110,12 @@
     "drops": [
       "DemonHorn",
       "Essence"
-    ]
+    ],
+    "image": ""
   },
   "Abyss Guardian": {
     "name": "Abyss Guardian",
-    "icon": "\ud83d\udee1\ufe0f",
+    "icon": "🛡️",
     "archetype": "tank",
     "baseHp": 140,
     "baseAttack": 30,
@@ -1055,94 +1126,103 @@
       "Cloth",
       "BanditToken",
       "Iron"
-    ]
+    ],
+    "image": ""
   },
   "Skeleton King": {
     "name": "Skeleton King",
-    "icon": "\ud83d\udc51",
+    "icon": "💀",
     "archetype": "boss",
     "boss": true,
     "damageType": "dark",
     "ability": "dark_bolt",
     "drops": [
       "CrownBone"
-    ]
+    ],
+    "image": "images/bosses/skeleton-king.png"
   },
   "Broodmother": {
     "name": "Broodmother",
-    "icon": "\ud83d\udc51",
+    "icon": "🕷️",
     "archetype": "boss",
     "boss": true,
     "damageType": "poison",
     "ability": "poison_spit",
     "drops": [
       "BroodSilk"
-    ]
+    ],
+    "image": "images/bosses/broodmother.png"
   },
   "Rotting Colossus": {
     "name": "Rotting Colossus",
-    "icon": "\ud83d\udc51",
+    "icon": "🧟",
     "archetype": "boss",
     "boss": true,
     "damageType": "poison",
     "ability": "poison_spit",
     "drops": [
       "ColossusIchor"
-    ]
+    ],
+    "image": "images/bosses/rotting-colossus.png"
   },
   "High Cultist": {
     "name": "High Cultist",
-    "icon": "\ud83d\udc51",
+    "icon": "🧙",
     "archetype": "boss",
     "boss": true,
     "damageType": "dark",
     "ability": "dark_bolt",
     "drops": [
       "HighRune"
-    ]
+    ],
+    "image": "images/bosses/high-cultist.png"
   },
   "Ancient Drake": {
     "name": "Ancient Drake",
-    "icon": "\ud83d\udc51",
+    "icon": "🐉",
     "archetype": "boss",
     "boss": true,
     "damageType": "fire",
     "ability": "fireball",
     "drops": [
       "AncientDrakeScale"
-    ]
+    ],
+    "image": "images/bosses/ancient-drake.png"
   },
   "War Ogre": {
     "name": "War Ogre",
-    "icon": "\ud83d\udc51",
+    "icon": "👹",
     "archetype": "boss",
     "boss": true,
     "damageType": "physical",
     "ability": "cleave",
     "drops": [
       "WarOgreHeart"
-    ]
+    ],
+    "image": "images/bosses/war-ogre.png"
   },
   "Wraith Lord": {
     "name": "Wraith Lord",
-    "icon": "\ud83d\udc51",
+    "icon": "👻",
     "archetype": "boss",
     "boss": true,
     "damageType": "dark",
     "ability": "dark_bolt",
     "drops": [
       "WraithLordCore"
-    ]
+    ],
+    "image": "images/bosses/wraith-lord.png"
   },
   "Abyssal Demon": {
     "name": "Abyssal Demon",
-    "icon": "\ud83d\udc51",
+    "icon": "😈",
     "archetype": "boss",
     "boss": true,
     "damageType": "dark",
     "ability": "dark_bolt",
     "drops": [
       "AbyssalHorn"
-    ]
+    ],
+    "image": "images/bosses/abyssal-demon.png"
   }
 }

@@ -1,0 +1,32 @@
+{
+  "Warrior": {
+    "name": "Warrior",
+    "image": "images/classes/warrior.png",
+    "fallback": "⚔️"
+  },
+  "Ranger": {
+    "name": "Ranger",
+    "image": "images/classes/ranger.png",
+    "fallback": "🏹"
+  },
+  "Mage": {
+    "name": "Mage",
+    "image": "images/classes/mage.png",
+    "fallback": "🔮"
+  },
+  "Priest": {
+    "name": "Priest",
+    "image": "images/classes/priest.png",
+    "fallback": "✚"
+  },
+  "Rogue": {
+    "name": "Rogue",
+    "image": "images/classes/rogue.png",
+    "fallback": "🗡️"
+  },
+  "Paladin": {
+    "name": "Paladin",
+    "image": "images/classes/paladin.png",
+    "fallback": "🛡️"
+  }
+}

@@ -5,21 +5,24 @@
       "type": "physical",
       "base": 12,
       "parry": 0.05,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": "images/weapons/longsword.png"
     },
     "Greatsword": {
       "scale": "str",
       "type": "physical",
       "base": 17,
       "cleave": 0.22,
-      "icon": "\u2694\ufe0f"
+      "icon": "⚔️",
+      "image": "images/weapons/greatsword.png"
     },
     "Battle Axe": {
       "scale": "str",
       "type": "physical",
       "base": 15,
       "critDamage": 0.25,
-      "icon": "\ud83e\ude93"
+      "icon": "🪓",
+      "image": "images/weapons/battle-axe.png"
     },
     "Greataxe": {
       "scale": "str",
@@ -27,21 +30,24 @@
       "base": 18,
       "critDamage": 0.4,
       "damageVariance": 0.18,
-      "icon": "\ud83e\ude93"
+      "icon": "🪓",
+      "image": "images/weapons/greataxe.png"
     },
     "Warhammer": {
       "scale": "str",
       "type": "physical",
       "base": 16,
       "armorPen": 0.14,
-      "icon": "\ud83d\udd28"
+      "icon": "🔨",
+      "image": "images/weapons/warhammer.png"
     },
     "Mace": {
       "scale": "str",
       "type": "physical",
       "base": 12,
       "armorPen": 0.1,
-      "icon": "\ud83d\udd28"
+      "icon": "🔨",
+      "image": "images/weapons/mace.png"
     },
     "Spear": {
       "scale": "str",
@@ -49,7 +55,8 @@
       "type": "physical",
       "base": 13,
       "accuracy": 0.06,
-      "icon": "\ud83d\udd31"
+      "icon": "🔱",
+      "image": "images/weapons/spear.png"
     },
     "Halberd": {
       "scale": "str",
@@ -57,7 +64,8 @@
       "base": 16,
       "cleave": 0.16,
       "accuracy": 0.04,
-      "icon": "\ud83d\udd31"
+      "icon": "🔱",
+      "image": "images/weapons/halberd.png"
     },
     "Holy Sword": {
       "scale": "str",
@@ -65,14 +73,16 @@
       "base": 15,
       "parry": 0.04,
       "healingPower": 0.06,
-      "icon": "\u2694\ufe0f"
+      "icon": "⚔️",
+      "image": "images/weapons/holy-sword.png"
     },
     "Shortbow": {
       "scale": "dex",
       "type": "physical",
       "base": 11,
       "accuracy": 0.08,
-      "icon": "\ud83c\udff9"
+      "icon": "🏹",
+      "image": "images/weapons/shortbow.png"
     },
     "Longbow": {
       "scale": "dex",
@@ -80,7 +90,8 @@
       "base": 14,
       "critChance": 0.05,
       "accuracy": 0.05,
-      "icon": "\ud83c\udff9"
+      "icon": "🏹",
+      "image": "images/weapons/longbow.png"
     },
     "Recurve Bow": {
       "scale": "dex",
@@ -88,7 +99,8 @@
       "base": 13,
       "critChance": 0.04,
       "accuracy": 0.06,
-      "icon": "\ud83c\udff9"
+      "icon": "🏹",
+      "image": "images/weapons/recurve-bow.png"
     },
     "Light Crossbow": {
       "scale": "dex",
@@ -96,28 +108,32 @@
       "base": 14,
       "armorPen": 0.08,
       "accuracy": 0.05,
-      "icon": "\ud83c\udff9"
+      "icon": "🏹",
+      "image": "images/weapons/light-crossbow.png"
     },
     "Heavy Crossbow": {
       "scale": "dex",
       "type": "physical",
       "base": 17,
       "armorPen": 0.16,
-      "icon": "\ud83c\udff9"
+      "icon": "🏹",
+      "image": "images/weapons/heavy-crossbow.png"
     },
     "Hunting Bow": {
       "scale": "dex",
       "type": "poison",
       "base": 12,
       "statusChance": 0.08,
-      "icon": "\ud83c\udff9"
+      "icon": "🏹",
+      "image": "images/weapons/hunting-bow.png"
     },
     "Dagger": {
       "scale": "dex",
       "type": "physical",
       "base": 10,
       "critChance": 0.07,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": "images/weapons/dagger.png"
     },
     "Knife": {
       "scale": "dex",
@@ -125,7 +141,8 @@
       "base": 8,
       "critChance": 0.05,
       "statusChance": 0.05,
-      "icon": "\ud83d\udd2a"
+      "icon": "🔪",
+      "image": "images/weapons/knife.png"
     },
     "Dirk": {
       "scale": "dex",
@@ -133,7 +150,8 @@
       "base": 11,
       "critChance": 0.06,
       "critDamage": 0.15,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": "images/weapons/dirk.png"
     },
     "Kris": {
       "scale": "dex",
@@ -141,7 +159,8 @@
       "base": 10,
       "statusChance": 0.12,
       "critChance": 0.04,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": "images/weapons/kris.png"
     },
     "Shortsword": {
       "scale": "dex",
@@ -149,7 +168,8 @@
       "base": 12,
       "parry": 0.04,
       "critChance": 0.03,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": "images/weapons/shortsword.png"
     },
     "Twin Blades": {
       "scale": "dex",
@@ -157,28 +177,32 @@
       "base": 13,
       "counter": 0.08,
       "critChance": 0.04,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": "images/weapons/twin-blades.png"
     },
     "Oak Staff": {
       "scale": "int",
       "type": "physical",
       "base": 9,
       "healingPower": 0.08,
-      "icon": "\ud83e\ude84"
+      "icon": "🪄",
+      "image": "images/weapons/oak-staff.png"
     },
     "Arcane Staff": {
       "scale": "int",
       "type": "lightning",
       "base": 15,
       "elementalDamage": 0.1,
-      "icon": "\ud83e\ude84"
+      "icon": "🪄",
+      "image": "images/weapons/arcane-staff.png"
     },
     "Holy Staff": {
       "scale": "int",
       "type": "holy",
       "base": 13,
       "healingPower": 0.16,
-      "icon": "\ud83e\ude84"
+      "icon": "🪄",
+      "image": "images/weapons/holy-staff.png"
     },
     "Wand": {
       "scale": "int",
@@ -186,7 +210,8 @@
       "base": 12,
       "elementalDamage": 0.08,
       "critChance": 0.04,
-      "icon": "\ud83e\ude84"
+      "icon": "🪄",
+      "image": "images/weapons/wand.png"
     },
     "Crystal Wand": {
       "scale": "int",
@@ -194,7 +219,8 @@
       "base": 14,
       "elementalDamage": 0.1,
       "statusChance": 0.07,
-      "icon": "\ud83e\ude84"
+      "icon": "🪄",
+      "image": "images/weapons/crystal-wand.png"
     },
     "Orb": {
       "scale": "int",
@@ -202,14 +228,16 @@
       "base": 15,
       "statusChance": 0.1,
       "elementalDamage": 0.08,
-      "icon": "\ud83d\udd2e"
+      "icon": "🔮",
+      "image": "images/weapons/orb.png"
     },
     "Spellbook": {
       "scale": "int",
       "type": "fire",
       "base": 16,
       "elementalDamage": 0.14,
-      "icon": "\ud83d\udcd6"
+      "icon": "📖",
+      "image": "images/weapons/spellbook.png"
     },
     "Runic Hammer": {
       "scale": "str",
@@ -218,7 +246,8 @@
       "base": 19,
       "armorPen": 0.13,
       "elementalDamage": 0.08,
-      "icon": "\ud83d\udd28"
+      "icon": "🔨",
+      "image": ""
     },
     "Spellblade": {
       "scale": "str",
@@ -227,7 +256,8 @@
       "base": 18,
       "parry": 0.05,
       "elementalDamage": 0.1,
-      "icon": "\u2694\ufe0f"
+      "icon": "⚔️",
+      "image": ""
     },
     "Arcane Dagger": {
       "scale": "dex",
@@ -236,7 +266,8 @@
       "base": 16,
       "critChance": 0.06,
       "statusChance": 0.1,
-      "icon": "\ud83d\udde1\ufe0f"
+      "icon": "🗡️",
+      "image": ""
     },
     "Scepter": {
       "scale": "int",
@@ -244,7 +275,8 @@
       "base": 13,
       "healingPower": 0.12,
       "accuracy": 0.04,
-      "icon": "\ud83e\ude84"
+      "icon": "🪄",
+      "image": "images/weapons/scepter.png"
     }
   },
   "weaponTypeMap": {
@@ -252,5 +284,378 @@
     "Runic Hammer": "Warhammer",
     "Spellblade": "Longsword",
     "Arcane Dagger": "Dagger"
+  },
+  "weaponAttackTimes": {
+    "Dagger": 1.4,
+    "Knife": 1.35,
+    "Dirk": 1.5,
+    "Kris": 1.5,
+    "Arcane Dagger": 1.55,
+    "Twin Blades": 1.45,
+    "Shortsword": 1.7,
+    "Longsword": 1.9,
+    "Holy Sword": 2,
+    "Spellblade": 2.05,
+    "Spear": 2,
+    "Halberd": 2.55,
+    "Battle Axe": 2.3,
+    "Greataxe": 2.7,
+    "Mace": 2.35,
+    "Warhammer": 2.8,
+    "Runic Hammer": 2.9,
+    "Shortbow": 1.95,
+    "Longbow": 2.2,
+    "Recurve Bow": 2.05,
+    "Hunting Bow": 2.1,
+    "Light Crossbow": 2.4,
+    "Heavy Crossbow": 3,
+    "Wand": 2,
+    "Crystal Wand": 2.05,
+    "Scepter": 2.2,
+    "Orb": 2.25,
+    "Oak Staff": 2.45,
+    "Arcane Staff": 2.55,
+    "Holy Staff": 2.55,
+    "Spellbook": 2.7
+  },
+  "classAttackSpeed": {
+    "Warrior": 0.03,
+    "Ranger": 0.05,
+    "Rogue": 0.08,
+    "Paladin": 0,
+    "Priest": -0.03,
+    "Mage": -0.05
+  },
+  "armorProfiles": {
+    "Robes": {
+      "armorClass": "Light",
+      "stat": "mdef",
+      "base": 10,
+      "block": 0,
+      "tier": 1
+    },
+    "Leathers": {
+      "armorClass": "Light",
+      "stat": "dex",
+      "base": 5,
+      "block": 0,
+      "tier": 1
+    },
+    "Ironwood Leathers": {
+      "armorClass": "Light",
+      "stat": "def",
+      "base": 9,
+      "block": 1,
+      "tier": 3
+    },
+    "Spiritweave Robes": {
+      "armorClass": "Light",
+      "stat": "mdef",
+      "base": 16,
+      "block": 0,
+      "tier": 4
+    },
+    "Nightveil Leathers": {
+      "armorClass": "Light",
+      "stat": "dex",
+      "base": 10,
+      "block": 0,
+      "tier": 5
+    },
+    "Aetherweave Robes": {
+      "armorClass": "Light",
+      "stat": "mdef",
+      "base": 20,
+      "block": 0,
+      "tier": 6
+    },
+    "Mail": {
+      "armorClass": "Medium",
+      "stat": "def",
+      "base": 8,
+      "block": 1,
+      "tier": 1
+    },
+    "Scale Vest": {
+      "armorClass": "Medium",
+      "stat": "def",
+      "base": 11,
+      "block": 1,
+      "tier": 2
+    },
+    "Reinforced Mail": {
+      "armorClass": "Medium",
+      "stat": "def",
+      "base": 13,
+      "block": 2,
+      "tier": 2
+    },
+    "Runic Coat": {
+      "armorClass": "Medium",
+      "stat": "mdef",
+      "base": 14,
+      "block": 1,
+      "tier": 4
+    },
+    "Stormhide Coat": {
+      "armorClass": "Medium",
+      "stat": "dex",
+      "base": 9,
+      "block": 1,
+      "tier": 5
+    },
+    "Starsteel Mail": {
+      "armorClass": "Medium",
+      "stat": "def",
+      "base": 19,
+      "block": 2,
+      "tier": 6
+    },
+    "Cuirass": {
+      "armorClass": "Heavy",
+      "stat": "def",
+      "base": 12,
+      "block": 2,
+      "tier": 2
+    },
+    "Plate": {
+      "armorClass": "Heavy",
+      "stat": "def",
+      "base": 16,
+      "block": 3,
+      "tier": 3
+    },
+    "Aegis Cuirass": {
+      "armorClass": "Heavy",
+      "stat": "mdef",
+      "base": 17,
+      "block": 3,
+      "tier": 4
+    },
+    "Mithril Bulwark": {
+      "armorClass": "Heavy",
+      "stat": "def",
+      "base": 24,
+      "block": 5,
+      "tier": 6
+    },
+    "Cinderplate": {
+      "armorClass": "Heavy",
+      "stat": "def",
+      "base": 22,
+      "block": 4,
+      "tier": 6
+    },
+    "Voidguard Plate": {
+      "armorClass": "Heavy",
+      "stat": "mdef",
+      "base": 23,
+      "block": 5,
+      "tier": 7
+    }
+  },
+  "runeSlots": {
+    "Common": 0,
+    "Uncommon": 1,
+    "Rare": 2,
+    "Epic": 3,
+    "Legendary": 4,
+    "Mythic": 5
+  },
+  "runes": {
+    "might": {
+      "name": "Rune of Might",
+      "icon": "🜂",
+      "stat": "str",
+      "value": 3,
+      "cost": {
+        "ArcaneDust": 3,
+        "Crystal": 2
+      },
+      "desc": "+3 STR",
+      "image": "images/runes/might.png"
+    },
+    "precision": {
+      "name": "Rune of Precision",
+      "icon": "✦",
+      "stat": "dex",
+      "value": 3,
+      "cost": {
+        "ArcaneDust": 3,
+        "ShadowSilk": 1,
+        "Crystal": 1
+      },
+      "desc": "+3 DEX",
+      "image": "images/runes/precision.png"
+    },
+    "wisdom": {
+      "name": "Rune of Wisdom",
+      "icon": "✧",
+      "stat": "int",
+      "value": 3,
+      "cost": {
+        "ArcaneDust": 3,
+        "Essence": 3
+      },
+      "desc": "+3 INT",
+      "image": "images/runes/wisdom.png"
+    },
+    "warding": {
+      "name": "Rune of Warding",
+      "icon": "⬡",
+      "stat": "def",
+      "value": 4,
+      "cost": {
+        "Crystal": 4,
+        "Essence": 2
+      },
+      "desc": "+4 DEF",
+      "image": "images/runes/warding.png"
+    },
+    "aegis": {
+      "name": "Rune of Aegis",
+      "icon": "◇",
+      "stat": "mdef",
+      "value": 4,
+      "cost": {
+        "Crystal": 3,
+        "HolyWater": 2,
+        "Essence": 1
+      },
+      "desc": "+4 MDEF",
+      "image": "images/runes/aegis.png"
+    },
+    "vitality": {
+      "name": "Rune of Vitality",
+      "icon": "♥",
+      "stat": "hp",
+      "value": 15,
+      "cost": {
+        "Essence": 4,
+        "Crystal": 2
+      },
+      "desc": "+15 HP",
+      "image": "images/runes/vitality.png"
+    },
+    "embers": {
+      "name": "Rune of Embers",
+      "icon": "🔥",
+      "stat": "fire",
+      "value": 8,
+      "cost": {
+        "Emberstone": 3,
+        "ArcaneDust": 2
+      },
+      "desc": "+8 Fire Res",
+      "image": "images/runes/embers.png"
+    },
+    "frost": {
+      "name": "Rune of Frost",
+      "icon": "❄️",
+      "stat": "ice",
+      "value": 8,
+      "cost": {
+        "FrostShard": 3,
+        "ArcaneDust": 2
+      },
+      "desc": "+8 Ice Res",
+      "image": "images/runes/frost.png"
+    },
+    "storm": {
+      "name": "Rune of Storms",
+      "icon": "⚡",
+      "stat": "lightning",
+      "value": 8,
+      "cost": {
+        "StormCore": 3,
+        "Crystal": 2
+      },
+      "desc": "+8 Lightning Res",
+      "image": "images/runes/storm.png"
+    },
+    "holy": {
+      "name": "Rune of Radiance",
+      "icon": "✨",
+      "stat": "holy",
+      "value": 8,
+      "cost": {
+        "HolyWater": 3,
+        "Crystal": 2
+      },
+      "desc": "+8 Holy Res",
+      "image": ""
+    },
+    "dark": {
+      "name": "Rune of Shadow",
+      "icon": "🌑",
+      "stat": "dark",
+      "value": 8,
+      "cost": {
+        "ShadowSilk": 3,
+        "ArcaneDust": 2
+      },
+      "desc": "+8 Dark Res",
+      "image": ""
+    },
+    "venom": {
+      "name": "Rune of Venom",
+      "icon": "☠️",
+      "stat": "poison",
+      "value": 8,
+      "cost": {
+        "Venom": 4,
+        "Essence": 2
+      },
+      "desc": "+8 Poison Res",
+      "image": "images/runes/venom.png"
+    },
+    "renewal": {
+      "name": "Rune of Renewal",
+      "icon": "✚",
+      "stat": "regen",
+      "value": 2,
+      "cost": {
+        "Essence": 5,
+        "HolyWater": 2,
+        "Herbs": 3
+      },
+      "desc": "+2 HP regeneration / round",
+      "image": "images/runes/renewal.png"
+    },
+    "leeching": {
+      "name": "Rune of Leeching",
+      "icon": "◈",
+      "stat": "lifesteal",
+      "value": 2,
+      "cost": {
+        "ShadowSilk": 3,
+        "Essence": 3,
+        "Venom": 2
+      },
+      "desc": "+2% Lifesteal",
+      "image": "images/runes/leeching.png"
+    }
+  },
+  "slotVisuals": {
+    "Weapon": {
+      "image": "images/items/weapon.png",
+      "fallback": "⚔️"
+    },
+    "Armor": {
+      "image": "images/items/armor.png",
+      "fallback": "🛡️"
+    },
+    "Ring": {
+      "image": "images/items/ring.png",
+      "fallback": "💍"
+    },
+    "Amulet": {
+      "image": "images/items/amulet.png",
+      "fallback": "📿"
+    },
+    "Jewelry": {
+      "image": "images/items/jewelry.png",
+      "fallback": "💎"
+    }
   }
 }

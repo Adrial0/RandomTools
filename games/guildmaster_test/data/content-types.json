@@ -1,0 +1,14 @@
+{
+  "quest": {
+    "image": "images/activities/expedition.png",
+    "fallback": "🗺️"
+  },
+  "dungeon": {
+    "image": "images/activities/dungeon.png",
+    "fallback": "🏰"
+  },
+  "raid": {
+    "image": "images/activities/raid.png",
+    "fallback": "🐉"
+  }
+}

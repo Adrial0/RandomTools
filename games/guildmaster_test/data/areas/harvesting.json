@@ -14,7 +14,9 @@
         100
       ]
     ],
-    "desc": "A novice quarry for dependable building stone."
+    "desc": "A novice quarry for dependable building stone.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "copper",
@@ -31,7 +33,9 @@
         100
       ]
     ],
-    "desc": "Shallow red-veined tunnels rich in copper ore."
+    "desc": "Shallow red-veined tunnels rich in copper ore.",
+    "image": "images/harvesting/copper-mine.png",
+    "background": "images/backgrounds/background22.png"
   },
   {
     "id": "ironmine",
@@ -48,7 +52,9 @@
         100
       ]
     ],
-    "desc": "A reliable iron mine for growing guilds."
+    "desc": "A reliable iron mine for growing guilds.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "silvermine",
@@ -65,7 +71,9 @@
         100
       ]
     ],
-    "desc": "Cool tunnels threaded with pale silver."
+    "desc": "Cool tunnels threaded with pale silver.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "crystal",
@@ -82,7 +90,9 @@
         100
       ]
     ],
-    "desc": "A magically active cavern filled with crafting crystals."
+    "desc": "A magically active cavern filled with crafting crystals.",
+    "image": "images/harvesting/crystal-cavern.png",
+    "background": "images/backgrounds/background24.png"
   },
   {
     "id": "mithril",
@@ -99,7 +109,9 @@
         100
       ]
     ],
-    "desc": "Deep blue-metal veins requiring experienced miners."
+    "desc": "Deep blue-metal veins requiring experienced miners.",
+    "image": "images/harvesting/mithril-mine.png",
+    "background": "images/backgrounds/background26.png"
   },
   {
     "id": "bogiron",
@@ -116,7 +128,9 @@
         100
       ]
     ],
-    "desc": "Dense bog iron dug from the black marsh earth."
+    "desc": "Dense bog iron dug from the black marsh earth.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "glacialore",
@@ -133,7 +147,9 @@
         100
       ]
     ],
-    "desc": "Frozen ore veins exposed beneath ancient ice."
+    "desc": "Frozen ore veins exposed beneath ancient ice.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "cindermine",
@@ -150,7 +166,9 @@
         100
       ]
     ],
-    "desc": "Heat-scarred tunnels containing dense cinder ore."
+    "desc": "Heat-scarred tunnels containing dense cinder ore.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "starmetal",
@@ -167,7 +185,9 @@
         100
       ]
     ],
-    "desc": "A dangerous crater where fallen star-metal can be extracted."
+    "desc": "A dangerous crater where fallen star-metal can be extracted.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "obsidian",
@@ -184,7 +204,9 @@
         100
       ]
     ],
-    "desc": "Volcanic glass quarried beside active magma vents."
+    "desc": "Volcanic glass quarried beside active magma vents.",
+    "image": "images/harvesting/obsidian-pit.png",
+    "background": "images/backgrounds/background27.png"
   },
   {
     "id": "voidquarry",
@@ -201,7 +223,9 @@
         100
       ]
     ],
-    "desc": "Reality-warped deposits used in the highest-tier equipment."
+    "desc": "Reality-warped deposits used in the highest-tier equipment.",
+    "image": "",
+    "background": "images/backgrounds/voidstone-quarry.png"
   },
   {
     "id": "logging",
@@ -218,7 +242,9 @@
         100
       ]
     ],
-    "desc": "Straight, dependable timber for basic crafting."
+    "desc": "Straight, dependable timber for basic crafting.",
+    "image": "images/harvesting/logging.png",
+    "background": "images/backgrounds/background17.png"
   },
   {
     "id": "hardwood",
@@ -235,7 +261,9 @@
         100
       ]
     ],
-    "desc": "Mature hardwood trees requiring stronger tools and technique."
+    "desc": "Mature hardwood trees requiring stronger tools and technique.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "ironwood",
@@ -252,7 +280,9 @@
         100
       ]
     ],
-    "desc": "Exceptionally dense timber prized by weapon smiths."
+    "desc": "Exceptionally dense timber prized by weapon smiths.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "spiritgrove",
@@ -269,7 +299,9 @@
         100
       ]
     ],
-    "desc": "Ancient living trees that shed magically charged bark."
+    "desc": "Ancient living trees that shed magically charged bark.",
+    "image": "",
+    "background": "images/backgrounds/spiritwood-grove.png"
   },
   {
     "id": "herbs",
@@ -286,7 +318,9 @@
         100
       ]
     ],
-    "desc": "Common medicinal plants for novice herbalists."
+    "desc": "Common medicinal plants for novice herbalists.",
+    "image": "images/harvesting/herbalism.png",
+    "background": "images/backgrounds/background19.png"
   },
   {
     "id": "manabloom",
@@ -303,7 +337,9 @@
         100
       ]
     ],
-    "desc": "Mana-rich flowers cultivated around old ley lines."
+    "desc": "Mana-rich flowers cultivated around old ley lines.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "nightfen",
@@ -320,7 +356,9 @@
         100
       ]
     ],
-    "desc": "Toxic magical flora gathered from a dangerous fen."
+    "desc": "Toxic magical flora gathered from a dangerous fen.",
+    "image": "",
+    "background": "images/backgrounds/nightshade-fen.png"
   },
   {
     "id": "venomsap",
@@ -337,7 +375,9 @@
         100
       ]
     ],
-    "desc": "Caustic sap harvested from twisted marsh trees."
+    "desc": "Caustic sap harvested from twisted marsh trees.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "cinderbloom",
@@ -354,7 +394,9 @@
         100
       ]
     ],
-    "desc": "Rare flowers that thrive in warm volcanic ash."
+    "desc": "Rare flowers that thrive in warm volcanic ash.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "frostbloom",
@@ -371,7 +413,9 @@
         100
       ]
     ],
-    "desc": "Delicate alpine herbs preserved by supernatural cold."
+    "desc": "Delicate alpine herbs preserved by supernatural cold.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "fishing",
@@ -388,7 +432,9 @@
         100
       ]
     ],
-    "desc": "A calm river suitable for novice fishers."
+    "desc": "A calm river suitable for novice fishers.",
+    "image": "images/harvesting/fishing.png",
+    "background": "images/backgrounds/background18.png"
   },
   {
     "id": "pearlbank",
@@ -405,7 +451,9 @@
         100
       ]
     ],
-    "desc": "Deep pools where valuable pearls form beneath the riverbed."
+    "desc": "Deep pools where valuable pearls form beneath the riverbed.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "stormcoast",
@@ -422,7 +470,9 @@
         100
       ]
     ],
-    "desc": "Violent coastal waters wash magically fused stormglass ashore."
+    "desc": "Violent coastal waters wash magically fused stormglass ashore.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "skywater",
@@ -439,7 +489,9 @@
         100
       ]
     ],
-    "desc": "A high mountain lake where strange blue crystals form underwater."
+    "desc": "A high mountain lake where strange blue crystals form underwater.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "hunting",
@@ -456,7 +508,9 @@
         100
       ]
     ],
-    "desc": "Common game provides reliable leather."
+    "desc": "Common game provides reliable leather.",
+    "image": "images/harvesting/hunting.png",
+    "background": "images/backgrounds/background20.png"
   },
   {
     "id": "wolfhunt",
@@ -473,7 +527,9 @@
         100
       ]
     ],
-    "desc": "Rocky hunting grounds populated by thick-furred wolves."
+    "desc": "Rocky hunting grounds populated by thick-furred wolves.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "bonefields",
@@ -490,7 +546,9 @@
         100
       ]
     ],
-    "desc": "Large beasts leave strong bones useful for specialized crafting."
+    "desc": "Large beasts leave strong bones useful for specialized crafting.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "whitepelt",
@@ -507,7 +565,9 @@
         100
       ]
     ],
-    "desc": "Cold-weather beasts yield rare insulating white pelts."
+    "desc": "Cold-weather beasts yield rare insulating white pelts.",
+    "image": "",
+    "background": ""
   },
   {
     "id": "shadowsilk",
@@ -524,6 +584,8 @@
         100
       ]
     ],
-    "desc": "Nocturnal creatures produce fine shadow-dark fibers."
+    "desc": "Nocturnal creatures produce fine shadow-dark fibers.",
+    "image": "",
+    "background": ""
   }
 ]

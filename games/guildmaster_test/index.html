@@ -245,7 +245,18 @@ Paladin:{hp:122,str:15,dex:7,int:11,def:18,mdef:13,block:2,manaRegen:1,armor:'He
 const ASSET_CONFIG={base:'',version:'',guildhallBackground:''};
 const ICONS={};
 const ICON_FALLBACKS={};
-const ACTIVITY_BACKGROUNDS={};
+
+function clearVisualRegistry(){
+  Object.keys(ICONS).forEach(k=>delete ICONS[k]);
+  Object.keys(ICON_FALLBACKS).forEach(k=>delete ICON_FALLBACKS[k]);
+}
+function registerVisual(group,key,obj={}){
+  if(!group||!key)return;
+  if(!ICONS[group])ICONS[group]={};
+  if(!ICON_FALLBACKS[group])ICON_FALLBACKS[group]={};
+  ICONS[group][key]=obj.image||'';
+  ICON_FALLBACKS[group][key]=obj.fallback??obj.icon??'';
+}
 
 function assetUrl(path){
   if(!path)return '';
@@ -407,10 +418,10 @@ const AREA_RESOURCE_DROPS={};
 
 const BOSS_INFO={dungeon:{},raid:{}};
 
-const elementIcon={physical:gameIcon('element','physical','⚔️'),fire:gameIcon('element','fire','🔥'),ice:gameIcon('element','ice','❄️'),poison:gameIcon('element','poison','☠️'),lightning:gameIcon('element','lightning','⚡'),holy:gameIcon('element','holy','✨'),dark:gameIcon('element','dark','🌑')};
+const elementIcon={};
 
-const itemIcons={Weapon:gameIcon('item','Weapon','⚔️','gameAsset itemAsset'),Armor:gameIcon('item','Armor','🛡️','gameAsset itemAsset'),Ring:gameIcon('item','Ring','💍','gameAsset itemAsset'),Amulet:gameIcon('item','Amulet','📿','gameAsset itemAsset'),Jewelry:gameIcon('item','Jewelry','💎','gameAsset itemAsset')};
-const questIcons={quest:gameIcon('activity','quest','🗺️','gameAsset areaAsset'),dungeon:gameIcon('activity','dungeon','🏰','gameAsset areaAsset'),raid:gameIcon('activity','raid','🐉','gameAsset areaAsset')};
+const itemIcons={};
+const questIcons={};
 const ENEMY_DEFS={};
 const ENEMY_ARCHETYPES_DATA={};
 const ENEMY_ABILITIES_DATA={};
@@ -460,8 +471,12 @@ const AREAS=[];
 
 
 function activityBackground(type,key){
-  const raw=ACTIVITY_BACKGROUNDS[type]?.[key];
-  return raw?assetUrl(raw):'';
+  let obj=null;
+  if(type==='expedition')obj=AREAS.find(a=>a.id===key||a.name===key);
+  else if(type==='dungeon')obj=DUNGEON_AREAS.find(a=>a.name===key);
+  else if(type==='raid')obj=RAID_AREAS.find(a=>a.name===key);
+  else if(type==='harvest')obj=HARVEST_AREAS.find(a=>a.id===key||a.name===key);
+  return obj?.background?assetUrl(obj.background):'';
 }
 function sceneBanner(type,key){
   const url=activityBackground(type,key);
@@ -3964,6 +3979,10 @@ document.addEventListener('visibilitychange',()=>{
 async function loadExternalGameData(){
   const paths={
     assets:'data/assets.json',
+    classes:'data/classes.json',
+    elements:'data/elements.json',
+    ui:'data/ui.json',
+    contentTypes:'data/content-types.json',
     enemies:'data/enemies.json',
     archetypes:'data/enemy-archetypes.json',
     enemyAbilities:'data/abilities.json',
@@ -3990,17 +4009,37 @@ async function loadExternalGameData(){
   ASSET_CONFIG.version=String(assetData.assetVersion??'');
   ASSET_CONFIG.guildhallBackground=assetData.guildhallBackground||'';
 
-  Object.keys(ICONS).forEach(k=>delete ICONS[k]);
-  Object.assign(ICONS,assetData.icons||{});
-  Object.keys(ICON_FALLBACKS).forEach(k=>delete ICON_FALLBACKS[k]);
-  Object.assign(ICON_FALLBACKS,assetData.fallbacks||{});
-  Object.keys(ACTIVITY_BACKGROUNDS).forEach(k=>delete ACTIVITY_BACKGROUNDS[k]);
-  Object.assign(ACTIVITY_BACKGROUNDS,assetData.activityBackgrounds||{});
+  clearVisualRegistry();
+
+  Object.entries(d.classes||{}).forEach(([name,obj])=>registerVisual('class',name,obj));
+  Object.entries(d.subclasses||{}).forEach(([className,list])=>(list||[]).forEach(obj=>registerVisual('subclass',obj.id,obj)));
+  Object.entries(d.enemies||{}).forEach(([name,obj])=>{
+    registerVisual('enemy',name,obj);
+    if(obj.boss)registerVisual('boss',name,obj);
+  });
+  Object.entries(d.elements||{}).forEach(([key,obj])=>registerVisual('element',key,obj));
+  Object.entries(d.ui||{}).forEach(([key,obj])=>registerVisual('ui',key,obj));
+  Object.entries(d.contentTypes||{}).forEach(([key,obj])=>registerVisual('activity',key,obj));
+
+  const itemData=d.items||{};
+  Object.entries(itemData.slotVisuals||{}).forEach(([key,obj])=>registerVisual('item',key,obj));
+  Object.entries(itemData.weapons||{}).forEach(([name,obj])=>registerVisual('weapon',name,obj));
+  Object.entries(itemData.runes||{}).forEach(([id,obj])=>registerVisual('rune',id,obj));
+
+  Object.entries(d.resources?.resources||{}).forEach(([key,obj])=>registerVisual('resource',key,obj));
+  (d.expeditions||[]).forEach(obj=>registerVisual('area',obj.id,obj));
+  (d.harvesting||[]).forEach(obj=>registerVisual('harvest',obj.id,obj));
 
   Object.keys(classIcons).forEach(k=>delete classIcons[k]);
-  ['Warrior','Ranger','Mage','Priest','Rogue','Paladin'].forEach(name=>{
+  Object.keys(d.classes||{}).forEach(name=>{
     classIcons[name]=gameIcon('class',name,iconFallback('class',name,name),'gameAsset');
   });
+  Object.keys(elementIcon).forEach(k=>delete elementIcon[k]);
+  Object.keys(d.elements||{}).forEach(key=>elementIcon[key]=gameIcon('element',key,d.elements[key]?.fallback||'','gameAsset'));
+  Object.keys(itemIcons).forEach(k=>delete itemIcons[k]);
+  Object.keys(itemData.slotVisuals||{}).forEach(key=>itemIcons[key]=gameIcon('item',key,itemData.slotVisuals[key]?.fallback||'◇','gameAsset itemAsset'));
+  Object.keys(questIcons).forEach(k=>delete questIcons[k]);
+  Object.keys(d.contentTypes||{}).forEach(key=>questIcons[key]=gameIcon('activity',key,d.contentTypes[key]?.fallback||'','gameAsset areaAsset'));
 
   Object.assign(ENEMIES_DATA,d.enemies||{});
   Object.assign(ENEMY_ARCHETYPES_DATA,d.archetypes||{});
@@ -4009,7 +4048,6 @@ async function loadExternalGameData(){
   Object.assign(RACES,d.races||{});
   RACE_NAMES.splice(0,RACE_NAMES.length,...Object.keys(RACES));
 
-  const itemData=d.items||{};
   Object.entries(itemData.weapons||{}).forEach(([name,w])=>{
     WEAPONS[name]={...w,icon:gameIcon('weapon',name,w.icon||'⚔️','gameAsset itemAsset')};
   });
@@ -4024,9 +4062,10 @@ async function loadExternalGameData(){
   AREAS.splice(0,AREAS.length,...(d.expeditions||[]).map(a=>({...a,icon:gameIcon('area',a.id,a.icon||'🗺️','gameAsset areaAsset')})));
   DUNGEON_AREAS.splice(0,DUNGEON_AREAS.length,...(d.dungeons||[]));
   RAID_AREAS.splice(0,RAID_AREAS.length,...(d.raids||[]));
-  HARVEST_AREAS.splice(0,HARVEST_AREAS.length,...(d.harvesting||[]));
+  HARVEST_AREAS.splice(0,HARVEST_AREAS.length,...(d.harvesting||[]).map(a=>({...a,icon:gameIcon('harvest',a.id,a.icon||'⛏️','gameAsset areaAsset')})));
 
-  Object.assign(RESOURCE_NAMES,d.resources?.names||{});
+  Object.keys(RESOURCE_NAMES).forEach(k=>delete RESOURCE_NAMES[k]);
+  Object.entries(d.resources?.resources||{}).forEach(([key,obj])=>RESOURCE_NAMES[key]=obj.name||key);
   MARKET_BASIC_RESOURCES.splice(0,MARKET_BASIC_RESOURCES.length,...(d.resources?.marketBasic||[]));
 
   Object.assign(ACTIVE_MANA_COSTS,d.playerAbilities?.manaCosts||{});
@@ -4050,7 +4089,7 @@ async function loadExternalGameData(){
   }));
 
   window.GAME_DATA_READY=true;
-  console.info('Guildmaster data loaded. Authored content and asset paths live in /data; CSS lives in styles.css.');
+  console.info('Guildmaster data loaded. Each content object owns its image/background path; assets.json now contains global assets only.');
 }
 function validateContentData(){
   const warnings=[];const allEnemies=new Set([...AREAS,...DUNGEON_AREAS,...RAID_AREAS].flatMap(a=>[...(a.enemyPool||[]),...(a.boss?[a.boss]:[])]));allEnemies.forEach(n=>{const e=ENEMIES_DATA[n];if(!e){warnings.push('Area references missing enemy: '+n);return}if(!e.drops?.length)warnings.push('Enemy has no resource drop: '+n);if(!ENEMY_ARCHETYPES_DATA[e.archetype])warnings.push('Enemy has missing archetype: '+n+' -> '+e.archetype);if(e.ability&&!ENEMY_ABILITIES_DATA[e.ability])warnings.push('Enemy has missing ability: '+n+' -> '+e.ability)});

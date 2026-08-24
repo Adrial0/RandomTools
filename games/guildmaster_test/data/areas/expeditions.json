@@ -11,7 +11,9 @@
       "Thornback Boar",
       "Moss Slime",
       "Briar Wisp"
-    ]
+    ],
+    "image": "images/areas/greenwood-forest.png",
+    "background": "images/backgrounds/greenwood-forest.png"
   },
   {
     "id": "plains",
@@ -25,7 +27,9 @@
       "Sunfield Raider",
       "Dust Hawk",
       "Spark Imp"
-    ]
+    ],
+    "image": "images/areas/sunfield-plains.png",
+    "background": "images/backgrounds/sunfield-plains.png"
   },
   {
     "id": "desert",
@@ -44,7 +48,9 @@
       "Sunstone",
       "Sandglass",
       "CinderBloom"
-    ]
+    ],
+    "image": "images/areas/ashen-desert.png",
+    "background": "images/backgrounds/ashen-desert.png"
   },
   {
     "id": "swamp",
@@ -63,7 +69,9 @@
       "Nightshade",
       "BogIron",
       "VenomSap"
-    ]
+    ],
+    "image": "images/areas/blackwater-swamp.png",
+    "background": "images/backgrounds/blackwater-swamp.png"
   },
   {
     "id": "mountain",
@@ -82,7 +90,9 @@
       "StarMetal",
       "SkyCrystal",
       "Ironwood"
-    ]
+    ],
+    "image": "images/areas/ironpeak-mountains.png",
+    "background": "images/backgrounds/ironpeak-mountains.png"
   },
   {
     "id": "tundra",
@@ -101,7 +111,9 @@
       "GlacialOre",
       "Frostbloom",
       "WhitePelt"
-    ]
+    ],
+    "image": "images/areas/frozen-tundra.png",
+    "background": "images/backgrounds/frozen-tundra.png"
   },
   {
     "id": "volcano",
@@ -120,7 +132,9 @@
       "CinderOre",
       "StormGlass",
       "MagmaCore"
-    ]
+    ],
+    "image": "images/areas/emberfall-volcano.png",
+    "background": "images/backgrounds/emberfall-volcano.png"
   },
   {
     "id": "voidlands",
@@ -139,6 +153,8 @@
       "Voidstone",
       "AetherCrystal",
       "AstralThread"
-    ]
+    ],
+    "image": "images/areas/voidlands.png",
+    "background": "images/backgrounds/voidlands.png"
   }
 ]

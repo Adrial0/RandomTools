@@ -10,7 +10,9 @@
       "Grave Acolyte",
       "Restless Spirit"
     ],
-    "desc": "A royal crypt where dark damage is common. Some Dark resistance is recommended."
+    "desc": "A royal crypt where dark damage is common. Some Dark resistance is recommended.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/bone-crypt.png"
   },
   {
     "name": "Silken Depths",
@@ -23,7 +25,9 @@
       "Webbed Husk",
       "Silk Stalker"
     ],
-    "desc": "A venomous spider nest. Poison resistance greatly improves survival."
+    "desc": "A venomous spider nest. Poison resistance greatly improves survival.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/silken-depths.png"
   },
   {
     "name": "Rotting Vault",
@@ -36,7 +40,9 @@
       "Blight Priest",
       "Vault Abomination"
     ],
-    "desc": "A plague vault saturated with poison damage. Prepare Poison resistance."
+    "desc": "A plague vault saturated with poison damage. Prepare Poison resistance.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/rotting-vault.png"
   },
   {
     "name": "Cultist Sanctum",
@@ -49,6 +55,8 @@
       "Fallen Templar",
       "Ritual Seer"
     ],
-    "desc": "Forbidden rites fill this temple with heavy Dark damage."
+    "desc": "Forbidden rites fill this temple with heavy Dark damage.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/cultist-sanctum.png"
   }
 ]
