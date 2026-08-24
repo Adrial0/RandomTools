@@ -20,6 +20,6 @@ Deno.serve(async(req)=>{
     const {data:finalized,error}=await admin.rpc('finalize_arena_match',{p_request_id:body.requestId,p_attacker:user.id,p_defender:defender.user_id,p_attacker_won:result.attackerWon,p_attacker_snapshot:attackSnapshot,p_defender_snapshot:defenseSnapshot,p_seed:seed,p_report:result.report,p_replay:result.replay});
     if(error)throw error;
     const attackerReport=result.report.filter(x=>x.side==='attack');
-    return json({won:result.attackerWon,ratingChange:finalized.ratingChange,newRating:finalized.newRating,matchId:finalized.matchId,report:attackerReport,replay:result.replay,durationMs:result.durationMs});
+    return json({won:result.attackerWon,ratingChange:finalized.ratingChange,newRating:finalized.newRating,matchId:finalized.matchId,report:attackerReport,replay:result.replay,timeline:result.timeline,combatants:result.combatants,attackerGuild:attackSnapshot.guildName,defenderGuild:defenseSnapshot.guildName,durationMs:result.durationMs});
   }catch(err){return json({error:errorText(err)},400)}
 });

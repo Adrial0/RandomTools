@@ -1366,3 +1366,15 @@ body.windowOpen .side{overflow:hidden!important}
 .resourceSourceRow b{display:block;color:#dbc38f;font-size:11px}
 .resourceSourceRow span{display:block;color:var(--muted);font-size:9px;margin-top:2px}
 .harvestCard:hover{border-color:#8a693e!important}
+
+/* Animated asynchronous Arena replay. */
+.arenaBattle{display:grid;grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);gap:12px;align-items:start}
+.arenaBattleSide h3{text-align:center;margin:0 0 9px}.arenaVersus{align-self:center;text-align:center;color:var(--gold);font-weight:900;font-size:18px}
+.arenaFormation{display:grid;gap:7px}.arenaFighter{position:relative;background:#18130d;border:1px solid #594426;padding:9px;transition:opacity .35s,filter .35s,transform .15s}
+.arenaFighter.defeated{opacity:.35;filter:grayscale(1)}.arenaFighterTop{display:flex;justify-content:space-between;gap:8px}.arenaFighterTop small{color:var(--muted)}
+.arenaFighter .hpTrack{height:8px;background:#321313;margin-top:7px;border:1px solid #4c2c20;overflow:hidden}.arenaFighter .hpFill{height:100%;background:linear-gradient(90deg,#8f2720,#d45a3d);transition:width .18s linear}
+.arenaHpText{text-align:right;color:var(--muted);font-size:9px;margin-top:3px}.arenaFloat{position:absolute;right:10px;top:35px;opacity:0;font-weight:900;pointer-events:none}.arenaFloat.pop{animation:arenaFloat .35s ease-out}
+@keyframes arenaFloat{0%{opacity:1;transform:translateY(4px)}100%{opacity:0;transform:translateY(-15px)}}
+.arenaPlaybackBar{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;color:var(--muted)}.arenaLiveLog{min-height:96px;max-height:150px}.arenaEvent.ability,.arenaEvent.interrupt{color:var(--gold)}.arenaEvent.heal,.arenaEvent.cleanse{color:#82c98d}
+.arenaResultReveal{text-align:center;margin-top:12px;padding:14px;border:1px solid #6b522d;background:#18130d}.arenaResultReveal.victory{box-shadow:inset 0 0 30px rgba(201,154,69,.08)}.arenaResultReveal.defeat{border-color:#704038}.arenaResultReveal .arenaResultTable{text-align:left;margin:10px 0}
+@media(max-width:700px){.arenaBattle{grid-template-columns:1fr}.arenaVersus{padding:2px}.arenaFighter{padding:7px}}
