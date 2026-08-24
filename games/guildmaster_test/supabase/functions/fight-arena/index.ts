@@ -19,8 +19,7 @@ Deno.serve(async(req)=>{
       throw new Error(`Five Arena challenges used. Another attempt becomes available at ${resetsAt}.`);
     }
     const attackSnapshot=validateSnapshot(attacker.snapshot),defenseSnapshot=validateSnapshot(defender.snapshot);
-    if(body.prepare===true)return json({requestId:body.requestId,attacker:attackSnapshot,defender:defenseSnapshot});
-    if(typeof body.won!=='boolean')throw new Error('Arena result is required.');
+    if(typeof body.won!=='boolean')return json({requestId:body.requestId,attacker:attackSnapshot,defender:defenseSnapshot});
     const report=Array.isArray(body.report)?body.report.slice(0,20):[],replay=Array.isArray(body.replay)?body.replay.slice(0,80):[];
     const {data:finalized,error}=await admin.rpc('finalize_arena_match',{p_request_id:body.requestId,p_attacker:user.id,p_defender:defender.user_id,p_attacker_won:body.won,p_attacker_snapshot:attackSnapshot,p_defender_snapshot:defenseSnapshot,p_seed:0,p_report:report,p_replay:replay});
     if(error)throw error;
