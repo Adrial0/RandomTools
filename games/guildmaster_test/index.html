@@ -413,8 +413,6 @@ const RUNE_SLOTS={};
 const RUNES={};
 function runeSlots(it){return RUNE_SLOTS[it?.rarity]||0}
 function runeIcon(id,cls='gameAsset'){const r=RUNES[id];return gameIcon('rune',id,r?.icon||'◇',cls)}
-const ZONE_DROPS={};
-const AREA_RESOURCE_DROPS={};
 
 const BOSS_INFO={dungeon:{},raid:{}};
 
@@ -422,7 +420,6 @@ const elementIcon={};
 
 const itemIcons={};
 const questIcons={};
-const ENEMY_DEFS={};
 const ENEMY_ARCHETYPES_DATA={};
 const ENEMY_ABILITIES_DATA={};
 const ENEMIES_DATA={};
@@ -487,7 +484,6 @@ const HARVEST_AREAS=[];const DUNGEON_AREAS=[];
 const RAID_AREAS=[];
 
 const rar=['Common','Uncommon','Rare','Epic','Legendary','Mythic'],rm={Common:1,Uncommon:1.06,Rare:1.14,Epic:1.26,Legendary:1.42,Mythic:1.65};
-const mats=['Iron','Wood','Cloth','Crystal','Essence'];
 const recipes=[];
 const upgrades=[
 ['quarters','Guild Quarters','Adds one permanent guild member slot per level. Starts at 4 slots.',350,26],
@@ -513,7 +509,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'Ironhaven Guild',gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,smithing:{level:1,xp:0},inventoryAuto:{mode:'off',rarity:'Common'},members:[],recruits:[],inventory:[],memberCap:4,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0,Stone:0,CopperOre:0,Fish:0,Mithril:0,Hardwood:0},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'Ironhaven Guild',gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,smithing:{level:1,xp:0},inventoryAuto:{mode:'off',rarity:'Common'},members:[],recruits:[],inventory:[],memberCap:4,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -569,7 +565,7 @@ function load(){
     }
     if(!it.extraStats)it.extraStats={};
   });
-s.materials=Object.assign({Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0,Stone:0,CopperOre:0,Fish:0,Mithril:0,Hardwood:0},s.materials||{});
+s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>[k,0])),s.materials||{});
   Object.keys(RESOURCE_NAMES).forEach(k=>{if(s.materials[k]==null)s.materials[k]=0});
   s.up=Object.assign({quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},s.up||{});
   const defaultSkills=()=>({woodcutting:{level:1,xp:0},mining:{level:1,xp:0},fishing:{level:1,xp:0},herbalism:{level:1,xp:0},hunting:{level:1,xp:0}});
@@ -620,7 +616,7 @@ s.materials=Object.assign({Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Lea
     if(m.goldEarned==null)m.goldEarned=0;
     if(m.repEarned==null)m.repEarned=0;
     if(!m.battle)m.battle=null;
-    if(!m.stash)m.stash={gold:0,rep:0,materials:{Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0},items:[]};
+    if(!m.stash)m.stash=emptyStash();else{m.stash.gold=m.stash.gold||0;m.stash.rep=m.stash.rep||0;m.stash.materials=m.stash.materials||{};m.stash.items=Array.isArray(m.stash.items)?m.stash.items:[];}
     if(!m.partyState)m.partyState={};
   });
 }
@@ -1237,7 +1233,7 @@ function syncPartyHp(m){
     }
   });
 }
-function emptyStash(){return{gold:0,rep:0,materials:{Iron:0,Wood:0,Cloth:0,Crystal:0,Essence:0,Herbs:0,Leather:0,Bone:0,Venom:0,Emberstone:0,FrostShard:0,StormCore:0,Silver:0,Obsidian:0,ArcaneDust:0,HolyWater:0,ShadowSilk:0,GoblinInsignia:0,WolfPelt:0,BanditToken:0,SlimeGel:0,GraveDust:0,SpiderSilk:0,GhoulIchor:0,CultistRune:0,DrakeScale:0,OgreHeart:0,WraithEssence:0,DemonHorn:0,CrownBone:0,BroodSilk:0,ColossusIchor:0,HighRune:0,AncientDrakeScale:0,WarOgreHeart:0,WraithLordCore:0,AbyssalHorn:0},items:[]}}
+function emptyStash(){return{gold:0,rep:0,materials:{},items:[]}}
 function missionLocationKey(type,q){
   if(!q)return '';
   return `${type}:${q.areaId||q.name||q.id}`;
@@ -1351,9 +1347,7 @@ function grantFightRewards(m,enemySnapshots){
       return;
     }
 
-    const monsterPool=(ENEMIES_DATA[enemy.name]?.drops)||[];
-    const areaPool=m.type==='quest'?((AREAS.find(a=>a.id===m.areaId)?.resourceDrops)||[]):[];
-    const pool=areaPool.length?areaPool:monsterPool;
+    const pool=(ENEMIES_DATA[enemy.name]?.drops)||[];
     if(pool.length){
       const k=pick(pool);
       if(k){m.stash.materials[k]=(m.stash.materials[k]||0)+1;markResourceFound(k);}
@@ -3266,11 +3260,6 @@ function resourceSourceEntries(k){
     }
   });
 
-  // Area-specific resource pools are stored on the area itself.
-  (AREAS||[]).forEach(area=>{
-    if((area.resourceDrops||[]).includes(k))add('Expedition',area.name,'Area resource drop');
-  });
-
   // Every enemy owns its drop table. Show exact enemies and where they appear.
   Object.entries(ENEMIES_DATA||{}).forEach(([enemyName,enemy])=>{
     if(!(enemy.drops||[]).includes(k))return;
@@ -3280,17 +3269,6 @@ function resourceSourceEntries(k){
     (RAID_AREAS||[]).forEach(a=>{if((a.enemyPool||[]).includes(enemyName)||a.boss===enemyName)places.push(a.name)});
     add(enemy.boss?'Boss':'Enemy',enemyName,places.length?places.join(', '):'Enemy drop');
   });
-
-  // Exact boss material sources.
-  const boss=BOSS_RESOURCE_SOURCE?.[k];
-  if(boss){
-    let place='';
-    const d=(DUNGEON_AREAS||[]).find(a=>a.boss===boss);
-    const r=(RAID_AREAS||[]).find(a=>a.boss===boss);
-    if(d)place=d.name;
-    if(r)place=r.name;
-    add('Boss',boss,place||'Boss drop');
-  }
 
   // Market is a possible source only for basic market resources.
   if((MARKET_BASIC_RESOURCES||[]).includes(k))add('Market','Market','Can appear in rotating basic-resource offers');
@@ -4076,8 +4054,6 @@ async function loadExternalGameData(){
   enemyPools.quest.splice(0,enemyPools.quest.length,...new Set(AREAS.flatMap(a=>a.enemyPool||[])));
   enemyPools.dungeon.splice(0,enemyPools.dungeon.length,...new Set(DUNGEON_AREAS.flatMap(a=>a.enemyPool||[])));
   enemyPools.raid.splice(0,enemyPools.raid.length,...new Set(RAID_AREAS.flatMap(a=>a.enemyPool||[])));
-  Object.keys(AREA_RESOURCE_DROPS).forEach(k=>delete AREA_RESOURCE_DROPS[k]);
-  AREAS.forEach(a=>{if(a.resourceDrops?.length)AREA_RESOURCE_DROPS[a.id]=a.resourceDrops.slice()});
   Object.keys(BOSS_INFO.dungeon).forEach(k=>delete BOSS_INFO.dungeon[k]);
   Object.keys(BOSS_INFO.raid).forEach(k=>delete BOSS_INFO.raid[k]);
   Object.keys(BOSS_RESOURCE_SOURCE).forEach(k=>delete BOSS_RESOURCE_SOURCE[k]);
@@ -4092,10 +4068,50 @@ async function loadExternalGameData(){
   console.info('Guildmaster data loaded. Each content object owns its image/background path; assets.json now contains global assets only.');
 }
 function validateContentData(){
-  const warnings=[];const allEnemies=new Set([...AREAS,...DUNGEON_AREAS,...RAID_AREAS].flatMap(a=>[...(a.enemyPool||[]),...(a.boss?[a.boss]:[])]));allEnemies.forEach(n=>{const e=ENEMIES_DATA[n];if(!e){warnings.push('Area references missing enemy: '+n);return}if(!e.drops?.length)warnings.push('Enemy has no resource drop: '+n);if(!ENEMY_ARCHETYPES_DATA[e.archetype])warnings.push('Enemy has missing archetype: '+n+' -> '+e.archetype);if(e.ability&&!ENEMY_ABILITIES_DATA[e.ability])warnings.push('Enemy has missing ability: '+n+' -> '+e.ability)});
-  const sourced=new Set();HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>sourced.add(r[0])));AREAS.forEach(a=>(a.resourceDrops||[]).forEach(r=>sourced.add(r)));Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>sourced.add(r)));Object.keys(RESOURCE_NAMES).forEach(r=>{if(!sourced.has(r))warnings.push('Resource has no source: '+r)});
-  const used=new Set();recipes.forEach(r=>Object.keys(r[3]||{}).forEach(x=>used.add(x)));Object.values(RUNES).forEach(r=>Object.keys(r.cost||{}).forEach(x=>used.add(x)));Object.keys(RESOURCE_NAMES).forEach(r=>{if(!used.has(r))warnings.push('Resource has no crafting/rune use: '+r)});
-  if(warnings.length)console.warn('Guildmaster content audit:',warnings);else console.info('Guildmaster content audit passed: enemy drops, resource sources, and resource uses are complete.');return warnings;
+  const warnings=[];
+  const allAreas=[...AREAS,...DUNGEON_AREAS,...RAID_AREAS];
+  const allEnemies=new Set(allAreas.flatMap(a=>[...(a.enemyPool||[]),...(a.boss?[a.boss]:[])]));
+
+  allAreas.forEach(a=>{
+    if(Object.prototype.hasOwnProperty.call(a,'resource'+'Drops'))warnings.push('Legacy area resource drop field still exists: '+a.name);
+  });
+
+  allEnemies.forEach(n=>{
+    const e=ENEMIES_DATA[n];
+    if(!e){warnings.push('Area references missing enemy: '+n);return}
+    if(!e.drops?.length)warnings.push('Enemy has no resource drop: '+n);
+    if(!ENEMY_ARCHETYPES_DATA[e.archetype])warnings.push('Enemy has missing archetype: '+n+' -> '+e.archetype);
+    if(e.ability&&!ENEMY_ABILITIES_DATA[e.ability])warnings.push('Enemy has missing ability: '+n+' -> '+e.ability);
+    (e.drops||[]).forEach(r=>{if(!RESOURCE_NAMES[r])warnings.push('Enemy drops undefined resource: '+n+' -> '+r)});
+  });
+
+  HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>{
+    if(!RESOURCE_NAMES[r[0]])warnings.push('Gathering area yields undefined resource: '+a.name+' -> '+r[0]);
+  }));
+
+  const sourced=new Set();
+  HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>sourced.add(r[0])));
+  Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>sourced.add(r)));
+  Object.keys(RESOURCE_NAMES).forEach(r=>{
+    if(!sourced.has(r))warnings.push('Resource has no enemy/gathering source: '+r);
+  });
+
+  const used=new Set();
+  recipes.forEach(r=>Object.keys(r[3]||{}).forEach(x=>{
+    used.add(x);
+    if(!RESOURCE_NAMES[x])warnings.push('Recipe requires undefined resource: '+r[0]+' -> '+x);
+  }));
+  Object.entries(RUNES).forEach(([id,r])=>Object.keys(r.cost||{}).forEach(x=>{
+    used.add(x);
+    if(!RESOURCE_NAMES[x])warnings.push('Rune requires undefined resource: '+id+' -> '+x);
+  }));
+  Object.keys(RESOURCE_NAMES).forEach(r=>{
+    if(!used.has(r))warnings.push('Resource has no crafting/rune use: '+r);
+  });
+
+  if(warnings.length)console.warn('Guildmaster content audit:',warnings);
+  else console.info('Guildmaster content audit passed: exact enemy/gathering sources, defined drops, and resource uses are complete.');
+  return warnings;
 }
 async function bootstrapGame(){
   try{

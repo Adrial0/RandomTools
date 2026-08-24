@@ -44,11 +44,6 @@
       "Ash Vulture",
       "Sun Cultist"
     ],
-    "resourceDrops": [
-      "Sunstone",
-      "Sandglass",
-      "CinderBloom"
-    ],
     "image": "images/areas/ashen-desert.png",
     "background": "images/backgrounds/ashen-desert.png"
   },
@@ -64,11 +59,6 @@
       "Fen Leech",
       "Bog Lurker",
       "Mire Witch"
-    ],
-    "resourceDrops": [
-      "Nightshade",
-      "BogIron",
-      "VenomSap"
     ],
     "image": "images/areas/blackwater-swamp.png",
     "background": "images/backgrounds/blackwater-swamp.png"
@@ -86,11 +76,6 @@
       "Thunder Roc",
       "Granite Golem"
     ],
-    "resourceDrops": [
-      "StarMetal",
-      "SkyCrystal",
-      "Ironwood"
-    ],
     "image": "images/areas/ironpeak-mountains.png",
     "background": "images/backgrounds/ironpeak-mountains.png"
   },
@@ -106,11 +91,6 @@
       "Snow Stalker",
       "Glacial Elemental",
       "Whitefang Yeti"
-    ],
-    "resourceDrops": [
-      "GlacialOre",
-      "Frostbloom",
-      "WhitePelt"
     ],
     "image": "images/areas/frozen-tundra.png",
     "background": "images/backgrounds/frozen-tundra.png"
@@ -128,11 +108,6 @@
       "Magma Elemental",
       "Obsidian Brute"
     ],
-    "resourceDrops": [
-      "CinderOre",
-      "StormGlass",
-      "MagmaCore"
-    ],
     "image": "images/areas/emberfall-volcano.png",
     "background": "images/backgrounds/emberfall-volcano.png"
   },
@@ -148,11 +123,6 @@
       "Voidling",
       "Aether Horror",
       "Warped Knight"
-    ],
-    "resourceDrops": [
-      "Voidstone",
-      "AetherCrystal",
-      "AstralThread"
     ],
     "image": "images/areas/voidlands.png",
     "background": "images/backgrounds/voidlands.png"
