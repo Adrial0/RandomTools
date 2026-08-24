@@ -36,29 +36,39 @@ function syncMusic(){
   else stopMusic();
 }
 
+function featureAccess(page){
+  const hasExpedition=!!s.onboarding?.flags?.expeditionStarted||s.missions.length>0||s.wins>0;
+  const hasResources=(s.discoveredResources||[]).length>0||Object.values(s.materials||{}).some(v=>v>0);
+  if(['hall','roster','quests','settings'].includes(page))return{revealed:true,locked:false};
+  if(page==='inventory')return{revealed:hasExpedition,locked:false,revealHint:'Start your first expedition to reveal Inventory.'};
+  if(['harvesting','crafting'].includes(page))return{revealed:hasResources,locked:false,revealHint:'Discover your first resource to reveal this feature.'};
+  if(['questboard','market','upgrades'].includes(page))return{revealed:s.level>=2,locked:false,revealHint:'Reach Guild Level 2 to reveal this feature.'};
+  if(page==='dungeons')return{revealed:s.level>=2,locked:s.level<3,lockLabel:'Lv. 3',lockReason:'Dungeons unlock at Guild Level 3.'};
+  if(page==='raids')return{revealed:s.level>=3,locked:s.level<6,lockLabel:'Lv. 6',lockReason:'Raids unlock at Guild Level 6.'};
+  return{revealed:true,locked:false};
+}
 function updateNavigationLocks(){
-  const dungeon=document.querySelector('.nav[data-p="dungeons"]');
-  const raid=document.querySelector('.nav[data-p="raids"]');
-  if(dungeon){
-    const locked=s.level<3;
-    dungeon.classList.toggle('navLocked',locked);
-    dungeon.setAttribute('aria-disabled',locked?'true':'false');
-    dungeon.dataset.lockLabel=locked?'Lv. 3':'';
-    dungeon.title=locked?'Unlocks at Guild Level 3':'';
-  }
-  if(raid){
-    const locked=s.level<6;
-    raid.classList.toggle('navLocked',locked);
-    raid.setAttribute('aria-disabled',locked?'true':'false');
-    raid.dataset.lockLabel=locked?'Lv. 6':'';
-    raid.title=locked?'Unlocks at Guild Level 6':'';
+  document.querySelectorAll('.nav[data-p]').forEach(nav=>{
+    const access=featureAccess(nav.dataset.p);
+    nav.classList.toggle('navFeatureHidden',!access.revealed);
+    nav.classList.toggle('navLocked',access.revealed&&access.locked);
+    nav.setAttribute('aria-hidden',access.revealed?'false':'true');
+    nav.setAttribute('aria-disabled',access.locked?'true':'false');
+    nav.dataset.lockLabel=access.locked?(access.lockLabel||'Locked'):'';
+    nav.title=access.locked?(access.lockReason||'This feature is locked.'):(access.revealHint||'');
+  });
+  const active=document.querySelector('.nav.on[data-p]');
+  if(active&&!featureAccess(active.dataset.p).revealed){
+    document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));
+    document.querySelector('.nav[data-p="hall"]')?.classList.add('on');
+    $('hall')?.classList.add('on');
   }
 }
-function render(){updateNavigationLocks();completeCrafting();updateMusicUI();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;
+function render(){completeOnboardingGoals(false);updateNavigationLocks();completeCrafting();updateMusicUI();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;
   const guildNeed=guildRepNeeded(s.level),guildPct=clamp((s.rep||0)/guildNeed*100,0,100);
   if($('guildLevelHall'))$('guildLevelHall').textContent=s.level;
   if($('guildRepText'))$('guildRepText').textContent=`${(s.rep||0).toLocaleString()} / ${guildNeed.toLocaleString()}`;
-  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
+  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
@@ -281,12 +291,16 @@ let combatDomKey='';
 function combatStructureKey(m){
   return `${m.id}:${m.battle?.id||0}:${m.battle?.heroes?.map(x=>x.id).join('-')||''}:${m.battle?.enemies?.map(x=>x.id).join('-')||''}:${m.battle?.boss?'boss':'normal'}`;
 }
+function defeatAdviceHtml(m){
+  const advice=m.defeatAdvice?.length?m.defeatAdvice:defeatAdviceFor(m);
+  return `<b>Party defeated.</b> Combat has stopped.${advice.length?`<div class="defeatAdviceTitle">What to change next</div><ul class="defeatAdviceList">${advice.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}`;
+}
 function buildCombatStructure(m){
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   const ordered=threatOrderedHeroes(m.battle.heroes);
   $('combatBody').innerHTML=`
     <div class="combatFixedTop">
-      <div id="combatDefeatedBanner" class="card dangerText" style="margin-bottom:7px;display:${m.defeated?'block':'none'}"><b>Party defeated.</b> Combat has stopped.</div>
+      <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?defeatAdviceHtml(m):''}</div>
       <div class="combatGrid">
         <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">YOUR PARTY · FRONT COLUMN = HIGHER THREAT</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map(x=>combatantHtml(x.hero,false,x.front)).join('')}</div></div>
         <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">ENEMIES · REAL-TIME COMBAT</div><div class="combatSide compactCombatSide" id="combatEnemySide">${m.battle.enemies.map(x=>combatantHtml(x,true,false)).join('')}</div></div>
@@ -357,7 +371,10 @@ function renderCombat(){
   if($('combatRep'))$('combatRep').textContent=m.stash.rep;
   if($('combatMaterials'))$('combatMaterials').textContent=matTotal;
   if($('combatItems'))$('combatItems').textContent=m.stash.items.length;
-  if($('combatDefeatedBanner'))$('combatDefeatedBanner').style.display=m.defeated?'block':'none';
+  if($('combatDefeatedBanner')){
+    $('combatDefeatedBanner').style.display=m.defeated?'block':'none';
+    if(m.defeated)$('combatDefeatedBanner').innerHTML=defeatAdviceHtml(m);
+  }
 
   updateCombatLog(m);
   colorizeStatTerms($('combatBody'));

@@ -17,10 +17,16 @@ function closeModal(){
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('combatModal').addEventListener('click',e=>{if(e.target===$('combatModal'))closeCombat()});
 
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{let p=b.dataset.p;if(p==='dungeons'&&s.level<3)return notify('Dungeons unlock at guild level 3.');if(p==='raids'&&s.level<6)return notify('Raids unlock at guild level 6.');document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(p).classList.add('on');if(p==='upgrades')renderUp()});
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{
+  const p=b.dataset.p,access=featureAccess(p);
+  if(!access.revealed)return notify(access.revealHint||'That feature has not been revealed yet.');
+  if(access.locked)return notify(access.lockReason||'That feature is still locked.');
+  document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');$(p).classList.add('on');if(p==='upgrades')renderUp();
+});
 $('rename').onclick=()=>{let n=prompt('Guild name',s.guild);if(n){s.guild=n.trim().slice(0,40);save();render()}};
 $('exportSave').onclick=()=>{let a=document.createElement('a'),b=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});a.href=URL.createObjectURL(b);a.download='guildmaster-save.json';a.click()};
-$('importSave').onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{s=JSON.parse(r.result);save();render()}catch(e){notify('That save file is invalid.')}};r.readAsText(i.files[0])};i.click()};
+$('importSave').onclick=()=>{let i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{s=JSON.parse(r.result);save();load();ensure();syncDiscoveredResources();repairDeadBattles();syncMusic();render()}catch(e){notify('That save file is invalid.')}};r.readAsText(i.files[0])};i.click()};
 $('reset').onclick=()=>showModal('Reset Progress',`<div class="card"><div class="name dangerText">Delete all progress?</div><div class="muted">This cannot be undone unless you exported a save first.</div><div class="modalActionRow"><button class="btn" onclick="confirmReset()">Reset Guild</button></div></div>`);
 function confirmReset(){
   localStorage.removeItem('guildmaster-v1');

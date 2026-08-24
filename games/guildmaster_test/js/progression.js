@@ -1,6 +1,68 @@
 // Roster actions, equipment, crafting progression, upgrades, and display helpers.
+const ONBOARDING_GOALS=[
+  {id:'recruitTwo',title:'Form the Core Team',description:'Recruit your first two adventurers.',reward:{gold:20},complete:()=>s.members.length>=2},
+  {id:'startExpedition',title:'Send an Expedition',description:'Choose a destination and deploy a party.',reward:{gold:25},complete:()=>!!s.onboarding.flags.expeditionStarted},
+  {id:'claimLoot',title:'Bring Home the Spoils',description:'Claim rewards earned by an expedition.',reward:{gold:30,rep:250},complete:()=>!!s.onboarding.flags.lootClaimed},
+  {id:'equipItem',title:'Equip an Adventurer',description:'Equip any weapon, armor, or piece of jewelry.',reward:{gold:30},complete:()=>!!s.onboarding.flags.itemEquipped},
+  {id:'startHarvest',title:'Gather Resources',description:'Send a crew to a harvesting location.',reward:{gold:35,rep:250},complete:()=>!!s.onboarding.flags.harvestStarted},
+  {id:'buyUpgrade',title:'Invest in the Guild',description:'Purchase your first permanent guild upgrade.',reward:{gold:50,rep:500},complete:()=>!!s.onboarding.flags.upgradePurchased}
+];
+function normalizeOnboarding(){
+  s.onboarding=s.onboarding&&typeof s.onboarding==='object'?s.onboarding:{collapsed:false,flags:{},claimed:[]};
+  s.onboarding.flags=s.onboarding.flags&&typeof s.onboarding.flags==='object'?s.onboarding.flags:{};
+  s.onboarding.claimed=Array.isArray(s.onboarding.claimed)?s.onboarding.claimed:[];
+  const flags=s.onboarding.flags;
+  if(s.members.length>=2)flags.recruitedTwo=true;
+  if(s.missions.length||s.wins>0)flags.expeditionStarted=true;
+  if(s.inventory.length||Object.values(s.materials||{}).some(v=>v>0)||s.wins>0)flags.lootClaimed=true;
+  if(s.members.some(h=>Object.values(h.equip||{}).some(Boolean)))flags.itemEquipped=true;
+  if(s.harvestJobs.length)flags.harvestStarted=true;
+  if(Object.values(s.up||{}).some(v=>v>0))flags.upgradePurchased=true;
+  completeOnboardingGoals(false);
+}
+function onboardingRewardText(reward){
+  const parts=[];
+  if(reward.gold)parts.push(`${reward.gold} gold`);
+  if(reward.rep)parts.push(`${reward.rep} reputation`);
+  return parts.join(' · ');
+}
+function completeOnboardingGoals(announce=true){
+  if(!s?.onboarding)return;
+  const claimed=new Set(s.onboarding.claimed);
+  ONBOARDING_GOALS.forEach(goal=>{
+    if(claimed.has(goal.id)||!goal.complete())return;
+    s.onboarding.claimed.push(goal.id);claimed.add(goal.id);
+    if(goal.reward.gold)s.gold+=goal.reward.gold;
+    if(goal.reward.rep)grantGuildReputation(goal.reward.rep);
+    log(`Guild Goal completed: ${goal.title}.`);
+    if(announce)notify(`${goal.title} complete · ${onboardingRewardText(goal.reward)}`,'good');
+  });
+}
+function setOnboardingFlag(flag){
+  if(!s.onboarding)normalizeOnboarding();
+  if(s.onboarding.flags[flag])return;
+  s.onboarding.flags[flag]=true;
+  completeOnboardingGoals(true);
+  save();
+  if(typeof updateNavigationLocks==='function')updateNavigationLocks();
+}
+function toggleGuildGoals(){
+  s.onboarding.collapsed=!s.onboarding.collapsed;
+  save();renderOnboardingGoals();
+}
+function renderOnboardingGoals(){
+  const panel=$('guildGoalsPanel'),box=$('guildGoals'),button=$('guildGoalsToggle');
+  if(!panel||!box||!button)return;
+  const claimed=new Set(s.onboarding.claimed);
+  const complete=ONBOARDING_GOALS.filter(g=>claimed.has(g.id)).length;
+  button.textContent=s.onboarding.collapsed?'Show':'Hide';
+  box.style.display=s.onboarding.collapsed?'none':'';
+  panel.classList.toggle('allGoalsComplete',complete===ONBOARDING_GOALS.length);
+  if(s.onboarding.collapsed)return;
+  box.innerHTML=`<div class="goalSummary"><span>${complete} / ${ONBOARDING_GOALS.length} completed</span><div class="progressTrack"><div class="progressFill" style="width:${complete/ONBOARDING_GOALS.length*100}%"></div></div></div><div class="guildGoalList">${ONBOARDING_GOALS.map((goal,index)=>{const done=claimed.has(goal.id),active=!done&&ONBOARDING_GOALS.slice(0,index).every(g=>claimed.has(g.id));return `<div class="guildGoal ${done?'done':active?'active':''}"><span class="goalMark">${done?'✓':index+1}</span><div><div class="name">${goal.title}</div><div class="muted">${goal.description}</div></div><span class="goalReward">${done?'Complete':onboardingRewardText(goal.reward)}</span></div>`}).join('')}</div>`;
+}
 function complete(){}
-function recruit(i){if(s.members.length>=s.memberCap)return notify('Your guild has no open member slots. Upgrade Guild Quarters first.');let x=s.recruits.find(v=>v.id===i);if(!x)return;s.members.push(x);s.recruits=s.recruits.filter(v=>v.id!==i);if(!s.recruits.length)s.nextApplicantsAt=Date.now()+5*60*1000;log(x.name+' joined the guild.');save();render();notify(x.name+' joined for free.','good')}
+function recruit(i){if(s.members.length>=s.memberCap)return notify('Your guild has no open member slots. Upgrade Guild Quarters first.');let x=s.recruits.find(v=>v.id===i);if(!x)return;s.members.push(x);s.recruits=s.recruits.filter(v=>v.id!==i);if(!s.recruits.length)s.nextApplicantsAt=Date.now()+5*60*1000;log(x.name+' joined the guild.');if(s.members.length>=2)setOnboardingFlag('recruitedTwo');save();render();notify(x.name+' joined for free.','good')}
 function dismissHero(hid){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
   if(h.busy)return notify('You cannot dismiss someone who is on an expedition.');
@@ -50,6 +112,7 @@ function equip(hid,iid){
   }
   h.equip[slot]=it.id;
   it.equipped=h.id;
+  setOnboardingFlag('itemEquipped');
   save();closeModal();renderRoster();renderInv();
 }
 function equipModal(hid,slot){
@@ -63,7 +126,10 @@ const BOSS_RESOURCE_SOURCE={};
 const BOSS_RESOURCES=new Set();
 
 function markResourceFound(k){
-  if(k&&!s.discoveredResources.includes(k))s.discoveredResources.push(k);
+  if(k&&!s.discoveredResources.includes(k)){
+    s.discoveredResources.push(k);
+    if(typeof updateNavigationLocks==='function')updateNavigationLocks();
+  }
 }
 
 function syncDiscoveredResources(){
@@ -188,6 +254,7 @@ function upgrade(k){
   s.gold-=c;
   Object.entries(rc).forEach(([r,v])=>s.materials[r]-=v);
   s.up[k]=l+1;
+  setOnboardingFlag('upgradePurchased');
   if(k==='quarters')s.memberCap=Math.max(s.members.length,4+s.up.quarters);if(k==='recruit')s.applicantCap=applicantBatchSize();
   save();render();
 }

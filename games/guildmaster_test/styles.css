@@ -1165,6 +1165,32 @@ body.windowOpen .side{overflow:hidden!important}
   font-size:9px;
   opacity:.85;
 }
+.nav.navFeatureHidden{display:none!important}
+
+.guildGoalsPanel{margin-top:12px}
+.guildGoalsPanel.allGoalsComplete{border-color:#65784c!important}
+.guildGoalsHead{align-items:center!important}
+.goalSummary{display:grid;grid-template-columns:auto minmax(120px,1fr);gap:12px;align-items:center;color:var(--muted);font-size:11px;margin-bottom:9px}
+.guildGoalList{display:grid;gap:7px}
+.guildGoal{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:9px;align-items:center;padding:9px;background:#1c1711;border:1px solid #4e3c27}
+.guildGoal.active{border-color:#9b743d;background:#2a2014}
+.guildGoal.done{opacity:.72;border-color:#536343}
+.goalMark{width:25px;height:25px;display:grid;place-items:center;border:1px solid #6a5434;color:#cdbb91;font-weight:700}
+.guildGoal.active .goalMark{border-color:#c99a45;color:#f0d79b}
+.guildGoal.done .goalMark{border-color:#71845a;color:#a7b982}
+.goalReward{color:#d8bd80;font-size:11px;text-align:right;white-space:nowrap}
+.guildGoal.done .goalReward{color:#a7b982}
+
+.defeatAnalysis{color:#cf8574!important}
+.defeatAdviceTitle{margin-top:9px;color:#e0c89a;font-weight:700}
+.defeatAdviceList{margin:6px 0 0;padding-left:20px;color:#c9b68d}
+.defeatAdviceList li+li{margin-top:5px}
+
+@media(max-width:600px){
+  .goalSummary{grid-template-columns:1fr}
+  .guildGoal{grid-template-columns:30px 1fr}
+  .goalReward{grid-column:2;text-align:left}
+}
 
 
 /* Real-time combat bars: HP -> Mana -> Attack -> Active */

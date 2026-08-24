@@ -170,6 +170,7 @@ function confirmHarvestParty(areaId){
   if(crew.some(x=>gatheringSkill(x,a.skill).level<a.req))return notify('A selected member does not meet the skill requirement.');
   crew.forEach(x=>x.busy=true);
   s.harvestJobs.push({id:id(),areaId,party:crew.map(x=>x.id),start:Date.now(),lastTick:Date.now(),cycles:0,stash:{}});
+  setOnboardingFlag('harvestStarted');
   closeModal();save();render();
   const harvestBtn=[...document.querySelectorAll('.areaMode')].find(x=>x.textContent.includes('Harvest'));
   setAreaMode('harvest',harvestBtn);

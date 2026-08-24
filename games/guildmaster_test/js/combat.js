@@ -270,6 +270,7 @@ function send(type,qid,ids){
   ensurePartyState(mission);
   mission.battle=makeBattle(mission);
   s.missions.push(mission);
+  setOnboardingFlag('expeditionStarted');
   
   log('Expedition started: '+q.name+'.');
   save();render();notify('Expedition started.','good');
@@ -298,12 +299,14 @@ function claimAllMissionLoot(){
 }
 function collectLoot(mid,quiet=false){
   const m=s.missions.find(x=>x.id===mid);if(!m||!m.stash)return;
+  const claimedAnything=(m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0;
   s.gold+=m.stash.gold||0;
   grantGuildReputation(m.stash.rep||0);
   Object.entries(m.stash.materials||{}).forEach(([k,v])=>{const added=addStoredResource(k,v);m.stash.materials[k]=v-added;if(m.stash.materials[k]<=0)delete m.stash.materials[k]});
   (m.stash.items||[]).forEach(it=>receiveInventoryItem(it,'mission'));
   const summary=`${m.stash.gold||0}g, ${m.stash.rep||0} reputation, ${pendingCount(m)} loot/material drops`;
   m.stash=emptyStash();discoverRecipes();save();
+  if(claimedAnything)setOnboardingFlag('lootClaimed');
   if(!quiet)notify('Collected '+summary+'.','good');
   renderResourcesLite();renderInv();renderActive();renderCombat();
 }
@@ -713,9 +716,29 @@ function processTimedRegen(m,now=Date.now()){
     m.nextRegenAt+=5000;
   }
 }
+function defeatAdviceFor(m){
+  const party=(m.party||[]).map(id=>s.members.find(h=>h.id===id)).filter(Boolean);
+  const enemies=m.battle?.enemies||[];
+  const advice=[];
+  const avgLevel=party.length?party.reduce((sum,h)=>sum+(h.level||1),0)/party.length:0;
+  const partyPower=party.reduce((sum,h)=>sum+hs(h).power,0);
+  const hasFrontline=party.some(h=>['Warrior','Paladin'].includes(h.class)||hs(h).threat>=1.5);
+  const hasHealer=party.some(h=>h.class==='Priest'||['lifepriest','oracle','beacon'].includes(h.subclass));
+  const physical=enemies.filter(e=>(e.damageType||'physical')==='physical').length;
+  const magical=enemies.length-physical;
+
+  if(avgLevel&&avgLevel+1<m.level)advice.push(`Your party averaged level ${avgLevel.toFixed(1)} in a level ${m.level} area. Train in a lower-level expedition first.`);
+  else if(partyPower<m.target*.85)advice.push(`Party power was ${partyPower} against the recommended ${m.target}. Improve equipment or bring a stronger full party.`);
+  if(!hasFrontline)advice.push('The party had no durable frontline. Add a Warrior, Paladin, or another high-threat defender to draw attacks.');
+  if(!hasHealer)advice.push('The party had no reliable healer. A Priest or healing subclass can stabilize longer encounters.');
+  if(advice.length<3&&enemies.length)advice.push(physical>=magical?'These enemies dealt mostly physical damage. Prioritize DEF, Block, and heavier armor.':'These enemies dealt mostly magical damage. Prioritize MDEF and relevant elemental resistances.');
+  if(advice.length<2)advice.push('Inspect the surviving enemies and adjust weapons, subclasses, or party composition before returning.');
+  return advice.slice(0,3);
+}
 function expeditionDefeated(m){
   syncPartyHp(m);
   m.defeated=true;
+  m.defeatAdvice=defeatAdviceFor(m);
   m.battle.log.unshift('The entire party has fallen. The expedition can no longer continue.');
   log(m.name+' expedition was defeated.');
   save();
@@ -928,7 +951,7 @@ function offlineCatchup(hiddenMs){
       hpRatio-=clamp((.13/ratio)*(1-healer)-sustain,.02,.32);
       if(hpRatio<=0){
         m.party.forEach(id=>{if(m.partyState[id])m.partyState[id].hp=0});
-        m.defeated=true;
+        expeditionDefeated(m);
         break;
       }
 
