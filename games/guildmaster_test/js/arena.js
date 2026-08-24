@@ -46,7 +46,19 @@ async function arenaSignOut(){if(arenaClient){await arenaClient.auth.signOut();a
 async function arenaInvoke(name,body={}){
   if(!arenaClient||!arenaSession)throw new Error('Sign in to Arena first.');
   const {data,error}=await arenaClient.functions.invoke(name,{body});
-  if(error)throw new Error(error.context?.body?.error||error.message||'Arena request failed.');
+  if(error){
+    let message=error.message||'Arena request failed.';
+    const response=error.context;
+    if(response&&typeof response.clone==='function'){
+      try{
+        const payload=await response.clone().json();
+        if(payload?.error)message=payload.error;
+      }catch(_ignored){
+        try{const detail=await response.clone().text();if(detail)message=detail}catch(_alsoIgnored){}
+      }
+    }
+    throw new Error(message);
+  }
   if(data?.error)throw new Error(data.error);
   return data;
 }
@@ -64,7 +76,7 @@ function arenaHeroSnapshot(h){
     physicalDodge:z.physicalDodge||0,magicalDodge:z.magicalDodge||0,regen:z.regen||0,lifesteal:z.lifesteal||0,
     fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
     weaponPower:weapon?.weaponPower||wd?.base||8,damageType:weapon?.damageType||'physical',armorPen:z.armorPen||0,
-    critChance:clamp((h.class==='Rogue'?.18:0)+(z.critBonus||0),0,.75),critDamage:z.critDamage||0,
+    critChance:clamp((h.class==='Rogue' ? .18 : 0)+(z.critBonus||0),0,.75),critDamage:z.critDamage||0,
     statusChance:clamp(z.statusChance||0,0,.75),attackInterval:heroAttackIntervalMs({baseAttackTime:weaponAttackTime(weapon?.weaponTemplate||weapon?.weaponType||''),attackSpeed:z.attackSpeed,buffs:{}}),
     activeType:z.activeType||(h.class==='Priest'?'Heal':h.class==='Mage'?'arcaneBurst':null),element:z.element||null,healMult:z.healMult||1,damageMult:z.damageMult||1
   };
