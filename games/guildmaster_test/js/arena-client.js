@@ -160,3 +160,5 @@ function renderArenaHistory(){
   const box=$('arenaHistory');if(!box)return;
   box.innerHTML=arenaData.history?.length?arenaData.history.map(x=>`<div class="arenaHistoryRow"><span class="${x.won?'good':'dangerText'}">${x.won?'Victory':'Defeat'}</span><span>${arenaEscape(x.opponent_guild)}</span><span>${x.rating_change>=0?'+':''}${x.rating_change} rating</span><small>${new Date(x.created_at).toLocaleString()}</small></div>`).join(''):'<div class="empty">No Arena matches yet.</div>';
 }
+
+

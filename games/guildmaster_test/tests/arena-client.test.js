@@ -12,7 +12,7 @@ const context={
 };
 context.globalThis=context;
 vm.createContext(context);
-vm.runInContext(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),context);
+vm.runInContext(fs.readFileSync(require.resolve('../js/arena-client.js'),'utf8'),context);
 
 const snapshot=context.arenaHeroSnapshot({id:1,name:'Arena Hero',class:'Warrior',subclass:'guardian',level:12,equip:{Weapon:9}});
 assert.equal(snapshot.sourceId,1);
@@ -25,7 +25,7 @@ assert.doesNotThrow(()=>JSON.stringify(snapshot),'Arena snapshots must be serial
 const online=JSON.parse(fs.readFileSync(require.resolve('../data/online.json'),'utf8'));
 assert.equal(online.enabled,true,'Arena configuration is enabled after project credentials are supplied');
 assert.ok(!JSON.stringify(online).toLowerCase().includes('service_role'),'browser configuration must never contain a service-role key');
-assert.match(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/signInAnonymously\(\)/,'Arena should create an invisible anonymous identity');
+assert.match(fs.readFileSync(require.resolve('../js/arena-client.js'),'utf8'),/signInAnonymously\(\)/,'Arena should create an invisible anonymous identity');
 
 const migration=fs.readFileSync(require.resolve('../supabase/migrations/001_arena.sql'),'utf8');
 for(const table of ['profiles','arena_parties','arena_ratings','arena_matches'])assert.match(migration,new RegExp(`alter table public\\.${table} enable row level security`));
@@ -37,8 +37,8 @@ assert.match(migration,/defender_rating_change,report,replay\)\s*values\([\s\S]*
 const fightFunction=fs.readFileSync(require.resolve('../supabase/functions/arena-match/index.ts'),'utf8');
 assert.match(fightFunction,/recent\?\.length\|\|0\)>=5/,'Arena should allow five challenges inside the rolling window');
 assert.match(fightFunction,/5\*60\*1000/,'Arena challenge window should last five minutes');
-assert.doesNotMatch(fs.readFileSync(require.resolve('../js/arena.js'),'utf8'),/Skip to Result/,'Arena combat must not offer result skipping');
-const arenaClient=fs.readFileSync(require.resolve('../js/arena.js'),'utf8');
+assert.doesNotMatch(fs.readFileSync(require.resolve('../js/arena-client.js'),'utf8'),/Skip to Result/,'Arena combat must not offer result skipping');
+const arenaClient=fs.readFileSync(require.resolve('../js/arena-client.js'),'utf8');
 assert.match(arenaClient,/type:'arena'/,'Arena must create a normal local combat mission');
 assert.match(fs.readFileSync(require.resolve('../js/app.js'),'utf8'),/stepBattle\(arenaLiveMission\)/,'Arena must use the normal combat step loop');
 assert.doesNotMatch(arenaClient,/timeline|showArenaResult|updateArenaActionBars/,'Arena must not maintain a separate replay renderer');

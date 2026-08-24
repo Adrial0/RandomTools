@@ -10,7 +10,7 @@ Load order:
 4. `ui.js` — guild hall, combat, and roster rendering
 5. `activities.js` — quest board, harvesting, expeditions, and party selection
 6. `economy.js` — resources, market, inventory, enchanting, and crafting UI
-7. `arena.js` — Supabase authentication, Arena snapshots, matchmaking, leaderboard, and history
+7. `arena-client.js` — anonymous Arena identity, snapshots, matchmaking, client combat, leaderboard, and history
 8. `app.js` — event wiring, timers, data loading, validation, and bootstrap
 
 All scripts must load before `bootstrapGame()` runs at the end of `app.js`. When adding new code, place gameplay rules in the owning domain and keep startup/event wiring in `app.js`.
