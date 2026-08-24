@@ -24,12 +24,12 @@ Arena uses email magic-link authentication. Players do not need a Guildmaster pa
 
 ## 3. Apply the database migration
 
-Either paste `migrations/001_arena.sql` into Supabase **SQL Editor** and run it, or use the CLI from this directory:
+Either paste `migrations/001_arena.sql` into Supabase **SQL Editor** and run it, or use the CLI from this directory. The commands below use `npm exec`, so a global Supabase CLI installation is not required:
 
 ```powershell
-supabase login
-supabase link --project-ref YOUR_PROJECT_REF
-supabase db push
+npm exec --yes --package supabase@latest -- supabase login
+npm exec --yes --package supabase@latest -- supabase link --project-ref YOUR_PROJECT_REF
+npm exec --yes --package supabase@latest -- supabase db push
 ```
 
 The migration creates:
@@ -45,12 +45,12 @@ Direct browser access to these tables is revoked. The authenticated Edge Functio
 
 ## 4. Deploy the Edge Functions
 
-From `guildmaster_test`:
+From `guildmaster_test` (replace `YOUR_PROJECT_REF`, or omit it after running `supabase link`):
 
 ```powershell
-supabase functions deploy publish-party
-supabase functions deploy arena-data
-supabase functions deploy fight-arena
+npm exec --yes --package supabase@latest -- supabase functions deploy publish-party --project-ref YOUR_PROJECT_REF
+npm exec --yes --package supabase@latest -- supabase functions deploy arena-data --project-ref YOUR_PROJECT_REF
+npm exec --yes --package supabase@latest -- supabase functions deploy fight-arena --project-ref YOUR_PROJECT_REF
 ```
 
 Supabase automatically provides `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` to hosted Edge Functions. Do not add the service-role key to the repository.
