@@ -1,0 +1,298 @@
+// Roster actions, equipment, crafting progression, upgrades, and display helpers.
+function complete(){}
+function recruit(i){if(s.members.length>=s.memberCap)return notify('Your guild has no open member slots. Upgrade Guild Quarters first.');let x=s.recruits.find(v=>v.id===i);if(!x)return;s.members.push(x);s.recruits=s.recruits.filter(v=>v.id!==i);if(!s.recruits.length)s.nextApplicantsAt=Date.now()+5*60*1000;log(x.name+' joined the guild.');save();render();notify(x.name+' joined for free.','good')}
+function dismissHero(hid){
+  const h=s.members.find(x=>x.id===hid);if(!h)return;
+  if(h.busy)return notify('You cannot dismiss someone who is on an expedition.');
+  
+  showModal('Dismiss Guild Member',`<div class="card"><div class="name">Dismiss ${h.name}?</div><div class="muted">Their equipped items will return to inventory.</div><button class="btn" style="margin-top:10px" onclick="confirmDismiss(${hid})">Dismiss</button></div>`);
+}
+function confirmDismiss(hid){
+  const h=s.members.find(x=>x.id===hid);if(!h)return;
+  Object.values(h.equip||{}).forEach(itemId=>{const it=s.inventory.find(x=>x.id===itemId);if(it)it.equipped=null});
+  s.members=s.members.filter(x=>x.id!==hid);
+  if(s.selected===hid)s.selected=s.members[0]?.id||null;
+  log(h.name+' left the guild.');
+  save();closeModal();render();notify('Guild member dismissed.','good');
+}
+function allowedWeapons(h){
+  const base=[...(C[h.class]?.weapons||[])];
+  if(h.class==='Priest'&&h.subclass==='battlepriest'){
+    ['Mace','Warhammer'].forEach(w=>{if(!base.includes(w))base.push(w)});
+  }
+  return base;
+}
+function itemEquipSlot(it){
+  return it&&(it.slot==='Ring'||it.slot==='Amulet')?'Jewelry':it?.slot;
+}
+function unequipItem(hid,slot){
+  const h=s.members.find(x=>x.id===hid);if(!h)return;
+  const itemId=h.equip?.[slot];if(!itemId)return;
+  const it=s.inventory.find(x=>x.id===itemId);
+  if(it)it.equipped=null;
+  h.equip[slot]=null;
+  save();renderRoster();renderInv();
+}
+function equip(hid,iid){
+  const h=s.members.find(x=>x.id===hid),it=s.inventory.find(x=>x.id===iid);
+  if(!h||!it)return;
+  const slot=itemEquipSlot(it);
+  if(slot==='Weapon'&&!allowedWeapons(h).includes(it.weaponType))return notify('That class cannot use this weapon.');
+  if(slot==='Armor'&&!canEquipArmor(h,it))return notify(displayClass(h)+' can only equip up to '+maxArmorClass(h)+' armor.');
+  const old=s.inventory.find(x=>x.id===h.equip[slot]);
+  if(old)old.equipped=null;
+  if(it.equipped){
+    const previous=s.members.find(x=>x.id===it.equipped);
+    if(previous){
+      const previousSlot=itemEquipSlot(it);
+      if(previous.equip[previousSlot]===it.id)previous.equip[previousSlot]=null;
+    }
+  }
+  h.equip[slot]=it.id;
+  it.equipped=h.id;
+  save();closeModal();renderRoster();renderInv();
+}
+function equipModal(hid,slot){
+  const h=s.members.find(x=>x.id===hid);
+  let a=s.inventory.filter(x=>itemEquipSlot(x)===slot&&!x.equipped);
+  if(slot==='Weapon'&&h)a=a.filter(it=>allowedWeapons(h).includes(it.weaponType));
+  if(slot==='Armor'&&h)a=a.filter(it=>canEquipArmor(h,it));
+  const current=s.inventory.find(x=>x.id===h?.equip?.[slot]);
+  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+const BOSS_RESOURCE_SOURCE={};
+const BOSS_RESOURCES=new Set();
+
+function markResourceFound(k){
+  if(k&&!s.discoveredResources.includes(k))s.discoveredResources.push(k);
+}
+
+function syncDiscoveredResources(){
+  Object.entries(s.materials||{}).forEach(([k,v])=>{if(v>0)markResourceFound(k)});
+  (s.missions||[]).forEach(m=>{
+    Object.entries(m.stash?.materials||{}).forEach(([k,v])=>{if(v>0)markResourceFound(k)});
+  });
+  (s.harvestJobs||[]).forEach(j=>{
+    Object.entries(j.stash||{}).forEach(([k,v])=>{if(v>0)markResourceFound(k)});
+  });
+}
+
+function recipeVisible(r){
+  const required=Object.keys(r[3]);
+  const normal=required.filter(k=>!BOSS_RESOURCES.has(k));
+  const bosses=required.filter(k=>BOSS_RESOURCES.has(k));
+
+  // Every ordinary ingredient must have been discovered at least once.
+  if(!normal.every(k=>s.discoveredResources.includes(k)))return false;
+
+  // Boss materials are intentionally exempt. Once all other ingredients
+  // are known, the player can see what boss material the recipe needs.
+  return true;
+}
+
+function discoverRecipes(){syncDiscoveredResources()}
+
+function smithXpNeeded(level){return Math.round(50+25*level+6*level*level)}
+function recipeSmithLevel(r){
+  const tier=Math.max(1,Number(r?.[4])||1);
+  const tierReq={1:1,2:2,3:3,4:5,5:7,6:10,7:14}[tier]||Math.max(1,Math.round(tier*2));
+  const boss=Object.keys(r?.[3]||{}).some(k=>BOSS_RESOURCES.has(k));
+  return tierReq+(boss?(tier>=7?2:1):0);
+}
+function recipeSmithXp(r){
+  const boss=Object.keys(r[3]||{}).some(k=>BOSS_RESOURCES.has(k));
+  return Math.round(5+r[4]*7+Object.keys(r[3]||{}).length*2+(boss?20:0));
+}
+function grantSmithXp(amount){
+  s.smithing=Object.assign({level:1,xp:0},s.smithing||{});
+  s.smithing.xp+=Math.max(0,Math.round(amount||0));
+  let need=smithXpNeeded(s.smithing.level);
+  while(s.smithing.xp>=need){s.smithing.xp-=need;s.smithing.level++;log('Blacksmithing reached level '+s.smithing.level+'.');need=smithXpNeeded(s.smithing.level)}
+}
+function smithingSpeedBonus(level=s.smithing?.level||1){
+  const l=Math.max(0,level);
+  return .9*(1-Math.exp(-l/25))+.004*l;
+}
+function craftingSpeedMultiplier(){return Math.pow(.88,s.up.craftSpeed||0)/(1+smithingSpeedBonus())}
+function craftDuration(r){
+  return Math.max(5000,Math.round((18+r[4]*12)*1000*craftingSpeedMultiplier()));
+}
+
+function normalizeCraftQueue(){
+  if(!s.craftJobs?.length)return;let cursor=Date.now();
+  s.craftJobs=s.craftJobs.filter(j=>recipes[j.recipe]).map(j=>{j.qty=Math.max(1,Math.floor(j.qty||j.remaining||1));j.remaining=Math.max(1,Math.floor(j.remaining||j.qty||1));j.duration=j.duration||craftDuration(recipes[j.recipe]);return j});
+  s.craftJobs.forEach((j,index)=>{const duration=j.duration;if(index===0){if(!j.start)j.start=cursor;if(!j.end)j.end=j.start+duration;cursor=Math.max(cursor,j.end)+(j.remaining-1)*duration}else{j.start=cursor;j.end=j.start+duration;cursor=j.end+(j.remaining-1)*duration}});
+}
+function maxCraftQuantity(r){const amounts=Object.entries(r?.[3]||{}).map(([k,v])=>v>0?Math.floor((s.materials[k]||0)/v):99);return Math.max(0,Math.min(99,amounts.length?Math.min(...amounts):99))}
+function craft(i,qty=1){const r=recipes[i];if(!r)return;const req=recipeSmithLevel(r);if((s.smithing?.level||1)<req)return notify('Requires Blacksmithing level '+req+'.');qty=clamp(Math.floor(Number(qty)||1),1,99);const maxQty=maxCraftQuantity(r);if(maxQty<qty)return notify(`You only have materials for ${maxQty} craft${maxQty===1?'':'s'}.`);Object.entries(r[3]).forEach(([k,v])=>s.materials[k]-=v*qty);const duration=craftDuration(r),now=Date.now();let startAt=now;if(s.craftJobs.length){const tail=s.craftJobs[s.craftJobs.length-1];startAt=Math.max(now,(tail.end||now)+(Math.max(1,tail.remaining||tail.qty||1)-1)*(tail.duration||duration))}s.craftJobs.push({id:id(),recipe:i,qty,remaining:qty,duration,start:startAt,end:startAt+duration});log(`Queued ${r[0]} ×${qty}.`);save();render()}
+function cancelCraftJob(jid){const index=s.craftJobs.findIndex(j=>j.id===jid);if(index<0)return;const j=s.craftJobs[index],r=recipes[j.recipe];if(r){const remaining=Math.max(1,j.remaining||j.qty||1);Object.entries(r[3]).forEach(([k,v])=>s.materials[k]=(s.materials[k]||0)+v*remaining);log(`Cancelled ${r[0]} ×${remaining}. Materials refunded.`)}s.craftJobs.splice(index,1);normalizeCraftQueue();save();render();notify('Craft group cancelled and remaining materials refunded.','good')}
+
+function finishCraftJob(j){
+  const r=recipes[j.recipe];
+  if(!r)return;
+  const it=makeSpecificItem(r[1],r[2],r[4]);
+  applyRecipeModifiers(it,r[5]||{});
+  it.name=r[0];
+  it.recipeIndex=j.recipe;
+  receiveInventoryItem(it,'craft');
+  const smithXp=Math.round(recipeSmithXp(r)*(1+.10*(s.up.smith||0)));grantSmithXp(smithXp);
+  trackQuestProgress('craft',it.name,1);
+  log('Finished crafting '+it.name+' ['+it.rarity+'] · +'+smithXp+' Smithing XP.');
+}
+
+function completeCrafting(){if(!s.craftJobs.length)return false;let changed=false;const now=Date.now();while(s.craftJobs.length){const first=s.craftJobs[0];if(now<first.end)break;finishCraftJob(first);first.remaining=Math.max(0,(first.remaining||first.qty||1)-1);changed=true;if(first.remaining>0){first.start=first.end;first.end=first.start+first.duration;continue}s.craftJobs.shift()}if(changed){normalizeCraftQueue();save()}return changed}
+
+const UPGRADE_RESOURCE_THEMES={
+quarters:['Wood','Stone','Iron','Hardwood','Mithril'],
+party:['Wood','Cloth','Iron','Leather','Silver'],
+recruit:['Wood','Cloth','Silver','Crystal','Essence'],
+smith:['Iron','Wood','Silver','Mithril','Obsidian'],
+craftSpeed:['Iron','Wood','CopperOre','Silver','Crystal'],
+training:['Wood','Iron','Leather','Silver','Crystal'],
+storage:['Wood','Stone','Iron','Hardwood','Mithril'],
+afkHarvest:['Wood','Cloth','Iron','Hardwood','Crystal'],
+gatherParty:['Wood','Leather','Iron','Silver','Hardwood'],
+board:['Wood','Cloth','Silver','Crystal','ArcaneDust']
+};
+function upgradeResourceCost(k,l){
+  const theme=UPGRADE_RESOURCE_THEMES[k]||['Wood','Iron','Silver','Crystal','Mithril'];
+  const tier=l<2?0:l<4?1:l<7?2:l<10?3:4;
+  const primary=theme[Math.min(tier,theme.length-1)];
+  const secondary=theme[Math.min(Math.max(0,tier-1),theme.length-1)];
+  const base=8+Math.round(Math.pow(l+1,1.45)*5);
+  const out={};
+  out[primary]=(out[primary]||0)+base;
+  if(l>=1)out[secondary]=(out[secondary]||0)+Math.max(4,Math.round(base*.55));
+  if(k==='smith'){
+    out.Iron=(out.Iron||0)+12+Math.round(l*10);
+    out.Wood=(out.Wood||0)+6+Math.round(l*5);
+  }
+  return out;
+}
+function hasUpgradeResources(cost){return Object.entries(cost).every(([k,v])=>(s.materials[k]||0)>=v)}
+function upgradeResourceText(cost){return Object.entries(cost).map(([k,v])=>`${v} ${RESOURCE_NAMES[k]||k}`).join(' · ')}
+function upgradeResourceProgressHtml(cost){
+  return Object.entries(cost).map(([k,need])=>{
+    const have=s.materials[k]||0;
+    return `<span class="chip ${have>=need?'enough':'missing'}">${gameIcon('resource',k,'','gameAsset')} ${have}/${need} ${RESOURCE_NAMES[k]||k}</span>`;
+  }).join('');
+}
+
+function upgradeCost(u,l){
+  return Math.max(1,Math.round(u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l)*0.05));
+}
+function upgrade(k){
+  let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=upgradeCost(u,l),rc=upgradeResourceCost(k,l);
+  if(l>=u[4])return;
+  if(s.gold<c)return notify('Not enough gold.');
+  if(!hasUpgradeResources(rc))return notify('Missing upgrade resources: '+upgradeResourceText(rc)+'.');
+  s.gold-=c;
+  Object.entries(rc).forEach(([r,v])=>s.materials[r]-=v);
+  s.up[k]=l+1;
+  if(k==='quarters')s.memberCap=Math.max(s.members.length,4+s.up.quarters);if(k==='recruit')s.applicantCap=applicantBatchSize();
+  save();render();
+}
+function statName(k){
+  return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',hp:'HP',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res'}[k]||String(k).toUpperCase();
+}
+function colorizeStatTerms(root=document){
+  if(!root)return;
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(node){
+      const p=node.parentElement;
+      if(!p||['SCRIPT','STYLE','INPUT','TEXTAREA','SELECT','OPTION'].includes(p.tagName))return NodeFilter.FILTER_REJECT;
+      if(p.closest('.statSTR,.statDEX,.statINT'))return NodeFilter.FILTER_REJECT;
+      return /\b(STR|DEX|INT)\b/.test(node.nodeValue||'')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
+    }
+  });
+  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
+  nodes.forEach(node=>{
+    const frag=document.createDocumentFragment();
+    node.nodeValue.split(/\b(STR|DEX|INT)\b/g).forEach(piece=>{
+      if(piece==='STR'||piece==='DEX'||piece==='INT'){
+        const span=document.createElement('span');span.className='stat'+piece;span.textContent=piece;frag.appendChild(span);
+      }else frag.appendChild(document.createTextNode(piece));
+    });
+    node.parentNode.replaceChild(frag,node);
+  });
+}
+function itemCompareValues(it){
+  const out={power:it?.power||0,weaponPower:it?.slot==='Weapon'?(it.weaponPower||0):0,hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:itemBlockValue(it),regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,armorPen:0,parry:0,critChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0};
+  if(!it)return out;
+  const add=(k,v)=>{if(k in out)out[k]+=(Number(v)||0)};
+  add(it.stat,it.value);
+  add(it.secondaryStat,it.secondaryValue);
+  add(it.tertiaryStat,it.tertiaryValue);
+  Object.entries(it.extraStats||{}).forEach(([k,v])=>add(k,v));
+  (it.runes||[]).forEach(id=>{const r=RUNES[id];if(r)add(r.stat,r.value)});
+  out.armorPen=it.armorPen||0;
+  out.parry=it.parry||0;
+  out.critChance=it.weaponCritChance||0;
+  out.critDamage=it.critDamage||0;
+  out.accuracy=it.accuracy||0;
+  out.elementalDamage=it.elementalDamage||0;
+  out.healingPower=it.healingPower||0;
+  out.statusChance=it.statusChance||0;
+  out.cleave=it.cleave||0;
+  out.counter=it.counter||0;
+  return out;
+}
+function equipComparison(newItem,oldItem){
+  const a=itemCompareValues(newItem),b=itemCompareValues(oldItem);
+  const labels={power:'Power',weaponPower:'Attack',hp:'HP',str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Pen',parry:'Parry',critChance:'Crit Chance',critDamage:'Crit Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter'};
+  const percent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark','armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter']);
+  const parts=[];
+  Object.keys(labels).forEach(k=>{
+    const d=(a[k]||0)-(b[k]||0);
+    if(!d)return;
+    const sign=d>0?'+':'';
+    parts.push(`<span class="${d>0?'equipGain':'equipLoss'}">${labels[k]} ${sign}${d}${percent.has(k)?'%':''}</span>`);
+  });
+  return parts.length?`<div class="equipCompare">${parts.join('')}</div>`:`<div class="equipCompare"><span class="equipSame">No numerical stat change</span></div>`;
+}
+function runeBonusText(id){
+  const r=RUNES[id];if(!r)return 'Unknown rune';
+  const suffix=['lifesteal','fire','ice','poison','lightning','holy','dark'].includes(r.stat)?'%':'';
+  return `+${r.value}${suffix} ${statName(r.stat)}`;
+}
+function runeSlotsHtml(it,compact=false){
+  const cap=runeSlots(it),equipped=it.runes||[];
+  if(cap<=0)return '';
+  return `<div class="runeSlotRow ${compact?'compactRuneSlots':''}">${Array.from({length:cap},(_,i)=>{
+    const id=equipped[i],r=id?RUNES[id]:null;
+    return `<span class="runeSocket ${id?'filled':''}" title="${id?(r?.name||id)+' · '+runeBonusText(id):'Empty rune slot'}">${id?runeIcon(id,'gameAsset'):''}</span>`;
+  }).join('')}</div>`;
+}
+function runeDetailsHtml(it){
+  const ids=it.runes||[];
+  if(!ids.length)return '<div class="muted">No runes socketed.</div>';
+  return ids.map(id=>{const r=RUNES[id];return `<div class="runeDetailRow"><span>${runeIcon(id,'gameAsset')} <b>${r?.name||id}</b></span><span>${runeBonusText(id)}</span></div>`}).join('');
+}
+function statText(it){
+  const parts=[];
+  parts.push(it.stat==='regen'?`+${it.value} HP / round`:it.stat==='manaRegen'?`+${it.value} Mana Regen`:it.stat==='lifesteal'?`${it.value}% lifesteal`:`+${it.value} ${statName(it.stat)}`);
+  if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${it.secondaryValue} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${it.secondaryValue}% Attack Speed`:`+${it.secondaryValue} ${statName(it.secondaryStat)}`);
+  if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${it.tertiaryValue} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${it.tertiaryValue}% Attack Speed`:`+${it.tertiaryValue} ${statName(it.tertiaryStat)}`);
+  Object.entries(it.extraStats||{}).forEach(([k,v])=>parts.push(`+${v}${['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k)?'%':''} ${statName(k)}`));
+  const block=itemBlockValue(it);if(block)parts.push(`+${block} Block`);
+  if(it.damageBonus)parts.push(`+${Math.round(it.damageBonus*100)}% damage`);
+  if(it.healBonus)parts.push(`+${Math.round(it.healBonus*100)}% healing`);
+  if(it.itemCritBonus)parts.push(`+${Math.round(it.itemCritBonus*100)}% crit`);
+  if(it.itemThreatBonus)parts.push(`+${it.itemThreatBonus.toFixed(2)} Threat`);
+  if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(it.itemPhysicalDodgeBonus*100)}% physical dodge`);
+  if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(it.itemMagicalDodgeBonus*100)}% magic dodge`);
+  if(it.specialLabel)parts.push(it.specialLabel);
+  if(it.mythicEffect)parts.push(`Mythic: ${it.mythicEffect}`);
+  if(it.slot==='Armor')parts.push(`${armorClassForItem(it)} armor`);
+  if(it.slot==='Weapon'){
+    const w=weaponDefForItem(it);
+    parts.unshift(`Attack ${it.weaponPower||0}`);
+    parts.unshift(`Attack Speed ${weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)}s`);
+    parts.push(`${it.weaponType}`);
+    parts.push(`scales ${weaponScalingLabel(it)}`);
+    parts.push(`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'}`);
+    weaponSpecials(w||it).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
+  }
+  return parts.map(x=>`<span class="itemStatPart">${x}</span>`).join('<span class="itemStatSep"> · </span>');
+}
+function rarityClass(x){return String(x||'Common').toLowerCase()}
+function fmt(ms){let z=Math.max(0,Math.ceil(ms/1000)),m=Math.floor(z/60),q=z%60;return m?m+':'+String(q).padStart(2,'0'):q+'s'}
