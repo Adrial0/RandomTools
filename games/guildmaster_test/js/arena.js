@@ -48,7 +48,7 @@ async function claimArenaGuildName(name){
   catch(err){arenaMessage(err.message);if(/already taken/i.test(err.message))$('guildNameInput')?.select();return false}
 }
 async function arenaInvoke(name,body={}){
-  if(!arenaClient||!arenaSession)throw new Error('Sign in to Arena first.');
+  if(!arenaClient||!arenaSession)throw new Error('Arena identity is not ready yet.');
   const {data,error}=await arenaClient.functions.invoke(name,{body});
   if(error){
     let message=error.message||'Arena request failed.';
