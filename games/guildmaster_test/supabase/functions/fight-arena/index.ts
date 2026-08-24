@@ -1,4 +1,4 @@
-import {authenticatedUser,json,preflight,validateSnapshot} from '../_shared/common.ts';
+import {authenticatedUser,errorText,json,preflight,validateSnapshot} from '../_shared/common.ts';
 import {resolveArenaBattle} from '../_shared/arena-engine.ts';
 
 Deno.serve(async(req)=>{
@@ -21,5 +21,5 @@ Deno.serve(async(req)=>{
     if(error)throw error;
     const attackerReport=result.report.filter(x=>x.side==='attack');
     return json({won:result.attackerWon,ratingChange:finalized.ratingChange,newRating:finalized.newRating,matchId:finalized.matchId,report:attackerReport,replay:result.replay,durationMs:result.durationMs});
-  }catch(err){return json({error:String(err instanceof Error?err.message:err)},400)}
+  }catch(err){return json({error:errorText(err)},400)}
 });

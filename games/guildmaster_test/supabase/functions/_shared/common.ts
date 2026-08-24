@@ -7,6 +7,16 @@ export const corsHeaders={
 };
 export const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...corsHeaders,'Content-Type':'application/json'}});
 export const preflight=(req:Request)=>req.method==='OPTIONS'?new Response('ok',{headers:corsHeaders}):null;
+export function errorText(err:unknown){
+  if(err instanceof Error)return err.message;
+  if(err&&typeof err==='object'){
+    const value=err as Record<string,unknown>;
+    const parts=[value.message,value.details,value.hint,value.code].filter(Boolean).map(String);
+    if(parts.length)return parts.join(' · ');
+    try{return JSON.stringify(value)}catch(_ignored){}
+  }
+  return String(err);
+}
 
 export function adminClient(){
   const url=Deno.env.get('SUPABASE_URL'),key=Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');

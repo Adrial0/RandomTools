@@ -1,4 +1,4 @@
-import {authenticatedUser,json,preflight} from '../_shared/common.ts';
+import {authenticatedUser,errorText,json,preflight} from '../_shared/common.ts';
 
 Deno.serve(async(req)=>{
   const pre=preflight(req);if(pre)return pre;
@@ -19,5 +19,5 @@ Deno.serve(async(req)=>{
     const leaderboard=(ratings||[]).map(x=>({guild_name:profileMap.get(x.user_id)||'Unnamed Guild',rating:x.rating,wins:x.wins,losses:x.losses}));
     const history=(matches||[]).map(x=>{const attacking=x.attacker_id===user.id,opponent=attacking?x.defender_id:x.attacker_id;return{id:x.id,won:x.winner_id===user.id,opponent_guild:profileMap.get(opponent)||'Unnamed Guild',rating_change:attacking?x.attacker_rating_change:x.defender_rating_change,created_at:x.created_at}});
     return json({profile:rating||{rating:1000,wins:0,losses:0},defense,opponents,leaderboard,history});
-  }catch(err){return json({error:String(err instanceof Error?err.message:err)},400)}
+  }catch(err){return json({error:errorText(err)},400)}
 });

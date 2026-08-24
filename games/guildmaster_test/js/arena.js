@@ -52,7 +52,7 @@ async function arenaInvoke(name,body={}){
     if(response&&typeof response.clone==='function'){
       try{
         const payload=await response.clone().json();
-        if(payload?.error)message=payload.error;
+        if(payload?.error)message=typeof payload.error==='string'?payload.error:JSON.stringify(payload.error);
       }catch(_ignored){
         try{const detail=await response.clone().text();if(detail)message=detail}catch(_alsoIgnored){}
       }

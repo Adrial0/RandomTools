@@ -1,4 +1,4 @@
-import {authenticatedUser,json,preflight,safeGuildName,validateSnapshot} from '../_shared/common.ts';
+import {authenticatedUser,errorText,json,preflight,safeGuildName,validateSnapshot} from '../_shared/common.ts';
 
 Deno.serve(async(req)=>{
   const pre=preflight(req);if(pre)return pre;
@@ -14,5 +14,5 @@ Deno.serve(async(req)=>{
     const {error:ratingError}=await admin.from('arena_ratings').upsert({user_id:user.id},{onConflict:'user_id',ignoreDuplicates:true});
     if(ratingError)throw ratingError;
     return json({defense:party});
-  }catch(err){return json({error:String(err instanceof Error?err.message:err)},400)}
+  }catch(err){return json({error:errorText(err)},400)}
 });
