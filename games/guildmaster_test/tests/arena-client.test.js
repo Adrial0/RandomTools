@@ -32,10 +32,8 @@ for(const table of ['profiles','arena_parties','arena_ratings','arena_matches'])
 assert.match(migration,/revoke all on public\.profiles, public\.arena_parties, public\.arena_ratings, public\.arena_matches from anon, authenticated/);
 assert.match(migration,/security definer/);
 assert.match(migration,/request_id uuid not null unique/,'match requests must be idempotent');
-const uniqueNames=fs.readFileSync(require.resolve('../supabase/migrations/003_unique_guild_names.sql'),'utf8');
-assert.match(uniqueNames,/unique index[\s\S]*lower\(guild_name\)/i,'guild names must be unique regardless of capitalization');
-const attackerRating=fs.readFileSync(require.resolve('../supabase/migrations/004_attacker_only_arena_rating.sql'),'utf8');
-assert.match(attackerRating,/defender_rating_change,report,replay\)\s*values\([\s\S]*,delta,0,/i,'defensive matches must not change defender rating');
+assert.match(migration,/unique index[\s\S]*lower\(guild_name\)/i,'guild names must be unique regardless of capitalization');
+assert.match(migration,/defender_rating_change,report,replay\)\s*values\([\s\S]*,delta,0,/i,'defensive matches must not change defender rating');
 const engine=fs.readFileSync(require.resolve('../supabase/functions/_shared/arena-engine.ts'),'utf8');
 assert.match(engine,/timeline/,'Arena battles must return a structured animation timeline');
 

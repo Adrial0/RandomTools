@@ -13,8 +13,8 @@ Deno.serve(async(req)=>{
     if(!attacker||!defender)throw new Error('Both players must have a published Arena defense.');
     if(defender.user_id===user.id)throw new Error('You cannot challenge your own defense.');
     if(attacker.combat_version!==1||defender.combat_version!==1)throw new Error('Arena party combat versions do not match.');
-    const {data:recent}=await admin.from('arena_matches').select('created_at').eq('attacker_id',user.id).gte('created_at',new Date(Date.now()-8000).toISOString()).limit(1);
-    if(recent?.length)throw new Error('Wait a few seconds before starting another ranked match.');
+    const {data:recent}=await admin.from('arena_matches').select('created_at').eq('attacker_id',user.id).gte('created_at',new Date(Date.now()-5*60*1000).toISOString()).limit(1);
+    if(recent?.length)throw new Error('Arena challenges have a five-minute cooldown.');
     const attackSnapshot=validateSnapshot(attacker.snapshot),defenseSnapshot=validateSnapshot(defender.snapshot);
     const seed=Math.floor(Math.random()*2147483646)+1,result=resolveArenaBattle(attackSnapshot,defenseSnapshot,seed);
     const {data:finalized,error}=await admin.rpc('finalize_arena_match',{p_request_id:body.requestId,p_attacker:user.id,p_defender:defender.user_id,p_attacker_won:result.attackerWon,p_attacker_snapshot:attackSnapshot,p_defender_snapshot:defenseSnapshot,p_seed:seed,p_report:result.report,p_replay:result.replay});

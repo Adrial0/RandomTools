@@ -7,6 +7,7 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+create unique index if not exists profiles_guild_name_unique_ci on public.profiles (lower(guild_name));
 
 create table if not exists public.arena_parties (
   id uuid primary key default gen_random_uuid(),
@@ -102,10 +103,11 @@ begin
   winner=case when p_attacker_won then p_attacker else p_defender end;
 
   update arena_ratings set rating=greatest(0,rating+delta),wins=wins+(case when p_attacker_won then 1 else 0 end),losses=losses+(case when p_attacker_won then 0 else 1 end),updated_at=now() where user_id=p_attacker;
-  update arena_ratings set rating=greatest(0,rating-delta),defense_wins=defense_wins+(case when p_attacker_won then 0 else 1 end),defense_losses=defense_losses+(case when p_attacker_won then 1 else 0 end),updated_at=now() where user_id=p_defender;
+  -- Defending is passive: record the result without changing defender rating.
+  update arena_ratings set defense_wins=defense_wins+(case when p_attacker_won then 0 else 1 end),defense_losses=defense_losses+(case when p_attacker_won then 1 else 0 end),updated_at=now() where user_id=p_defender;
 
   insert into arena_matches(request_id,attacker_id,defender_id,winner_id,attacker_snapshot,defender_snapshot,seed,attacker_rating_before,defender_rating_before,attacker_rating_change,defender_rating_change,report,replay)
-  values(p_request_id,p_attacker,p_defender,winner,p_attacker_snapshot,p_defender_snapshot,p_seed,a_rating,d_rating,delta,-delta,p_report,p_replay)
+  values(p_request_id,p_attacker,p_defender,winner,p_attacker_snapshot,p_defender_snapshot,p_seed,a_rating,d_rating,delta,0,p_report,p_replay)
   returning id into match_id;
 
   return jsonb_build_object('matchId',match_id,'ratingChange',delta,'newRating',greatest(0,a_rating+delta));

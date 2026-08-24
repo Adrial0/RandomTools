@@ -189,6 +189,7 @@ function renderActive(){
 }
 function openCombat(mid){combatDomKey='';
   const m=s.missions.find(x=>x.id===mid);if(!m)return;
+  $('combatModal').dataset.mode='mission';
   $('combatModal').dataset.mission=mid;
   $('combatModal').classList.add('on');
   syncWindowScrollLock();
@@ -374,6 +375,7 @@ function updateCombatLog(m){
 }
 function renderCombat(){
   if(!$('combatModal').classList.contains('on'))return;
+  if($('combatModal').dataset.mode==='arena')return;
   const mid=+$('combatModal').dataset.mission,m=s.missions.find(x=>x.id===mid);if(!m){closeCombat();return}
   if(!m.battle)return;
 

@@ -120,42 +120,44 @@ async function fightArenaOpponent(partyId){
 }
 function showArenaResult(result){
   const token=++arenaPlaybackToken,units=new Map((result.combatants||[]).map(x=>[x.id,{...x,hp:x.maxHp}]));
-  const card=x=>`<div class="arenaFighter" id="arenaUnit-${x.id}"><div class="arenaFighterTop"><span class="name">${arenaEscape(x.name)}</span><small>${arenaEscape(x.subclass||x.class)}</small></div><div class="hpTrack"><div class="hpFill" style="width:100%"></div></div><div class="arenaHpText">${x.maxHp} / ${x.maxHp}</div><div class="arenaFloat"></div></div>`;
+  const card=x=>{const icon=x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset');return `<div class="combatant combatMini arenaCombatant" id="arenaUnit-${x.id}" data-arena-unit="${x.id}"><div class="visualIcon">${icon}</div><div class="combatMiniVitals"><div class="combatMiniNameRow"><div class="name combatantName">${arenaEscape(x.name)}</div><span class="combatantHp">${x.maxHp}/${x.maxHp}</span></div><div class="combatMiniClass">${arenaEscape(x.subclass||x.class)}</div><div class="hpTrack"><div class="hpFill" style="width:100%"></div></div><div class="attackTrack"><div class="attackFill" style="width:0%"></div></div>${x.activeType?'<div class="cooldownTrack"><div class="cooldownFill" style="width:0%"></div></div>':''}<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel">Casting</span></div><div class="combatStatusRow"></div></div><div class="arenaFloat"></div></div>`};
   $('combatTitle').textContent=`${result.attackerGuild} vs ${result.defenderGuild}`;
-  $('combatSubtitle').textContent='Arena battle · Server resolved';
-  $('combatBody').innerHTML=`<div class="arenaBattle"><div class="arenaBattleSide"><h3>${arenaEscape(result.attackerGuild)} <span class="chip">Attacking</span></h3><div class="arenaFormation">${[...units.values()].filter(x=>x.side==='attack').map(card).join('')}</div></div><div class="arenaVersus">VS</div><div class="arenaBattleSide"><h3>${arenaEscape(result.defenderGuild)} <span class="chip">Defense</span></h3><div class="arenaFormation">${[...units.values()].filter(x=>x.side==='defense').map(card).join('')}</div></div></div><div class="arenaPlaybackBar"><span>Watching at 5× speed</span><button class="btn" onclick="finishArenaPlayback(${token})">Skip to Result</button></div><div class="log arenaLiveLog" id="arenaLiveLog"></div><div id="arenaFinalResult"></div>`;
+  $('combatSubtitle').textContent='Ranked Arena · live replay of the server-resolved fight';
+  $('combatModal').dataset.mode='arena';
+  $('combatBody').innerHTML=`<div class="combatFixedTop"><div class="combatGrid"><div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">YOUR ARENA PARTY · ATTACKING</div><div class="combatSide compactCombatSide">${[...units.values()].filter(x=>x.side==='attack').map(card).join('')}</div></div><div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">OPPONENT PARTY · DEFENDING</div><div class="combatSide compactCombatSide">${[...units.values()].filter(x=>x.side==='defense').map(card).join('')}</div></div></div></div><div class="log combatLog arenaLiveLog" id="arenaLiveLog"></div><div class="card combatReport" id="arenaFinalResult"><div class="muted">Battle in progress…</div></div>`;
   $('combatModal').classList.add('on');syncWindowScrollLock();
   const events=result.timeline||[],started=performance.now();let cursor=0;
-  window.currentArenaResult=result;window.currentArenaPlaybackToken=token;
   function frame(now){
     if(token!==arenaPlaybackToken||!$('combatModal').classList.contains('on'))return;
-    const battleTime=(now-started)*5;
+    const battleTime=now-started;
     while(cursor<events.length&&events[cursor].time<=battleTime)applyArenaEvent(events[cursor++],units);
-    if(cursor<events.length)requestAnimationFrame(frame);else renderArenaFinalResult(result,token);
+    if(cursor<events.length)requestAnimationFrame(frame);else renderArenaFinalResult(result);
   }
   requestAnimationFrame(frame);
 }
 function applyArenaEvent(event,units){
-  const target=units.get(event.targetId),el=target?$(`arenaUnit-${target.id}`):null;
+  const source=units.get(event.sourceId),sourceEl=source?$(`arenaUnit-${source.id}`):null,target=units.get(event.targetId),el=target?$(`arenaUnit-${target.id}`):null;
+  if(sourceEl){
+    sourceEl.classList.remove('arenaAct');void sourceEl.offsetWidth;sourceEl.classList.add('arenaAct');setTimeout(()=>sourceEl.classList.remove('arenaAct'),240);
+    const attack=sourceEl.querySelector('.attackFill');if(attack&&['attack','ability'].includes(event.type)){attack.style.transition='none';attack.style.width='0%';requestAnimationFrame(()=>{attack.style.transition=`width ${Math.max(250,source.attackInterval||2500)}ms linear`;attack.style.width='100%'})}
+    const cast=sourceEl.querySelector('.castTrack');if(cast&&event.type==='cast'){cast.style.display='block';const fill=cast.querySelector('.castFill');if(fill){fill.style.transition='none';fill.style.width='0%';requestAnimationFrame(()=>{fill.style.transition='width 700ms linear';fill.style.width='100%'})}}else if(cast&&['ability','interrupt'].includes(event.type))cast.style.display='none';
+  }
   if(target&&event.targetHp!=null){
     target.hp=event.targetHp;const pct=clamp(target.hp/target.maxHp*100,0,100);
     const fill=el?.querySelector('.hpFill');if(fill)fill.style.width=pct+'%';
-    const text=el?.querySelector('.arenaHpText');if(text)text.textContent=`${Math.max(0,target.hp)} / ${target.maxHp}`;
+    const text=el?.querySelector('.combatantHp');if(text)text.textContent=`${Math.max(0,target.hp)}/${target.maxHp}`;
     el?.classList.toggle('defeated',target.hp<=0);
     const float=el?.querySelector('.arenaFloat');if(float&&event.amount){float.textContent=(event.type==='heal'?'+':'−')+event.amount;float.className='arenaFloat pop '+(event.type==='heal'?'good':'dangerText');setTimeout(()=>float.classList.remove('pop'),350)}
+    if(el&&event.type!=='heal'){el.classList.remove('arenaHit');void el.offsetWidth;el.classList.add('arenaHit');setTimeout(()=>el.classList.remove('arenaHit'),240)}
+    const statuses=el?.querySelector('.combatStatusRow');if(statuses&&event.type==='status')statuses.innerHTML='<span class="combatStatus burning" title="Damage over time">◆</span>';
   }
   const log=$('arenaLiveLog');if(log&&event.text){const line=document.createElement('div');line.textContent=event.text;line.className='arenaEvent '+event.type;log.prepend(line);while(log.children.length>7)log.lastElementChild.remove()}
 }
-function finishArenaPlayback(token){
-  if(token!==window.currentArenaPlaybackToken)return;arenaPlaybackToken++;
-  const result=window.currentArenaResult,units=new Map((result.combatants||[]).map(x=>[x.id,{...x,hp:x.maxHp}]));
-  (result.timeline||[]).forEach(e=>applyArenaEvent(e,units));renderArenaFinalResult(result,arenaPlaybackToken);
-}
-function renderArenaFinalResult(result,token){
+function renderArenaFinalResult(result){
   if($('arenaFinalResult')?.dataset.done)return;
   const box=$('arenaFinalResult');if(!box)return;box.dataset.done='true';
   const rows=(result.report||[]).map(x=>`<div class="arenaResultRow"><span>${arenaEscape(x.name)}</span><span>${x.damage||0} damage</span><span>${x.healing||0} healing</span><span>${x.interrupts||0} interrupts</span></div>`).join('');
-  box.innerHTML=`<div class="arenaResultReveal ${result.won?'victory':'defeat'}"><h2>${result.won?'Arena Victory':'Arena Defeat'}</h2><div class="arenaRatingChange ${result.ratingChange>=0?'good':'dangerText'}">${result.ratingChange===0?'Rating unchanged':`Rating ${result.ratingChange>0?'+':''}${result.ratingChange}`} · ${result.newRating}</div><div class="arenaResultTable">${rows}</div><button class="btn gold" onclick="closeCombat()">Continue</button></div>`;
+  box.innerHTML=`<div class="arenaResultReveal ${result.won?'victory':'defeat'}"><h2>${result.won?'Arena Victory':'Arena Defeat'}</h2><div class="arenaRatingChange ${result.ratingChange>=0?'good':'dangerText'}">${result.ratingChange===0?'Rating unchanged':`Rating ${result.ratingChange>0?'+':''}${result.ratingChange}`} · ${result.newRating}</div><div class="arenaResultTable">${rows}</div></div>`;
   box.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function renderArenaData(){renderArenaDefense();renderArenaOpponents();renderArenaLeaderboard();renderArenaHistory()}
