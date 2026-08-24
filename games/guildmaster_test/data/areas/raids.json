@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Drakefall Assault",
+    "level": 35,
+    "boss": "Ancient Drake",
+    "theme": "fire",
+    "enemyPool": [
+      "Flame Drake",
+      "Drake Whelp",
+      "Ashscale Guardian",
+      "Inferno Wyvern"
+    ],
+    "desc": "A raid dominated by extreme Fire damage. High Fire resistance is essential."
+  },
+  {
+    "name": "Ogre Warcamp",
+    "level": 42,
+    "boss": "War Ogre",
+    "theme": "physical",
+    "enemyPool": [
+      "War Ogre Brute",
+      "Ogre Firecaller",
+      "Ironhide Ogre",
+      "Warcamp Shaman"
+    ],
+    "desc": "A crushing physical raid with secondary Fire and Lightning threats."
+  },
+  {
+    "name": "Haunted Citadel",
+    "level": 50,
+    "boss": "Wraith Lord",
+    "theme": "dark",
+    "enemyPool": [
+      "Citadel Wraith",
+      "Dread Knight",
+      "Soul Reaper",
+      "Haunting Choir"
+    ],
+    "desc": "A fortress drowned in Dark damage. High Dark resistance is essential."
+  },
+  {
+    "name": "Abyss Gate",
+    "level": 60,
+    "boss": "Abyssal Demon",
+    "theme": "dark",
+    "enemyPool": [
+      "Abyss Demon",
+      "Hellfire Fiend",
+      "Void Herald",
+      "Abyss Guardian"
+    ],
+    "desc": "Endgame Dark and Fire damage. Strong resistances are mandatory."
+  }
+]

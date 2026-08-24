@@ -1,0 +1,81 @@
+{
+  "regeneration": {
+    "name": "Regeneration",
+    "manaCost": 0,
+    "cooldown": 5000,
+    "type": "heal",
+    "power": 0.08
+  },
+  "fireball": {
+    "name": "Fireball",
+    "manaCost": 10,
+    "cooldown": 7000,
+    "type": "spell",
+    "damageType": "fire",
+    "power": 1.45
+  },
+  "burning_strike": {
+    "name": "Burning Strike",
+    "manaCost": 6,
+    "cooldown": 6500,
+    "type": "spell",
+    "damageType": "fire",
+    "power": 1.25
+  },
+  "poison_spit": {
+    "name": "Poison Spit",
+    "manaCost": 8,
+    "cooldown": 6500,
+    "type": "spell",
+    "damageType": "poison",
+    "power": 1.35
+  },
+  "venom_strike": {
+    "name": "Venom Strike",
+    "manaCost": 5,
+    "cooldown": 6000,
+    "type": "spell",
+    "damageType": "poison",
+    "power": 1.2
+  },
+  "frost_bolt": {
+    "name": "Frost Bolt",
+    "manaCost": 8,
+    "cooldown": 7000,
+    "type": "spell",
+    "damageType": "ice",
+    "power": 1.35
+  },
+  "lightning_burst": {
+    "name": "Lightning Burst",
+    "manaCost": 12,
+    "cooldown": 8500,
+    "type": "aoe",
+    "damageType": "lightning",
+    "power": 1.0
+  },
+  "dark_bolt": {
+    "name": "Dark Bolt",
+    "manaCost": 9,
+    "cooldown": 7000,
+    "type": "spell",
+    "damageType": "dark",
+    "power": 1.35
+  },
+  "radiant_bolt": {
+    "name": "Radiant Bolt",
+    "manaCost": 9,
+    "cooldown": 7000,
+    "type": "spell",
+    "damageType": "holy",
+    "power": 1.35
+  },
+  "cleave": {
+    "name": "Cleave",
+    "manaCost": 0,
+    "cooldown": 7500,
+    "type": "aoe",
+    "damageType": "physical",
+    "power": 0.85
+  }
+}

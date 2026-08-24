@@ -1,0 +1,144 @@
+[
+  {
+    "id": "forest",
+    "name": "Greenwood Forest",
+    "level": 1,
+    "icon": "🌲",
+    "desc": "Old woodland roads filled with beasts, goblins and living forest magic.",
+    "enemyPool": [
+      "Forest Goblin",
+      "Grey Wolf",
+      "Thornback Boar",
+      "Moss Slime",
+      "Briar Wisp"
+    ]
+  },
+  {
+    "id": "plains",
+    "name": "Sunfield Plains",
+    "level": 5,
+    "icon": "🌾",
+    "desc": "Open grasslands patrolled by raiders and fast roaming beasts.",
+    "enemyPool": [
+      "Highway Bandit",
+      "Prairie Wolf",
+      "Sunfield Raider",
+      "Dust Hawk",
+      "Spark Imp"
+    ]
+  },
+  {
+    "id": "desert",
+    "name": "Ashen Desert",
+    "level": 10,
+    "icon": "🏜️",
+    "desc": "Scorching dunes where fire and poison appear among mostly physical threats.",
+    "enemyPool": [
+      "Dune Raider",
+      "Sand Scorpion",
+      "Cinder Slime",
+      "Ash Vulture",
+      "Sun Cultist"
+    ],
+    "resourceDrops": [
+      "Sunstone",
+      "Sandglass",
+      "CinderBloom"
+    ]
+  },
+  {
+    "id": "swamp",
+    "name": "Blackwater Swamp",
+    "level": 15,
+    "icon": "🌫️",
+    "desc": "A poisonous marsh of venomous wildlife, ghouls and dark bog magic.",
+    "enemyPool": [
+      "Bog Spider",
+      "Marsh Ghoul",
+      "Fen Leech",
+      "Bog Lurker",
+      "Mire Witch"
+    ],
+    "resourceDrops": [
+      "Nightshade",
+      "BogIron",
+      "VenomSap"
+    ]
+  },
+  {
+    "id": "mountain",
+    "name": "Ironpeak Mountains",
+    "level": 22,
+    "icon": "🏔️",
+    "desc": "Brutal physical enemies dominate the peaks, with occasional lightning threats.",
+    "enemyPool": [
+      "Peak Ogre",
+      "Stone Drake",
+      "Cliff Raider",
+      "Thunder Roc",
+      "Granite Golem"
+    ],
+    "resourceDrops": [
+      "StarMetal",
+      "SkyCrystal",
+      "Ironwood"
+    ]
+  },
+  {
+    "id": "tundra",
+    "name": "Frozen Tundra",
+    "level": 30,
+    "icon": "❄️",
+    "desc": "Frozen predators and spirits mix physical attacks with moderate ice damage.",
+    "enemyPool": [
+      "Frost Wraith",
+      "Icebound Ghoul",
+      "Snow Stalker",
+      "Glacial Elemental",
+      "Whitefang Yeti"
+    ],
+    "resourceDrops": [
+      "GlacialOre",
+      "Frostbloom",
+      "WhitePelt"
+    ]
+  },
+  {
+    "id": "volcano",
+    "name": "Emberfall Volcano",
+    "level": 40,
+    "icon": "🌋",
+    "desc": "Fire creatures rule the molten caverns, backed by crushing physical brutes.",
+    "enemyPool": [
+      "Ember Drake",
+      "Lava Hound",
+      "Cinder Demon",
+      "Magma Elemental",
+      "Obsidian Brute"
+    ],
+    "resourceDrops": [
+      "CinderOre",
+      "StormGlass",
+      "MagmaCore"
+    ]
+  },
+  {
+    "id": "voidlands",
+    "name": "The Voidlands",
+    "level": 55,
+    "icon": "🌌",
+    "desc": "Reality-warped horrors use dark magic alongside deadly physical attacks.",
+    "enemyPool": [
+      "Void Demon",
+      "Astral Wraith",
+      "Voidling",
+      "Aether Horror",
+      "Warped Knight"
+    ],
+    "resourceDrops": [
+      "Voidstone",
+      "AetherCrystal",
+      "AstralThread"
+    ]
+  }
+]

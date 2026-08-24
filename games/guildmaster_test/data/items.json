@@ -1,0 +1,256 @@
+{
+  "weapons": {
+    "Longsword": {
+      "scale": "str",
+      "type": "physical",
+      "base": 12,
+      "parry": 0.05,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Greatsword": {
+      "scale": "str",
+      "type": "physical",
+      "base": 17,
+      "cleave": 0.22,
+      "icon": "\u2694\ufe0f"
+    },
+    "Battle Axe": {
+      "scale": "str",
+      "type": "physical",
+      "base": 15,
+      "critDamage": 0.25,
+      "icon": "\ud83e\ude93"
+    },
+    "Greataxe": {
+      "scale": "str",
+      "type": "physical",
+      "base": 18,
+      "critDamage": 0.4,
+      "damageVariance": 0.18,
+      "icon": "\ud83e\ude93"
+    },
+    "Warhammer": {
+      "scale": "str",
+      "type": "physical",
+      "base": 16,
+      "armorPen": 0.14,
+      "icon": "\ud83d\udd28"
+    },
+    "Mace": {
+      "scale": "str",
+      "type": "physical",
+      "base": 12,
+      "armorPen": 0.1,
+      "icon": "\ud83d\udd28"
+    },
+    "Spear": {
+      "scale": "str",
+      "scale2": "dex",
+      "type": "physical",
+      "base": 13,
+      "accuracy": 0.06,
+      "icon": "\ud83d\udd31"
+    },
+    "Halberd": {
+      "scale": "str",
+      "type": "physical",
+      "base": 16,
+      "cleave": 0.16,
+      "accuracy": 0.04,
+      "icon": "\ud83d\udd31"
+    },
+    "Holy Sword": {
+      "scale": "str",
+      "type": "holy",
+      "base": 15,
+      "parry": 0.04,
+      "healingPower": 0.06,
+      "icon": "\u2694\ufe0f"
+    },
+    "Shortbow": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 11,
+      "accuracy": 0.08,
+      "icon": "\ud83c\udff9"
+    },
+    "Longbow": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 14,
+      "critChance": 0.05,
+      "accuracy": 0.05,
+      "icon": "\ud83c\udff9"
+    },
+    "Recurve Bow": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 13,
+      "critChance": 0.04,
+      "accuracy": 0.06,
+      "icon": "\ud83c\udff9"
+    },
+    "Light Crossbow": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 14,
+      "armorPen": 0.08,
+      "accuracy": 0.05,
+      "icon": "\ud83c\udff9"
+    },
+    "Heavy Crossbow": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 17,
+      "armorPen": 0.16,
+      "icon": "\ud83c\udff9"
+    },
+    "Hunting Bow": {
+      "scale": "dex",
+      "type": "poison",
+      "base": 12,
+      "statusChance": 0.08,
+      "icon": "\ud83c\udff9"
+    },
+    "Dagger": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 10,
+      "critChance": 0.07,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Knife": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 8,
+      "critChance": 0.05,
+      "statusChance": 0.05,
+      "icon": "\ud83d\udd2a"
+    },
+    "Dirk": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 11,
+      "critChance": 0.06,
+      "critDamage": 0.15,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Kris": {
+      "scale": "dex",
+      "type": "poison",
+      "base": 10,
+      "statusChance": 0.12,
+      "critChance": 0.04,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Shortsword": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 12,
+      "parry": 0.04,
+      "critChance": 0.03,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Twin Blades": {
+      "scale": "dex",
+      "type": "physical",
+      "base": 13,
+      "counter": 0.08,
+      "critChance": 0.04,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Oak Staff": {
+      "scale": "int",
+      "type": "physical",
+      "base": 9,
+      "healingPower": 0.08,
+      "icon": "\ud83e\ude84"
+    },
+    "Arcane Staff": {
+      "scale": "int",
+      "type": "lightning",
+      "base": 15,
+      "elementalDamage": 0.1,
+      "icon": "\ud83e\ude84"
+    },
+    "Holy Staff": {
+      "scale": "int",
+      "type": "holy",
+      "base": 13,
+      "healingPower": 0.16,
+      "icon": "\ud83e\ude84"
+    },
+    "Wand": {
+      "scale": "int",
+      "type": "fire",
+      "base": 12,
+      "elementalDamage": 0.08,
+      "critChance": 0.04,
+      "icon": "\ud83e\ude84"
+    },
+    "Crystal Wand": {
+      "scale": "int",
+      "type": "ice",
+      "base": 14,
+      "elementalDamage": 0.1,
+      "statusChance": 0.07,
+      "icon": "\ud83e\ude84"
+    },
+    "Orb": {
+      "scale": "int",
+      "type": "lightning",
+      "base": 15,
+      "statusChance": 0.1,
+      "elementalDamage": 0.08,
+      "icon": "\ud83d\udd2e"
+    },
+    "Spellbook": {
+      "scale": "int",
+      "type": "fire",
+      "base": 16,
+      "elementalDamage": 0.14,
+      "icon": "\ud83d\udcd6"
+    },
+    "Runic Hammer": {
+      "scale": "str",
+      "scale2": "int",
+      "type": "lightning",
+      "base": 19,
+      "armorPen": 0.13,
+      "elementalDamage": 0.08,
+      "icon": "\ud83d\udd28"
+    },
+    "Spellblade": {
+      "scale": "str",
+      "scale2": "int",
+      "type": "lightning",
+      "base": 18,
+      "parry": 0.05,
+      "elementalDamage": 0.1,
+      "icon": "\u2694\ufe0f"
+    },
+    "Arcane Dagger": {
+      "scale": "dex",
+      "scale2": "int",
+      "type": "dark",
+      "base": 16,
+      "critChance": 0.06,
+      "statusChance": 0.1,
+      "icon": "\ud83d\udde1\ufe0f"
+    },
+    "Scepter": {
+      "scale": "int",
+      "type": "ice",
+      "base": 13,
+      "healingPower": 0.12,
+      "accuracy": 0.04,
+      "icon": "\ud83e\ude84"
+    }
+  },
+  "weaponTypeMap": {
+    "Holy Sword": "Longsword",
+    "Runic Hammer": "Warhammer",
+    "Spellblade": "Longsword",
+    "Arcane Dagger": "Dagger"
+  }
+}

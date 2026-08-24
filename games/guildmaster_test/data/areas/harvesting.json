@@ -1,0 +1,529 @@
+[
+  {
+    "id": "stonequarry",
+    "name": "Oldstone Quarry",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 1,
+    "kind": "Mining",
+    "cycle": 30,
+    "xp": 1,
+    "resources": [
+      [
+        "Stone",
+        100
+      ]
+    ],
+    "desc": "A novice quarry for dependable building stone."
+  },
+  {
+    "id": "copper",
+    "name": "Redridge Copper Mine",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 3,
+    "kind": "Mining",
+    "cycle": 34,
+    "xp": 2,
+    "resources": [
+      [
+        "CopperOre",
+        100
+      ]
+    ],
+    "desc": "Shallow red-veined tunnels rich in copper ore."
+  },
+  {
+    "id": "ironmine",
+    "name": "Ironvein Mine",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 5,
+    "kind": "Mining",
+    "cycle": 38,
+    "xp": 2,
+    "resources": [
+      [
+        "Iron",
+        100
+      ]
+    ],
+    "desc": "A reliable iron mine for growing guilds."
+  },
+  {
+    "id": "silvermine",
+    "name": "Mooncrest Silver Mine",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 7,
+    "kind": "Mining",
+    "cycle": 43,
+    "xp": 3,
+    "resources": [
+      [
+        "Silver",
+        100
+      ]
+    ],
+    "desc": "Cool tunnels threaded with pale silver."
+  },
+  {
+    "id": "crystal",
+    "name": "Shimmering Crystal Cavern",
+    "icon": "💎",
+    "skill": "mining",
+    "req": 10,
+    "kind": "Mining",
+    "cycle": 50,
+    "xp": 3,
+    "resources": [
+      [
+        "Crystal",
+        100
+      ]
+    ],
+    "desc": "A magically active cavern filled with crafting crystals."
+  },
+  {
+    "id": "mithril",
+    "name": "Mithril Depths",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 13,
+    "kind": "Mining",
+    "cycle": 58,
+    "xp": 4,
+    "resources": [
+      [
+        "Mithril",
+        100
+      ]
+    ],
+    "desc": "Deep blue-metal veins requiring experienced miners."
+  },
+  {
+    "id": "bogiron",
+    "name": "Blackfen Bog-Iron Pits",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 16,
+    "kind": "Mining",
+    "cycle": 64,
+    "xp": 4,
+    "resources": [
+      [
+        "BogIron",
+        100
+      ]
+    ],
+    "desc": "Dense bog iron dug from the black marsh earth."
+  },
+  {
+    "id": "glacialore",
+    "name": "Frostpeak Excavation",
+    "icon": "❄️",
+    "skill": "mining",
+    "req": 19,
+    "kind": "Mining",
+    "cycle": 70,
+    "xp": 5,
+    "resources": [
+      [
+        "GlacialOre",
+        100
+      ]
+    ],
+    "desc": "Frozen ore veins exposed beneath ancient ice."
+  },
+  {
+    "id": "cindermine",
+    "name": "Cinderdeep Mine",
+    "icon": "🔥",
+    "skill": "mining",
+    "req": 22,
+    "kind": "Mining",
+    "cycle": 76,
+    "xp": 5,
+    "resources": [
+      [
+        "CinderOre",
+        100
+      ]
+    ],
+    "desc": "Heat-scarred tunnels containing dense cinder ore."
+  },
+  {
+    "id": "starmetal",
+    "name": "Starfall Crater",
+    "icon": "☄️",
+    "skill": "mining",
+    "req": 26,
+    "kind": "Mining",
+    "cycle": 84,
+    "xp": 6,
+    "resources": [
+      [
+        "StarMetal",
+        100
+      ]
+    ],
+    "desc": "A dangerous crater where fallen star-metal can be extracted."
+  },
+  {
+    "id": "obsidian",
+    "name": "Obsidian Pit",
+    "icon": "⬛",
+    "skill": "mining",
+    "req": 30,
+    "kind": "Mining",
+    "cycle": 92,
+    "xp": 7,
+    "resources": [
+      [
+        "Obsidian",
+        100
+      ]
+    ],
+    "desc": "Volcanic glass quarried beside active magma vents."
+  },
+  {
+    "id": "voidquarry",
+    "name": "Voidstone Quarry",
+    "icon": "🌌",
+    "skill": "mining",
+    "req": 36,
+    "kind": "Mining",
+    "cycle": 105,
+    "xp": 8,
+    "resources": [
+      [
+        "Voidstone",
+        100
+      ]
+    ],
+    "desc": "Reality-warped deposits used in the highest-tier equipment."
+  },
+  {
+    "id": "logging",
+    "name": "Whisperwood Logging Camp",
+    "icon": "🪵",
+    "skill": "woodcutting",
+    "req": 1,
+    "kind": "Woodcutting",
+    "cycle": 30,
+    "xp": 1,
+    "resources": [
+      [
+        "Wood",
+        100
+      ]
+    ],
+    "desc": "Straight, dependable timber for basic crafting."
+  },
+  {
+    "id": "hardwood",
+    "name": "Oakshield Timberland",
+    "icon": "🌲",
+    "skill": "woodcutting",
+    "req": 6,
+    "kind": "Woodcutting",
+    "cycle": 44,
+    "xp": 3,
+    "resources": [
+      [
+        "Hardwood",
+        100
+      ]
+    ],
+    "desc": "Mature hardwood trees requiring stronger tools and technique."
+  },
+  {
+    "id": "ironwood",
+    "name": "Ironwood Thicket",
+    "icon": "🌳",
+    "skill": "woodcutting",
+    "req": 12,
+    "kind": "Woodcutting",
+    "cycle": 58,
+    "xp": 4,
+    "resources": [
+      [
+        "Ironwood",
+        100
+      ]
+    ],
+    "desc": "Exceptionally dense timber prized by weapon smiths."
+  },
+  {
+    "id": "spiritgrove",
+    "name": "Spiritwood Grove",
+    "icon": "✨",
+    "skill": "woodcutting",
+    "req": 20,
+    "kind": "Woodcutting",
+    "cycle": 76,
+    "xp": 6,
+    "resources": [
+      [
+        "SpiritBark",
+        100
+      ]
+    ],
+    "desc": "Ancient living trees that shed magically charged bark."
+  },
+  {
+    "id": "herbs",
+    "name": "Greenmeadow Herb Fields",
+    "icon": "🌿",
+    "skill": "herbalism",
+    "req": 1,
+    "kind": "Herbalism",
+    "cycle": 32,
+    "xp": 1,
+    "resources": [
+      [
+        "Herbs",
+        100
+      ]
+    ],
+    "desc": "Common medicinal plants for novice herbalists."
+  },
+  {
+    "id": "manabloom",
+    "name": "Bluebell Mana Garden",
+    "icon": "🪻",
+    "skill": "herbalism",
+    "req": 7,
+    "kind": "Herbalism",
+    "cycle": 46,
+    "xp": 3,
+    "resources": [
+      [
+        "ManaBloom",
+        100
+      ]
+    ],
+    "desc": "Mana-rich flowers cultivated around old ley lines."
+  },
+  {
+    "id": "nightfen",
+    "name": "Nightshade Fen",
+    "icon": "🌑",
+    "skill": "herbalism",
+    "req": 13,
+    "kind": "Herbalism",
+    "cycle": 60,
+    "xp": 4,
+    "resources": [
+      [
+        "Nightshade",
+        100
+      ]
+    ],
+    "desc": "Toxic magical flora gathered from a dangerous fen."
+  },
+  {
+    "id": "venomsap",
+    "name": "Venomsap Mangrove",
+    "icon": "☠️",
+    "skill": "herbalism",
+    "req": 19,
+    "kind": "Herbalism",
+    "cycle": 72,
+    "xp": 5,
+    "resources": [
+      [
+        "VenomSap",
+        100
+      ]
+    ],
+    "desc": "Caustic sap harvested from twisted marsh trees."
+  },
+  {
+    "id": "cinderbloom",
+    "name": "Ashen Bloomfields",
+    "icon": "🌺",
+    "skill": "herbalism",
+    "req": 25,
+    "kind": "Herbalism",
+    "cycle": 84,
+    "xp": 6,
+    "resources": [
+      [
+        "CinderBloom",
+        100
+      ]
+    ],
+    "desc": "Rare flowers that thrive in warm volcanic ash."
+  },
+  {
+    "id": "frostbloom",
+    "name": "Frostbloom Shelf",
+    "icon": "❄️",
+    "skill": "herbalism",
+    "req": 31,
+    "kind": "Herbalism",
+    "cycle": 96,
+    "xp": 7,
+    "resources": [
+      [
+        "Frostbloom",
+        100
+      ]
+    ],
+    "desc": "Delicate alpine herbs preserved by supernatural cold."
+  },
+  {
+    "id": "fishing",
+    "name": "Silverstream Fishing Spot",
+    "icon": "🎣",
+    "skill": "fishing",
+    "req": 1,
+    "kind": "Fishing",
+    "cycle": 30,
+    "xp": 1,
+    "resources": [
+      [
+        "Fish",
+        100
+      ]
+    ],
+    "desc": "A calm river suitable for novice fishers."
+  },
+  {
+    "id": "pearlbank",
+    "name": "Pearlwater Bank",
+    "icon": "🦪",
+    "skill": "fishing",
+    "req": 8,
+    "kind": "Fishing",
+    "cycle": 48,
+    "xp": 3,
+    "resources": [
+      [
+        "DeepPearl",
+        100
+      ]
+    ],
+    "desc": "Deep pools where valuable pearls form beneath the riverbed."
+  },
+  {
+    "id": "stormcoast",
+    "name": "Storm Coast",
+    "icon": "🌊",
+    "skill": "fishing",
+    "req": 16,
+    "kind": "Fishing",
+    "cycle": 66,
+    "xp": 5,
+    "resources": [
+      [
+        "StormGlass",
+        100
+      ]
+    ],
+    "desc": "Violent coastal waters wash magically fused stormglass ashore."
+  },
+  {
+    "id": "skywater",
+    "name": "Skyfall Lake",
+    "icon": "💠",
+    "skill": "fishing",
+    "req": 24,
+    "kind": "Fishing",
+    "cycle": 82,
+    "xp": 6,
+    "resources": [
+      [
+        "SkyCrystal",
+        100
+      ]
+    ],
+    "desc": "A high mountain lake where strange blue crystals form underwater."
+  },
+  {
+    "id": "hunting",
+    "name": "Greenwood Hunting Grounds",
+    "icon": "🦌",
+    "skill": "hunting",
+    "req": 1,
+    "kind": "Skinning",
+    "cycle": 36,
+    "xp": 1,
+    "resources": [
+      [
+        "Leather",
+        100
+      ]
+    ],
+    "desc": "Common game provides reliable leather."
+  },
+  {
+    "id": "wolfhunt",
+    "name": "Greyfang Range",
+    "icon": "🐺",
+    "skill": "hunting",
+    "req": 6,
+    "kind": "Skinning",
+    "cycle": 46,
+    "xp": 3,
+    "resources": [
+      [
+        "WolfPelt",
+        100
+      ]
+    ],
+    "desc": "Rocky hunting grounds populated by thick-furred wolves."
+  },
+  {
+    "id": "bonefields",
+    "name": "Sunbleached Wilds",
+    "icon": "🦴",
+    "skill": "hunting",
+    "req": 11,
+    "kind": "Skinning",
+    "cycle": 56,
+    "xp": 4,
+    "resources": [
+      [
+        "Bone",
+        100
+      ]
+    ],
+    "desc": "Large beasts leave strong bones useful for specialized crafting."
+  },
+  {
+    "id": "whitepelt",
+    "name": "Whitefang Tundra",
+    "icon": "🐻‍❄️",
+    "skill": "hunting",
+    "req": 18,
+    "kind": "Skinning",
+    "cycle": 72,
+    "xp": 5,
+    "resources": [
+      [
+        "WhitePelt",
+        100
+      ]
+    ],
+    "desc": "Cold-weather beasts yield rare insulating white pelts."
+  },
+  {
+    "id": "shadowsilk",
+    "name": "Duskmoth Hollow",
+    "icon": "🕸️",
+    "skill": "hunting",
+    "req": 26,
+    "kind": "Skinning",
+    "cycle": 88,
+    "xp": 7,
+    "resources": [
+      [
+        "ShadowSilk",
+        100
+      ]
+    ],
+    "desc": "Nocturnal creatures produce fine shadow-dark fibers."
+  }
+]
