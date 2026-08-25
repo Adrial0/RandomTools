@@ -329,8 +329,22 @@ function combatReportHtml(m){
   const report=ensureCombatReport(m),rows=Object.values(report.heroes);
   const duration=fmt(Date.now()-(report.startedAt||m.start||Date.now()));
   const deathOrder=report.deaths.length?report.deaths.map((x,i)=>`${i+1}. ${x.name}`).join(' · '):'No recorded deaths';
-  return `<div class="combatReportHead"><div><div class="name">Mission Report</div><div class="muted">${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active</div></div><span class="chip">${deathOrder}</span></div>
-    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow"><span><b>${row.name}</b><small>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small></span><span>${Math.round(row.damage||0).toLocaleString()}</span><span>${Math.round(row.statusDamage||0).toLocaleString()}<small>${row.statusesApplied||0} applied</small></span><span>${Math.round(row.healing||0).toLocaleString()}</span><span>${Math.round(row.damageTaken||0).toLocaleString()}<small>${row.deaths||0} deaths</small></span><span>${row.interrupts||0} interrupts<small>${row.cleanses||0} cleanses</small></span></div>`).join('')}</div>`;
+  return `<div class="combatReportHead"><div><div class="name">Mission Report</div><div class="muted" data-report-summary>${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active</div></div><span class="chip" data-report-deaths>${deathOrder}</span></div>
+    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow" data-report-hero="${row.id}"><span><b data-report-name>${row.name}</b><small data-report-actions>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small></span><span data-report-damage>${Math.round(row.damage||0).toLocaleString()}</span><span data-report-status>${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied</span><span data-report-healing>${Math.round(row.healing||0).toLocaleString()}</span><span data-report-taken>${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths</span><span data-report-utility>${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses</span></div>`).join('')}</div>`;
+}
+function combatReportKey(m){return Object.values(ensureCombatReport(m).heroes).map(row=>row.id).join('-')}
+function updateCombatReport(m){
+  const el=$('combatReport');if(!el)return;
+  const report=ensureCombatReport(m),rows=Object.values(report.heroes),key=combatReportKey(m);
+  if(el.dataset.reportKey!==key){el.innerHTML=combatReportHtml(m);el.dataset.reportKey=key}
+  const duration=fmt(Date.now()-(report.startedAt||m.start||Date.now())),summary=el.querySelector('[data-report-summary]'),deaths=el.querySelector('[data-report-deaths]');
+  if(summary)summary.textContent=`${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active`;
+  if(deaths)deaths.textContent=report.deaths.length?report.deaths.map((x,i)=>`${i+1}. ${x.name}`).join(' · '):'No recorded deaths';
+  rows.forEach(row=>{
+    const card=el.querySelector(`[data-report-hero="${row.id}"]`);if(!card)return;
+    const set=(selector,value)=>{const node=card.querySelector(selector);if(node)node.textContent=value};
+    set('[data-report-name]',row.name);set('[data-report-actions]',`${row.abilityUses||0} abilities · ${row.criticalHits||0} crits`);set('[data-report-damage]',Math.round(row.damage||0).toLocaleString());set('[data-report-status]',`${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied`);set('[data-report-healing]',Math.round(row.healing||0).toLocaleString());set('[data-report-taken]',`${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths`);set('[data-report-utility]',`${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses`);
+  });
 }
 function buildCombatStructure(m){
   const arenaMode=m.type==='arena';
@@ -350,8 +364,8 @@ function buildCombatStructure(m){
         <div class="lootBox"><span>Items</span><strong id="combatItems">${m.stash.items.length}</strong></div>
       </div>
     </div>
+    <div class="card combatReport" id="combatReport" data-report-key="${combatReportKey(m)}">${combatReportHtml(m)}</div>
     <div class="log combatLog" id="combatLog"></div>
-    <div class="card combatReport" id="combatReport">${combatReportHtml(m)}</div>
     <div class="combatInspectPanel" id="combatInspectPanel"></div>
   `;
   combatDomKey=combatStructureKey(m);
@@ -445,11 +459,7 @@ function renderCombat(){
   if($('combatRep'))$('combatRep').textContent=m.stash.rep;
   if($('combatMaterials'))$('combatMaterials').textContent=matTotal;
   if($('combatItems'))$('combatItems').textContent=m.stash.items.length;
-  if($('combatReport')){
-    const reportEl=$('combatReport'),top=reportEl.scrollTop,left=reportEl.scrollLeft;
-    reportEl.innerHTML=combatReportHtml(m);
-    reportEl.scrollTop=top;reportEl.scrollLeft=left;
-  }
+  updateCombatReport(m);
   if($('combatDefeatedBanner')){
     $('combatDefeatedBanner').style.display=m.defeated?'block':'none';
     if(m.defeated)$('combatDefeatedBanner').innerHTML=m.type==='arena'?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m);
