@@ -402,10 +402,12 @@ function buildCombatStructure(m){
 function updateCombatantDom(x,enemy){
   let el=document.querySelector(`[data-combatant="${enemy?'enemy':'hero'}-${x.id}"]`);
   if(!el)return;
-  if(el.dataset.entitySignature!==combatEntitySignature(x,enemy)){
-    el.outerHTML=combatantHtml(x,enemy,!enemy&&x.row==='front');
-    return;
-  }
+  // Encounter creation produces fresh combat-state objects. Never replace an
+  // existing card because of that: replacing the element resets animations,
+  // effect icons and timer bars, which made every new encounter look like a
+  // full combat-view refresh.
+  el.dataset.entitySignature=combatEntitySignature(x,enemy);
+  el.classList.toggle('combatThreatFront',!enemy&&x.row==='front');
   const pct=clamp(x.hp/x.maxHp*100,0,100);
   const previousHp=Number(el.dataset.lastHp),hpDelta=x.hp-previousHp;
   if(Number.isFinite(previousHp)&&hpDelta!==0){
@@ -414,7 +416,9 @@ function updateCombatantDom(x,enemy){
     el.classList.remove(hpDelta>0?'combatHeal':'combatHit');void el.offsetWidth;el.classList.add(hpDelta>0?'combatHeal':'combatHit');setTimeout(()=>el.classList.remove('combatHeal','combatHit'),240);
   }
   el.dataset.lastHp=x.hp;
-  const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill');
+  const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass');
+  if(name)name.textContent=x.name;
+  if(classLine)classLine.textContent=enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`;
   if(hp)hp.textContent=`${Math.max(0,x.hp)}/${x.maxHp}`;
   if(fill)fill.style.width=pct+'%';
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';

@@ -14,6 +14,7 @@ assert.match(css,/\.combatant\.combatMini\.enemy\{\s*height:auto!important;\s*mi
 assert.ok(ui.indexOf('id="combatReport"')<ui.indexOf('id="combatLog"'),'Mission Report appears above the combat log');
 assert.match(ui,/function updateCombatReport\(/,'Mission Report values update without replacing the whole panel');
 assert.doesNotMatch(ui,/statusRow\)statusRow\.innerHTML/,'effect rows are reconciled without being erased every render');
+assert.doesNotMatch(ui,/el\.outerHTML\s*=\s*combatantHtml/,'existing combatant cards survive encounter-state replacement');
 assert.match(ui,/if\(!\$\('combatLog'\)\)buildCombatStructure\(m\)/,'the full combat structure is created only when the view is opened');
 assert.match(css,/#combatReport\{[^}]*order:2/s,'Mission Report is explicitly ordered above the combat log');
 assert.match(css,/#combatLog\{[^}]*order:3/s,'Combat Log is explicitly ordered below the Mission Report');
