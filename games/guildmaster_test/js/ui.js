@@ -231,7 +231,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
   const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
-  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''}" ${options.arena?'':`${options.slot!=null?`data-combat-slot="${enemy?'enemy':'hero'}:${options.slot}"`:''} data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.hidden?'style="display:none"':''} ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
+  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''} ${options.hidden?'combatSlotEmpty':''}" ${options.arena?'':`${options.slot!=null?`data-combat-slot="${enemy?'enemy':'hero'}:${options.slot}"`:''} data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
     <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
       <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
@@ -466,16 +466,16 @@ function renderPersistentCombatSlots(m){
   const heroCards=[...heroSide.querySelectorAll('[data-combat-slot]')];
   heroes.forEach((hero,index)=>{
     const el=heroCards[index];if(!el)return;
-    el.style.display='';el.dataset.combatant=`hero-${hero.id}`;el.dataset.combatSide='hero';el.dataset.combatId=hero.id;
+    el.classList.remove('combatSlotEmpty');el.dataset.combatant=`hero-${hero.id}`;el.dataset.combatSide='hero';el.dataset.combatId=hero.id;
     updateCombatantDom(hero,false,el);
   });
-  heroCards.slice(heroes.length).forEach(el=>{el.style.display='none';delete el.dataset.combatant;delete el.dataset.combatId});
+  heroCards.slice(heroes.length).forEach(el=>{el.classList.add('combatSlotEmpty');delete el.dataset.combatant;delete el.dataset.combatId});
   const enemyCards=[...enemySide.querySelectorAll('[data-combat-slot]')];
   enemies.forEach((enemy,index)=>{
     const el=enemyCards[index];if(!el)return;
     const encounterSlot=`${m.battle.id}:${index}`;
     const enteringNewEncounter=el.dataset.encounterSlot!==encounterSlot;
-    el.style.display='';
+    el.classList.remove('combatSlotEmpty');
     el.dataset.combatant=`enemy-${enemy.id}`;
     el.dataset.combatSide='enemy';
     el.dataset.combatId=enemy.id;
@@ -487,7 +487,7 @@ function renderPersistentCombatSlots(m){
     }
     updateCombatantDom(enemy,true,el);
   });
-  enemyCards.slice(enemies.length).forEach(el=>{el.style.display='none';delete el.dataset.combatant;delete el.dataset.combatId;el.dataset.encounterSlot='' });
+  enemyCards.slice(enemies.length).forEach(el=>{el.classList.add('combatSlotEmpty');delete el.dataset.combatant;delete el.dataset.combatId;el.dataset.encounterSlot='' });
 }
 function updateCombatLog(m){
   const logEl=$('combatLog');if(!logEl)return;

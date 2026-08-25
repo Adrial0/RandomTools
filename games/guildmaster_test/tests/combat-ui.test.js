@@ -31,6 +31,7 @@ assert.equal(context.combatStructureKey({type:'quest',id:7,battle:{id:1}}),conte
 assert.match(ui,/function renderPersistentCombatSlots\(/,'combat uses a persistent slot renderer');
 assert.doesNotMatch(ui,/logEl\.innerHTML\s*=/,'the combat log is not completely replaced during combat');
 assert.match(ui,/COMBAT_ENEMY_SLOT_COUNT=8/,'enemy slots are preallocated before combat begins');
+assert.match(css,/\.combatant\.combatMini\.combatSlotEmpty\{display:none!important\}/,'unused persistent combat slots override the combat card grid display');
 assert.doesNotMatch(ui,/function reconcileCombatants\(/,'the old structural reconciliation renderer is gone');
 assert.doesNotMatch(ui,/heroSide\.(appendChild|insertBefore|insertAdjacentHTML)/,'hero cards are never moved or recreated during combat');
 assert.doesNotMatch(ui,/enemySide\.(appendChild|insertBefore|insertAdjacentHTML)/,'enemy cards are never moved or recreated during combat');
