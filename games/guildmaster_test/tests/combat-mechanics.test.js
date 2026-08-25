@@ -2,6 +2,14 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const vm=require('node:vm');
 
+const abilities=JSON.parse(fs.readFileSync(require.resolve('../data/abilities.json'),'utf8'));
+const enemies=JSON.parse(fs.readFileSync(require.resolve('../data/enemies.json'),'utf8'));
+assert.equal(enemies['Bone Guard'].archetype,'tank','Bone Guards protect the enemy formation');
+assert.equal(enemies['Restless Spirit'].archetype,'skirmisher','Restless Spirits pressure the back row');
+assert.equal(enemies['Skeleton King'].ability,'royal_decree','Skeleton King uses his signature interruptible cast');
+assert.equal(abilities.royal_decree.type,'aoe');
+assert.ok(abilities.royal_decree.castTime>=2500,'Royal Decree has a readable interrupt window');
+
 const context={
   console,Date,Math,Object,Array,String,Number,Set,
   ENEMY_ABILITIES_DATA:{
@@ -100,6 +108,21 @@ function mission(){
   const fragile=[{class:'Mage',subclass:null,threat:.6},{class:'Ranger',subclass:null,threat:.8}];
   const balanced=[{class:'Warrior',subclass:'guardian',threat:2},{class:'Priest',subclass:'lifepriest',threat:.7}];
   assert.ok(context.offlineCompositionFactor(missionData,balanced)>context.offlineCompositionFactor(missionData,fragile),'offline combat preserves the advantage of mechanic coverage');
+}
+
+{
+  context.ENEMIES_DATA['Bone Guard']={archetype:'tank',baseHp:52,baseAttack:14,baseDefense:10,damageType:'physical',drops:[]};
+  context.ENEMY_ARCHETYPES_DATA={tank:{hpMult:1.3,attackMult:.9,defMult:1.25,attackInterval:3000,protectorAura:.15}};
+  context.rnd=(a)=>a;context.gameIcon=()=>'';context.enemyAttackIntervalMs=e=>e.attackInterval;context.scheduleNextAttack=(e,enemy,now)=>{e.nextAttackAt=now+e.attackInterval};
+  const now=Date.now(),king={id:1,name:'Skeleton King',boss:true,hp:65,maxHp:100,atk:20,attackInterval:4000,statuses:{}};
+  const m={type:'dungeon',level:8,boss:'Skeleton King',battle:{boss:true,bossEnrageAt:now+100000,bossMechanics:{summoned70:false,summoned35:false,phaseTwo:false,enraged:false},enemies:[king],log:[],actionSeq:0}};
+  context.processBossMechanics(m,now);
+  assert.equal(m.battle.enemies.filter(e=>e.name==='Bone Guard').length,1,'the first Royal Guard rises at 70% HP');
+  king.hp=45;context.processBossMechanics(m,now+1);
+  assert.equal(king.phase,'Grave Sovereign','the Skeleton King changes phase below half health');
+  assert.ok(king.attackInterval<4000,'phase two makes the boss faster');
+  m.battle.bossEnrageAt=now;context.processBossMechanics(m,now+2);
+  assert.equal(king.enraged,true,'the encounter eventually enrages');
 }
 
 console.log('Combat mechanic tests passed.');

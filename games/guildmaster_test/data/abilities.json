@@ -95,6 +95,19 @@
     "statusPower": 0.14,
     "statusDuration": 8000
   },
+  "royal_decree": {
+    "name": "Royal Decree",
+    "manaCost": 18,
+    "cooldown": 9000,
+    "castTime": 3000,
+    "type": "aoe",
+    "damageType": "dark",
+    "power": 1.05,
+    "status": "cursed",
+    "statusChance": 0.7,
+    "statusPower": 0.14,
+    "statusDuration": 10000
+  },
   "radiant_bolt": {
     "name": "Radiant Bolt",
     "manaCost": 9,

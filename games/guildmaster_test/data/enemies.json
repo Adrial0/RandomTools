@@ -651,7 +651,7 @@
   "Bone Guard": {
     "name": "Bone Guard",
     "icon": "🛡️",
-    "archetype": "brute",
+    "archetype": "tank",
     "baseHp": 52,
     "baseAttack": 14,
     "baseDefense": 10,
@@ -683,7 +683,7 @@
   "Restless Spirit": {
     "name": "Restless Spirit",
     "icon": "👻",
-    "archetype": "caster",
+    "archetype": "skirmisher",
     "baseHp": 36,
     "baseAttack": 17,
     "baseDefense": 4,
@@ -1135,7 +1135,7 @@
     "archetype": "boss",
     "boss": true,
     "damageType": "dark",
-    "ability": "dark_bolt",
+    "ability": "royal_decree",
     "drops": [
       "CrownBone"
     ],

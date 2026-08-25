@@ -40,6 +40,9 @@ function makeBossBattle(m){
   b.encounterNumber=null;
   b.enemies=[boss];
   b.boss=true;
+  b.bossStartedAt=Date.now();
+  b.bossEnrageAt=b.bossStartedAt+75000;
+  b.bossMechanics={summoned70:false,summoned35:false,phaseTwo:false,enraged:false};
   b.log=['⚠ BOSS: '+m.boss+' enters the battle.'];
   return b;
 }
@@ -86,9 +89,9 @@ function bossReward(m){
   save();
 }
 let currentMissionForEnemy=null;
-function makeEnemy(type,level,index){
-  const names=(currentMissionForEnemy?.enemyPool&&currentMissionForEnemy.enemyPool.length)?currentMissionForEnemy.enemyPool:(enemyPools[type]||enemyPools.quest);
-  const name=pick(names),tpl=ENEMIES_DATA[name]||null;
+function makeEnemy(type,level,index,forcedName=null){
+  const names=forcedName?[]:(currentMissionForEnemy?.enemyPool&&currentMissionForEnemy.enemyPool.length)?currentMissionForEnemy.enemyPool:(enemyPools[type]||enemyPools.quest);
+  const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
   if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:['Iron']}}
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
   const hp=Math.round((tpl.baseHp||35)*scale*1.125*(ar.hpMult||1));
@@ -470,7 +473,7 @@ function applyStatus(m,target,type,{power=1,duration=6000,stacks=1,source='Unkno
     current.expiresAt=Math.max(current.expiresAt,now+duration);
     current.source=source;
     if(sourceId!=null)current.sourceId=sourceId;
-  }else statuses[type]={type,stacks:Math.min(def.maxStacks,stacks),power:Math.max(1,Math.round(power)),source,sourceId,nextTickAt:now+2000,expiresAt:now+duration};
+  }else statuses[type]={type,stacks:Math.min(def.maxStacks,stacks),power:Math.max(1,Math.round(power)),source,sourceId,startedAt:now,duration,nextTickAt:now+2000,expiresAt:now+duration};
   if(sourceId!=null&&m.battle.enemies.includes(target))addHeroMetric(m,sourceId,'statusesApplied',1);
   if(m.battle.heroes.includes(target)){
     m.mechanicsSeen=Array.isArray(m.mechanicsSeen)?m.mechanicsSeen:[];
@@ -1009,6 +1012,12 @@ function repairFiniteMissionState(m){
   });
   if(!m||m.completed||m.defeated||(m.type!=='dungeon'&&m.type!=='raid'))return;
 
+  if(m.battle?.boss){
+    m.battle.bossStartedAt=m.battle.bossStartedAt||Date.now();
+    m.battle.bossEnrageAt=m.battle.bossEnrageAt||m.battle.bossStartedAt+75000;
+    m.battle.bossMechanics=m.battle.bossMechanics||{summoned70:false,summoned35:false,phaseTwo:false,enraged:false};
+  }
+
   if(m.finiteStage==null){
     const old=m.normalEncountersCompleted!=null?m.normalEncountersCompleted:(m.fights||0);
     m.finiteStage=Math.max(0,Math.min(old,m.maxFights||old));
@@ -1057,6 +1066,34 @@ function repairDeadBattles(){
   if(repaired)save();
 }
 
+function summonSkeletonGuards(m,count,label){
+  const b=m.battle,now=Date.now();
+  for(let i=0;i<count;i++){
+    const nextId=Math.max(0,...b.enemies.map(e=>e.id||0))+1;
+    const guard={...makeEnemy(m.type,m.level,nextId-1,'Bone Guard'),id:nextId,statuses:{},cast:null,summoned:true};
+    guard.attackStartedAt=now;guard.nextAttackAt=now+enemyAttackIntervalMs(guard);
+    b.enemies.push(guard);
+  }
+  b.log.unshift(`⚠ ${label}: skeletal guards rise to protect the king.`);
+  b.actionSeq=(b.actionSeq||0)+1;
+}
+function processBossMechanics(m,now=Date.now()){
+  const b=m.battle;if(!b?.boss||m.boss!=='Skeleton King')return;
+  const king=b.enemies.find(e=>e.boss&&e.name==='Skeleton King');if(!king||king.hp<=0)return;
+  b.bossMechanics=b.bossMechanics||{summoned70:false,summoned35:false,phaseTwo:false,enraged:false};
+  const mech=b.bossMechanics,hp=king.hp/Math.max(1,king.maxHp);
+  if(hp<=.70&&!mech.summoned70){mech.summoned70=true;summonSkeletonGuards(m,1,'Royal Guard')}
+  if(hp<=.50&&!mech.phaseTwo){
+    mech.phaseTwo=true;king.phase='Grave Sovereign';king.atk=Math.round(king.atk*1.15);king.attackInterval=Math.round(king.attackInterval*.78);scheduleNextAttack(king,true,now);
+    b.log.unshift('⚠ The Skeleton King shatters his throne and enters the Grave Sovereign phase.');b.actionSeq=(b.actionSeq||0)+1;
+  }
+  if(hp<=.35&&!mech.summoned35){mech.summoned35=true;summonSkeletonGuards(m,2,'Call of the Crypt')}
+  if(!mech.enraged&&now>=(b.bossEnrageAt||Infinity)){
+    mech.enraged=true;king.enraged=true;king.atk=Math.round(king.atk*1.35);king.attackInterval=Math.round(king.attackInterval*.72);scheduleNextAttack(king,true,now);
+    b.log.unshift('⚠ The Skeleton King enrages. His attacks become much faster and stronger.');b.actionSeq=(b.actionSeq||0)+1;
+  }
+}
+
 function stepBattle(m){
   if(!m||m.defeated||m.completed)return;
   const now=Date.now();
@@ -1075,6 +1112,7 @@ function stepBattle(m){
 
   processStatusEffects(m,now);
   processEnemyCasts(m,now);
+  processBossMechanics(m,now);
   refreshEnemyTactics(m);
 
   if(!living(b.enemies).length){finishCurrentFight(m);return}

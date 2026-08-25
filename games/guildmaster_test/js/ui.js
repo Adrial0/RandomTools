@@ -236,10 +236,32 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
       <div class="attackTrack" title="Attack timer"><div class="attackFill ${attackPct>=100?'ready':''}" style="width:${attackPct}%"></div></div>
       ${activeType?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${activeName(activeType)} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
       ${enemy?`<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel"></span></div>`:''}
-      <div class="combatStatusRow"></div>
+      <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     </div>
     <div class="combatFloat"></div>
   </div>`;
+}
+const COMBAT_BUFF_VISUALS={
+  battleShout:{icon:'⚔',name:'Battle Shout',className:'battleShout'},
+  shieldFaith:{icon:'✦',name:'Shield of Faith',className:'shieldFaith'}
+};
+function timedEffectIcon(icon,name,className,expiresAt,duration,stacks=0){
+  const now=Date.now(),remaining=Math.max(0,(expiresAt||now)-now),total=Math.max(1,duration||remaining||1),progress=clamp(remaining/total,0,1),deg=Math.round(progress*360);
+  return `<span class="combatEffect ${className||''}" style="--effect-progress:${deg}deg" title="${name}${stacks>1?` ×${stacks}`:''} · ${fmt(remaining)}"><span>${icon}${stacks>1?`<b>${stacks}</b>`:''}</span></span>`;
+}
+function combatEffectIcons(x,enemy=false){
+  const now=Date.now(),icons=[];
+  Object.values(ensureStatuses(x)).forEach(status=>{
+    const def=STATUS_EFFECTS[status.type],duration=status.duration||Math.max(2000,(status.expiresAt||now)-now);
+    icons.push(timedEffectIcon(def?.icon||'◆',def?.name||status.type,status.type,status.expiresAt,duration,status.stacks));
+  });
+  if(!enemy)Object.entries(x.buffs||{}).forEach(([key,expiresAt])=>{
+    const def=COMBAT_BUFF_VISUALS[key];if(def&&expiresAt>now)icons.push(timedEffectIcon(def.icon,def.name,def.className,expiresAt,key==='battleShout'?6000:6000));
+  });
+  if(enemy&&x.protection>0)icons.push('<span class="combatEffect protected staticEffect" title="Protected by an allied Bulwark"><span>🛡</span></span>');
+  if(enemy&&x.phase)icons.push(`<span class="combatEffect bossPhase staticEffect" title="${x.phase}"><span>♛</span></span>`);
+  if(enemy&&x.enraged)icons.push('<span class="combatEffect enraged staticEffect" title="Enraged"><span>!</span></span>');
+  return icons.join('');
 }
 function closeCombatInspector(){
   const p=$('combatInspectPanel');
@@ -350,7 +372,7 @@ function updateCombatantDom(x,enemy){
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';
   if(attackFill){const attackPct=attackTimerProgress(x,enemy,Date.now())*100,previousAttack=Number(el.dataset.lastAttack);attackFill.style.width=attackPct+'%';if(Number.isFinite(previousAttack)&&attackPct+35<previousAttack){el.classList.remove('combatAct');void el.offsetWidth;el.classList.add('combatAct');setTimeout(()=>el.classList.remove('combatAct'),240)}el.dataset.lastAttack=attackPct}
   const statusRow=el.querySelector('.combatStatusRow');
-  if(statusRow)statusRow.innerHTML=Object.values(ensureStatuses(x)).map(status=>{const def=STATUS_EFFECTS[status.type];return `<span class="combatStatus ${status.type}" title="${def?.name||status.type} · ${status.stacks} stack${status.stacks===1?'':'s'} · ${fmt(status.expiresAt-Date.now())}">${def?.icon||'◆'}${status.stacks>1?status.stacks:''}</span>`}).join('');
+  if(statusRow)statusRow.innerHTML=combatEffectIcons(x,enemy);
   if(enemy){
     const track=el.querySelector('.castTrack'),fillCast=el.querySelector('.castFill'),label=el.querySelector('.castLabel');
     if(track){

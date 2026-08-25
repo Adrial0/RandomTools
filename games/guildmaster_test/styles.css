@@ -987,13 +987,15 @@ body.windowOpen .side{overflow:hidden!important}
 .recipeCraftableToggle.on{color:#a7c98b}
 
 /* Combat tiles never resize when inspected. */
-#combatBody{position:relative!important;overflow:visible!important}
+#combatBody{position:relative!important;overflow-y:auto!important;overflow-x:hidden!important;display:block!important;padding-right:4px}
+#combatBody .combatLog{height:220px!important;min-height:160px!important;max-height:220px!important;overflow-y:auto!important}
+#combatBody .combatReport{margin-top:10px;margin-bottom:8px}
 .combatant.combatMini{
   position:relative;
   overflow:hidden!important;
-  height:66px!important;
-  min-height:66px!important;
-  max-height:66px!important;
+  height:88px!important;
+  min-height:88px!important;
+  max-height:88px!important;
 }
 .combatantDetails{display:none!important}
 .combatMiniNameRow .name{
@@ -1240,7 +1242,20 @@ body.windowOpen .side{overflow:hidden!important}
 .castTrack{position:relative;height:12px;margin-top:3px;background:#21110e;border:1px solid #a34e38;overflow:hidden}
 .castFill{height:100%;width:0;background:#bd593e;transition:none}
 .castLabel{position:absolute;inset:0;display:grid;place-items:center;color:#ffe1bd;font:700 8px/1 ui-monospace,monospace;text-shadow:1px 1px #000}
-.combatStatusRow{display:flex;gap:3px;min-height:15px;margin-top:3px}
+.combatStatusRow{display:flex;gap:4px;min-height:22px;margin-top:4px;align-items:center}
+.combatEffect{--effect-progress:360deg;display:inline-grid;place-items:center;width:21px;height:21px;padding:2px;border-radius:4px;background:conic-gradient(#d2a85d var(--effect-progress),#35291d 0);box-shadow:0 0 0 1px #17110b;flex:0 0 auto}
+.combatEffect>span{position:relative;display:grid;place-items:center;width:15px;height:15px;border-radius:2px;background:#18120d;color:#ead29d;font:700 10px/1 sans-serif}
+.combatEffect b{position:absolute;right:-3px;bottom:-3px;display:grid;place-items:center;min-width:9px;height:9px;border-radius:5px;background:#090806;color:#fff;font:700 7px/1 sans-serif}
+.combatEffect.staticEffect{background:#8b6b3f}
+.combatEffect.burning{background:conic-gradient(#e77b31 var(--effect-progress),#392116 0)}
+.combatEffect.poison{background:conic-gradient(#82a84f var(--effect-progress),#253019 0)}
+.combatEffect.bleed{background:conic-gradient(#bd5550 var(--effect-progress),#371b1b 0)}
+.combatEffect.frostbite{background:conic-gradient(#69b8dc var(--effect-progress),#18303b 0)}
+.combatEffect.shocked{background:conic-gradient(#e0c34e var(--effect-progress),#373116 0)}
+.combatEffect.cursed{background:conic-gradient(#a56bc9 var(--effect-progress),#2d1d38 0)}
+.combatEffect.battleShout{background:conic-gradient(#e1aa49 var(--effect-progress),#382919 0)}
+.combatEffect.shieldFaith,.combatEffect.protected{background:conic-gradient(#70a8df var(--effect-progress),#1a2938 0)}
+.combatEffect.enraged{background:#b33b2d}.combatEffect.bossPhase{background:#74529b}
 .combatStatus{display:inline-grid;place-items:center;min-width:17px;height:15px;padding:0 3px;border:1px solid #765237;background:#1a120d;font:700 9px/1 ui-monospace,monospace}
 .combatStatus.bleed{border-color:#a84949;color:#ef9990}
 .combatStatus.burning{border-color:#bd6a2e;color:#ffb36b}

@@ -13,6 +13,7 @@ context.archetypeData=readJson('../data/enemy-archetypes.json');
 context.abilityData=readJson('../data/abilities.json');
 vm.runInContext('Object.assign(ENEMIES_DATA,enemyData);Object.assign(ENEMY_ARCHETYPES_DATA,archetypeData);Object.assign(ENEMY_ABILITIES_DATA,abilityData);',context);
 vm.runInContext(fs.readFileSync(require.resolve('../js/activities.js'),'utf8'),context);
+assert.doesNotMatch(fs.readFileSync(require.resolve('../js/activities.js'),'utf8'),/threatIntelRow"><b>Recommended/,'mission selection must not prescribe composition counters');
 
 const profile=context.enemyTacticalProfile('Moss Slime');
 assert.equal(profile.role,'Bulwark');
