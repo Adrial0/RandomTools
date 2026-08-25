@@ -64,6 +64,7 @@ button{font:inherit;cursor:pointer}.site{height:60px;padding:0 18px;display:flex
   --ink:#eadbb8;--ink2:#cdbb91;--muted:#9f8f6d;--line:#6a5434;
   --gold:#c99a45;--gold2:#e3bb6d;--green:#8fa36c;--red:#b76f5e;
   --shadow:#0c0a07;--radius:3px;
+  --ui-pixel:"Cascadia Mono","Lucida Console",Consolas,"Courier New",monospace;
 }
 html,body{background:#17140f!important}
 body{
@@ -1437,3 +1438,40 @@ body.windowOpen .side{overflow:hidden!important}
 }
 .combatant.combatMini.combatSlotEmpty{display:none!important}
 .combatEnemySlot[hidden]{display:none!important}
+
+/* Grouped navigation and compact guild-ledger typography. */
+.shell{grid-template-columns:230px minmax(0,1fr)!important}
+.side{display:flex!important;flex-direction:column!important;padding:9px!important}
+.navPrimary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding-bottom:9px;border-bottom:1px solid rgba(121,93,55,.45)}
+.navGroup{min-width:0;border:1px solid #4e3c27;background:#211a12;color:#9f8f6d;padding:9px 7px;text-align:center;font-family:var(--ui-pixel);font-size:10px;font-weight:800;letter-spacing:.045em;text-transform:uppercase}
+.navGroup:hover{color:#dfc691;border-color:#80623b;background:#2a2015}
+.navGroup.on{color:#f0d79b;border-color:#a67937;background:linear-gradient(180deg,#50391d,#2f2417);box-shadow:inset 0 0 0 1px rgba(238,197,112,.08)}
+.navGroup small{display:block;margin-top:2px;color:#c99a45;font-size:7px;letter-spacing:.08em}
+.navSubgroups{padding-top:8px;flex:1 1 auto}
+.navSubgroup{display:none;gap:3px}
+.navSubgroup.on{display:grid}
+.navSubgroup .nav{padding:10px 11px!important}
+.navUtility{margin-top:auto;padding-top:9px;border-top:1px solid rgba(121,93,55,.45)}
+.navSettings{font-family:var(--ui-pixel)!important;font-size:10px!important;letter-spacing:.04em}
+.page.on{animation:pageReveal .13s ease-out}
+@keyframes pageReveal{from{opacity:.72;transform:translateY(2px)}to{opacity:1;transform:none}}
+
+/* Mechanical information uses a pixel-like system mono stack; headings retain the bookish serif face. */
+.sub,.muted,.head p,.chip,.res,.stat,.power,.timer,.progressMeta,.saveState,.log,.lootBox,.combatReport,.combatLog,.questObjective,.resourceSourceRow span,.arenaHpText,.arenaHistoryRow,.arenaLeaderboardRow{font-family:var(--ui-pixel)!important;letter-spacing:.005em}
+.head p,.muted{line-height:1.5!important}
+.res strong,.stat strong,.timer,.progressMeta strong{font-variant-numeric:tabular-nums}
+
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr!important}
+  .side{display:block!important;overflow:visible!important}
+  .navPrimary{grid-template-columns:repeat(4,minmax(105px,1fr));overflow-x:auto;padding-bottom:7px}
+  .navSubgroups{padding-top:7px}
+  .navSubgroup.on{display:flex;overflow-x:auto;gap:4px}
+  .navSubgroup .nav{width:auto!important;white-space:nowrap}
+  .navUtility{position:absolute;right:23px;margin-top:-45px;border:0;padding:0}
+  .navSettings{width:auto!important}
+}
+@media(max-width:600px){
+  .navPrimary{grid-template-columns:repeat(4,105px)}
+  .navUtility{position:static;margin-top:7px;padding-top:7px;border-top:1px solid rgba(121,93,55,.45)}
+}

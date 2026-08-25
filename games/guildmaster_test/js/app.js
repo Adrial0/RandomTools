@@ -18,12 +18,38 @@ function closeModal(){
 $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('combatModal').addEventListener('click',e=>{if(e.target===$('combatModal'))closeCombat()});
 
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{
-  const p=b.dataset.p,access=featureAccess(p);
+const NAV_GROUP_FOR_PAGE={
+  hall:'guild',roster:'guild',questboard:'guild',upgrades:'guild',
+  harvesting:'missions',quests:'missions',dungeons:'missions',raids:'missions',
+  inventory:'workshop',crafting:'workshop',market:'workshop',arena:'arena'
+};
+const navMemory={guild:'hall',missions:'harvesting',workshop:'inventory',arena:'arena'};
+let activeNavGroup='guild';
+function showNavGroup(group){
+  activeNavGroup=group;
+  document.querySelectorAll('.navGroup').forEach(b=>{
+    const on=b.dataset.navGroup===group;
+    b.classList.toggle('on',on);
+    b.setAttribute('aria-selected',on?'true':'false');
+  });
+  document.querySelectorAll('.navSubgroup').forEach(p=>p.classList.toggle('on',p.dataset.navPanel===group));
+}
+function activatePage(p){
+  const access=featureAccess(p);
   if(!access.revealed)return notify(access.revealHint||'That feature has not been revealed yet.');
   if(access.locked)return notify(access.lockReason||'That feature is still locked.');
   document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');$(p).classList.add('on');if(p==='upgrades')renderUp();
+  document.querySelector(`.nav[data-p="${p}"]`)?.classList.add('on');
+  $(p)?.classList.add('on');
+  const group=NAV_GROUP_FOR_PAGE[p];
+  if(group){navMemory[group]=p;showNavGroup(group)}else showNavGroup(activeNavGroup);
+  if(p==='upgrades')renderUp();
+}
+document.querySelectorAll('.nav[data-p]').forEach(b=>b.onclick=()=>activatePage(b.dataset.p));
+document.querySelectorAll('.navGroup').forEach(b=>b.onclick=()=>{
+  const group=b.dataset.navGroup;
+  showNavGroup(group);
+  activatePage(navMemory[group]);
 });
 $('rename').onclick=()=>openGuildNameModal(false);
 function validGuildName(name){return /^[A-Za-z0-9][A-Za-z0-9 '\-]{2,23}$/.test(name)}

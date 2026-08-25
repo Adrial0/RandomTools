@@ -39,9 +39,9 @@ function syncMusic(){
 function featureAccess(page){
   const hasExpedition=!!s.onboarding?.flags?.expeditionStarted||s.missions.length>0||s.wins>0;
   const hasResources=(s.discoveredResources||[]).length>0||Object.values(s.materials||{}).some(v=>v>0);
-  if(['hall','roster','quests','arena','settings'].includes(page))return{revealed:true,locked:false};
+  if(['hall','roster','quests','harvesting','arena','settings'].includes(page))return{revealed:true,locked:false};
   if(page==='inventory')return{revealed:hasExpedition,locked:false,revealHint:'Start your first expedition to reveal Inventory.'};
-  if(['harvesting','crafting'].includes(page))return{revealed:hasResources,locked:false,revealHint:'Discover your first resource to reveal this feature.'};
+  if(page==='crafting')return{revealed:hasResources,locked:false,revealHint:'Discover your first resource to reveal this feature.'};
   if(page==='upgrades')return{revealed:hasResources||s.level>=2,locked:false,revealHint:'Discover your first resource to reveal Guild Upgrades.'};
   if(['questboard','market'].includes(page))return{revealed:s.level>=2,locked:false,revealHint:'Reach Guild Level 2 to reveal this feature.'};
   if(page==='dungeons')return{revealed:s.level>=2,locked:s.level<3,lockLabel:'Lv. 3',lockReason:'Dungeons unlock at Guild Level 3.'};
@@ -58,11 +58,18 @@ function updateNavigationLocks(){
     nav.dataset.lockLabel=access.locked?(access.lockLabel||'Locked'):'';
     nav.title=access.locked?(access.lockReason||'This feature is locked.'):(access.revealHint||'');
   });
+  document.querySelectorAll('.navSubgroup[data-nav-panel]').forEach(panel=>{
+    const group=document.querySelector(`.navGroup[data-nav-group="${panel.dataset.navPanel}"]`);
+    group?.classList.toggle('navFeatureHidden',!panel.querySelector('.nav[data-p]:not(.navFeatureHidden)'));
+  });
   const active=document.querySelector('.nav.on[data-p]');
   if(active&&!featureAccess(active.dataset.p).revealed){
-    document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));
-    document.querySelector('.nav[data-p="hall"]')?.classList.add('on');
-    $('hall')?.classList.add('on');
+    if(typeof activatePage==='function')activatePage('hall');
+    else{
+      document.querySelectorAll('.nav,.page').forEach(x=>x.classList.remove('on'));
+      document.querySelector('.nav[data-p="hall"]')?.classList.add('on');
+      $('hall')?.classList.add('on');
+    }
   }
 }
 function render(){completeOnboardingGoals(false);updateNavigationLocks();completeCrafting();updateMusicUI();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;

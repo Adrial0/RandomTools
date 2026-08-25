@@ -10,10 +10,36 @@
 <div class="top"><div><h1>Guildmaster</h1><div class="sub">Build a guild strong enough to take on the things sensible people avoid.</div></div>
 <div class="res"><span>Guild Lv. <strong id="lv"></strong></span><span>Gold <strong id="gold"></strong></span><span>Reputation <strong id="rep"></strong></span></div></div>
 <div class="shell">
-<aside class="side">
-<button class="nav on" data-p="hall">Guild Hall</button><button class="nav" data-p="roster">Roster</button><button class="nav" data-p="quests">Expeditions</button><button class="nav" data-p="arena">Arena <small>Beta</small></button><button class="nav" data-p="questboard">Quests</button><button class="nav" data-p="harvesting">Harvesting</button>
-<button class="nav" data-p="dungeons">Dungeons</button><button class="nav" data-p="raids">Raids</button><button class="nav" data-p="inventory">Inventory</button><button class="nav" data-p="market">Market</button>
-<button class="nav" data-p="crafting">Crafting</button><button class="nav" data-p="upgrades">Upgrades</button><button class="nav" data-p="settings">Settings</button>
+<aside class="side" aria-label="Game navigation">
+<div class="navPrimary" role="tablist" aria-label="Game sections">
+  <button class="navGroup on" data-nav-group="guild" role="tab" aria-selected="true">Guild</button>
+  <button class="navGroup" data-nav-group="missions" role="tab" aria-selected="false">Missions</button>
+  <button class="navGroup" data-nav-group="workshop" role="tab" aria-selected="false">Workshop</button>
+  <button class="navGroup" data-nav-group="arena" role="tab" aria-selected="false">Arena <small>Beta</small></button>
+</div>
+<div class="navSubgroups">
+  <div class="navSubgroup on" data-nav-panel="guild">
+    <button class="nav on" data-p="hall">Overview</button>
+    <button class="nav" data-p="roster">Members</button>
+    <button class="nav" data-p="questboard">Contracts</button>
+    <button class="nav" data-p="upgrades">Upgrades</button>
+  </div>
+  <div class="navSubgroup" data-nav-panel="missions">
+    <button class="nav" data-p="harvesting">Gathering</button>
+    <button class="nav" data-p="quests">Expeditions</button>
+    <button class="nav" data-p="dungeons">Dungeons</button>
+    <button class="nav" data-p="raids">Raids</button>
+  </div>
+  <div class="navSubgroup" data-nav-panel="workshop">
+    <button class="nav" data-p="inventory">Inventory</button>
+    <button class="nav" data-p="crafting">Crafting</button>
+    <button class="nav" data-p="market">Market</button>
+  </div>
+  <div class="navSubgroup" data-nav-panel="arena">
+    <button class="nav" data-p="arena">Arena <small>Online</small></button>
+  </div>
+</div>
+<div class="navUtility"><button class="nav navSettings" data-p="settings">Settings</button></div>
 </aside>
 <main>
 <section class="page on" id="hall">
@@ -32,7 +58,7 @@
     <div id="active" class="active"></div>
   </div>
   <div class="panel guildActivityColumn">
-    <div class="head"><div><h3>Active Harvesting</h3><p>Gathering jobs currently underway.</p></div></div>
+    <div class="head"><div><h3>Active Gathering</h3><p>Gathering jobs currently underway.</p></div></div>
     <div id="harvestActive" class="active"></div>
   </div>
 </div>
@@ -47,7 +73,7 @@
 <div class="rosterPageLayout">
   <div class="panel rosterListPanel">
     <div class="head">
-      <div><h2>Roster</h2><p>Select a guild member to inspect them on the right.</p></div>
+      <div><h2>Members</h2><p>Select a guild member to inspect them on the right.</p></div>
       <div class="rosterSortControls">
         <select id="rosterSortSelect" onchange="setRosterSort(this.value)">
           <option value="power">Power</option>
@@ -87,7 +113,7 @@
 <section class="page" id="questboard">
 <div class="panel">
   <div class="head">
-    <div><h2>Quest Board</h2><p>Guild contracts rotate every 30 minutes. Harder contracts offer better rewards.</p></div>
+    <div><h2>Contracts</h2><p>Guild contracts rotate every 30 minutes. Harder contracts offer better rewards.</p></div>
     <span class="chip" id="questBoardTimer">Refresh in 30:00</span>
   </div>
   <div id="proceduralQuestList" class="questBoardGrid"></div>
@@ -95,7 +121,7 @@
 </section>
 <section class="page" id="harvesting">
 <div class="panel">
-  <div class="head"><div><h2>Harvesting</h2><p>Send guild members to gather resources while you manage the guild.</p></div>
+  <div class="head"><div><h2>Gathering</h2><p>Send guild members to gather resources while you manage the guild.</p></div>
     <div class="harvestFilters">
       <button class="btn harvestFilter on" data-harvest-filter="all" onclick="setHarvestFilter('all',this)">All</button>
       <button class="btn harvestFilter" data-harvest-filter="mining" onclick="setHarvestFilter('mining',this)">Mining</button>
