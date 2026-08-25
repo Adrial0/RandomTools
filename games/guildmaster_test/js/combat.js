@@ -6,7 +6,7 @@ function makeBoss(m){
   const raid=m.type==='raid';
   const scale=1+(m.level||1)*.12;
 
-  const maxHp=Math.round((raid?210:110)*scale);
+  const maxHp=Math.round((raid?720:360)*scale);
   const atk=Math.round((raid?18:13)*scale);
   const def=Math.round((raid?10:7)*scale);
   const mdef=Math.round((raid?11:8)*scale);
@@ -41,7 +41,7 @@ function makeBossBattle(m){
   b.enemies=[boss];
   b.boss=true;
   b.bossStartedAt=Date.now();
-  b.bossEnrageAt=b.bossStartedAt+75000;
+  b.bossEnrageAt=b.bossStartedAt+18000;
   b.bossMechanics={summoned70:false,summoned35:false,phaseTwo:false,enraged:false};
   b.log=['⚠ BOSS: '+m.boss+' enters the battle.'];
   return b;
@@ -674,6 +674,14 @@ function tryActiveSkill(m,h,now=Date.now()){
   if(!type||!activeReady(h,type,now)||!canSpendMana(h,type))return false;
   const targets=living(b.enemies);
   if(!targets.length)return false;
+  const castingTarget=targets.find(t=>t.cast);
+  const interruptTypes=new Set(['shieldSlam','preciseShot','backstab']);
+  const enemiesCanCast=targets.some(t=>t.ability);
+  // Dedicated interrupt attacks are held when a caster is present. Without
+  // this reservation they fire for damage at battle start and are on cooldown
+  // for the entire cast window.
+  if(interruptTypes.has(type)&&enemiesCanCast&&!castingTarget)return false;
+  if(type==='elementNova'&&h.subclass==='stormcaller'&&enemiesCanCast&&!castingTarget)return false;
   const ally=lowestAlly(b);
   const afflicted=living(b.heroes).filter(x=>Object.keys(ensureStatuses(x)).length).sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0]||null;
   let used=false;
@@ -725,7 +733,7 @@ function tryActiveSkill(m,h,now=Date.now()){
     b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith! Damage taken reduced for 6 seconds.`);
     used=true;
   }else{
-    const target=(['shieldSlam','preciseShot','backstab'].includes(type)&&targets.some(t=>t.cast))?targets.find(t=>t.cast):pick(targets);
+    const target=(['shieldSlam','preciseShot','backstab'].includes(type)&&castingTarget)?castingTarget:pick(targets);
     if(type==='powerStrike'){used=activeDamageHit(m,h,target,2.0,'Power Strike');if(used)applyStatus(m,target,'bleed',{power:heroDamage(h,target)*.15,duration:6000,source:h.name,sourceId:h.id})}
     else if(type==='shieldSlam'){used=activeDamageHit(m,h,target,1.70,'Shield Slam');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Shield Slam',h.id)}
     else if(type==='preciseShot'){used=activeDamageHit(m,h,target,2.20,'Precise Shot');if(used)interruptEnemy(m,target,h.name.split(' ')[0]+'\'s Precise Shot',h.id)}
@@ -1014,7 +1022,7 @@ function repairFiniteMissionState(m){
 
   if(m.battle?.boss){
     m.battle.bossStartedAt=m.battle.bossStartedAt||Date.now();
-    m.battle.bossEnrageAt=m.battle.bossEnrageAt||m.battle.bossStartedAt+75000;
+    m.battle.bossEnrageAt=m.battle.bossEnrageAt||m.battle.bossStartedAt+18000;
     m.battle.bossMechanics=m.battle.bossMechanics||{summoned70:false,summoned35:false,phaseTwo:false,enraged:false};
   }
 

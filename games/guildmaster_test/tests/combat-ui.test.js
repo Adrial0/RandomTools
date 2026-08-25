@@ -7,5 +7,7 @@ assert.match(ui,/function combatEffectIcons\(/,'combatants render effects withou
 assert.match(ui,/battleShout:\{icon:/,'Battle Shout has a visible party buff icon');
 assert.match(ui,/shieldFaith:\{icon:/,'Shield of Faith has a visible buff icon');
 assert.match(css,/#combatBody\{[^}]*overflow-y:auto!important/s,'the combat body itself is scrollable');
+assert.match(css,/\.combatReport\{max-height:220px!important;overflow-y:auto!important/,'Mission Report has its own vertical scroll area');
 assert.match(css,/conic-gradient/,'timed combat effects use circular countdown visuals');
+assert.match(css,/\.combatant\.combatMini\.enemy\{\s*height:108px!important/s,'enemy cards leave room for effect icons');
 console.log('Combat UI tests passed.');

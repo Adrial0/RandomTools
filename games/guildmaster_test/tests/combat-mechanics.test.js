@@ -63,6 +63,13 @@ function mission(){
 }
 
 {
+  const hero={id:1,name:'Guardian',hp:100,maxHp:100,activeType:'shieldSlam',mana:100,cooldowns:{},buffs:{}};
+  const enemy={id:1,name:'Caster',hp:100,maxHp:100,ability:'fireball',cast:null};
+  const m={battle:{heroes:[hero],enemies:[enemy],log:[]}};
+  assert.equal(context.tryActiveSkill(m,hero,Date.now()),false,'an interrupt is reserved while a caster has not begun casting');
+}
+
+{
   const m=mission(),enemy=m.battle.enemies[0],hero=m.battle.heroes[0];
   context.resolveEnemyAbility(m,enemy,'fireball',Date.now());
   assert.ok(hero.hp<100,'completed casts deal damage');
