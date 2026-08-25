@@ -18,4 +18,6 @@ context.globalThis=context;vm.createContext(context);vm.runInContext(ui,context)
 const effects=context.combatEffectIcons({statuses:{bleed:{type:'bleed',stacks:2,expiresAt:Date.now()+5000,duration:6000}},buffs:{battleShout:Date.now()+5000}},false);
 assert.match(effects,/combatEffect bleed/,'Bleeding renders directly on the combat card');
 assert.match(effects,/combatEffect battleShout/,'Battle Shout renders directly on every affected character card');
+assert.equal(context.combatStructureKey({type:'quest',id:7,battle:{id:1}}),context.combatStructureKey({type:'quest',id:7,battle:{id:2}}),'a new encounter does not rebuild the entire combat view');
+assert.match(ui,/function reconcileCombatants\(/,'combat cards are reconciled individually between encounters');
 console.log('Combat UI tests passed.');

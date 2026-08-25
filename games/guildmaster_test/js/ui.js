@@ -226,7 +226,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
   const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
-  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''}" ${options.arena?'':`data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
+  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''}" ${options.arena?'':`data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
     <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
       <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
@@ -241,6 +241,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
     <div class="combatFloat"></div>
   </div>`;
 }
+function combatEntitySignature(x,enemy=false){return `${enemy?'e':'h'}:${x.id}:${encodeURIComponent(x.name||'')}:${x.maxHp||0}:${x.maxMana||0}:${x.boss?'b':''}`}
 const COMBAT_BUFF_VISUALS={
   battleShout:{icon:'⚔',name:'Battle Shout',className:'battleShout'},
   shieldFaith:{icon:'✦',name:'Shield of Faith',className:'shieldFaith'}
@@ -318,7 +319,7 @@ function threatOrderedHeroes(heroes){
 }
 let combatDomKey='';
 function combatStructureKey(m){
-  return `${m.id}:${m.battle?.id||0}:${m.battle?.heroes?.map(x=>x.id).join('-')||''}:${m.battle?.enemies?.map(x=>x.id).join('-')||''}:${m.battle?.boss?'boss':'normal'}`;
+  return `${m.type}:${m.id}`;
 }
 function defeatAdviceHtml(m){
   const advice=m.defeatAdvice?.length?m.defeatAdvice:defeatAdviceFor(m);
@@ -356,8 +357,12 @@ function buildCombatStructure(m){
   combatDomKey=combatStructureKey(m);
 }
 function updateCombatantDom(x,enemy){
-  const el=document.querySelector(`[data-combatant="${enemy?'enemy':'hero'}-${x.id}"]`);
+  let el=document.querySelector(`[data-combatant="${enemy?'enemy':'hero'}-${x.id}"]`);
   if(!el)return;
+  if(el.dataset.entitySignature!==combatEntitySignature(x,enemy)){
+    el.outerHTML=combatantHtml(x,enemy,!enemy&&x.row==='front');
+    return;
+  }
   const pct=clamp(x.hp/x.maxHp*100,0,100);
   const previousHp=Number(el.dataset.lastHp),hpDelta=x.hp-previousHp;
   if(Number.isFinite(previousHp)&&hpDelta!==0){
@@ -394,6 +399,19 @@ function updateCombatantDom(x,enemy){
   const p=$('combatInspectPanel');
   if(p?.classList.contains('on')&&p.dataset.side===(enemy?'enemy':'hero')&&+p.dataset.id===x.id)renderCombatInspector();
 }
+function reconcileCombatants(m){
+  const heroSide=$('combatHeroSide'),enemySide=$('combatEnemySide');if(!heroSide||!enemySide)return;
+  const heroes=threatOrderedHeroes(m.battle.heroes).map(x=>x.hero),enemies=m.battle.enemies||[];
+  const reconcile=(side,units,enemy)=>{
+    const expected=new Set(units.map(x=>`${enemy?'enemy':'hero'}-${x.id}`));
+    side.querySelectorAll('[data-combatant]').forEach(el=>{if(!expected.has(el.dataset.combatant))el.remove()});
+    units.forEach(x=>{
+      const key=`${enemy?'enemy':'hero'}-${x.id}`;
+      if(!side.querySelector(`[data-combatant="${key}"]`))side.insertAdjacentHTML('beforeend',combatantHtml(x,enemy,!enemy&&x.row==='front'));
+    });
+  };
+  reconcile(heroSide,heroes,false);reconcile(enemySide,enemies,true);
+}
 function updateCombatLog(m){
   const logEl=$('combatLog');if(!logEl)return;
   const lines=[...(m.battle.log||[])].reverse();
@@ -416,6 +434,7 @@ function renderCombat(){
 
   const key=combatStructureKey(m);
   if(key!==combatDomKey||!$('combatLog'))buildCombatStructure(m);
+  else reconcileCombatants(m);
 
   m.battle.heroes.forEach(x=>updateCombatantDom(x,false));
   m.battle.enemies.forEach(x=>updateCombatantDom(x,true));
