@@ -991,6 +991,36 @@ function carryBattleEffects(previousBattle,nextBattle,now=Date.now()){
   return nextBattle;
 }
 
+function advanceBattleInPlace(currentBattle,nextBattle,now=Date.now()){
+  if(!currentBattle)return nextBattle;
+  carryBattleEffects(currentBattle,nextBattle,now);
+
+  const currentHeroesById=new Map((currentBattle.heroes||[]).map(hero=>[hero.id,hero]));
+  const heroes=(nextBattle.heroes||[]).map(nextHero=>{
+    const hero=currentHeroesById.get(nextHero.id);
+    if(!hero)return nextHero;
+    Object.keys(hero).forEach(key=>{if(!(key in nextHero))delete hero[key]});
+    Object.assign(hero,nextHero);
+    return hero;
+  });
+  const currentEnemies=currentBattle.enemies||[];
+  const enemies=(nextBattle.enemies||[]).map((nextEnemy,index)=>{
+    const enemy=currentEnemies[index];
+    if(!enemy)return nextEnemy;
+    Object.keys(enemy).forEach(key=>{if(!(key in nextEnemy))delete enemy[key]});
+    Object.assign(enemy,nextEnemy);
+    return enemy;
+  });
+
+  if(!Array.isArray(currentBattle.heroes))currentBattle.heroes=[];
+  if(!Array.isArray(currentBattle.enemies))currentBattle.enemies=[];
+  currentBattle.heroes.splice(0,currentBattle.heroes.length,...heroes);
+  currentBattle.enemies.splice(0,currentBattle.enemies.length,...enemies);
+  Object.keys(currentBattle).forEach(key=>{if(key!=='heroes'&&key!=='enemies'&&!(key in nextBattle))delete currentBattle[key]});
+  Object.entries(nextBattle).forEach(([key,value])=>{if(key!=='heroes'&&key!=='enemies')currentBattle[key]=value});
+  return currentBattle;
+}
+
 function finishCurrentFight(m){
   const b=m.battle;
   if(!b||living(b.enemies||[]).length)return;
@@ -1023,7 +1053,9 @@ function finishCurrentFight(m){
 
   const transitionNow=Date.now();
   const nextBattle=(m.type==='dungeon'||m.type==='raid')?createCurrentFiniteBattle(m):makeBattle(m);
-  m.battle=carryBattleEffects(b,nextBattle,transitionNow);
+  // Keep the live battle and combatant objects. Swapping m.battle here used to
+  // reset the entire visualization at every encounter boundary.
+  m.battle=advanceBattleInPlace(b,nextBattle,transitionNow);
 
   m.lastRewardedBattleId=b.id;
   m.lastSim=Date.now();

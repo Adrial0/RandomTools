@@ -51,6 +51,19 @@ assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.shieldFaith',context),10000,
   assert.equal(next.heroes[1].buffs.shieldFaith,now+4000,'Shield of Faith expiry survives the encounter handoff unchanged');
 }
 
+{
+  const now=Date.now(),hero={id:1,name:'Warlord',hp:50,buffs:{battleShout:now+5000},statuses:{}},enemy={id:1,name:'Old Enemy',hp:0},heroes=[hero],enemies=[enemy],battle={id:1,heroes,enemies,log:['old']};
+  const next={id:2,heroes:[{id:1,name:'Warlord',hp:45,buffs:{},statuses:{}}],enemies:[{id:1,name:'New Enemy',hp:100}],log:['new']};
+  const result=context.advanceBattleInPlace(battle,next,now);
+  assert.equal(result,battle,'the battle object is retained between encounters');
+  assert.equal(result.heroes,heroes,'the hero array is retained between encounters');
+  assert.equal(result.enemies,enemies,'the enemy array is retained between encounters');
+  assert.equal(result.heroes[0],hero,'existing hero objects are retained between encounters');
+  assert.equal(result.enemies[0],enemy,'existing enemy slots are retained between encounters');
+  assert.equal(result.heroes[0].buffs.battleShout,now+5000,'an active party buff remains on the same hero object');
+  assert.equal(result.enemies[0].name,'New Enemy','the retained enemy slot receives the next encounter data');
+}
+
 function mission(){
   const hero={id:1,name:'Test Hero',hp:100,maxHp:100,def:0,mdef:0,block:0,fire:0,statuses:{}};
   const enemy={id:1,name:'Test Caster',hp:100,maxHp:100,atk:10,mana:30,maxMana:30,ability:'fireball',abilityReadyAt:0,statuses:{}};
