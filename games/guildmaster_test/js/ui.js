@@ -231,13 +231,13 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
   const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
-  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''}" ${options.arena?'':`data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
+  return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''}" ${options.arena?'':`${options.slot!=null?`data-combat-slot="${enemy?'enemy':'hero'}:${options.slot}"`:''} data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.hidden?'style="display:none"':''} ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
     <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
       <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
       <div class="combatMiniClass">${enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`}</div>
       <div class="hpTrack"><div class="hpFill" style="width:${pct}%"></div></div>
-      ${(!enemy||x.maxMana)?`<div class="manaTrack"><div class="manaFill" style="width:${clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)}%"></div></div>`:''}
+      <div class="manaTrack" style="display:${!enemy||x.maxMana?'block':'none'}"><div class="manaFill" style="width:${clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)}%"></div></div>
       <div class="attackTrack" title="Attack timer"><div class="attackFill ${attackPct>=100?'ready':''}" style="width:${attackPct}%"></div></div>
       ${activeType?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${activeName(activeType)} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
       ${enemy?`<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel"></span></div>`:''}
@@ -245,6 +245,11 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
     </div>
     <div class="combatFloat"></div>
   </div>`;
+}
+const COMBAT_ENEMY_SLOT_COUNT=8;
+function emptyCombatSlotHtml(enemy,index){
+  const unit={id:`empty-${index}`,name:'',class:'Warrior',displayClass:'Warrior',maxHp:1,hp:1,maxMana:0,mana:0,icon:'',statuses:{},buffs:{},nextAttackAt:Date.now()+1000,attackStartedAt:Date.now(),attackInterval:1000};
+  return combatantHtml(unit,enemy,false,{slot:index,hidden:true});
 }
 function combatEntitySignature(x,enemy=false){return `${enemy?'e':'h'}:${x.id}:${encodeURIComponent(x.name||'')}:${x.maxHp||0}:${x.maxMana||0}:${x.boss?'b':''}`}
 const COMBAT_BUFF_VISUALS={
@@ -368,8 +373,7 @@ function combatReportHtml(m){
 function combatReportKey(m){return Object.values(ensureCombatReport(m).heroes).map(row=>row.id).join('-')}
 function updateCombatReport(m){
   const el=$('combatReport');if(!el)return;
-  const report=ensureCombatReport(m),rows=Object.values(report.heroes),key=combatReportKey(m);
-  if(el.dataset.reportKey!==key){el.innerHTML=combatReportHtml(m);el.dataset.reportKey=key}
+  const report=ensureCombatReport(m),rows=Object.values(report.heroes);
   const duration=fmt(Date.now()-(report.startedAt||m.start||Date.now())),summary=el.querySelector('[data-report-summary]'),deaths=el.querySelector('[data-report-deaths]');
   if(summary)summary.textContent=`${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active`;
   if(deaths)deaths.textContent=report.deaths.length?report.deaths.map((x,i)=>`${i+1}. ${x.name}`).join(' · '):'No recorded deaths';
@@ -387,8 +391,8 @@ function buildCombatStructure(m){
     <div class="combatFixedTop">
       <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
       <div class="combatGrid">
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT AND BACK ROW'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map(x=>combatantHtml(x.hero,false,x.front)).join('')}</div></div>
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${m.battle.enemies.map(x=>combatantHtml(x,true,false)).join('')}</div></div>
+        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT AND BACK ROW'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
+        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false,{slot:index}):emptyCombatSlotHtml(true,index)).join('')}</div></div>
       </div>
       <div class="lootStash" style="display:${arenaMode?'none':'grid'}">
         <div class="lootBox"><span>Unclaimed gold</span><strong id="combatGold">${m.stash.gold}</strong></div>
@@ -403,8 +407,8 @@ function buildCombatStructure(m){
   `;
   combatDomKey=combatStructureKey(m);
 }
-function updateCombatantDom(x,enemy){
-  let el=document.querySelector(`[data-combatant="${enemy?'enemy':'hero'}-${x.id}"]`);
+function updateCombatantDom(x,enemy,slotElement=null){
+  let el=slotElement||document.querySelector(`[data-combatant="${enemy?'enemy':'hero'}-${x.id}"]`);
   if(!el)return;
   // Encounter creation produces fresh combat-state objects. Never replace an
   // existing card because of that: replacing the element resets animations,
@@ -420,7 +424,7 @@ function updateCombatantDom(x,enemy){
     el.classList.remove(hpDelta>0?'combatHeal':'combatHit');void el.offsetWidth;el.classList.add(hpDelta>0?'combatHeal':'combatHit');setTimeout(()=>el.classList.remove('combatHeal','combatHit'),240);
   }
   el.dataset.lastHp=x.hp;
-  const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass'),visualIcon=el.querySelector('.visualIcon');
+  const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaTrack=el.querySelector('.manaTrack'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass'),visualIcon=el.querySelector('.visualIcon');
   if(name)name.textContent=x.name;
   if(classLine)classLine.textContent=enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`;
   const iconKey=enemy?`enemy:${x.name}`:`hero:${x.class}:${x.subclass||''}`;
@@ -430,6 +434,7 @@ function updateCombatantDom(x,enemy){
   }
   if(hp)hp.textContent=`${Math.max(0,x.hp)}/${x.maxHp}`;
   if(fill)fill.style.width=pct+'%';
+  if(manaTrack)manaTrack.style.display=!enemy||x.maxMana?'block':'none';
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';
   if(attackFill){const attackPct=attackTimerProgress(x,enemy,Date.now())*100,previousAttack=Number(el.dataset.lastAttack);attackFill.style.width=attackPct+'%';if(Number.isFinite(previousAttack)&&attackPct+35<previousAttack){el.classList.remove('combatAct');void el.offsetWidth;el.classList.add('combatAct');setTimeout(()=>el.classList.remove('combatAct'),240)}el.dataset.lastAttack=attackPct}
   const statusRow=el.querySelector('.combatStatusRow');
@@ -455,29 +460,22 @@ function updateCombatantDom(x,enemy){
   const p=$('combatInspectPanel');
   if(p?.classList.contains('on')&&p.dataset.side===(enemy?'enemy':'hero')&&+p.dataset.id===x.id)renderCombatInspector();
 }
-function reconcileCombatants(m){
+function renderPersistentCombatSlots(m){
   const heroSide=$('combatHeroSide'),enemySide=$('combatEnemySide');if(!heroSide||!enemySide)return;
   const heroes=threatOrderedHeroes(m.battle.heroes).map(x=>x.hero),enemies=m.battle.enemies||[];
-  // Heroes keep stable IDs. Only move a card when its actual order changed;
-  // appendChild on every render was detaching and reinserting the whole party.
+  const heroCards=[...heroSide.querySelectorAll('[data-combat-slot]')];
   heroes.forEach((hero,index)=>{
-    const key=`hero-${hero.id}`;
-    let el=heroSide.querySelector(`[data-combatant="${key}"]`);
-    if(!el){heroSide.insertAdjacentHTML('beforeend',combatantHtml(hero,false,hero.row==='front'));el=heroSide.lastElementChild}
-    const currentAtIndex=heroSide.children[index];
-    if(currentAtIndex!==el)heroSide.insertBefore(el,currentAtIndex||null);
+    const el=heroCards[index];if(!el)return;
+    el.style.display='';el.dataset.combatant=`hero-${hero.id}`;el.dataset.combatSide='hero';el.dataset.combatId=hero.id;
+    updateCombatantDom(hero,false,el);
   });
-  const heroIds=new Set(heroes.map(hero=>`hero-${hero.id}`));
-  heroSide.querySelectorAll('[data-combatant]').forEach(el=>{if(!heroIds.has(el.dataset.combatant))el.remove()});
-
-  // A new encounter gives every enemy a new ID. Reuse the visible card slots
-  // by position instead of deleting the old group and inserting a new group.
-  const enemyCards=[...enemySide.querySelectorAll('[data-combatant]')];
+  heroCards.slice(heroes.length).forEach(el=>{el.style.display='none';delete el.dataset.combatant;delete el.dataset.combatId});
+  const enemyCards=[...enemySide.querySelectorAll('[data-combat-slot]')];
   enemies.forEach((enemy,index)=>{
-    let el=enemyCards[index];
-    if(!el){enemySide.insertAdjacentHTML('beforeend',combatantHtml(enemy,true,false));el=enemySide.lastElementChild}
+    const el=enemyCards[index];if(!el)return;
     const encounterSlot=`${m.battle.id}:${index}`;
     const enteringNewEncounter=el.dataset.encounterSlot!==encounterSlot;
+    el.style.display='';
     el.dataset.combatant=`enemy-${enemy.id}`;
     el.dataset.combatSide='enemy';
     el.dataset.combatId=enemy.id;
@@ -487,8 +485,9 @@ function reconcileCombatants(m){
       el.dataset.lastHp=enemy.hp;
       el.dataset.lastAttack=attackTimerProgress(enemy,true,Date.now())*100;
     }
+    updateCombatantDom(enemy,true,el);
   });
-  enemyCards.slice(enemies.length).forEach(el=>el.remove());
+  enemyCards.slice(enemies.length).forEach(el=>{el.style.display='none';delete el.dataset.combatant;delete el.dataset.combatId;el.dataset.encounterSlot='' });
 }
 function updateCombatLog(m){
   const logEl=$('combatLog');if(!logEl)return;
@@ -518,10 +517,7 @@ function renderCombat(){
   $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
 
   if(!$('combatLog'))buildCombatStructure(m);
-  else reconcileCombatants(m);
-
-  m.battle.heroes.forEach(x=>updateCombatantDom(x,false));
-  m.battle.enemies.forEach(x=>updateCombatantDom(x,true));
+  renderPersistentCombatSlots(m);
 
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   

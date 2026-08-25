@@ -13,6 +13,7 @@ assert.match(css,/conic-gradient/,'timed combat effects use circular countdown v
 assert.match(css,/\.combatant\.combatMini\.enemy\{\s*height:auto!important;\s*min-height:108px!important;\s*max-height:none!important/s,'enemy cards grow instead of clipping effect icons');
 assert.ok(ui.indexOf('id="combatReport"')<ui.indexOf('id="combatLog"'),'Mission Report appears above the combat log');
 assert.match(ui,/function updateCombatReport\(/,'Mission Report values update without replacing the whole panel');
+assert.doesNotMatch(ui,/el\.innerHTML\s*=\s*combatReportHtml/,'Mission Report is never structurally replaced during combat');
 assert.doesNotMatch(ui,/statusRow\)statusRow\.innerHTML/,'effect rows are reconciled without being erased every render');
 assert.doesNotMatch(ui,/el\.outerHTML\s*=\s*combatantHtml/,'existing combatant cards survive encounter-state replacement');
 assert.match(ui,/if\(!\$\('combatLog'\)\)buildCombatStructure\(m\)/,'the full combat structure is created only when the view is opened');
@@ -27,9 +28,10 @@ const effects=context.combatEffectIcons({statuses:{bleed:{type:'bleed',stacks:2,
 assert.match(effects,/combatEffect bleed/,'Bleeding renders directly on the combat card');
 assert.match(effects,/combatEffect battleShout/,'Battle Shout renders directly on every affected character card');
 assert.equal(context.combatStructureKey({type:'quest',id:7,battle:{id:1}}),context.combatStructureKey({type:'quest',id:7,battle:{id:2}}),'a new encounter does not rebuild the entire combat view');
-assert.match(ui,/function reconcileCombatants\(/,'combat cards are reconciled individually between encounters');
+assert.match(ui,/function renderPersistentCombatSlots\(/,'combat uses a persistent slot renderer');
 assert.doesNotMatch(ui,/logEl\.innerHTML\s*=/,'the combat log is not completely replaced during combat');
-assert.match(ui,/Reuse the visible card slots/,'new encounters reuse existing enemy card elements');
-assert.doesNotMatch(ui,/else heroSide\.appendChild\(el\)/,'stable hero cards are not detached and reinserted every render');
-assert.match(ui,/if\(currentAtIndex!==el\)heroSide\.insertBefore/,'hero cards move only when their actual formation order changes');
+assert.match(ui,/COMBAT_ENEMY_SLOT_COUNT=8/,'enemy slots are preallocated before combat begins');
+assert.doesNotMatch(ui,/function reconcileCombatants\(/,'the old structural reconciliation renderer is gone');
+assert.doesNotMatch(ui,/heroSide\.(appendChild|insertBefore|insertAdjacentHTML)/,'hero cards are never moved or recreated during combat');
+assert.doesNotMatch(ui,/enemySide\.(appendChild|insertBefore|insertAdjacentHTML)/,'enemy cards are never moved or recreated during combat');
 console.log('Combat UI tests passed.');
