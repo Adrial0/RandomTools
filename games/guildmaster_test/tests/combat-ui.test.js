@@ -21,7 +21,7 @@ assert.match(css,/#combatLog\{[^}]*order:3/s,'Combat Log is explicitly ordered b
 assert.match(css,/\.combatGrid\{[^}]*max-height:none!important;[^}]*overflow:visible!important/s,'large parties expand the combat visualization instead of being cropped');
 assert.match(css,/\.combatTeamPane\{[^}]*max-height:none!important;[^}]*overflow:visible!important/s,'combat team panes do not crop members beyond six');
 
-const context={Date,Math,Object,Array,String,Number,Set,console,clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),fmt:()=> '5s',ensureStatuses:u=>u.statuses||{},STATUS_EFFECTS:{bleed:{icon:'B',name:'Bleeding'}},COMBAT_BUFF_DURATIONS:{battleShout:12000,shieldFaith:10000}};
+const context={Date,Math,Object,Array,String,Number,Set,console,clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),fmt:()=> '5s',ensureStatuses:u=>u.statuses||{},STATUS_EFFECTS:{bleed:{icon:'B',name:'Bleeding'}},COMBAT_BUFF_DURATIONS:{battleShout:30000,shieldFaith:24000}};
 context.globalThis=context;vm.createContext(context);vm.runInContext(ui,context);
 const effects=context.combatEffectIcons({statuses:{bleed:{type:'bleed',stacks:2,expiresAt:Date.now()+5000,duration:6000}},buffs:{battleShout:Date.now()+5000}},false);
 assert.match(effects,/combatEffect bleed/,'Bleeding renders directly on the combat card');

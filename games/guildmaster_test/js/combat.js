@@ -573,7 +573,9 @@ function lowestAlly(b){
 const ACTIVE_MANA_COSTS={};
 const ACTIVE_COOLDOWNS={};
 const ACTIVE_DISPLAY_NAMES={};
-const COMBAT_BUFF_DURATIONS={battleShout:12000,shieldFaith:10000};
+// These are expedition-wide combat buffs, not single-exchange effects. Their
+// duration must be long enough to survive an ordinary encounter boundary.
+const COMBAT_BUFF_DURATIONS={battleShout:30000,shieldFaith:24000};
 function manaCost(type){return ACTIVE_MANA_COSTS[type]||0}
 function activeCooldownMs(type){return ACTIVE_COOLDOWNS[type]||10000}
 function activeName(type){return ACTIVE_DISPLAY_NAMES[type]||type||'Active'}
@@ -738,13 +740,13 @@ function tryActiveSkill(m,h,now=Date.now()){
       if(!x.buffs)x.buffs={};
       x.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout;
     });
-    b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout! Party damage and Attack Speed increased for 12 seconds.`);
+    b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout! Party damage and Attack Speed increased for 30 seconds.`);
     targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Battle Shout',h.id));
     used=true;
   }else if(type==='shieldFaith'){
     if(!h.buffs)h.buffs={};
     h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
-    b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith! Damage taken reduced for 10 seconds.`);
+    b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith! Damage taken reduced for 24 seconds.`);
     used=true;
   }else{
     const target=(['shieldSlam','preciseShot','backstab'].includes(type)&&castingTarget)?castingTarget:pick(targets);
