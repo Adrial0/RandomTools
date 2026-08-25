@@ -94,7 +94,7 @@ function makeEnemy(type,level,index,forcedName=null){
   const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
   if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:['Iron']}}
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
-  const hp=Math.round((tpl.baseHp||35)*scale*1.125*(ar.hpMult||1));
+  const hp=Math.round((tpl.baseHp||35)*scale*2.25*(ar.hpMult||1));
   const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1));
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
@@ -328,7 +328,10 @@ function collectLoot(mid,quiet=false){
   if(!quiet)notify('Collected '+summary+'.','good');
   renderResourcesLite();renderInv();renderActive();renderCombat();
 }
-function heroXpNeeded(level){return 100+(level-1)*85}
+function heroXpNeeded(level){
+  const n=Math.max(0,(level||1)-1);
+  return Math.round(100+n*85+n*n*6);
+}
 
 function xpForEnemy(hero,encounterLevel,type){
   const typeMult=type==='raid'?1.65:type==='dungeon'?1.3:1;

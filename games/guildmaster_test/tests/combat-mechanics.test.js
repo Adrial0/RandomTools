@@ -31,6 +31,9 @@ assert.equal(context.statusForDamageType('poison'),'poison');
 assert.equal(context.statusForDamageType('ice'),'frostbite');
 assert.equal(context.statusForDamageType('lightning'),'shocked');
 assert.equal(context.statusForDamageType('dark'),'cursed');
+assert.equal(context.heroXpNeeded(1),100);
+assert.ok(context.heroXpNeeded(10)>1300,'higher character levels require substantially more XP');
+assert.ok(context.heroXpNeeded(20)>3800,'the XP curve continues steepening instead of remaining linear');
 
 function mission(){
   const hero={id:1,name:'Test Hero',hp:100,maxHp:100,def:0,mdef:0,block:0,fire:0,statuses:{}};
@@ -130,6 +133,8 @@ function mission(){
   assert.ok(king.attackInterval<4000,'phase two makes the boss faster');
   m.battle.bossEnrageAt=now;context.processBossMechanics(m,now+2);
   assert.equal(king.enraged,true,'the encounter eventually enrages');
+  const doubled=context.makeEnemy('dungeon',8,1,'Bone Guard');
+  assert.ok(doubled.maxHp>290,'normal enemy HP uses the doubled global multiplier');
 }
 
 console.log('Combat mechanic tests passed.');

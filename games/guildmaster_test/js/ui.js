@@ -426,7 +426,11 @@ function renderCombat(){
   if($('combatRep'))$('combatRep').textContent=m.stash.rep;
   if($('combatMaterials'))$('combatMaterials').textContent=matTotal;
   if($('combatItems'))$('combatItems').textContent=m.stash.items.length;
-  if($('combatReport'))$('combatReport').innerHTML=combatReportHtml(m);
+  if($('combatReport')){
+    const reportEl=$('combatReport'),top=reportEl.scrollTop,left=reportEl.scrollLeft;
+    reportEl.innerHTML=combatReportHtml(m);
+    reportEl.scrollTop=top;reportEl.scrollLeft=left;
+  }
   if($('combatDefeatedBanner')){
     $('combatDefeatedBanner').style.display=m.defeated?'block':'none';
     if(m.defeated)$('combatDefeatedBanner').innerHTML=m.type==='arena'?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m);

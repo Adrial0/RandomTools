@@ -1243,6 +1243,7 @@ body.windowOpen .side{overflow:hidden!important}
 .castFill{height:100%;width:0;background:#bd593e;transition:none}
 .castLabel{position:absolute;inset:0;display:grid;place-items:center;color:#ffe1bd;font:700 8px/1 ui-monospace,monospace;text-shadow:1px 1px #000}
 .combatStatusRow{display:flex;gap:4px;min-height:22px;margin-top:4px;align-items:center}
+.combatStatusRow{flex-wrap:wrap}
 .combatEffect{--effect-progress:360deg;display:inline-grid;place-items:center;width:21px;height:21px;padding:2px;border-radius:4px;background:conic-gradient(#d2a85d var(--effect-progress),#35291d 0);box-shadow:0 0 0 1px #17110b;flex:0 0 auto}
 .combatEffect>span{position:relative;display:grid;place-items:center;width:15px;height:15px;border-radius:2px;background:#18120d;color:#ead29d;font:700 10px/1 sans-serif}
 .combatEffect b{position:absolute;right:-3px;bottom:-3px;display:grid;place-items:center;min-width:9px;height:9px;border-radius:5px;background:#090806;color:#fff;font:700 7px/1 sans-serif}
@@ -1299,14 +1300,14 @@ body.windowOpen .side{overflow:hidden!important}
 
 /* v62: four combat bars need a little more vertical room. */
 .combatant.combatMini{
-  height:112px!important;
+  height:auto!important;
   min-height:112px!important;
-  max-height:112px!important;
+  max-height:none!important;
 }
 .combatant.combatMini.enemy{
-  height:108px!important;
+  height:auto!important;
   min-height:108px!important;
-  max-height:108px!important;
+  max-height:none!important;
 }
 .combatGrid{
   max-height:390px!important;
