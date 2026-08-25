@@ -34,14 +34,21 @@ assert.equal(context.statusForDamageType('dark'),'cursed');
 assert.equal(context.heroXpNeeded(1),100);
 assert.ok(context.heroXpNeeded(10)>1300,'higher character levels require substantially more XP');
 assert.ok(context.heroXpNeeded(20)>3800,'the XP curve continues steepening instead of remaining linear');
-assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.battleShout',context),30000,'Battle Shout lasts long enough to cross an ordinary encounter boundary');
-assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.shieldFaith',context),24000,'Shield of Faith lasts long enough to cross an ordinary encounter boundary');
+assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.battleShout',context),12000,'Battle Shout keeps its intended 12-second duration');
+assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.shieldFaith',context),10000,'Shield of Faith keeps its intended 10-second duration');
 
 {
   const now=Date.now();
   assert.deepEqual({...context.activePersistentBuffs({battleShout:now+5000,expired:now-1},now)},{battleShout:now+5000},'only active buffs cross an encounter boundary');
   const carried=context.activePersistentStatuses({bleed:{type:'bleed',stacks:2,expiresAt:now+5000},old:{type:'poison',expiresAt:now-1}},now);
   assert.deepEqual(Object.keys(carried),['bleed'],'only active statuses cross an encounter boundary');
+}
+
+{
+  const now=Date.now(),previous={heroes:[{id:1,buffs:{battleShout:now+5000},statuses:{}},{id:2,buffs:{shieldFaith:now+4000},statuses:{}}]},next={heroes:[{id:1,buffs:{},statuses:{}},{id:2,buffs:{},statuses:{}}]};
+  context.carryBattleEffects(previous,next,now);
+  assert.equal(next.heroes[0].buffs.battleShout,now+5000,'Battle Shout expiry survives the encounter handoff unchanged');
+  assert.equal(next.heroes[1].buffs.shieldFaith,now+4000,'Shield of Faith expiry survives the encounter handoff unchanged');
 }
 
 function mission(){
