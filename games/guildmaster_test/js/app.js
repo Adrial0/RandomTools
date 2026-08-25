@@ -153,7 +153,7 @@ requestAnimationFrame(animateTimerBars);
 setInterval(()=>{if(!document.hidden)updateFluidTimerBars(Date.now())},50);
 setInterval(()=>{
   if(!window.GAME_DATA_READY||!s)return;
-  s.missions.forEach(m=>{stepBattle(m);if((m.type==='dungeon'||m.type==='raid')&&m.finiteStage>=m.maxFights&&!m.completed&&m.battle&&!m.battle.boss){console.error('Finite mission invariant failed',m);m.battle=makeBossBattle(m)}});
+  s.missions.forEach(m=>{stepBattle(m);if((m.type==='dungeon'||m.type==='raid')&&m.finiteStage>=m.maxFights&&!m.completed&&m.battle&&!m.battle.boss){console.error('Finite mission invariant failed',m);m.battle=advanceBattleInPlace(m.battle,makeBossBattle(m))}});
   if(typeof arenaLiveMission!=='undefined'&&arenaLiveMission&&!arenaLiveMission.completed)stepBattle(arenaLiveMission);
 },100);
 setInterval(()=>{

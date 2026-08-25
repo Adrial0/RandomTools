@@ -1092,7 +1092,8 @@ function repairFiniteMissionState(m){
 
   // If a save claims all normal encounters are done, force the boss.
   if(m.finiteStage>=m.maxFights){
-    if(!m.battle||m.battle.kind!=='boss')m.battle=makeBossBattle(m);
+    if(!m.battle)m.battle=makeBossBattle(m);
+    else if(m.battle.kind!=='boss')m.battle=advanceBattleInPlace(m.battle,makeBossBattle(m));
     return;
   }
 
@@ -1299,8 +1300,8 @@ function offlineCatchup(hiddenMs){
       // of a fresh global round rather than halfway through an actor sequence.
       const c=ensureCombatCycle(m);
       c.phase='heroes';c.heroTurn=0;c.enemyTurn=0;c.round=Math.max(1,c.round+completed);
-      if(m.type==='dungeon'||m.type==='raid')m.battle=createCurrentFiniteBattle(m);
-      else m.battle=makeBattle(m);
+      const nextBattle=(m.type==='dungeon'||m.type==='raid')?createCurrentFiniteBattle(m):makeBattle(m);
+      m.battle=m.battle?advanceBattleInPlace(m.battle,nextBattle):nextBattle;
 
       if(completed)m.battle.log.unshift(`Offline progress: ${completed} encounters completed while away.`);
       m.lastRewardedBattleId=null;

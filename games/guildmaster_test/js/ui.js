@@ -289,8 +289,12 @@ function updateCombatEffects(row,x,enemy=false){
     const remaining=effect.static?0:Math.max(0,(effect.expiresAt||Date.now())-Date.now()),progress=effect.static?1:clamp(remaining/Math.max(1,effect.duration||remaining||1),0,1);
     el.style.setProperty('--effect-progress',`${Math.round(progress*360)}deg`);
     el.title=effect.name+(effect.stacks>1?` ×${effect.stacks}`:'')+(effect.static?'':` · ${fmt(remaining)}`);
-    const content=el.firstElementChild;
-    if(content){content.textContent=effect.icon;if(effect.stacks>1){const count=document.createElement('b');count.textContent=effect.stacks;content.appendChild(count)}}
+    const content=el.firstElementChild,contentKey=`${effect.icon}:${effect.stacks||0}`;
+    if(content&&el.dataset.contentKey!==contentKey){
+      content.textContent=effect.icon;
+      if(effect.stacks>1){const count=document.createElement('b');count.textContent=effect.stacks;content.appendChild(count)}
+      el.dataset.contentKey=contentKey;
+    }
   });
 }
 function closeCombatInspector(){
@@ -454,12 +458,14 @@ function updateCombatantDom(x,enemy){
 function reconcileCombatants(m){
   const heroSide=$('combatHeroSide'),enemySide=$('combatEnemySide');if(!heroSide||!enemySide)return;
   const heroes=threatOrderedHeroes(m.battle.heroes).map(x=>x.hero),enemies=m.battle.enemies||[];
-  // Heroes keep stable IDs, so preserve and merely reorder their existing cards.
-  heroes.forEach(hero=>{
+  // Heroes keep stable IDs. Only move a card when its actual order changed;
+  // appendChild on every render was detaching and reinserting the whole party.
+  heroes.forEach((hero,index)=>{
     const key=`hero-${hero.id}`;
     let el=heroSide.querySelector(`[data-combatant="${key}"]`);
     if(!el){heroSide.insertAdjacentHTML('beforeend',combatantHtml(hero,false,hero.row==='front'));el=heroSide.lastElementChild}
-    else heroSide.appendChild(el);
+    const currentAtIndex=heroSide.children[index];
+    if(currentAtIndex!==el)heroSide.insertBefore(el,currentAtIndex||null);
   });
   const heroIds=new Set(heroes.map(hero=>`hero-${hero.id}`));
   heroSide.querySelectorAll('[data-combatant]').forEach(el=>{if(!heroIds.has(el.dataset.combatant))el.remove()});
@@ -470,12 +476,17 @@ function reconcileCombatants(m){
   enemies.forEach((enemy,index)=>{
     let el=enemyCards[index];
     if(!el){enemySide.insertAdjacentHTML('beforeend',combatantHtml(enemy,true,false));el=enemySide.lastElementChild}
+    const encounterSlot=`${m.battle.id}:${index}`;
+    const enteringNewEncounter=el.dataset.encounterSlot!==encounterSlot;
     el.dataset.combatant=`enemy-${enemy.id}`;
     el.dataset.combatSide='enemy';
     el.dataset.combatId=enemy.id;
     el.dataset.entitySignature=combatEntitySignature(enemy,true);
-    el.dataset.lastHp=enemy.hp;
-    el.dataset.lastAttack=attackTimerProgress(enemy,true,Date.now())*100;
+    if(enteringNewEncounter){
+      el.dataset.encounterSlot=encounterSlot;
+      el.dataset.lastHp=enemy.hp;
+      el.dataset.lastAttack=attackTimerProgress(enemy,true,Date.now())*100;
+    }
   });
   enemyCards.slice(enemies.length).forEach(el=>el.remove());
 }

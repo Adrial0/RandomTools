@@ -30,4 +30,6 @@ assert.equal(context.combatStructureKey({type:'quest',id:7,battle:{id:1}}),conte
 assert.match(ui,/function reconcileCombatants\(/,'combat cards are reconciled individually between encounters');
 assert.doesNotMatch(ui,/logEl\.innerHTML\s*=/,'the combat log is not completely replaced during combat');
 assert.match(ui,/Reuse the visible card slots/,'new encounters reuse existing enemy card elements');
+assert.doesNotMatch(ui,/else heroSide\.appendChild\(el\)/,'stable hero cards are not detached and reinserted every render');
+assert.match(ui,/if\(currentAtIndex!==el\)heroSide\.insertBefore/,'hero cards move only when their actual formation order changes');
 console.log('Combat UI tests passed.');
