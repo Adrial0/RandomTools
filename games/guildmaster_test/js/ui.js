@@ -248,8 +248,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
 }
 const COMBAT_ENEMY_SLOT_COUNT=8;
 function emptyCombatSlotHtml(enemy,index){
-  const unit={id:`empty-${index}`,name:'',class:'Warrior',displayClass:'Warrior',maxHp:1,hp:1,maxMana:0,mana:0,icon:'',statuses:{},buffs:{},nextAttackAt:Date.now()+1000,attackStartedAt:Date.now(),attackInterval:1000};
-  return combatantHtml(unit,enemy,false,{hidden:true});
+  return '';
 }
 function setCombatSlotVisible(el,visible){
   if(!el)return;
@@ -480,7 +479,10 @@ function renderPersistentCombatSlots(m){
   heroCards.slice(heroes.length).forEach(el=>{setCombatSlotVisible(el,false);delete el.dataset.combatant;delete el.dataset.combatId});
   const enemySlots=[...enemySide.querySelectorAll('.combatEnemySlot[data-combat-slot]')];
   enemies.forEach((enemy,index)=>{
-    const slot=enemySlots[index],el=slot?.querySelector('.combatant');if(!slot||!el)return;
+    const slot=enemySlots[index];if(!slot)return;
+    let el=slot.querySelector('.combatant');
+    if(!el){slot.insertAdjacentHTML('afterbegin',combatantHtml(enemy,true,false));el=slot.querySelector('.combatant')}
+    if(!el)return;
     const encounterSlot=`${m.battle.id}:${index}`;
     const enteringNewEncounter=slot.dataset.encounterSlot!==encounterSlot;
     setCombatSlotVisible(slot,true);

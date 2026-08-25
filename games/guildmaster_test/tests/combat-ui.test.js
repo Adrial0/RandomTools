@@ -34,6 +34,7 @@ assert.match(ui,/COMBAT_ENEMY_SLOT_COUNT=8/,'enemy slots are preallocated before
 assert.match(css,/\.combatant\.combatMini\.combatSlotEmpty\{display:none!important\}/,'unused persistent combat slots override the combat card grid display');
 assert.match(css,/\.combatEnemySlot\[hidden\]\{display:none!important\}/,'neutral enemy slot wrappers hide unused placeholders');
 assert.match(ui,/class="combatEnemySlot" data-combat-slot=/,'enemy cards are contained by neutral persistent slot wrappers');
+assert.match(ui,/function emptyCombatSlotHtml\(enemy,index\)\{\s*return '';\s*\}/s,'unused enemy slots contain no fake 1/1 combatant');
 assert.doesNotMatch(ui,/function reconcileCombatants\(/,'the old structural reconciliation renderer is gone');
 assert.doesNotMatch(ui,/heroSide\.(appendChild|insertBefore|insertAdjacentHTML)/,'hero cards are never moved or recreated during combat');
 assert.doesNotMatch(ui,/enemySide\.(appendChild|insertBefore|insertAdjacentHTML)/,'enemy cards are never moved or recreated during combat');
