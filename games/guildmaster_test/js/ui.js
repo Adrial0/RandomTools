@@ -249,7 +249,15 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
 const COMBAT_ENEMY_SLOT_COUNT=8;
 function emptyCombatSlotHtml(enemy,index){
   const unit={id:`empty-${index}`,name:'',class:'Warrior',displayClass:'Warrior',maxHp:1,hp:1,maxMana:0,mana:0,icon:'',statuses:{},buffs:{},nextAttackAt:Date.now()+1000,attackStartedAt:Date.now(),attackInterval:1000};
-  return combatantHtml(unit,enemy,false,{slot:index,hidden:true});
+  return combatantHtml(unit,enemy,false,{slot:index,hidden:true}).replace('<div class="combatant','<div hidden aria-hidden="true" class="combatant');
+}
+function setCombatSlotVisible(el,visible){
+  if(!el)return;
+  el.hidden=!visible;
+  el.setAttribute('aria-hidden',visible?'false':'true');
+  el.classList.toggle('combatSlotEmpty',!visible);
+  if(visible)el.style.removeProperty('display');
+  else el.style.setProperty('display','none','important');
 }
 function combatEntitySignature(x,enemy=false){return `${enemy?'e':'h'}:${x.id}:${encodeURIComponent(x.name||'')}:${x.maxHp||0}:${x.maxMana||0}:${x.boss?'b':''}`}
 const COMBAT_BUFF_VISUALS={
@@ -466,16 +474,16 @@ function renderPersistentCombatSlots(m){
   const heroCards=[...heroSide.querySelectorAll('[data-combat-slot]')];
   heroes.forEach((hero,index)=>{
     const el=heroCards[index];if(!el)return;
-    el.classList.remove('combatSlotEmpty');el.dataset.combatant=`hero-${hero.id}`;el.dataset.combatSide='hero';el.dataset.combatId=hero.id;
+    setCombatSlotVisible(el,true);el.dataset.combatant=`hero-${hero.id}`;el.dataset.combatSide='hero';el.dataset.combatId=hero.id;
     updateCombatantDom(hero,false,el);
   });
-  heroCards.slice(heroes.length).forEach(el=>{el.classList.add('combatSlotEmpty');delete el.dataset.combatant;delete el.dataset.combatId});
+  heroCards.slice(heroes.length).forEach(el=>{setCombatSlotVisible(el,false);delete el.dataset.combatant;delete el.dataset.combatId});
   const enemyCards=[...enemySide.querySelectorAll('[data-combat-slot]')];
   enemies.forEach((enemy,index)=>{
     const el=enemyCards[index];if(!el)return;
     const encounterSlot=`${m.battle.id}:${index}`;
     const enteringNewEncounter=el.dataset.encounterSlot!==encounterSlot;
-    el.classList.remove('combatSlotEmpty');
+    setCombatSlotVisible(el,true);
     el.dataset.combatant=`enemy-${enemy.id}`;
     el.dataset.combatSide='enemy';
     el.dataset.combatId=enemy.id;
@@ -487,7 +495,7 @@ function renderPersistentCombatSlots(m){
     }
     updateCombatantDom(enemy,true,el);
   });
-  enemyCards.slice(enemies.length).forEach(el=>{el.classList.add('combatSlotEmpty');delete el.dataset.combatant;delete el.dataset.combatId;el.dataset.encounterSlot='' });
+  enemyCards.slice(enemies.length).forEach(el=>{setCombatSlotVisible(el,false);delete el.dataset.combatant;delete el.dataset.combatId;el.dataset.encounterSlot='' });
 }
 function updateCombatLog(m){
   const logEl=$('combatLog');if(!logEl)return;
