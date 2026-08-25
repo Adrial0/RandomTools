@@ -256,7 +256,7 @@ function combatEffectIcons(x,enemy=false){
     icons.push(timedEffectIcon(def?.icon||'◆',def?.name||status.type,status.type,status.expiresAt,duration,status.stacks));
   });
   if(!enemy)Object.entries(x.buffs||{}).forEach(([key,expiresAt])=>{
-    const def=COMBAT_BUFF_VISUALS[key];if(def&&expiresAt>now)icons.push(timedEffectIcon(def.icon,def.name,def.className,expiresAt,key==='battleShout'?6000:6000));
+    const def=COMBAT_BUFF_VISUALS[key];if(def&&expiresAt>now)icons.push(timedEffectIcon(def.icon,def.name,def.className,expiresAt,COMBAT_BUFF_DURATIONS[key]||6000));
   });
   if(enemy&&x.protection>0)icons.push('<span class="combatEffect protected staticEffect" title="Protected by an allied Bulwark"><span>🛡</span></span>');
   if(enemy&&x.phase)icons.push(`<span class="combatEffect bossPhase staticEffect" title="${x.phase}"><span>♛</span></span>`);
