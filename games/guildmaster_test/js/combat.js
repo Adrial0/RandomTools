@@ -109,7 +109,7 @@ function ensurePartyState(m){
     if(!h)return;
     const z=hs(h);
     if(!m.partyState[hid]){
-      m.partyState[hid]={hp:z.hp,maxHp:z.hp,mana:z.mana,maxMana:z.mana,cooldowns:{},nextAttackAt:null,attackStartedAt:null};
+      m.partyState[hid]={hp:z.hp,maxHp:z.hp,mana:z.mana,maxMana:z.mana,cooldowns:{},buffs:{},statuses:{},nextAttackAt:null,attackStartedAt:null};
     }else{
       const oldMax=m.partyState[hid].maxHp||z.hp;
       const ratio=oldMax?m.partyState[hid].hp/oldMax:1;
@@ -118,10 +118,18 @@ function ensurePartyState(m){
       if(m.partyState[hid].maxMana==null)m.partyState[hid].maxMana=z.mana;
       if(m.partyState[hid].mana==null)m.partyState[hid].mana=z.mana;
       if(!m.partyState[hid].cooldowns||typeof m.partyState[hid].cooldowns!=='object')m.partyState[hid].cooldowns={};
+      if(!m.partyState[hid].buffs||typeof m.partyState[hid].buffs!=='object')m.partyState[hid].buffs={};
+      if(!m.partyState[hid].statuses||typeof m.partyState[hid].statuses!=='object')m.partyState[hid].statuses={};
       m.partyState[hid].maxMana=z.mana;
       m.partyState[hid].mana=Math.min(z.mana,Math.max(0,m.partyState[hid].mana));
     }
   });
+}
+function activePersistentBuffs(buffs,now=Date.now()){
+  return Object.fromEntries(Object.entries(buffs||{}).filter(([,expiresAt])=>Number(expiresAt)>now));
+}
+function activePersistentStatuses(statuses,now=Date.now()){
+  return Object.fromEntries(Object.entries(statuses||{}).filter(([,status])=>Number(status?.expiresAt)>now).map(([key,status])=>[key,{...status}]));
 }
 function ensureCombatCycle(m){
   if(!m.combatCycle||typeof m.combatCycle!=='object'){
@@ -180,7 +188,7 @@ function makeBattle(m){
       id:h.id,name:h.name,class:h.class,displayClass:displayClass(h),subclass:h.subclass||null,level:h.level,maxHp:z.hp,
       hp:Math.min(z.hp,Math.max(0,ps?ps.hp:z.hp)),
       mana:Math.min(z.mana,Math.max(0,ps?.mana??z.mana)),maxMana:z.mana,manaRegen:z.manaRegen,
-      cooldowns:Object.assign({},ps?.cooldowns||{}),buffs:{},statuses:{},baseAttackTime,attackSpeed:z.attackSpeed,nextAttackAt,attackStartedAt,
+      cooldowns:Object.assign({},ps?.cooldowns||{}),buffs:activePersistentBuffs(ps?.buffs,now),statuses:activePersistentStatuses(ps?.statuses,now),baseAttackTime,attackSpeed:z.attackSpeed,nextAttackAt,attackStartedAt,
       str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,physicalDodge:z.physicalDodge,magicalDodge:z.magicalDodge,
       regen:z.regen||0,lifesteal:z.lifesteal||0,damageMult:z.damageMult||1,healMult:z.healMult||1,critBonus:z.critBonus||0,element:z.element||null,elementMult:z.elementMult||1,activeType:z.activeType||null,
       fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
@@ -254,6 +262,8 @@ function syncPartyHp(m){
       m.partyState[h.id].mana=Math.max(0,h.mana||0);
       m.partyState[h.id].maxMana=h.maxMana||(20+(h.int||0));
       m.partyState[h.id].cooldowns=Object.assign({},h.cooldowns||{});
+      m.partyState[h.id].buffs=activePersistentBuffs(h.buffs);
+      m.partyState[h.id].statuses=activePersistentStatuses(h.statuses);
       m.partyState[h.id].nextAttackAt=h.nextAttackAt;
       m.partyState[h.id].attackStartedAt=h.attackStartedAt;
     }

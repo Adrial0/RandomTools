@@ -35,6 +35,13 @@ assert.equal(context.heroXpNeeded(1),100);
 assert.ok(context.heroXpNeeded(10)>1300,'higher character levels require substantially more XP');
 assert.ok(context.heroXpNeeded(20)>3800,'the XP curve continues steepening instead of remaining linear');
 
+{
+  const now=Date.now();
+  assert.deepEqual({...context.activePersistentBuffs({battleShout:now+5000,expired:now-1},now)},{battleShout:now+5000},'only active buffs cross an encounter boundary');
+  const carried=context.activePersistentStatuses({bleed:{type:'bleed',stacks:2,expiresAt:now+5000},old:{type:'poison',expiresAt:now-1}},now);
+  assert.deepEqual(Object.keys(carried),['bleed'],'only active statuses cross an encounter boundary');
+}
+
 function mission(){
   const hero={id:1,name:'Test Hero',hp:100,maxHp:100,def:0,mdef:0,block:0,fire:0,statuses:{}};
   const enemy={id:1,name:'Test Caster',hp:100,maxHp:100,atk:10,mana:30,maxMana:30,ability:'fireball',abilityReadyAt:0,statuses:{}};
