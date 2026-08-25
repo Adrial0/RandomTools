@@ -28,4 +28,6 @@ assert.match(effects,/combatEffect bleed/,'Bleeding renders directly on the comb
 assert.match(effects,/combatEffect battleShout/,'Battle Shout renders directly on every affected character card');
 assert.equal(context.combatStructureKey({type:'quest',id:7,battle:{id:1}}),context.combatStructureKey({type:'quest',id:7,battle:{id:2}}),'a new encounter does not rebuild the entire combat view');
 assert.match(ui,/function reconcileCombatants\(/,'combat cards are reconciled individually between encounters');
+assert.doesNotMatch(ui,/logEl\.innerHTML\s*=/,'the combat log is not completely replaced during combat');
+assert.match(ui,/Reuse the visible card slots/,'new encounters reuse existing enemy card elements');
 console.log('Combat UI tests passed.');

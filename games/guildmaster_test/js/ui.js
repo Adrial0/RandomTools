@@ -416,9 +416,14 @@ function updateCombatantDom(x,enemy){
     el.classList.remove(hpDelta>0?'combatHeal':'combatHit');void el.offsetWidth;el.classList.add(hpDelta>0?'combatHeal':'combatHit');setTimeout(()=>el.classList.remove('combatHeal','combatHit'),240);
   }
   el.dataset.lastHp=x.hp;
-  const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass');
+  const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass'),visualIcon=el.querySelector('.visualIcon');
   if(name)name.textContent=x.name;
   if(classLine)classLine.textContent=enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`;
+  const iconKey=enemy?`enemy:${x.name}`:`hero:${x.class}:${x.subclass||''}`;
+  if(visualIcon&&el.dataset.iconKey!==iconKey){
+    visualIcon.innerHTML=enemy?x.icon:(x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset'));
+    el.dataset.iconKey=iconKey;
+  }
   if(hp)hp.textContent=`${Math.max(0,x.hp)}/${x.maxHp}`;
   if(fill)fill.style.width=pct+'%';
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';
@@ -449,15 +454,30 @@ function updateCombatantDom(x,enemy){
 function reconcileCombatants(m){
   const heroSide=$('combatHeroSide'),enemySide=$('combatEnemySide');if(!heroSide||!enemySide)return;
   const heroes=threatOrderedHeroes(m.battle.heroes).map(x=>x.hero),enemies=m.battle.enemies||[];
-  const reconcile=(side,units,enemy)=>{
-    const expected=new Set(units.map(x=>`${enemy?'enemy':'hero'}-${x.id}`));
-    side.querySelectorAll('[data-combatant]').forEach(el=>{if(!expected.has(el.dataset.combatant))el.remove()});
-    units.forEach(x=>{
-      const key=`${enemy?'enemy':'hero'}-${x.id}`;
-      if(!side.querySelector(`[data-combatant="${key}"]`))side.insertAdjacentHTML('beforeend',combatantHtml(x,enemy,!enemy&&x.row==='front'));
-    });
-  };
-  reconcile(heroSide,heroes,false);reconcile(enemySide,enemies,true);
+  // Heroes keep stable IDs, so preserve and merely reorder their existing cards.
+  heroes.forEach(hero=>{
+    const key=`hero-${hero.id}`;
+    let el=heroSide.querySelector(`[data-combatant="${key}"]`);
+    if(!el){heroSide.insertAdjacentHTML('beforeend',combatantHtml(hero,false,hero.row==='front'));el=heroSide.lastElementChild}
+    else heroSide.appendChild(el);
+  });
+  const heroIds=new Set(heroes.map(hero=>`hero-${hero.id}`));
+  heroSide.querySelectorAll('[data-combatant]').forEach(el=>{if(!heroIds.has(el.dataset.combatant))el.remove()});
+
+  // A new encounter gives every enemy a new ID. Reuse the visible card slots
+  // by position instead of deleting the old group and inserting a new group.
+  const enemyCards=[...enemySide.querySelectorAll('[data-combatant]')];
+  enemies.forEach((enemy,index)=>{
+    let el=enemyCards[index];
+    if(!el){enemySide.insertAdjacentHTML('beforeend',combatantHtml(enemy,true,false));el=enemySide.lastElementChild}
+    el.dataset.combatant=`enemy-${enemy.id}`;
+    el.dataset.combatSide='enemy';
+    el.dataset.combatId=enemy.id;
+    el.dataset.entitySignature=combatEntitySignature(enemy,true);
+    el.dataset.lastHp=enemy.hp;
+    el.dataset.lastAttack=attackTimerProgress(enemy,true,Date.now())*100;
+  });
+  enemyCards.slice(enemies.length).forEach(el=>el.remove());
 }
 function updateCombatLog(m){
   const logEl=$('combatLog');if(!logEl)return;
@@ -465,7 +485,14 @@ function updateCombatLog(m){
   const signature=`${m.battle.id}:${m.battle.actionSeq||0}:${lines.length}`;
   if(logEl.dataset.signature===signature)return;
   const wasNearBottom=logEl.scrollHeight-logEl.scrollTop-logEl.clientHeight<45;
-  logEl.innerHTML=lines.map(x=>`<div class="${x.includes('⚠')?'dangerText':x.toLowerCase().includes('heal')||x.includes('regenerates')?'healText':''}">${x}</div>`).join('');
+  lines.forEach((line,index)=>{
+    let row=logEl.children[index];
+    if(!row){row=document.createElement('div');logEl.appendChild(row)}
+    const className=line.includes('⚠')?'dangerText':line.toLowerCase().includes('heal')||line.includes('regenerates')?'healText':'';
+    if(row.dataset.rawLine!==line){row.textContent=line;row.dataset.rawLine=line}
+    row.className=className;
+  });
+  while(logEl.children.length>lines.length)logEl.lastElementChild.remove();
   logEl.dataset.signature=signature;
   if(wasNearBottom||!logEl.dataset.initialized)logEl.scrollTop=logEl.scrollHeight;
   logEl.dataset.initialized='1';
