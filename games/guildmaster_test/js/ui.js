@@ -249,7 +249,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
 const COMBAT_ENEMY_SLOT_COUNT=8;
 function emptyCombatSlotHtml(enemy,index){
   const unit={id:`empty-${index}`,name:'',class:'Warrior',displayClass:'Warrior',maxHp:1,hp:1,maxMana:0,mana:0,icon:'',statuses:{},buffs:{},nextAttackAt:Date.now()+1000,attackStartedAt:Date.now(),attackInterval:1000};
-  return combatantHtml(unit,enemy,false,{slot:index,hidden:true}).replace('<div class="combatant','<div hidden aria-hidden="true" class="combatant');
+  return combatantHtml(unit,enemy,false,{hidden:true});
 }
 function setCombatSlotVisible(el,visible){
   if(!el)return;
@@ -400,7 +400,7 @@ function buildCombatStructure(m){
       <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
       <div class="combatGrid">
         <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT AND BACK ROW'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false,{slot:index}):emptyCombatSlotHtml(true,index)).join('')}</div></div>
+        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>`<div class="combatEnemySlot" data-combat-slot="enemy:${index}" ${m.battle.enemies[index]?'':'hidden aria-hidden="true" style="display:none!important"'}>${m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false):emptyCombatSlotHtml(true,index)}</div>`).join('')}</div></div>
       </div>
       <div class="lootStash" style="display:${arenaMode?'none':'grid'}">
         <div class="lootBox"><span>Unclaimed gold</span><strong id="combatGold">${m.stash.gold}</strong></div>
@@ -478,24 +478,28 @@ function renderPersistentCombatSlots(m){
     updateCombatantDom(hero,false,el);
   });
   heroCards.slice(heroes.length).forEach(el=>{setCombatSlotVisible(el,false);delete el.dataset.combatant;delete el.dataset.combatId});
-  const enemyCards=[...enemySide.querySelectorAll('[data-combat-slot]')];
+  const enemySlots=[...enemySide.querySelectorAll('.combatEnemySlot[data-combat-slot]')];
   enemies.forEach((enemy,index)=>{
-    const el=enemyCards[index];if(!el)return;
+    const slot=enemySlots[index],el=slot?.querySelector('.combatant');if(!slot||!el)return;
     const encounterSlot=`${m.battle.id}:${index}`;
-    const enteringNewEncounter=el.dataset.encounterSlot!==encounterSlot;
-    setCombatSlotVisible(el,true);
+    const enteringNewEncounter=slot.dataset.encounterSlot!==encounterSlot;
+    setCombatSlotVisible(slot,true);
+    el.classList.remove('combatSlotEmpty');
     el.dataset.combatant=`enemy-${enemy.id}`;
     el.dataset.combatSide='enemy';
     el.dataset.combatId=enemy.id;
     el.dataset.entitySignature=combatEntitySignature(enemy,true);
     if(enteringNewEncounter){
-      el.dataset.encounterSlot=encounterSlot;
+      slot.dataset.encounterSlot=encounterSlot;
       el.dataset.lastHp=enemy.hp;
       el.dataset.lastAttack=attackTimerProgress(enemy,true,Date.now())*100;
     }
     updateCombatantDom(enemy,true,el);
   });
-  enemyCards.slice(enemies.length).forEach(el=>{setCombatSlotVisible(el,false);delete el.dataset.combatant;delete el.dataset.combatId;el.dataset.encounterSlot='' });
+  enemySlots.slice(enemies.length).forEach(slot=>{
+    setCombatSlotVisible(slot,false);slot.dataset.encounterSlot='';
+    const el=slot.querySelector('.combatant');if(el){delete el.dataset.combatant;delete el.dataset.combatId}
+  });
 }
 function updateCombatLog(m){
   const logEl=$('combatLog');if(!logEl)return;

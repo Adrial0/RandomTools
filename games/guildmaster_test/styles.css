@@ -1436,3 +1436,4 @@ body.windowOpen .side{overflow:hidden!important}
   overflow:visible!important;
 }
 .combatant.combatMini.combatSlotEmpty{display:none!important}
+.combatEnemySlot[hidden]{display:none!important}
