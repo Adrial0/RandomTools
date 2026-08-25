@@ -1403,3 +1403,35 @@ body.windowOpen .side{overflow:hidden!important}
 .combatFloat{position:absolute;right:9px;top:31px;z-index:3;opacity:0;font-weight:900;pointer-events:none;text-shadow:0 1px 2px #000}.combatFloat.pop{animation:arenaFloat .35s ease-out}
 @keyframes combatHeal{50%{border-color:#579264;box-shadow:0 0 12px rgba(87,146,100,.4)}}
 .arenaQuota{padding:5px 0 9px}.arenaOpponent button:disabled{opacity:.45;cursor:not-allowed}
+
+/* Persistent combat view: the body is rebuilt only when it is opened. */
+#combatBody{
+  display:flex!important;
+  flex-direction:column!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+.combatFixedTop{order:1}
+#combatReport{
+  order:2;
+  flex:0 0 auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  margin:10px 0 8px!important;
+}
+#combatLog{
+  order:3;
+  flex:0 0 220px!important;
+  height:220px!important;
+  min-height:160px!important;
+  max-height:220px!important;
+}
+.combatGrid{
+  max-height:none!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+.combatTeamPane{
+  max-height:none!important;
+  overflow:visible!important;
+}

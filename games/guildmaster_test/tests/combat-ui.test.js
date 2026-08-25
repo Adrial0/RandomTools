@@ -13,6 +13,12 @@ assert.match(css,/conic-gradient/,'timed combat effects use circular countdown v
 assert.match(css,/\.combatant\.combatMini\.enemy\{\s*height:auto!important;\s*min-height:108px!important;\s*max-height:none!important/s,'enemy cards grow instead of clipping effect icons');
 assert.ok(ui.indexOf('id="combatReport"')<ui.indexOf('id="combatLog"'),'Mission Report appears above the combat log');
 assert.match(ui,/function updateCombatReport\(/,'Mission Report values update without replacing the whole panel');
+assert.doesNotMatch(ui,/statusRow\)statusRow\.innerHTML/,'effect rows are reconciled without being erased every render');
+assert.match(ui,/if\(!\$\('combatLog'\)\)buildCombatStructure\(m\)/,'the full combat structure is created only when the view is opened');
+assert.match(css,/#combatReport\{[^}]*order:2/s,'Mission Report is explicitly ordered above the combat log');
+assert.match(css,/#combatLog\{[^}]*order:3/s,'Combat Log is explicitly ordered below the Mission Report');
+assert.match(css,/\.combatGrid\{[^}]*max-height:none!important;[^}]*overflow:visible!important/s,'large parties expand the combat visualization instead of being cropped');
+assert.match(css,/\.combatTeamPane\{[^}]*max-height:none!important;[^}]*overflow:visible!important/s,'combat team panes do not crop members beyond six');
 
 const context={Date,Math,Object,Array,String,Number,Set,console,clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),fmt:()=> '5s',ensureStatuses:u=>u.statuses||{},STATUS_EFFECTS:{bleed:{icon:'B',name:'Bleeding'}},COMBAT_BUFF_DURATIONS:{battleShout:12000,shieldFaith:10000}};
 context.globalThis=context;vm.createContext(context);vm.runInContext(ui,context);

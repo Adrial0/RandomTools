@@ -187,7 +187,12 @@ function renderActive(){
   if(key!==activeMissionDomKey||(s.missions.length&&!hasCards)||(!s.missions.length&&hasCards))buildActiveMissionDom();
   s.missions.forEach(updateActiveMissionCard);
 }
-function openCombat(mid){combatDomKey='';
+function resetCombatView(){
+  combatDomKey='';
+  const body=$('combatBody');
+  if(body)body.replaceChildren();
+}
+function openCombat(mid){resetCombatView();
   const m=s.missions.find(x=>x.id===mid);if(!m)return;
   $('combatModal').dataset.mode='mission';
   $('combatModal').dataset.mission=mid;
@@ -250,19 +255,43 @@ function timedEffectIcon(icon,name,className,expiresAt,duration,stacks=0){
   const now=Date.now(),remaining=Math.max(0,(expiresAt||now)-now),total=Math.max(1,duration||remaining||1),progress=clamp(remaining/total,0,1),deg=Math.round(progress*360);
   return `<span class="combatEffect ${className||''}" style="--effect-progress:${deg}deg" title="${name}${stacks>1?` ×${stacks}`:''} · ${fmt(remaining)}"><span>${icon}${stacks>1?`<b>${stacks}</b>`:''}</span></span>`;
 }
-function combatEffectIcons(x,enemy=false){
-  const now=Date.now(),icons=[];
+function combatEffectDescriptors(x,enemy=false){
+  const now=Date.now(),effects=[];
   Object.values(ensureStatuses(x)).forEach(status=>{
     const def=STATUS_EFFECTS[status.type],duration=status.duration||Math.max(2000,(status.expiresAt||now)-now);
-    icons.push(timedEffectIcon(def?.icon||'◆',def?.name||status.type,status.type,status.expiresAt,duration,status.stacks));
+    effects.push({key:`status:${status.type}`,icon:def?.icon||'◆',name:def?.name||status.type,className:status.type,expiresAt:status.expiresAt,duration,stacks:status.stacks||0});
   });
   if(!enemy)Object.entries(x.buffs||{}).forEach(([key,expiresAt])=>{
-    const def=COMBAT_BUFF_VISUALS[key];if(def&&expiresAt>now)icons.push(timedEffectIcon(def.icon,def.name,def.className,expiresAt,COMBAT_BUFF_DURATIONS[key]||6000));
+    const def=COMBAT_BUFF_VISUALS[key];
+    if(def&&expiresAt>now)effects.push({key:`buff:${key}`,icon:def.icon,name:def.name,className:def.className,expiresAt,duration:COMBAT_BUFF_DURATIONS[key]||6000,stacks:0});
   });
-  if(enemy&&x.protection>0)icons.push('<span class="combatEffect protected staticEffect" title="Protected by an allied Bulwark"><span>🛡</span></span>');
-  if(enemy&&x.phase)icons.push(`<span class="combatEffect bossPhase staticEffect" title="${x.phase}"><span>♛</span></span>`);
-  if(enemy&&x.enraged)icons.push('<span class="combatEffect enraged staticEffect" title="Enraged"><span>!</span></span>');
-  return icons.join('');
+  if(enemy&&x.protection>0)effects.push({key:'static:protected',icon:'🛡',name:'Protected by an allied Bulwark',className:'protected staticEffect',static:true});
+  if(enemy&&x.phase)effects.push({key:'static:phase',icon:'♛',name:x.phase,className:'bossPhase staticEffect',static:true});
+  if(enemy&&x.enraged)effects.push({key:'static:enraged',icon:'!',name:'Enraged',className:'enraged staticEffect',static:true});
+  return effects;
+}
+function combatEffectIcons(x,enemy=false){
+  return combatEffectDescriptors(x,enemy).map(effect=>effect.static
+    ?`<span class="combatEffect ${effect.className}" data-effect-key="${effect.key}" title="${effect.name}"><span>${effect.icon}</span></span>`
+    :timedEffectIcon(effect.icon,effect.name,effect.className,effect.expiresAt,effect.duration,effect.stacks).replace('class="combatEffect',`data-effect-key="${effect.key}" class="combatEffect`)
+  ).join('');
+}
+function updateCombatEffects(row,x,enemy=false){
+  const effects=combatEffectDescriptors(x,enemy),expected=new Set(effects.map(effect=>effect.key));
+  row.querySelectorAll('[data-effect-key]').forEach(el=>{if(!expected.has(el.dataset.effectKey))el.remove()});
+  effects.forEach(effect=>{
+    let el=row.querySelector(`[data-effect-key="${effect.key}"]`);
+    if(!el){
+      el=document.createElement('span');el.dataset.effectKey=effect.key;
+      const content=document.createElement('span');el.appendChild(content);row.appendChild(el);
+    }
+    el.className=`combatEffect ${effect.className||''}`;
+    const remaining=effect.static?0:Math.max(0,(effect.expiresAt||Date.now())-Date.now()),progress=effect.static?1:clamp(remaining/Math.max(1,effect.duration||remaining||1),0,1);
+    el.style.setProperty('--effect-progress',`${Math.round(progress*360)}deg`);
+    el.title=effect.name+(effect.stacks>1?` ×${effect.stacks}`:'')+(effect.static?'':` · ${fmt(remaining)}`);
+    const content=el.firstElementChild;
+    if(content){content.textContent=effect.icon;if(effect.stacks>1){const count=document.createElement('b');count.textContent=effect.stacks;content.appendChild(count)}}
+  });
 }
 function closeCombatInspector(){
   const p=$('combatInspectPanel');
@@ -391,7 +420,7 @@ function updateCombatantDom(x,enemy){
   if(manaFill)manaFill.style.width=clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)+'%';
   if(attackFill){const attackPct=attackTimerProgress(x,enemy,Date.now())*100,previousAttack=Number(el.dataset.lastAttack);attackFill.style.width=attackPct+'%';if(Number.isFinite(previousAttack)&&attackPct+35<previousAttack){el.classList.remove('combatAct');void el.offsetWidth;el.classList.add('combatAct');setTimeout(()=>el.classList.remove('combatAct'),240)}el.dataset.lastAttack=attackPct}
   const statusRow=el.querySelector('.combatStatusRow');
-  if(statusRow)statusRow.innerHTML=combatEffectIcons(x,enemy);
+  if(statusRow)updateCombatEffects(statusRow,x,enemy);
   if(enemy){
     const track=el.querySelector('.castTrack'),fillCast=el.querySelector('.castFill'),label=el.querySelector('.castLabel');
     if(track){
@@ -446,8 +475,7 @@ function renderCombat(){
   $('combatTitle').textContent=m.name;
   $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
 
-  const key=combatStructureKey(m);
-  if(key!==combatDomKey||!$('combatLog'))buildCombatStructure(m);
+  if(!$('combatLog'))buildCombatStructure(m);
   else reconcileCombatants(m);
 
   m.battle.heroes.forEach(x=>updateCombatantDom(x,false));
