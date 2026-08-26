@@ -29,7 +29,8 @@ const intel=context.missionThreatIntel(forest,'quest');
 assert.equal(intel.profiles.length,forest.enemyPool.length);
 assert.ok(intel.damageTypes.includes('physical'));
 assert.ok(intel.mechanics.includes('Casting'));
-assert.ok(intel.drops.includes('Iron'));
+assert.ok(!intel.drops.includes('Iron'),'combat intel must not offer gathering-owned Iron');
+assert.ok(intel.drops.includes('GoblinInsignia'),'combat intel should retain creature-specific components');
 
 for(const [id,archetype] of Object.entries(context.archetypeData)){
   assert.ok(archetype.tacticalRole,`${id} is missing a tactical role`);

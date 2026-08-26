@@ -334,15 +334,18 @@ function validateContentData(){
 
   allAreas.forEach(a=>{
     if(Object.prototype.hasOwnProperty.call(a,'resource'+'Drops'))warnings.push('Legacy area resource drop field still exists: '+a.name);
+    if(!a.tier||a.tier<1||a.tier>7)warnings.push('Area has invalid tier: '+a.name);
   });
+
+  const gatheringOwned=new Set(HARVEST_AREAS.flatMap(a=>(a.resources||[]).map(r=>r[0])));
 
   allEnemies.forEach(n=>{
     const e=ENEMIES_DATA[n];
     if(!e){warnings.push('Area references missing enemy: '+n);return}
-    if(!e.drops?.length)warnings.push('Enemy has no resource drop: '+n);
+    if(!e.tier||e.tier<1||e.tier>7)warnings.push('Enemy has invalid tier: '+n);
     if(!ENEMY_ARCHETYPES_DATA[e.archetype])warnings.push('Enemy has missing archetype: '+n+' -> '+e.archetype);
     if(e.ability&&!ENEMY_ABILITIES_DATA[e.ability])warnings.push('Enemy has missing ability: '+n+' -> '+e.ability);
-    (e.drops||[]).forEach(r=>{if(!RESOURCE_NAMES[r])warnings.push('Enemy drops undefined resource: '+n+' -> '+r)});
+    (e.drops||[]).forEach(r=>{if(!RESOURCE_NAMES[r])warnings.push('Enemy drops undefined resource: '+n+' -> '+r);if(gatheringOwned.has(r))warnings.push('Enemy bypasses gathering source: '+n+' -> '+r);if(resourceTier(r)>e.tier)warnings.push('Enemy drops material above its tier: '+n+' -> '+r)});
   });
 
   Object.entries(ENEMY_ABILITIES_DATA).forEach(([id,ability])=>{

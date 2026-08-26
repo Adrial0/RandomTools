@@ -13,7 +13,8 @@
       "Briar Wisp"
     ],
     "image": "images/areas/greenwood-forest.png",
-    "background": "images/backgrounds/greenwood-forest.png"
+    "background": "images/backgrounds/greenwood-forest.png",
+    "tier": 1
   },
   {
     "id": "plains",
@@ -29,7 +30,8 @@
       "Spark Imp"
     ],
     "image": "images/areas/sunfield-plains.png",
-    "background": "images/backgrounds/sunfield-plains.png"
+    "background": "images/backgrounds/sunfield-plains.png",
+    "tier": 2
   },
   {
     "id": "desert",
@@ -45,7 +47,8 @@
       "Sun Cultist"
     ],
     "image": "images/areas/ashen-desert.png",
-    "background": "images/backgrounds/ashen-desert.png"
+    "background": "images/backgrounds/ashen-desert.png",
+    "tier": 3
   },
   {
     "id": "swamp",
@@ -61,7 +64,8 @@
       "Mire Witch"
     ],
     "image": "images/areas/blackwater-swamp.png",
-    "background": "images/backgrounds/blackwater-swamp.png"
+    "background": "images/backgrounds/blackwater-swamp.png",
+    "tier": 4
   },
   {
     "id": "mountain",
@@ -77,7 +81,8 @@
       "Granite Golem"
     ],
     "image": "images/areas/ironpeak-mountains.png",
-    "background": "images/backgrounds/ironpeak-mountains.png"
+    "background": "images/backgrounds/ironpeak-mountains.png",
+    "tier": 5
   },
   {
     "id": "tundra",
@@ -93,7 +98,8 @@
       "Whitefang Yeti"
     ],
     "image": "images/areas/frozen-tundra.png",
-    "background": "images/backgrounds/frozen-tundra.png"
+    "background": "images/backgrounds/frozen-tundra.png",
+    "tier": 5
   },
   {
     "id": "volcano",
@@ -109,7 +115,8 @@
       "Obsidian Brute"
     ],
     "image": "images/areas/emberfall-volcano.png",
-    "background": "images/backgrounds/emberfall-volcano.png"
+    "background": "images/backgrounds/emberfall-volcano.png",
+    "tier": 6
   },
   {
     "id": "voidlands",
@@ -125,6 +132,7 @@
       "Warped Knight"
     ],
     "image": "images/areas/voidlands.png",
-    "background": "images/backgrounds/voidlands.png"
+    "background": "images/backgrounds/voidlands.png",
+    "tier": 7
   }
 ]

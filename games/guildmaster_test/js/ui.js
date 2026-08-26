@@ -137,7 +137,7 @@ function recruitDetail(rid){
 function renderRec(){
   s.applicantCap=applicantBatchSize();
   $('recruits').innerHTML=
-    `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Batch every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll · 50g</button></div></div></div>`+
+    `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Batch every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll · ${recruitRerollCost().toLocaleString()}g</button></div></div></div>`+
     (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>${x.trait}</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
 }
 let activeMissionDomKey='';

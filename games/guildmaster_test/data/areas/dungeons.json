@@ -12,7 +12,8 @@
     ],
     "desc": "A royal crypt where dark damage is common. Some Dark resistance is recommended.",
     "image": "images/activities/dungeon.png",
-    "background": "images/backgrounds/bone-crypt.png"
+    "background": "images/backgrounds/bone-crypt.png",
+    "tier": 2
   },
   {
     "name": "Silken Depths",
@@ -27,7 +28,8 @@
     ],
     "desc": "A venomous spider nest. Poison resistance greatly improves survival.",
     "image": "images/activities/dungeon.png",
-    "background": "images/backgrounds/silken-depths.png"
+    "background": "images/backgrounds/silken-depths.png",
+    "tier": 3
   },
   {
     "name": "Rotting Vault",
@@ -42,7 +44,8 @@
     ],
     "desc": "A plague vault saturated with poison damage. Prepare Poison resistance.",
     "image": "images/activities/dungeon.png",
-    "background": "images/backgrounds/rotting-vault.png"
+    "background": "images/backgrounds/rotting-vault.png",
+    "tier": 4
   },
   {
     "name": "Cultist Sanctum",
@@ -57,6 +60,7 @@
     ],
     "desc": "Forbidden rites fill this temple with heavy Dark damage.",
     "image": "images/activities/dungeon.png",
-    "background": "images/backgrounds/cultist-sanctum.png"
+    "background": "images/backgrounds/cultist-sanctum.png",
+    "tier": 5
   }
 ]

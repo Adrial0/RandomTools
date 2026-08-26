@@ -12,7 +12,8 @@
     ],
     "desc": "A raid dominated by extreme Fire damage. High Fire resistance is essential.",
     "image": "images/activities/raid.png",
-    "background": "images/backgrounds/background13.png"
+    "background": "images/backgrounds/background13.png",
+    "tier": 5
   },
   {
     "name": "Ogre Warcamp",
@@ -27,7 +28,8 @@
     ],
     "desc": "A crushing physical raid with secondary Fire and Lightning threats.",
     "image": "images/activities/raid.png",
-    "background": "images/backgrounds/background14.png"
+    "background": "images/backgrounds/background14.png",
+    "tier": 6
   },
   {
     "name": "Haunted Citadel",
@@ -42,7 +44,8 @@
     ],
     "desc": "A fortress drowned in Dark damage. High Dark resistance is essential.",
     "image": "images/activities/raid.png",
-    "background": "images/backgrounds/background15.png"
+    "background": "images/backgrounds/background15.png",
+    "tier": 6
   },
   {
     "name": "Abyss Gate",
@@ -57,6 +60,7 @@
     ],
     "desc": "Endgame Dark and Fire damage. Strong resistances are mandatory.",
     "image": "images/activities/raid.png",
-    "background": "images/backgrounds/background16.png"
+    "background": "images/backgrounds/background16.png",
+    "tier": 7
   }
 ]

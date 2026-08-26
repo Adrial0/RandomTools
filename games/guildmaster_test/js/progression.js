@@ -207,31 +207,27 @@ function finishCraftJob(j){
 
 function completeCrafting(){if(!s.craftJobs.length)return false;let changed=false;const now=Date.now();while(s.craftJobs.length){const first=s.craftJobs[0];if(now<first.end)break;finishCraftJob(first);first.remaining=Math.max(0,(first.remaining||first.qty||1)-1);changed=true;if(first.remaining>0){first.start=first.end;first.end=first.start+first.duration;continue}s.craftJobs.shift()}if(changed){normalizeCraftQueue();save()}return changed}
 
-const UPGRADE_RESOURCE_THEMES={
-quarters:['Wood','Stone','Iron','Hardwood','Mithril'],
-party:['Wood','Cloth','Iron','Leather','Silver'],
-recruit:['Wood','Cloth','Silver','Crystal','Essence'],
-smith:['Iron','Wood','Silver','Mithril','Obsidian'],
-craftSpeed:['Iron','Wood','CopperOre','Silver','Crystal'],
-training:['Wood','Iron','Leather','Silver','Crystal'],
-storage:['Wood','Stone','Iron','Hardwood','Mithril'],
-afkHarvest:['Wood','Cloth','Iron','Hardwood','Crystal'],
-gatherParty:['Wood','Leather','Iron','Silver','Hardwood'],
-board:['Wood','Cloth','Silver','Crystal','ArcaneDust']
+const UPGRADE_RESOURCE_PATHS={
+quarters:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
+party:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','Crystal','SpiritBark','StormGlass','AstralThread','AetherCrystal']],
+recruit:[['Cloth','Iron','Silver','Mithril','Nightshade','AetherCrystal','Voidstone'],['Leather','Bone','ManaBloom','SpiritBark','DeepPearl','AstralThread','AetherCrystal']],
+smith:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
+craftSpeed:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Hardwood','Crystal','Sunstone','StormGlass','AetherCrystal','AstralThread']],
+training:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Herbs','Bone','ManaBloom','SpiritBark','Nightshade','CinderBloom','AetherCrystal']],
+storage:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
+afkHarvest:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','ManaBloom','SpiritBark','Nightshade','AstralThread','AetherCrystal']],
+gatherParty:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Hardwood','Crystal','Ironwood','StormGlass','AetherCrystal','AstralThread']],
+board:[['Cloth','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Bone','ManaBloom','Sunstone','DeepPearl','AstralThread','AetherCrystal']]
 };
 function upgradeResourceCost(k,l){
-  const theme=UPGRADE_RESOURCE_THEMES[k]||['Wood','Iron','Silver','Crystal','Mithril'];
-  const tier=l<2?0:l<4?1:l<7?2:l<10?3:4;
-  const primary=theme[Math.min(tier,theme.length-1)];
-  const secondary=theme[Math.min(Math.max(0,tier-1),theme.length-1)];
-  const base=8+Math.round(Math.pow(l+1,1.45)*5);
+  const upgrade=upgrades.find(x=>x[0]===k),max=Math.max(2,upgrade?.[4]||7);
+  const tier=clamp(1+Math.floor(l*6/(max-1)),1,7),index=tier-1;
+  const paths=UPGRADE_RESOURCE_PATHS[k]||UPGRADE_RESOURCE_PATHS.quarters;
+  const primary=paths[0][index],secondary=paths[1][index];
+  const base=Math.max(3,Math.round((10+Math.pow(l+1,1.35)*5)/(1+(tier-1)*.3)));
   const out={};
   out[primary]=(out[primary]||0)+base;
-  if(l>=1)out[secondary]=(out[secondary]||0)+Math.max(4,Math.round(base*.55));
-  if(k==='smith'){
-    out.Iron=(out.Iron||0)+12+Math.round(l*10);
-    out.Wood=(out.Wood||0)+6+Math.round(l*5);
-  }
+  if(l>=1)out[secondary]=(out[secondary]||0)+Math.max(2,Math.round(base*.55));
   return out;
 }
 function hasUpgradeResources(cost){return Object.entries(cost).every(([k,v])=>(s.materials[k]||0)>=v)}
@@ -244,7 +240,7 @@ function upgradeResourceProgressHtml(cost){
 }
 
 function upgradeCost(u,l){
-  return Math.max(1,Math.round(u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l)*0.05));
+  return Math.max(1,Math.round(u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l)));
 }
 function upgrade(k){
   let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=upgradeCost(u,l),rc=upgradeResourceCost(k,l);

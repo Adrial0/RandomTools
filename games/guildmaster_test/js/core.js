@@ -765,11 +765,13 @@ function ensure(){
   if(s.quests.length!==AREAS.length)refreshOffers('quest');
   if(s.dungeons.length!==DUNGEON_AREAS.length)refreshOffers('dungeon');
   if(s.raids.length!==RAID_AREAS.length)refreshOffers('raid');
+  [['quest',s.quests,AREAS],['dungeon',s.dungeons,DUNGEON_AREAS],['raid',s.raids,RAID_AREAS]].forEach(([type,offers,areas])=>offers.forEach(q=>{const area=areas.find(a=>a.id===q.areaId||a.name===q.name);if(area){q.tier=area.tier||1;q.enemyPool=area.enemyPool}}));
+  if(!s.marketBalance2xMigrated){(s.market?.offers||[]).forEach(o=>o.price=Math.max(1,Math.round((o.price||0)*2)));s.marketBalance2xMigrated=true}
   ensureQuestBoard();
 }
 function refreshRec(pay=false){
   if(pay){
-    const cost=50;
+    const cost=recruitRerollCost();
     if(s.gold<cost)return notify('Not enough gold.');
     s.gold-=cost;
     s.recruits=[];
@@ -782,17 +784,18 @@ function refreshRec(pay=false){
   if(!s.recruits.length&&(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt))fillApplicants();
   save();
 }
+function recruitRerollCost(){return 50*Math.max(1,s?.level||1)}
 function offer(type,index=0){
  if(type==='quest'){
    const a=AREAS[index%AREAS.length];
-   return{id:id(),type:'quest',areaId:a.id,name:a.name,desc:a.desc,level:a.level,target:70+a.level*24,gold:18+a.level*3,rep:5+a.level,icon:a.icon,enemyPool:a.enemyPool};
+   return{id:id(),type:'quest',areaId:a.id,name:a.name,desc:a.desc,level:a.level,tier:a.tier||1,target:70+a.level*24,gold:18+a.level*3,rep:5+a.level,icon:a.icon,enemyPool:a.enemyPool};
  }
  if(type==='dungeon'){
    const a=DUNGEON_AREAS[index%DUNGEON_AREAS.length];
-   return{id:id(),type:'dungeon',name:a.name,desc:a.desc,level:a.level,target:120+a.level*28,gold:35+a.level*5,rep:10+a.level*2,maxFights:6+Math.floor(a.level/5),boss:a.boss,enemyPool:a.enemyPool,theme:a.theme};
+   return{id:id(),type:'dungeon',name:a.name,desc:a.desc,level:a.level,tier:a.tier||1,target:120+a.level*28,gold:35+a.level*5,rep:10+a.level*2,maxFights:6+Math.floor(a.level/5),boss:a.boss,enemyPool:a.enemyPool,theme:a.theme};
  }
  const a=RAID_AREAS[index%RAID_AREAS.length];
- return{id:id(),type:'raid',name:a.name,desc:a.desc,level:a.level,target:220+a.level*34,gold:80+a.level*7,rep:25+a.level*3,maxFights:10+Math.floor(a.level/4),boss:a.boss,enemyPool:a.enemyPool,theme:a.theme};
+ return{id:id(),type:'raid',name:a.name,desc:a.desc,level:a.level,tier:a.tier||1,target:220+a.level*34,gold:80+a.level*7,rep:25+a.level*3,maxFights:10+Math.floor(a.level/4),boss:a.boss,enemyPool:a.enemyPool,theme:a.theme};
 }
 function arr(type){return type==='raid'?s.raids:type==='dungeon'?s.dungeons:s.quests}
 function refreshOffers(type){

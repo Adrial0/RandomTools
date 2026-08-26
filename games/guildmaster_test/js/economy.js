@@ -82,7 +82,7 @@ function bulkSellSelected(){const items=s.inventory.filter(it=>selectedInventory
 function bulkScrapSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let scrapped=0,skipped=0;const removeIds=new Set();items.forEach(it=>{const recovered=scrapItemCore(it);if(recovered){detachItem(it);removeIds.add(it.id);scrapped++}else skipped++});s.inventory=s.inventory.filter(it=>!removeIds.has(it.id));removeIds.forEach(id=>selectedInventoryItems.delete(id));save();render();notify(`Scrapped ${scrapped} item${scrapped===1?'':'s'}${skipped?` · ${skipped} could not be scrapped`:''}.`,'good')}
 function itemSellValue(it){
   const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9}[it.rarity]||1;
-  return Math.max(1,Math.round(((it.power||10)*.45+5)*rarityMult));
+  return Math.max(1,Math.round(((it.power||10)*.45+5)*rarityMult*.5));
 }
 function recipeForItem(it){
   if(Number.isInteger(it.recipeIndex)&&recipes[it.recipeIndex])return recipes[it.recipeIndex];
@@ -133,14 +133,14 @@ function generateMarket(){
     applyRecipeModifiers(it,chosen.r[5]||{});
     it.name=name;it.recipeIndex=chosen.i;
     const rarityPrice={Common:1,Uncommon:1.7,Rare:3.2}[rarity];
-    const price=Math.max(80,Math.round((90+rtier*85+(it.power||0)*1.8)*rarityPrice));
+    const price=Math.max(160,Math.round((90+rtier*85+(it.power||0)*1.8)*rarityPrice*2));
     offers.push({id:id(),kind:'gear',item:it,price});
   }
 
   const resourceChoices=[...MARKET_BASIC_RESOURCES].sort(()=>Math.random()-.5).slice(0,4);
   resourceChoices.forEach(k=>{
     const qty=10;
-    const price=Math.round(120+Math.max(1,tier)*35);
+    const price=Math.round((120+Math.max(1,tier)*35)*2);
     offers.push({id:id(),kind:'resource',resource:k,qty,price});
   });
 

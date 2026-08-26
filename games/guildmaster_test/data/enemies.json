@@ -9,10 +9,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "GoblinInsignia",
-      "Iron"
+      "GoblinInsignia"
     ],
-    "image": "images/enemies/goblin.png"
+    "image": "images/enemies/goblin.png",
+    "tier": 1
   },
   "Grey Wolf": {
     "name": "Grey Wolf",
@@ -23,11 +23,9 @@
     "baseDefense": 2,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Leather",
-      "WolfPelt"
-    ],
-    "image": "images/enemies/wolf.png"
+    "drops": [],
+    "image": "images/enemies/wolf.png",
+    "tier": 1
   },
   "Thornback Boar": {
     "name": "Thornback Boar",
@@ -38,11 +36,9 @@
     "baseDefense": 5,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Leather",
-      "WolfPelt"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 1
   },
   "Moss Slime": {
     "name": "Moss Slime",
@@ -54,10 +50,10 @@
     "damageType": "poison",
     "ability": "venom_strike",
     "drops": [
-      "SlimeGel",
-      "Essence"
+      "SlimeGel"
     ],
-    "image": "images/enemies/slime.png"
+    "image": "images/enemies/slime.png",
+    "tier": 1
   },
   "Briar Wisp": {
     "name": "Briar Wisp",
@@ -68,11 +64,9 @@
     "baseDefense": 3,
     "damageType": "holy",
     "ability": "radiant_bolt",
-    "drops": [
-      "Essence",
-      "HolyWater"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 1
   },
   "Highway Bandit": {
     "name": "Highway Bandit",
@@ -85,10 +79,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": "images/enemies/bandit.png"
+    "image": "images/enemies/bandit.png",
+    "tier": 2
   },
   "Prairie Wolf": {
     "name": "Prairie Wolf",
@@ -99,11 +93,9 @@
     "baseDefense": 3,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Leather",
-      "WolfPelt"
-    ],
-    "image": "images/enemies/wolf.png"
+    "drops": [],
+    "image": "images/enemies/wolf.png",
+    "tier": 2
   },
   "Sunfield Raider": {
     "name": "Sunfield Raider",
@@ -116,10 +108,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 2
   },
   "Dust Hawk": {
     "name": "Dust Hawk",
@@ -131,10 +123,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "Leather",
       "Cloth"
     ],
-    "image": ""
+    "image": "",
+    "tier": 2
   },
   "Spark Imp": {
     "name": "Spark Imp",
@@ -145,10 +137,9 @@
     "baseDefense": 3,
     "damageType": "lightning",
     "ability": "lightning_burst",
-    "drops": [
-      "Essence"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 2
   },
   "Dune Raider": {
     "name": "Dune Raider",
@@ -161,10 +152,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 3
   },
   "Sand Scorpion": {
     "name": "Sand Scorpion",
@@ -177,11 +168,11 @@
     "ability": "venom_strike",
     "drops": [
       "Venom",
-      "Leather",
       "Sunstone",
       "Sandglass"
     ],
-    "image": ""
+    "image": "",
+    "tier": 3
   },
   "Cinder Slime": {
     "name": "Cinder Slime",
@@ -197,7 +188,8 @@
       "Essence",
       "Sunstone"
     ],
-    "image": "images/enemies/slime.png"
+    "image": "images/enemies/slime.png",
+    "tier": 3
   },
   "Ash Vulture": {
     "name": "Ash Vulture",
@@ -209,11 +201,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "Leather",
-      "Cloth",
-      "Sunstone"
+      "Cloth"
     ],
-    "image": ""
+    "image": "",
+    "tier": 3
   },
   "Sun Cultist": {
     "name": "Sun Cultist",
@@ -227,9 +218,11 @@
     "drops": [
       "ArcaneDust",
       "CultistRune",
-      "Essence"
+      "Essence",
+      "HolyWater"
     ],
-    "image": "images/enemies/cultist.png"
+    "image": "images/enemies/cultist.png",
+    "tier": 3
   },
   "Bog Spider": {
     "name": "Bog Spider",
@@ -242,10 +235,10 @@
     "ability": "venom_strike",
     "drops": [
       "SpiderSilk",
-      "ShadowSilk",
       "Venom"
     ],
-    "image": "images/enemies/spider.png"
+    "image": "images/enemies/spider.png",
+    "tier": 4
   },
   "Marsh Ghoul": {
     "name": "Marsh Ghoul",
@@ -257,11 +250,11 @@
     "damageType": "poison",
     "ability": "regeneration",
     "drops": [
-      "Bone",
       "GhoulIchor",
       "GraveDust"
     ],
-    "image": "images/enemies/ghoul.png"
+    "image": "images/enemies/ghoul.png",
+    "tier": 4
   },
   "Fen Leech": {
     "name": "Fen Leech",
@@ -273,11 +266,10 @@
     "damageType": "poison",
     "ability": "venom_strike",
     "drops": [
-      "Venom",
-      "Leather",
-      "Nightshade"
+      "Venom"
     ],
-    "image": ""
+    "image": "",
+    "tier": 4
   },
   "Bog Lurker": {
     "name": "Bog Lurker",
@@ -288,11 +280,9 @@
     "baseDefense": 8,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Iron",
-      "Nightshade"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 4
   },
   "Mire Witch": {
     "name": "Mire Witch",
@@ -308,7 +298,8 @@
       "CultistRune",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 4
   },
   "Peak Ogre": {
     "name": "Peak Ogre",
@@ -320,11 +311,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "OgreHeart",
-      "Iron",
-      "StarMetal"
+      "OgreHeart"
     ],
-    "image": "images/enemies/ogre.png"
+    "image": "images/enemies/ogre.png",
+    "tier": 5
   },
   "Stone Drake": {
     "name": "Stone Drake",
@@ -337,10 +327,10 @@
     "ability": null,
     "drops": [
       "DrakeScale",
-      "Emberstone",
-      "StarMetal"
+      "Emberstone"
     ],
-    "image": "images/enemies/drake.png"
+    "image": "images/enemies/drake.png",
+    "tier": 5
   },
   "Cliff Raider": {
     "name": "Cliff Raider",
@@ -353,10 +343,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Thunder Roc": {
     "name": "Thunder Roc",
@@ -368,12 +358,11 @@
     "damageType": "lightning",
     "ability": "lightning_burst",
     "drops": [
-      "Leather",
       "Cloth",
-      "StarMetal",
       "StormCore"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Granite Golem": {
     "name": "Granite Golem",
@@ -384,12 +373,9 @@
     "baseDefense": 13,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Stone",
-      "Obsidian",
-      "StarMetal"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 5
   },
   "Frost Wraith": {
     "name": "Frost Wraith",
@@ -405,7 +391,8 @@
       "FrostShard",
       "Essence"
     ],
-    "image": "images/enemies/wraith.png"
+    "image": "images/enemies/wraith.png",
+    "tier": 5
   },
   "Icebound Ghoul": {
     "name": "Icebound Ghoul",
@@ -417,11 +404,11 @@
     "damageType": "ice",
     "ability": "regeneration",
     "drops": [
-      "Bone",
       "GhoulIchor",
       "GraveDust"
     ],
-    "image": "images/enemies/ghoul.png"
+    "image": "images/enemies/ghoul.png",
+    "tier": 5
   },
   "Snow Stalker": {
     "name": "Snow Stalker",
@@ -432,12 +419,9 @@
     "baseDefense": 6,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Leather",
-      "WolfPelt",
-      "GlacialOre"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 5
   },
   "Glacial Elemental": {
     "name": "Glacial Elemental",
@@ -449,11 +433,10 @@
     "damageType": "ice",
     "ability": "frost_bolt",
     "drops": [
-      "Crystal",
-      "Essence",
-      "GlacialOre"
+      "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Whitefang Yeti": {
     "name": "Whitefang Yeti",
@@ -464,12 +447,9 @@
     "baseDefense": 12,
     "damageType": "physical",
     "ability": null,
-    "drops": [
-      "Leather",
-      "WolfPelt",
-      "GlacialOre"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 5
   },
   "Ember Drake": {
     "name": "Ember Drake",
@@ -483,10 +463,10 @@
     "drops": [
       "DrakeScale",
       "Emberstone",
-      "CinderOre",
       "MagmaCore"
     ],
-    "image": "images/enemies/drake.png"
+    "image": "images/enemies/drake.png",
+    "tier": 6
   },
   "Lava Hound": {
     "name": "Lava Hound",
@@ -497,12 +477,9 @@
     "baseDefense": 9,
     "damageType": "fire",
     "ability": "burning_strike",
-    "drops": [
-      "Leather",
-      "WolfPelt",
-      "CinderOre"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 6
   },
   "Cinder Demon": {
     "name": "Cinder Demon",
@@ -515,10 +492,10 @@
     "ability": "burning_strike",
     "drops": [
       "DemonHorn",
-      "Essence",
-      "CinderOre"
+      "Essence"
     ],
-    "image": "images/enemies/demon.png"
+    "image": "images/enemies/demon.png",
+    "tier": 6
   },
   "Magma Elemental": {
     "name": "Magma Elemental",
@@ -530,11 +507,10 @@
     "damageType": "fire",
     "ability": "burning_strike",
     "drops": [
-      "Crystal",
-      "Essence",
-      "CinderOre"
+      "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 6
   },
   "Obsidian Brute": {
     "name": "Obsidian Brute",
@@ -546,11 +522,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "OgreHeart",
-      "Iron",
-      "CinderOre"
+      "OgreHeart"
     ],
-    "image": ""
+    "image": "",
+    "tier": 6
   },
   "Void Demon": {
     "name": "Void Demon",
@@ -563,10 +538,10 @@
     "ability": "dark_bolt",
     "drops": [
       "DemonHorn",
-      "Essence",
-      "Voidstone"
+      "Essence"
     ],
-    "image": "images/enemies/demon.png"
+    "image": "images/enemies/demon.png",
+    "tier": 7
   },
   "Astral Wraith": {
     "name": "Astral Wraith",
@@ -582,7 +557,8 @@
       "FrostShard",
       "Essence"
     ],
-    "image": "images/enemies/wraith.png"
+    "image": "images/enemies/wraith.png",
+    "tier": 7
   },
   "Voidling": {
     "name": "Voidling",
@@ -595,10 +571,10 @@
     "ability": "dark_bolt",
     "drops": [
       "AetherCrystal",
-      "Voidstone",
       "AstralThread"
     ],
-    "image": ""
+    "image": "",
+    "tier": 7
   },
   "Aether Horror": {
     "name": "Aether Horror",
@@ -611,10 +587,10 @@
     "ability": "dark_bolt",
     "drops": [
       "AetherCrystal",
-      "Voidstone",
       "AstralThread"
     ],
-    "image": ""
+    "image": "",
+    "tier": 7
   },
   "Warped Knight": {
     "name": "Warped Knight",
@@ -627,10 +603,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 7
   },
   "Crypt Skeleton": {
     "name": "Crypt Skeleton",
@@ -642,11 +618,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "Bone",
-      "GraveDust",
-      "Iron"
+      "GraveDust"
     ],
-    "image": "images/enemies/skeleton.png"
+    "image": "images/enemies/skeleton.png",
+    "tier": 2
   },
   "Bone Guard": {
     "name": "Bone Guard",
@@ -659,10 +634,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 2
   },
   "Grave Acolyte": {
     "name": "Grave Acolyte",
@@ -673,12 +648,9 @@
     "baseDefense": 5,
     "damageType": "dark",
     "ability": "dark_bolt",
-    "drops": [
-      "ArcaneDust",
-      "CultistRune",
-      "Essence"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 2
   },
   "Restless Spirit": {
     "name": "Restless Spirit",
@@ -689,12 +661,9 @@
     "baseDefense": 4,
     "damageType": "dark",
     "ability": "dark_bolt",
-    "drops": [
-      "WraithEssence",
-      "FrostShard",
-      "Essence"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 2
   },
   "Brood Spider": {
     "name": "Brood Spider",
@@ -707,10 +676,10 @@
     "ability": "poison_spit",
     "drops": [
       "SpiderSilk",
-      "ShadowSilk",
       "Venom"
     ],
-    "image": "images/enemies/spider.png"
+    "image": "images/enemies/spider.png",
+    "tier": 3
   },
   "Venomfang": {
     "name": "Venomfang",
@@ -724,7 +693,8 @@
     "drops": [
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 3
   },
   "Webbed Husk": {
     "name": "Webbed Husk",
@@ -737,10 +707,10 @@
     "ability": null,
     "drops": [
       "SpiderSilk",
-      "ShadowSilk",
       "Venom"
     ],
-    "image": ""
+    "image": "",
+    "tier": 3
   },
   "Silk Stalker": {
     "name": "Silk Stalker",
@@ -751,11 +721,9 @@
     "baseDefense": 6,
     "damageType": "poison",
     "ability": "poison_spit",
-    "drops": [
-      "Leather",
-      "WolfPelt"
-    ],
-    "image": ""
+    "drops": [],
+    "image": "",
+    "tier": 3
   },
   "Plague Ghoul": {
     "name": "Plague Ghoul",
@@ -767,11 +735,11 @@
     "damageType": "poison",
     "ability": "regeneration",
     "drops": [
-      "Bone",
       "GhoulIchor",
       "GraveDust"
     ],
-    "image": "images/enemies/ghoul.png"
+    "image": "images/enemies/ghoul.png",
+    "tier": 4
   },
   "Rot Slime": {
     "name": "Rot Slime",
@@ -786,7 +754,8 @@
       "SlimeGel",
       "Essence"
     ],
-    "image": "images/enemies/slime.png"
+    "image": "images/enemies/slime.png",
+    "tier": 4
   },
   "Blight Priest": {
     "name": "Blight Priest",
@@ -802,7 +771,8 @@
       "CultistRune",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 4
   },
   "Vault Abomination": {
     "name": "Vault Abomination",
@@ -814,11 +784,11 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "Bone",
       "GhoulIchor",
       "GraveDust"
     ],
-    "image": ""
+    "image": "",
+    "tier": 4
   },
   "Fanatic": {
     "name": "Fanatic",
@@ -831,10 +801,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Dark Acolyte": {
     "name": "Dark Acolyte",
@@ -850,7 +820,8 @@
       "CultistRune",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Fallen Templar": {
     "name": "Fallen Templar",
@@ -863,10 +834,10 @@
     "ability": "dark_bolt",
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Ritual Seer": {
     "name": "Ritual Seer",
@@ -882,7 +853,8 @@
       "CultistRune",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Flame Drake": {
     "name": "Flame Drake",
@@ -897,7 +869,8 @@
       "DrakeScale",
       "Emberstone"
     ],
-    "image": "images/enemies/drake.png"
+    "image": "images/enemies/drake.png",
+    "tier": 5
   },
   "Drake Whelp": {
     "name": "Drake Whelp",
@@ -912,7 +885,8 @@
       "DrakeScale",
       "Emberstone"
     ],
-    "image": "images/enemies/drake.png"
+    "image": "images/enemies/drake.png",
+    "tier": 5
   },
   "Ashscale Guardian": {
     "name": "Ashscale Guardian",
@@ -925,10 +899,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "Inferno Wyvern": {
     "name": "Inferno Wyvern",
@@ -943,7 +917,8 @@
       "DrakeScale",
       "Emberstone"
     ],
-    "image": ""
+    "image": "",
+    "tier": 5
   },
   "War Ogre Brute": {
     "name": "War Ogre Brute",
@@ -955,10 +930,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "OgreHeart",
-      "Iron"
+      "OgreHeart"
     ],
-    "image": "images/enemies/ogre.png"
+    "image": "images/enemies/ogre.png",
+    "tier": 6
   },
   "Ogre Firecaller": {
     "name": "Ogre Firecaller",
@@ -970,10 +945,10 @@
     "damageType": "fire",
     "ability": "fireball",
     "drops": [
-      "OgreHeart",
-      "Iron"
+      "OgreHeart"
     ],
-    "image": "images/enemies/ogre.png"
+    "image": "images/enemies/ogre.png",
+    "tier": 6
   },
   "Ironhide Ogre": {
     "name": "Ironhide Ogre",
@@ -985,10 +960,10 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "OgreHeart",
-      "Iron"
+      "OgreHeart"
     ],
-    "image": "images/enemies/ogre.png"
+    "image": "images/enemies/ogre.png",
+    "tier": 6
   },
   "Warcamp Shaman": {
     "name": "Warcamp Shaman",
@@ -1002,7 +977,8 @@
     "drops": [
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 6
   },
   "Citadel Wraith": {
     "name": "Citadel Wraith",
@@ -1018,7 +994,8 @@
       "FrostShard",
       "Essence"
     ],
-    "image": "images/enemies/wraith.png"
+    "image": "images/enemies/wraith.png",
+    "tier": 6
   },
   "Dread Knight": {
     "name": "Dread Knight",
@@ -1031,10 +1008,10 @@
     "ability": "dark_bolt",
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 6
   },
   "Soul Reaper": {
     "name": "Soul Reaper",
@@ -1050,7 +1027,8 @@
       "FrostShard",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 6
   },
   "Haunting Choir": {
     "name": "Haunting Choir",
@@ -1066,7 +1044,8 @@
       "FrostShard",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 6
   },
   "Abyss Demon": {
     "name": "Abyss Demon",
@@ -1081,7 +1060,8 @@
       "DemonHorn",
       "Essence"
     ],
-    "image": "images/enemies/demon.png"
+    "image": "images/enemies/demon.png",
+    "tier": 7
   },
   "Hellfire Fiend": {
     "name": "Hellfire Fiend",
@@ -1096,7 +1076,8 @@
       "DemonHorn",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 7
   },
   "Void Herald": {
     "name": "Void Herald",
@@ -1111,7 +1092,8 @@
       "DemonHorn",
       "Essence"
     ],
-    "image": ""
+    "image": "",
+    "tier": 7
   },
   "Abyss Guardian": {
     "name": "Abyss Guardian",
@@ -1124,10 +1106,10 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken",
-      "Iron"
+      "BanditToken"
     ],
-    "image": ""
+    "image": "",
+    "tier": 7
   },
   "Skeleton King": {
     "name": "Skeleton King",
@@ -1139,7 +1121,8 @@
     "drops": [
       "CrownBone"
     ],
-    "image": "images/bosses/skeleton-king.png"
+    "image": "images/bosses/skeleton-king.png",
+    "tier": 2
   },
   "Broodmother": {
     "name": "Broodmother",
@@ -1151,7 +1134,8 @@
     "drops": [
       "BroodSilk"
     ],
-    "image": "images/bosses/broodmother.png"
+    "image": "images/bosses/broodmother.png",
+    "tier": 3
   },
   "Rotting Colossus": {
     "name": "Rotting Colossus",
@@ -1163,7 +1147,8 @@
     "drops": [
       "ColossusIchor"
     ],
-    "image": "images/bosses/rotting-colossus.png"
+    "image": "images/bosses/rotting-colossus.png",
+    "tier": 4
   },
   "High Cultist": {
     "name": "High Cultist",
@@ -1175,7 +1160,8 @@
     "drops": [
       "HighRune"
     ],
-    "image": "images/bosses/high-cultist.png"
+    "image": "images/bosses/high-cultist.png",
+    "tier": 5
   },
   "Ancient Drake": {
     "name": "Ancient Drake",
@@ -1187,7 +1173,8 @@
     "drops": [
       "AncientDrakeScale"
     ],
-    "image": "images/bosses/ancient-drake.png"
+    "image": "images/bosses/ancient-drake.png",
+    "tier": 5
   },
   "War Ogre": {
     "name": "War Ogre",
@@ -1199,7 +1186,8 @@
     "drops": [
       "WarOgreHeart"
     ],
-    "image": "images/bosses/war-ogre.png"
+    "image": "images/bosses/war-ogre.png",
+    "tier": 6
   },
   "Wraith Lord": {
     "name": "Wraith Lord",
@@ -1211,7 +1199,8 @@
     "drops": [
       "WraithLordCore"
     ],
-    "image": "images/bosses/wraith-lord.png"
+    "image": "images/bosses/wraith-lord.png",
+    "tier": 6
   },
   "Abyssal Demon": {
     "name": "Abyssal Demon",
@@ -1223,6 +1212,7 @@
     "drops": [
       "AbyssalHorn"
     ],
-    "image": "images/bosses/abyssal-demon.png"
+    "image": "images/bosses/abyssal-demon.png",
+    "tier": 7
   }
 }

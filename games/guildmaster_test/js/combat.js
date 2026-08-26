@@ -47,12 +47,9 @@ function makeBossBattle(m){
   return b;
 }
 function bossItemDrop(m,rarity){
-  const targetTier=clamp(Math.ceil((m.level||1)/8),1,7);
-  const minTier=Math.max(1,targetTier-1);
-  const maxTier=Math.min(7,targetTier+1);
-
-  let candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]>=minTier&&x.r[4]<=maxTier);
-  if(!candidates.length)candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]>=minTier);
+  const targetTier=clamp(m.tier||1,1,7);
+  let candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]===targetTier);
+  if(!candidates.length)candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]<=targetTier).sort((a,b)=>b.r[4]-a.r[4]);
   if(!candidates.length)return null;
 
   const chosen=pick(candidates);
@@ -92,7 +89,7 @@ let currentMissionForEnemy=null;
 function makeEnemy(type,level,index,forcedName=null){
   const names=forcedName?[]:(currentMissionForEnemy?.enemyPool&&currentMissionForEnemy.enemyPool.length)?currentMissionForEnemy.enemyPool:(enemyPools[type]||enemyPools.quest);
   const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
-  if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:['Iron']}}
+  if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:[]}}
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
   const hp=Math.round((tpl.baseHp||35)*scale*2.25*(ar.hpMult||1));
   const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1));
@@ -385,7 +382,7 @@ function grantFightRewards(m,enemySnapshots){
     const lootChance=m.type==='raid'?.78:m.type==='dungeon'?.74:.70;
     const gearChance=m.type==='raid'?.018:m.type==='dungeon'?.009:.0025;
     if(Math.random()<gearChance){
-      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),Math.max(1,m.level-1)));
+      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),clamp(m.tier||1,1,7)));
       return;
     }
 

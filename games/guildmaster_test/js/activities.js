@@ -308,7 +308,7 @@ function renderOffers(type){
    const sceneKey=type==='quest'?(AREAS.find(a=>a.name===q.name)?.id||q.areaId||q.id):q.name;
    return `<div class="card quest actionCard" data-id="${q.id}">
     ${sceneBanner(sceneType,sceneKey)}<div class="name">${q.name}</div><div class="muted">${q.desc}</div>
-    <div class="chips"><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
+    <div class="chips"><span class="chip">Tier ${tierLabel(q.tier||1)}</span><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
     ${threatIntelHtml(q,type)}
     <button class="btn ${occupied?'':'gold'} actionButton" ${occupied?'disabled':''} onclick="openPartyPicker('${type}',${q.id})">${occupied?'Party Deployed':type==='raid'?'Start Raid':type==='dungeon'?'Start Dungeon':'Start Expedition'}</button>
    </div>`;
