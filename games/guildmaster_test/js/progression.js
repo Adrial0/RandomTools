@@ -207,7 +207,7 @@ function finishCraftJob(j){
 
 function completeCrafting(){if(!s.craftJobs.length)return false;let changed=false;const now=Date.now();while(s.craftJobs.length){const first=s.craftJobs[0];if(now<first.end)break;finishCraftJob(first);first.remaining=Math.max(0,(first.remaining||first.qty||1)-1);changed=true;if(first.remaining>0){first.start=first.end;first.end=first.start+first.duration;continue}s.craftJobs.shift()}if(changed){normalizeCraftQueue();save()}return changed}
 
-function cookingXpNeeded(level){return Math.round(45*Math.pow(Math.max(1,level),1.48))}
+function cookingXpNeeded(level){return Math.round(55*Math.pow(Math.max(1,level),1.75))}
 function cookingDuration(meal){return Math.max(5000,Math.round((meal.duration||20)*1000*Math.pow(.88,s.up.craftSpeed||0)))}
 function normalizeCookingQueue(){
   if(!s?.cookingJobs?.length)return;
@@ -238,7 +238,7 @@ function grantCookingXp(amount){
   let need=cookingXpNeeded(s.cooking.level);
   while(s.cooking.xp>=need){s.cooking.xp-=need;s.cooking.level++;log('Cooking reached level '+s.cooking.level+'.');need=cookingXpNeeded(s.cooking.level)}
 }
-function finishCookingJob(j){const meal=MEALS[j.meal];if(!meal)return;s.meals[j.meal]=(s.meals[j.meal]||0)+1;grantCookingXp(meal.xp||1);log('Finished cooking '+meal.name+' · +'+(meal.xp||1)+' Cooking XP.')}
+function finishCookingJob(j){const meal=MEALS[j.meal];if(!meal)return;s.meals[j.meal]=(s.meals[j.meal]||0)+1;grantCookingXp(meal.xp||1);trackQuestProgress('cook',j.meal,1);log('Finished cooking '+meal.name+' · +'+(meal.xp||1)+' Cooking XP.')}
 function completeCooking(){
   if(!s?.cookingJobs?.length)return false;let changed=false;const now=Date.now();
   while(s.cookingJobs.length){const first=s.cookingJobs[0];if(now<first.end)break;finishCookingJob(first);first.remaining=Math.max(0,(first.remaining||first.qty||1)-1);changed=true;if(first.remaining>0){first.start=first.end;first.end=first.start+first.duration;continue}s.cookingJobs.shift()}

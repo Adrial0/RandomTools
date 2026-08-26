@@ -306,8 +306,8 @@ function send(type,qid,ids,provision=null){
   if(missionLocationOccupied(type,q))return notify('A party is already deployed to '+q.name+'.');
   let party=ids.slice(0,partySizeFor(type)).map(i=>s.members.find(x=>x.id===i)).filter(Boolean);
   if(party.some(h=>h.busy))return notify('One of those guild members is already on an expedition.');
-  if(provision&&(!MEALS[provision]||(s.meals[provision]||0)<1))return notify('That meal is no longer available.');
-  if(provision)s.meals[provision]--;
+  if(provision&&(!MEALS[provision]||(s.meals[provision]||0)<party.length))return notify(`That party needs ${party.length} servings of the selected meal.`);
+  if(provision)s.meals[provision]-=party.length;
   party.forEach(h=>h.busy=true);
   const now=Date.now();
   const mission={

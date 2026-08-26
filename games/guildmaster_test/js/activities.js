@@ -29,7 +29,7 @@ function questWeaponReward(diff){
   applyRecipeModifiers(it,chosen.r[5]||{});it.name=name;it.recipeIndex=chosen.i;return it;
 }
 function questRewardFor(diff,type){
-  const base=70+(s.level||1)*38,typeMult=type==='boss'?2.2:type==='craft'?1.25:type==='kill'?1.15:1;
+  const base=70+(s.level||1)*38,typeMult=type==='boss'?2.2:type==='craft'?1.25:type==='cook'?1.2:type==='kill'?1.15:1;
   const rewardDiff=type==='boss'&&diff.id!=='elite'?QUEST_DIFFICULTIES[2]:diff;
   return{gold:Math.round(base*diff.reward*typeMult),item:questWeaponReward(rewardDiff)};
 }
@@ -50,15 +50,22 @@ function makeCraftQuest(diff){
   const chosen=pick(pool),target=Math.max(2,Math.round((3+(s.level||1)*.45)*diff.mult));
   return{kind:'craft',key:chosen.r[0],recipeIndex:chosen.i,title:`Craft ${chosen.r[0]}`,desc:`Craft ${target} ${chosen.r[0]}.`,target,progress:0,source:'Workshop'};
 }
+function makeCookingQuest(diff){
+  let pool=Object.entries(MEALS).filter(([,meal])=>(meal.level||1)<=(s.cooking?.level||1));
+  if(!pool.length)pool=Object.entries(MEALS).filter(([,meal])=>(meal.level||1)===1);
+  const chosen=pick(pool);if(!chosen)return null;
+  const [mealId,meal]=chosen,target=clamp(Math.round((2+(s.level||1)*.28)*diff.mult),2,15);
+  return{kind:'cook',key:mealId,title:`Prepare ${meal.name}`,desc:`Cook ${target} serving${target===1?'':'s'} of ${meal.name}.`,target,progress:0,source:'Guild Kitchens'};
+}
 function makeBossQuest(diff){
   const options=[];if((s.level||1)>=3)DUNGEON_AREAS.forEach(a=>options.push({type:'dungeon',a}));if((s.level||1)>=6)RAID_AREAS.forEach(a=>options.push({type:'raid',a}));
   if(!options.length)return null;const p=pick(options);
   return{kind:'boss',key:p.a.boss,title:`Defeat ${p.a.boss}`,desc:`Defeat ${p.a.boss} in ${p.a.name}.`,target:1,progress:0,source:p.a.name,contentType:p.type};
 }
 function generateProceduralQuest(){
-  const diff=questDifficulty(),kinds=['gather','kill','craft'];if((s.level||1)>=3)kinds.push('boss');
+  const diff=questDifficulty(),kinds=['gather','kill','craft','cook'];if((s.level||1)>=3)kinds.push('boss');
   let kind=(diff.id==='elite'&&(s.level||1)>=3&&Math.random()<.55)?'boss':pick(kinds);
-  let obj=kind==='boss'?makeBossQuest(diff):kind==='craft'?makeCraftQuest(diff):kind==='kill'?makeKillQuest(diff):makeGatherQuest(diff);
+  let obj=kind==='boss'?makeBossQuest(diff):kind==='craft'?makeCraftQuest(diff):kind==='cook'?makeCookingQuest(diff):kind==='kill'?makeKillQuest(diff):makeGatherQuest(diff);
   if(!obj){kind='kill';obj=makeKillQuest(diff)}
   return{id:id(),difficulty:diff.id,difficultyLabel:diff.label,...obj,reward:questRewardFor(diff,kind),claimed:false,createdAt:Date.now()};
 }
@@ -117,7 +124,7 @@ function claimProceduralQuest(qid){
   if(q.reward?.item){receiveInventoryItem(q.reward.item,'quest');itemText=` and ${q.reward.item.rarity} ${q.reward.item.name}`}
   q.claimed=true;log(`Quest completed: ${q.title}. Reward: ${q.reward?.gold||0} gold${itemText}.`);save();renderProceduralQuests();renderInv();notify(`Quest claimed: ${q.reward?.gold||0} gold${itemText}.`,'good');
 }
-function questKindLabel(q){return q.kind==='gather'?'Gathering':q.kind==='kill'?'Hunting':q.kind==='craft'?'Crafting':'Boss Hunt'}
+function questKindLabel(q){return q.kind==='gather'?'Gathering':q.kind==='kill'?'Hunting':q.kind==='craft'?'Crafting':q.kind==='cook'?'Cooking':'Boss Hunt'}
 function renderProceduralQuestTimer(){if(!$('questBoardTimer'))return;ensureQuestBoard();$('questBoardTimer').textContent='Refresh in '+fmt(Math.max(0,(s.questBoard.nextRefresh||0)-Date.now()))}
 function renderProceduralQuests(){
   if(!$('proceduralQuestList'))return;ensureQuestBoard();renderProceduralQuestTimer();
@@ -365,6 +372,7 @@ function loadPartyPreset(index){
   const p=s.partyPresets[index],members=availablePresetMembers(p);
   if(!p||!members)return notify('That saved party is not currently available.');
   document.querySelectorAll('#expeditionPartyPicker .partyMember').forEach(btn=>btn.classList.toggle('on',p.members.includes(+btn.dataset.h)));
+  updateProvisionDescription($('missionProvisionSelect')?.value||'');
 }
 function autofillExpeditionParty(){
   const buttons=[...document.querySelectorAll('#expeditionPartyPicker .partyMember')];
@@ -374,6 +382,7 @@ function autofillExpeditionParty(){
     return{b,power:hero?hs(hero).power:0};
   }).sort((a,b)=>b.power-a.power).slice(0,partySizeFor(currentPartyPickerType));
   ranked.forEach(x=>x.b.classList.add('on'));
+  updateProvisionDescription($('missionProvisionSelect')?.value||'');
 }
 function openPartyPicker(type,qid){
  currentPartyPickerType=type;
@@ -390,17 +399,18 @@ function openPartyPicker(type,qid){
      <button class="btn" onclick="saveCurrentPartyPreset()">Save Current Party</button>
    </div>
    <div style="margin-top:10px"><div class="muted" style="margin-bottom:6px">Saved parties available now</div><div id="partyPresetList" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
-   <div class="card" style="margin-top:10px"><div class="name">Mission Provision</div><div class="muted">Optional · one serving is consumed when the mission begins and supports the whole party until it ends.</div><select id="missionProvisionSelect" style="width:100%;margin-top:8px" onchange="updateProvisionDescription(this.value)"><option value="">No provision</option>${availableMeals.map(([id,count])=>`<option value="${id}">${MEALS[id].icon||'🍲'} ${MEALS[id].name} ×${count}</option>`).join('')}</select><div class="muted" id="missionProvisionDescription" style="margin-top:7px">No meal selected.</div></div>
+   <div class="card" style="margin-top:10px"><div class="name">Mission Provision</div><div class="muted">Optional · consumes one serving per selected party member and supports them until the mission ends.</div><select id="missionProvisionSelect" style="width:100%;margin-top:8px" onchange="updateProvisionDescription(this.value)"><option value="">No provision</option>${availableMeals.map(([id,count])=>`<option value="${id}">${MEALS[id].icon||'🍲'} ${MEALS[id].name} ×${count}</option>`).join('')}</select><div class="muted" id="missionProvisionDescription" style="margin-top:7px">No meal selected.</div></div>
    <div class="party" id="expeditionPartyPicker" style="margin-top:10px">${available.map(h=>{const z=hs(h),p=h.class==='Mage'||h.class==='Priest'?'INT '+z.int:h.class==='Ranger'||h.class==='Rogue'?'DEX '+z.dex:'STR '+z.str;return `<button class="partyMember" data-h="${h.id}" onclick="toggleExpeditionMember(this)"><span class="miniClass">${classIcon(h)}</span><span>${h.name} · ${displayClass(h)} · ${p} · ${z.power} power</span></button>`}).join('')}</div>
    <div class="modalActionRow"><button class="btn gold" onclick="confirmExpeditionParty('${type}',${qid})">Send Party</button></div>
  </div>`);
  updatePartyPresetButtons();
 }
-function updateProvisionDescription(id){const box=$('missionProvisionDescription'),meal=MEALS[id];if(box)box.textContent=meal?meal.desc:'No meal selected.'}
+function updateProvisionDescription(id){const box=$('missionProvisionDescription'),meal=MEALS[id],needed=selectedExpeditionIds().length,owned=s.meals?.[id]||0;if(box)box.textContent=meal?`${meal.desc} · ${needed||'No'} selected member${needed===1?'':'s'} · requires ${needed} serving${needed===1?'':'s'} · ${owned} owned.`:'No meal selected.'}
 function toggleExpeditionMember(btn){
  const selected=document.querySelectorAll('#expeditionPartyPicker .partyMember.on');
  if(!btn.classList.contains('on')&&selected.length>=partySizeFor(currentPartyPickerType))return notify('Maximum party size is '+partySizeFor(currentPartyPickerType)+'.');
  btn.classList.toggle('on');
+ updateProvisionDescription($('missionProvisionSelect')?.value||'');
 }
 function confirmExpeditionParty(type,qid){
  const ids=selectedExpeditionIds();
@@ -408,5 +418,6 @@ function confirmExpeditionParty(type,qid){
  const unavailable=ids.some(id=>{const m=s.members.find(x=>x.id===id);return !m||m.busy});
  if(unavailable)return notify('A selected member is no longer available.');
  const provision=$('missionProvisionSelect')?.value||null;
+ if(provision&&(s.meals[provision]||0)<ids.length)return notify(`This party needs ${ids.length} servings. You own ${s.meals[provision]||0}.`);
  closeModal();send(type,qid,ids,provision);
 }
