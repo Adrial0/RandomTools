@@ -242,13 +242,16 @@ function setHarvestFilter(filter,btn){
 }
 function renderHarvestAreas(){
   if(!$('harvestList'))return;
-  const areas=HARVEST_AREAS.filter(a=>harvestFilter==='all'||a.skill===harvestFilter);
+  const areas=HARVEST_AREAS
+    .filter(a=>harvestFilter==='all'||a.skill===harvestFilter)
+    .slice()
+    .sort((a,b)=>(a.req||1)-(b.req||1)||(SKILL_NAMES[a.skill]||a.skill).localeCompare(SKILL_NAMES[b.skill]||b.skill)||a.name.localeCompare(b.name));
   $('harvestList').innerHTML=areas.map(a=>{
     const qualified=s.members.filter(h=>!h.busy&&gatheringSkill(h,a.skill).level>=a.req).length;
     const occupied=harvestLocationOccupied(a.id);
     return `<div class="card quest actionCard">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
       <div class="muted">${a.kind} · ${SKILL_NAMES[a.skill]} Lv. ${a.req} required</div><div class="muted" style="margin-top:5px">${a.desc}</div>
-      <div class="chips">${a.resources.map(x=>`<span class="chip">Tier ${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span></div>
+      <div class="chips">${a.resources.map(x=>`<span class="chip">${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span></div>
       <button class="btn ${qualified&&!occupied?'gold':''} actionButton" ${qualified&&!occupied?'':'disabled'} onclick="openHarvestPicker('${a.id}')">${occupied?'Party Gathering':qualified?'Start Harvesting':'No Eligible Members'}</button></div>`;
   }).join('')||'<div class="empty">No gathering areas match this filter.</div>';
 }
@@ -315,7 +318,7 @@ function renderOffers(type){
    const sceneKey=type==='quest'?(AREAS.find(a=>a.name===q.name)?.id||q.areaId||q.id):q.name;
    return `<div class="card quest actionCard" data-id="${q.id}">
     ${sceneBanner(sceneType,sceneKey)}<div class="name">${q.name}</div><div class="muted">${q.desc}</div>
-    <div class="chips"><span class="chip">Tier ${tierLabel(q.tier||1)}</span><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
+    <div class="chips"><span class="chip">${tierLabel(q.tier||1)}</span><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
     ${threatIntelHtml(q,type)}
     <button class="btn ${occupied?'':'gold'} actionButton" ${occupied?'disabled':''} onclick="openPartyPicker('${type}',${q.id})">${occupied?'Party Deployed':type==='raid'?'Start Raid':type==='dungeon'?'Start Dungeon':'Start Expedition'}</button>
    </div>`;
