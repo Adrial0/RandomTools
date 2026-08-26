@@ -1514,25 +1514,42 @@ body.windowOpen .side{overflow:hidden!important}
 .recipeDetailLayout{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(285px,.65fr)!important;gap:12px!important;padding:11px!important;min-height:0!important}
 .recipeItemInformation{display:grid;grid-template-columns:minmax(190px,.7fr) minmax(260px,1.3fr);gap:10px;min-width:0}
 .recipeInfoSection,.recipeCraftingBox{border:1px solid #4d3b27;background:#18130e;padding:9px;min-width:0}
-.recipeInfoSection h4,.recipeCraftingBox h4{margin:0 0 8px;color:#d7b879;font-family:var(--ui-pixel);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.recipeInfoSection h4,.recipeCraftingBox h4,.itemActionBox h4{margin:0 0 9px;color:#d7b879;font-family:var(--ui-pixel);font-size:11px;letter-spacing:.07em;text-transform:uppercase}
 .recipeProfileList,.recipeStatList{display:grid;gap:5px}
-.recipeProfileList span{color:#bba886;font-family:var(--ui-pixel);font-size:10px;line-height:1.35}
+.recipeProfileList span{color:#c7b38c;font-family:var(--ui-pixel);font-size:12px;line-height:1.45}
 .recipeStatList{grid-template-columns:repeat(2,minmax(0,1fr))}
-.recipeStatList span{padding:5px 6px;border-left:2px solid #73552f;background:#211a12;color:#d8c397;font-family:var(--ui-pixel);font-size:9px}
+.recipeStatList span{padding:6px 7px;border-left:2px solid #73552f;background:#211a12;color:#dfc99d;font-family:var(--ui-pixel);font-size:11px}
 .recipeCraftingBox{display:flex;flex-direction:column}
 .recipeCraftMeta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
-.recipeCraftMeta span{padding:5px;background:#211a12;border:1px solid #483723;color:#aa9875;text-align:center;font-family:var(--ui-pixel);font-size:8px}
+.recipeCraftMeta span{padding:6px;background:#211a12;border:1px solid #483723;color:#bbaa86;text-align:center;font-family:var(--ui-pixel);font-size:10px}
 .recipeCraftMeta .enough{color:#a7b982;border-color:#536542}.recipeCraftMeta .missing{color:#d68b79;border-color:#73483d}
-.recipeCostLabel{margin:10px 0 5px;color:#817359;font-family:var(--ui-pixel);font-size:8px;text-transform:uppercase;letter-spacing:.07em}
+.recipeCostLabel{margin:11px 0 6px;color:#a08e6b;font-family:var(--ui-pixel);font-size:10px;text-transform:uppercase;letter-spacing:.07em}
 .recipeDetailLayout .recipeDetailMaterials{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px!important;align-items:stretch!important}
-.recipeDetailLayout .recipeDetailMaterials>span{position:relative;padding:6px 7px;border:1px solid #4b3926;background:#211a12;color:#aa9875;font-family:var(--ui-pixel);font-size:9px}
+.recipeDetailLayout .recipeDetailMaterials>span{position:relative;padding:7px 8px;border:1px solid #4b3926;background:#211a12;color:#bbaa86;font-family:var(--ui-pixel);font-size:11px}
 .recipeDetailLayout .recipeDetailMaterials>span.enough{color:#a7b982;border-color:#536542}.recipeDetailLayout .recipeDetailMaterials>span.missing{color:#d68b79;border-color:#73483d}
-.recipeDetailLayout .recipeDetailMaterials small{float:right;color:#887655;font-size:7px}.recipeDetailLayout .recipeDetailMaterials em{display:block;margin-top:3px;color:#a98a62;font-size:7px;font-style:normal}
+.recipeDetailLayout .recipeDetailMaterials small{float:right;color:#9c8963;font-size:9px}.recipeDetailLayout .recipeDetailMaterials em{display:block;margin-top:4px;color:#b6976c;font-size:9px;font-style:normal}
 .recipeDetailLayout .recipeLineAction{display:block!important;min-width:0!important;margin-top:auto;padding-top:10px}
 .recipeDetailLayout .recipeQuantityControl{width:100%;justify-content:flex-end}
 .recipeDetailLayout .recipeQuantityControl .btn{flex:1;max-width:150px}
 @media(max-width:1050px){.recipeDetailLayout{grid-template-columns:1fr!important}.recipeItemInformation{grid-template-columns:1fr 1.4fr}}
 @media(max-width:650px){.recipeItemInformation{grid-template-columns:1fr}.recipeStatList,.recipeDetailLayout .recipeDetailMaterials{grid-template-columns:1fr}.recipeCraftMeta{grid-template-columns:1fr}}
+
+/* Inventory item details use the same readable profile/stat hierarchy as recipes. */
+.itemDetailCard{padding:11px!important}
+.itemDetailHeader{display:flex;align-items:center;gap:11px;padding-bottom:10px;border-bottom:1px solid #594329}
+.itemDetailHeader .itemVisual{width:58px!important;height:58px!important;min-height:58px!important;margin:0!important}
+.itemDetailHeader .name{font-size:16px!important}.itemDetailHeader .muted{font-size:11px!important;margin-top:3px}
+.itemDetailLayout{display:grid;grid-template-columns:minmax(0,1fr) minmax(235px,.36fr);gap:10px;margin-top:10px}
+.itemDetailInformation{display:grid;grid-template-columns:minmax(180px,.65fr) minmax(260px,1.35fr);gap:10px;min-width:0}
+.itemActionBox{display:flex;flex-direction:column;border:1px solid #4d3b27;background:#18130e;padding:10px}
+.itemOwner{padding:7px;background:#211a12;color:#bbaa86;font:11px var(--ui-pixel)}
+.itemValue{display:flex;justify-content:space-between;gap:10px;margin-top:5px;padding:7px;background:#211a12;color:#a08e6b;font:11px var(--ui-pixel)}
+.itemValue strong{color:#dfbd78}.itemActionButtons{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:auto;padding-top:10px}
+.itemRuneSection{margin-top:10px;padding:10px;border:1px solid #4d3b27;background:#18130e}
+.itemSectionHeading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.itemSectionHeading h3{margin:0!important;font-size:14px!important}.itemSectionHeading span{color:#a08e6b;font:10px var(--ui-pixel)}
+.itemRuneSection .runeSlotRow{margin-top:0}.itemRuneSection .muted{font-size:11px!important}
+@media(max-width:850px){.itemDetailLayout{grid-template-columns:1fr}.itemActionButtons{margin-top:8px}}
+@media(max-width:600px){.itemDetailInformation{grid-template-columns:1fr}.itemActionButtons{grid-template-columns:1fr}}
 .sectionKicker{margin-bottom:3px}
 .dashboardCount{display:inline-grid;place-items:center;min-width:20px;height:18px;margin-left:4px;padding:0 5px;background:#1d1710;border:1px solid #5d482e;color:#cda65d;font-family:var(--ui-pixel);font-size:9px;vertical-align:2px}
 .guildActivityDashboard{margin-bottom:10px}

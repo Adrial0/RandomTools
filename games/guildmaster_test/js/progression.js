@@ -334,9 +334,16 @@ function runeDetailsHtml(it){
   if(!ids.length)return '<div class="muted">No runes socketed.</div>';
   return ids.map(id=>{const r=RUNES[id];return `<div class="runeDetailRow"><span>${runeIcon(id,'gameAsset')} <b>${r?.name||id}</b></span><span>${runeBonusText(id)}</span></div>`}).join('');
 }
-function statText(it){
+function itemProfileParts(it){
+  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`];
+  if(it.slot==='Armor')return[`${armorClassForItem(it)} armor`];
+  if(it.slot==='Ring')return['Ring'];
+  if(it.slot==='Amulet'||it.slot==='Jewelry')return['Amulet'];
+  return[it.slot||'Equipment'];
+}
+function itemStatParts(it){
   const parts=[];
-  parts.push(it.stat==='regen'?`+${it.value} HP / round`:it.stat==='manaRegen'?`+${it.value} Mana Regen`:it.stat==='lifesteal'?`${it.value}% lifesteal`:`+${it.value} ${statName(it.stat)}`);
+  if(it.stat&&it.value!=null)parts.push(it.stat==='regen'?`+${it.value} HP / round`:it.stat==='manaRegen'?`+${it.value} Mana Regen`:it.stat==='lifesteal'?`${it.value}% lifesteal`:`+${it.value} ${statName(it.stat)}`);
   if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${it.secondaryValue} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${it.secondaryValue}% Attack Speed`:`+${it.secondaryValue} ${statName(it.secondaryStat)}`);
   if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${it.tertiaryValue} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${it.tertiaryValue}% Attack Speed`:`+${it.tertiaryValue} ${statName(it.tertiaryStat)}`);
   Object.entries(it.extraStats||{}).forEach(([k,v])=>parts.push(`+${v}${['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k)?'%':''} ${statName(k)}`));
@@ -348,16 +355,16 @@ function statText(it){
   if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(it.itemPhysicalDodgeBonus*100)}% physical dodge`);
   if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(it.itemMagicalDodgeBonus*100)}% magic dodge`);
   if(it.mythicEffect)parts.push(`Mythic: ${it.mythicEffect}`);
-  if(it.slot==='Armor')parts.push(`${armorClassForItem(it)} armor`);
   if(it.slot==='Weapon'){
     const w=weaponDefForItem(it);
     parts.unshift(`Attack ${it.weaponPower||0}`);
     parts.unshift(`Attack Speed ${weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)}s`);
-    parts.push(`${it.weaponType}`);
-    parts.push(`scales ${weaponScalingLabel(it)}`);
-    parts.push(`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'}`);
     weaponSpecials(w||it).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
   }
+  return parts;
+}
+function statText(it){
+  const parts=[...itemStatParts(it),...itemProfileParts(it)];
   return parts.map(x=>`<span class="itemStatPart">${x}</span>`).join('<span class="itemStatSep"> · </span>');
 }
 function rarityClass(x){return String(x||'Common').toLowerCase()}

@@ -238,17 +238,22 @@ function openInventoryEquip(iid){
   const candidates=s.members.filter(h=>(slot!=='Weapon'||allowedWeapons(h).includes(it.weaponType))&&(slot!=='Armor'||canEquipArmor(h,it)));
   const recipe=recipeForItem(it);
 
-  showModal(it.name,`<div class="card">
-    <div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div>
-    <div class="name ${rarityClass(it.rarity)}">${it.name}</div>
-    <div class="muted">${slot==='Jewelry'?'Jewelry':it.slot}${it.slot==='Weapon'?` · ${it.weaponType}`:''} · ${it.rarity}</div><div class="good" style="margin-top:7px">${statText(it)}</div>
-    ${runeSlotsHtml(it)}
-    ${runeSlots(it)>0?`<div class="detailSection" style="margin-top:10px"><h3>Runes</h3>${runeDetailsHtml(it)}</div>`:''}
-    ${owner?`<div class="chip" style="margin-top:8px">Currently equipped by ${owner.name}</div>`:''}
-    <div class="modalActionRow">
-      <button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button>
-      <button class="btn gold" onclick="sellItem(${it.id})">Sell · ${itemSellValue(it)}g</button>
+  const profile=itemProfileParts(it),stats=itemStatParts(it);
+  showModal(it.name,`<div class="card itemDetailCard">
+    <div class="itemDetailHeader"><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity}</div></div></div>
+    <div class="itemDetailLayout">
+      <div class="itemDetailInformation">
+        <section class="recipeInfoSection"><h4>Item Profile</h4><div class="recipeProfileList">${profile.map(x=>`<span>${x}</span>`).join('')}</div></section>
+        <section class="recipeInfoSection"><h4>Item Stats</h4><div class="recipeStatList">${stats.map(x=>`<span>${x}</span>`).join('')}</div></section>
+      </div>
+      <aside class="itemActionBox">
+        <h4>Item Actions</h4>
+        ${owner?`<div class="itemOwner">Equipped by <b>${owner.name}</b></div>`:'<div class="itemOwner">Currently unequipped</div>'}
+        <div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div>
+        <div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>
+      </aside>
     </div>
+    <section class="itemRuneSection"><div class="itemSectionHeading"><h3>Runes</h3><span>${(it.runes||[]).length} / ${runeSlots(it)} socketed</span></div>${runeSlotsHtml(it)}${runeSlots(it)>0?runeDetailsHtml(it):'<div class="muted">This item has no rune slots.</div>'}</section>
   </div>
   <h3 style="margin-top:14px">Equip on</h3>
   <div class="g2">${candidates.map(h=>{
