@@ -1499,6 +1499,16 @@ body.windowOpen .side{overflow:hidden!important}
 .guildShortcutText .name{display:block;font-size:11px;line-height:1.2}
 .guildShortcutText .muted{display:block;margin-top:3px;font-size:8px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .guildShortcutArrow{flex:0 0 auto;color:#9e773d;font-size:20px;line-height:1}
+.resourceTier{display:inline-block;color:#e0bd76;font-family:var(--ui-pixel);font-size:8px;font-weight:800;letter-spacing:.04em}
+.workshopTabs{display:flex;gap:7px}
+.workshopMode.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#a67937!important;color:#f0d698!important}
+.runeTierList{display:grid;gap:10px}
+.runeTierGroup{border:1px solid #594329;background:#1c1710;padding:9px}
+.runeTierHeading{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:2px 2px 8px;border-bottom:1px solid #4d3a25;color:#ddbd7e;font-family:var(--ui-pixel);font-size:11px;font-weight:800}
+.runeTierHeading small{color:#8f8064;font-size:8px;font-weight:400}
+.runeTierGroup>.recipes{grid-template-columns:repeat(3,minmax(0,1fr))!important;margin-top:9px}
+@media(max-width:1050px){.runeTierGroup>.recipes{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:650px){.runeTierGroup>.recipes{grid-template-columns:1fr!important}.workshopTabs{width:100%}.workshopTabs .btn{flex:1}}
 .sectionKicker{margin-bottom:3px}
 .dashboardCount{display:inline-grid;place-items:center;min-width:20px;height:18px;margin-left:4px;padding:0 5px;background:#1d1710;border:1px solid #5d482e;color:#cda65d;font-family:var(--ui-pixel);font-size:9px;vertical-align:2px}
 .guildActivityDashboard{margin-bottom:10px}

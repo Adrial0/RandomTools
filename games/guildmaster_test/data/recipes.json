@@ -7,7 +7,7 @@
       "Iron": 8,
       "Wood": 2
     },
-    1
+    2
   ],
   [
     "Iron Greatsword",
@@ -28,7 +28,7 @@
       "Iron": 10,
       "Wood": 4
     },
-    1
+    2
   ],
   [
     "Iron Greataxe",
@@ -60,7 +60,7 @@
       "Iron": 8,
       "Wood": 3
     },
-    1
+    2
   ],
   [
     "Iron Spear",
@@ -70,7 +70,7 @@
       "Iron": 7,
       "Wood": 6
     },
-    1
+    2
   ],
   [
     "Iron Halberd",
@@ -173,7 +173,7 @@
       "Iron": 5,
       "Cloth": 1
     },
-    1
+    2
   ],
   [
     "Knife",
@@ -183,7 +183,7 @@
       "Iron": 4,
       "Wood": 1
     },
-    1
+    2
   ],
   [
     "Dirk",
@@ -327,7 +327,7 @@
       "Iron": 10,
       "Cloth": 2
     },
-    1
+    2
   ],
   [
     "Steel Cuirass",
@@ -408,7 +408,7 @@
     {
       "Iron": 4
     },
-    1
+    2
   ],
   [
     "Crystal Signet",
@@ -1256,5 +1256,19 @@
       "critBonus": 0.03,
       "label": "Arcane edge"
     }
-  ]
+  ],
+  ["Copper Longsword", "Weapon", "Longsword", {"CopperOre": 7, "Wood": 2}, 1, {"label": "Copper age"}],
+  ["Copper Greatsword", "Weapon", "Greatsword", {"CopperOre": 11, "Wood": 3}, 1, {"label": "Copper age"}],
+  ["Copper Battle Axe", "Weapon", "Battle Axe", {"CopperOre": 9, "Wood": 4}, 1, {"label": "Copper age"}],
+  ["Copper Mace", "Weapon", "Mace", {"CopperOre": 8, "Wood": 3}, 1, {"label": "Copper age"}],
+  ["Copper Spear", "Weapon", "Spear", {"CopperOre": 6, "Wood": 6}, 1, {"label": "Copper age"}],
+  ["Copper Dagger", "Weapon", "Dagger", {"CopperOre": 4, "Cloth": 1}, 1, {"label": "Copper age"}],
+  ["Copper Knife", "Weapon", "Knife", {"CopperOre": 4, "Wood": 1}, 1, {"label": "Copper age"}],
+  ["Ashwood Shortbow", "Weapon", "Shortbow", {"Wood": 7, "Cloth": 2}, 1, {"stats": {"dex": 1}, "label": "Starter bow"}],
+  ["Apprentice Staff", "Weapon", "Oak Staff", {"Wood": 8, "Cloth": 2, "Herbs": 2}, 1, {"stats": {"int": 1}, "label": "Starter focus"}],
+  ["Copper Mail", "Armor", "Mail", {"CopperOre": 10, "Cloth": 2}, 1, {"armorClass": "Medium", "label": "Copper links"}],
+  ["Copper Scale Vest", "Armor", "Scale Vest", {"CopperOre": 9, "Leather": 4}, 1, {"armorClass": "Medium", "label": "Copper scales"}],
+  ["Padded Field Robes", "Armor", "Robes", {"Cloth": 9, "Herbs": 2}, 1, {"armorClass": "Light", "stats": {"hp": 4}, "label": "Fieldwear"}],
+  ["Copper Band", "Ring", "Band", {"CopperOre": 4}, 1, {"stats": {"def": 1}, "label": "Copper age"}],
+  ["Carved Copper Charm", "Amulet", "Charm", {"CopperOre": 3, "Wood": 2, "Cloth": 1}, 1, {"stats": {"hp": 4}, "label": "Copper age"}]
 ]

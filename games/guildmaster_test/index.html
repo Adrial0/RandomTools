@@ -224,8 +224,8 @@
 <section class="page" id="crafting">
 <div class="panel">
   <div class="head">
-    <div><h2>Workshop</h2><p>Craft equipment or turn magical resources into runes and enchant gear.</p></div>
-    <div style="display:flex;gap:7px"><button class="btn workshopMode on" onclick="setWorkshopMode('crafting',this)">Crafting</button><button class="btn workshopMode" onclick="setWorkshopMode('enchanting',this)">Enchanting</button></div>
+    <div><h2>Workshop</h2><p>Forge equipment or practice runecrafting.</p></div>
+    <div class="workshopTabs"><button class="btn workshopMode on" onclick="setWorkshopMode('crafting',this)">Crafting</button><button class="btn workshopMode" onclick="setWorkshopMode('runecrafting',this)">Runecrafting</button></div>
   </div>
   <div id="craftMats" class="mats"></div>
   <div class="smithingPanel">
@@ -250,9 +250,9 @@
   </div>
 </div><div id="recipeList" class="recipes"></div></div>
 </div>
-<div id="enchantingModeSection" style="display:none">
-  <div class="panel"><div class="head"><div><h3>Rune Crafting</h3><p>Magical resources can be shaped into runes. Crafted runes are stored until socketed into equipment.</p></div></div><div id="runeInventory" class="mats"></div><div id="runeRecipes" class="recipes" style="margin-top:12px"></div></div>
-  <div class="panel"><div class="head"><div><h3>Enchant Equipment</h3><p>Rune capacity is determined by item rarity. Socketed runes permanently enhance that item.</p></div></div><div id="enchantItems" class="inventory"></div></div>
+<div id="runecraftingModeSection" style="display:none">
+  <div class="panel"><div class="head"><div><h3>Runecrafting</h3><p>Shape tiered materials into permanent socketable runes.</p></div></div><div id="runeInventory" class="mats"></div><div id="runeRecipes" class="runeTierList" style="margin-top:12px"></div></div>
+  <div class="panel"><div class="head"><div><h3>Socket Runes</h3><p>Rune capacity is determined by item rarity. Socketing consumes the rune.</p></div></div><div id="runeSocketItems" class="inventory"></div></div>
 </div>
 </section>
 <section class="page" id="upgrades"><div class="panel"><div class="head"><div><h2>Guild Upgrades</h2><p>Permanent bonuses for the whole guild.</p></div></div><div id="upgradeList" class="upgrades"></div></div></section>

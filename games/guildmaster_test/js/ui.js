@@ -87,7 +87,7 @@ function render(){completeOnboardingGoals(false);updateNavigationLocks();complet
   const guildNeed=guildRepNeeded(s.level),guildPct=clamp((s.rep||0)/guildNeed*100,0,100);
   if($('guildLevelHall'))$('guildLevelHall').textContent=s.level;
   if($('guildRepText'))$('guildRepText').textContent=`${(s.rep||0).toLocaleString()} / ${guildNeed.toLocaleString()}`;
-  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
+  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());

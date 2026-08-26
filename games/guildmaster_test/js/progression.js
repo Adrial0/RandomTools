@@ -121,7 +121,7 @@ function equipModal(hid,slot){
   if(slot==='Weapon'&&h)a=a.filter(it=>allowedWeapons(h).includes(it.weaponType));
   if(slot==='Armor'&&h)a=a.filter(it=>canEquipArmor(h,it));
   const current=s.inventory.find(x=>x.id===h?.equip?.[slot]);
-  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
 const BOSS_RESOURCE_SOURCE={};
 const BOSS_RESOURCES=new Set();
 

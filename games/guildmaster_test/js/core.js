@@ -176,10 +176,16 @@ function applyRecipeModifiers(it,meta={}){
 
 const ELEMENT_KEYS=['fire','ice','poison','lightning','holy','dark'];
 const RESOURCE_NAMES={};
+const RESOURCE_TIERS={};
+const ROMAN_TIERS=['0','I','II','III','IV','V','VI','VII','VIII','IX','X'];
+function tierLabel(tier){const n=Math.max(1,Math.floor(Number(tier)||1));return ROMAN_TIERS[n]||String(n)}
+function resourceTier(id){return RESOURCE_TIERS[id]||1}
+function itemTier(it){const recipe=typeof recipeForItem==='function'?recipeForItem(it):null;return Math.max(1,Number(it?.tier)||Number(recipe?.[4])||1)}
 const RUNE_SLOTS={};
 const RUNES={};
 function runeSlots(it){return RUNE_SLOTS[it?.rarity]||0}
 function runeIcon(id,cls='gameAsset'){const r=RUNES[id];return gameIcon('rune',id,r?.icon||'◇',cls)}
+function runeTier(id){const r=RUNES[id];if(!r)return 1;return Math.max(1,Number(r.tier)||Math.max(1,...Object.keys(r.cost||{}).map(resourceTier)))}
 
 const BOSS_INFO={dungeon:{},raid:{}};
 
@@ -387,6 +393,7 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
   });
   s.inventory=(s.inventory||[]).map(it=>{
     it.runes=Array.isArray(it.runes)?it.runes:[];
+    it.tier=itemTier(it);
     if(it.slot==='Weapon'&&!it.weaponType){
       const allowed=Object.keys(WEAPONS);
       const guess=allowed.find(w=>it.name&&it.name.includes(w))||pick(allowed);
@@ -535,7 +542,7 @@ function applyRarityBonuses(it,tier){
 
 function makeSpecificItem(slot,name,tier=1,forcedRarity=null){
   const ra=forcedRarity||itemRarity(tier);
-  const it={id:id(),slot,rarity:ra,equipped:null,runes:[]};
+  const it={id:id(),slot,rarity:ra,tier:Math.max(1,Number(tier)||1),equipped:null,runes:[]};
 
   if(slot==='Weapon'){
     const w=WEAPONS[name];

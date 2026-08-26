@@ -253,6 +253,15 @@
       "image": ""
     }
   },
+  "tierGroups": {
+    "1": ["Stone", "CopperOre", "Wood", "Cloth", "Herbs", "Leather", "Fish", "GoblinInsignia", "WolfPelt", "SlimeGel"],
+    "2": ["Iron", "Hardwood", "Bone", "Venom", "BanditToken", "GraveDust", "SpiderSilk", "GhoulIchor"],
+    "3": ["Silver", "Crystal", "Essence", "ManaBloom", "DeepPearl", "ArcaneDust", "HolyWater", "CultistRune", "DrakeScale", "OgreHeart"],
+    "4": ["Mithril", "Ironwood", "SpiritBark", "Sunstone", "Sandglass", "BogIron", "WhitePelt", "FrostShard", "Emberstone", "StormCore", "WraithEssence", "DemonHorn"],
+    "5": ["StarMetal", "GlacialOre", "Frostbloom", "Nightshade", "VenomSap", "SkyCrystal", "StormGlass", "ShadowSilk", "CrownBone", "BroodSilk", "ColossusIchor"],
+    "6": ["CinderOre", "CinderBloom", "MagmaCore", "Obsidian", "AetherCrystal", "AstralThread", "HighRune", "AncientDrakeScale", "WarOgreHeart"],
+    "7": ["Voidstone", "WraithLordCore", "AbyssalHorn"]
+  },
   "marketBasic": [
     "Wood",
     "Iron",

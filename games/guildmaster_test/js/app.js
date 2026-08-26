@@ -191,7 +191,7 @@ setInterval(()=>{
   refreshUpgradeResourceUI();
   renderProceduralQuestTimer();
 },500);
-setInterval(()=>{if(!window.GAME_DATA_READY||!s)return;renderInv();renderMarket();renderCraftQueue();renderCraft();if(workshopMode==='enchanting')renderEnchanting();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
+setInterval(()=>{if(!window.GAME_DATA_READY||!s)return;renderInv();renderMarket();renderCraftQueue();renderCraft();if(workshopMode==='runecrafting')renderRunecrafting();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
 function renderResourcesLite(){
   $('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();
 }
@@ -301,6 +301,8 @@ async function loadExternalGameData(){
 
   Object.keys(RESOURCE_NAMES).forEach(k=>delete RESOURCE_NAMES[k]);
   Object.entries(d.resources?.resources||{}).forEach(([key,obj])=>RESOURCE_NAMES[key]=obj.name||key);
+  Object.keys(RESOURCE_TIERS).forEach(k=>delete RESOURCE_TIERS[k]);
+  Object.entries(d.resources?.tierGroups||{}).forEach(([tier,keys])=>(keys||[]).forEach(key=>RESOURCE_TIERS[key]=Number(tier)||1));
   MARKET_BASIC_RESOURCES.splice(0,MARKET_BASIC_RESOURCES.length,...(d.resources?.marketBasic||[]));
 
   Object.assign(ACTIVE_MANA_COSTS,d.playerAbilities?.manaCosts||{});
@@ -375,6 +377,7 @@ function validateContentData(){
     if(!RESOURCE_NAMES[x])warnings.push('Rune requires undefined resource: '+id+' -> '+x);
   }));
   Object.keys(RESOURCE_NAMES).forEach(r=>{
+    if(!RESOURCE_TIERS[r])warnings.push('Resource has no tier: '+r);
     if(!used.has(r))warnings.push('Resource has no crafting/rune use: '+r);
   });
 

@@ -1,4 +1,4 @@
-// Resources, market, inventory, enchanting, crafting UI, and upgrade UI.
+// Resources, market, inventory, runecrafting, crafting UI, and upgrade UI.
 function resourceSourceEntries(k){
   const out=[],seen=new Set();
   const add=(type,name,detail='')=>{
@@ -39,7 +39,7 @@ function openResourceSell(k){
   const owned=s.materials[k]||0;if(owned<=0)return;
   const initial=Math.min(owned,10);
   showModal('Sell '+(RESOURCE_NAMES[k]||k),`<div class="card">
-    <div class="name">${RESOURCE_NAMES[k]||k}</div>
+    <div class="name">Tier ${tierLabel(resourceTier(k))} · ${RESOURCE_NAMES[k]||k}</div>
     <div class="muted">You have ${owned}. Resources sell for 1 gold each.</div>
     <input id="resourceSellRange" type="range" min="1" max="${owned}" value="${initial}" oninput="$('resourceSellAmount').value=this.value;$('resourceSellTotal').textContent=this.value+'g'" style="width:100%;margin-top:14px">
     <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
@@ -63,7 +63,7 @@ function sellResource(k){
 function matHtml(){
   const e=Object.entries(s.materials||{}).filter(([k,v])=>v>0);
   const head=`<div class="mat"><b>Storage ${resourceCount()} / ${resourceCapacity()}</b></div>`;
-  return head+(e.length?e.map(([k,v])=>`<button class="mat" style="cursor:pointer" onclick="openResourceSell('${k}')">${gameIcon('resource',k,'','gameAsset')} ${RESOURCE_NAMES[k]||k} <b>${v}</b></button>`).join(''):'<div class="muted">No resources yet.</div>');
+  return head+(e.length?e.sort((a,b)=>resourceTier(a[0])-resourceTier(b[0])||(RESOURCE_NAMES[a[0]]||a[0]).localeCompare(RESOURCE_NAMES[b[0]]||b[0])).map(([k,v])=>`<button class="mat" style="cursor:pointer" onclick="openResourceSell('${k}')">${gameIcon('resource',k,'','gameAsset')} <span class="resourceTier">T${tierLabel(resourceTier(k))}</span> ${RESOURCE_NAMES[k]||k} <b>${v}</b></button>`).join(''):'<div class="muted">No resources yet.</div>');
 }
 
 function detachItem(it){
@@ -265,7 +265,7 @@ function renderInv(){
   $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();
   const existingIds=new Set(s.inventory.map(it=>it.id));[...selectedInventoryItems].forEach(id=>{if(!existingIds.has(id))selectedInventoryItems.delete(id)});
   const visible=sortedInventoryItems();
-  $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
+  $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
   const sel=$('inventorySortSelect'),dir=$('inventorySortDir');if(sel)sel.value=inventorySortKey;if(dir)dir.textContent=inventorySortDirection==='desc'?'Highest first':'Lowest first';updateInventoryControlUI();
 }
 
@@ -275,8 +275,8 @@ function setWorkshopMode(mode,btn){
   document.querySelectorAll('.workshopMode').forEach(x=>x.classList.remove('on'));
   if(btn)btn.classList.add('on');
   if($('craftingModeSection'))$('craftingModeSection').style.display=mode==='crafting'?'':'none';
-  if($('enchantingModeSection'))$('enchantingModeSection').style.display=mode==='enchanting'?'':'none';
-  if(mode==='enchanting')renderEnchanting();
+  if($('runecraftingModeSection'))$('runecraftingModeSection').style.display=mode==='runecrafting'?'':'none';
+  if(mode==='runecrafting')renderRunecrafting();
 }
 function craftRune(id){
   const r=RUNES[id];if(!r)return;
@@ -284,16 +284,16 @@ function craftRune(id){
   Object.entries(r.cost).forEach(([k,v])=>s.materials[k]-=v);
   s.runes[id]=(s.runes[id]||0)+1;
   log('Created '+r.name+'.');
-  save();renderEnchanting();renderInv();renderCraft();
+  save();renderRunecrafting();renderInv();renderCraft();
   notify(r.name+' created.','good');
 }
-function openEnchantItem(iid){
+function openRuneSocketItem(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
-  if(it.equipped)return notify('Unequip the item before enchanting it.');
+  if(it.equipped)return notify('Unequip the item before socketing a rune.');
   const cap=runeSlots(it),used=(it.runes||[]).length;
   if(cap<=0)return notify('Common items have no rune slots.');
   const available=Object.keys(RUNES).filter(id=>(s.runes[id]||0)>0);
-  showModal('Enchant '+it.name,`<div class="card">
+  showModal('Socket Rune · '+it.name,`<div class="card">
     <div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div>
     <div class="name ${rarityClass(it.rarity)}">${it.name}</div>
     <div class="muted">${it.rarity} · Rune slots ${used}/${cap}</div>
@@ -310,19 +310,17 @@ function socketRune(iid,rid){
   if((s.runes[rid]||0)<=0)return notify('You do not own that rune.');
   s.runes[rid]--;
   it.runes.push(rid);
-  save();closeModal();renderEnchanting();renderInv();renderRoster();
+  save();closeModal();renderRunecrafting();renderInv();renderRoster();
   notify(r.name+' socketed into '+it.name+'.','good');
 }
-function renderEnchanting(){
+function renderRunecrafting(){
   if(!$('runeRecipes'))return;
   const owned=Object.entries(s.runes||{}).filter(([k,v])=>v>0);
-  $('runeInventory').innerHTML=owned.length?owned.map(([id,v])=>`<div class="mat">${runeIcon(id)} ${RUNES[id]?.name||id} <b>${v}</b></div>`).join(''):'<div class="muted">No runes crafted yet.</div>';
-  $('runeRecipes').innerHTML=Object.entries(RUNES).map(([id,r])=>{
-    const ok=Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v);
-    return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''} actionButton" ${ok?'':'disabled'} onclick="craftRune('${id}')">Create Rune</button></div>`;
-  }).join('');
+  $('runeInventory').innerHTML=owned.length?owned.sort((a,b)=>runeTier(a[0])-runeTier(b[0])).map(([id,v])=>`<div class="mat">${runeIcon(id)} <span class="resourceTier">T${tierLabel(runeTier(id))}</span> ${RUNES[id]?.name||id} <b>${v}</b></div>`).join(''):'<div class="muted">No runes crafted yet.</div>';
+  const runeGroups=new Map();Object.entries(RUNES).forEach(entry=>{const t=runeTier(entry[0]);if(!runeGroups.has(t))runeGroups.set(t,[]);runeGroups.get(t).push(entry)});
+  $('runeRecipes').innerHTML=[...runeGroups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="runeTierGroup"><div class="runeTierHeading"><span>Tier ${tierLabel(tier)}</span><small>${TIER_IDENTITIES[tier]||'Masterwork'} runes · ${entries.length}</small></div><div class="recipes">${entries.map(([id,r])=>{const ok=Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v);return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">Tier ${tierLabel(tier)} · ${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">T${tierLabel(resourceTier(k))} · ${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''} actionButton" ${ok?'':'disabled'} onclick="craftRune('${id}')">Create Rune</button></div>`}).join('')}</div></div>`).join('');
   const gear=s.inventory.filter(it=>!it.equipped);
-  $('enchantItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openEnchantItem(${it.id})"`:''}><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items cannot be enchanted.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear available to enchant.</div>';
+  $('runeSocketItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openRuneSocketItem(${it.id})"`:''}><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">T${tierLabel(runeTier(id))} · ${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items have no rune slots.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear is available for rune socketing.</div>';
 }
 
 function renderCraftQueue(){normalizeCraftQueue();$('craftQueue').innerHTML=s.craftJobs.length?s.craftJobs.map((j,index)=>{const r=recipes[j.recipe],now=Date.now(),waiting=index>0&&now<j.start,total=Math.max(1,j.end-j.start),pct=waiting?0:clamp((now-j.start)/total*100,0,100),remainingTime=waiting?j.start-now:j.end-now,count=Math.max(1,j.remaining||j.qty||1);return `<div class="card"><div class="mission-row"><div><div class="name">${r?r[0]:'Unknown recipe'} ×${count}</div><div class="muted">${index===0?'Crafting now':'Queue group '+(index+1)} · ${waiting?'waiting':'crafting'} · current item</div></div><span class="chip">${index===0?'Active':'#'+(index+1)}</span></div><div class="progressWrap"><div class="progressMeta"><span>${waiting?'Waiting':Math.floor(pct)+'%'}</span><span class="timer" data-start="${j.start}" data-end="${waiting?j.start:j.end}">${fmt(remainingTime)}</span></div><div class="progressTrack"><div class="progressFill" ${waiting?'':`data-start="${j.start}" data-end="${j.end}"`} style="width:${pct}%"></div></div></div><button class="btn" style="margin-top:9px" onclick="cancelCraftJob(${j.id})">Cancel Group</button></div>`}).join(''):'<div class="empty">Nothing is being crafted.</div>'}
@@ -400,7 +398,9 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.recipeMenuWrap'))closeRecipeMenu();
 });
 let expandedRecipes=new Set();
-let expandedRecipeCategories=new Set(['Iron']);
+const TIER_IDENTITIES={1:'Copper',2:'Iron',3:'Silver',4:'Mithril',5:'Star Metal',6:'Cinder',7:'Voidstone'};
+function recipeTierCategory(r){const tier=Math.max(1,Number(r?.[4])||1);return `Tier ${tierLabel(tier)} · ${TIER_IDENTITIES[tier]||'Masterwork'}`}
+let expandedRecipeCategories=new Set(['Tier I · Copper']);
 function toggleRecipeRow(i){
   if(expandedRecipes.has(i))expandedRecipes.delete(i);else expandedRecipes.add(i);
   renderCraft();
@@ -453,7 +453,7 @@ function renderRecipeLine(r,i){
       <div class="recipeLineIcon">${icon}</div>
       <div>
         <div class="recipeLineName">${r[0]}</div>
-        <div class="recipeLineType">${recipeTypeLabel(r)}</div>
+        <div class="recipeLineType">Tier ${tierLabel(r[4])} · ${recipeTypeLabel(r)}</div>
       </div>
       <div class="recipeLineStatus">${!smithOk?'Smithing '+smithReq:mat?time+'s':'Missing materials'}</div>
       <div class="recipeChevron">${open?'▾':'▸'}</div>
@@ -466,7 +466,7 @@ function renderRecipeLine(r,i){
       <div class="recipeDetailMaterials">
         ${Object.entries(r[3]).map(([k,v])=>{
           const have=s.materials[k]||0,ok=have>=v;
-          return `<span class="chip ${ok?'enough':'missing'}">${have}/${v} ${RESOURCE_NAMES[k]||k}${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?' · '+BOSS_RESOURCE_SOURCE[k]:''}</span>`;
+          return `<span class="chip ${ok?'enough':'missing'}">T${tierLabel(resourceTier(k))} · ${have}/${v} ${RESOURCE_NAMES[k]||k}${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?' · '+BOSS_RESOURCE_SOURCE[k]:''}</span>`;
         }).join('')}
       </div>
       <div class="recipeLineAction">
@@ -494,12 +494,12 @@ function renderCraft(){
 
   const groups=new Map();
   list.forEach(([r,i])=>{
-    const cat=recipeMaterialCategory(r);
+    const cat=recipeTierCategory(r);
     if(!groups.has(cat))groups.set(cat,[]);
     groups.get(cat).push([r,i]);
   });
 
-  const ordered=[...RECIPE_CATEGORY_PRIORITY.map(x=>x[0])].filter(name=>groups.has(name));
+  const ordered=[...groups.keys()].sort((a,b)=>[...groups.get(a)][0][0][4]-[...groups.get(b)][0][0][4]);
   $('recipeList').innerHTML=ordered.map(name=>{
     const rows=groups.get(name),open=expandedRecipeCategories.has(name);
     return `<div class="recipeCategory ${open?'open':''}">

@@ -23,10 +23,10 @@
     "name": "Redridge Copper Mine",
     "icon": "⛏️",
     "skill": "mining",
-    "req": 3,
+    "req": 1,
     "kind": "Mining",
-    "cycle": 34,
-    "xp": 2,
+    "cycle": 30,
+    "xp": 1,
     "resources": [
       [
         "CopperOre",

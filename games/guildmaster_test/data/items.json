@@ -463,6 +463,54 @@
     "Mythic": 5
   },
   "runes": {
+    "copper_might": {
+      "name": "Minor Rune of Might", "icon": "🜂", "tier": 1, "stat": "str", "value": 1,
+      "cost": {"CopperOre": 4, "Stone": 2}, "desc": "+1 STR", "image": ""
+    },
+    "copper_precision": {
+      "name": "Minor Rune of Precision", "icon": "✦", "tier": 1, "stat": "dex", "value": 1,
+      "cost": {"CopperOre": 3, "Leather": 2}, "desc": "+1 DEX", "image": ""
+    },
+    "copper_wisdom": {
+      "name": "Minor Rune of Wisdom", "icon": "✧", "tier": 1, "stat": "int", "value": 1,
+      "cost": {"CopperOre": 2, "Herbs": 3}, "desc": "+1 INT", "image": ""
+    },
+    "copper_guard": {
+      "name": "Minor Rune of Guarding", "icon": "⬡", "tier": 1, "stat": "def", "value": 2,
+      "cost": {"CopperOre": 4, "Stone": 3}, "desc": "+2 DEF", "image": ""
+    },
+    "iron_might": {
+      "name": "Iron Rune of Might", "icon": "🜂", "tier": 2, "stat": "str", "value": 2,
+      "cost": {"Iron": 5, "Bone": 2}, "desc": "+2 STR", "image": ""
+    },
+    "iron_precision": {
+      "name": "Iron Rune of Precision", "icon": "✦", "tier": 2, "stat": "dex", "value": 2,
+      "cost": {"Iron": 4, "Venom": 2}, "desc": "+2 DEX", "image": ""
+    },
+    "iron_vitality": {
+      "name": "Ironheart Rune", "icon": "♥", "tier": 2, "stat": "hp", "value": 10,
+      "cost": {"Iron": 5, "Hardwood": 2}, "desc": "+10 HP", "image": ""
+    },
+    "silver_focus": {
+      "name": "Silver Rune of Focus", "icon": "✧", "tier": 3, "stat": "mana", "value": 8,
+      "cost": {"Silver": 4, "Essence": 2}, "desc": "+8 Mana", "image": ""
+    },
+    "mithril_aegis": {
+      "name": "Mithril Aegis Rune", "icon": "◇", "tier": 4, "stat": "mdef", "value": 7,
+      "cost": {"Mithril": 5, "SpiritBark": 2}, "desc": "+7 MDEF", "image": ""
+    },
+    "star_fury": {
+      "name": "Starfury Rune", "icon": "✹", "tier": 5, "stat": "attackSpeed", "value": 4,
+      "cost": {"StarMetal": 4, "SkyCrystal": 3}, "desc": "+4% Attack Speed", "image": ""
+    },
+    "cinder_blood": {
+      "name": "Cinderblood Rune", "icon": "🔥", "tier": 6, "stat": "lifesteal", "value": 4,
+      "cost": {"CinderOre": 4, "MagmaCore": 2}, "desc": "+4% Lifesteal", "image": ""
+    },
+    "void_soul": {
+      "name": "Voidsoul Rune", "icon": "🌑", "tier": 7, "stat": "dark", "value": 20,
+      "cost": {"Voidstone": 5, "WraithLordCore": 1}, "desc": "+20 Dark Res", "image": ""
+    },
     "might": {
       "name": "Rune of Might",
       "icon": "🜂",
