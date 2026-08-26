@@ -1509,6 +1509,21 @@ body.windowOpen .side{overflow:hidden!important}
 .guildShortcutArrow{flex:0 0 auto;color:#9e773d;font-size:20px;line-height:1}
 .resourceTier{display:inline-block;color:#e0bd76;font-family:var(--ui-pixel);font-size:8px;font-weight:800;letter-spacing:.04em}
 .workshopTabs{display:flex;gap:7px}
+.professionTabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #594329}
+.professionTab{flex:1 1 135px;min-width:120px}
+.professionTab.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#b18443!important;color:#f0d698!important}
+.professionStation{margin-top:10px;padding:12px;border:1px solid #60482d;background:linear-gradient(135deg,rgba(126,87,37,.16),transparent 45%),#1c1710}
+.professionStationTop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}
+.professionStationTop h3{margin:2px 0 4px!important}
+.professionEffectRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.professionWorkerChoice{display:flex!important;flex-direction:column;gap:5px;text-align:left;cursor:pointer}
+.professionSimpleRecipe{display:grid!important;grid-template-columns:minmax(220px,1fr) minmax(300px,1.4fr) auto;align-items:center;gap:12px}
+.professionSimpleRecipe .recipeDetailMaterials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.professionSimpleRecipe .recipeDetailMaterials>span{padding:7px;border:1px solid #4b3926;background:#211a12;font:11px var(--ui-pixel)}
+.professionSimpleRecipe .recipeDetailMaterials .enough{color:#a7b982;border-color:#536542}.professionSimpleRecipe .recipeDetailMaterials .missing{color:#d68b79;border-color:#73483d}
+.professionSocketList{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+#crafting #recipeList.recipes{display:grid!important;grid-template-columns:1fr!important}
+@media(max-width:760px){.professionStationTop,.professionSimpleRecipe{grid-template-columns:1fr;display:grid!important}.professionStationTop{display:flex!important;flex-direction:column}.professionSimpleRecipe .recipeDetailMaterials{grid-template-columns:1fr}}
 .workshopMode.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#a67937!important;color:#f0d698!important}
 .runeTierList{display:grid;gap:10px}
 .runeTierGroup{border:1px solid #594329;background:#1c1710;padding:9px}

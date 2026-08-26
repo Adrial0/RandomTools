@@ -316,7 +316,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:4,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:4,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -382,6 +382,7 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
   s.up=Object.assign({quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},s.up||{});
   const defaultSkills=()=>({woodcutting:{level:1,xp:0},mining:{level:1,xp:0},fishing:{level:1,xp:0},harvesting:{level:1,xp:0},hunting:{level:1,xp:0}});
   [...(s.members||[]),...(s.recruits||[])].forEach(h=>{h.skills=h.skills||{};if(h.skills.herbalism&&!h.skills.harvesting)h.skills.harvesting=h.skills.herbalism;delete h.skills.herbalism;h.skills=Object.assign(defaultSkills(),h.skills);Object.keys(h.skills).forEach(k=>h.skills[k]=Object.assign({level:1,xp:0},h.skills[k]||{}));if(h.subclass===undefined)h.subclass=null;if(!h.race||!RACES[h.race])h.race=pick(RACE_NAMES)});
+  if(typeof normalizeProfessionState==='function')normalizeProfessionState();
   s.runes=s.runes&&typeof s.runes==='object'?s.runes:{};Object.keys(RUNES).forEach(k=>{if(s.runes[k]==null)s.runes[k]=0});s.partyPresets=Array.isArray(s.partyPresets)?s.partyPresets:[];s.market=s.market&&typeof s.market==='object'?s.market:{nextRefresh:0,offers:[]};s.market.offers=Array.isArray(s.market.offers)?s.market.offers:[];s.questBoard=s.questBoard&&typeof s.questBoard==='object'?s.questBoard:{nextRefresh:0,offers:[]};s.questBoard.offers=Array.isArray(s.questBoard.offers)?s.questBoard.offers:[];s.harvestJobs=Array.isArray(s.harvestJobs)?s.harvestJobs:[];s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];normalizeCraftQueue();s.battleSeq=s.battleSeq||1;s.lastHiddenAt=s.lastHiddenAt||0;s.knownRecipes=Array.isArray(s.knownRecipes)?s.knownRecipes:[];s.memberCap=Math.max((s.members||[]).length,4+(s.up.quarters||0));s.discoveredResources=Array.isArray(s.discoveredResources)?s.discoveredResources:[];s.applicantCap=Math.max(2,s.applicantCap||2+(s.up.recruit||0));s.nextApplicantsAt=s.nextApplicantsAt||0;
   s.memberCap=Math.max((s.members||[]).length,4+(s.up.quarters||0));
   s.members=(s.members||[]).map(h=>{
@@ -495,7 +496,7 @@ function hero(){
   const recruitBase=1+Math.floor(Math.max(0,(s.level||1)-1)*.18);
   const lv=clamp(rnd(Math.max(1,recruitBase-2),recruitBase+1),1,15);
   return{
-    id:id(),name:pick(FN)+' '+pick(LN),class:c,race:pick(RACE_NAMES),rarity:ra,trait:t.name,level:lv,xp:0,busy:false,subclass:null,
+    id:id(),name:pick(FN)+' '+pick(LN),class:c,race:pick(RACE_NAMES),rarity:ra,trait:t.name,professionTrait:typeof rollProfessionTrait==='function'?rollProfessionTrait():null,level:lv,xp:0,busy:false,subclass:null,
     equip:{Weapon:null,Armor:null,Jewelry:null},
     skills:rolledRecruitSkills(),
     bonus:{

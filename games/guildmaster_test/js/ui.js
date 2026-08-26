@@ -621,7 +621,7 @@ function renderRoster(){
         <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
         <div style="min-width:0"><div class="name">${h.name}</div><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level}</div></div>
       </div>
-      <div class="power"><span>${h.busy?'Away':h.trait}</span><strong>${z.power}</strong></div>
+      <div class="power"><span>${h.busy?(h.professionBusy?'Working · '+PROFESSION_DEFS[h.professionBusy].name:'Away'):h.trait}</span><strong>${z.power}</strong></div>
     </div>`;
   }).join(''):'<div class="empty">No guild members recruited.</div>';
   const selected=s.members.find(x=>x.id===s.selected)||members[0];
@@ -662,6 +662,7 @@ function showCharacterSkills(hid){
   showModal(h.name+' · Skills',`<div class="card"><div class="name">${sub?sub.name:h.class}</div><div class="muted">${sub?'Specialization selected.':'Specialization unlocks at level 10.'}</div></div>
   <div class="card racialPassiveCard" style="margin-top:10px"><div class="name">${race.passive} · ${h.race} Racial Passive</div><div class="muted" style="margin-top:7px">${race.desc}</div></div>
   <div class="card" style="margin-top:10px"><div class="name">Quirk · ${h.trait}</div><div class="muted" style="margin-top:7px">${quirk?.desc||'No special quirk effect.'}</div></div>
+  <div class="card" style="margin-top:10px"><div class="name">Profession Affinity · ${professionTraitDef(h).name}</div><div class="muted" style="margin-top:7px">${professionTraitText(h)}</div></div>
   <div class="card" style="margin-top:10px"><div class="name">Base Skills</div>${baseSkills.map(x=>`<div class="muted" style="margin-top:7px">${x}</div>`).join('')}</div>
   ${sub?`<div class="card" style="margin-top:10px"><div class="name">Passive</div><div class="muted" style="margin-top:7px">${sub.passive}</div></div><div class="card" style="margin-top:10px"><div class="name">Active Skill</div><div class="muted" style="margin-top:7px">${sub.active}</div></div>`:''}
   ${!sub&&h.level>=10?`<button class="btn gold" style="margin-top:12px" onclick="closeModal();chooseSubclass(${h.id})">Choose Specialization</button>`:''}`);
@@ -712,7 +713,7 @@ function heroDetail(h){
   return `<div class="detailHeader">
     <div class="detailIdentity">
       <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
-      <div style="min-width:0"><h2>${h.name}</h2><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level} · ${h.rarity}</div><div class="muted">${h.trait}${h.busy?' · Away':''}</div></div>
+      <div style="min-width:0"><h2>${h.name}</h2><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level} · ${h.rarity}</div><div class="muted">${h.trait}${h.busy?' · '+(h.professionBusy?'Working in '+PROFESSION_DEFS[h.professionBusy].name:'Away'):''}</div><div class="muted">${professionTraitText(h)}</div></div>
     </div>
     <div style="text-align:right"><b>${z.power} power</b></div>
   </div>

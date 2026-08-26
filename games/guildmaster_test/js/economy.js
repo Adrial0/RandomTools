@@ -346,7 +346,7 @@ function recipePreview(r){
 
   if(slot==='Material'){
     const output=meta.outputResource||specificName,qty=Math.max(1,Math.floor(meta.outputQty||1));
-    return{profile:['Processed textile',`Produces ${qty} ${RESOURCE_NAMES[output]||output}`],stats:['Crafting material']};
+    return{profile:['Processed material',`Produces ${qty} ${RESOURCE_NAMES[output]||output}`],stats:['Profession material']};
   }
 
   if(slot==='Weapon'){

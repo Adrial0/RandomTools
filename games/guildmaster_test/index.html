@@ -32,9 +32,7 @@
   </div>
   <div class="navSubgroup" data-nav-panel="workshop">
     <button class="nav" data-p="inventory">Inventory</button>
-    <button class="nav" data-p="crafting">Crafting</button>
-    <button class="nav" data-p="runecrafting">Runecrafting</button>
-    <button class="nav" data-p="cooking">Cooking</button>
+    <button class="nav" data-p="crafting">Professions</button>
     <button class="nav" data-p="market">Market</button>
   </div>
   <div class="navSubgroup" data-nav-panel="arena">
@@ -226,30 +224,15 @@
 <section class="page" id="crafting">
 <div class="panel">
   <div class="head">
-    <div><h2>Crafting</h2><p>Forge equipment from materials your guild has discovered.</p></div>
+    <div><h2>Workshop</h2><p>Assign specialists, process gathered resources, and create equipment and provisions.</p></div>
   </div>
   <div id="craftMats" class="mats"></div>
-  <div class="smithingPanel">
-    <div class="smithingTop"><div><div class="name">Blacksmithing <span id="smithLevel">Lv. 1</span></div><div class="muted">Craft gear to gain Smithing XP and unlock harder recipes.</div></div><strong id="smithXpText">0 / 0 XP</strong></div>
-    <div class="progressTrack"><div class="progressFill" id="smithXpFill"></div></div>
-    <div class="smithingBonuses"><span class="chip" id="smithSpeedBonus"></span><span class="chip" id="smithRarityBonus"></span></div>
-  </div>
+  <div id="professionTabs" class="professionTabs"></div>
+  <div id="professionWorkstation"></div>
 </div>
 <div>
-  <div class="panel"><div class="head"><div><h3>Crafting Queue</h3><p>Completed items are placed in inventory automatically.</p></div></div><div id="craftQueue" class="active"></div></div>
-  <div class="panel recipePanel"><div class="head recipePanelHead"><div><h3>Known Recipes</h3><p>Recipes appear once you've discovered every normal resource they require. Boss materials are the exception: the recipe appears before you've obtained the boss drop.</p></div>
-  <div class="recipeMenuWrap">
-    <button class="btn" id="recipeMenuButton" onclick="toggleRecipeMenu(event)">Filter ▾</button>
-    <div class="recipeMenu" id="recipeMenu">
-      <button class="recipeMenuItem on" data-recipe-filter="all" onclick="setRecipeFilter('all',this)">All recipes</button>
-      <button class="recipeMenuItem" data-recipe-filter="Weapon" onclick="setRecipeFilter('Weapon',this)">Weapons</button>
-      <button class="recipeMenuItem" data-recipe-filter="Armor" onclick="setRecipeFilter('Armor',this)">Armor</button>
-      <button class="recipeMenuItem" data-recipe-filter="Jewelry" onclick="setRecipeFilter('Jewelry',this)">Jewelry</button>
-      <div class="recipeMenuDivider"></div>
-      <button class="recipeMenuItem recipeCraftableToggle" id="recipeCraftableToggle" onclick="toggleCraftableRecipes(this)">Craftable only: Off</button>
-    </div>
-  </div>
-</div><div id="recipeList" class="recipes"></div></div>
+  <div class="panel"><div class="head"><div><h3>Work Queue</h3><p>The assigned specialist remains busy until this workstation's queue is empty.</p></div></div><div id="craftQueue" class="active"></div></div>
+  <div class="panel recipePanel"><div class="head"><div><h3 id="professionRecipeTitle">Known Recipes</h3><p id="professionRecipeHelp">Recipes are grouped by profession and tier.</p></div></div><div id="recipeList" class="recipes"></div></div>
 </div>
 </section>
 <section class="page" id="cooking">
@@ -318,6 +301,7 @@
 <script src="js/ui.js?build=20260826o"></script>
 <script src="js/activities.js?build=20260826o"></script>
 <script src="js/economy.js?build=20260826o"></script>
+<script src="js/professions.js?build=20260826p"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/arena-client.js?build=20260826o"></script>
 <script src="js/app.js?build=20260826o"></script>
