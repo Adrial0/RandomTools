@@ -10,6 +10,7 @@ const tiers={};Object.entries(resources.tierGroups).forEach(([tier,keys])=>keys.
 let nextId=100;
 const context={
   console,Math,Date,
+  recipeFilter:'all',recipeCraftableOnly:false,expandedRecipes:new Set(),expandedRecipeCategories:new Set(['I · Copper']),TIER_IDENTITIES:{1:'Copper',2:'Iron'},
   recipes:structuredClone(sourceRecipes),RESOURCE_NAMES:Object.fromEntries(Object.entries(resources.resources).map(([k,v])=>[k,v.name])),
   RESOURCE_TIERS:tiers,BOSS_RESOURCES:new Set(),RUNES:{},MEALS:{},rar:['Common','Uncommon','Rare','Epic','Legendary','Mythic'],
   s:null,pick:a=>a[0],clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),id:()=>nextId++,resourceTier:k=>tiers[k]||1,
@@ -19,7 +20,7 @@ const context={
   addStoredResource:()=>1,recipePreview:r=>({profile:[r[1]],stats:[]}),maxCraftQuantity:()=>99,professionRecipeKnown:()=>true,
   gameIcon:()=>'',itemIcons:{},WEAPONS:{},tierLabel:t=>String(t),fmt:()=>'',colorizeStatTerms:()=>{},matHtml:()=>'',
   runeIcon:()=>'',runeSlots:()=>0,openRuneSocketItem:()=>{},openRuneSocketItem:()=>{},openRuneSocketItem:()=>{},
-  $:()=>({innerHTML:'',textContent:'',style:{}}),setTimeout
+  $:()=>({innerHTML:'',textContent:'',style:{},classList:{toggle:()=>{}}}),document:{querySelectorAll:()=>[]},setTimeout
 };
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(root,'js/professions.js'),'utf8'),context);
@@ -49,11 +50,19 @@ assert.ok(context.s.members[0].professionTrait,'existing member received determi
 vm.runInContext("assignProfessionWorker('smithing',1)",context);
 assert.equal(context.s.professions.smithing.workerId,1,'worker assignment persisted');
 assert.equal(context.s.members[0].busy,false,'idle assigned worker remains mission-available');
+context.s.members[0].busy=true;
+assert.equal(vm.runInContext("professionWorkerAvailable('smithing')",context),false,'idle workstation cannot start work while its assigned specialist is away');
+context.s.members[0].busy=false;
 context.s.professions.smithing.jobs.push({id:3,kind:'recipe',recipe:0,qty:1,remaining:1,start:Date.now(),end:Date.now()+1000,duration:1000,effects:{}});
 vm.runInContext("syncProfessionBusy('smithing')",context);
 assert.equal(context.s.members[0].busy,true,'worker becomes busy while workstation has queued work');
+assert.equal(vm.runInContext("professionWorkerAvailable('smithing')",context),true,'active specialist may accept additional queued work at the same station');
 context.s.professions.smithing.jobs.length=0;
 vm.runInContext("syncProfessionBusy('smithing')",context);
 assert.equal(context.s.members[0].busy,false,'worker is released when workstation queue empties');
+
+const uiSource=fs.readFileSync(path.join(root,'js/ui.js'),'utf8');
+assert.match(uiSource,/Skills & Passives[\s\S]*Profession Affinity/,'roster stats show profession affinity in Skills & Passives');
+assert.match(uiSource,/function recruitDetail[\s\S]*Profession Affinity/,'applicant detail shows profession affinity before recruitment');
 
 console.log('Profession model, recipe split, processing chains, migration, and busy-state tests passed.');

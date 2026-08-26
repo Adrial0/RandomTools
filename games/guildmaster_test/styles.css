@@ -1510,6 +1510,8 @@ body.windowOpen .side{overflow:hidden!important}
 .resourceTier{display:inline-block;color:#e0bd76;font-family:var(--ui-pixel);font-size:8px;font-weight:800;letter-spacing:.04em}
 .workshopTabs{display:flex;gap:7px}
 .professionTabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid #594329}
+.professionRecipeControls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.professionRecipeControls select{min-width:145px}
+.professionPassiveCard{border-left:2px solid #9b7138!important}
 .professionTab{flex:1 1 135px;min-width:120px}
 .professionTab.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#b18443!important;color:#f0d698!important}
 .professionStation{margin-top:10px;padding:12px;border:1px solid #60482d;background:linear-gradient(135deg,rgba(126,87,37,.16),transparent 45%),#1c1710}

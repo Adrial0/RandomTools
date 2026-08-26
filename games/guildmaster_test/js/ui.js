@@ -128,6 +128,8 @@ function recruitDetail(rid){
     <div class="card racialPassiveCard"><div class="name">${h.race} · ${raceDef(h).passive}</div><div class="muted">${raceDef(h).desc}</div></div>
     <h3 style="margin-top:14px">Quirk</h3>
     <div class="card"><div class="name">${h.trait}</div><div class="muted">${traitDef(h)?.desc||''}</div></div>
+    <h3 style="margin-top:14px">Profession Affinity</h3>
+    <div class="card"><div class="name">${professionTraitDef(h).name} · ${professionTraitDef(h).professionName}</div><div class="muted">${professionTraitDef(h).desc}</div></div>
     <h3 style="margin-top:14px">Gathering Skills</h3>
     <div class="stats">${skills}</div>
     <div class="modalActionRow"><button class="btn gold" onclick="closeModal();recruit(${h.id})">Recruit · Free</button></div>
@@ -796,6 +798,7 @@ function heroDetail(h){
     <h3>Skills & Passives</h3>
     <div class="detailSkillCard racialPassiveCard"><b>${raceDef(h).passive} · ${h.race} Racial Passive</b><span>${raceDef(h).desc}</span></div>
     <div class="detailSkillCard"><b>Quirk · ${h.trait}</b><span>${quirk?.desc||'No special quirk effect.'}</span></div>
+    <div class="detailSkillCard professionPassiveCard"><b>Profession Affinity · ${professionTraitDef(h).name}</b><span>${professionTraitDef(h).professionName}: ${professionTraitDef(h).desc}</span></div>
     ${baseSkills.map(x=>`<div class="detailSkillCard"><b>Base Skill</b><span>${x}</span></div>`).join('')}
     ${sub?`<div class="detailSkillCard"><b>${sub.name} Passive</b><span>${sub.passive}</span></div><div class="detailSkillCard"><b>${sub.name} Active</b><span>${sub.active}</span></div>`:`<div class="detailSkillCard"><b>Specialization</b><span>${h.level>=10?'Ready to choose a specialization.':'Unlocks at level 10.'}</span></div>`}
   </div>

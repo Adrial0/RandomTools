@@ -404,7 +404,7 @@ function closeRecipeMenu(){
 function setRecipeFilter(f,b){
   recipeFilter=f;
   document.querySelectorAll('[data-recipe-filter]').forEach(x=>x.classList.toggle('on',x.dataset.recipeFilter===f));
-  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',Jewelry:'Jewelry'};
+  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',Jewelry:'Jewelry',Material:'Materials'};
   const btn=$('recipeMenuButton');if(btn)btn.textContent=(labels[f]||'Filter')+' ▾';
   renderCraft();
 }
