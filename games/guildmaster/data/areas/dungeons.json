@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Bone Crypt",
+    "level": 8,
+    "boss": "Skeleton King",
+    "theme": "dark",
+    "enemyPool": [
+      "Crypt Skeleton",
+      "Bone Guard",
+      "Grave Acolyte",
+      "Restless Spirit"
+    ],
+    "desc": "A royal crypt where dark damage is common. Some Dark resistance is recommended.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/bone-crypt.png",
+    "tier": 2
+  },
+  {
+    "name": "Silken Depths",
+    "level": 14,
+    "boss": "Broodmother",
+    "theme": "poison",
+    "enemyPool": [
+      "Brood Spider",
+      "Venomfang",
+      "Webbed Husk",
+      "Silk Stalker"
+    ],
+    "desc": "A venomous spider nest. Poison resistance greatly improves survival.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/silken-depths.png",
+    "tier": 3
+  },
+  {
+    "name": "Rotting Vault",
+    "level": 20,
+    "boss": "Rotting Colossus",
+    "theme": "poison",
+    "enemyPool": [
+      "Plague Ghoul",
+      "Rot Slime",
+      "Blight Priest",
+      "Vault Abomination"
+    ],
+    "desc": "A plague vault saturated with poison damage. Prepare Poison resistance.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/rotting-vault.png",
+    "tier": 4
+  },
+  {
+    "name": "Cultist Sanctum",
+    "level": 28,
+    "boss": "High Cultist",
+    "theme": "dark",
+    "enemyPool": [
+      "Fanatic",
+      "Dark Acolyte",
+      "Fallen Templar",
+      "Ritual Seer"
+    ],
+    "desc": "Forbidden rites fill this temple with heavy Dark damage.",
+    "image": "images/activities/dungeon.png",
+    "background": "images/backgrounds/cultist-sanctum.png",
+    "tier": 5
+  }
+]

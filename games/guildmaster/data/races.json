@@ -1,0 +1,261 @@
+{
+  "Human": {
+    "passive": "Versatile Heritage",
+    "desc": "+5% HP, +5% Mana, +3% DEF, +3% MDEF. +5% XP to all gathering skills.",
+    "mult": {
+      "hp": 1.05,
+      "mana": 1.05,
+      "def": 1.03,
+      "mdef": 1.03
+    },
+    "gathering": {
+      "all": 0.05
+    }
+  },
+  "Dwarf": {
+    "passive": "Stoneborn",
+    "desc": "+10% HP, +8% DEF, +5 Block, -10% Mana. +10% Mining XP.",
+    "mult": {
+      "hp": 1.1,
+      "def": 1.08,
+      "mana": 0.9
+    },
+    "flat": {
+      "block": 5
+    },
+    "gathering": {
+      "mining": 0.1
+    }
+  },
+  "Gnome": {
+    "passive": "Arcane Mind",
+    "desc": "+10% INT, +10% Mana, +1 Mana Regen, -10% STR. +10% Herbalism XP.",
+    "mult": {
+      "int": 1.1,
+      "mana": 1.1,
+      "str": 0.9
+    },
+    "flat": {
+      "manaRegen": 1
+    },
+    "gathering": {
+      "herbalism": 0.1
+    }
+  },
+  "Orc": {
+    "passive": "Blood and Iron",
+    "desc": "+10% STR, +8% HP, +5% Attack Speed, -10% MDEF. +10% Hunting XP.",
+    "mult": {
+      "str": 1.1,
+      "hp": 1.08,
+      "mdef": 0.9
+    },
+    "flat": {
+      "attackSpeed": 0.05
+    },
+    "gathering": {
+      "hunting": 0.1
+    }
+  },
+  "Halfling": {
+    "passive": "Lightfoot",
+    "desc": "+8% DEX, +5% physical dodge, +5% magical dodge, -10% STR. +10% Fishing XP.",
+    "mult": {
+      "dex": 1.08,
+      "str": 0.9
+    },
+    "flat": {
+      "physicalDodge": 0.05,
+      "magicalDodge": 0.05
+    },
+    "gathering": {
+      "fishing": 0.1
+    }
+  },
+  "Goblin": {
+    "passive": "Scrappy",
+    "desc": "+8% Attack Speed, +8% DEX, +10 Poison resistance, -10% HP. +10% Mining XP.",
+    "mult": {
+      "dex": 1.08,
+      "hp": 0.9
+    },
+    "flat": {
+      "attackSpeed": 0.08,
+      "poison": 10
+    },
+    "gathering": {
+      "mining": 0.1
+    }
+  },
+  "Troll": {
+    "passive": "Trollblood",
+    "desc": "+15% HP, +2 HP Regen, +10 Poison resistance, -12% MDEF. +10% Fishing XP.",
+    "mult": {
+      "hp": 1.15,
+      "mdef": 0.88
+    },
+    "flat": {
+      "regen": 2,
+      "poison": 10
+    },
+    "gathering": {
+      "fishing": 0.1
+    }
+  },
+  "Ogre": {
+    "passive": "Mountain of Muscle",
+    "desc": "+15% STR, +15% HP, +4 Block, -10% Attack Speed. +10% Mining XP.",
+    "mult": {
+      "str": 1.15,
+      "hp": 1.15
+    },
+    "flat": {
+      "block": 4,
+      "attackSpeed": -0.1
+    },
+    "gathering": {
+      "mining": 0.1
+    }
+  },
+  "Kobold": {
+    "passive": "Tunnel Runner",
+    "desc": "+10% DEX, +8% Attack Speed, +10 Fire resistance, -12% HP. +10% Mining XP.",
+    "mult": {
+      "dex": 1.1,
+      "hp": 0.88
+    },
+    "flat": {
+      "attackSpeed": 0.08,
+      "fire": 10
+    },
+    "gathering": {
+      "mining": 0.1
+    }
+  },
+  "Lizardfolk": {
+    "passive": "Scaled Hide",
+    "desc": "+10% DEF, +15 Poison resistance, +8% HP, -10% Mana. +10% Hunting XP.",
+    "mult": {
+      "def": 1.1,
+      "hp": 1.08,
+      "mana": 0.9
+    },
+    "flat": {
+      "poison": 15
+    },
+    "gathering": {
+      "hunting": 0.1
+    }
+  },
+  "Minotaur": {
+    "passive": "Bull Strength",
+    "desc": "+12% STR, +10% HP, +5% Attack, -8% physical dodge. +10% Hunting XP.",
+    "mult": {
+      "str": 1.12,
+      "hp": 1.1
+    },
+    "flat": {
+      "attackMult": 0.05,
+      "physicalDodge": -0.08
+    },
+    "gathering": {
+      "hunting": 0.1
+    }
+  },
+  "Fae": {
+    "passive": "Otherworldly",
+    "desc": "+12% Mana, +10% INT, +8% magical dodge, -15% HP. +10% Herbalism XP.",
+    "mult": {
+      "mana": 1.12,
+      "int": 1.1,
+      "hp": 0.85
+    },
+    "flat": {
+      "magicalDodge": 0.08
+    },
+    "gathering": {
+      "herbalism": 0.1
+    }
+  },
+  "Satyr": {
+    "passive": "Wild Rhythm",
+    "desc": "+8% DEX, +6% Attack Speed, +8 Dark resistance, -8% DEF. +10% Herbalism XP.",
+    "mult": {
+      "dex": 1.08,
+      "def": 0.92
+    },
+    "flat": {
+      "attackSpeed": 0.06,
+      "dark": 8
+    },
+    "gathering": {
+      "herbalism": 0.1
+    }
+  },
+  "Firbolg": {
+    "passive": "Forest Guardian",
+    "desc": "+10% HP, +10% MDEF, +10 Nature resistances (Poison), -8% Attack Speed. +10% Woodcutting XP.",
+    "mult": {
+      "hp": 1.1,
+      "mdef": 1.1
+    },
+    "flat": {
+      "poison": 10,
+      "attackSpeed": -0.08
+    },
+    "gathering": {
+      "woodcutting": 0.1
+    }
+  },
+  "Gnoll": {
+    "passive": "Pack Hunter",
+    "desc": "+10% STR, +8% Attack, +8% HP, -10% MDEF. +10% Hunting XP.",
+    "mult": {
+      "str": 1.1,
+      "hp": 1.08
+    },
+    "flat": {
+      "attackMult": 0.08
+    },
+    "gathering": {
+      "hunting": 0.1
+    }
+  },
+  "Undead": {
+    "passive": "Deathless",
+    "desc": "+25 Dark resistance, +15 Poison resistance, +8% DEF, but -20 Holy resistance.",
+    "mult": {
+      "def": 1.08
+    },
+    "flat": {
+      "dark": 25,
+      "poison": 15,
+      "holy": -20
+    }
+  },
+  "Dragonkin": {
+    "passive": "Draconic Blood",
+    "desc": "+20 Fire resistance, +8% STR, +8% DEF, but -15 Ice resistance.",
+    "mult": {
+      "str": 1.08,
+      "def": 1.08
+    },
+    "flat": {
+      "fire": 20,
+      "ice": -15
+    }
+  },
+  "Elf": {
+    "passive": "Elven Grace",
+    "desc": "+10% Mana, +5% DEX, +5% MDEF, -10% HP. +10% Herbalism XP.",
+    "mult": {
+      "mana": 1.1,
+      "dex": 1.05,
+      "mdef": 1.05,
+      "hp": 0.9
+    },
+    "gathering": {
+      "herbalism": 0.1
+    }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "Mage": [
+    {
+      "id": "pyromancer",
+      "name": "Pyromancer",
+      "passive": "Fire damage +20%.",
+      "active": "Flame Wave — hits every enemy and applies Burning. Cooldown: 16s.",
+      "element": "fire",
+      "elementMult": 1.2,
+      "activeType": "elementNova",
+      "image": "images/subclasses/pyromancer.png"
+    },
+    {
+      "id": "frostmage",
+      "name": "Frost Mage",
+      "passive": "Ice damage +20%, +10% MDEF and +1 Mana Regen.",
+      "manaRegenBonus": 1,
+      "active": "Ice Nova — hits every enemy with ice. Cooldown: 16s.",
+      "element": "ice",
+      "elementMult": 1.2,
+      "mdefMult": 1.1,
+      "activeType": "elementNova",
+      "image": "images/subclasses/frost-mage.png"
+    },
+    {
+      "id": "stormcaller",
+      "name": "Stormcaller",
+      "passive": "Lightning damage +20% and +1 Mana Regen.",
+      "manaRegenBonus": 1,
+      "active": "Storm Nova — strikes every enemy and interrupts active casts. Cooldown: 16s.",
+      "element": "lightning",
+      "elementMult": 1.2,
+      "activeType": "elementNova",
+      "image": "images/subclasses/stormcaller.png"
+    },
+    {
+      "id": "venomancer",
+      "name": "Venomancer",
+      "passive": "Poison damage +20%.",
+      "active": "Toxic Burst — hits every enemy and applies stacking Poison. Cooldown: 16s.",
+      "element": "poison",
+      "elementMult": 1.2,
+      "activeType": "elementNova",
+      "image": "images/subclasses/venomancer.png"
+    }
+  ],
+  "Warrior": [
+    {
+      "id": "berserker",
+      "name": "Berserker",
+      "passive": "All damage +15% and Attack Speed +10%.",
+      "attackSpeedBonus": 0.1,
+      "active": "Power Strike — deals 100% extra damage and applies Bleeding. Cooldown: 8s.",
+      "damageMult": 1.15,
+      "activeType": "powerStrike",
+      "image": "images/subclasses/berserker.png"
+    },
+    {
+      "id": "guardian",
+      "name": "Guardian",
+      "passive": "DEF +18%, +2 Block and +0.9 Threat.",
+      "active": "Shield Slam — performs a heavy strike and interrupts casting. Cooldown: 10s.",
+      "defMult": 1.18,
+      "blockBonus": 2,
+      "threatBonus": 0.9,
+      "activeType": "shieldSlam",
+      "image": "images/subclasses/guardian.png"
+    },
+    {
+      "id": "warlord",
+      "name": "Warlord",
+      "passive": "Battle Shout — party damage +10%.",
+      "active": "Battle Shout — interrupts all enemies, then grants party damage and Attack Speed for 6s. Cooldown: 18s.",
+      "partyDamage": 0.1,
+      "activeType": "commandStrike",
+      "image": "images/subclasses/warlord.png"
+    }
+  ],
+  "Ranger": [
+    {
+      "id": "marksman",
+      "name": "Marksman",
+      "passive": "Damage +10%, +10% critical chance and Attack Speed +8%.",
+      "attackSpeedBonus": 0.08,
+      "active": "Precise Shot — prioritizes and interrupts casting enemies. Cooldown: 10s.",
+      "damageMult": 1.1,
+      "critBonus": 0.1,
+      "activeType": "preciseShot",
+      "image": "images/subclasses/marksman.png"
+    },
+    {
+      "id": "beastmaster",
+      "name": "Beastmaster",
+      "passive": "HP +12%.",
+      "active": "Companion Strike — adds a second hit at 110% damage. Cooldown: 11s.",
+      "hpMult": 1.12,
+      "activeType": "companionStrike",
+      "image": "images/subclasses/beastmaster.png"
+    },
+    {
+      "id": "warden",
+      "name": "Warden",
+      "passive": "Party DEF and MDEF +8%.",
+      "active": "Warden Shot — deals 50% extra damage. Cooldown: 9s.",
+      "partyDefense": 0.08,
+      "activeType": "wardenShot",
+      "image": "images/subclasses/warden.png"
+    }
+  ],
+  "Rogue": [
+    {
+      "id": "assassin",
+      "name": "Assassin",
+      "passive": "Critical chance +18%. Execute: +25% damage to enemies below 30% HP.",
+      "active": "Backstab — interrupts casting and inflicts Bleeding. Cooldown: 11s.",
+      "critBonus": 0.18,
+      "execute": 0.25,
+      "activeType": "backstab",
+      "image": "images/subclasses/assassin.png"
+    },
+    {
+      "id": "duelist",
+      "name": "Duelist",
+      "passive": "Physical dodge +10% and Attack Speed +12%.",
+      "attackSpeedBonus": 0.12,
+      "active": "Flurry — adds a 140% follow-up hit. Cooldown: 14s.",
+      "physicalDodgeBonus": 0.1,
+      "activeType": "flurry",
+      "image": "images/subclasses/duelist.png"
+    },
+    {
+      "id": "venomblade",
+      "name": "Venomblade",
+      "passive": "Poison damage +20%.",
+      "active": "Envenom — deals a poison strike and applies stacking Poison. Cooldown: 10s.",
+      "element": "poison",
+      "elementMult": 1.2,
+      "activeType": "envenom",
+      "image": "images/subclasses/venomblade.png"
+    }
+  ],
+  "Priest": [
+    {
+      "id": "lifepriest",
+      "name": "Life Priest",
+      "passive": "Healing +35% and +1 Mana Regen.",
+      "manaRegenBonus": 1,
+      "active": "Greater Heal — performs a much stronger heal and cleanses every harmful status. Cooldown: 14s.",
+      "healMult": 1.35,
+      "activeType": "greaterHeal",
+      "image": "images/subclasses/life-priest.png"
+    },
+    {
+      "id": "battlepriest",
+      "name": "Battle Priest",
+      "passive": "Damage +15%, +1 Block, Medium armor and Attack Speed +5%.",
+      "attackSpeedBonus": 0.05,
+      "active": "Smite — deals 110% extra magical damage. Cooldown: 10s.",
+      "damageMult": 1.15,
+      "blockBonus": 1,
+      "armorOverride": "Medium",
+      "activeType": "smite",
+      "image": "images/subclasses/battle-priest.png"
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle",
+      "passive": "Party MDEF +12% and +1 Mana Regen.",
+      "manaRegenBonus": 1,
+      "active": "Renew — heals the lowest-health ally and cleanses one harmful status. Cooldown: 10s.",
+      "partyMdef": 0.12,
+      "activeType": "renew",
+      "image": "images/subclasses/oracle.png"
+    }
+  ],
+  "Paladin": [
+    {
+      "id": "templar",
+      "name": "Templar",
+      "passive": "DEF +15%, MDEF +10%, +2 Block and +1 Threat.",
+      "active": "Shield of Faith — reduces damage taken by 30% for 6s. Cooldown: 16s.",
+      "defMult": 1.15,
+      "mdefMult": 1.1,
+      "blockBonus": 2,
+      "threatBonus": 1,
+      "activeType": "shieldFaith",
+      "image": "images/subclasses/templar.png"
+    },
+    {
+      "id": "crusader",
+      "name": "Crusader",
+      "passive": "Damage +15% and Attack Speed +5%.",
+      "attackSpeedBonus": 0.05,
+      "active": "Holy Strike — deals 110% extra damage. Cooldown: 9s.",
+      "damageMult": 1.15,
+      "activeType": "holyStrike",
+      "image": "images/subclasses/crusader.png"
+    },
+    {
+      "id": "beacon",
+      "name": "Beacon",
+      "passive": "Party DEF and MDEF +10% and +1 Mana Regen.",
+      "manaRegenBonus": 1,
+      "active": "Radiant Aid — heals the lowest-health ally and cleanses one harmful status. Cooldown: 12s.",
+      "partyDefense": 0.1,
+      "partyMdef": 0.1,
+      "activeType": "radiantAid",
+      "image": "images/subclasses/beacon.png"
+    }
+  ]
+}

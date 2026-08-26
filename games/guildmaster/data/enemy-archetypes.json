@@ -1,0 +1,71 @@
+{
+  "brute": {
+    "tacticalRole": "Bruiser",
+    "roleDescription": "Slow, durable attacker with heavy physical hits.",
+    "counter": "Frontline and DEF",
+    "enrageThreshold": 0.3,
+    "enrageMult": 1.4,
+    "hpMult": 1.15,
+    "attackMult": 1.1,
+    "defMult": 1.0,
+    "attackInterval": 2600,
+    "mana": 0
+  },
+  "skirmisher": {
+    "tacticalRole": "Skirmisher",
+    "roleDescription": "Fast attacker that pressures fragile backline parties.",
+    "counter": "Frontline and sustain",
+    "basicStatus": "bleed",
+    "basicStatusChance": 0.2,
+    "hpMult": 0.9,
+    "attackMult": 1.1,
+    "defMult": 0.9,
+    "attackInterval": 1900,
+    "mana": 0
+  },
+  "caster": {
+    "tacticalRole": "Caster",
+    "roleDescription": "Uses dangerous telegraphed abilities powered by Mana.",
+    "counter": "Interrupt and MDEF",
+    "hpMult": 0.9,
+    "attackMult": 1.05,
+    "defMult": 0.85,
+    "attackInterval": 2900,
+    "mana": 35,
+    "manaRegen": 2
+  },
+  "tank": {
+    "tacticalRole": "Bulwark",
+    "roleDescription": "High-health defender that prolongs encounters.",
+    "counter": "Armor penetration and sustained damage",
+    "protectorAura": 0.15,
+    "hpMult": 1.3,
+    "attackMult": 0.9,
+    "defMult": 1.25,
+    "attackInterval": 3000,
+    "mana": 0
+  },
+  "beast": {
+    "tacticalRole": "Predator",
+    "roleDescription": "Relentless attacker with balanced speed and damage.",
+    "counter": "Frontline and sustain",
+    "executeThreshold": 0.3,
+    "executeMult": 1.35,
+    "hpMult": 1.0,
+    "attackMult": 1.0,
+    "defMult": 0.9,
+    "attackInterval": 2150,
+    "mana": 0
+  },
+  "boss": {
+    "tacticalRole": "Boss",
+    "roleDescription": "Powerful encounter leader with frequent signature abilities.",
+    "counter": "Balanced party with mechanic coverage",
+    "hpMult": 1.0,
+    "attackMult": 1.0,
+    "defMult": 1.0,
+    "attackInterval": 4300,
+    "mana": 80,
+    "manaRegen": 4
+  }
+}

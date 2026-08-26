@@ -1,0 +1,1408 @@
+[
+  [
+    "Iron Longsword",
+    "Weapon",
+    "Longsword",
+    {
+      "Iron": 8,
+      "Wood": 2
+    },
+    2
+  ],
+  [
+    "Iron Greatsword",
+    "Weapon",
+    "Greatsword",
+    {
+      "Iron": 12,
+      "Wood": 2,
+      "GoblinInsignia": 1
+    },
+    2
+  ],
+  [
+    "Iron Battle Axe",
+    "Weapon",
+    "Battle Axe",
+    {
+      "Iron": 10,
+      "Wood": 4
+    },
+    2
+  ],
+  [
+    "Iron Greataxe",
+    "Weapon",
+    "Greataxe",
+    {
+      "Iron": 14,
+      "Wood": 5,
+      "BanditToken": 1
+    },
+    2
+  ],
+  [
+    "Iron Warhammer",
+    "Weapon",
+    "Warhammer",
+    {
+      "Iron": 12,
+      "Wood": 4,
+      "SlimeGel": 1
+    },
+    2
+  ],
+  [
+    "Iron Mace",
+    "Weapon",
+    "Mace",
+    {
+      "Iron": 8,
+      "Wood": 3
+    },
+    2
+  ],
+  [
+    "Iron Spear",
+    "Weapon",
+    "Spear",
+    {
+      "Iron": 7,
+      "Wood": 6
+    },
+    2
+  ],
+  [
+    "Iron Halberd",
+    "Weapon",
+    "Halberd",
+    {
+      "Iron": 12,
+      "Wood": 7,
+      "GraveDust": 1
+    },
+    2
+  ],
+  [
+    "Holy Sword",
+    "Weapon",
+    "Holy Sword",
+    {
+      "Iron": 10,
+      "Crystal": 3,
+      "HolyWater": 2,
+      "StormCore": 1,
+      "SpiderSilk": 1
+    },
+    5
+  ],
+  [
+    "Shortbow",
+    "Weapon",
+    "Shortbow",
+    {
+      "Wood": 7,
+      "Cloth": 2
+    },
+    1
+  ],
+  [
+    "Longbow",
+    "Weapon",
+    "Longbow",
+    {
+      "Wood": 10,
+      "Cloth": 3,
+      "Hardwood": 1
+    },
+    2
+  ],
+  [
+    "Recurve Bow",
+    "Weapon",
+    "Recurve Bow",
+    {
+      "Wood": 9,
+      "Cloth": 4,
+      "Bone": 1
+    },
+    2
+  ],
+  [
+    "Light Crossbow",
+    "Weapon",
+    "Light Crossbow",
+    {
+      "Wood": 9,
+      "Iron": 5,
+      "Cloth": 2,
+      "GraveDust": 1
+    },
+    2
+  ],
+  [
+    "Heavy Crossbow",
+    "Weapon",
+    "Heavy Crossbow",
+    {
+      "Wood": 11,
+      "Iron": 8,
+      "Cloth": 3,
+      "CultistRune": 1
+    },
+    3
+  ],
+  [
+    "Hunting Bow",
+    "Weapon",
+    "Hunting Bow",
+    {
+      "Wood": 8,
+      "Cloth": 3,
+      "Venom": 2,
+      "WolfPelt": 2,
+      "Stone": 1
+    },
+    3
+  ],
+  [
+    "Dagger",
+    "Weapon",
+    "Dagger",
+    {
+      "Iron": 5,
+      "Cloth": 1
+    },
+    2
+  ],
+  [
+    "Knife",
+    "Weapon",
+    "Knife",
+    {
+      "Iron": 4,
+      "Wood": 1
+    },
+    2
+  ],
+  [
+    "Dirk",
+    "Weapon",
+    "Dirk",
+    {
+      "Iron": 6,
+      "Cloth": 1,
+      "CopperOre": 1
+    },
+    2
+  ],
+  [
+    "Kris",
+    "Weapon",
+    "Kris",
+    {
+      "Iron": 6,
+      "Venom": 2,
+      "Fish": 1,
+      "ArcaneDust": 1
+    },
+    3
+  ],
+  [
+    "Shortsword",
+    "Weapon",
+    "Shortsword",
+    {
+      "Iron": 7,
+      "Wood": 2,
+      "BanditToken": 1
+    },
+    2
+  ],
+  [
+    "Twin Blades",
+    "Weapon",
+    "Twin Blades",
+    {
+      "Iron": 12,
+      "Cloth": 2,
+      "CultistRune": 1
+    },
+    3
+  ],
+  [
+    "Oak Staff",
+    "Weapon",
+    "Oak Staff",
+    {
+      "Wood": 8,
+      "Cloth": 1
+    },
+    1
+  ],
+  [
+    "Arcane Staff",
+    "Weapon",
+    "Arcane Staff",
+    {
+      "Wood": 8,
+      "ArcaneDust": 3,
+      "Crystal": 3,
+      "CultistRune": 1,
+      "Silver": 1
+    },
+    3
+  ],
+  [
+    "Holy Staff",
+    "Weapon",
+    "Holy Staff",
+    {
+      "Wood": 7,
+      "Crystal": 3,
+      "Essence": 3,
+      "HolyWater": 1
+    },
+    3
+  ],
+  [
+    "Wand",
+    "Weapon",
+    "Wand",
+    {
+      "Wood": 4,
+      "CopperOre": 2
+    },
+    1
+  ],
+  [
+    "Crystal Wand",
+    "Weapon",
+    "Crystal Wand",
+    {
+      "Wood": 3,
+      "Crystal": 5,
+      "ManaBloom": 1
+    },
+    3
+  ],
+  [
+    "Orb",
+    "Weapon",
+    "Orb",
+    {
+      "Crystal": 6,
+      "ArcaneDust": 2,
+      "CultistRune": 2
+    },
+    3
+  ],
+  [
+    "Spellbook",
+    "Weapon",
+    "Spellbook",
+    {
+      "Cloth": 5,
+      "Essence": 4,
+      "Crystal": 2
+    },
+    3
+  ],
+  [
+    "Scepter",
+    "Weapon",
+    "Scepter",
+    {
+      "Iron": 4,
+      "Crystal": 5,
+      "Essence": 2
+    },
+    3
+  ],
+  [
+    "Iron Mail",
+    "Armor",
+    "Mail",
+    {
+      "Iron": 10,
+      "Cloth": 2
+    },
+    2
+  ],
+  [
+    "Steel Cuirass",
+    "Armor",
+    "Cuirass",
+    {
+      "Iron": 14,
+      "Cloth": 2
+    },
+    2
+  ],
+  [
+    "Ranger Leathers",
+    "Armor",
+    "Leathers",
+    {
+      "Cloth": 8,
+      "Wood": 2
+    },
+    1
+  ],
+  [
+    "Mage Robes",
+    "Armor",
+    "Robes",
+    {
+      "Cloth": 10,
+      "Herbs": 1
+    },
+    1
+  ],
+  [
+    "Knight Plate",
+    "Armor",
+    "Plate",
+    {
+      "Iron": 18,
+      "Cloth": 3
+    },
+    2
+  ],
+  [
+    "Scale Vest",
+    "Armor",
+    "Scale Vest",
+    {
+      "Iron": 12,
+      "Cloth": 4
+    },
+    2
+  ],
+  [
+    "Frostguard Plate",
+    "Armor",
+    "Plate",
+    {
+      "Iron": 16,
+      "FrostShard": 4,
+      "Crystal": 3
+    },
+    5
+  ],
+  [
+    "Flameward Robes",
+    "Armor",
+    "Robes",
+    {
+      "Cloth": 12,
+      "Emberstone": 4,
+      "ArcaneDust": 2
+    },
+    5
+  ],
+  [
+    "Iron Band",
+    "Ring",
+    "Band",
+    {
+      "Iron": 4
+    },
+    2
+  ],
+  [
+    "Crystal Signet",
+    "Ring",
+    "Signet",
+    {
+      "Iron": 3,
+      "Crystal": 3,
+      "Sandglass": 2
+    },
+    3
+  ],
+  [
+    "Runed Ring",
+    "Ring",
+    "Ring",
+    {
+      "Iron": 3,
+      "GraveDust": 3
+    },
+    2
+  ],
+  [
+    "Guardian Ring",
+    "Ring",
+    "Ring",
+    {
+      "Iron": 5,
+      "Crystal": 2,
+      "Essence": 2
+    },
+    4,
+    {
+      "stats": {
+        "holy": 10
+      }
+    }
+  ],
+  [
+    "Wooden Charm",
+    "Amulet",
+    "Charm",
+    {
+      "Wood": 3,
+      "Cloth": 2
+    },
+    1
+  ],
+  [
+    "Crystal Pendant",
+    "Amulet",
+    "Pendant",
+    {
+      "Crystal": 4,
+      "Cloth": 2
+    },
+    3
+  ],
+  [
+    "Arcane Amulet",
+    "Amulet",
+    "Amulet",
+    {
+      "Crystal": 5,
+      "Essence": 4
+    },
+    3
+  ],
+  [
+    "Warden Amulet",
+    "Amulet",
+    "Amulet",
+    {
+      "Iron": 3,
+      "Crystal": 4,
+      "Essence": 4
+    },
+    4,
+    {
+      "stats": {
+        "dark": 10
+      }
+    }
+  ],
+  [
+    "Bone King Greatsword",
+    "Weapon",
+    "Greatsword",
+    {
+      "Iron": 14,
+      "Bone": 8,
+      "CrownBone": 1
+    },
+    5,
+    {
+      "damageType": "dark",
+      "stats": {
+        "str": 8,
+        "dark": 18
+      },
+      "damageBonus": 0.1,
+      "critBonus": 0.05
+    }
+  ],
+  [
+    "Broodmother Kris",
+    "Weapon",
+    "Kris",
+    {
+      "Iron": 7,
+      "Venom": 5,
+      "BroodSilk": 1
+    },
+    5,
+    {
+      "damageType": "poison",
+      "stats": {
+        "dex": 8,
+        "poison": 22
+      },
+      "damageBonus": 0.09,
+      "critBonus": 0.07
+    }
+  ],
+  [
+    "Colossus Plate",
+    "Armor",
+    "Plate",
+    {
+      "Iron": 20,
+      "GhoulIchor": 6,
+      "ColossusIchor": 1,
+      "OgreHeart": 1
+    },
+    5,
+    {
+      "armorClass": "Heavy",
+      "block": 2,
+      "stats": {
+        "hp": 55,
+        "def": 10,
+        "poison": 28
+      },
+      "threatBonus": 0.25
+    }
+  ],
+  [
+    "High Cultist Scepter",
+    "Weapon",
+    "Scepter",
+    {
+      "Crystal": 7,
+      "ArcaneDust": 6,
+      "HighRune": 1
+    },
+    5,
+    {
+      "damageType": "dark",
+      "stats": {
+        "int": 9,
+        "dark": 24
+      },
+      "damageBonus": 0.11
+    }
+  ],
+  [
+    "Ancient Drake Greatsword",
+    "Weapon",
+    "Greatsword",
+    {
+      "Iron": 20,
+      "Emberstone": 8,
+      "AncientDrakeScale": 1
+    },
+    7,
+    {
+      "damageType": "fire",
+      "stats": {
+        "str": 13,
+        "fire": 35,
+        "hp": 25
+      },
+      "damageBonus": 0.16,
+      "critBonus": 0.06
+    }
+  ],
+  [
+    "War Ogre Hammer",
+    "Weapon",
+    "Warhammer",
+    {
+      "Iron": 22,
+      "Obsidian": 8,
+      "WarOgreHeart": 1
+    },
+    7,
+    {
+      "stats": {
+        "str": 15,
+        "def": 10,
+        "hp": 35
+      },
+      "damageBonus": 0.18,
+      "block": 1
+    }
+  ],
+  [
+    "Wraith Lord Amulet",
+    "Amulet",
+    "Amulet",
+    {
+      "Crystal": 9,
+      "FrostShard": 7,
+      "WraithLordCore": 1
+    },
+    7,
+    {
+      "stats": {
+        "int": 12,
+        "mdef": 12,
+        "dark": 38
+      },
+      "magicalDodgeBonus": 0.05,
+      "damageBonus": 0.1
+    }
+  ],
+  [
+    "Abyssal Demon Ring",
+    "Ring",
+    "Ring",
+    {
+      "Obsidian": 8,
+      "StormCore": 7,
+      "AbyssalHorn": 1
+    },
+    7,
+    {
+      "stats": {
+        "str": 6,
+        "int": 8,
+        "dark": 40,
+        "fire": 20
+      },
+      "damageBonus": 0.12,
+      "critBonus": 0.06
+    }
+  ],
+  [
+    "Reinforced Mail",
+    "Armor",
+    "Reinforced Mail",
+    {
+      "Iron": 16,
+      "Cloth": 4,
+      "Leather": 3
+    },
+    2,
+    {
+      "armorClass": "Medium",
+      "block": 1,
+      "stats": {
+        "hp": 10
+      }
+    }
+  ],
+  [
+    "Ironwood Leathers",
+    "Armor",
+    "Ironwood Leathers",
+    {
+      "Hardwood": 10,
+      "Ironwood": 6,
+      "Leather": 8,
+      "BogIron": 3
+    },
+    4,
+    {
+      "armorClass": "Light",
+      "stats": {
+        "dex": 3,
+        "hp": 12
+      },
+      "physicalDodgeBonus": 0.02
+    }
+  ],
+  [
+    "Spiritweave Robes",
+    "Armor",
+    "Spiritweave Robes",
+    {
+      "SpiritBark": 6,
+      "ManaBloom": 5,
+      "Essence": 8
+    },
+    4,
+    {
+      "armorClass": "Light",
+      "stats": {
+        "int": 4,
+        "mdef": 5
+      },
+      "healBonus": 0.05
+    }
+  ],
+  [
+    "Runic Coat",
+    "Armor",
+    "Runic Coat",
+    {
+      "Silver": 8,
+      "ArcaneDust": 8,
+      "Cloth": 8,
+      "Mithril": 4
+    },
+    4,
+    {
+      "armorClass": "Medium",
+      "stats": {
+        "mdef": 5,
+        "int": 2
+      },
+      "magicalDodgeBonus": 0.02
+    }
+  ],
+  [
+    "Aegis Cuirass",
+    "Armor",
+    "Aegis Cuirass",
+    {
+      "Mithril": 10,
+      "Silver": 8,
+      "Crystal": 8
+    },
+    4,
+    {
+      "armorClass": "Heavy",
+      "block": 1,
+      "stats": {
+        "mdef": 6,
+        "hp": 18
+      },
+      "threatBonus": 0.15
+    }
+  ],
+  [
+    "Nightveil Leathers",
+    "Armor",
+    "Nightveil Leathers",
+    {
+      "Nightshade": 7,
+      "ShadowSilk": 8,
+      "VenomSap": 5,
+      "Leather": 8
+    },
+    5,
+    {
+      "armorClass": "Light",
+      "stats": {
+        "dex": 5,
+        "poison": 14
+      },
+      "physicalDodgeBonus": 0.03
+    }
+  ],
+  [
+    "Stormhide Coat",
+    "Armor",
+    "Stormhide Coat",
+    {
+      "StormGlass": 6,
+      "SkyCrystal": 5,
+      "Leather": 12,
+      "DrakeScale": 2
+    },
+    5,
+    {
+      "armorClass": "Medium",
+      "stats": {
+        "dex": 4,
+        "lightning": 16,
+        "hp": 14
+      },
+      "critBonus": 0.03
+    }
+  ],
+  [
+    "Aetherweave Robes",
+    "Armor",
+    "Aetherweave Robes",
+    {
+      "AetherCrystal": 8,
+      "AstralThread": 6,
+      "ManaBloom": 6
+    },
+    7,
+    {
+      "armorClass": "Light",
+      "stats": {
+        "int": 7,
+        "mdef": 8
+      },
+      "magicalDodgeBonus": 0.03,
+      "healBonus": 0.05
+    }
+  ],
+  [
+    "Starsteel Mail",
+    "Armor",
+    "Starsteel Mail",
+    {
+      "StarMetal": 10,
+      "Mithril": 10,
+      "Ironwood": 5
+    },
+    5,
+    {
+      "armorClass": "Medium",
+      "block": 1,
+      "stats": {
+        "def": 7,
+        "str": 3,
+        "hp": 20
+      }
+    }
+  ],
+  [
+    "Mithril Bulwark",
+    "Armor",
+    "Mithril Bulwark",
+    {
+      "Mithril": 18,
+      "SpiritBark": 5,
+      "Sunstone": 8
+    },
+    4,
+    {
+      "armorClass": "Heavy",
+      "block": 1,
+      "stats": {
+        "def": 8,
+        "hp": 30
+      },
+      "threatBonus": 0.25
+    }
+  ],
+  [
+    "Cinderplate",
+    "Armor",
+    "Cinderplate",
+    {
+      "CinderOre": 12,
+      "Obsidian": 10,
+      "MagmaCore": 5
+    },
+    6,
+    {
+      "armorClass": "Heavy",
+      "stats": {
+        "fire": 22,
+        "str": 3
+      },
+      "damageBonus": 0.03
+    }
+  ],
+  [
+    "Voidguard Plate",
+    "Armor",
+    "Voidguard Plate",
+    {
+      "Voidstone": 14,
+      "AetherCrystal": 8,
+      "AstralThread": 6
+    },
+    7,
+    {
+      "armorClass": "Heavy",
+      "stats": {
+        "mdef": 10,
+        "hp": 25,
+        "dark": 22
+      },
+      "magicalDodgeBonus": 0.02
+    }
+  ],
+  [
+    "Ironwood Longbow",
+    "Weapon",
+    "Longbow",
+    {
+      "Ironwood": 8,
+      "SpiritBark": 4,
+      "WhitePelt": 3
+    },
+    4,
+    {
+      "stats": {
+        "dex": 3
+      },
+      "critBonus": 0.03
+    }
+  ],
+  [
+    "Sunforged Spear",
+    "Weapon",
+    "Spear",
+    {
+      "Sunstone": 8,
+      "Silver": 8,
+      "Hardwood": 5
+    },
+    4,
+    {
+      "stats": {
+        "str": 3,
+        "fire": 10
+      },
+      "damageBonus": 0.03
+    }
+  ],
+  [
+    "Glacial Wand",
+    "Weapon",
+    "Crystal Wand",
+    {
+      "GlacialOre": 7,
+      "FrostShard": 6,
+      "SkyCrystal": 6,
+      "Frostbloom": 3
+    },
+    5,
+    {
+      "stats": {
+        "int": 5,
+        "ice": 14
+      }
+    }
+  ],
+  [
+    "Nightfang Kris",
+    "Weapon",
+    "Kris",
+    {
+      "Nightshade": 6,
+      "VenomSap": 6,
+      "ShadowSilk": 5
+    },
+    5,
+    {
+      "stats": {
+        "dex": 4,
+        "poison": 12
+      },
+      "critBonus": 0.04
+    }
+  ],
+  [
+    "Starsteel Greatsword",
+    "Weapon",
+    "Greatsword",
+    {
+      "StarMetal": 12,
+      "Mithril": 10,
+      "Ironwood": 4
+    },
+    5,
+    {
+      "stats": {
+        "str": 6
+      },
+      "damageBonus": 0.05
+    }
+  ],
+  [
+    "Cinder Greataxe",
+    "Weapon",
+    "Greataxe",
+    {
+      "CinderOre": 10,
+      "MagmaCore": 5,
+      "Obsidian": 8,
+      "DemonHorn": 1
+    },
+    6,
+    {
+      "stats": {
+        "str": 5,
+        "fire": 16
+      },
+      "damageBonus": 0.05
+    }
+  ],
+  [
+    "Stormglass Crossbow",
+    "Weapon",
+    "Heavy Crossbow",
+    {
+      "StormGlass": 10,
+      "SkyCrystal": 6,
+      "Ironwood": 6
+    },
+    6,
+    {
+      "stats": {
+        "dex": 6,
+        "lightning": 14
+      },
+      "critBonus": 0.05
+    }
+  ],
+  [
+    "Aether Scepter",
+    "Weapon",
+    "Scepter",
+    {
+      "AetherCrystal": 10,
+      "AstralThread": 6,
+      "ManaBloom": 8
+    },
+    7,
+    {
+      "stats": {
+        "int": 7,
+        "mdef": 5
+      },
+      "healBonus": 0.08
+    }
+  ],
+  [
+    "Void Kris",
+    "Weapon",
+    "Kris",
+    {
+      "Voidstone": 8,
+      "AstralThread": 8,
+      "VenomSap": 6
+    },
+    7,
+    {
+      "stats": {
+        "dex": 7,
+        "poison": 18
+      },
+      "critBonus": 0.06
+    }
+  ],
+  [
+    "Voidstaff",
+    "Weapon",
+    "Arcane Staff",
+    {
+      "Voidstone": 10,
+      "AetherCrystal": 10,
+      "AstralThread": 8
+    },
+    7,
+    {
+      "stats": {
+        "int": 8,
+        "dark": 20
+      },
+      "damageBonus": 0.06
+    }
+  ],
+  [
+    "Spiritbark Charm",
+    "Amulet",
+    "Charm",
+    {
+      "SpiritBark": 6,
+      "ManaBloom": 4,
+      "DeepPearl": 2
+    },
+    4,
+    {
+      "stats": {
+        "hp": 20,
+        "regen": 2
+      }
+    }
+  ],
+  [
+    "Deep Pearl Pendant",
+    "Amulet",
+    "Pendant",
+    {
+      "DeepPearl": 7,
+      "Silver": 5,
+      "SkyCrystal": 4,
+      "WraithEssence": 2
+    },
+    5,
+    {
+      "stats": {
+        "int": 4,
+        "hp": 24,
+        "manaRegen": 1
+      },
+      "healBonus": 0.06
+    }
+  ],
+  [
+    "Sunstone Signet",
+    "Ring",
+    "Signet",
+    {
+      "Sunstone": 7,
+      "Silver": 6,
+      "Crystal": 4
+    },
+    5,
+    {
+      "stats": {
+        "str": 4,
+        "fire": 12
+      },
+      "damageBonus": 0.02
+    }
+  ],
+  [
+    "Stormglass Ring",
+    "Ring",
+    "Ring",
+    {
+      "StormGlass": 7,
+      "SkyCrystal": 6,
+      "Silver": 6
+    },
+    6,
+    {
+      "stats": {
+        "dex": 4,
+        "lightning": 15,
+        "attackSpeed": 5
+      },
+      "critBonus": 0.03
+    }
+  ],
+  [
+    "Voidstone Ring",
+    "Ring",
+    "Ring",
+    {
+      "Voidstone": 8,
+      "AetherCrystal": 6,
+      "AstralThread": 4
+    },
+    7,
+    {
+      "block": 1,
+      "stats": {
+        "mdef": 6,
+        "int": 4,
+        "dark": 18,
+        "mana": 10
+      }
+    }
+  ],
+  [
+    "Runic Hammer",
+    "Weapon",
+    "Runic Hammer",
+    {
+      "Mithril": 12,
+      "StarMetal": 6,
+      "AetherCrystal": 5,
+      "ArcaneDust": 6
+    },
+    7,
+    {
+      "stats": {
+        "str": 3,
+        "int": 3,
+        "lightning": 12
+      }
+    }
+  ],
+  [
+    "Spellblade",
+    "Weapon",
+    "Spellblade",
+    {
+      "StarMetal": 10,
+      "AetherCrystal": 8,
+      "AstralThread": 5,
+      "Silver": 8
+    },
+    7,
+    {
+      "stats": {
+        "str": 3,
+        "int": 4
+      },
+      "damageBonus": 0.04
+    }
+  ],
+  [
+    "Arcane Dagger",
+    "Weapon",
+    "Arcane Dagger",
+    {
+      "Voidstone": 7,
+      "AetherCrystal": 7,
+      "ShadowSilk": 8,
+      "ArcaneDust": 5
+    },
+    7,
+    {
+      "stats": {
+        "dex": 4,
+        "int": 4,
+        "dark": 10,
+        "attackSpeed": 4
+      },
+      "critBonus": 0.03
+    }
+  ],
+  [
+    "Copper Longsword",
+    "Weapon",
+    "Longsword",
+    {
+      "CopperOre": 7,
+      "Wood": 2
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Greatsword",
+    "Weapon",
+    "Greatsword",
+    {
+      "CopperOre": 11,
+      "Wood": 3
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Battle Axe",
+    "Weapon",
+    "Battle Axe",
+    {
+      "CopperOre": 9,
+      "Wood": 4
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Mace",
+    "Weapon",
+    "Mace",
+    {
+      "CopperOre": 8,
+      "Wood": 3
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Spear",
+    "Weapon",
+    "Spear",
+    {
+      "CopperOre": 6,
+      "Wood": 6
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Dagger",
+    "Weapon",
+    "Dagger",
+    {
+      "CopperOre": 4,
+      "Cloth": 1
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Knife",
+    "Weapon",
+    "Knife",
+    {
+      "CopperOre": 4,
+      "Wood": 1
+    },
+    1,
+    {}
+  ],
+  [
+    "Ashwood Shortbow",
+    "Weapon",
+    "Shortbow",
+    {
+      "Wood": 7,
+      "Cloth": 2
+    },
+    1,
+    {
+      "stats": {
+        "dex": 1
+      }
+    }
+  ],
+  [
+    "Apprentice Staff",
+    "Weapon",
+    "Oak Staff",
+    {
+      "Wood": 8,
+      "Cloth": 2,
+      "Herbs": 2
+    },
+    1,
+    {
+      "stats": {
+        "int": 1
+      }
+    }
+  ],
+  [
+    "Copper Mail",
+    "Armor",
+    "Mail",
+    {
+      "CopperOre": 10,
+      "Cloth": 2
+    },
+    1,
+    {
+      "armorClass": "Medium"
+    }
+  ],
+  [
+    "Copper Scale Vest",
+    "Armor",
+    "Scale Vest",
+    {
+      "CopperOre": 9,
+      "Leather": 4
+    },
+    1,
+    {
+      "armorClass": "Medium"
+    }
+  ],
+  [
+    "Padded Field Robes",
+    "Armor",
+    "Robes",
+    {
+      "Cloth": 9,
+      "Herbs": 2
+    },
+    1,
+    {
+      "armorClass": "Light",
+      "stats": {
+        "hp": 4
+      }
+    }
+  ],
+  [
+    "Copper Band",
+    "Ring",
+    "Band",
+    {
+      "CopperOre": 4
+    },
+    1,
+    {
+      "stats": {
+        "def": 1
+      }
+    }
+  ],
+  [
+    "Carved Copper Charm",
+    "Amulet",
+    "Charm",
+    {
+      "CopperOre": 3,
+      "Wood": 2,
+      "Cloth": 1
+    },
+    1,
+    {
+      "stats": {
+        "hp": 4
+      }
+    }
+  ]
+]

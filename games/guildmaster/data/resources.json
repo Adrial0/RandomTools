@@ -1,0 +1,283 @@
+{
+  "resources": {
+    "Iron": {
+      "name": "Iron",
+      "image": "images/resources/iron.png"
+    },
+    "Wood": {
+      "name": "Wood",
+      "image": "images/resources/wood.png"
+    },
+    "Cloth": {
+      "name": "Cloth",
+      "image": "images/resources/cloth.png"
+    },
+    "Crystal": {
+      "name": "Crystal",
+      "image": "images/resources/crystal.png"
+    },
+    "Essence": {
+      "name": "Essence",
+      "image": "images/resources/essence.png"
+    },
+    "Herbs": {
+      "name": "Herbs",
+      "image": "images/resources/herbs.png"
+    },
+    "Leather": {
+      "name": "Leather",
+      "image": "images/resources/leather.png"
+    },
+    "Bone": {
+      "name": "Bone",
+      "image": "images/resources/bone.png"
+    },
+    "Venom": {
+      "name": "Venom",
+      "image": "images/resources/venom.png"
+    },
+    "Emberstone": {
+      "name": "Emberstone",
+      "image": "images/resources/emberstone.png"
+    },
+    "FrostShard": {
+      "name": "Frost Shard",
+      "image": "images/resources/frost-shard.png"
+    },
+    "StormCore": {
+      "name": "Storm Core",
+      "image": "images/resources/storm-core.png"
+    },
+    "Silver": {
+      "name": "Silver",
+      "image": "images/resources/silver.png"
+    },
+    "Obsidian": {
+      "name": "Obsidian",
+      "image": "images/resources/obsidian.png"
+    },
+    "ArcaneDust": {
+      "name": "Arcane Dust",
+      "image": "images/resources/arcane-dust.png"
+    },
+    "HolyWater": {
+      "name": "Holy Water",
+      "image": "images/resources/holy-water.png"
+    },
+    "ShadowSilk": {
+      "name": "Shadow Silk",
+      "image": "images/resources/shadow-silk.png"
+    },
+    "GoblinInsignia": {
+      "name": "Goblin Insignia",
+      "image": ""
+    },
+    "WolfPelt": {
+      "name": "Wolf Pelt",
+      "image": ""
+    },
+    "BanditToken": {
+      "name": "Bandit Token",
+      "image": ""
+    },
+    "SlimeGel": {
+      "name": "Slime Gel",
+      "image": ""
+    },
+    "GraveDust": {
+      "name": "Grave Dust",
+      "image": ""
+    },
+    "SpiderSilk": {
+      "name": "Spider Silk",
+      "image": ""
+    },
+    "GhoulIchor": {
+      "name": "Ghoul Ichor",
+      "image": ""
+    },
+    "CultistRune": {
+      "name": "Cultist Rune",
+      "image": ""
+    },
+    "DrakeScale": {
+      "name": "Drake Scale",
+      "image": ""
+    },
+    "OgreHeart": {
+      "name": "Ogre Heart",
+      "image": ""
+    },
+    "WraithEssence": {
+      "name": "Wraith Essence",
+      "image": ""
+    },
+    "DemonHorn": {
+      "name": "Demon Horn",
+      "image": ""
+    },
+    "CrownBone": {
+      "name": "Crown Bone",
+      "image": ""
+    },
+    "BroodSilk": {
+      "name": "Broodmother Silk",
+      "image": ""
+    },
+    "ColossusIchor": {
+      "name": "Colossus Ichor",
+      "image": ""
+    },
+    "HighRune": {
+      "name": "High Cultist Rune",
+      "image": ""
+    },
+    "AncientDrakeScale": {
+      "name": "Ancient Drake Scale",
+      "image": ""
+    },
+    "WarOgreHeart": {
+      "name": "War Ogre Heart",
+      "image": ""
+    },
+    "WraithLordCore": {
+      "name": "Wraith Lord Core",
+      "image": ""
+    },
+    "AbyssalHorn": {
+      "name": "Abyssal Demon Horn",
+      "image": ""
+    },
+    "Stone": {
+      "name": "Stone",
+      "image": "images/resources/stone.png"
+    },
+    "CopperOre": {
+      "name": "Copper Ore",
+      "image": "images/resources/copper-ore.png"
+    },
+    "Fish": {
+      "name": "Fish",
+      "image": "images/resources/fish.png"
+    },
+    "GameMeat": {"name":"Game Meat","image":""},
+    "WolfMeat": {"name":"Wolf Meat","image":""},
+    "Pearlfin": {"name":"Pearlfin","image":""},
+    "RedMeat": {"name":"Red Meat","image":""},
+    "FrostVenison": {"name":"Frost Venison","image":""},
+    "StormEel": {"name":"Storm Eel","image":""},
+    "SkyKoi": {"name":"Sky Koi","image":""},
+    "DuskmothMeat": {"name":"Duskmoth Meat","image":""},
+    "Mithril": {
+      "name": "Mithril Ore",
+      "image": "images/resources/mithril.png"
+    },
+    "Hardwood": {
+      "name": "Hardwood",
+      "image": "images/resources/hardwood.png"
+    },
+    "Ironwood": {
+      "name": "Ironwood",
+      "image": ""
+    },
+    "SpiritBark": {
+      "name": "Spirit Bark",
+      "image": ""
+    },
+    "ManaBloom": {
+      "name": "Mana Bloom",
+      "image": ""
+    },
+    "Sunstone": {
+      "name": "Sunstone",
+      "image": ""
+    },
+    "Sandglass": {
+      "name": "Sandglass",
+      "image": ""
+    },
+    "CinderBloom": {
+      "name": "Cinder Bloom",
+      "image": ""
+    },
+    "Nightshade": {
+      "name": "Nightshade",
+      "image": ""
+    },
+    "BogIron": {
+      "name": "Bog Iron",
+      "image": ""
+    },
+    "VenomSap": {
+      "name": "Venom Sap",
+      "image": ""
+    },
+    "StarMetal": {
+      "name": "Star Metal",
+      "image": ""
+    },
+    "SkyCrystal": {
+      "name": "Sky Crystal",
+      "image": ""
+    },
+    "GlacialOre": {
+      "name": "Glacial Ore",
+      "image": ""
+    },
+    "Frostbloom": {
+      "name": "Frostbloom",
+      "image": ""
+    },
+    "WhitePelt": {
+      "name": "White Pelt",
+      "image": ""
+    },
+    "CinderOre": {
+      "name": "Cinder Ore",
+      "image": ""
+    },
+    "StormGlass": {
+      "name": "Storm Glass",
+      "image": ""
+    },
+    "MagmaCore": {
+      "name": "Magma Core",
+      "image": ""
+    },
+    "Voidstone": {
+      "name": "Voidstone",
+      "image": ""
+    },
+    "AetherCrystal": {
+      "name": "Aether Crystal",
+      "image": ""
+    },
+    "AstralThread": {
+      "name": "Astral Thread",
+      "image": ""
+    },
+    "DeepPearl": {
+      "name": "Deep Pearl",
+      "image": ""
+    }
+  },
+  "tierGroups": {
+    "1": ["Stone", "CopperOre", "Wood", "Cloth", "Herbs", "Leather", "Fish", "GameMeat", "GoblinInsignia", "WolfPelt", "SlimeGel"],
+    "2": ["Iron", "Hardwood", "Bone", "Venom", "WolfMeat", "BanditToken", "GraveDust", "CrownBone"],
+    "3": ["Silver", "Crystal", "Essence", "ManaBloom", "DeepPearl", "Pearlfin", "RedMeat", "ArcaneDust", "HolyWater", "CultistRune", "SpiderSilk", "BroodSilk", "Sunstone", "Sandglass"],
+    "4": ["Mithril", "Ironwood", "SpiritBark", "BogIron", "WhitePelt", "FrostVenison", "GhoulIchor", "ColossusIchor"],
+    "5": ["StarMetal", "GlacialOre", "Frostbloom", "Nightshade", "VenomSap", "SkyCrystal", "StormGlass", "ShadowSilk", "StormEel", "SkyKoi", "DuskmothMeat", "HighRune", "AncientDrakeScale", "DrakeScale", "OgreHeart", "WraithEssence", "FrostShard", "Emberstone", "StormCore"],
+    "6": ["CinderOre", "CinderBloom", "MagmaCore", "Obsidian", "DemonHorn", "WarOgreHeart", "WraithLordCore"],
+    "7": ["Voidstone", "AetherCrystal", "AstralThread", "AbyssalHorn"]
+  },
+  "marketBasic": [
+    "Wood",
+    "Iron",
+    "Cloth",
+    "Herbs",
+    "Stone",
+    "Fish",
+    "Leather",
+    "CopperOre"
+  ]
+}

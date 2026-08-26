@@ -1,0 +1,10 @@
+{
+  "package": {
+    "image": "images/ui/resource-bundle.png",
+    "fallback": ""
+  },
+  "rename": {
+    "image": "images/ui/rename.png",
+    "fallback": ""
+  }
+}
