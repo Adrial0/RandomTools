@@ -44,7 +44,7 @@
   },
   "Orc": {
     "passive": "Blood and Iron",
-    "desc": "+10% STR, +8% HP, +5% Attack Speed, -10% MDEF. +10% Skinning XP.",
+    "desc": "+10% STR, +8% HP, +5% Attack Speed, -10% MDEF. +10% Hunting XP.",
     "mult": {
       "str": 1.1,
       "hp": 1.08,
@@ -134,7 +134,7 @@
   },
   "Lizardfolk": {
     "passive": "Scaled Hide",
-    "desc": "+10% DEF, +15 Poison resistance, +8% HP, -10% Mana. +10% Skinning XP.",
+    "desc": "+10% DEF, +15 Poison resistance, +8% HP, -10% Mana. +10% Hunting XP.",
     "mult": {
       "def": 1.1,
       "hp": 1.08,
@@ -149,7 +149,7 @@
   },
   "Minotaur": {
     "passive": "Bull Strength",
-    "desc": "+12% STR, +10% HP, +5% Attack, -8% physical dodge. +10% Skinning XP.",
+    "desc": "+12% STR, +10% HP, +5% Attack, -8% physical dodge. +10% Hunting XP.",
     "mult": {
       "str": 1.12,
       "hp": 1.1
@@ -209,7 +209,7 @@
   },
   "Gnoll": {
     "passive": "Pack Hunter",
-    "desc": "+10% STR, +8% Attack, +8% HP, -10% MDEF. +10% Skinning XP.",
+    "desc": "+10% STR, +8% Attack, +8% HP, -10% MDEF. +10% Hunting XP.",
     "mult": {
       "str": 1.1,
       "hp": 1.08

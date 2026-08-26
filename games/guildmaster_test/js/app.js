@@ -21,7 +21,7 @@ $('combatModal').addEventListener('click',e=>{if(e.target===$('combatModal'))clo
 const NAV_GROUP_FOR_PAGE={
   hall:'guild',roster:'guild',questboard:'guild',upgrades:'guild',
   harvesting:'missions',quests:'missions',dungeons:'missions',raids:'missions',
-  inventory:'workshop',crafting:'workshop',runecrafting:'workshop',market:'workshop',arena:'arena'
+  inventory:'workshop',crafting:'workshop',runecrafting:'workshop',cooking:'workshop',market:'workshop',arena:'arena'
 };
 const navMemory={guild:'hall',missions:'harvesting',workshop:'inventory',arena:'arena'};
 let activeNavGroup='guild';
@@ -45,6 +45,7 @@ function activatePage(p){
   if(group){navMemory[group]=p;showNavGroup(group)}else showNavGroup(activeNavGroup);
   if(p==='upgrades')renderUp();
   if(p==='runecrafting')renderRunecrafting();
+  if(p==='cooking')renderCooking();
 }
 document.querySelectorAll('.nav[data-p]').forEach(b=>b.onclick=()=>activatePage(b.dataset.p));
 document.querySelectorAll('.navGroup').forEach(b=>b.onclick=()=>{
@@ -185,14 +186,14 @@ setInterval(()=>{
 },100);
 setInterval(()=>{
   if(!window.GAME_DATA_READY||!s)return;
-  completeCrafting();
+  completeCrafting();completeCooking();
   processHarvesting();
   renderActive();
   renderCombat();
   refreshUpgradeResourceUI();
   renderProceduralQuestTimer();
 },500);
-setInterval(()=>{if(!window.GAME_DATA_READY||!s)return;renderInv();renderMarket();renderCraftQueue();renderCraft();if($('runecrafting')?.classList.contains('on'))renderRunecrafting();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
+setInterval(()=>{if(!window.GAME_DATA_READY||!s)return;renderInv();renderMarket();renderCraftQueue();renderCraft();if($('runecrafting')?.classList.contains('on'))renderRunecrafting();if($('cooking')?.classList.contains('on'))renderCooking();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
 function renderResourcesLite(){
   $('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();
 }
@@ -228,6 +229,7 @@ async function loadExternalGameData(){
     harvesting:'data/areas/harvesting.json',
     items:'data/items.json',
     recipes:'data/recipes.json',
+    cooking:'data/cooking.json',
     subclasses:'data/subclasses.json',
     races:'data/races.json',
     resources:'data/resources.json',
@@ -293,6 +295,7 @@ async function loadExternalGameData(){
   Object.assign(ARMOR_PROFILES,itemData.armorProfiles||{});
   Object.assign(RUNE_SLOTS,itemData.runeSlots||{});
   Object.assign(RUNES,itemData.runes||{});
+  Object.assign(MEALS,d.cooking||{});
 
   recipes.splice(0,recipes.length,...(d.recipes||[]));
   AREAS.splice(0,AREAS.length,...(d.expeditions||[]).map(a=>({...a,icon:gameIcon('area',a.id,a.icon||'🗺️','gameAsset areaAsset')})));
@@ -380,6 +383,11 @@ function validateContentData(){
     used.add(x);
     if(!RESOURCE_NAMES[x])warnings.push('Rune requires undefined resource: '+id+' -> '+x);
   }));
+  Object.entries(MEALS).forEach(([id,meal])=>Object.keys(meal.cost||{}).forEach(x=>{
+    used.add(x);
+    if(!RESOURCE_NAMES[x])warnings.push('Meal requires undefined resource: '+id+' -> '+x);
+    if(resourceTier(x)>(meal.tier||1))warnings.push('Meal requires material above its tier: '+id+' -> '+x);
+  }));
   Object.values(UPGRADE_RESOURCE_PATHS).flat(Infinity).forEach(x=>used.add(x));
 
   const earliestSourceTier={};
@@ -395,7 +403,7 @@ function validateContentData(){
   Object.keys(RESOURCE_NAMES).forEach(r=>{
     if(!RESOURCE_TIERS[r])warnings.push('Resource has no tier: '+r);
     if((earliestSourceTier[r]||99)>resourceTier(r))warnings.push('Resource is sourced after its declared tier: '+r);
-    if(!used.has(r))warnings.push('Resource has no crafting, rune, or upgrade use: '+r);
+    if(!used.has(r))warnings.push('Resource has no crafting, cooking, rune, or upgrade use: '+r);
   });
 
   if(warnings.length)console.warn('Guildmaster content audit:',warnings);

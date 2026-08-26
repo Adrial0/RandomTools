@@ -207,6 +207,44 @@ function finishCraftJob(j){
 
 function completeCrafting(){if(!s.craftJobs.length)return false;let changed=false;const now=Date.now();while(s.craftJobs.length){const first=s.craftJobs[0];if(now<first.end)break;finishCraftJob(first);first.remaining=Math.max(0,(first.remaining||first.qty||1)-1);changed=true;if(first.remaining>0){first.start=first.end;first.end=first.start+first.duration;continue}s.craftJobs.shift()}if(changed){normalizeCraftQueue();save()}return changed}
 
+function cookingXpNeeded(level){return Math.round(45*Math.pow(Math.max(1,level),1.48))}
+function cookingDuration(meal){return Math.max(5000,Math.round((meal.duration||20)*1000*Math.pow(.88,s.up.craftSpeed||0)))}
+function normalizeCookingQueue(){
+  if(!s?.cookingJobs?.length)return;
+  let cursor=Date.now();
+  s.cookingJobs=s.cookingJobs.filter(j=>MEALS[j.meal]).map(j=>{j.qty=Math.max(1,Math.floor(j.qty||j.remaining||1));j.remaining=Math.max(1,Math.floor(j.remaining||j.qty||1));j.duration=j.duration||cookingDuration(MEALS[j.meal]);return j});
+  s.cookingJobs.forEach((j,index)=>{if(index===0){j.start=j.start||cursor;j.end=j.end||j.start+j.duration;cursor=Math.max(cursor,j.end)+(j.remaining-1)*j.duration}else{j.start=cursor;j.end=j.start+j.duration;cursor=j.end+(j.remaining-1)*j.duration}});
+}
+function maxCookQuantity(meal){const amounts=Object.entries(meal?.cost||{}).map(([k,v])=>v>0?Math.floor((s.materials[k]||0)/v):99);return Math.max(0,Math.min(99,amounts.length?Math.min(...amounts):99))}
+function cookMeal(mealId,qty=1){
+  const meal=MEALS[mealId];if(!meal)return;
+  if((s.cooking?.level||1)<meal.level)return notify('Requires Cooking level '+meal.level+'.');
+  qty=clamp(Math.floor(Number(qty)||1),1,99);const max=maxCookQuantity(meal);
+  if(max<qty)return notify(`You only have ingredients for ${max} serving${max===1?'':'s'}.`);
+  Object.entries(meal.cost).forEach(([k,v])=>s.materials[k]-=v*qty);
+  const duration=cookingDuration(meal),now=Date.now();let startAt=now;
+  if(s.cookingJobs.length){const tail=s.cookingJobs[s.cookingJobs.length-1];startAt=Math.max(now,(tail.end||now)+(Math.max(1,tail.remaining||tail.qty||1)-1)*(tail.duration||duration))}
+  s.cookingJobs.push({id:id(),meal:mealId,qty,remaining:qty,duration,start:startAt,end:startAt+duration});
+  log(`Queued ${meal.name} ×${qty}.`);save();renderCooking();
+}
+function cancelCookingJob(jid){
+  const index=s.cookingJobs.findIndex(j=>j.id===jid);if(index<0)return;
+  const j=s.cookingJobs[index],meal=MEALS[j.meal],remaining=Math.max(1,j.remaining||j.qty||1);
+  if(meal)Object.entries(meal.cost).forEach(([k,v])=>s.materials[k]=(s.materials[k]||0)+v*remaining);
+  s.cookingJobs.splice(index,1);normalizeCookingQueue();save();renderCooking();notify('Cooking cancelled and remaining ingredients refunded.','good');
+}
+function grantCookingXp(amount){
+  s.cooking=Object.assign({level:1,xp:0},s.cooking||{});s.cooking.xp+=Math.max(0,Math.round(amount||0));
+  let need=cookingXpNeeded(s.cooking.level);
+  while(s.cooking.xp>=need){s.cooking.xp-=need;s.cooking.level++;log('Cooking reached level '+s.cooking.level+'.');need=cookingXpNeeded(s.cooking.level)}
+}
+function finishCookingJob(j){const meal=MEALS[j.meal];if(!meal)return;s.meals[j.meal]=(s.meals[j.meal]||0)+1;grantCookingXp(meal.xp||1);log('Finished cooking '+meal.name+' · +'+(meal.xp||1)+' Cooking XP.')}
+function completeCooking(){
+  if(!s?.cookingJobs?.length)return false;let changed=false;const now=Date.now();
+  while(s.cookingJobs.length){const first=s.cookingJobs[0];if(now<first.end)break;finishCookingJob(first);first.remaining=Math.max(0,(first.remaining||first.qty||1)-1);changed=true;if(first.remaining>0){first.start=first.end;first.end=first.start+first.duration;continue}s.cookingJobs.shift()}
+  if(changed){normalizeCookingQueue();save()}return changed;
+}
+
 const UPGRADE_RESOURCE_PATHS={
 quarters:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
 party:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','Crystal','SpiritBark','StormGlass','AstralThread','AetherCrystal']],

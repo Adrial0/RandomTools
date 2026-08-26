@@ -160,6 +160,14 @@
       "name": "Fish",
       "image": "images/resources/fish.png"
     },
+    "GameMeat": {"name":"Game Meat","image":""},
+    "WolfMeat": {"name":"Wolf Meat","image":""},
+    "Pearlfin": {"name":"Pearlfin","image":""},
+    "RedMeat": {"name":"Red Meat","image":""},
+    "FrostVenison": {"name":"Frost Venison","image":""},
+    "StormEel": {"name":"Storm Eel","image":""},
+    "SkyKoi": {"name":"Sky Koi","image":""},
+    "DuskmothMeat": {"name":"Duskmoth Meat","image":""},
     "Mithril": {
       "name": "Mithril Ore",
       "image": "images/resources/mithril.png"
@@ -254,11 +262,11 @@
     }
   },
   "tierGroups": {
-    "1": ["Stone", "CopperOre", "Wood", "Cloth", "Herbs", "Leather", "Fish", "GoblinInsignia", "WolfPelt", "SlimeGel"],
-    "2": ["Iron", "Hardwood", "Bone", "Venom", "BanditToken", "GraveDust", "CrownBone"],
-    "3": ["Silver", "Crystal", "Essence", "ManaBloom", "DeepPearl", "ArcaneDust", "HolyWater", "CultistRune", "SpiderSilk", "BroodSilk", "Sunstone", "Sandglass"],
-    "4": ["Mithril", "Ironwood", "SpiritBark", "BogIron", "WhitePelt", "GhoulIchor", "ColossusIchor"],
-    "5": ["StarMetal", "GlacialOre", "Frostbloom", "Nightshade", "VenomSap", "SkyCrystal", "StormGlass", "ShadowSilk", "HighRune", "AncientDrakeScale", "DrakeScale", "OgreHeart", "WraithEssence", "FrostShard", "Emberstone", "StormCore"],
+    "1": ["Stone", "CopperOre", "Wood", "Cloth", "Herbs", "Leather", "Fish", "GameMeat", "GoblinInsignia", "WolfPelt", "SlimeGel"],
+    "2": ["Iron", "Hardwood", "Bone", "Venom", "WolfMeat", "BanditToken", "GraveDust", "CrownBone"],
+    "3": ["Silver", "Crystal", "Essence", "ManaBloom", "DeepPearl", "Pearlfin", "RedMeat", "ArcaneDust", "HolyWater", "CultistRune", "SpiderSilk", "BroodSilk", "Sunstone", "Sandglass"],
+    "4": ["Mithril", "Ironwood", "SpiritBark", "BogIron", "WhitePelt", "FrostVenison", "GhoulIchor", "ColossusIchor"],
+    "5": ["StarMetal", "GlacialOre", "Frostbloom", "Nightshade", "VenomSap", "SkyCrystal", "StormGlass", "ShadowSilk", "StormEel", "SkyKoi", "DuskmothMeat", "HighRune", "AncientDrakeScale", "DrakeScale", "OgreHeart", "WraithEssence", "FrostShard", "Emberstone", "StormCore"],
     "6": ["CinderOre", "CinderBloom", "MagmaCore", "Obsidian", "DemonHorn", "WarOgreHeart", "WraithLordCore"],
     "7": ["Voidstone", "AetherCrystal", "AstralThread", "AbyssalHorn"]
   },

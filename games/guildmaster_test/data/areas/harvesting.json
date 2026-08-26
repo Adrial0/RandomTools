@@ -447,11 +447,15 @@
     "xp": 3,
     "resources": [
       [
+        "Pearlfin",
+        85
+      ],
+      [
         "DeepPearl",
-        100
+        15
       ]
     ],
-    "desc": "Deep pools where valuable pearls form beneath the riverbed.",
+    "desc": "Catch luminous pearlfin, with an occasional deep pearl brought up in the nets.",
     "image": "",
     "background": ""
   },
@@ -466,11 +470,15 @@
     "xp": 5,
     "resources": [
       [
+        "StormEel",
+        85
+      ],
+      [
         "StormGlass",
-        100
+        15
       ]
     ],
-    "desc": "Violent coastal waters wash magically fused stormglass ashore.",
+    "desc": "Fish the violent coast for storm eels while searching the shallows for rare stormglass.",
     "image": "",
     "background": ""
   },
@@ -485,11 +493,15 @@
     "xp": 6,
     "resources": [
       [
+        "SkyKoi",
+        85
+      ],
+      [
         "SkyCrystal",
-        100
+        15
       ]
     ],
-    "desc": "A high mountain lake where strange blue crystals form underwater.",
+    "desc": "Catch sky koi in the high mountain lake, where rare blue crystals form beneath the water.",
     "image": "",
     "background": ""
   },
@@ -499,16 +511,20 @@
     "icon": "🦌",
     "skill": "hunting",
     "req": 1,
-    "kind": "Skinning",
+    "kind": "Hunting",
     "cycle": 36,
     "xp": 1,
     "resources": [
       [
         "Leather",
-        100
+        65
+      ],
+      [
+        "GameMeat",
+        35
       ]
     ],
-    "desc": "Common game provides reliable leather.",
+    "desc": "Common game provides leather and fresh meat for the guild kitchens.",
     "image": "images/harvesting/hunting.png",
     "background": "images/backgrounds/background20.png"
   },
@@ -518,13 +534,17 @@
     "icon": "🐺",
     "skill": "hunting",
     "req": 6,
-    "kind": "Skinning",
+    "kind": "Hunting",
     "cycle": 46,
     "xp": 3,
     "resources": [
       [
         "WolfPelt",
-        100
+        65
+      ],
+      [
+        "WolfMeat",
+        35
       ]
     ],
     "desc": "Rocky hunting grounds populated by thick-furred wolves.",
@@ -537,13 +557,17 @@
     "icon": "🦴",
     "skill": "hunting",
     "req": 11,
-    "kind": "Skinning",
+    "kind": "Hunting",
     "cycle": 56,
     "xp": 4,
     "resources": [
       [
         "Bone",
-        100
+        65
+      ],
+      [
+        "RedMeat",
+        35
       ]
     ],
     "desc": "Large beasts leave strong bones useful for specialized crafting.",
@@ -556,13 +580,17 @@
     "icon": "🐻‍❄️",
     "skill": "hunting",
     "req": 18,
-    "kind": "Skinning",
+    "kind": "Hunting",
     "cycle": 72,
     "xp": 5,
     "resources": [
       [
         "WhitePelt",
-        100
+        65
+      ],
+      [
+        "FrostVenison",
+        35
       ]
     ],
     "desc": "Cold-weather beasts yield rare insulating white pelts.",
@@ -575,13 +603,17 @@
     "icon": "🕸️",
     "skill": "hunting",
     "req": 26,
-    "kind": "Skinning",
+    "kind": "Hunting",
     "cycle": 88,
     "xp": 7,
     "resources": [
       [
         "ShadowSilk",
-        100
+        65
+      ],
+      [
+        "DuskmothMeat",
+        35
       ]
     ],
     "desc": "Nocturnal creatures produce fine shadow-dark fibers.",

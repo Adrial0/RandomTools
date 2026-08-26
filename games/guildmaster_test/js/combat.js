@@ -168,6 +168,26 @@ function finishGlobalRound(m,b){
   c.phase='heroes';c.heroTurn=0;c.enemyTurn=0;c.round=b.round;
   processTimedRegen(m);
 }
+function missionProvisionEffect(m){return MEALS[m?.provision]?.effect||{}}
+function applyMissionProvisionToHero(m,hero){
+  const effect=missionProvisionEffect(m),oldMax=Math.max(1,hero.maxHp||1),ratio=clamp((hero.hp||0)/oldMax,0,1);
+  hero.maxHp=Math.round(oldMax*(1+(effect.maxHp||0)));hero.hp=Math.round(hero.maxHp*ratio);
+  hero.attackSpeed+=(effect.attackSpeed||0);
+  hero.def=Math.round(hero.def*(1+(effect.defense||0)));
+  hero.mdef=Math.round(hero.mdef*(1+(effect.mdef||0)));
+  hero.block+=(effect.block||0);
+  hero.damageMult*=1+(effect.damage||0);
+  hero.healMult*=1+(effect.healing||0);
+  Object.entries(effect.resist||{}).forEach(([key,value])=>{if(key in hero)hero[key]+=value});
+  return hero;
+}
+function applyProvisionRecovery(m){
+  const effect=missionProvisionEffect(m);if(!effect.betweenHp&&!effect.betweenMana)return;
+  Object.values(m.partyState||{}).forEach(ps=>{
+    if(ps.hp>0&&effect.betweenHp)ps.hp=Math.min(ps.maxHp,ps.hp+Math.round(ps.maxHp*effect.betweenHp));
+    if(ps.hp>0&&effect.betweenMana)ps.mana=Math.min(ps.maxMana,ps.mana+Math.round(ps.maxMana*effect.betweenMana));
+  });
+}
 function makeBattle(m){
   ensurePartyState(m);
   const count=m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3);currentMissionForEnemy=m;
@@ -210,6 +230,7 @@ function makeBattle(m){
     x.partyDamageMult=1+partyDamage;
     x.def=Math.round(x.def*(1+partyDefense));
     x.mdef=Math.round(x.mdef*(1+partyDefense+partyMdef));
+    applyMissionProvisionToHero(m,x);
   });
   assignPartyFormation(heroes);
   const cycle=ensureCombatCycle(m);
@@ -279,16 +300,18 @@ function harvestLocationOccupied(areaId){
   return s.harvestJobs.some(j=>j.areaId===areaId&&!j.stopped);
 }
 
-function send(type,qid,ids){
+function send(type,qid,ids,provision=null){
   let q=arr(type).find(x=>x.id===qid);
   if(!q||!ids.length)return notify('Choose at least one guild member.');
   if(missionLocationOccupied(type,q))return notify('A party is already deployed to '+q.name+'.');
   let party=ids.slice(0,partySizeFor(type)).map(i=>s.members.find(x=>x.id===i)).filter(Boolean);
   if(party.some(h=>h.busy))return notify('One of those guild members is already on an expedition.');
+  if(provision&&(!MEALS[provision]||(s.meals[provision]||0)<1))return notify('That meal is no longer available.');
+  if(provision)s.meals[provision]--;
   party.forEach(h=>h.busy=true);
   const now=Date.now();
   const mission={
-    ...q,id:id(),party:party.map(h=>h.id),start:now,lastSim:now,
+    ...q,id:id(),party:party.map(h=>h.id),provision:provision||null,start:now,lastSim:now,
     kills:0,fights:0,finiteStage:0,normalEncountersCompleted:0,goldEarned:0,repEarned:0,battle:null,
     stash:emptyStash(),partyState:{},combatCycle:{phase:'heroes',heroTurn:0,enemyTurn:0,round:1},nextRegenAt:now+5000,defeated:false,completed:false,bossDefeated:false,battleNumber:0,lastRewardedBattleId:null
   };
@@ -1024,6 +1047,7 @@ function finishCurrentFight(m){
   if(m.type==='arena'){finishArenaClientBattle(m,true);return}
 
   syncPartyHp(m);
+  applyProvisionRecovery(m);
 
   if(b.kind==='boss'||b.boss){
     if(!m.completed)bossReward(m);
@@ -1064,7 +1088,7 @@ function repairFiniteMissionState(m){
     if(!hero.cooldowns||typeof hero.cooldowns!=='object')hero.cooldowns={};
     if(!hero.buffs||typeof hero.buffs!=='object')hero.buffs={};
     const original=s.members.find(x=>x.id===hero.id),z=original?hs(original):null,wep=original?s.inventory.find(x=>x.id===original.equip?.Weapon):null;
-    if(z)hero.attackSpeed=z.attackSpeed;
+    if(z)hero.attackSpeed=z.attackSpeed+(missionProvisionEffect(m).attackSpeed||0);
     if(!hero.baseAttackTime)hero.baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||hero.weaponType||'');
     if(!Number.isFinite(hero.nextAttackAt))scheduleNextAttack(hero,false,Date.now());
   });
@@ -1252,7 +1276,9 @@ function offlineCatchup(hiddenMs){
 
     const party=s.members.filter(h=>m.party.includes(h.id));
     const composition=offlineCompositionFactor(m,party);
-    const ratio=clamp(power(m.party)*composition/Math.max(1,m.target),.3,2.2);
+    const mealEffect=missionProvisionEffect(m);
+    const provisionPower=1+(mealEffect.damage||0)+(mealEffect.attackSpeed||0)*.5+(mealEffect.defense||0)*.4+(mealEffect.mdef||0)*.2+(mealEffect.maxHp||0)*.5;
+    const ratio=clamp(power(m.party)*composition*provisionPower/Math.max(1,m.target),.3,2.2);
     const secondsPerFight=clamp(180/ratio,m.type==='raid'?130:90,m.type==='raid'?300:250);
     let possible=Math.floor(hiddenMs/1000/secondsPerFight);
     possible=Math.min(possible,100);
@@ -1262,7 +1288,7 @@ function offlineCatchup(hiddenMs){
     }
     if(possible<=0)return;
 
-    const healer=party.some(h=>h.class==='Priest')?.35:0;
+    const healer=(party.some(h=>h.class==='Priest')?.35:0)+(mealEffect.healing||0)*.25;
     const sustain=party.reduce((sum,h)=>{const z=hs(h);return sum+(z.regen||0)*.012+(z.lifesteal||0)*.004},0);
 
     let completed=0;
@@ -1282,6 +1308,7 @@ function offlineCatchup(hiddenMs){
         const ps=m.partyState[id];
         if(ps)ps.hp=Math.max(1,Math.round(ps.maxHp*hpRatio));
       });
+      applyProvisionRecovery(m);
 
       grantFightRewards(m,offlineEnemySnapshot(m));
       if(m.type==='dungeon'||m.type==='raid'){

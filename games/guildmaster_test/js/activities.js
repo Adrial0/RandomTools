@@ -7,7 +7,7 @@ function setAreaMode(mode,btn){
     document.querySelector('[data-p="quests"]')?.click();
   }
 }
-const SKILL_NAMES={woodcutting:'Woodcutting',mining:'Mining',fishing:'Fishing',herbalism:'Herbalism / Harvesting',hunting:'Hunting / Skinning'};
+const SKILL_NAMES={woodcutting:'Woodcutting',mining:'Mining',fishing:'Fishing',herbalism:'Herbalism',hunting:'Hunting'};
 const QUEST_BOARD_REFRESH_MS=30*60*1000;
 const QUEST_DIFFICULTIES=[
   {id:'easy',label:'Routine',mult:.75,reward:.75},
@@ -380,6 +380,7 @@ function openPartyPicker(type,qid){
  const q=arr(type).find(x=>x.id===qid);if(!q)return;
  if(missionLocationOccupied(type,q))return notify('A party is already deployed to '+q.name+'.');
  const available=s.members.filter(h=>!h.busy);
+ const availableMeals=Object.entries(s.meals||{}).filter(([id,count])=>count>0&&MEALS[id]);
  if(!available.length)return notify('No available guild members.');
  showModal('Choose Expedition Party',`<div class="card">
    <div class="name">${q.name}</div>
@@ -389,11 +390,13 @@ function openPartyPicker(type,qid){
      <button class="btn" onclick="saveCurrentPartyPreset()">Save Current Party</button>
    </div>
    <div style="margin-top:10px"><div class="muted" style="margin-bottom:6px">Saved parties available now</div><div id="partyPresetList" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+   <div class="card" style="margin-top:10px"><div class="name">Mission Provision</div><div class="muted">Optional · one serving is consumed when the mission begins and supports the whole party until it ends.</div><select id="missionProvisionSelect" style="width:100%;margin-top:8px" onchange="updateProvisionDescription(this.value)"><option value="">No provision</option>${availableMeals.map(([id,count])=>`<option value="${id}">${MEALS[id].icon||'🍲'} ${MEALS[id].name} ×${count}</option>`).join('')}</select><div class="muted" id="missionProvisionDescription" style="margin-top:7px">No meal selected.</div></div>
    <div class="party" id="expeditionPartyPicker" style="margin-top:10px">${available.map(h=>{const z=hs(h),p=h.class==='Mage'||h.class==='Priest'?'INT '+z.int:h.class==='Ranger'||h.class==='Rogue'?'DEX '+z.dex:'STR '+z.str;return `<button class="partyMember" data-h="${h.id}" onclick="toggleExpeditionMember(this)"><span class="miniClass">${classIcon(h)}</span><span>${h.name} · ${displayClass(h)} · ${p} · ${z.power} power</span></button>`}).join('')}</div>
    <div class="modalActionRow"><button class="btn gold" onclick="confirmExpeditionParty('${type}',${qid})">Send Party</button></div>
  </div>`);
  updatePartyPresetButtons();
 }
+function updateProvisionDescription(id){const box=$('missionProvisionDescription'),meal=MEALS[id];if(box)box.textContent=meal?meal.desc:'No meal selected.'}
 function toggleExpeditionMember(btn){
  const selected=document.querySelectorAll('#expeditionPartyPicker .partyMember.on');
  if(!btn.classList.contains('on')&&selected.length>=partySizeFor(currentPartyPickerType))return notify('Maximum party size is '+partySizeFor(currentPartyPickerType)+'.');
@@ -404,5 +407,6 @@ function confirmExpeditionParty(type,qid){
  if(!ids.length)return notify('Choose at least one guild member.');
  const unavailable=ids.some(id=>{const m=s.members.find(x=>x.id===id);return !m||m.busy});
  if(unavailable)return notify('A selected member is no longer available.');
- closeModal();send(type,qid,ids);
+ const provision=$('missionProvisionSelect')?.value||null;
+ closeModal();send(type,qid,ids,provision);
 }
