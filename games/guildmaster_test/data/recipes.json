@@ -1422,5 +1422,12 @@
   ["Endstone Aegis","Armor","Plate",{"Eternium":20,"Endstone":9,"Godthread":5},10,{"armorClass":"Heavy","block":5,"stats":{"hp":120,"def":20,"mdef":12}}],
   ["Godthread Regalia","Armor","Robes",{"Godthread":14,"Worldroot":7,"StarlightCore":6},10,{"armorClass":"Light","stats":{"int":15,"mdef":18,"manaRegen":4},"healBonus":0.15}],
   ["Starlight Crown","Amulet","Pendant",{"StarlightCore":9,"Eternium":5,"Godthread":6},10,{"stats":{"hp":70,"int":10,"holy":30}}],
-  ["Ring of the Last Horizon","Ring","Signet",{"Endstone":8,"StarlightCore":7,"Eternium":6},10,{"stats":{"str":7,"dex":7,"int":7,"dark":30}}]
+  ["Ring of the Last Horizon","Ring","Signet",{"Endstone":8,"StarlightCore":7,"Eternium":6},10,{"stats":{"str":7,"dex":7,"int":7,"dark":30}}],
+  ["Moonbrook Charm","Amulet","Charm",{"Moonpetal":4,"CreekScale":3,"CopperOre":2},1,{"stats":{"mdef":2,"ice":8,"dark":8}}],
+  ["Redstone Mantle","Armor","Scale Vest",{"Stormhide":6,"HarpyFeather":4,"Iron":5},2,{"armorClass":"Medium","stats":{"hp":12,"fire":10,"ice":10}}],
+  ["Tideglass Scepter","Weapon","Arcane Staff",{"Tideglass":7,"ShrineRelic":4,"Silver":6},3,{"stats":{"int":4,"ice":14,"lightning":10}}],
+  ["Elderwood Talisman","Amulet","Pendant",{"RunebarkRelic":6,"Sporecap":5,"Mithril":3},4,{"stats":{"hp":24,"holy":14,"fire":10},"healBonus":0.04}],
+  ["Shattered Coast Cutlass","Weapon","Longsword",{"Shardglass":8,"CorsairSeal":5,"CinderOre":7},6,{"stats":{"dex":7,"ice":18,"lightning":15},"critBonus":0.04}],
+  ["Astral Phaseweave","Armor","Robes",{"PhaseSilk":9,"CometDust":6,"Voidstone":5},7,{"armorClass":"Light","stats":{"int":8,"holy":18,"lightning":18},"magicalDodgeBonus":0.04}],
+  ["Regent's Halo","Amulet","Pendant",{"CrownShard":9,"SeraphFeather":7,"Eternium":5},10,{"stats":{"int":12,"holy":35,"ice":25},"healBonus":0.12}]
 ]
