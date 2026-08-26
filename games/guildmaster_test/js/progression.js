@@ -347,7 +347,6 @@ function statText(it){
   if(it.itemThreatBonus)parts.push(`+${it.itemThreatBonus.toFixed(2)} Threat`);
   if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(it.itemPhysicalDodgeBonus*100)}% physical dodge`);
   if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(it.itemMagicalDodgeBonus*100)}% magic dodge`);
-  if(it.specialLabel)parts.push(it.specialLabel);
   if(it.mythicEffect)parts.push(`Mythic: ${it.mythicEffect}`);
   if(it.slot==='Armor')parts.push(`${armorClassForItem(it)} armor`);
   if(it.slot==='Weapon'){

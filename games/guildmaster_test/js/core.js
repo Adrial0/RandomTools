@@ -168,7 +168,6 @@ function applyRecipeModifiers(it,meta={}){
   if(meta.threatBonus)it.itemThreatBonus=(it.itemThreatBonus||0)+meta.threatBonus;
   if(meta.physicalDodgeBonus)it.itemPhysicalDodgeBonus=(it.itemPhysicalDodgeBonus||0)+meta.physicalDodgeBonus;
   if(meta.magicalDodgeBonus)it.itemMagicalDodgeBonus=(it.itemMagicalDodgeBonus||0)+meta.magicalDodgeBonus;
-  if(meta.label)it.specialLabel=meta.label;
   const statsPower=Object.entries(meta.stats||{}).reduce((p,[k,v])=>p+(k==='hp'?v*1.5:v*4),0);
   it.power=(it.power||0)+statsPower+(meta.block||0)*10+(meta.damageBonus||0)*100+(meta.healBonus||0)*80+(meta.critBonus||0)*100+(meta.threatBonus||0)*18+(meta.physicalDodgeBonus||0)*100+(meta.magicalDodgeBonus||0)*100;
   return it;

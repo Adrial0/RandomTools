@@ -753,7 +753,7 @@ body.windowOpen .side{overflow:hidden!important}
 }
 .recipeLineHeader{
   display:grid;
-  grid-template-columns:44px minmax(180px,1fr) auto auto;
+  grid-template-columns:44px minmax(180px,1fr) auto;
   align-items:center;
   gap:10px;
   min-height:54px;
@@ -1509,6 +1509,30 @@ body.windowOpen .side{overflow:hidden!important}
 .runeTierGroup>.recipes{grid-template-columns:repeat(3,minmax(0,1fr))!important;margin-top:9px}
 @media(max-width:1050px){.runeTierGroup>.recipes{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:650px){.runeTierGroup>.recipes{grid-template-columns:1fr!important}.workshopTabs{width:100%}.workshopTabs .btn{flex:1}}
+
+/* Recipe information hierarchy: item facts and crafting requirements are separate. */
+.recipeDetailLayout{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(285px,.65fr)!important;gap:12px!important;padding:11px!important;min-height:0!important}
+.recipeItemInformation{display:grid;grid-template-columns:minmax(190px,.7fr) minmax(260px,1.3fr);gap:10px;min-width:0}
+.recipeInfoSection,.recipeCraftingBox{border:1px solid #4d3b27;background:#18130e;padding:9px;min-width:0}
+.recipeInfoSection h4,.recipeCraftingBox h4{margin:0 0 8px;color:#d7b879;font-family:var(--ui-pixel);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.recipeProfileList,.recipeStatList{display:grid;gap:5px}
+.recipeProfileList span{color:#bba886;font-family:var(--ui-pixel);font-size:10px;line-height:1.35}
+.recipeStatList{grid-template-columns:repeat(2,minmax(0,1fr))}
+.recipeStatList span{padding:5px 6px;border-left:2px solid #73552f;background:#211a12;color:#d8c397;font-family:var(--ui-pixel);font-size:9px}
+.recipeCraftingBox{display:flex;flex-direction:column}
+.recipeCraftMeta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.recipeCraftMeta span{padding:5px;background:#211a12;border:1px solid #483723;color:#aa9875;text-align:center;font-family:var(--ui-pixel);font-size:8px}
+.recipeCraftMeta .enough{color:#a7b982;border-color:#536542}.recipeCraftMeta .missing{color:#d68b79;border-color:#73483d}
+.recipeCostLabel{margin:10px 0 5px;color:#817359;font-family:var(--ui-pixel);font-size:8px;text-transform:uppercase;letter-spacing:.07em}
+.recipeDetailLayout .recipeDetailMaterials{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px!important;align-items:stretch!important}
+.recipeDetailLayout .recipeDetailMaterials>span{position:relative;padding:6px 7px;border:1px solid #4b3926;background:#211a12;color:#aa9875;font-family:var(--ui-pixel);font-size:9px}
+.recipeDetailLayout .recipeDetailMaterials>span.enough{color:#a7b982;border-color:#536542}.recipeDetailLayout .recipeDetailMaterials>span.missing{color:#d68b79;border-color:#73483d}
+.recipeDetailLayout .recipeDetailMaterials small{float:right;color:#887655;font-size:7px}.recipeDetailLayout .recipeDetailMaterials em{display:block;margin-top:3px;color:#a98a62;font-size:7px;font-style:normal}
+.recipeDetailLayout .recipeLineAction{display:block!important;min-width:0!important;margin-top:auto;padding-top:10px}
+.recipeDetailLayout .recipeQuantityControl{width:100%;justify-content:flex-end}
+.recipeDetailLayout .recipeQuantityControl .btn{flex:1;max-width:150px}
+@media(max-width:1050px){.recipeDetailLayout{grid-template-columns:1fr!important}.recipeItemInformation{grid-template-columns:1fr 1.4fr}}
+@media(max-width:650px){.recipeItemInformation{grid-template-columns:1fr}.recipeStatList,.recipeDetailLayout .recipeDetailMaterials{grid-template-columns:1fr}.recipeCraftMeta{grid-template-columns:1fr}}
 .sectionKicker{margin-bottom:3px}
 .dashboardCount{display:inline-grid;place-items:center;min-width:20px;height:18px;margin-left:4px;padding:0 5px;background:#1d1710;border:1px solid #5d482e;color:#cda65d;font-family:var(--ui-pixel);font-size:9px;vertical-align:2px}
 .guildActivityDashboard{margin-bottom:10px}

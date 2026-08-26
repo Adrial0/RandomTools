@@ -262,22 +262,13 @@ function openInventoryEquip(iid){
   }).join('')}</div>`);
 }
 function renderInv(){
-  $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();
+  $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();if($('runeCraftMats'))$('runeCraftMats').innerHTML=matHtml();
   const existingIds=new Set(s.inventory.map(it=>it.id));[...selectedInventoryItems].forEach(id=>{if(!existingIds.has(id))selectedInventoryItems.delete(id)});
   const visible=sortedInventoryItems();
   $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
   const sel=$('inventorySortSelect'),dir=$('inventorySortDir');if(sel)sel.value=inventorySortKey;if(dir)dir.textContent=inventorySortDirection==='desc'?'Highest first':'Lowest first';updateInventoryControlUI();
 }
 
-let workshopMode='crafting';
-function setWorkshopMode(mode,btn){
-  workshopMode=mode;
-  document.querySelectorAll('.workshopMode').forEach(x=>x.classList.remove('on'));
-  if(btn)btn.classList.add('on');
-  if($('craftingModeSection'))$('craftingModeSection').style.display=mode==='crafting'?'':'none';
-  if($('runecraftingModeSection'))$('runecraftingModeSection').style.display=mode==='runecrafting'?'':'none';
-  if(mode==='runecrafting')renderRunecrafting();
-}
 function craftRune(id){
   const r=RUNES[id];if(!r)return;
   if(!Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v))return notify('Not enough magical resources.');
@@ -327,48 +318,50 @@ function renderCraftQueue(){normalizeCraftQueue();$('craftQueue').innerHTML=s.cr
 let recipeFilter='all';
 function recipePreview(r){
   const [displayName,slot,specificName,cost,tier,meta={}]=r;
-  const parts=[];
+  const profile=[],stats=[];
 
   if(slot==='Weapon'){
     const w=WEAPONS[specificName];
     if(w){
-      parts.push(`Attack ${w.base+tier*2}`);
-      parts.push(`Attack Speed ${weaponAttackTime(specificName).toFixed(2)}s`);
-      parts.push(`${weaponScalingLabel(w)} scaling`);
-      parts.push(`${elementIcon[w.type]||''} ${w.type} damage`);
+      profile.push(`${weaponTypeFor(specificName)} weapon`);
+      profile.push(`Scales with ${weaponScalingLabel(w)}`);
+      profile.push(`${elementIcon[w.type]||''} ${w.type} damage`);
+      stats.push(`Attack ${w.base+tier*2}`);
+      stats.push(`Attack Speed ${weaponAttackTime(specificName).toFixed(2)}s`);
       const statBudget=Math.max(1,Math.round(2+tier*.7));
       if(w.scale2){
-        parts.push(`+${Math.ceil(statBudget/2)} ${statName(w.scale)}`);
-        parts.push(`+${Math.floor(statBudget/2)} ${statName(w.scale2)}`);
-      }else parts.push(`+${statBudget} ${statName(w.scale)}`);
-      weaponSpecials(w).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
+        stats.push(`+${Math.ceil(statBudget/2)} ${statName(w.scale)}`);
+        stats.push(`+${Math.floor(statBudget/2)} ${statName(w.scale2)}`);
+      }else stats.push(`+${statBudget} ${statName(w.scale)}`);
+      weaponSpecials(w).forEach(([k,v])=>stats.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
     }
   }else if(slot==='Armor'){
     const p=armorProfile(specificName);
-    parts.push(`${p.armorClass} armor`);
-    parts.push(`+${p.base+tier*2} ${statName(p.stat)}`);
+    profile.push(`${p.armorClass} armor`);
+    stats.push(`+${p.base+tier*2} ${statName(p.stat)}`);
     const totalBlock=(p.block||0)+(meta.block||0);
-    if(totalBlock)parts.push(`+${totalBlock} Block`);
-    if(specificName.includes('Frostguard'))parts.push(`+${12+tier*2} Ice Res`);
-    if(specificName.includes('Flameward'))parts.push(`+${12+tier*2} Fire Res`);
+    if(totalBlock)stats.push(`+${totalBlock} Block`);
+    if(specificName.includes('Frostguard'))stats.push(`+${12+tier*2} Ice Res`);
+    if(specificName.includes('Flameward'))stats.push(`+${12+tier*2} Fire Res`);
   }else if(slot==='Ring'){
+    profile.push('Ring');
     let stat=specificName.includes('Guardian')?'def':specificName.includes('Crystal')?'int':specificName.includes('Runed')?'mdef':'str';
-    parts.push(`+${Math.round(3+tier*1.6)} ${statName(stat)}`);
+    stats.push(`+${Math.round(3+tier*1.6)} ${statName(stat)}`);
   }else if(slot==='Amulet'){
+    profile.push('Amulet');
     let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
     const value=stat==='hp'?Math.round(12+tier*4):Math.round(3+tier*1.8);
-    parts.push(`+${value} ${statName(stat)}`);
+    stats.push(`+${value} ${statName(stat)}`);
   }
 
-  Object.entries(meta.stats||{}).forEach(([k,v])=>parts.push(`+${v}${['fire','ice','poison','lightning','holy','dark','lifesteal'].includes(k)?'%':''} ${statName(k)}`));
-  if(meta.damageBonus)parts.push(`+${Math.round(meta.damageBonus*100)}% damage`);
-  if(meta.healBonus)parts.push(`+${Math.round(meta.healBonus*100)}% healing`);
-  if(meta.critBonus)parts.push(`+${Math.round(meta.critBonus*100)}% crit`);
-  if(meta.threatBonus)parts.push(`+${meta.threatBonus} Threat`);
-  if(meta.physicalDodgeBonus)parts.push(`+${Math.round(meta.physicalDodgeBonus*100)}% physical dodge`);
-  if(meta.magicalDodgeBonus)parts.push(`+${Math.round(meta.magicalDodgeBonus*100)}% magic dodge`);
-  if(meta.label)parts.push(meta.label);
-  return parts;
+  Object.entries(meta.stats||{}).forEach(([k,v])=>stats.push(`+${v}${['fire','ice','poison','lightning','holy','dark','lifesteal'].includes(k)?'%':''} ${statName(k)}`));
+  if(meta.damageBonus)stats.push(`+${Math.round(meta.damageBonus*100)}% damage`);
+  if(meta.healBonus)stats.push(`+${Math.round(meta.healBonus*100)}% healing`);
+  if(meta.critBonus)stats.push(`+${Math.round(meta.critBonus*100)}% crit`);
+  if(meta.threatBonus)stats.push(`+${meta.threatBonus} Threat`);
+  if(meta.physicalDodgeBonus)stats.push(`+${Math.round(meta.physicalDodgeBonus*100)}% physical dodge`);
+  if(meta.magicalDodgeBonus)stats.push(`+${Math.round(meta.magicalDodgeBonus*100)}% magic dodge`);
+  return{profile:[...new Set(profile)],stats:[...new Set(stats)]};
 }
 
 let recipeCraftableOnly=false;
@@ -455,23 +448,30 @@ function renderRecipeLine(r,i){
         <div class="recipeLineName">${r[0]}</div>
         <div class="recipeLineType">Tier ${tierLabel(r[4])} · ${recipeTypeLabel(r)}</div>
       </div>
-      <div class="recipeLineStatus">${!smithOk?'Smithing '+smithReq:mat?time+'s':'Missing materials'}</div>
       <div class="recipeChevron">${open?'▾':'▸'}</div>
     </div>
-    ${open?`<div class="recipeLineDetails">
-      <div class="recipeDetailStats">
-        <span class="chip recipeSmithReq ${smithOk?'enough':'missing'}">Blacksmithing ${smithReq}</span><span class="chip">+${smithXp} Smithing XP</span>
-        ${preview.map(x=>`<span class="chip">${x}</span>`).join('')}
+    ${open?`<div class="recipeLineDetails recipeDetailLayout">
+      <div class="recipeItemInformation">
+        <section class="recipeInfoSection">
+          <h4>Item Profile</h4>
+          <div class="recipeProfileList">${preview.profile.map(x=>`<span>${x}</span>`).join('')}</div>
+        </section>
+        <section class="recipeInfoSection">
+          <h4>Item Stats</h4>
+          <div class="recipeStatList">${preview.stats.map(x=>`<span>${x}</span>`).join('')}</div>
+        </section>
       </div>
-      <div class="recipeDetailMaterials">
-        ${Object.entries(r[3]).map(([k,v])=>{
-          const have=s.materials[k]||0,ok=have>=v;
-          return `<span class="chip ${ok?'enough':'missing'}">T${tierLabel(resourceTier(k))} · ${have}/${v} ${RESOURCE_NAMES[k]||k}${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?' · '+BOSS_RESOURCE_SOURCE[k]:''}</span>`;
-        }).join('')}
-      </div>
-      <div class="recipeLineAction">
-        ${mat&&smithOk?`<div class="recipeQuantityControl" onclick="event.stopPropagation()"><span>×</span><input type="number" id="craftQty-${i}" min="1" max="${maxCraftQuantity(r)}" value="1"><button class="btn gold" onclick="craft(${i},$('craftQty-${i}').value)">Craft · ${time}s each</button></div>`:`<button class="btn" disabled>${!smithOk?'Requires Smithing '+smithReq:'Missing materials'}</button>`}
-      </div>
+      <aside class="recipeCraftingBox">
+        <h4>Crafting Requirements</h4>
+        <div class="recipeCraftMeta"><span class="${smithOk?'enough':'missing'}">Blacksmithing ${smithReq}</span><span>+${smithXp} XP</span><span>${time}s per item</span></div>
+        <div class="recipeCostLabel">Material Cost</div>
+        <div class="recipeDetailMaterials">
+          ${Object.entries(r[3]).map(([k,v])=>{const have=s.materials[k]||0,ok=have>=v;return `<span class="${ok?'enough':'missing'}"><b>${have}/${v}</b> ${RESOURCE_NAMES[k]||k} <small>T${tierLabel(resourceTier(k))}</small>${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?`<em>${BOSS_RESOURCE_SOURCE[k]}</em>`:''}</span>`}).join('')}
+        </div>
+        <div class="recipeLineAction">
+          ${mat&&smithOk?`<div class="recipeQuantityControl" onclick="event.stopPropagation()"><span>×</span><input type="number" id="craftQty-${i}" min="1" max="${maxCraftQuantity(r)}" value="1"><button class="btn gold" onclick="craft(${i},$('craftQty-${i}').value)">Craft</button></div>`:`<button class="btn" disabled>${!smithOk?'Requires Blacksmithing '+smithReq:'Missing materials'}</button>`}
+        </div>
+      </aside>
     </div>`:''}
   </div>`;
 }

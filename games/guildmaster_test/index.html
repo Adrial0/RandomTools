@@ -33,6 +33,7 @@
   <div class="navSubgroup" data-nav-panel="workshop">
     <button class="nav" data-p="inventory">Inventory</button>
     <button class="nav" data-p="crafting">Crafting</button>
+    <button class="nav" data-p="runecrafting">Runecrafting</button>
     <button class="nav" data-p="market">Market</button>
   </div>
   <div class="navSubgroup" data-nav-panel="arena">
@@ -224,8 +225,7 @@
 <section class="page" id="crafting">
 <div class="panel">
   <div class="head">
-    <div><h2>Workshop</h2><p>Forge equipment or practice runecrafting.</p></div>
-    <div class="workshopTabs"><button class="btn workshopMode on" onclick="setWorkshopMode('crafting',this)">Crafting</button><button class="btn workshopMode" onclick="setWorkshopMode('runecrafting',this)">Runecrafting</button></div>
+    <div><h2>Crafting</h2><p>Forge equipment from materials your guild has discovered.</p></div>
   </div>
   <div id="craftMats" class="mats"></div>
   <div class="smithingPanel">
@@ -234,7 +234,7 @@
     <div class="smithingBonuses"><span class="chip" id="smithSpeedBonus"></span><span class="chip" id="smithRarityBonus"></span></div>
   </div>
 </div>
-<div id="craftingModeSection">
+<div>
   <div class="panel"><div class="head"><div><h3>Crafting Queue</h3><p>Completed items are placed in inventory automatically.</p></div></div><div id="craftQueue" class="active"></div></div>
   <div class="panel recipePanel"><div class="head recipePanelHead"><div><h3>Known Recipes</h3><p>Recipes appear once you've discovered every normal resource they require. Boss materials are the exception: the recipe appears before you've obtained the boss drop.</p></div>
   <div class="recipeMenuWrap">
@@ -250,8 +250,11 @@
   </div>
 </div><div id="recipeList" class="recipes"></div></div>
 </div>
-<div id="runecraftingModeSection" style="display:none">
-  <div class="panel"><div class="head"><div><h3>Runecrafting</h3><p>Shape tiered materials into permanent socketable runes.</p></div></div><div id="runeInventory" class="mats"></div><div id="runeRecipes" class="runeTierList" style="margin-top:12px"></div></div>
+</section>
+<section class="page" id="runecrafting">
+<div id="runecraftingModeSection">
+  <div class="panel"><div class="head"><div><h2>Runecrafting</h2><p>Shape tiered materials into permanent socketable runes.</p></div></div><div id="runeCraftMats" class="mats"></div></div>
+  <div class="panel"><div class="head"><div><h3>Known Runes</h3><p>Crafted runes are stored here until socketed into equipment.</p></div></div><div id="runeInventory" class="mats"></div><div id="runeRecipes" class="runeTierList" style="margin-top:12px"></div></div>
   <div class="panel"><div class="head"><div><h3>Socket Runes</h3><p>Rune capacity is determined by item rarity. Socketing consumes the rune.</p></div></div><div id="runeSocketItems" class="inventory"></div></div>
 </div>
 </section>

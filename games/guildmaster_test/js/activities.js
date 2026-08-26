@@ -264,6 +264,7 @@ function openHarvestJobDetails(jobId){
 function renderHarvestActive(){
   if(!$('harvestActive'))return;
   processHarvesting();
+  if($('activeGatherCount'))$('activeGatherCount').textContent=s.harvestJobs.length;
   const cap=afkHarvestCap();
   $('harvestActive').innerHTML=s.harvestJobs.length?s.harvestJobs.map(j=>{
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId),stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);

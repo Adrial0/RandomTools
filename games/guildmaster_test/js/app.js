@@ -21,7 +21,7 @@ $('combatModal').addEventListener('click',e=>{if(e.target===$('combatModal'))clo
 const NAV_GROUP_FOR_PAGE={
   hall:'guild',roster:'guild',questboard:'guild',upgrades:'guild',
   harvesting:'missions',quests:'missions',dungeons:'missions',raids:'missions',
-  inventory:'workshop',crafting:'workshop',market:'workshop',arena:'arena'
+  inventory:'workshop',crafting:'workshop',runecrafting:'workshop',market:'workshop',arena:'arena'
 };
 const navMemory={guild:'hall',missions:'harvesting',workshop:'inventory',arena:'arena'};
 let activeNavGroup='guild';
@@ -44,6 +44,7 @@ function activatePage(p){
   const group=NAV_GROUP_FOR_PAGE[p];
   if(group){navMemory[group]=p;showNavGroup(group)}else showNavGroup(activeNavGroup);
   if(p==='upgrades')renderUp();
+  if(p==='runecrafting')renderRunecrafting();
 }
 document.querySelectorAll('.nav[data-p]').forEach(b=>b.onclick=()=>activatePage(b.dataset.p));
 document.querySelectorAll('.navGroup').forEach(b=>b.onclick=()=>{
@@ -191,7 +192,7 @@ setInterval(()=>{
   refreshUpgradeResourceUI();
   renderProceduralQuestTimer();
 },500);
-setInterval(()=>{if(!window.GAME_DATA_READY||!s)return;renderInv();renderMarket();renderCraftQueue();renderCraft();if(workshopMode==='runecrafting')renderRunecrafting();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
+setInterval(()=>{if(!window.GAME_DATA_READY||!s)return;renderInv();renderMarket();renderCraftQueue();renderCraft();if($('runecrafting')?.classList.contains('on'))renderRunecrafting();renderResourcesLite();refreshUpgradeResourceUI();save()},5000);
 function renderResourcesLite(){
   $('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();
 }

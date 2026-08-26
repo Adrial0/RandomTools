@@ -41,7 +41,7 @@ function featureAccess(page){
   const hasResources=(s.discoveredResources||[]).length>0||Object.values(s.materials||{}).some(v=>v>0);
   if(['hall','roster','quests','harvesting','arena','settings'].includes(page))return{revealed:true,locked:false};
   if(page==='inventory')return{revealed:hasExpedition,locked:false,revealHint:'Start your first expedition to reveal Inventory.'};
-  if(page==='crafting')return{revealed:hasResources,locked:false,revealHint:'Discover your first resource to reveal this feature.'};
+  if(['crafting','runecrafting'].includes(page))return{revealed:hasResources,locked:false,revealHint:'Discover your first resource to reveal this feature.'};
   if(page==='upgrades')return{revealed:hasResources||s.level>=2,locked:false,revealHint:'Discover your first resource to reveal Guild Upgrades.'};
   if(['questboard','market'].includes(page))return{revealed:s.level>=2,locked:false,revealHint:'Reach Guild Level 2 to reveal this feature.'};
   if(page==='dungeons')return{revealed:s.level>=2,locked:s.level<3,lockLabel:'Lv. 3',lockReason:'Dungeons unlock at Guild Level 3.'};
@@ -201,6 +201,7 @@ function updateActiveMissionCard(m){
   card.querySelector('[data-active-help]').textContent='Click the card to '+(m.defeated?'view the result':'watch combat')+'.';
 }
 function renderActive(){
+  if($('activeMissionCount'))$('activeMissionCount').textContent=s.missions.length;
   const key=activeMissionKey(),hasCards=!!$('active').querySelector('[data-active-mission]');
   if(key!==activeMissionDomKey||(s.missions.length&&!hasCards)||(!s.missions.length&&hasCards))buildActiveMissionDom();
   s.missions.forEach(updateActiveMissionCard);
