@@ -245,7 +245,10 @@ function renderHarvestAreas(){
   const areas=HARVEST_AREAS
     .filter(a=>harvestFilter==='all'||a.skill===harvestFilter)
     .slice()
-    .sort((a,b)=>(a.req||1)-(b.req||1)||(SKILL_NAMES[a.skill]||a.skill).localeCompare(SKILL_NAMES[b.skill]||b.skill)||a.name.localeCompare(b.name));
+    .sort((a,b)=>{
+      const aTier=Math.min(...(a.resources||[]).map(x=>resourceTier(x[0]))),bTier=Math.min(...(b.resources||[]).map(x=>resourceTier(x[0])));
+      return aTier-bTier||(a.req||1)-(b.req||1)||a.name.localeCompare(b.name);
+    });
   $('harvestList').innerHTML=areas.map(a=>{
     const qualified=s.members.filter(h=>!h.busy&&gatheringSkill(h,a.skill).level>=a.req).length;
     const occupied=harvestLocationOccupied(a.id);

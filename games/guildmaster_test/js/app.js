@@ -308,6 +308,10 @@ async function loadExternalGameData(){
   Object.keys(RESOURCE_TIERS).forEach(k=>delete RESOURCE_TIERS[k]);
   Object.entries(d.resources?.tierGroups||{}).forEach(([tier,keys])=>(keys||[]).forEach(key=>RESOURCE_TIERS[key]=Number(tier)||1));
   MARKET_BASIC_RESOURCES.splice(0,MARKET_BASIC_RESOURCES.length,...(d.resources?.marketBasic||[]));
+  HARVEST_AREAS.sort((a,b)=>{
+    const aTier=Math.min(...(a.resources||[]).map(x=>resourceTier(x[0]))),bTier=Math.min(...(b.resources||[]).map(x=>resourceTier(x[0])));
+    return aTier-bTier||(a.req||1)-(b.req||1)||(SKILL_NAMES[a.skill]||a.skill).localeCompare(SKILL_NAMES[b.skill]||b.skill)||a.name.localeCompare(b.name);
+  });
 
   Object.assign(ACTIVE_MANA_COSTS,d.playerAbilities?.manaCosts||{});
   Object.assign(ACTIVE_COOLDOWNS,d.playerAbilities?.cooldowns||{});
