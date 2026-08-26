@@ -380,9 +380,22 @@ function validateContentData(){
     used.add(x);
     if(!RESOURCE_NAMES[x])warnings.push('Rune requires undefined resource: '+id+' -> '+x);
   }));
+  Object.values(UPGRADE_RESOURCE_PATHS).flat(Infinity).forEach(x=>used.add(x));
+
+  const earliestSourceTier={};
+  HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(([r])=>{
+    earliestSourceTier[r]=Math.min(earliestSourceTier[r]||99,resourceTier(r));
+  }));
+  Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>{
+    earliestSourceTier[r]=Math.min(earliestSourceTier[r]||99,e.tier||99);
+  }));
+  recipes.forEach(r=>Object.keys(r[3]||{}).forEach(x=>{
+    if((earliestSourceTier[x]||99)>(r[4]||1))warnings.push('Recipe needs a material before its first source: '+r[0]+' -> '+x);
+  }));
   Object.keys(RESOURCE_NAMES).forEach(r=>{
     if(!RESOURCE_TIERS[r])warnings.push('Resource has no tier: '+r);
-    if(!used.has(r))warnings.push('Resource has no crafting/rune use: '+r);
+    if((earliestSourceTier[r]||99)>resourceTier(r))warnings.push('Resource is sourced after its declared tier: '+r);
+    if(!used.has(r))warnings.push('Resource has no crafting, rune, or upgrade use: '+r);
   });
 
   if(warnings.length)console.warn('Guildmaster content audit:',warnings);

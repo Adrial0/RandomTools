@@ -9,7 +9,8 @@
     "damageType": "physical",
     "ability": null,
     "drops": [
-      "GoblinInsignia"
+      "GoblinInsignia",
+      "Cloth"
     ],
     "image": "images/enemies/goblin.png",
     "tier": 1
@@ -79,7 +80,8 @@
     "ability": null,
     "drops": [
       "Cloth",
-      "BanditToken"
+      "BanditToken",
+      "Venom"
     ],
     "image": "images/enemies/bandit.png",
     "tier": 2

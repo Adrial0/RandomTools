@@ -94,7 +94,7 @@
       "StormCore": 1,
       "SpiderSilk": 1
     },
-    4
+    5
   ],
   [
     "Shortbow",
@@ -388,7 +388,7 @@
       "FrostShard": 4,
       "Crystal": 3
     },
-    4
+    5
   ],
   [
     "Flameward Robes",
@@ -399,7 +399,7 @@
       "Emberstone": 4,
       "ArcaneDust": 2
     },
-    4
+    5
   ],
   [
     "Iron Band",
@@ -416,7 +416,8 @@
     "Signet",
     {
       "Iron": 3,
-      "Crystal": 3
+      "Crystal": 3,
+      "Sandglass": 2
     },
     3
   ],
@@ -539,7 +540,8 @@
     {
       "Iron": 20,
       "GhoulIchor": 6,
-      "ColossusIchor": 1
+      "ColossusIchor": 1,
+      "OgreHeart": 1
     },
     5,
     {
@@ -679,7 +681,8 @@
     {
       "Hardwood": 10,
       "Ironwood": 6,
-      "Leather": 8
+      "Leather": 8,
+      "BogIron": 3
     },
     4,
     {
@@ -777,7 +780,8 @@
     {
       "StormGlass": 6,
       "SkyCrystal": 5,
-      "Leather": 12
+      "Leather": 12,
+      "DrakeScale": 2
     },
     5,
     {
@@ -799,7 +803,7 @@
       "AstralThread": 6,
       "ManaBloom": 6
     },
-    6,
+    7,
     {
       "armorClass": "Light",
       "stats": {
@@ -931,7 +935,8 @@
     {
       "GlacialOre": 7,
       "FrostShard": 6,
-      "SkyCrystal": 6
+      "SkyCrystal": 6,
+      "Frostbloom": 3
     },
     5,
     {
@@ -983,7 +988,8 @@
     {
       "CinderOre": 10,
       "MagmaCore": 5,
-      "Obsidian": 8
+      "Obsidian": 8,
+      "DemonHorn": 1
     },
     6,
     {
@@ -1090,7 +1096,8 @@
     {
       "DeepPearl": 7,
       "Silver": 5,
-      "SkyCrystal": 4
+      "SkyCrystal": 4,
+      "WraithEssence": 2
     },
     5,
     {
@@ -1169,7 +1176,7 @@
       "AetherCrystal": 5,
       "ArcaneDust": 6
     },
-    6,
+    7,
     {
       "stats": {
         "str": 3,
@@ -1188,7 +1195,7 @@
       "AstralThread": 5,
       "Silver": 8
     },
-    6,
+    7,
     {
       "stats": {
         "str": 3,
