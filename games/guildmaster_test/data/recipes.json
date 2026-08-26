@@ -443,8 +443,7 @@
     {
       "stats": {
         "holy": 10
-      },
-      "label": "Consecrated guard"
+      }
     }
   ],
   [
@@ -490,8 +489,7 @@
     {
       "stats": {
         "dark": 10
-      },
-      "label": "Shadow ward"
+      }
     }
   ],
   [
@@ -511,8 +509,7 @@
         "dark": 18
       },
       "damageBonus": 0.1,
-      "critBonus": 0.05,
-      "label": "Boss-forged \u00b7 Grave cleaver"
+      "critBonus": 0.05
     }
   ],
   [
@@ -532,8 +529,7 @@
         "poison": 22
       },
       "damageBonus": 0.09,
-      "critBonus": 0.07,
-      "label": "Boss-forged \u00b7 Venom fang"
+      "critBonus": 0.07
     }
   ],
   [
@@ -554,8 +550,7 @@
         "def": 10,
         "poison": 28
       },
-      "threatBonus": 0.25,
-      "label": "Boss-forged \u00b7 Plague bulwark"
+      "threatBonus": 0.25
     }
   ],
   [
@@ -574,8 +569,7 @@
         "int": 9,
         "dark": 24
       },
-      "damageBonus": 0.11,
-      "label": "Boss-forged \u00b7 Forbidden focus"
+      "damageBonus": 0.11
     }
   ],
   [
@@ -596,8 +590,7 @@
         "hp": 25
       },
       "damageBonus": 0.16,
-      "critBonus": 0.06,
-      "label": "Raid-forged \u00b7 Ancient inferno"
+      "critBonus": 0.06
     }
   ],
   [
@@ -617,8 +610,7 @@
         "hp": 35
       },
       "damageBonus": 0.18,
-      "block": 1,
-      "label": "Raid-forged \u00b7 Warbreaker"
+      "block": 1
     }
   ],
   [
@@ -638,8 +630,7 @@
         "dark": 38
       },
       "magicalDodgeBonus": 0.05,
-      "damageBonus": 0.1,
-      "label": "Raid-forged \u00b7 Soul ward"
+      "damageBonus": 0.1
     }
   ],
   [
@@ -660,8 +651,7 @@
         "fire": 20
       },
       "damageBonus": 0.12,
-      "critBonus": 0.06,
-      "label": "Raid-forged \u00b7 Abyss seal"
+      "critBonus": 0.06
     }
   ],
   [
@@ -698,8 +688,7 @@
         "dex": 3,
         "hp": 12
       },
-      "physicalDodgeBonus": 0.02,
-      "label": "Flexible ironwood plates"
+      "physicalDodgeBonus": 0.02
     }
   ],
   [
@@ -718,8 +707,7 @@
         "int": 4,
         "mdef": 5
       },
-      "healBonus": 0.05,
-      "label": "Spiritwoven"
+      "healBonus": 0.05
     }
   ],
   [
@@ -739,8 +727,7 @@
         "mdef": 5,
         "int": 2
       },
-      "magicalDodgeBonus": 0.02,
-      "label": "Runic warding"
+      "magicalDodgeBonus": 0.02
     }
   ],
   [
@@ -760,8 +747,7 @@
         "mdef": 6,
         "hp": 18
       },
-      "threatBonus": 0.15,
-      "label": "Aegis guard"
+      "threatBonus": 0.15
     }
   ],
   [
@@ -781,8 +767,7 @@
         "dex": 5,
         "poison": 14
       },
-      "physicalDodgeBonus": 0.03,
-      "label": "Nightveil"
+      "physicalDodgeBonus": 0.03
     }
   ],
   [
@@ -802,8 +787,7 @@
         "lightning": 16,
         "hp": 14
       },
-      "critBonus": 0.03,
-      "label": "Stormhide"
+      "critBonus": 0.03
     }
   ],
   [
@@ -823,8 +807,7 @@
         "mdef": 8
       },
       "magicalDodgeBonus": 0.03,
-      "healBonus": 0.05,
-      "label": "Aetherwoven"
+      "healBonus": 0.05
     }
   ],
   [
@@ -844,8 +827,7 @@
         "def": 7,
         "str": 3,
         "hp": 20
-      },
-      "label": "Starsteel reinforcement"
+      }
     }
   ],
   [
@@ -865,8 +847,7 @@
         "def": 8,
         "hp": 30
       },
-      "threatBonus": 0.25,
-      "label": "Bulwark"
+      "threatBonus": 0.25
     }
   ],
   [
@@ -885,8 +866,7 @@
         "fire": 22,
         "str": 3
       },
-      "damageBonus": 0.03,
-      "label": "Molten core"
+      "damageBonus": 0.03
     }
   ],
   [
@@ -906,8 +886,7 @@
         "hp": 25,
         "dark": 22
       },
-      "magicalDodgeBonus": 0.02,
-      "label": "Voidguard"
+      "magicalDodgeBonus": 0.02
     }
   ],
   [
@@ -924,8 +903,7 @@
       "stats": {
         "dex": 3
       },
-      "critBonus": 0.03,
-      "label": "Ironwood limbs"
+      "critBonus": 0.03
     }
   ],
   [
@@ -943,8 +921,7 @@
         "str": 3,
         "fire": 10
       },
-      "damageBonus": 0.03,
-      "label": "Sunforged"
+      "damageBonus": 0.03
     }
   ],
   [
@@ -961,8 +938,7 @@
       "stats": {
         "int": 5,
         "ice": 14
-      },
-      "label": "Glacial focus"
+      }
     }
   ],
   [
@@ -980,8 +956,7 @@
         "dex": 4,
         "poison": 12
       },
-      "critBonus": 0.04,
-      "label": "Nightfang"
+      "critBonus": 0.04
     }
   ],
   [
@@ -998,8 +973,7 @@
       "stats": {
         "str": 6
       },
-      "damageBonus": 0.05,
-      "label": "Starsteel edge"
+      "damageBonus": 0.05
     }
   ],
   [
@@ -1017,8 +991,7 @@
         "str": 5,
         "fire": 16
       },
-      "damageBonus": 0.05,
-      "label": "Cinder edge"
+      "damageBonus": 0.05
     }
   ],
   [
@@ -1036,8 +1009,7 @@
         "dex": 6,
         "lightning": 14
       },
-      "critBonus": 0.05,
-      "label": "Stormglass mechanism"
+      "critBonus": 0.05
     }
   ],
   [
@@ -1055,8 +1027,7 @@
         "int": 7,
         "mdef": 5
       },
-      "healBonus": 0.08,
-      "label": "Aether focus"
+      "healBonus": 0.08
     }
   ],
   [
@@ -1074,8 +1045,7 @@
         "dex": 7,
         "poison": 18
       },
-      "critBonus": 0.06,
-      "label": "Void edge"
+      "critBonus": 0.06
     }
   ],
   [
@@ -1093,8 +1063,7 @@
         "int": 8,
         "dark": 20
       },
-      "damageBonus": 0.06,
-      "label": "Void channeling"
+      "damageBonus": 0.06
     }
   ],
   [
@@ -1111,8 +1080,7 @@
       "stats": {
         "hp": 20,
         "regen": 2
-      },
-      "label": "Living charm"
+      }
     }
   ],
   [
@@ -1131,8 +1099,7 @@
         "hp": 24,
         "manaRegen": 1
       },
-      "healBonus": 0.06,
-      "label": "Tidal blessing"
+      "healBonus": 0.06
     }
   ],
   [
@@ -1150,8 +1117,7 @@
         "str": 4,
         "fire": 12
       },
-      "damageBonus": 0.02,
-      "label": "Solar brand"
+      "damageBonus": 0.02
     }
   ],
   [
@@ -1170,8 +1136,7 @@
         "lightning": 15,
         "attackSpeed": 5
       },
-      "critBonus": 0.03,
-      "label": "Storm resonance"
+      "critBonus": 0.03
     }
   ],
   [
@@ -1191,8 +1156,7 @@
         "int": 4,
         "dark": 18,
         "mana": 10
-      },
-      "label": "Void ward"
+      }
     }
   ],
   [
@@ -1211,8 +1175,7 @@
         "str": 3,
         "int": 3,
         "lightning": 12
-      },
-      "label": "Runic impact"
+      }
     }
   ],
   [
@@ -1231,8 +1194,7 @@
         "str": 3,
         "int": 4
       },
-      "damageBonus": 0.04,
-      "label": "Spellsteel edge"
+      "damageBonus": 0.04
     }
   ],
   [
@@ -1253,22 +1215,187 @@
         "dark": 10,
         "attackSpeed": 4
       },
-      "critBonus": 0.03,
-      "label": "Arcane edge"
+      "critBonus": 0.03
     }
   ],
-  ["Copper Longsword", "Weapon", "Longsword", {"CopperOre": 7, "Wood": 2}, 1, {"label": "Copper age"}],
-  ["Copper Greatsword", "Weapon", "Greatsword", {"CopperOre": 11, "Wood": 3}, 1, {"label": "Copper age"}],
-  ["Copper Battle Axe", "Weapon", "Battle Axe", {"CopperOre": 9, "Wood": 4}, 1, {"label": "Copper age"}],
-  ["Copper Mace", "Weapon", "Mace", {"CopperOre": 8, "Wood": 3}, 1, {"label": "Copper age"}],
-  ["Copper Spear", "Weapon", "Spear", {"CopperOre": 6, "Wood": 6}, 1, {"label": "Copper age"}],
-  ["Copper Dagger", "Weapon", "Dagger", {"CopperOre": 4, "Cloth": 1}, 1, {"label": "Copper age"}],
-  ["Copper Knife", "Weapon", "Knife", {"CopperOre": 4, "Wood": 1}, 1, {"label": "Copper age"}],
-  ["Ashwood Shortbow", "Weapon", "Shortbow", {"Wood": 7, "Cloth": 2}, 1, {"stats": {"dex": 1}, "label": "Starter bow"}],
-  ["Apprentice Staff", "Weapon", "Oak Staff", {"Wood": 8, "Cloth": 2, "Herbs": 2}, 1, {"stats": {"int": 1}, "label": "Starter focus"}],
-  ["Copper Mail", "Armor", "Mail", {"CopperOre": 10, "Cloth": 2}, 1, {"armorClass": "Medium", "label": "Copper links"}],
-  ["Copper Scale Vest", "Armor", "Scale Vest", {"CopperOre": 9, "Leather": 4}, 1, {"armorClass": "Medium", "label": "Copper scales"}],
-  ["Padded Field Robes", "Armor", "Robes", {"Cloth": 9, "Herbs": 2}, 1, {"armorClass": "Light", "stats": {"hp": 4}, "label": "Fieldwear"}],
-  ["Copper Band", "Ring", "Band", {"CopperOre": 4}, 1, {"stats": {"def": 1}, "label": "Copper age"}],
-  ["Carved Copper Charm", "Amulet", "Charm", {"CopperOre": 3, "Wood": 2, "Cloth": 1}, 1, {"stats": {"hp": 4}, "label": "Copper age"}]
+  [
+    "Copper Longsword",
+    "Weapon",
+    "Longsword",
+    {
+      "CopperOre": 7,
+      "Wood": 2
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Greatsword",
+    "Weapon",
+    "Greatsword",
+    {
+      "CopperOre": 11,
+      "Wood": 3
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Battle Axe",
+    "Weapon",
+    "Battle Axe",
+    {
+      "CopperOre": 9,
+      "Wood": 4
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Mace",
+    "Weapon",
+    "Mace",
+    {
+      "CopperOre": 8,
+      "Wood": 3
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Spear",
+    "Weapon",
+    "Spear",
+    {
+      "CopperOre": 6,
+      "Wood": 6
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Dagger",
+    "Weapon",
+    "Dagger",
+    {
+      "CopperOre": 4,
+      "Cloth": 1
+    },
+    1,
+    {}
+  ],
+  [
+    "Copper Knife",
+    "Weapon",
+    "Knife",
+    {
+      "CopperOre": 4,
+      "Wood": 1
+    },
+    1,
+    {}
+  ],
+  [
+    "Ashwood Shortbow",
+    "Weapon",
+    "Shortbow",
+    {
+      "Wood": 7,
+      "Cloth": 2
+    },
+    1,
+    {
+      "stats": {
+        "dex": 1
+      }
+    }
+  ],
+  [
+    "Apprentice Staff",
+    "Weapon",
+    "Oak Staff",
+    {
+      "Wood": 8,
+      "Cloth": 2,
+      "Herbs": 2
+    },
+    1,
+    {
+      "stats": {
+        "int": 1
+      }
+    }
+  ],
+  [
+    "Copper Mail",
+    "Armor",
+    "Mail",
+    {
+      "CopperOre": 10,
+      "Cloth": 2
+    },
+    1,
+    {
+      "armorClass": "Medium"
+    }
+  ],
+  [
+    "Copper Scale Vest",
+    "Armor",
+    "Scale Vest",
+    {
+      "CopperOre": 9,
+      "Leather": 4
+    },
+    1,
+    {
+      "armorClass": "Medium"
+    }
+  ],
+  [
+    "Padded Field Robes",
+    "Armor",
+    "Robes",
+    {
+      "Cloth": 9,
+      "Herbs": 2
+    },
+    1,
+    {
+      "armorClass": "Light",
+      "stats": {
+        "hp": 4
+      }
+    }
+  ],
+  [
+    "Copper Band",
+    "Ring",
+    "Band",
+    {
+      "CopperOre": 4
+    },
+    1,
+    {
+      "stats": {
+        "def": 1
+      }
+    }
+  ],
+  [
+    "Carved Copper Charm",
+    "Amulet",
+    "Charm",
+    {
+      "CopperOre": 3,
+      "Wood": 2,
+      "Cloth": 1
+    },
+    1,
+    {
+      "stats": {
+        "hp": 4
+      }
+    }
+  ]
 ]

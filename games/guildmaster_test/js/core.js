@@ -393,6 +393,7 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
   s.inventory=(s.inventory||[]).map(it=>{
     it.runes=Array.isArray(it.runes)?it.runes:[];
     it.tier=itemTier(it);
+    delete it.specialLabel;
     if(it.slot==='Weapon'&&!it.weaponType){
       const allowed=Object.keys(WEAPONS);
       const guess=allowed.find(w=>it.name&&it.name.includes(w))||pick(allowed);
