@@ -370,6 +370,7 @@ function validateContentData(){
   const sourced=new Set();
   HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>sourced.add(r[0])));
   Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>sourced.add(r)));
+  recipes.forEach(r=>{if(r[1]==='Material'&&r[5]?.outputResource)sourced.add(r[5].outputResource)});
   Object.keys(RESOURCE_NAMES).forEach(r=>{
     if(!sourced.has(r))warnings.push('Resource has no enemy/gathering source: '+r);
   });
@@ -397,6 +398,7 @@ function validateContentData(){
   Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>{
     earliestSourceTier[r]=Math.min(earliestSourceTier[r]||99,e.tier||99);
   }));
+  recipes.forEach(r=>{if(r[1]==='Material'&&r[5]?.outputResource)earliestSourceTier[r[5].outputResource]=Math.min(earliestSourceTier[r[5].outputResource]||99,r[4]||1)});
   recipes.forEach(r=>Object.keys(r[3]||{}).forEach(x=>{
     if((earliestSourceTier[x]||99)>(r[4]||1))warnings.push('Recipe needs a material before its first source: '+r[0]+' -> '+x);
   }));

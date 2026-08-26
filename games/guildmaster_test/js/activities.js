@@ -7,7 +7,7 @@ function setAreaMode(mode,btn){
     document.querySelector('[data-p="quests"]')?.click();
   }
 }
-const SKILL_NAMES={woodcutting:'Woodcutting',mining:'Mining',fishing:'Fishing',herbalism:'Herbalism',hunting:'Hunting'};
+const SKILL_NAMES={woodcutting:'Woodcutting',mining:'Mining',fishing:'Fishing',harvesting:'Harvesting',hunting:'Hunting'};
 const QUEST_BOARD_REFRESH_MS=30*60*1000;
 const QUEST_DIFFICULTIES=[
   {id:'easy',label:'Routine',mult:.75,reward:.75},
@@ -248,7 +248,7 @@ function renderHarvestAreas(){
     const occupied=harvestLocationOccupied(a.id);
     return `<div class="card quest actionCard">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
       <div class="muted">${a.kind} · ${SKILL_NAMES[a.skill]} Lv. ${a.req} required</div><div class="muted" style="margin-top:5px">${a.desc}</div>
-      <div class="chips">${a.resources.map(x=>`<span class="chip">T${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span></div>
+      <div class="chips">${a.resources.map(x=>`<span class="chip">Tier ${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span></div>
       <button class="btn ${qualified&&!occupied?'gold':''} actionButton" ${qualified&&!occupied?'':'disabled'} onclick="openHarvestPicker('${a.id}')">${occupied?'Party Gathering':qualified?'Start Harvesting':'No Eligible Members'}</button></div>`;
   }).join('')||'<div class="empty">No gathering areas match this filter.</div>';
 }

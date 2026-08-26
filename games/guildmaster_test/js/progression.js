@@ -159,12 +159,14 @@ function discoverRecipes(){syncDiscoveredResources()}
 
 function smithXpNeeded(level){return Math.round(50+25*level+6*level*level)}
 function recipeSmithLevel(r){
+  if(r?.[1]==='Material')return 1;
   const tier=Math.max(1,Number(r?.[4])||1);
   const tierReq={1:1,2:2,3:3,4:5,5:7,6:10,7:14,8:18,9:23,10:29}[tier]||Math.max(1,Math.round(tier*2));
   const boss=Object.keys(r?.[3]||{}).some(k=>BOSS_RESOURCES.has(k));
   return tierReq+(boss?(tier>=7?2:1):0);
 }
 function recipeSmithXp(r){
+  if(r?.[1]==='Material')return 0;
   const boss=Object.keys(r[3]||{}).some(k=>BOSS_RESOURCES.has(k));
   return Math.round(5+r[4]*7+Object.keys(r[3]||{}).length*2+(boss?20:0));
 }
@@ -195,6 +197,14 @@ function cancelCraftJob(jid){const index=s.craftJobs.findIndex(j=>j.id===jid);if
 function finishCraftJob(j){
   const r=recipes[j.recipe];
   if(!r)return;
+  const outputResource=r[5]?.outputResource;
+  if(r[1]==='Material'&&outputResource){
+    const amount=Math.max(1,Math.floor(r[5]?.outputQty||1));
+    const added=addStoredResource(outputResource,amount);
+    trackQuestProgress('craft',r[0],1);
+    log(`Finished ${r[0]} · ${added} ${RESOURCE_NAMES[outputResource]||outputResource}.`);
+    return;
+  }
   const it=makeSpecificItem(r[1],r[2],r[4]);
   applyRecipeModifiers(it,r[5]||{});
   it.name=r[0];

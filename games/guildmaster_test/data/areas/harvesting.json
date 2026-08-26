@@ -307,18 +307,22 @@
     "id": "herbs",
     "name": "Greenmeadow Herb Fields",
     "icon": "🌿",
-    "skill": "herbalism",
+    "skill": "harvesting",
     "req": 1,
-    "kind": "Herbalism",
+    "kind": "Harvesting",
     "cycle": 32,
     "xp": 1,
     "resources": [
       [
         "Herbs",
-        100
+        65
+      ],
+      [
+        "PlantFiber",
+        35
       ]
     ],
-    "desc": "Common medicinal plants for novice herbalists.",
+    "desc": "Common medicinal plants and workable fibers for novice harvesters.",
     "image": "images/harvesting/herbalism.png",
     "background": "images/backgrounds/background19.png"
   },
@@ -326,9 +330,9 @@
     "id": "manabloom",
     "name": "Bluebell Mana Garden",
     "icon": "🪻",
-    "skill": "herbalism",
+    "skill": "harvesting",
     "req": 7,
-    "kind": "Herbalism",
+    "kind": "Harvesting",
     "cycle": 46,
     "xp": 3,
     "resources": [
@@ -345,9 +349,9 @@
     "id": "nightfen",
     "name": "Nightshade Fen",
     "icon": "🌑",
-    "skill": "herbalism",
+    "skill": "harvesting",
     "req": 13,
-    "kind": "Herbalism",
+    "kind": "Harvesting",
     "cycle": 60,
     "xp": 4,
     "resources": [
@@ -364,9 +368,9 @@
     "id": "venomsap",
     "name": "Venomsap Mangrove",
     "icon": "☠️",
-    "skill": "herbalism",
+    "skill": "harvesting",
     "req": 19,
-    "kind": "Herbalism",
+    "kind": "Harvesting",
     "cycle": 72,
     "xp": 5,
     "resources": [
@@ -383,9 +387,9 @@
     "id": "cinderbloom",
     "name": "Ashen Bloomfields",
     "icon": "🌺",
-    "skill": "herbalism",
+    "skill": "harvesting",
     "req": 25,
-    "kind": "Herbalism",
+    "kind": "Harvesting",
     "cycle": 84,
     "xp": 6,
     "resources": [
@@ -402,9 +406,9 @@
     "id": "frostbloom",
     "name": "Frostbloom Shelf",
     "icon": "❄️",
-    "skill": "herbalism",
+    "skill": "harvesting",
     "req": 31,
-    "kind": "Herbalism",
+    "kind": "Harvesting",
     "cycle": 96,
     "xp": 7,
     "resources": [
@@ -414,6 +418,48 @@
       ]
     ],
     "desc": "Delicate alpine herbs preserved by supernatural cold.",
+    "image": "",
+    "background": ""
+  },
+  {
+    "id": "flaxfields",
+    "name": "Goldstem Flax Fields",
+    "icon": "🌾",
+    "skill": "harvesting",
+    "req": 5,
+    "kind": "Harvesting",
+    "cycle": 40,
+    "xp": 2,
+    "resources": [["Flax",100]],
+    "desc": "Long flax stems ready to be retted, spun, and woven into linen.",
+    "image": "",
+    "background": ""
+  },
+  {
+    "id": "cottonterraces",
+    "name": "Cloudwhite Cotton Terraces",
+    "icon": "☁️",
+    "skill": "harvesting",
+    "req": 10,
+    "kind": "Harvesting",
+    "cycle": 52,
+    "xp": 3,
+    "resources": [["CottonBoll",100]],
+    "desc": "Soft cotton bolls used to produce durable, breathable cloth.",
+    "image": "",
+    "background": ""
+  },
+  {
+    "id": "silkgrassmarsh",
+    "name": "Silverthread Wetlands",
+    "icon": "🌱",
+    "skill": "harvesting",
+    "req": 16,
+    "kind": "Harvesting",
+    "cycle": 66,
+    "xp": 4,
+    "resources": [["Silkgrass",100]],
+    "desc": "Fine marsh grass whose shining fibers can be woven into silk-like fabric.",
     "image": "",
     "background": ""
   },

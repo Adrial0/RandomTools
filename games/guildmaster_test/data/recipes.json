@@ -1429,5 +1429,12 @@
   ["Elderwood Talisman","Amulet","Pendant",{"RunebarkRelic":6,"Sporecap":5,"Mithril":3},4,{"stats":{"hp":24,"holy":14,"fire":10},"healBonus":0.04}],
   ["Shattered Coast Cutlass","Weapon","Longsword",{"Shardglass":8,"CorsairSeal":5,"CinderOre":7},6,{"stats":{"dex":7,"ice":18,"lightning":15},"critBonus":0.04}],
   ["Astral Phaseweave","Armor","Robes",{"PhaseSilk":9,"CometDust":6,"Voidstone":5},7,{"armorClass":"Light","stats":{"int":8,"holy":18,"lightning":18},"magicalDodgeBonus":0.04}],
-  ["Regent's Halo","Amulet","Pendant",{"CrownShard":9,"SeraphFeather":7,"Eternium":5},10,{"stats":{"int":12,"holy":35,"ice":25},"healBonus":0.12}]
+  ["Regent's Halo","Amulet","Pendant",{"CrownShard":9,"SeraphFeather":7,"Eternium":5},10,{"stats":{"int":12,"holy":35,"ice":25},"healBonus":0.12}],
+  ["Weave Cloth","Material","Cloth",{"PlantFiber":3},1,{"outputResource":"Cloth","outputQty":2}],
+  ["Weave Linen","Material","Linen",{"Flax":4},2,{"outputResource":"Linen","outputQty":2}],
+  ["Weave Cotton Cloth","Material","CottonCloth",{"CottonBoll":5},3,{"outputResource":"CottonCloth","outputQty":2}],
+  ["Weave Silkgrass","Material","WovenSilk",{"Silkgrass":6},4,{"outputResource":"WovenSilk","outputQty":2}],
+  ["Linen Trailcoat","Armor","Ranger Leathers",{"Linen":9,"Iron":3,"Hardwood":2},2,{"armorClass":"Light","stats":{"dex":3,"hp":10}}],
+  ["Cotton Adept Robes","Armor","Robes",{"CottonCloth":10,"ManaBloom":3,"Silver":3},3,{"armorClass":"Light","stats":{"int":4,"mana":12}}],
+  ["Silverthread Vestments","Armor","Robes",{"WovenSilk":11,"Mithril":4,"SpiritBark":3},4,{"armorClass":"Light","stats":{"int":5,"mdef":6},"healBonus":0.05}]
 ]

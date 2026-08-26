@@ -29,7 +29,7 @@
   },
   "Gnome": {
     "passive": "Arcane Mind",
-    "desc": "+10% INT, +10% Mana, +1 Mana Regen, -10% STR. +10% Herbalism XP.",
+    "desc": "+10% INT, +10% Mana, +1 Mana Regen, -10% STR. +10% Harvesting XP.",
     "mult": {
       "int": 1.1,
       "mana": 1.1,
@@ -39,7 +39,7 @@
       "manaRegen": 1
     },
     "gathering": {
-      "herbalism": 0.1
+      "harvesting": 0.1
     }
   },
   "Orc": {
@@ -164,7 +164,7 @@
   },
   "Fae": {
     "passive": "Otherworldly",
-    "desc": "+12% Mana, +10% INT, +8% magical dodge, -15% HP. +10% Herbalism XP.",
+    "desc": "+12% Mana, +10% INT, +8% magical dodge, -15% HP. +10% Harvesting XP.",
     "mult": {
       "mana": 1.12,
       "int": 1.1,
@@ -174,12 +174,12 @@
       "magicalDodge": 0.08
     },
     "gathering": {
-      "herbalism": 0.1
+      "harvesting": 0.1
     }
   },
   "Satyr": {
     "passive": "Wild Rhythm",
-    "desc": "+8% DEX, +6% Attack Speed, +8 Dark resistance, -8% DEF. +10% Herbalism XP.",
+    "desc": "+8% DEX, +6% Attack Speed, +8 Dark resistance, -8% DEF. +10% Harvesting XP.",
     "mult": {
       "dex": 1.08,
       "def": 0.92
@@ -189,7 +189,7 @@
       "dark": 8
     },
     "gathering": {
-      "herbalism": 0.1
+      "harvesting": 0.1
     }
   },
   "Firbolg": {
@@ -247,7 +247,7 @@
   },
   "Elf": {
     "passive": "Elven Grace",
-    "desc": "+10% Mana, +5% DEX, +5% MDEF, -10% HP. +10% Herbalism XP.",
+    "desc": "+10% Mana, +5% DEX, +5% MDEF, -10% HP. +10% Harvesting XP.",
     "mult": {
       "mana": 1.1,
       "dex": 1.05,
@@ -255,7 +255,7 @@
       "hp": 0.9
     },
     "gathering": {
-      "herbalism": 0.1
+      "harvesting": 0.1
     }
   }
 }

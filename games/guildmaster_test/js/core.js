@@ -380,8 +380,8 @@ function load(){
 s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>[k,0])),s.materials||{});
   Object.keys(RESOURCE_NAMES).forEach(k=>{if(s.materials[k]==null)s.materials[k]=0});
   s.up=Object.assign({quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},s.up||{});
-  const defaultSkills=()=>({woodcutting:{level:1,xp:0},mining:{level:1,xp:0},fishing:{level:1,xp:0},herbalism:{level:1,xp:0},hunting:{level:1,xp:0}});
-  [...(s.members||[]),...(s.recruits||[])].forEach(h=>{h.skills=Object.assign(defaultSkills(),h.skills||{});Object.keys(h.skills).forEach(k=>h.skills[k]=Object.assign({level:1,xp:0},h.skills[k]||{}));if(h.subclass===undefined)h.subclass=null;if(!h.race||!RACES[h.race])h.race=pick(RACE_NAMES)});
+  const defaultSkills=()=>({woodcutting:{level:1,xp:0},mining:{level:1,xp:0},fishing:{level:1,xp:0},harvesting:{level:1,xp:0},hunting:{level:1,xp:0}});
+  [...(s.members||[]),...(s.recruits||[])].forEach(h=>{h.skills=h.skills||{};if(h.skills.herbalism&&!h.skills.harvesting)h.skills.harvesting=h.skills.herbalism;delete h.skills.herbalism;h.skills=Object.assign(defaultSkills(),h.skills);Object.keys(h.skills).forEach(k=>h.skills[k]=Object.assign({level:1,xp:0},h.skills[k]||{}));if(h.subclass===undefined)h.subclass=null;if(!h.race||!RACES[h.race])h.race=pick(RACE_NAMES)});
   s.runes=s.runes&&typeof s.runes==='object'?s.runes:{};Object.keys(RUNES).forEach(k=>{if(s.runes[k]==null)s.runes[k]=0});s.partyPresets=Array.isArray(s.partyPresets)?s.partyPresets:[];s.market=s.market&&typeof s.market==='object'?s.market:{nextRefresh:0,offers:[]};s.market.offers=Array.isArray(s.market.offers)?s.market.offers:[];s.questBoard=s.questBoard&&typeof s.questBoard==='object'?s.questBoard:{nextRefresh:0,offers:[]};s.questBoard.offers=Array.isArray(s.questBoard.offers)?s.questBoard.offers:[];s.harvestJobs=Array.isArray(s.harvestJobs)?s.harvestJobs:[];s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];normalizeCraftQueue();s.battleSeq=s.battleSeq||1;s.lastHiddenAt=s.lastHiddenAt||0;s.knownRecipes=Array.isArray(s.knownRecipes)?s.knownRecipes:[];s.memberCap=Math.max((s.members||[]).length,4+(s.up.quarters||0));s.discoveredResources=Array.isArray(s.discoveredResources)?s.discoveredResources:[];s.applicantCap=Math.max(2,s.applicantCap||2+(s.up.recruit||0));s.nextApplicantsAt=s.nextApplicantsAt||0;
   s.memberCap=Math.max((s.members||[]).length,4+(s.up.quarters||0));
   s.members=(s.members||[]).map(h=>{
@@ -485,7 +485,7 @@ function rolledRecruitSkills(){
     woodcutting:{level:rnd(min,max),xp:0},
     mining:{level:rnd(min,max),xp:0},
     fishing:{level:rnd(min,max),xp:0},
-    herbalism:{level:rnd(min,max),xp:0},
+    harvesting:{level:rnd(min,max),xp:0},
     hunting:{level:rnd(min,max),xp:0}
   };
 }
