@@ -1492,11 +1492,13 @@ body.windowOpen .side{overflow:hidden!important}
 .guildBanner .guildRepProgress{grid-column:1/-1;margin-top:0}
 .guildBanner .progressTrack{height:8px!important}
 .guildCommandBar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:8px 0 10px}
-.guildCommandBar button{position:relative;text-align:left;border:1px solid #5b462e;background:linear-gradient(180deg,#2b2116,#211a12);padding:9px 11px;color:#d9c397;min-width:0}
-.guildCommandBar button::after{content:"›";position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#9e773d;font-size:18px}
-.guildCommandBar button:hover{border-color:#9a743d;background:#302416}
-.guildCommandBar span{display:block;font-weight:800;font-size:11px}
-.guildCommandBar small{display:block;margin-top:2px;padding-right:14px;color:#8f8064;font-family:var(--ui-pixel);font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.guildShortcut{display:flex!important;align-items:center;justify-content:space-between;gap:9px;width:100%;min-width:0;text-align:left;padding:10px 11px!important;color:#d9c397!important;background:linear-gradient(180deg,#2b2116,#211a12)!important}
+.guildShortcut:hover{border-color:#9a743d!important;background:#302416!important;transform:translateY(-1px)}
+.guildShortcutText{display:block;min-width:0}
+.guildShortcutText br{display:none}
+.guildShortcutText .name{display:block;font-size:11px;line-height:1.2}
+.guildShortcutText .muted{display:block;margin-top:3px;font-size:8px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.guildShortcutArrow{flex:0 0 auto;color:#9e773d;font-size:20px;line-height:1}
 .sectionKicker{margin-bottom:3px}
 .dashboardCount{display:inline-grid;place-items:center;min-width:20px;height:18px;margin-left:4px;padding:0 5px;background:#1d1710;border:1px solid #5d482e;color:#cda65d;font-family:var(--ui-pixel);font-size:9px;vertical-align:2px}
 .guildActivityDashboard{margin-bottom:10px}
