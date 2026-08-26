@@ -1479,8 +1479,7 @@ body.windowOpen .side{overflow:hidden!important}
 /* Guild Overview: identity, operations, notices, then historical detail. */
 #hall{padding-bottom:24px}
 .guildBanner{display:grid;grid-template-columns:minmax(260px,1.2fr) minmax(380px,1.5fr);gap:12px 22px;align-items:center;padding:17px 18px!important;background:linear-gradient(115deg,rgba(139,98,42,.18),transparent 48%),#2d251a!important}
-.guildBannerIdentity{display:flex;align-items:center;gap:13px;min-width:0}
-.guildCrest{width:54px;height:62px;flex:0 0 auto;display:grid;place-items:center;color:#21170b;background:linear-gradient(145deg,#e2bd6c,#9d6c2f);border:2px solid #e4c27b;clip-path:polygon(8% 0,92% 0,92% 72%,50% 100%,8% 72%);font:900 24px Georgia,serif;text-shadow:0 1px rgba(255,255,255,.3)}
+.guildBannerIdentity{display:flex;align-items:center;min-width:0}
 .guildEyebrow,.sectionKicker{font-family:var(--ui-pixel);color:#9f8f6d;font-size:8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .guildBanner h2{font-size:24px!important;line-height:1.1;margin:2px 0 3px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .guildRename{border:0;padding:0;background:transparent;color:#b99b64;font-family:var(--ui-pixel);font-size:8px;text-decoration:underline;text-underline-offset:3px}
@@ -1536,7 +1535,6 @@ body.windowOpen .side{overflow:hidden!important}
 }
 @media(max-width:480px){
   .guildBanner{padding:13px!important}
-  .guildCrest{width:44px;height:52px}
   .guildBanner h2{font-size:19px!important}
   .guildCommandBar{grid-template-columns:1fr}
 }

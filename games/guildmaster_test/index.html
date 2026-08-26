@@ -45,14 +45,13 @@
 <section class="page on" id="hall">
 <div class="panel guildBanner">
   <div class="guildBannerIdentity">
-    <div class="guildCrest" aria-hidden="true">G</div>
-    <div><div class="guildEyebrow">Guild Headquarters</div><h2 id="guildName"></h2><button class="guildRename" id="rename">Edit guild name</button></div>
+    <div><div class="guildEyebrow">Guild Headquarters</div><h2 id="guildName"></h2><button class="btn guildRename" id="rename">Edit guild name</button></div>
   </div>
-  <div class="guildBannerStats">
-    <div class="guildBannerStat"><span>Level</span><strong id="guildLevelHall"></strong></div>
-    <div class="guildBannerStat"><span>Members</span><strong id="memberCount"></strong></div>
-    <div class="guildBannerStat"><span>Power</span><strong id="totalPower"></strong></div>
-    <div class="guildBannerStat"><span>Victories</span><strong id="wins"></strong></div>
+  <div class="guildBannerStats g4">
+    <div class="guildBannerStat stat"><span>Level</span><strong id="guildLevelHall"></strong></div>
+    <div class="guildBannerStat stat"><span>Members</span><strong id="memberCount"></strong></div>
+    <div class="guildBannerStat stat"><span>Power</span><strong id="totalPower"></strong></div>
+    <div class="guildBannerStat stat"><span>Victories</span><strong id="wins"></strong></div>
   </div>
   <div class="guildRepProgress">
     <div class="progressMeta"><span>Reputation toward next guild level</span><strong id="guildRepText"></strong></div>
@@ -60,10 +59,10 @@
   </div>
 </div>
 <div class="guildCommandBar" aria-label="Guild shortcuts">
-  <button onclick="activatePage('roster')"><span>Members</span><small>Manage the guild roster</small></button>
-  <button onclick="activatePage('harvesting')"><span>Gathering</span><small>Assign available workers</small></button>
-  <button onclick="activatePage('quests')"><span>Expeditions</span><small>Send out a combat party</small></button>
-  <button onclick="activatePage('questboard')"><span>Contracts</span><small>Review guild work</small></button>
+  <button class="btn" onclick="activatePage('roster')"><span>Members</span><small>Manage the guild roster</small></button>
+  <button class="btn" onclick="activatePage('harvesting')"><span>Gathering</span><small>Assign available workers</small></button>
+  <button class="btn" onclick="activatePage('quests')"><span>Expeditions</span><small>Send out a combat party</small></button>
+  <button class="btn" onclick="activatePage('questboard')"><span>Contracts</span><small>Review guild work</small></button>
 </div>
 <div class="guildActivityDashboard">
   <div class="panel guildActivityColumn">
