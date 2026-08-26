@@ -8,6 +8,8 @@ const resources=JSON.parse(fs.readFileSync(path.join(root,'data/resources.json')
 const sourceRecipes=JSON.parse(fs.readFileSync(path.join(root,'data/recipes.json'),'utf8'));
 const tiers={};Object.entries(resources.tierGroups).forEach(([tier,keys])=>keys.forEach(k=>tiers[k]=Number(tier)));
 let nextId=100;
+const domElements=new Map();
+const fakeElement=()=>({innerHTML:'',textContent:'',value:'',style:{},classList:{toggle:()=>{}}});
 const context={
   console,Math,Date,
   recipeFilter:'all',recipeCraftableOnly:false,expandedRecipes:new Set(),expandedRecipeCategories:new Set(['I · Copper']),TIER_IDENTITIES:{1:'Copper',2:'Iron'},
@@ -18,9 +20,9 @@ const context={
   log:()=>{},save:()=>{},render:()=>{},renderRoster:()=>{},notify:()=>{},displayClass:h=>h.class||'Adventurer',showModal:()=>{},
   itemRarity:()=> 'Common',runeTier:()=>1,makeSpecificItem:()=>({}),applyRecipeModifiers:()=>{},receiveInventoryItem:()=>{},trackQuestProgress:()=>{},
   addStoredResource:()=>1,recipePreview:r=>({profile:[r[1]],stats:[]}),maxCraftQuantity:()=>99,professionRecipeKnown:()=>true,
-  gameIcon:()=>'',itemIcons:{},WEAPONS:{},tierLabel:t=>String(t),fmt:()=>'',colorizeStatTerms:()=>{},matHtml:()=>'',
+  gameIcon:()=>'',itemIcons:{},WEAPONS:{},recipeTypeLabel:r=>r[1],tierLabel:t=>String(t),fmt:()=>'',colorizeStatTerms:()=>{},matHtml:()=>'',
   runeIcon:()=>'',runeSlots:()=>0,openRuneSocketItem:()=>{},openRuneSocketItem:()=>{},openRuneSocketItem:()=>{},
-  $:()=>({innerHTML:'',textContent:'',style:{},classList:{toggle:()=>{}}}),document:{querySelectorAll:()=>[]},setTimeout
+  $:id=>{if(!domElements.has(id))domElements.set(id,fakeElement());return domElements.get(id)},document:{querySelectorAll:()=>[]},setTimeout
 };
 vm.createContext(context);
 vm.runInContext(fs.readFileSync(path.join(root,'js/professions.js'),'utf8'),context);
@@ -60,6 +62,21 @@ assert.equal(vm.runInContext("professionWorkerAvailable('smithing')",context),tr
 context.s.professions.smithing.jobs.length=0;
 vm.runInContext("syncProfessionBusy('smithing')",context);
 assert.equal(context.s.members[0].busy,false,'worker is released when workstation queue empties');
+
+Object.keys(resources.resources).forEach(k=>context.s.materials[k]=9999);
+const smithRecipeIndex=context.recipes.findIndex(r=>r[5]?.profession==='smithing'&&r[1]==='Weapon');
+const collapsed=vm.runInContext(`renderProfessionRecipe(recipes[${smithRecipeIndex}],${smithRecipeIndex})`,context);
+assert.doesNotMatch(collapsed,/recipeLineDetails/,'recipe details are not rendered before the row is expanded');
+vm.runInContext(`expandedRecipes.add('recipe:${smithRecipeIndex}')`,context);
+const expanded=vm.runInContext(`renderProfessionRecipe(recipes[${smithRecipeIndex}],${smithRecipeIndex})`,context);
+assert.match(expanded,/recipeLineDetails/,'click-expanded recipe renders its details');
+
+context.s.professions.smithing.level=100;context.s.members[0].busy=false;
+for(let tier=1;tier<=10;tier++)context.expandedRecipeCategories.add(`${tier} · ${context.TIER_IDENTITIES[tier]||'Masterwork'}`);
+vm.runInContext("renderProfessionRecipe=(r,i)=>r[0]; recipeFilter='Armor'; renderCraft()",context);
+const filteredHtml=domElements.get('recipeList').innerHTML;
+assert.doesNotMatch(filteredHtml,/Longsword|Greatsword|Battle Axe/,'Armor filter removes weapon recipes from rendered results');
+assert.match(filteredHtml,/Plate|Mail|Shield/,'Armor filter keeps Smithing armor recipes');
 
 const uiSource=fs.readFileSync(path.join(root,'js/ui.js'),'utf8');
 assert.match(uiSource,/Skills & Passives[\s\S]*Profession Affinity/,'roster stats show profession affinity in Skills & Passives');
