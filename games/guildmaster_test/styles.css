@@ -1475,3 +1475,68 @@ body.windowOpen .side{overflow:hidden!important}
   .navPrimary{grid-template-columns:repeat(4,105px)}
   .navUtility{position:static;margin-top:7px;padding-top:7px;border-top:1px solid rgba(121,93,55,.45)}
 }
+
+/* Guild Overview: identity, operations, notices, then historical detail. */
+#hall{padding-bottom:24px}
+.guildBanner{display:grid;grid-template-columns:minmax(260px,1.2fr) minmax(380px,1.5fr);gap:12px 22px;align-items:center;padding:17px 18px!important;background:linear-gradient(115deg,rgba(139,98,42,.18),transparent 48%),#2d251a!important}
+.guildBannerIdentity{display:flex;align-items:center;gap:13px;min-width:0}
+.guildCrest{width:54px;height:62px;flex:0 0 auto;display:grid;place-items:center;color:#21170b;background:linear-gradient(145deg,#e2bd6c,#9d6c2f);border:2px solid #e4c27b;clip-path:polygon(8% 0,92% 0,92% 72%,50% 100%,8% 72%);font:900 24px Georgia,serif;text-shadow:0 1px rgba(255,255,255,.3)}
+.guildEyebrow,.sectionKicker{font-family:var(--ui-pixel);color:#9f8f6d;font-size:8px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.guildBanner h2{font-size:24px!important;line-height:1.1;margin:2px 0 3px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.guildRename{border:0;padding:0;background:transparent;color:#b99b64;font-family:var(--ui-pixel);font-size:8px;text-decoration:underline;text-underline-offset:3px}
+.guildRename:hover{color:#e3bb6d}
+.guildBannerStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #5f482d;background:#211a12}
+.guildBannerStat{padding:9px 11px;border-right:1px solid #4b3926;min-width:0}
+.guildBannerStat:last-child{border-right:0}
+.guildBannerStat span{display:block;color:#8f8064;font-family:var(--ui-pixel);font-size:8px;text-transform:uppercase;letter-spacing:.07em}
+.guildBannerStat strong{display:block;margin-top:3px;color:#e3c687;font-family:var(--ui-pixel);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.guildBanner .guildRepProgress{grid-column:1/-1;margin-top:0}
+.guildBanner .progressTrack{height:8px!important}
+.guildCommandBar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:8px 0 10px}
+.guildCommandBar button{position:relative;text-align:left;border:1px solid #5b462e;background:linear-gradient(180deg,#2b2116,#211a12);padding:9px 11px;color:#d9c397;min-width:0}
+.guildCommandBar button::after{content:"›";position:absolute;right:9px;top:50%;transform:translateY(-50%);color:#9e773d;font-size:18px}
+.guildCommandBar button:hover{border-color:#9a743d;background:#302416}
+.guildCommandBar span{display:block;font-weight:800;font-size:11px}
+.guildCommandBar small{display:block;margin-top:2px;padding-right:14px;color:#8f8064;font-family:var(--ui-pixel);font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sectionKicker{margin-bottom:3px}
+.dashboardCount{display:inline-grid;place-items:center;min-width:20px;height:18px;margin-left:4px;padding:0 5px;background:#1d1710;border:1px solid #5d482e;color:#cda65d;font-family:var(--ui-pixel);font-size:9px;vertical-align:2px}
+.guildActivityDashboard{margin-bottom:10px}
+.guildActivityColumn>.head{align-items:center!important}
+.guildHallLower{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(330px,.65fr);gap:10px;align-items:start}
+.guildHallNotices{display:grid;gap:10px}
+.guildRecruitmentPanel #recruits{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.guildContractNotice .head{align-items:center}
+.contractSummaryStats{display:grid;grid-template-columns:1fr 1fr;border:1px solid #4f3c28;background:#211a12}
+.contractSummaryStats>div{padding:10px;border-right:1px solid #4f3c28}
+.contractSummaryStats>div:last-child{border:0}
+.contractSummaryStats strong{display:block;color:#d9bd82;font:800 20px var(--ui-pixel)}
+.contractSummaryStats span{display:block;margin-top:2px;color:#8f8064;font:8px var(--ui-pixel);text-transform:uppercase;letter-spacing:.05em}
+.contractSummaryStats .ready strong{color:#a7b982}
+.contractSummaryFocus{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:7px;padding:8px 9px;border-left:2px solid #856338;background:#211a12}
+.contractSummaryFocus span{display:block;color:#817359;font:8px var(--ui-pixel);text-transform:uppercase}
+.contractSummaryFocus strong{display:block;margin-top:3px;color:#cdb88d;font-size:10px}
+.contractSummaryFocus b{color:#d9bd82;font:10px var(--ui-pixel);white-space:nowrap}
+.dashboardEmpty{padding:14px;border:1px dashed #5f482d;color:#8f8064;text-align:center;font:9px var(--ui-pixel)}
+.guildLedger{margin-top:10px!important}
+.guildLedger .log{max-height:150px!important;border:0!important;border-left:2px solid #554128!important;border-radius:0!important;background:#1d1710!important}
+
+@media(max-width:1100px){
+  .guildBanner{grid-template-columns:1fr}
+  .guildBanner .guildRepProgress{grid-column:auto}
+  .guildHallLower{grid-template-columns:1fr}
+  .guildHallNotices{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+  .guildCommandBar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .guildBannerStats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .guildBannerStat:nth-child(2){border-right:0}
+  .guildBannerStat:nth-child(-n+2){border-bottom:1px solid #4b3926}
+  .guildHallNotices{grid-template-columns:1fr}
+  .guildRecruitmentPanel #recruits{grid-template-columns:1fr!important}
+}
+@media(max-width:480px){
+  .guildBanner{padding:13px!important}
+  .guildCrest{width:44px;height:52px}
+  .guildBanner h2{font-size:19px!important}
+  .guildCommandBar{grid-template-columns:1fr}
+}

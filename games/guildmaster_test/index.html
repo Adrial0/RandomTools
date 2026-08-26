@@ -43,30 +43,52 @@
 </aside>
 <main>
 <section class="page on" id="hall">
-<div class="g2">
-<div class="panel"><div class="head"><div><h2 id="guildName"></h2><p>Guild headquarters</p></div><button class="btn" id="rename">Rename</button></div>
-<div class="g4"><div class="stat"><span>Members</span><strong id="memberCount"></strong></div><div class="stat"><span>Total Power</span><strong id="totalPower"></strong></div><div class="stat"><span>Wins</span><strong id="wins"></strong></div><div class="stat"><span>Guild Level</span><strong id="guildLevelHall"></strong></div></div>
-<div class="guildRepProgress">
-  <div class="progressMeta"><span>Guild Reputation</span><strong id="guildRepText"></strong></div>
-  <div class="progressTrack"><div class="progressFill guildRepFill" id="guildRepFill"></div></div>
-</div></div>
-<div class="panel"><div class="head"><div><h3>Recruitment</h3><p>Your guild begins empty with 2 applicants. Recruiting is free. A fresh batch arrives every 5 minutes after the board is emptied, and Recruitment Hall upgrades increase the number of applicants per batch.</p></div></div><div id="recruits" class="g2"></div></div>
+<div class="panel guildBanner">
+  <div class="guildBannerIdentity">
+    <div class="guildCrest" aria-hidden="true">G</div>
+    <div><div class="guildEyebrow">Guild Headquarters</div><h2 id="guildName"></h2><button class="guildRename" id="rename">Edit guild name</button></div>
+  </div>
+  <div class="guildBannerStats">
+    <div class="guildBannerStat"><span>Level</span><strong id="guildLevelHall"></strong></div>
+    <div class="guildBannerStat"><span>Members</span><strong id="memberCount"></strong></div>
+    <div class="guildBannerStat"><span>Power</span><strong id="totalPower"></strong></div>
+    <div class="guildBannerStat"><span>Victories</span><strong id="wins"></strong></div>
+  </div>
+  <div class="guildRepProgress">
+    <div class="progressMeta"><span>Reputation toward next guild level</span><strong id="guildRepText"></strong></div>
+    <div class="progressTrack"><div class="progressFill guildRepFill" id="guildRepFill"></div></div>
+  </div>
+</div>
+<div class="guildCommandBar" aria-label="Guild shortcuts">
+  <button onclick="activatePage('roster')"><span>Members</span><small>Manage the guild roster</small></button>
+  <button onclick="activatePage('harvesting')"><span>Gathering</span><small>Assign available workers</small></button>
+  <button onclick="activatePage('quests')"><span>Expeditions</span><small>Send out a combat party</small></button>
+  <button onclick="activatePage('questboard')"><span>Contracts</span><small>Review guild work</small></button>
 </div>
 <div class="guildActivityDashboard">
   <div class="panel guildActivityColumn">
-    <div class="head guildActivityHead"><div><h3>Active Missions</h3><p>Expeditions, dungeons and raids currently underway.</p></div><button class="btn gold" onclick="claimAllMissionLoot()">Claim All</button></div>
+    <div class="head guildActivityHead"><div><div class="sectionKicker">Field Operations</div><h3>Active Missions <span class="dashboardCount" id="activeMissionCount">0</span></h3><p>Expeditions, dungeons and raids currently underway.</p></div><button class="btn gold" onclick="claimAllMissionLoot()">Claim All</button></div>
     <div id="active" class="active"></div>
   </div>
   <div class="panel guildActivityColumn">
-    <div class="head"><div><h3>Active Gathering</h3><p>Gathering jobs currently underway.</p></div></div>
+    <div class="head"><div><div class="sectionKicker">Guild Workforce</div><h3>Active Gathering <span class="dashboardCount" id="activeGatherCount">0</span></h3><p>Gathering jobs currently underway.</p></div><button class="btn" onclick="activatePage('harvesting')">Manage</button></div>
     <div id="harvestActive" class="active"></div>
   </div>
 </div>
-<div class="panel guildGoalsPanel" id="guildGoalsPanel">
-  <div class="head guildGoalsHead"><div><h3>Guild Goals</h3><p>A guided path through the foundations of running your guild.</p></div><button class="btn" id="guildGoalsToggle" onclick="toggleGuildGoals()">Hide</button></div>
-  <div id="guildGoals"></div>
+<div class="guildHallLower">
+  <div class="panel guildRecruitmentPanel"><div class="head"><div><div class="sectionKicker">New Blood</div><h3>Recruitment</h3><p>Applicants remain until recruited. New candidates arrive after the board is emptied.</p></div></div><div id="recruits" class="g2"></div></div>
+  <div class="guildHallNotices">
+    <div class="panel guildContractNotice">
+      <div class="head"><div><div class="sectionKicker">Guild Business</div><h3>Contracts</h3></div><button class="btn" onclick="activatePage('questboard')">Open Board</button></div>
+      <div id="hallContractsSummary"></div>
+    </div>
+    <div class="panel guildGoalsPanel" id="guildGoalsPanel">
+      <div class="head guildGoalsHead"><div><div class="sectionKicker">Milestones</div><h3>Guild Goals</h3><p>A guided record of the guild's foundations.</p></div><button class="btn" id="guildGoalsToggle" onclick="toggleGuildGoals()">Hide</button></div>
+      <div id="guildGoals"></div>
+    </div>
+  </div>
 </div>
-<div class="panel"><div class="head"><h3>Guild Log</h3></div><div id="log" class="log"></div></div>
+<div class="panel guildLedger"><div class="head"><div><div class="sectionKicker">Recent Record</div><h3>Guild Ledger</h3></div></div><div id="log" class="log"></div></div>
 </section>
 
 <section class="page" id="roster">

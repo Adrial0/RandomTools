@@ -72,11 +72,22 @@ function updateNavigationLocks(){
     }
   }
 }
+function renderGuildOverviewSummary(){
+  if($('activeMissionCount'))$('activeMissionCount').textContent=s.missions.length;
+  if($('activeGatherCount'))$('activeGatherCount').textContent=s.harvestJobs.length;
+  const target=$('hallContractsSummary');if(!target)return;
+  if(!featureAccess('questboard').revealed){target.innerHTML='<div class="dashboardEmpty">The contract board has not opened yet.</div>';return}
+  ensureQuestBoard();
+  const offers=s.questBoard.offers||[],open=offers.filter(q=>!q.claimed),ready=open.filter(q=>(q.progress||0)>=q.target);
+  const nearest=open.slice().sort((a,b)=>((b.progress||0)/Math.max(1,b.target))-((a.progress||0)/Math.max(1,a.target)))[0];
+  if(!offers.length){target.innerHTML='<div class="dashboardEmpty">No contracts are posted.</div>';return}
+  target.innerHTML=`<div class="contractSummaryStats"><div><strong>${open.length}</strong><span>Open</span></div><div class="${ready.length?'ready':''}"><strong>${ready.length}</strong><span>Ready to claim</span></div></div>${nearest?`<div class="contractSummaryFocus"><div><span>Closest to completion</span><strong>${nearest.title}</strong></div><b>${Math.min(nearest.progress||0,nearest.target)} / ${nearest.target}</b></div>`:'<div class="dashboardEmpty">All posted contracts have been claimed.</div>'}`;
+}
 function render(){completeOnboardingGoals(false);updateNavigationLocks();completeCrafting();updateMusicUI();$('lv').textContent=s.level;$('gold').textContent=s.gold.toLocaleString();$('rep').textContent=s.rep.toLocaleString();$('guildName').textContent=s.guild;$('memberCount').textContent=s.members.length+' / '+s.memberCap;$('totalPower').textContent=s.members.reduce((a,h)=>a+hs(h).power,0);$('wins').textContent=s.wins;
   const guildNeed=guildRepNeeded(s.level),guildPct=clamp((s.rep||0)/guildNeed*100,0,100);
   if($('guildLevelHall'))$('guildLevelHall').textContent=s.level;
   if($('guildRepText'))$('guildRepText').textContent=`${(s.rep||0).toLocaleString()} / ${guildNeed.toLocaleString()}`;
-  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
+  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderEnchanting();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
