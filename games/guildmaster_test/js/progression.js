@@ -160,7 +160,7 @@ function discoverRecipes(){syncDiscoveredResources()}
 function smithXpNeeded(level){return Math.round(50+25*level+6*level*level)}
 function recipeSmithLevel(r){
   const tier=Math.max(1,Number(r?.[4])||1);
-  const tierReq={1:1,2:2,3:3,4:5,5:7,6:10,7:14}[tier]||Math.max(1,Math.round(tier*2));
+  const tierReq={1:1,2:2,3:3,4:5,5:7,6:10,7:14,8:18,9:23,10:29}[tier]||Math.max(1,Math.round(tier*2));
   const boss=Object.keys(r?.[3]||{}).some(k=>BOSS_RESOURCES.has(k));
   return tierReq+(boss?(tier>=7?2:1):0);
 }
@@ -246,20 +246,20 @@ function completeCooking(){
 }
 
 const UPGRADE_RESOURCE_PATHS={
-quarters:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
-party:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','Crystal','SpiritBark','StormGlass','AstralThread','AetherCrystal']],
-recruit:[['Cloth','Iron','Silver','Mithril','Nightshade','AetherCrystal','Voidstone'],['Leather','Bone','ManaBloom','SpiritBark','DeepPearl','AstralThread','AetherCrystal']],
-smith:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
-craftSpeed:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Hardwood','Crystal','Sunstone','StormGlass','AetherCrystal','AstralThread']],
-training:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Herbs','Bone','ManaBloom','SpiritBark','Nightshade','CinderBloom','AetherCrystal']],
-storage:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
-afkHarvest:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','ManaBloom','SpiritBark','Nightshade','AstralThread','AetherCrystal']],
-gatherParty:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Hardwood','Crystal','Ironwood','StormGlass','AetherCrystal','AstralThread']],
-board:[['Cloth','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Bone','ManaBloom','Sunstone','DeepPearl','AstralThread','AetherCrystal']]
+quarters:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal','LeviathanScale','Gearheart','Endstone']],
+party:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Cloth','Hardwood','Crystal','SpiritBark','StormGlass','AstralThread','AetherCrystal','CelestialSilk','Dreamwood','Godthread']],
+recruit:[['Cloth','Iron','Silver','Mithril','Nightshade','AetherCrystal','Voidstone','AngelicSigil','DreamEssence','StarlightCore'],['Leather','Bone','ManaBloom','SpiritBark','DeepPearl','AstralThread','AetherCrystal','CelestialSilk','NightmareBloom','Godthread']],
+smith:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal','LeviathanScale','Gearheart','Endstone']],
+craftSpeed:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Hardwood','Crystal','Sunstone','StormGlass','AetherCrystal','AstralThread','AngelicSigil','ChronoShard','StarlightCore']],
+training:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Herbs','Bone','ManaBloom','SpiritBark','Nightshade','CinderBloom','AetherCrystal','LeviathanScale','NightmareBloom','Endstone']],
+storage:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal','TrenchPearl','Gearheart','Endstone']],
+afkHarvest:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Cloth','Hardwood','ManaBloom','SpiritBark','Nightshade','AstralThread','AetherCrystal','CelestialSilk','DreamEssence','Godthread']],
+gatherParty:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Hardwood','Crystal','Ironwood','StormGlass','AetherCrystal','AstralThread','LeviathanScale','Dreamwood','Worldroot']],
+board:[['Cloth','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Bone','ManaBloom','Sunstone','DeepPearl','AstralThread','AetherCrystal','AngelicSigil','ChronoShard','StarlightCore']]
 };
 function upgradeResourceCost(k,l){
   const upgrade=upgrades.find(x=>x[0]===k),max=Math.max(2,upgrade?.[4]||7);
-  const tier=clamp(1+Math.floor(l*6/(max-1)),1,7),index=tier-1;
+  const tier=clamp(1+Math.floor(l*9/(max-1)),1,10),index=tier-1;
   const paths=UPGRADE_RESOURCE_PATHS[k]||UPGRADE_RESOURCE_PATHS.quarters;
   const primary=paths[0][index],secondary=paths[1][index];
   const base=Math.max(3,Math.round((10+Math.pow(l+1,1.35)*5)/(1+(tier-1)*.3)));

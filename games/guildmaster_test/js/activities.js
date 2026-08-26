@@ -16,12 +16,12 @@ const QUEST_DIFFICULTIES=[
   {id:'elite',label:'Elite',mult:1.7,reward:2.25}
 ];
 function questDifficulty(){const r=Math.random();return r<.18?QUEST_DIFFICULTIES[3]:r<.46?QUEST_DIFFICULTIES[2]:r<.82?QUEST_DIFFICULTIES[1]:QUEST_DIFFICULTIES[0]}
-function questGuildTier(){return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/5),1,7)}
+function questGuildTier(){return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/10),1,10)}
 function questWeaponReward(diff){
   const chance=diff.id==='elite'?.72:diff.id==='hard'?.38:diff.id==='normal'?.14:.05;
   if(Math.random()>=chance)return null;
   const tier=questGuildTier();
-  let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon'&&x.r[4]>=Math.max(1,tier-1)&&x.r[4]<=Math.min(7,tier+1));
+  let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon'&&x.r[4]>=Math.max(1,tier-1)&&x.r[4]<=Math.min(10,tier+1));
   if(!pool.length)pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon');
   const chosen=pick(pool);if(!chosen)return null;
   const rarity=(diff.id==='elite'||(diff.id==='hard'&&Math.random()<.55))?'Rare':'Uncommon';

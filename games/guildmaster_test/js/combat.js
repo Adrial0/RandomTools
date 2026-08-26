@@ -47,7 +47,7 @@ function makeBossBattle(m){
   return b;
 }
 function bossItemDrop(m,rarity){
-  const targetTier=clamp(m.tier||1,1,7);
+  const targetTier=clamp(m.tier||1,1,10);
   let candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]===targetTier);
   if(!candidates.length)candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]<=targetTier).sort((a,b)=>b.r[4]-a.r[4]);
   if(!candidates.length)return null;
@@ -405,7 +405,7 @@ function grantFightRewards(m,enemySnapshots){
     const lootChance=m.type==='raid'?.78:m.type==='dungeon'?.74:.70;
     const gearChance=m.type==='raid'?.018:m.type==='dungeon'?.009:.0025;
     if(Math.random()<gearChance){
-      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),clamp(m.tier||1,1,7)));
+      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),clamp(m.tier||1,1,10)));
       return;
     }
 

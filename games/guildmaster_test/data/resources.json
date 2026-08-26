@@ -259,7 +259,23 @@
     "DeepPearl": {
       "name": "Deep Pearl",
       "image": ""
-    }
+    },
+    "Adamantite": {"name":"Adamantite","image":""},
+    "CelestialSilk": {"name":"Celestial Silk","image":""},
+    "AngelicSigil": {"name":"Angelic Sigil","image":""},
+    "LeviathanScale": {"name":"Leviathan Scale","image":""},
+    "TrenchPearl": {"name":"Trench Pearl","image":""},
+    "Godthread": {"name":"Godthread","image":""},
+    "Orichalcum": {"name":"Orichalcum","image":""},
+    "Dreamwood": {"name":"Dreamwood","image":""},
+    "ChronoShard": {"name":"Chrono Shard","image":""},
+    "NightmareBloom": {"name":"Nightmare Bloom","image":""},
+    "Gearheart": {"name":"Gearheart","image":""},
+    "DreamEssence": {"name":"Dream Essence","image":""},
+    "Eternium": {"name":"Eternium","image":""},
+    "Worldroot": {"name":"Worldroot","image":""},
+    "StarlightCore": {"name":"Starlight Core","image":""},
+    "Endstone": {"name":"Endstone","image":""}
   },
   "tierGroups": {
     "1": ["Stone", "CopperOre", "Wood", "Cloth", "Herbs", "Leather", "Fish", "GameMeat", "GoblinInsignia", "WolfPelt", "SlimeGel"],
@@ -268,7 +284,10 @@
     "4": ["Mithril", "Ironwood", "SpiritBark", "BogIron", "WhitePelt", "FrostVenison", "GhoulIchor", "ColossusIchor"],
     "5": ["StarMetal", "GlacialOre", "Frostbloom", "Nightshade", "VenomSap", "SkyCrystal", "StormGlass", "ShadowSilk", "StormEel", "SkyKoi", "DuskmothMeat", "HighRune", "AncientDrakeScale", "DrakeScale", "OgreHeart", "WraithEssence", "FrostShard", "Emberstone", "StormCore"],
     "6": ["CinderOre", "CinderBloom", "MagmaCore", "Obsidian", "DemonHorn", "WarOgreHeart", "WraithLordCore"],
-    "7": ["Voidstone", "AetherCrystal", "AstralThread", "AbyssalHorn"]
+    "7": ["Voidstone", "AetherCrystal", "AstralThread", "AbyssalHorn"],
+    "8": ["Adamantite", "CelestialSilk", "AngelicSigil", "LeviathanScale", "TrenchPearl", "Godthread"],
+    "9": ["Orichalcum", "Dreamwood", "ChronoShard", "NightmareBloom", "Gearheart", "DreamEssence"],
+    "10": ["Eternium", "Worldroot", "StarlightCore", "Endstone"]
   },
   "marketBasic": [
     "Wood",

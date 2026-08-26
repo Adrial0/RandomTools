@@ -113,11 +113,11 @@ function marketRarity(){
   return'Common';
 }
 function marketTier(){
-  return clamp(1+Math.floor((s.level||1)/6),1,7);
+  return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/10),1,10);
 }
 function generateMarket(){
   const tier=marketTier();
-  const minTier=Math.max(1,tier-1),maxTier=Math.min(7,tier+1);
+  const minTier=Math.max(1,tier-1),maxTier=Math.min(10,tier+1);
   let gearPool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]>=minTier&&x.r[4]<=maxTier);
   if(!gearPool.length)gearPool=recipes.map((r,i)=>({r,i}));
 
@@ -411,7 +411,7 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.recipeMenuWrap'))closeRecipeMenu();
 });
 let expandedRecipes=new Set();
-const TIER_IDENTITIES={1:'Copper',2:'Iron',3:'Silver',4:'Mithril',5:'Star Metal',6:'Cinder',7:'Voidstone'};
+const TIER_IDENTITIES={1:'Copper',2:'Iron',3:'Silver',4:'Mithril',5:'Star Metal',6:'Cinder',7:'Voidstone',8:'Adamantite',9:'Orichalcum',10:'Eternium'};
 function recipeTierCategory(r){const tier=Math.max(1,Number(r?.[4])||1);return `Tier ${tierLabel(tier)} · ${TIER_IDENTITIES[tier]||'Masterwork'}`}
 let expandedRecipeCategories=new Set(['Tier I · Copper']);
 function toggleRecipeRow(i){

@@ -1404,5 +1404,23 @@
         "hp": 4
       }
     }
-  ]
+  ],
+  ["Adamantite Longsword","Weapon","Longsword",{"Adamantite":12,"CelestialSilk":4,"AngelicSigil":2},8,{"stats":{"str":9,"holy":18},"damageBonus":0.07}],
+  ["Leviathan Bulwark","Armor","Plate",{"Adamantite":16,"LeviathanScale":6,"TrenchPearl":2},8,{"armorClass":"Heavy","block":4,"stats":{"hp":80,"def":14,"ice":24}}],
+  ["Celestial Vestments","Armor","Robes",{"CelestialSilk":12,"Godthread":5,"AngelicSigil":3},8,{"armorClass":"Light","stats":{"int":10,"mdef":12,"holy":24},"healBonus":0.12}],
+  ["Trench Pearl Pendant","Amulet","Pendant",{"TrenchPearl":7,"LeviathanScale":3,"CelestialSilk":4},8,{"stats":{"hp":42,"mdef":8,"ice":20}}],
+  ["Godthread Longbow","Weapon","Longbow",{"CelestialSilk":10,"Godthread":6,"Adamantite":5},8,{"stats":{"dex":10,"holy":14},"critBonus":0.07}],
+  ["Herald's Signet","Ring","Signet",{"Adamantite":6,"AngelicSigil":4,"Godthread":2},8,{"stats":{"def":7,"mdef":7,"holy":18}}],
+  ["Orichalcum Greatsword","Weapon","Greatsword",{"Orichalcum":14,"Gearheart":4,"ChronoShard":3},9,{"stats":{"str":11,"lightning":22},"damageBonus":0.09}],
+  ["Dreamwood Recurve Bow","Weapon","Recurve Bow",{"Dreamwood":12,"DreamEssence":5,"NightmareBloom":3},9,{"stats":{"dex":11,"dark":20},"statusChance":0.08}],
+  ["Chronomancer Robes","Armor","Robes",{"Dreamwood":5,"ChronoShard":7,"DreamEssence":6},9,{"armorClass":"Light","stats":{"int":12,"mana":30,"lightning":22},"magicalDodgeBonus":0.05}],
+  ["Gearheart Cuirass","Armor","Plate",{"Orichalcum":18,"Gearheart":7,"ChronoShard":2},9,{"armorClass":"Heavy","block":4,"stats":{"hp":95,"def":16}}],
+  ["Nightmare Kris","Weapon","Kris",{"Orichalcum":7,"NightmareBloom":7,"DreamEssence":5},9,{"stats":{"dex":12,"poison":24,"dark":18},"critBonus":0.08}],
+  ["Lucid Signet","Ring","Signet",{"Orichalcum":6,"DreamEssence":6,"ChronoShard":3},9,{"stats":{"int":9,"manaRegen":3,"dark":20}}],
+  ["Eternium Worldblade","Weapon","Greatsword",{"Eternium":16,"Worldroot":8,"StarlightCore":5},10,{"stats":{"str":14,"holy":26,"dark":26},"damageBonus":0.12}],
+  ["Worldroot Staff","Weapon","Arcane Staff",{"Worldroot":16,"Godthread":8,"StarlightCore":5},10,{"stats":{"int":14,"mana":40},"healBonus":0.15}],
+  ["Endstone Aegis","Armor","Plate",{"Eternium":20,"Endstone":9,"Godthread":5},10,{"armorClass":"Heavy","block":5,"stats":{"hp":120,"def":20,"mdef":12}}],
+  ["Godthread Regalia","Armor","Robes",{"Godthread":14,"Worldroot":7,"StarlightCore":6},10,{"armorClass":"Light","stats":{"int":15,"mdef":18,"manaRegen":4},"healBonus":0.15}],
+  ["Starlight Crown","Amulet","Pendant",{"StarlightCore":9,"Eternium":5,"Godthread":6},10,{"stats":{"hp":70,"int":10,"holy":30}}],
+  ["Ring of the Last Horizon","Ring","Signet",{"Endstone":8,"StarlightCore":7,"Eternium":6},10,{"stats":{"str":7,"dex":7,"int":7,"dark":30}}]
 ]

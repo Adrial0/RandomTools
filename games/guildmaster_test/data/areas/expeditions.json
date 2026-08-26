@@ -1,138 +1,22 @@
 [
-  {
-    "id": "forest",
-    "name": "Greenwood Forest",
-    "level": 1,
-    "icon": "🌲",
-    "desc": "Old woodland roads filled with beasts, goblins and living forest magic.",
-    "enemyPool": [
-      "Forest Goblin",
-      "Grey Wolf",
-      "Thornback Boar",
-      "Moss Slime",
-      "Briar Wisp"
-    ],
-    "image": "images/areas/greenwood-forest.png",
-    "background": "images/backgrounds/greenwood-forest.png",
-    "tier": 1
-  },
-  {
-    "id": "plains",
-    "name": "Sunfield Plains",
-    "level": 5,
-    "icon": "🌾",
-    "desc": "Open grasslands patrolled by raiders and fast roaming beasts.",
-    "enemyPool": [
-      "Highway Bandit",
-      "Prairie Wolf",
-      "Sunfield Raider",
-      "Dust Hawk",
-      "Spark Imp"
-    ],
-    "image": "images/areas/sunfield-plains.png",
-    "background": "images/backgrounds/sunfield-plains.png",
-    "tier": 2
-  },
-  {
-    "id": "desert",
-    "name": "Ashen Desert",
-    "level": 10,
-    "icon": "🏜️",
-    "desc": "Scorching dunes where fire and poison appear among mostly physical threats.",
-    "enemyPool": [
-      "Dune Raider",
-      "Sand Scorpion",
-      "Cinder Slime",
-      "Ash Vulture",
-      "Sun Cultist"
-    ],
-    "image": "images/areas/ashen-desert.png",
-    "background": "images/backgrounds/ashen-desert.png",
-    "tier": 3
-  },
-  {
-    "id": "swamp",
-    "name": "Blackwater Swamp",
-    "level": 15,
-    "icon": "🌫️",
-    "desc": "A poisonous marsh of venomous wildlife, ghouls and dark bog magic.",
-    "enemyPool": [
-      "Bog Spider",
-      "Marsh Ghoul",
-      "Fen Leech",
-      "Bog Lurker",
-      "Mire Witch"
-    ],
-    "image": "images/areas/blackwater-swamp.png",
-    "background": "images/backgrounds/blackwater-swamp.png",
-    "tier": 4
-  },
-  {
-    "id": "mountain",
-    "name": "Ironpeak Mountains",
-    "level": 22,
-    "icon": "🏔️",
-    "desc": "Brutal physical enemies dominate the peaks, with occasional lightning threats.",
-    "enemyPool": [
-      "Peak Ogre",
-      "Stone Drake",
-      "Cliff Raider",
-      "Thunder Roc",
-      "Granite Golem"
-    ],
-    "image": "images/areas/ironpeak-mountains.png",
-    "background": "images/backgrounds/ironpeak-mountains.png",
-    "tier": 5
-  },
-  {
-    "id": "tundra",
-    "name": "Frozen Tundra",
-    "level": 30,
-    "icon": "❄️",
-    "desc": "Frozen predators and spirits mix physical attacks with moderate ice damage.",
-    "enemyPool": [
-      "Frost Wraith",
-      "Icebound Ghoul",
-      "Snow Stalker",
-      "Glacial Elemental",
-      "Whitefang Yeti"
-    ],
-    "image": "images/areas/frozen-tundra.png",
-    "background": "images/backgrounds/frozen-tundra.png",
-    "tier": 5
-  },
-  {
-    "id": "volcano",
-    "name": "Emberfall Volcano",
-    "level": 40,
-    "icon": "🌋",
-    "desc": "Fire creatures rule the molten caverns, backed by crushing physical brutes.",
-    "enemyPool": [
-      "Ember Drake",
-      "Lava Hound",
-      "Cinder Demon",
-      "Magma Elemental",
-      "Obsidian Brute"
-    ],
-    "image": "images/areas/emberfall-volcano.png",
-    "background": "images/backgrounds/emberfall-volcano.png",
-    "tier": 6
-  },
-  {
-    "id": "voidlands",
-    "name": "The Voidlands",
-    "level": 55,
-    "icon": "🌌",
-    "desc": "Reality-warped horrors use dark magic alongside deadly physical attacks.",
-    "enemyPool": [
-      "Void Demon",
-      "Astral Wraith",
-      "Voidling",
-      "Aether Horror",
-      "Warped Knight"
-    ],
-    "image": "images/areas/voidlands.png",
-    "background": "images/backgrounds/voidlands.png",
-    "tier": 7
-  }
+  {"id":"forest","name":"Greenwood Forest","level":1,"tier":1,"icon":"🌲","desc":"Old woodland roads filled with beasts, goblins and living forest magic.","enemyPool":["Forest Goblin","Grey Wolf","Thornback Boar","Moss Slime","Briar Wisp"],"image":"images/areas/greenwood-forest.png","background":"images/backgrounds/greenwood-forest.png"},
+  {"id":"moonbrook","name":"Moonbrook Hollow","level":6,"tier":1,"icon":"🌙","desc":"Moonlit streams conceal territorial wildlife, poachers and restless nature spirits.","enemyPool":["Moonlit Stag","Creek Lurker","Pollen Sprite","Briar Fox","Greenwood Poacher"],"image":"","background":""},
+  {"id":"plains","name":"Sunfield Plains","level":11,"tier":2,"icon":"🌾","desc":"Open grasslands patrolled by raiders and fast roaming beasts.","enemyPool":["Highway Bandit","Prairie Wolf","Sunfield Raider","Dust Hawk","Spark Imp"],"image":"images/areas/sunfield-plains.png","background":"images/backgrounds/sunfield-plains.png"},
+  {"id":"redstone","name":"Redstone Highlands","level":16,"tier":2,"icon":"⛰️","desc":"Wind-cut highlands where brigands hunt among aggressive mountain wildlife.","enemyPool":["Rockhorn Ram","Hill Brigand","Thunder Hare","Redstone Harpy","Ironback Bear"],"image":"","background":""},
+  {"id":"desert","name":"Ashen Desert","level":21,"tier":3,"icon":"🏜️","desc":"Scorching dunes where fire and poison appear among mostly physical threats.","enemyPool":["Dune Raider","Sand Scorpion","Cinder Slime","Ash Vulture","Sun Cultist"],"image":"images/areas/ashen-desert.png","background":"images/backgrounds/ashen-desert.png"},
+  {"id":"sunkenShrine","name":"Sunken Shrine","level":26,"tier":3,"icon":"🔱","desc":"A drowned temple crackling with storm magic and disputed sacred power.","enemyPool":["Drowned Acolyte","Coral Sentinel","Tide Serpent","Shrine Wisp","Tempest Priest"],"image":"","background":""},
+  {"id":"swamp","name":"Blackwater Swamp","level":31,"tier":4,"icon":"🌫️","desc":"A poisonous marsh of venomous wildlife, ghouls and dark bog magic.","enemyPool":["Bog Spider","Marsh Ghoul","Fen Leech","Bog Lurker","Mire Witch"],"image":"images/areas/blackwater-swamp.png","background":"images/backgrounds/blackwater-swamp.png"},
+  {"id":"elderwood","name":"Elderwood Ruins","level":36,"tier":4,"icon":"🏚️","desc":"Ancient druidic ruins where fungal growth and awakened trees defend forgotten wards.","enemyPool":["Runebark Treant","Ruin Stalker","Fungal Knight","Elder Moth","Lost Druid"],"image":"","background":""},
+  {"id":"mountain","name":"Ironpeak Mountains","level":41,"tier":5,"icon":"🏔️","desc":"Brutal physical enemies dominate the peaks, with occasional lightning threats.","enemyPool":["Peak Ogre","Stone Drake","Cliff Raider","Thunder Roc","Granite Golem"],"image":"images/areas/ironpeak-mountains.png","background":"images/backgrounds/ironpeak-mountains.png"},
+  {"id":"tundra","name":"Frozen Tundra","level":46,"tier":5,"icon":"❄️","desc":"Frozen predators and spirits mix physical attacks with ice and dark magic.","enemyPool":["Frost Wraith","Icebound Ghoul","Snow Stalker","Glacial Elemental","Whitefang Yeti"],"image":"images/areas/frozen-tundra.png","background":"images/backgrounds/frozen-tundra.png"},
+  {"id":"volcano","name":"Emberfall Volcano","level":51,"tier":6,"icon":"🌋","desc":"Fire creatures rule the molten caverns, backed by crushing physical brutes.","enemyPool":["Ember Drake","Lava Hound","Cinder Demon","Magma Elemental","Obsidian Brute"],"image":"images/areas/emberfall-volcano.png","background":"images/backgrounds/emberfall-volcano.png"},
+  {"id":"shatteredCoast","name":"Shattered Coast","level":56,"tier":6,"icon":"🌊","desc":"Volcanic tides and broken sea-forts shelter corsairs, revenants and glass-scaled beasts.","enemyPool":["Rift Crab","Ashen Corsair","Cinder Gull","Tide Revenant","Glass Serpent"],"image":"","background":""},
+  {"id":"voidlands","name":"The Voidlands","level":61,"tier":7,"icon":"🌌","desc":"Reality-warped horrors use dark magic alongside deadly physical attacks.","enemyPool":["Void Demon","Astral Wraith","Voidling","Aether Horror","Warped Knight"],"image":"images/areas/voidlands.png","background":"images/backgrounds/voidlands.png"},
+  {"id":"astralWilds","name":"Astral Wilds","level":66,"tier":7,"icon":"☄️","desc":"A fractured wilderness where creatures phase between starlight and the void.","enemyPool":["Starved Horror","Astral Hound","Phase Moth","Comet Golem","Rift Seer"],"image":"","background":""},
+  {"id":"celestialField","name":"Celestial Battlefield","level":71,"tier":8,"icon":"⚜️","desc":"An abandoned divine battlefield still patrolled by radiant war-machines and fallen heralds.","enemyPool":["Fallen Herald","Radiant Sentinel","Banner Wraith","Seraphic Hound","Halo Construct"],"image":"","background":""},
+  {"id":"leviathanTrench","name":"Leviathan Trench","level":76,"tier":8,"icon":"🐋","desc":"A lightless ocean trench filled with ancient predators and crushing tide magic.","enemyPool":["Trench Stalker","Leviathan Spawn","Abyssal Angler","Pearlback Turtle","Tide Oracle"],"image":"","background":""},
+  {"id":"clockworkWastes","name":"Clockwork Wastes","level":81,"tier":9,"icon":"⚙️","desc":"Ruined timeworks produce relentless machines, temporal storms and scavenger artificers.","enemyPool":["Rust Colossus","Chrono Wisp","Gearhound","Wastes Artificer","Pendulum Knight"],"image":"","background":""},
+  {"id":"dreamingGrove","name":"Dreaming Grove","level":86,"tier":9,"icon":"🌸","desc":"A beautiful forest trapped in a hostile dream where memories take predatory form.","enemyPool":["Dream Eater","Lullaby Dryad","Memory Stag","Nightmare Bloom","Somnolent Giant"],"image":"","background":""},
+  {"id":"endfall","name":"Endfall Expanse","level":91,"tier":10,"icon":"🌑","desc":"The edge of creation collapses into hostile fragments of every known element.","enemyPool":["Endborn Ravager","Worldscar Elemental","Last Pilgrim","Entropy Drake","Godless Shade"],"image":"","background":""},
+  {"id":"starThrone","name":"Throne of Stars","level":96,"tier":10,"icon":"👑","desc":"The final celestial ascent is guarded by immortal wardens and living constellations.","enemyPool":["Constellation Knight","Throne Seraph","Starlight Devourer","Crown of Eyes","Eternal Regent"],"image":"","background":""}
 ]
