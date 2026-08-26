@@ -51,6 +51,12 @@ button{font:inherit;cursor:pointer}.site{height:60px;padding:0 18px;display:flex
 .empty{text-align:center;color:var(--m);padding:22px;border:1px dashed var(--b);border-radius:9px}.mats{display:flex;gap:7px;flex-wrap:wrap}.mat{border:1px solid var(--b);border-radius:8px;padding:7px 9px}.mat b{color:var(--g)}
 #mealInventory .mat{display:grid;grid-template-columns:auto minmax(180px,1fr) auto;gap:10px;align-items:center;flex:1 1 300px;max-width:520px;background:rgba(20,15,10,.45)}
 #mealInventory .mat small{display:block;color:var(--m);margin-top:3px;line-height:1.35}
+#cookingRecipes.recipes{display:block!important}
+#cookingRecipes .recipeCategory{width:100%;margin-bottom:10px}
+#cookingRecipes .recipeCategoryBody{grid-template-columns:1fr!important}
+#cookingRecipes .recipeItemInformation{grid-template-columns:1fr!important}
+#cookingRecipes .recipeProfileList span{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:800px){#cookingRecipes .recipeDetailLayout{grid-template-columns:1fr!important}}
 @media(max-width:900px){.shell{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto}.nav{width:auto;white-space:nowrap}.g2,.quests,.active{grid-template-columns:1fr}.roster{grid-template-columns:repeat(2,1fr)}.inventory,.recipes,.upgrades{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.top{align-items:flex-start;flex-direction:column}.roster,.inventory,.recipes,.upgrades,.g4,.stats{grid-template-columns:1fr}}
 
