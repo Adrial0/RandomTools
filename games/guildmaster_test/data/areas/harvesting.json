@@ -327,6 +327,25 @@
     "background": "images/backgrounds/background19.png"
   },
   {
+    "id": "flaxfields",
+    "name": "Goldstem Flax Fields",
+    "icon": "🌾",
+    "skill": "harvesting",
+    "req": 5,
+    "kind": "Harvesting",
+    "cycle": 40,
+    "xp": 2,
+    "resources": [
+      [
+        "Flax",
+        100
+      ]
+    ],
+    "desc": "Long flax stems ready to be retted, spun, and woven into linen.",
+    "image": "",
+    "background": ""
+  },
+  {
     "id": "manabloom",
     "name": "Bluebell Mana Garden",
     "icon": "🪻",
@@ -342,6 +361,44 @@
       ]
     ],
     "desc": "Mana-rich flowers cultivated around old ley lines.",
+    "image": "",
+    "background": ""
+  },
+  {
+    "id": "cottonterraces",
+    "name": "Cloudwhite Cotton Terraces",
+    "icon": "☁️",
+    "skill": "harvesting",
+    "req": 10,
+    "kind": "Harvesting",
+    "cycle": 52,
+    "xp": 3,
+    "resources": [
+      [
+        "CottonBoll",
+        100
+      ]
+    ],
+    "desc": "Soft cotton bolls used to produce durable, breathable cloth.",
+    "image": "",
+    "background": ""
+  },
+  {
+    "id": "silkgrassmarsh",
+    "name": "Silverthread Wetlands",
+    "icon": "🌱",
+    "skill": "harvesting",
+    "req": 16,
+    "kind": "Harvesting",
+    "cycle": 66,
+    "xp": 4,
+    "resources": [
+      [
+        "Silkgrass",
+        100
+      ]
+    ],
+    "desc": "Fine marsh grass whose shining fibers can be woven into silk-like fabric.",
     "image": "",
     "background": ""
   },
@@ -384,25 +441,6 @@
     "background": ""
   },
   {
-    "id": "cinderbloom",
-    "name": "Ashen Bloomfields",
-    "icon": "🌺",
-    "skill": "harvesting",
-    "req": 25,
-    "kind": "Harvesting",
-    "cycle": 84,
-    "xp": 6,
-    "resources": [
-      [
-        "CinderBloom",
-        100
-      ]
-    ],
-    "desc": "Rare flowers that thrive in warm volcanic ash.",
-    "image": "",
-    "background": ""
-  },
-  {
     "id": "frostbloom",
     "name": "Frostbloom Shelf",
     "icon": "❄️",
@@ -422,44 +460,21 @@
     "background": ""
   },
   {
-    "id": "flaxfields",
-    "name": "Goldstem Flax Fields",
-    "icon": "🌾",
+    "id": "cinderbloom",
+    "name": "Ashen Bloomfields",
+    "icon": "🌺",
     "skill": "harvesting",
-    "req": 5,
+    "req": 25,
     "kind": "Harvesting",
-    "cycle": 40,
-    "xp": 2,
-    "resources": [["Flax",100]],
-    "desc": "Long flax stems ready to be retted, spun, and woven into linen.",
-    "image": "",
-    "background": ""
-  },
-  {
-    "id": "cottonterraces",
-    "name": "Cloudwhite Cotton Terraces",
-    "icon": "☁️",
-    "skill": "harvesting",
-    "req": 10,
-    "kind": "Harvesting",
-    "cycle": 52,
-    "xp": 3,
-    "resources": [["CottonBoll",100]],
-    "desc": "Soft cotton bolls used to produce durable, breathable cloth.",
-    "image": "",
-    "background": ""
-  },
-  {
-    "id": "silkgrassmarsh",
-    "name": "Silverthread Wetlands",
-    "icon": "🌱",
-    "skill": "harvesting",
-    "req": 16,
-    "kind": "Harvesting",
-    "cycle": 66,
-    "xp": 4,
-    "resources": [["Silkgrass",100]],
-    "desc": "Fine marsh grass whose shining fibers can be woven into silk-like fabric.",
+    "cycle": 84,
+    "xp": 6,
+    "resources": [
+      [
+        "CinderBloom",
+        100
+      ]
+    ],
+    "desc": "Rare flowers that thrive in warm volcanic ash.",
     "image": "",
     "background": ""
   },
@@ -667,27 +682,117 @@
     "background": ""
   },
   {
-    "id":"adamantite","name":"Heavenfall Adamantite Mine","icon":"⛏️","skill":"mining","req":34,"kind":"Mining","cycle":108,"xp":8,
-    "resources":[["Adamantite",100]],"desc":"Dense celestial metal scattered across an ancient divine battlefield.","image":"","background":""
+    "id": "adamantite",
+    "name": "Heavenfall Adamantite Mine",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 34,
+    "kind": "Mining",
+    "cycle": 108,
+    "xp": 8,
+    "resources": [
+      [
+        "Adamantite",
+        100
+      ]
+    ],
+    "desc": "Dense celestial metal scattered across an ancient divine battlefield.",
+    "image": "",
+    "background": ""
   },
   {
-    "id":"celestialsilk","name":"Skyweaver Roost","icon":"🕸️","skill":"hunting","req":34,"kind":"Hunting","cycle":108,"xp":8,
-    "resources":[["CelestialSilk",100]],"desc":"Hunt radiant skyweavers for nearly weightless celestial fibers.","image":"","background":""
+    "id": "celestialsilk",
+    "name": "Skyweaver Roost",
+    "icon": "🕸️",
+    "skill": "hunting",
+    "req": 34,
+    "kind": "Hunting",
+    "cycle": 108,
+    "xp": 8,
+    "resources": [
+      [
+        "CelestialSilk",
+        100
+      ]
+    ],
+    "desc": "Hunt radiant skyweavers for nearly weightless celestial fibers.",
+    "image": "",
+    "background": ""
   },
   {
-    "id":"orichalcum","name":"Lost Orichalcum Works","icon":"⛏️","skill":"mining","req":39,"kind":"Mining","cycle":122,"xp":9,
-    "resources":[["Orichalcum",100]],"desc":"Temporal machinery exposes veins of time-warped orichalcum.","image":"","background":""
+    "id": "orichalcum",
+    "name": "Lost Orichalcum Works",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 39,
+    "kind": "Mining",
+    "cycle": 122,
+    "xp": 9,
+    "resources": [
+      [
+        "Orichalcum",
+        100
+      ]
+    ],
+    "desc": "Temporal machinery exposes veins of time-warped orichalcum.",
+    "image": "",
+    "background": ""
   },
   {
-    "id":"dreamwood","name":"Lucidwood Thicket","icon":"🪓","skill":"woodcutting","req":39,"kind":"Woodcutting","cycle":122,"xp":9,
-    "resources":[["Dreamwood",100]],"desc":"Trees grown from persistent dreams yield timber that remembers every shape.","image":"","background":""
+    "id": "dreamwood",
+    "name": "Lucidwood Thicket",
+    "icon": "🪓",
+    "skill": "woodcutting",
+    "req": 39,
+    "kind": "Woodcutting",
+    "cycle": 122,
+    "xp": 9,
+    "resources": [
+      [
+        "Dreamwood",
+        100
+      ]
+    ],
+    "desc": "Trees grown from persistent dreams yield timber that remembers every shape.",
+    "image": "",
+    "background": ""
   },
   {
-    "id":"eternium","name":"Endfall Eternium Seam","icon":"⛏️","skill":"mining","req":45,"kind":"Mining","cycle":140,"xp":10,
-    "resources":[["Eternium",100]],"desc":"The last stable metal is mined where the world fractures into nothing.","image":"","background":""
+    "id": "eternium",
+    "name": "Endfall Eternium Seam",
+    "icon": "⛏️",
+    "skill": "mining",
+    "req": 45,
+    "kind": "Mining",
+    "cycle": 140,
+    "xp": 10,
+    "resources": [
+      [
+        "Eternium",
+        100
+      ]
+    ],
+    "desc": "The last stable metal is mined where the world fractures into nothing.",
+    "image": "",
+    "background": ""
   },
   {
-    "id":"worldroot","name":"Worldroot Crown","icon":"🪓","skill":"woodcutting","req":45,"kind":"Woodcutting","cycle":140,"xp":10,
-    "resources":[["Worldroot",100]],"desc":"Harvest immortal branches from the roots supporting the Throne of Stars.","image":"","background":""
+    "id": "worldroot",
+    "name": "Worldroot Crown",
+    "icon": "🪓",
+    "skill": "woodcutting",
+    "req": 45,
+    "kind": "Woodcutting",
+    "cycle": 140,
+    "xp": 10,
+    "resources": [
+      [
+        "Worldroot",
+        100
+      ]
+    ],
+    "desc": "Harvest immortal branches from the roots supporting the Throne of Stars.",
+    "image": "",
+    "background": ""
   }
 ]

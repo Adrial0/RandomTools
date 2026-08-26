@@ -17,6 +17,7 @@ const context={
   },
   clamp:(value,min,max)=>Math.max(min,Math.min(max,value)),
   pick:list=>list[0],
+  scalingStatValue:unit=>unit.scale==='int'?(unit.int||0):unit.scale==='dex'?(unit.dex||0):(unit.str||0),
   syncPartyHp(){},
   elementIcon:{},
   s:{members:[]}
@@ -36,6 +37,18 @@ assert.ok(context.heroXpNeeded(10)>1300,'higher character levels require substan
 assert.ok(context.heroXpNeeded(20)>3800,'the XP curve continues steepening instead of remaining linear');
 assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.battleShout',context),12000,'Battle Shout keeps its intended 12-second duration');
 assert.equal(vm.runInContext('COMBAT_BUFF_DURATIONS.shieldFaith',context),10000,'Shield of Faith keeps its intended 10-second duration');
+
+{
+  vm.runInContext("ACTIVE_MANA_COSTS.arcaneBurst=16;ACTIVE_COOLDOWNS.arcaneBurst=12000;ACTIVE_DISPLAY_NAMES.arcaneBurst='Arcane Burst'",context);
+  const attacker={id:1,name:'Attacker',hp:160,maxHp:160,def:8,mdef:8,block:0,fire:0,statuses:{},buffs:{}};
+  const mage={id:1,name:'Defense Mage',class:'Mage',arenaHero:true,activeType:'arcaneBurst',hp:140,maxHp:140,mana:60,maxMana:60,manaRegen:3,int:32,str:4,dex:8,scale:'int',weaponPower:20,damageType:'fire',damageMult:1,elementalMult:1,cooldowns:{},buffs:{},statuses:{}};
+  const m={party:[1],battle:{heroes:[attacker],enemies:[mage],log:[],actionSeq:0},combatReport:{heroes:{},deaths:[]}};
+  const now=Date.now();
+  assert.equal(context.tryArenaDefenderActive(m,mage,now),true,'an Arena defending Mage casts its active ability');
+  assert.ok(attacker.hp<attacker.maxHp,'the defending Mage active ability damages the attacking party');
+  assert.equal(mage.mana,44,'the defending Mage spends the normal active-ability Mana cost');
+  assert.ok(mage.cooldowns.arcaneBurst>now,'the defending Mage starts the normal active cooldown');
+}
 
 {
   const now=Date.now();

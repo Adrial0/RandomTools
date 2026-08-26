@@ -247,7 +247,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
   const icon=enemy?x.icon:(x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset'));
   const side=options.arena?`arena-${x.side}`:(enemy?'enemy':'hero');
   const key=`${side}-${x.id}`;
-  const activeType=enemy?null:primaryActiveType(x);
+  const activeType=enemy&&!x.arenaHero?null:primaryActiveType(x);
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
   const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
@@ -474,7 +474,7 @@ function updateCombatantDom(x,enemy,slotElement=null){
     }
   }
   const activeType=primaryActiveType(x);
-  if(!enemy&&activeType&&!el.querySelector('.cooldownTrack')){
+  if((!enemy||x.arenaHero)&&activeType&&!el.querySelector('.cooldownTrack')){
     const vitals=el.querySelector('.combatMiniVitals')||el.lastElementChild;
     if(vitals){
       const track=document.createElement('div');

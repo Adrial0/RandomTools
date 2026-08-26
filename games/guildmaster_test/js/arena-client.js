@@ -122,7 +122,9 @@ let arenaLiveMission=null;
 function watchArenaBattle(){if(!arenaLiveMission)return;$('combatModal').dataset.mode='arena';$('combatModal').classList.add('on');resetCombatView();syncWindowScrollLock();renderCombat()}
 function arenaHeroUnit(h,index,enemy=false){
   const now=Date.now(),interval=Math.max(250,h.attackInterval||2500),main=h.class==='Mage'||h.class==='Priest'?h.int:h.class==='Ranger'||h.class==='Rogue'?h.dex:h.str;
-  const unit={...h,id:index+1,hp:h.maxHp,mana:h.maxMana||20+(h.int||0),maxMana:h.maxMana||20+(h.int||0),manaRegen:h.manaRegen||1,statuses:{},buffs:{},cooldowns:{},displayClass:h.subclass||h.class,baseAttackTime:interval/1000,attackSpeed:0,attackStartedAt:now,nextAttackAt:now+interval};
+  const activeType=h.activeType||subclassDef(h)?.activeType||(h.class==='Priest'?'Heal':h.class==='Mage'?'arcaneBurst':null);
+  const maxMana=Math.max(0,h.maxMana||(['Mage','Priest'].includes(h.class)?20+(h.int||0):0));
+  const unit={...h,id:index+1,hp:h.maxHp,mana:maxMana,maxMana,manaRegen:maxMana>0?(h.manaRegen||1):0,activeType,statuses:{},buffs:{},cooldowns:{},displayClass:h.subclass||h.class,baseAttackTime:interval/1000,attackSpeed:0,attackStartedAt:now,nextAttackAt:now+interval};
   if(enemy)Object.assign(unit,{icon:h.subclass?gameIcon('subclass',h.subclass,iconFallback('class',h.class),'gameAsset combatAsset'):gameIcon('class',h.class,iconFallback('class',h.class),'gameAsset combatAsset'),atk:Math.max(1,Math.round((h.weaponPower||8)*.55+(main||1)*.45)),attackInterval:interval,mage:['Mage','Priest'].includes(h.class),ability:null,abilityReadyAt:0,drops:[],arenaHero:true});
   return unit;
 }

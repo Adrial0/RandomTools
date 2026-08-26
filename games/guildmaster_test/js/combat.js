@@ -579,7 +579,7 @@ function heroDamage(h,target,forcedElement=null){
   if(h.subclass==='marksman'&&statuses.frostbite)synergy+=.18;
   const raw=base*roll*mult*synergy*(element==='physical'?1:(1+(h.elementalDamage||0)));
 
-  const protectionMult=1-clamp(target.protection||0,0,.6);
+  const protectionMult=(1-clamp(target.protection||0,0,.6))*(target.buffs?.shieldFaith>Date.now()?.70:1);
   if(element==='physical')return Math.max(1,Math.round(mitigatedDamage(raw,target.def,target.block||0,h.armorPen||0)*protectionMult));
 
   const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0,h.armorPen||0);
@@ -798,6 +798,45 @@ function tryActiveSkill(m,h,now=Date.now()){
   }
   return used;
 }
+function arenaDefenderDamage(m,h,target,mult,label,element=null){
+  if(!target||target.hp<=0)return false;
+  const type=element||h.damageType||'physical';
+  const dmg=Math.max(1,Math.round(heroDamage(h,target,element)*mult));
+  const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
+  m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} for ${dmg} ${elementIcon[type]||''} ${type} damage.`);
+  return true;
+}
+function tryArenaDefenderActive(m,h,now=Date.now()){
+  if(!h?.arenaHero||h.hp<=0)return false;
+  const b=m.battle,type=primaryActiveType(h),targets=living(b.heroes),allies=living(b.enemies);
+  if(!type||!targets.length||!activeReady(h,type,now)||!canSpendMana(h,type))return false;
+  let used=false;
+  const healTypes={Heal:1,greaterHeal:1.65,renew:.85,radiantAid:.75};
+  if(healTypes[type]){
+    const ally=[...allies].sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0];
+    const threshold=type==='greaterHeal'?.82:type==='renew'?.88:type==='radiantAid'?.90:.70;
+    if(ally&&ally.hp<ally.maxHp*threshold){
+      const amount=Math.max(2,Math.round(((h.int||1)*.38+(h.weaponPower||8)*.12)*(h.healMult||1)*healTypes[type]*2));
+      const before=ally.hp;ally.hp=Math.min(ally.maxHp,ally.hp+amount);
+      b.log.unshift(`${h.name.split(' ')[0]} uses ${activeName(type)} on ${ally.name.split(' ')[0]} for ${ally.hp-before}.`);used=true;
+    }
+  }else if(type==='elementNova'||type==='arcaneBurst'){
+    const element=type==='elementNova'?(h.element||'fire'):(h.damageType==='physical'?'fire':h.damageType);
+    const mult=type==='elementNova'?1.44:1.35;
+    targets.forEach(target=>arenaDefenderDamage(m,h,target,mult,activeName(type),element));used=true;
+  }else if(type==='commandStrike'){
+    allies.forEach(ally=>{ally.buffs=ally.buffs||{};ally.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout});
+    b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout on the defending party.`);used=true;
+  }else if(type==='shieldFaith'){
+    h.buffs=h.buffs||{};h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
+    b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith.`);used=true;
+  }else{
+    const target=pick(targets),definition={powerStrike:[2,'Power Strike'],shieldSlam:[1.7,'Shield Slam'],preciseShot:[2.2,'Precise Shot'],wardenShot:[1.5,'Warden Shot'],backstab:[2.4,'Backstab'],envenom:[1.9,'Envenom','poison'],smite:[2.1,'Smite','holy'],holyStrike:[2.1,'Holy Strike','holy'],companionStrike:[1.1,'Companion Strike'],flurry:[2.8,'Flurry']}[type];
+    if(definition){used=arenaDefenderDamage(m,h,target,definition[0],definition[1],definition[2]);if(used&&['powerStrike','backstab'].includes(type))applyStatus(m,target,'bleed',{power:Math.max(1,heroDamage(h,target)*.16),duration:7000,source:h.name});if(used&&type==='envenom')applyStatus(m,target,'poison',{power:Math.max(1,heroDamage(h,target,'poison')*.18),duration:10000,source:h.name})}
+  }
+  if(used){spendMana(h,type);startActiveCooldown(h,type,now);b.actionSeq=(b.actionSeq||0)+1;b.log=b.log.slice(0,45);syncPartyHp(m)}
+  return used;
+}
 function threatTarget(targets){
   const total=targets.reduce((sum,h)=>sum+Math.max(.01,h.threat||1),0);
   let roll=Math.random()*total;
@@ -871,7 +910,7 @@ function enemyAction(m,e){
   if(e.cast)return;
   if(tryEnemyAbility(m,e,Date.now()))return;
 
-  const elem=e.damageType||'physical';
+  const elem=e.damageType||'physical',buffMult=e.buffs?.battleShout>Date.now()?1.20:1;
   const elemental=elem!=='physical';
   if(elemental && Math.random()<(e.aoeChance||.32)){
     const hit=targets.map(target=>{
@@ -879,7 +918,7 @@ function enemyAction(m,e){
         return `${target.name.split(' ')[0]} dodged`;
       }
       const enraged=e.enrageThreshold&&e.hp/e.maxHp<=e.enrageThreshold?e.enrageMult||1:1;
-      const raw=e.atk*1.05*(e.elementalMult||1)*enraged;
+      const raw=e.atk*1.05*(e.elementalMult||1)*enraged*buffMult;
       const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0);
       let dmg=Math.max(0,Math.round(afterDefense*elementalReduction(target[elem])));
       if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
@@ -903,9 +942,9 @@ function enemyAction(m,e){
   const enraged=e.enrageThreshold&&e.hp/e.maxHp<=e.enrageThreshold?e.enrageMult||1:1;
   const execute=e.executeThreshold&&target.hp/target.maxHp<=e.executeThreshold?e.executeMult||1:1;
   if(elemental){
-    const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1)*enraged*execute;
+    const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1)*enraged*execute*buffMult;
     dmg=Math.max(0,Math.round(mitigatedDamage(raw,target.mdef,target.block||0)*elementalReduction(target[elem])));
-  }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute,target.def,target.block||0);
+  }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute*buffMult,target.def,target.block||0);
   if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} ${elemental?elementIcon[elem]+' '+elem:'physical'} damage.`);
@@ -1206,6 +1245,14 @@ function stepBattle(m){
   if(!living(b.heroes).length){expeditionDefeated(m);return}
 
   processTimedRegen(m,now);
+
+  // Arena defenders are saved heroes, so their subclass abilities run on
+  // independent mana/cooldown timers just like the attacking party.
+  for(const defender of b.enemies){
+    if(defender.hp<=0||!defender.arenaHero)continue;
+    tryArenaDefenderActive(m,defender,now);
+    if(!living(b.heroes).length){expeditionDefeated(m);return}
+  }
 
   // Active abilities are fully independent of normal attacks.
   for(const hero of b.heroes){
