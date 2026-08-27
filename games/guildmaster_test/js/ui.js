@@ -140,7 +140,7 @@ function renderRec(){
   s.applicantCap=applicantBatchSize();
   $('recruits').innerHTML=
     `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Batch every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll · ${recruitRerollCost().toLocaleString()}g</button></div></div></div>`+
-    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>${x.trait}</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
+    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard characterRarity rarityBorder-${String(x.rarity||'Common').toLowerCase()}" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>Click to inspect</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
 }
 let activeMissionDomKey='';
 function activeMissionKey(){
@@ -617,13 +617,13 @@ function renderRoster(){
   if(!s.selected&&members[0])s.selected=members[0].id;
   $('rosterList').innerHTML=members.length?members.map(h=>{
     const z=hs(h);
-    return `<div class="card hero ${s.selected===h.id?'on':''}" onclick="s.selected=${h.id};save();renderRoster()">
+    return `<div class="card hero characterRarity rarityBorder-${String(h.rarity||'Common').toLowerCase()} ${s.selected===h.id?'on':''}" onclick="s.selected=${h.id};save();renderRoster()">
       ${h.level>=10&&!h.subclass?`<div class="subclassReadyBadge" title="Subclass available">!</div>`:''}
       <div class="heroTop">
         <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
         <div style="min-width:0"><div class="name">${h.name}</div><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level}</div></div>
       </div>
-      <div class="power"><span>${h.busy?(h.professionBusy?'Working · '+PROFESSION_DEFS[h.professionBusy].name:'Away'):h.trait}</span><strong>${z.power}</strong></div>
+      <div class="power"><span>${h.busy?(h.professionBusy?'Working · '+PROFESSION_DEFS[h.professionBusy].name:'Away'):'Available'}</span><strong>${z.power}</strong></div>
     </div>`;
   }).join(''):'<div class="empty">No guild members recruited.</div>';
   const selected=s.members.find(x=>x.id===s.selected)||members[0];
@@ -715,7 +715,7 @@ function heroDetail(h){
   return `<div class="detailHeader">
     <div class="detailIdentity">
       <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
-      <div style="min-width:0"><h2>${h.name}</h2><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level} · ${h.rarity}</div><div class="muted">${h.trait}${h.busy?' · '+(h.professionBusy?'Working in '+PROFESSION_DEFS[h.professionBusy].name:'Away'):''}</div><div class="muted">${professionTraitText(h)}</div></div>
+      <div style="min-width:0"><h2>${h.name}</h2><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level} · <span class="${rarityClass(h.rarity)}">${h.rarity}</span></div><div class="muted">${h.trait}${h.busy?' · '+(h.professionBusy?'Working in '+PROFESSION_DEFS[h.professionBusy].name:'Away'):''}</div></div>
     </div>
     <div style="text-align:right"><b>${z.power} power</b></div>
   </div>

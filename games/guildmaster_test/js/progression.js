@@ -309,7 +309,7 @@ function upgrade(k){
   Object.entries(rc).forEach(([r,v])=>s.materials[r]-=v);
   s.up[k]=l+1;
   setOnboardingFlag('upgradePurchased');
-  if(k==='quarters')s.memberCap=Math.max(s.members.length,4+s.up.quarters);if(k==='recruit')s.applicantCap=applicantBatchSize();
+  if(k==='quarters')s.memberCap=Math.max(s.members.length,6+s.up.quarters);if(k==='recruit')s.applicantCap=applicantBatchSize();
   save();render();
 }
 function statName(k){
