@@ -19,7 +19,19 @@ const PROFESSION_TRAITS=[
 const METAL_BARS={CopperOre:'CopperBar',Iron:'IronBar',Silver:'SilverBar',Mithril:'MithrilBar',StarMetal:'StarMetalBar',CinderOre:'CinderBar',Voidstone:'VoidBar',Adamantite:'AdamantiteBar',Orichalcum:'OrichalcumBar',Eternium:'EterniumBar'};
 const WOOD_PLANKS={Wood:'WoodenPlank',Hardwood:'HardwoodPlank',Ironwood:'IronwoodPlank',SpiritBark:'SpiritwoodPlank',Dreamwood:'DreamwoodPlank',Worldroot:'WorldrootPlank'};
 const LEATHER_OUTPUTS={Leather:'CuredLeather',WolfPelt:'WolfLeather',WhitePelt:'FrostLeather',Stormhide:'StormLeather'};
+const PROFESSION_TIER_IDENTITIES={
+  smithing:['','Copper','Iron','Silver','Mithril','Star Metal','Cinder','Void','Adamantite','Orichalcum','Eternium'],
+  smelting:['','Copper Ore','Iron','Silver','Mithril','Star Metal','Cinder Ore','Voidstone','Adamantite','Orichalcum','Eternium'],
+  woodworking:['','Wood','Hardwood','Hardwood','Ironwood','Spiritwood','Spiritwood','Spiritwood','Spiritwood','Dreamwood','Worldroot'],
+  tailoring:['','Cloth','Linen','Cotton','Woven Silk','Shadow Silk','Shadow Silk','Phase Silk','Celestial Silk','Godthread','Godthread'],
+  leatherworking:['','Cured Leather','Wolf Leather','Storm Leather','Frost Leather','Shadow Silk','Demon Horn','Astral Thread','Leviathan Scale','Dream Essence','Worldroot'],
+  cooking:['','Fish & Game','Wolf & Herb','Pearlfin & Sunspice','Frost Fare','Dusk Fare','Cinder Fare','Astral Fare','Celestial Fare','Dream Fare','Worldroot Fare'],
+  runecrafting:['','Essence','Venom','Arcane','Spirit','Storm','Cinder','Astral','Celestial','Dream','Starlight']
+};
+const professionExpandedTiers=new Set(PROFESSION_ORDER.map(pid=>pid+':1'));
 let activeProfession='smithing';
+function professionTierIdentity(pid,tier){return PROFESSION_TIER_IDENTITIES[pid]?.[tier]||`Tier ${tier}`}
+function toggleProfessionTier(tier){const key=activeProfession+':'+tier;if(professionExpandedTiers.has(key))professionExpandedTiers.delete(key);else professionExpandedTiers.add(key);renderCraft()}
 
 function stableProfessionNumber(h){
   const text=String(h?.id||'')+'|'+String(h?.name||'');let n=0;
@@ -239,7 +251,7 @@ function renderTieredProfessionGroups(entries){
   let list=entries.filter(x=>!recipeCraftableOnly||x.craftable);
   const sorters={tier:(a,b)=>a.tier-b.tier||a.name.localeCompare(b.name),name:(a,b)=>a.name.localeCompare(b.name),level:(a,b)=>a.level-b.level||a.name.localeCompare(b.name),craftable:(a,b)=>Number(b.craftable)-Number(a.craftable)||a.tier-b.tier};
   list.sort(sorters[professionRecipeSort]||sorters.tier);const groups=new Map();list.forEach(x=>{if(!groups.has(x.tier))groups.set(x.tier,[]);groups.get(x.tier).push(x)});
-  return [...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,rows])=>{const name=`${tierLabel(tier)} · ${TIER_IDENTITIES[tier]||'Masterwork'}`,open=expandedRecipeCategories.has(name);return `<div class="recipeCategory ${open?'open':''}"><div class="recipeCategoryHeader" onclick="toggleRecipeCategory('${name}')"><span class="recipeCategoryArrow">${open?'▾':'▸'}</span><span class="recipeCategoryName">${name}</span><span class="recipeCategoryCount">${rows.length} recipe${rows.length===1?'':'s'}</span></div>${open?`<div class="recipeCategoryBody">${rows.map(x=>x.html()).join('')}</div>`:''}</div>`}).join('')||'<div class="empty">No recipes match the current filters.</div>';
+  return [...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,rows])=>{const name=`${tierLabel(tier)} · ${professionTierIdentity(activeProfession,tier)}`,open=professionExpandedTiers.has(activeProfession+':'+tier);return `<div class="recipeCategory ${open?'open':''}"><div class="recipeCategoryHeader" onclick="toggleProfessionTier(${tier})"><span class="recipeCategoryArrow">${open?'▾':'▸'}</span><span class="recipeCategoryName">${name}</span><span class="recipeCategoryCount">${rows.length} recipe${rows.length===1?'':'s'}</span></div>${open?`<div class="recipeCategoryBody">${rows.map(x=>x.html()).join('')}</div>`:''}</div>`}).join('')||'<div class="empty">No recipes match the current filters.</div>';
 }
 function renderCraftQueue(){
   const p=professionState(activeProfession),now=Date.now();normalizeProfessionQueue(activeProfession);

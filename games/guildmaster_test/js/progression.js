@@ -267,11 +267,17 @@ afkHarvest:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone
 gatherParty:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Hardwood','Crystal','Ironwood','StormGlass','AetherCrystal','AstralThread','LeviathanScale','Dreamwood','Worldroot']],
 board:[['Cloth','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Bone','ManaBloom','Sunstone','DeepPearl','AstralThread','AetherCrystal','AngelicSigil','ChronoShard','StarlightCore']]
 };
+const UPGRADE_PROCESSED_RESOURCES={
+  CopperOre:'CopperBar',Iron:'IronBar',Silver:'SilverBar',Mithril:'MithrilBar',StarMetal:'StarMetalBar',CinderOre:'CinderBar',Voidstone:'VoidBar',Adamantite:'AdamantiteBar',Orichalcum:'OrichalcumBar',Eternium:'EterniumBar',
+  Wood:'WoodenPlank',Hardwood:'HardwoodPlank',Ironwood:'IronwoodPlank',SpiritBark:'SpiritwoodPlank',Dreamwood:'DreamwoodPlank',Worldroot:'WorldrootPlank',
+  Leather:'CuredLeather',WolfPelt:'WolfLeather',WhitePelt:'FrostLeather',Stormhide:'StormLeather'
+};
+function upgradeProcessedResource(resource){return UPGRADE_PROCESSED_RESOURCES[resource]||resource}
 function upgradeResourceCost(k,l){
   const upgrade=upgrades.find(x=>x[0]===k),max=Math.max(2,upgrade?.[4]||7);
   const tier=clamp(1+Math.floor(l*9/(max-1)),1,10),index=tier-1;
   const paths=UPGRADE_RESOURCE_PATHS[k]||UPGRADE_RESOURCE_PATHS.quarters;
-  const primary=paths[0][index],secondary=paths[1][index];
+  const primary=upgradeProcessedResource(paths[0][index]),secondary=upgradeProcessedResource(paths[1][index]);
   const base=Math.max(3,Math.round((10+Math.pow(l+1,1.35)*5)/(1+(tier-1)*.3)));
   const out={};
   out[primary]=(out[primary]||0)+base;

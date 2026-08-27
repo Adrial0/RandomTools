@@ -82,4 +82,11 @@ const uiSource=fs.readFileSync(path.join(root,'js/ui.js'),'utf8');
 assert.match(uiSource,/Skills & Passives[\s\S]*Profession Affinity/,'roster stats show profession affinity in Skills & Passives');
 assert.match(uiSource,/function recruitDetail[\s\S]*Profession Affinity/,'applicant detail shows profession affinity before recruitment');
 
+assert.equal(vm.runInContext("professionTierIdentity('smithing',2)",context),'Iron');
+assert.equal(vm.runInContext("professionTierIdentity('woodworking',2)",context),'Hardwood');
+assert.equal(vm.runInContext("professionTierIdentity('tailoring',2)",context),'Linen');
+assert.equal(vm.runInContext("professionTierIdentity('leatherworking',2)",context),'Wolf Leather');
+assert.equal(vm.runInContext("professionTierIdentity('cooking',2)",context),'Wolf & Herb');
+assert.equal(vm.runInContext("professionTierIdentity('runecrafting',2)",context),'Venom');
+
 console.log('Profession model, recipe split, processing chains, migration, and busy-state tests passed.');
