@@ -1,0 +1,28 @@
+const assert=require('assert');
+const fs=require('fs');
+const path=require('path');
+
+const root=path.join(__dirname,'..');
+const areas=JSON.parse(fs.readFileSync(path.join(root,'data/areas/expeditions.json'),'utf8'));
+const enemies=JSON.parse(fs.readFileSync(path.join(root,'data/enemies.json'),'utf8'));
+const core=fs.readFileSync(path.join(root,'js/core.js'),'utf8');
+const activities=fs.readFileSync(path.join(root,'js/activities.js'),'utf8');
+const combat=fs.readFileSync(path.join(root,'js/combat.js'),'utf8');
+
+for(let tier=1;tier<=10;tier++){
+  const chapter=areas.filter(area=>area.tier===tier);
+  assert.strictEqual(chapter.length,3,`tier ${tier} should contain two areas and one gate boss`);
+  const gates=chapter.filter(area=>area.bossGate);
+  assert.strictEqual(gates.length,1,`tier ${tier} should have exactly one gate boss`);
+  assert.strictEqual(gates[0].gateTier,tier);
+  assert.ok(enemies[gates[0].boss],`missing enemy definition for ${gates[0].boss}`);
+  assert.strictEqual(enemies[gates[0].boss].boss,true,`${gates[0].boss} is not registered as a boss`);
+}
+
+assert.match(core,/expeditionGates:\[\]/,'new saves need expedition gate progress');
+assert.match(activities,/s\.expeditionGates.*includes\(\(q\.tier\|\|1\)-1\)/s,'expedition cards must be gated by the preceding tier boss');
+assert.match(combat,/s\.expeditionGates\.push\(m\.gateTier\)/,'boss victories must persist tier unlocks');
+assert.match(combat,/if\(m\.bossGate\)return;/,'offline progress must not bypass story bosses');
+assert.match(combat,/mission\.battle=mission\.bossGate\?makeBossBattle\(mission\):makeBattle\(mission\)/,'gate expeditions must begin directly in the boss encounter');
+
+console.log('Expedition tier gate tests passed.');

@@ -214,7 +214,7 @@ function toggleInventorySortDirection(){
 function inventoryMatchesFilter(it){
   if(!inventoryRarityFilter.has(it.rarity||'Common'))return false;
   if(inventoryFilter==='all')return true;
-  if(inventoryFilter==='Jewelry')return itemEquipSlot(it)==='Jewelry';
+  if(inventoryFilter==='Accessories')return itemEquipSlot(it)==='Accessories';
   return it.slot===inventoryFilter;
 }
 function inventorySortValue(it,key){
@@ -404,7 +404,7 @@ function closeRecipeMenu(){
 function setRecipeFilter(f,b){
   recipeFilter=f;
   document.querySelectorAll('[data-recipe-filter]').forEach(x=>x.classList.toggle('on',x.dataset.recipeFilter===f));
-  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',Jewelry:'Jewelry',Material:'Materials'};
+  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',Accessories:'Accessories',Material:'Materials'};
   const btn=$('recipeMenuButton');if(btn)btn.textContent=(labels[f]||'Filter')+' ▾';
   renderCraft();
 }
@@ -516,7 +516,7 @@ function renderCraft(){
   if($('smithRarityBonus'))$('smithRarityBonus').textContent='Higher rarity chance from Smithing Lv. '+s.smithing.level;
   const list=recipes.map((r,i)=>[r,i]).filter(([r])=>{
     const visible=recipeVisible(r);
-    const typeOk=recipeFilter==='all'||(recipeFilter==='Jewelry'?(r[1]==='Ring'||r[1]==='Amulet'):r[1]===recipeFilter);
+    const typeOk=recipeFilter==='all'||(recipeFilter==='Accessories'?(r[1]==='Ring'||r[1]==='Amulet'):r[1]===recipeFilter);
     const craftable=Object.entries(r[3]||{}).every(([k,v])=>(s.materials[k]||0)>=v)&&(s.smithing?.level||1)>=recipeSmithLevel(r);
     return visible&&typeOk&&(!recipeCraftableOnly||craftable);
   });

@@ -24,7 +24,7 @@ function makeBoss(m){
     damageType:({
       'Skeleton King':'dark','Broodmother':'poison','Rotting Colossus':'poison','High Cultist':'dark',
       'Ancient Drake':'fire','War Ogre':'physical','Wraith Lord':'dark','Abyssal Demon':'dark'
-    })[m.boss]||m.theme||'physical',
+    })[m.boss]||bossTpl.damageType||m.theme||'physical',
     aoeChance:raid?(m.boss==='War Ogre'?.25:.78):.48,
     elementalMult:raid?1.55:1.20,
     mage:true,boss:true,maxMana:80,mana:80,manaRegen:4,ability:ENEMIES_DATA[m.boss]?.ability||null,drops:ENEMIES_DATA[m.boss]?.drops||[],abilityReadyAt:0,attackInterval:raid?4500:4000,attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:4000)
@@ -80,10 +80,19 @@ function bossReward(m){
 
   m.completed=true;
   m.bossDefeated=true;
+  if(m.bossGate&&m.gateTier){
+    s.expeditionGates=Array.isArray(s.expeditionGates)?s.expeditionGates:[];
+    if(!s.expeditionGates.includes(m.gateTier)){
+      s.expeditionGates.push(m.gateTier);
+      s.expeditionGates.sort((a,b)=>a-b);
+      m.battle.log.unshift(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions unlocked.`:'The final expedition chapter is complete.');
+    }
+  }
   trackQuestProgress('boss',m.boss,1,{contentType:m.type});
   m.battle.log.unshift(m.boss+' dropped '+RESOURCE_NAMES[k]+'.');
   log(m.name+' completed. '+m.boss+' defeated.');
   save();
+  if(typeof renderOffers==='function')renderOffers('quest');
 }
 let currentMissionForEnemy=null;
 function makeEnemy(type,level,index,forcedName=null){
@@ -316,7 +325,7 @@ function send(type,qid,ids,provision=null){
     stash:emptyStash(),partyState:{},combatCycle:{phase:'heroes',heroTurn:0,enemyTurn:0,round:1},nextRegenAt:now+5000,defeated:false,completed:false,bossDefeated:false,battleNumber:0,lastRewardedBattleId:null
   };
   ensurePartyState(mission);
-  mission.battle=makeBattle(mission);
+  mission.battle=mission.bossGate?makeBossBattle(mission):makeBattle(mission);
   s.missions.push(mission);
   setOnboardingFlag('expeditionStarted');
   
@@ -1317,6 +1326,9 @@ function offlineCatchup(hiddenMs){
 
   s.missions.forEach(m=>{
     if(m.defeated||m.completed)return;
+    // Story gates are deliberate live boss attempts; background time cannot
+    // bypass them or silently advance the expedition chapter.
+    if(m.bossGate)return;
 
     ensurePartyState(m);
     repairFiniteMissionState(m);

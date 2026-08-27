@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
 <title>Guildmaster | My Random Tools</title>
-<link rel="stylesheet" href="styles.css?build=20260827h">
+<link rel="stylesheet" href="styles.css?build=20260827i">
 </head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -192,7 +192,7 @@
       <button class="btn inventoryFilter on" onclick="setInventoryFilter('all',this)">All</button>
       <button class="btn inventoryFilter" onclick="setInventoryFilter('Weapon',this)">Weapons</button>
       <button class="btn inventoryFilter" onclick="setInventoryFilter('Armor',this)">Armor</button>
-      <button class="btn inventoryFilter" onclick="setInventoryFilter('Jewelry',this)">Jewelry</button>
+      <button class="btn inventoryFilter" onclick="setInventoryFilter('Accessories',this)">Accessories</button>
     </div>
     <div class="inventorySortControls">
       <select id="inventorySortSelect" onchange="setInventorySort(this.value)">
@@ -226,6 +226,7 @@
   <div id="professionTabs" class="professionTabs"></div>
 </div>
 <div class="professionWorkspaceTop">
+  <div class="professionContentColumn">
   <div class="panel professionMainPanel">
     <div class="head">
       <div><h2>Workshop</h2><p>Assign specialists, process gathered resources, and create equipment and provisions.</p></div>
@@ -233,8 +234,9 @@
     <div id="craftMats" class="mats"></div>
     <div id="professionWorkstation"></div>
   </div>
+  <div class="panel recipePanel"><div class="head recipePanelHead"><div><h3 id="professionRecipeTitle">Known Recipes</h3><p id="professionRecipeHelp">Recipes are grouped by profession and tier.</p></div><div class="professionRecipeControls"><select id="professionRecipeSort" onchange="setProfessionRecipeSort(this.value)"><option value="tier">Tier</option><option value="name">Name</option><option value="level">Required level</option><option value="craftable">Craftable first</option></select><div class="recipeMenuWrap"><button class="btn" id="recipeMenuButton" onclick="toggleRecipeMenu(event)">All ▾</button><div class="recipeMenu" id="recipeMenu"><button class="recipeMenuItem on" data-recipe-filter="all" onclick="setRecipeFilter('all',this)">All recipes</button><button class="recipeMenuItem" data-recipe-filter="Weapon" onclick="setRecipeFilter('Weapon',this)">Weapons</button><button class="recipeMenuItem" data-recipe-filter="Armor" onclick="setRecipeFilter('Armor',this)">Armor</button><button class="recipeMenuItem" data-recipe-filter="Accessories" onclick="setRecipeFilter('Accessories',this)">Accessories</button><button class="recipeMenuItem" data-recipe-filter="Material" onclick="setRecipeFilter('Material',this)">Materials</button><div class="recipeMenuDivider"></div><button class="recipeMenuItem recipeCraftableToggle" id="recipeCraftableToggle" onclick="toggleCraftableRecipes(this)">Craftable only: Off</button></div></div></div></div><div id="recipeList" class="recipes"></div></div>
+  </div>
   <aside class="panel professionQueuePanel"><div class="head"><div><h3>Work Queue</h3><p>The assigned specialist remains busy until this workstation's queue is empty.</p></div></div><div id="craftQueue" class="active"></div></aside>
-  <div class="panel recipePanel"><div class="head recipePanelHead"><div><h3 id="professionRecipeTitle">Known Recipes</h3><p id="professionRecipeHelp">Recipes are grouped by profession and tier.</p></div><div class="professionRecipeControls"><select id="professionRecipeSort" onchange="setProfessionRecipeSort(this.value)"><option value="tier">Tier</option><option value="name">Name</option><option value="level">Required level</option><option value="craftable">Craftable first</option></select><div class="recipeMenuWrap"><button class="btn" id="recipeMenuButton" onclick="toggleRecipeMenu(event)">All ▾</button><div class="recipeMenu" id="recipeMenu"><button class="recipeMenuItem on" data-recipe-filter="all" onclick="setRecipeFilter('all',this)">All recipes</button><button class="recipeMenuItem" data-recipe-filter="Weapon" onclick="setRecipeFilter('Weapon',this)">Weapons</button><button class="recipeMenuItem" data-recipe-filter="Armor" onclick="setRecipeFilter('Armor',this)">Armor</button><button class="recipeMenuItem" data-recipe-filter="Jewelry" onclick="setRecipeFilter('Jewelry',this)">Jewelry</button><button class="recipeMenuItem" data-recipe-filter="Material" onclick="setRecipeFilter('Material',this)">Materials</button><div class="recipeMenuDivider"></div><button class="recipeMenuItem recipeCraftableToggle" id="recipeCraftableToggle" onclick="toggleCraftableRecipes(this)">Craftable only: Off</button></div></div></div></div><div id="recipeList" class="recipes"></div></div>
 </div>
 </section>
 <section class="page" id="cooking">
@@ -297,13 +299,13 @@
 <div class="modalBg" id="combatModal"><div class="modal"><div class="head"><div><h3 id="combatTitle">Expedition Combat</h3><div class="muted" id="combatSubtitle"></div></div><button class="btn" onclick="closeCombat()">Close</button></div><div id="combatBody"></div></div></div>
 <div class="noticeStack" id="noticeStack"></div>
 
-<script src="js/core.js?build=20260827g"></script>
-<script src="js/combat.js?build=20260826o"></script>
-<script src="js/progression.js?build=20260827g"></script>
-<script src="js/ui.js?build=20260827g"></script>
-<script src="js/activities.js?build=20260827g"></script>
-<script src="js/economy.js?build=20260827a"></script>
-<script src="js/professions.js?build=20260827e"></script>
+<script src="js/core.js?build=20260827i"></script>
+<script src="js/combat.js?build=20260827i"></script>
+<script src="js/progression.js?build=20260827i"></script>
+<script src="js/ui.js?build=20260827i"></script>
+<script src="js/activities.js?build=20260827i"></script>
+<script src="js/economy.js?build=20260827i"></script>
+<script src="js/professions.js?build=20260827i"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/arena-client.js?build=20260826o"></script>
 <script src="js/app.js?build=20260826o"></script>

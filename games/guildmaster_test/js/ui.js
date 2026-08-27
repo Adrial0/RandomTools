@@ -189,7 +189,7 @@ function updateActiveMissionCard(m){
   const drops=pendingCount(m);
   const stash=(m.stash?.gold||0)+'g · '+(m.stash?.rep||0)+' rep · '+drops+' drops';
 
-  card.querySelector('[data-active-encounter]').textContent=m.maxFights?(m.battle?.boss?'Boss':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights';
+  card.querySelector('[data-active-encounter]').textContent=m.bossGate?'Tier Boss':m.maxFights?(m.battle?.boss?'Boss':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights';
   card.querySelector('[data-active-kills]').textContent=m.kills+' kills';
   card.querySelector('[data-active-battle]').textContent=m.battle?.boss?'⚠ BOSS':'Battle #'+(m.battle?.id||'-');
   card.querySelector('[data-active-stash]').textContent=stash;
@@ -550,7 +550,7 @@ function renderCombat(){
   if(!m.battle)return;
 
   $('combatTitle').textContent=m.name;
-  $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
+  $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.bossGate?'TIER BOSS':m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
 
   if(!$('combatLog'))buildCombatStructure(m);
   renderPersistentCombatSlots(m);

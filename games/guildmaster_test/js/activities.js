@@ -315,13 +315,14 @@ function threatIntelHtml(q,type){
 }
 function renderOffers(type){
  const box=type==='raid'?'raidList':type==='dungeon'?'dungeonList':'questList';
- $(box).innerHTML=arr(type).map(q=>{
+ const offers=type==='quest'?arr(type).filter(q=>(q.tier||1)<=1||(s.expeditionGates||[]).includes((q.tier||1)-1)):arr(type);
+ $(box).innerHTML=offers.map(q=>{
    const locked=false,occupied=missionLocationOccupied(type,q);
    const sceneType=type==='quest'?'expedition':type;
    const sceneKey=type==='quest'?(AREAS.find(a=>a.name===q.name)?.id||q.areaId||q.id):q.name;
    return `<div class="card quest actionCard" data-id="${q.id}">
     ${sceneBanner(sceneType,sceneKey)}<div class="name">${q.name}</div><div class="muted">${q.desc}</div>
-    <div class="chips"><span class="chip">${tierLabel(q.tier||1)}</span><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
+    <div class="chips"><span class="chip">${tierLabel(q.tier||1)}</span><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?(q.bossGate?`<span class="chip gateBossChip">Tier Boss</span><span class="chip">Boss: ${q.boss}</span>${(s.expeditionGates||[]).includes(q.gateTier)?'<span class="chip good">Cleared</span>':''}`:'<span class="chip">Endless area</span>'):`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
     ${threatIntelHtml(q,type)}
     <button class="btn ${occupied?'':'gold'} actionButton" ${occupied?'disabled':''} onclick="openPartyPicker('${type}',${q.id})">${occupied?'Party Deployed':type==='raid'?'Start Raid':type==='dungeon'?'Start Dungeon':'Start Expedition'}</button>
    </div>`;

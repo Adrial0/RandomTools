@@ -701,7 +701,7 @@
       "image": "images/items/amulet.png",
       "fallback": "📿"
     },
-    "Jewelry": {
+    "Accessories": {
       "image": "images/items/jewelry.png",
       "fallback": "💎"
     }

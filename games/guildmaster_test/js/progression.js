@@ -3,7 +3,7 @@ const ONBOARDING_GOALS=[
   {id:'recruitTwo',title:'Form the Core Team',description:'Recruit your first two adventurers.',reward:{gold:20},complete:()=>s.members.length>=2},
   {id:'startExpedition',title:'Send an Expedition',description:'Choose a destination and deploy a party.',reward:{gold:25},complete:()=>!!s.onboarding.flags.expeditionStarted},
   {id:'claimLoot',title:'Bring Home the Spoils',description:'Claim rewards earned by an expedition.',reward:{gold:30,rep:250},complete:()=>!!s.onboarding.flags.lootClaimed},
-  {id:'equipItem',title:'Equip an Adventurer',description:'Equip any weapon, armor, or piece of jewelry.',reward:{gold:30},complete:()=>!!s.onboarding.flags.itemEquipped},
+  {id:'equipItem',title:'Equip an Adventurer',description:'Equip any weapon, armor, or accessory.',reward:{gold:30},complete:()=>!!s.onboarding.flags.itemEquipped},
   {id:'startHarvest',title:'Gather Resources',description:'Send a crew to a harvesting location.',reward:{gold:35,rep:250},complete:()=>!!s.onboarding.flags.harvestStarted},
   {id:'buyUpgrade',title:'Invest in the Guild',description:'Purchase your first permanent guild upgrade.',reward:{gold:50,rep:500},complete:()=>!!s.onboarding.flags.upgradePurchased}
 ];
@@ -85,7 +85,7 @@ function allowedWeapons(h){
   return base;
 }
 function itemEquipSlot(it){
-  return it&&(it.slot==='Ring'||it.slot==='Amulet')?'Jewelry':it?.slot;
+  return it&&(it.slot==='Ring'||it.slot==='Amulet'||it.slot==='Jewelry')?'Accessories':it?.slot;
 }
 function unequipItem(hid,slot){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
