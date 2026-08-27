@@ -1521,11 +1521,14 @@ body.windowOpen .side{overflow:hidden!important}
 .professionNavSticky{position:sticky;top:0;z-index:30;margin-bottom:10px;padding:8px;background:rgba(20,16,11,.97);border:1px solid #70522e;box-shadow:0 5px 14px rgba(0,0,0,.45)}
 .professionTabs{display:flex;gap:6px;flex-wrap:wrap;margin:0;padding:0;border:0}
 .professionTabs .professionTab{flex:1 1 140px}
-.professionWorkspaceTop{display:grid;grid-template-columns:minmax(680px,1fr) minmax(280px,340px);gap:10px;align-items:stretch}
+.professionWorkspaceTop{display:grid;grid-template-columns:minmax(680px,1fr) minmax(280px,340px);grid-template-areas:"workstation queue" "recipes queue";gap:10px;align-items:start}
+.professionMainPanel{grid-area:workstation}
+.professionQueuePanel{grid-area:queue;align-self:start}
+.professionWorkspaceTop>.recipePanel{grid-area:recipes;margin-top:0!important}
 .professionMainPanel,.professionQueuePanel{margin:0!important;min-width:0}
 .professionQueuePanel #craftQueue.active{grid-template-columns:1fr!important}
 .professionQueuePanel .active .card{min-width:0}
-@media(max-width:1050px){.professionWorkspaceTop{grid-template-columns:1fr}.professionQueuePanel{min-height:0}}
+@media(max-width:1050px){.professionWorkspaceTop{grid-template-columns:1fr;grid-template-areas:"workstation" "queue" "recipes"}.professionQueuePanel{min-height:0}}
 .professionRecipeControls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.professionRecipeControls select{min-width:145px}
 .professionPassiveCard{border-left:2px solid #9b7138!important}
 .professionTab{flex:1 1 135px;min-width:120px}
