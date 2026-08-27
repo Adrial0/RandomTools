@@ -180,7 +180,8 @@ function professionDuration(pid,baseSeconds,effects=professionEffects(pid)){retu
 function jobDuration(pid,kind,data,effects){
   if(kind==='meal')return professionDuration(pid,MEALS[data]?.duration||20,effects);
   if(kind==='rune')return professionDuration(pid,20+runeTier(data)*8,effects);
-  const r=recipes[data];return professionDuration(pid,18+(r?.[4]||1)*12,effects);
+  const r=recipes[data],refining=r?.[1]==='Material'||r?.[5]?.processing;
+  return professionDuration(pid,(18+(r?.[4]||1)*12)*(refining?.3:1),effects);
 }
 function normalizeProfessionQueue(pid){
   const p=professionState(pid);if(!p?.jobs?.length)return;let cursor=Date.now();

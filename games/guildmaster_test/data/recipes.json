@@ -157,8 +157,8 @@
     "Weapon",
     "Hunting Bow",
     {
-      "Wood": 8,
-      "Cloth": 3,
+      "Hardwood": 8,
+      "CottonCloth": 3,
       "Venom": 2,
       "WolfPelt": 2,
       "Stone": 1
@@ -436,7 +436,7 @@
     "Ring",
     "Ring",
     {
-      "Iron": 5,
+      "Mithril": 5,
       "Crystal": 2,
       "Essence": 2
     },
@@ -482,7 +482,7 @@
     "Amulet",
     "Amulet",
     {
-      "Iron": 3,
+      "Mithril": 3,
       "Crystal": 4,
       "Essence": 4
     },
@@ -502,7 +502,7 @@
       "Bone": 8,
       "CrownBone": 1
     },
-    5,
+    2,
     {
       "damageType": "dark",
       "stats": {
@@ -522,7 +522,7 @@
       "Venom": 5,
       "BroodSilk": 1
     },
-    5,
+    3,
     {
       "damageType": "poison",
       "stats": {
@@ -540,10 +540,9 @@
     {
       "Iron": 20,
       "GhoulIchor": 6,
-      "ColossusIchor": 1,
-      "OgreHeart": 1
+      "ColossusIchor": 1
     },
-    5,
+    4,
     {
       "armorClass": "Heavy",
       "block": 2,
@@ -583,7 +582,7 @@
       "Emberstone": 8,
       "AncientDrakeScale": 1
     },
-    7,
+    5,
     {
       "damageType": "fire",
       "stats": {
@@ -604,7 +603,7 @@
       "Obsidian": 8,
       "WarOgreHeart": 1
     },
-    7,
+    6,
     {
       "stats": {
         "str": 15,
@@ -624,7 +623,7 @@
       "FrostShard": 7,
       "WraithLordCore": 1
     },
-    7,
+    6,
     {
       "stats": {
         "int": 12,
@@ -917,7 +916,7 @@
     {
       "Sunstone": 8,
       "Silver": 8,
-      "Hardwood": 5
+      "Ironwood": 5
     },
     4,
     {
@@ -1007,7 +1006,8 @@
     {
       "StormGlass": 10,
       "SkyCrystal": 6,
-      "Ironwood": 6
+      "Ironwood": 6,
+      "CinderBar": 4
     },
     6,
     {
@@ -1118,7 +1118,7 @@
       "Silver": 6,
       "Crystal": 4
     },
-    5,
+    3,
     {
       "stats": {
         "str": 4,
@@ -1136,7 +1136,7 @@
       "SkyCrystal": 6,
       "Silver": 6
     },
-    6,
+    5,
     {
       "stats": {
         "dex": 4,

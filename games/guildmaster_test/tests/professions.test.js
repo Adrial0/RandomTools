@@ -101,4 +101,16 @@ assert.equal(vm.runInContext("professionTierIdentity('runecrafting',2)",context)
 
 assert.ok(context.recipes.some(r=>r[5]?.outputResource==='IronBar'&&r[5]?.profession==='smithing'),'ingot refining recipes belong to Smithing');
 
+const tierByResource={};Object.entries(resources.tierGroups).forEach(([tier,keys])=>keys.forEach(k=>tierByResource[k]=Number(tier)));
+for(const recipe of sourceRecipes.filter(r=>r[1]!=='Material')){
+  const ingredientTiers=Object.keys(recipe[3]||{}).map(k=>tierByResource[k]||0);
+  assert.ok(ingredientTiers.includes(recipe[4]),`${recipe[0]} includes a defining tier-${recipe[4]} ingredient`);
+  assert.ok(ingredientTiers.every(t=>t<=recipe[4]),`${recipe[0]} does not require materials above its own tier`);
+}
+const tierFiveRefining=context.recipes.findIndex(r=>r[1]==='Material'&&r[4]===5);
+const tierFiveEquipment=context.recipes.findIndex(r=>r[1]!=='Material'&&r[4]===5&&r[5]?.profession==='smithing');
+const refiningDuration=vm.runInContext(`jobDuration('smithing','recipe',${tierFiveRefining},{})`,context);
+const equipmentDuration=vm.runInContext(`jobDuration('smithing','recipe',${tierFiveEquipment},{})`,context);
+assert.ok(refiningDuration<=equipmentDuration*.31,'refining takes about 30% of normal same-tier crafting time');
+
 console.log('Profession model, recipe split, processing chains, migration, and busy-state tests passed.');

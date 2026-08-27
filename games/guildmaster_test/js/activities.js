@@ -133,7 +133,7 @@ function renderProceduralQuests(){
 }
 
 function resourceCapacity(){
-  const caps=[100,500,1500,4000,8000,13000,20000,30000,45000,65000,100000];
+  const caps=[200,1000,3000,8000,16000,26000,40000,60000,90000,130000,200000];
   return caps[Math.min(s.up.storage||0,caps.length-1)];
 }
 function resourceCount(){return Object.values(s.materials||{}).reduce((a,v)=>a+(Number(v)||0),0)}

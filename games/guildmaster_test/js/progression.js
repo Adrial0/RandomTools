@@ -273,11 +273,14 @@ const UPGRADE_PROCESSED_RESOURCES={
   Leather:'CuredLeather',WolfPelt:'WolfLeather',WhitePelt:'FrostLeather',Stormhide:'StormLeather'
 };
 function upgradeProcessedResource(resource){return UPGRADE_PROCESSED_RESOURCES[resource]||resource}
+const UPGRADE_RAW_RESOURCES={Cloth:'PlantFiber',CuredLeather:'Leather',WoodenPlank:'Wood',CopperBar:'CopperOre'};
+function upgradeRawResource(resource){return UPGRADE_RAW_RESOURCES[resource]||resource}
 function upgradeResourceCost(k,l){
   const upgrade=upgrades.find(x=>x[0]===k),max=Math.max(2,upgrade?.[4]||7);
   const tier=clamp(1+Math.floor(l*9/(max-1)),1,10),index=tier-1;
   const paths=UPGRADE_RESOURCE_PATHS[k]||UPGRADE_RESOURCE_PATHS.quarters;
-  const primary=upgradeProcessedResource(paths[0][index]),secondary=upgradeProcessedResource(paths[1][index]);
+  const firstPurchase=l===0;
+  const primary=firstPurchase?upgradeRawResource(paths[0][index]):upgradeProcessedResource(paths[0][index]),secondary=firstPurchase?upgradeRawResource(paths[1][index]):upgradeProcessedResource(paths[1][index]);
   const base=Math.max(3,Math.round((10+Math.pow(l+1,1.35)*5)/(1+(tier-1)*.3)));
   const out={};
   out[primary]=(out[primary]||0)+base;
@@ -294,7 +297,8 @@ function upgradeResourceProgressHtml(cost){
 }
 
 function upgradeCost(u,l){
-  return Math.max(1,Math.round(u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l)));
+  const cost=u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l);
+  return Math.max(1,Math.round(l===0?cost*.5:cost));
 }
 function upgrade(k){
   let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=upgradeCost(u,l),rc=upgradeResourceCost(k,l);

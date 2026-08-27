@@ -299,7 +299,7 @@ const upgrades=[
 ['smith','Blacksmith','Forge facilities. +10% Smithing XP gained per level.',320,5],
 ['craftSpeed','Workshop Tools','Reduces crafting time by 12% per level.',280,6],
 ['training','Training Hall','More adventurer XP.',300,5],
-['storage','Resource Storehouse','Greatly increases total resource inventory capacity. Reaches 20,000 by level 6.',290,10],
+['storage','Resource Storehouse','Greatly increases total resource inventory capacity. Reaches 40,000 by level 6.',290,10],
 ['afkHarvest','Harvest Stockpiles','Increases how much each gathering job can harvest while you are away.',300,10],
 ['gatherParty','Gathering Logistics','Adds one worker to the gathering party limit.',360,6],
 ['board','Quest Office','Slightly improves gold and reputation gains.',310,5]
