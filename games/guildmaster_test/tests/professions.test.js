@@ -42,13 +42,19 @@ const woodenWeapon=context.recipes.find(r=>r[1]==='Weapon'&&r[5]?.profession==='
 assert.ok(woodenWeapon,'Woodworking weapons consume processed planks');
 
 context.s={
-  professions:{},smithing:{level:8,xp:17},cooking:{level:4,xp:9},craftJobs:[],cookingJobs:[],
-  members:[{id:1,name:'Ada Forge',class:'Warrior',busy:false}],recruits:[],materials:{},discoveredResources:[],up:{craftSpeed:0,smith:0},inventory:[],runes:{},meals:{},next:2
+  professions:{smelting:{level:11,xp:23,workerId:1,jobs:[{id:77,kind:'recipe',recipe:context.recipes.findIndex(r=>r[5]?.outputResource==='CopperBar'),qty:1,remaining:1,start:Date.now(),end:Date.now()+5000,duration:5000,effects:{}}]}},smithing:{level:8,xp:17},cooking:{level:4,xp:9},craftJobs:[],cookingJobs:[],
+  members:[{id:1,name:'Ada Forge',class:'Warrior',busy:true,professionBusy:'smelting',professionTrait:{profession:'smelting',trait:'swift_hands'}}],recruits:[],materials:{},discoveredResources:[],up:{craftSpeed:0,smith:0},inventory:[],runes:{},meals:{},next:2
 };
 vm.runInContext('normalizeProfessionState()',context);
-assert.equal(context.s.professions.smithing.level,8,'legacy Smithing level migrated');
+assert.equal(context.s.professions.smithing.level,11,'legacy Smelting level merged into Smithing');
 assert.equal(context.s.professions.cooking.level,4,'legacy Cooking level migrated');
 assert.ok(context.s.members[0].professionTrait,'existing member received deterministic profession affinity');
+assert.equal(context.s.members[0].professionTrait.profession,'smithing','legacy Smelting affinity migrated to Smithing');
+assert.equal(context.s.professions.smithing.workerId,1,'legacy Smelting specialist migrated to Smithing');
+assert.equal(context.s.professions.smithing.jobs.length,1,'legacy Smelting queue migrated to Smithing');
+assert.equal(context.s.members[0].professionBusy,'smithing','active legacy Smelting worker now works in Smithing');
+assert.equal(vm.runInContext("PROFESSION_ORDER.includes('smelting')",context),false,'Smelting is no longer a standalone profession');
+context.s.professions.smithing.jobs.length=0;vm.runInContext("syncProfessionBusy('smithing')",context);
 vm.runInContext("assignProfessionWorker('smithing',1)",context);
 assert.equal(context.s.professions.smithing.workerId,1,'worker assignment persisted');
 assert.equal(context.s.members[0].busy,false,'idle assigned worker remains mission-available');
@@ -77,6 +83,10 @@ vm.runInContext("renderProfessionRecipe=(r,i)=>r[0]; recipeFilter='Armor'; rende
 const filteredHtml=domElements.get('recipeList').innerHTML;
 assert.doesNotMatch(filteredHtml,/Longsword|Greatsword|Battle Axe/,'Armor filter removes weapon recipes from rendered results');
 assert.match(filteredHtml,/Plate|Mail|Shield/,'Armor filter keeps Smithing armor recipes');
+vm.runInContext("recipeFilter='all'; renderCraft()",context);
+const groupedHtml=domElements.get('recipeList').innerHTML;
+assert.match(groupedHtml,/>Refining</,'Smithing shows refining as its own recipe section');
+assert.match(groupedHtml,/>Equipment</,'Smithing shows equipment as its own recipe section');
 
 const uiSource=fs.readFileSync(path.join(root,'js/ui.js'),'utf8');
 assert.match(uiSource,/Skills & Passives[\s\S]*Profession Affinity/,'roster stats show profession affinity in Skills & Passives');
@@ -88,5 +98,7 @@ assert.equal(vm.runInContext("professionTierIdentity('tailoring',2)",context),'L
 assert.equal(vm.runInContext("professionTierIdentity('leatherworking',2)",context),'Wolf Leather');
 assert.equal(vm.runInContext("professionTierIdentity('cooking',2)",context),'Wolf & Herb');
 assert.equal(vm.runInContext("professionTierIdentity('runecrafting',2)",context),'Venom');
+
+assert.ok(context.recipes.some(r=>r[5]?.outputResource==='IronBar'&&r[5]?.profession==='smithing'),'ingot refining recipes belong to Smithing');
 
 console.log('Profession model, recipe split, processing chains, migration, and busy-state tests passed.');

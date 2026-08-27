@@ -1524,6 +1524,9 @@ body.windowOpen .side{overflow:hidden!important}
 .professionSimpleRecipe .recipeDetailMaterials>span{padding:7px;border:1px solid #4b3926;background:#211a12;font:11px var(--ui-pixel)}
 .professionSimpleRecipe .recipeDetailMaterials .enough{color:#a7b982;border-color:#536542}.professionSimpleRecipe .recipeDetailMaterials .missing{color:#d68b79;border-color:#73483d}
 .professionSocketList{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.professionRecipeSection{display:grid;gap:7px;margin-bottom:14px}.professionRecipeSection:last-child{margin-bottom:0}
+.professionRecipeSectionHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;border-left:3px solid #8d6837;background:#211a12}
+.professionRecipeSectionHead h3{margin:1px 0 0!important;font-size:16px!important}
 #crafting #recipeList.recipes{display:grid!important;grid-template-columns:1fr!important}
 @media(max-width:760px){.professionStationTop,.professionSimpleRecipe{grid-template-columns:1fr;display:grid!important}.professionStationTop{display:flex!important;flex-direction:column}.professionSimpleRecipe .recipeDetailMaterials{grid-template-columns:1fr}}
 .workshopMode.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#a67937!important;color:#f0d698!important}

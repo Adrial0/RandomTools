@@ -1,8 +1,7 @@
 // Shared workshop professions, workstation assignments, queues, and save migration.
-const PROFESSION_ORDER=['smithing','smelting','woodworking','tailoring','leatherworking','cooking','runecrafting'];
+const PROFESSION_ORDER=['smithing','woodworking','tailoring','leatherworking','cooking','runecrafting'];
 const PROFESSION_DEFS={
-  smithing:{name:'Smithing',icon:'⚒️',desc:'Forge metal weapons, heavy armor, shields, and jewelry.'},
-  smelting:{name:'Smelting',icon:'🔥',desc:'Refine mined ore into bars used by Smithing.'},
+  smithing:{name:'Smithing',icon:'⚒️',desc:'Refine ore into ingots, then forge metal weapons, heavy armor, shields, and jewelry.'},
   woodworking:{name:'Woodworking',icon:'🪚',desc:'Process timber and make bows, crossbows, staves, wands, spears, and wooden shields.'},
   tailoring:{name:'Tailoring',icon:'🧵',desc:'Weave gathered fibers and sew cloth armor.'},
   leatherworking:{name:'Leatherworking',icon:'🦬',desc:'Cure hides and make leather and medium armor.'},
@@ -21,17 +20,16 @@ const WOOD_PLANKS={Wood:'WoodenPlank',Hardwood:'HardwoodPlank',Ironwood:'Ironwoo
 const LEATHER_OUTPUTS={Leather:'CuredLeather',WolfPelt:'WolfLeather',WhitePelt:'FrostLeather',Stormhide:'StormLeather'};
 const PROFESSION_TIER_IDENTITIES={
   smithing:['','Copper','Iron','Silver','Mithril','Star Metal','Cinder','Void','Adamantite','Orichalcum','Eternium'],
-  smelting:['','Copper Ore','Iron','Silver','Mithril','Star Metal','Cinder Ore','Voidstone','Adamantite','Orichalcum','Eternium'],
   woodworking:['','Wood','Hardwood','Hardwood','Ironwood','Spiritwood','Spiritwood','Spiritwood','Spiritwood','Dreamwood','Worldroot'],
   tailoring:['','Cloth','Linen','Cotton','Woven Silk','Shadow Silk','Shadow Silk','Phase Silk','Celestial Silk','Godthread','Godthread'],
   leatherworking:['','Cured Leather','Wolf Leather','Storm Leather','Frost Leather','Shadow Silk','Demon Horn','Astral Thread','Leviathan Scale','Dream Essence','Worldroot'],
   cooking:['','Fish & Game','Wolf & Herb','Pearlfin & Sunspice','Frost Fare','Dusk Fare','Cinder Fare','Astral Fare','Celestial Fare','Dream Fare','Worldroot Fare'],
   runecrafting:['','Essence','Venom','Arcane','Spirit','Storm','Cinder','Astral','Celestial','Dream','Starlight']
 };
-const professionExpandedTiers=new Set(PROFESSION_ORDER.map(pid=>pid+':1'));
+const professionExpandedTiers=new Set(PROFESSION_ORDER.flatMap(pid=>[pid+':refining:1',pid+':equipment:1',pid+':recipes:1']));
 let activeProfession='smithing';
 function professionTierIdentity(pid,tier){return PROFESSION_TIER_IDENTITIES[pid]?.[tier]||`Tier ${tier}`}
-function toggleProfessionTier(tier){const key=activeProfession+':'+tier;if(professionExpandedTiers.has(key))professionExpandedTiers.delete(key);else professionExpandedTiers.add(key);renderCraft()}
+function toggleProfessionTier(tier,section='recipes'){const key=activeProfession+':'+section+':'+tier;if(professionExpandedTiers.has(key))professionExpandedTiers.delete(key);else professionExpandedTiers.add(key);renderCraft()}
 
 function stableProfessionNumber(h){
   const text=String(h?.id||'')+'|'+String(h?.name||'');let n=0;
@@ -51,11 +49,11 @@ function professionTraitDef(h){
 function professionTraitText(h){const t=professionTraitDef(h);return `${t.name} · ${t.professionName}: ${t.desc}`}
 
 function recipeProfession(r){
-  if(r?.[5]?.profession)return r[5].profession;
+  if(r?.[5]?.profession)return r[5].profession==='smelting'?'smithing':r[5].profession;
   const slot=r?.[1],name=String(r?.[2]||r?.[0]||''),meta=r?.[5]||{};
   if(slot==='Material'){
     const out=meta.outputResource||r?.[2];
-    if(Object.values(METAL_BARS).includes(out))return'smelting';
+    if(Object.values(METAL_BARS).includes(out))return'smithing';
     if(Object.values(WOOD_PLANKS).includes(out))return'woodworking';
     if(Object.values(LEATHER_OUTPUTS).includes(out))return'leatherworking';
     return'tailoring';
@@ -76,7 +74,7 @@ function addProcessingRecipe(name,input,inputQty,output,outputQty,tier,professio
 function prepareProfessionRecipes(){
   if(recipes.__professionsPrepared)return;
   recipes.__professionsPrepared=true;
-  Object.entries(METAL_BARS).forEach(([raw,out])=>addProcessingRecipe('Smelt '+(RESOURCE_NAMES[out]||out),raw,2,out,1,resourceTier(raw),'smelting'));
+  Object.entries(METAL_BARS).forEach(([raw,out])=>addProcessingRecipe('Smelt '+(RESOURCE_NAMES[out]||out),raw,2,out,1,resourceTier(raw),'smithing'));
   Object.entries(WOOD_PLANKS).forEach(([raw,out])=>addProcessingRecipe('Mill '+(RESOURCE_NAMES[out]||out),raw,2,out,1,resourceTier(raw),'woodworking'));
   Object.entries(LEATHER_OUTPUTS).forEach(([raw,out])=>addProcessingRecipe('Cure '+(RESOURCE_NAMES[out]||out),raw,2,out,1,resourceTier(raw),'leatherworking'));
   recipes.forEach(r=>{
@@ -105,6 +103,22 @@ function normalizeProfessionState(){
     if(!smith.jobs.length)smith.jobs=(s.craftJobs||[]).map(j=>({...j,kind:'recipe',profession:'smithing'}));
     if(!cook.jobs.length)cook.jobs=(s.cookingJobs||[]).map(j=>({...j,kind:'meal',profession:'cooking'}));
     s.professionMigrationV1=true;
+  }
+  if(!s.professionMigrationV2){
+    const smelt=s.professions.smelting;
+    if(smelt){
+      smith.level=Math.max(smith.level||1,smelt.level||1);smith.xp=(smith.xp||0)+(smelt.xp||0);
+      const migratedJobs=(smelt.jobs||[]).map(j=>({...j,profession:'smithing'}));
+      if(migratedJobs.length)smith.jobs.push(...migratedJobs);
+      const smeltWorker=s.members.find(h=>h.id===smelt.workerId);
+      if(!smith.workerId&&smeltWorker)smith.workerId=smeltWorker.id;
+      if(smeltWorker?.professionBusy==='smelting'){
+        if(smith.workerId===smeltWorker.id&&smith.jobs.length)smeltWorker.professionBusy='smithing';
+        else{smeltWorker.busy=false;delete smeltWorker.professionBusy}
+      }
+    }
+    [...(s.members||[]),...(s.recruits||[])].forEach(h=>{if(h.professionTrait?.profession==='smelting')h.professionTrait.profession='smithing'});
+    delete s.professions.smelting;s.professionMigrationV2=true;
   }
   s.smithing=smith;s.cooking=cook;s.craftJobs=smith.jobs;s.cookingJobs=cook.jobs;
   [...(s.members||[]),...(s.recruits||[])].forEach(h=>{if(!h.professionTrait)h.professionTrait=rollProfessionTrait(h);if(h.professionBusy&&!h.busy)delete h.professionBusy});
@@ -247,11 +261,18 @@ function renderRuneProfession(){
   const owned=Object.entries(s.runes||{}).filter(([,v])=>v>0).map(([rid,v])=>`${runeIcon(rid)} ${RUNES[rid]?.name} ×${v}`).join(' · ')||'No runes crafted yet.';
   const socketable=s.inventory.filter(it=>!it.equipped&&runeSlots(it)>0).map(it=>`<button class="btn" onclick="openRuneSocketItem(${it.id})">${it.name} · ${(it.runes||[]).length}/${runeSlots(it)} slots</button>`).join('');
   const entries=Object.entries(RUNES).map(([rid,r])=>{const tier=runeTier(rid),req=professionRequirement(tier),open=expandedRecipes.has('rune:'+rid),workerOk=professionWorkerAvailable('runecrafting'),craftable=canPayMaterials(r.cost)&&professionState('runecrafting').level>=req&&workerOk;return{tier,name:r.name,level:req,craftable,html:()=>`<div class="recipeLine ${craftable?'':'recipeLocked'}"><div class="recipeLineHeader" onclick="toggleProfessionRecipe('rune:${rid}')"><div class="recipeLineIcon">${runeIcon(rid)}</div><div><div class="recipeLineName">${r.name}</div><div class="recipeLineType">${tierLabel(tier)} · Runecrafting ${req}</div></div><div class="recipeChevron">${open?'▾':'▸'}</div></div>${open?`<div class="recipeLineDetails recipeDetailLayout"><div class="recipeItemInformation"><section class="recipeInfoSection"><h4>Rune Effect</h4><div class="recipeProfileList"><span>${r.desc}</span></div></section></div><aside class="recipeCraftingBox"><h4>Materials</h4><div class="recipeDetailMaterials">${professionMaterialRows(r.cost)}</div><div class="recipeLineAction"><button class="btn ${craftable?'gold':''}" ${craftable?'':'disabled'} onclick="craftRune('${rid}',1)">${workerOk?'Create Rune':'Specialist unavailable'}</button></div></aside></div>`:''}</div>`}});return `<div class="card"><div class="name">Rune Vault</div><div class="muted">${owned}</div><div class="professionSocketList">${socketable||'<span class="muted">No unequipped socketable equipment.</span>'}</div></div>`+renderTieredProfessionGroups(entries)}
-function renderTieredProfessionGroups(entries){
+function renderTieredProfessionGroups(entries,section='recipes'){
   let list=entries.filter(x=>!recipeCraftableOnly||x.craftable);
   const sorters={tier:(a,b)=>a.tier-b.tier||a.name.localeCompare(b.name),name:(a,b)=>a.name.localeCompare(b.name),level:(a,b)=>a.level-b.level||a.name.localeCompare(b.name),craftable:(a,b)=>Number(b.craftable)-Number(a.craftable)||a.tier-b.tier};
   list.sort(sorters[professionRecipeSort]||sorters.tier);const groups=new Map();list.forEach(x=>{if(!groups.has(x.tier))groups.set(x.tier,[]);groups.get(x.tier).push(x)});
-  return [...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,rows])=>{const name=`${tierLabel(tier)} · ${professionTierIdentity(activeProfession,tier)}`,open=professionExpandedTiers.has(activeProfession+':'+tier);return `<div class="recipeCategory ${open?'open':''}"><div class="recipeCategoryHeader" onclick="toggleProfessionTier(${tier})"><span class="recipeCategoryArrow">${open?'▾':'▸'}</span><span class="recipeCategoryName">${name}</span><span class="recipeCategoryCount">${rows.length} recipe${rows.length===1?'':'s'}</span></div>${open?`<div class="recipeCategoryBody">${rows.map(x=>x.html()).join('')}</div>`:''}</div>`}).join('')||'<div class="empty">No recipes match the current filters.</div>';
+  return [...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,rows])=>{const name=`${tierLabel(tier)} · ${professionTierIdentity(activeProfession,tier)}`,open=professionExpandedTiers.has(activeProfession+':'+section+':'+tier);return `<div class="recipeCategory ${open?'open':''}"><div class="recipeCategoryHeader" onclick="toggleProfessionTier(${tier},'${section}')"><span class="recipeCategoryArrow">${open?'▾':'▸'}</span><span class="recipeCategoryName">${name}</span><span class="recipeCategoryCount">${rows.length} recipe${rows.length===1?'':'s'}</span></div>${open?`<div class="recipeCategoryBody">${rows.map(x=>x.html()).join('')}</div>`:''}</div>`}).join('')||'<div class="empty">No recipes match the current filters.</div>';
+}
+function renderProfessionRecipeSections(entries){
+  const refining=entries.filter(x=>x.section==='refining'),equipment=entries.filter(x=>x.section==='equipment');
+  const blocks=[];
+  if(refining.length)blocks.push(`<section class="professionRecipeSection"><div class="professionRecipeSectionHead"><div><div class="sectionKicker">Material Preparation</div><h3>Refining</h3></div><span class="chip">${refining.length} recipe${refining.length===1?'':'s'}</span></div>${renderTieredProfessionGroups(refining,'refining')}</section>`);
+  if(equipment.length)blocks.push(`<section class="professionRecipeSection"><div class="professionRecipeSectionHead"><div><div class="sectionKicker">Finished Goods</div><h3>Equipment</h3></div><span class="chip">${equipment.length} recipe${equipment.length===1?'':'s'}</span></div>${renderTieredProfessionGroups(equipment,'equipment')}</section>`);
+  return blocks.join('')||'<div class="empty">No recipes match the current filters.</div>';
 }
 function renderCraftQueue(){
   const p=professionState(activeProfession),now=Date.now();normalizeProfessionQueue(activeProfession);
@@ -263,7 +284,7 @@ function renderCraft(){
   $('professionTabs').innerHTML=PROFESSION_ORDER.map(pid=>`<button class="btn professionTab ${pid===activeProfession?'on':''}" onclick="setActiveProfession('${pid}')">${PROFESSION_DEFS[pid].icon} ${PROFESSION_DEFS[pid].name}</button>`).join('');
   $('professionWorkstation').innerHTML=`<div class="professionStation"><div class="professionStationTop"><div><div class="sectionKicker">Workstation</div><h3>${def.icon} ${def.name} <span class="chip">Lv. ${p.level}</span></h3><div class="muted">${def.desc}</div></div><button class="btn ${worker?'':'gold'}" onclick="openProfessionWorkerPicker('${activeProfession}')">${worker?'Change specialist':'Assign specialist'}</button></div><div class="progressMeta"><span>${p.xp.toLocaleString()} / ${need.toLocaleString()} XP</span><span>${worker?worker.name:'Vacant'} · ${professionWorkerStatus(activeProfession)}</span></div><div class="progressTrack"><div class="progressFill" style="width:${clamp(p.xp/need*100,0,100)}%"></div></div><div class="professionEffectRow">${worker?`<span class="chip">${professionTraitText(worker)}</span><span class="chip ${Object.values(effects).some(Boolean)?'good':''}">${effectSummary(effects)}</span>${p.jobs.length?'<span class="chip">Busy until queue is empty</span>':worker.busy?'<span class="chip bad">Cannot queue work until this specialist returns</span>':'<span class="chip">May join missions while this station is idle</span>'}`:'<span class="muted">A permanent specialist must be assigned before work can begin.</span>'}</div></div>`;
   $('professionRecipeTitle').textContent=activeProfession==='cooking'?'Meal Recipes':activeProfession==='runecrafting'?'Rune Recipes':'Known '+def.name+' Recipes';
-  $('professionRecipeHelp').textContent=activeProfession==='smelting'?'Bars are required by Smithing equipment.':activeProfession==='woodworking'?'Processed timber is required by wooden weapons.':'Recipes use materials appropriate to this profession.';
+  $('professionRecipeHelp').textContent=activeProfession==='smithing'?'Refine ore into ingots, then use those ingots for finished equipment.':activeProfession==='woodworking'?'Process timber into planks, then use those planks for finished equipment.':activeProfession==='tailoring'?'Weave fibers into textiles, then use those textiles for finished equipment.':activeProfession==='leatherworking'?'Cure gathered hides, then use them for finished equipment.':'Recipes use materials appropriate to this profession.';
   const sortSelect=$('professionRecipeSort');if(sortSelect)sortSelect.value=professionRecipeSort;
   const filterButton=$('recipeMenuButton');if(filterButton)filterButton.textContent=({all:'All',Weapon:'Weapons',Armor:'Armor',Jewelry:'Jewelry',Material:'Materials'}[recipeFilter]||'All')+' ▾';
   document.querySelectorAll('[data-recipe-filter]').forEach(x=>x.classList.toggle('on',x.dataset.recipeFilter===recipeFilter));
@@ -275,8 +296,8 @@ function renderCraft(){
       const typeOk=recipeFilter==='all'||(recipeFilter==='Jewelry'?(r[1]==='Ring'||r[1]==='Amulet'):r[1]===recipeFilter);
       const craftable=professionState(activeProfession).level>=professionRecipeRequirement(r)&&maxCraftQuantity(r)>0&&professionWorkerAvailable(activeProfession);
       return typeOk&&(!recipeCraftableOnly||craftable);
-    }).map(({r,i})=>({tier:r[4]||1,name:r[0],level:professionRecipeRequirement(r),craftable:professionState(activeProfession).level>=professionRecipeRequirement(r)&&maxCraftQuantity(r)>0&&professionWorkerAvailable(activeProfession),html:()=>renderProfessionRecipe(r,i)}));
-    $('recipeList').innerHTML=renderTieredProfessionGroups(entries);
+    }).map(({r,i})=>({tier:r[4]||1,name:r[0],level:professionRecipeRequirement(r),section:r[1]==='Material'||r[5]?.processing?'refining':'equipment',craftable:professionState(activeProfession).level>=professionRecipeRequirement(r)&&maxCraftQuantity(r)>0&&professionWorkerAvailable(activeProfession),html:()=>renderProfessionRecipe(r,i)}));
+    $('recipeList').innerHTML=renderProfessionRecipeSections(entries);
   }
   renderCraftQueue();colorizeStatTerms($('crafting'));
 }
