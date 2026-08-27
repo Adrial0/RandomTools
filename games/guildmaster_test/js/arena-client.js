@@ -73,13 +73,14 @@ async function refreshArenaData(force=false){
   catch(err){arenaSetConnection('Connection error','bad');arenaMessage(err.message)}finally{arenaBusy=false}
 }
 function arenaHeroSnapshot(h){
-  const z=hs(h),weapon=s.inventory.find(it=>it.id===h.equip?.Weapon),wd=weaponDefForItem(weapon);
+  const mainId=h.equip?.MainHand||h.equip?.Weapon,z=hs(h),weapon=s.inventory.find(it=>it.id===mainId),off=s.inventory.find(it=>it.id===h.equip?.OffHand&&it.id!==mainId&&it.slot==='Weapon'),wd=weaponDefForItem(weapon);
   return{
     sourceId:h.id,name:h.name,class:h.class,subclass:h.subclass||null,level:h.level,power:z.power,
     maxHp:z.hp,maxMana:z.mana||0,manaRegen:z.manaRegen||0,str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,
     physicalDodge:z.physicalDodge||0,magicalDodge:z.magicalDodge||0,regen:z.regen||0,lifesteal:z.lifesteal||0,
     fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
-    weaponPower:weapon?.weaponPower||wd?.base||8,damageType:weapon?.damageType||'physical',armorPen:z.armorPen||0,
+    weaponType:weapon?.weaponType||null,scale:weapon?.scale||({Mage:'int',Priest:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),weaponPower:weapon?.weaponPower||wd?.base||8,damageType:weapon?.damageType||'physical',armorPen:z.armorPen||0,
+    dualWield:!!off,offhandWeapon:off?{weaponType:off.weaponType,scale:off.scale||'dex',weaponPower:off.weaponPower||8,damageType:off.damageType||'physical'}:null,
     critChance:clamp((h.class==='Rogue' ? .18 : 0)+(z.critBonus||0),0,.75),critDamage:z.critDamage||0,
     statusChance:clamp(z.statusChance||0,0,.75),attackInterval:heroAttackIntervalMs({baseAttackTime:weaponAttackTime(weapon?.weaponTemplate||weapon?.weaponType||''),attackSpeed:z.attackSpeed,buffs:{}}),
     activeType:z.activeType||(h.class==='Priest'?'Heal':h.class==='Mage'?'arcaneBurst':null),element:z.element||null,healMult:z.healMult||1,damageMult:z.damageMult||1
@@ -125,7 +126,10 @@ function arenaHeroUnit(h,index,enemy=false){
   const activeType=h.activeType||subclassDef(h)?.activeType||(h.class==='Priest'?'Heal':h.class==='Mage'?'arcaneBurst':null);
   const maxMana=Math.max(0,h.maxMana||(['Mage','Priest'].includes(h.class)?20+(h.int||0):0));
   const unit={...h,id:index+1,hp:h.maxHp,mana:maxMana,maxMana,manaRegen:maxMana>0?(h.manaRegen||1):0,activeType,statuses:{},buffs:{},cooldowns:{},displayClass:h.subclass||h.class,baseAttackTime:interval/1000,attackSpeed:0,attackStartedAt:now,nextAttackAt:now+interval};
-  if(enemy)Object.assign(unit,{icon:h.subclass?gameIcon('subclass',h.subclass,iconFallback('class',h.class),'gameAsset combatAsset'):gameIcon('class',h.class,iconFallback('class',h.class),'gameAsset combatAsset'),atk:Math.max(1,Math.round((h.weaponPower||8)*.55+(main||1)*.45)),attackInterval:interval,mage:['Mage','Priest'].includes(h.class),ability:null,abilityReadyAt:0,drops:[],arenaHero:true});
+  if(enemy){
+    const offScale=h.offhandWeapon?.scale||h.scale,offAttribute=h[offScale]||main||1;
+    Object.assign(unit,{icon:h.subclass?gameIcon('subclass',h.subclass,iconFallback('class',h.class),'gameAsset combatAsset'):gameIcon('class',h.class,iconFallback('class',h.class),'gameAsset combatAsset'),atk:Math.max(1,Math.round((h.weaponPower||8)*.55+(main||1)*.45)),offhandAtk:h.dualWield&&h.offhandWeapon?Math.max(1,Math.round((h.offhandWeapon.weaponPower||8)*.55+offAttribute*.45)):0,attackInterval:interval,mage:['Mage','Priest'].includes(h.class),ability:null,abilityReadyAt:0,drops:[],arenaHero:true});
+  }
   return unit;
 }
 function startArenaClientBattle(opponentPartyId,requestId,prepared){

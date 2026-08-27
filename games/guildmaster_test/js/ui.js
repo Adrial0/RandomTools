@@ -115,6 +115,7 @@ function recruitDetail(rid){
       <div class="stat"><span>Attack</span><strong>${combat.attack}</strong></div>
       <div class="stat"><span>Attack Speed</span><strong>${combat.attackSpeed>=0?'+':''}${Math.round(combat.attackSpeed*100)}%</strong></div>
       <div class="stat"><span>Attack Time</span><strong>${combat.attackTime.toFixed(2)}s</strong></div>
+      <div class="stat"><span>Hits per Attack</span><strong>${combat.hits}</strong></div>
       <div class="stat"><span class="statSTR">STR</span><strong>${z.str}</strong></div>
       <div class="stat"><span class="statDEX">DEX</span><strong>${z.dex}</strong></div>
       <div class="stat"><span class="statINT">INT</span><strong>${z.int}</strong></div>
@@ -674,19 +675,21 @@ function showGatheringSkills(hid){
   showModal(h.name+' · Gathering Skills',`<div class="stats">${Object.entries(SKILL_NAMES).map(([k,n])=>{const sk=gatheringSkill(h,k),need=skillXpNeeded(sk.level);return `<div class="stat"><span>${n}</span><strong>Lv. ${sk.level}</strong><small>${sk.xp} / ${need} XP</small><div class="progressTrack" style="margin-top:6px"><div class="progressFill" style="width:${Math.min(100,sk.xp/need*100)}%"></div></div></div>`}).join('')}</div><div class="muted" style="margin-top:12px">Higher skill slightly increases bonus yield and unlocks advanced gathering locations.</div>`);
 }
 function heroAttackDisplay(h,z=hs(h)){
-  const wep=s.inventory.find(x=>x.id===h.equip?.Weapon);
+  const mainId=h.equip?.MainHand||h.equip?.Weapon,wep=s.inventory.find(x=>x.id===mainId);
+  const off=s.inventory.find(x=>x.id===h.equip?.OffHand&&x.id!==mainId&&x.slot==='Weapon');
   const attack=wep?.weaponPower||0;
   const baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||'');
   const unit={baseAttackTime,attackSpeed:z.attackSpeed||0,buffs:{}};
   return{
-    attack,
+    attack:off?`${attack} + ${off.weaponPower||0}`:attack,
+    hits:off?2:1,
     attackSpeed:z.attackSpeed||0,
     attackTime:heroAttackIntervalMs(unit)/1000
   };
 }
 function heroDetail(h){
   const z=hs(h),combat=heroAttackDisplay(h,z),slots=C[h.class].slots,sub=subclassDef(h),quirk=traitDef(h);
-  const wep=s.inventory.find(x=>x.id===h.equip.Weapon);
+  const wep=s.inventory.find(x=>x.id===(h.equip.MainHand||h.equip.Weapon));
   const scaling=wep?`${wep.weaponType} · ${String(wep.scale).toUpperCase()} scaling · ${elementIcon[wep.damageType||'physical']} ${wep.damageType}`:'No weapon equipped';
   const baseSkills={
     Warrior:['Basic Attack — attacks with the equipped weapon.'],
@@ -702,7 +705,7 @@ function heroDetail(h){
     const icon=it&&it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[k]||'🎒'):(itemIcons[k]||'🎒');
     return `<div class="detailEquipRow" onclick="equipModal(${h.id},'${k}')">
       <div class="detailEquipIcon">${icon}</div>
-      <div class="detailEquipText"><small>${k}</small><b>${it?it.name:'Empty'}</b><small>${it?statText(it):'Click to equip'}</small></div>
+      <div class="detailEquipText"><small>${slotLabel(k)}</small><b>${it?it.name:'Empty'}</b><small>${it?(k==='OffHand'&&h.equip.MainHand===h.equip.OffHand?'Occupied by two-handed weapon':statText(it)):'Click to equip'}</small></div>
       ${it?`<button class="btn" style="padding:4px 6px" onclick="event.stopPropagation();unequipItem(${h.id},'${k}')">Unequip</button>`:''}
     </div>`;
   }).join('');
@@ -758,6 +761,7 @@ function heroDetail(h){
           <div class="stat"><span>Attack</span><strong>${combat.attack}</strong></div>
           <div class="stat"><span>Attack Speed</span><strong>${combat.attackSpeed>=0?'+':''}${Math.round(combat.attackSpeed*100)}%</strong></div>
           <div class="stat"><span>Attack Time</span><strong>${combat.attackTime.toFixed(2)}s</strong></div>
+          <div class="stat"><span>Hits per Attack</span><strong>${combat.hits}</strong></div>
           <div class="stat"><span>Lifesteal</span><strong>${z.lifesteal}%</strong></div>
         </div>
       </div>

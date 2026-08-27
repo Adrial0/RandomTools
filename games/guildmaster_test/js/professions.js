@@ -287,14 +287,14 @@ function renderCraft(){
   $('professionRecipeTitle').textContent=activeProfession==='cooking'?'Meal Recipes':activeProfession==='runecrafting'?'Rune Recipes':'Known '+def.name+' Recipes';
   $('professionRecipeHelp').textContent=activeProfession==='smithing'?'Refine ore into ingots, then use those ingots for finished equipment.':activeProfession==='woodworking'?'Process timber into planks, then use those planks for finished equipment.':activeProfession==='tailoring'?'Weave fibers into textiles, then use those textiles for finished equipment.':activeProfession==='leatherworking'?'Cure gathered hides, then use them for finished equipment.':'Recipes use materials appropriate to this profession.';
   const sortSelect=$('professionRecipeSort');if(sortSelect)sortSelect.value=professionRecipeSort;
-  const filterButton=$('recipeMenuButton');if(filterButton)filterButton.textContent=({all:'All',Weapon:'Weapons',Armor:'Armor',Accessories:'Accessories',Material:'Materials'}[recipeFilter]||'All')+' ▾';
+  const filterButton=$('recipeMenuButton');if(filterButton)filterButton.textContent=({all:'All',Weapon:'Weapons',Armor:'Armor',OffHand:'Off-hand',Accessories:'Accessories',Material:'Materials'}[recipeFilter]||'All')+' ▾';
   document.querySelectorAll('[data-recipe-filter]').forEach(x=>x.classList.toggle('on',x.dataset.recipeFilter===recipeFilter));
   const craftableButton=$('recipeCraftableToggle');if(craftableButton){craftableButton.classList.toggle('on',recipeCraftableOnly);craftableButton.textContent='Craftable only: '+(recipeCraftableOnly?'On':'Off')}
   if(activeProfession==='cooking')$('recipeList').innerHTML=renderMealProfession();
   else if(activeProfession==='runecrafting')$('recipeList').innerHTML=renderRuneProfession();
   else{
     const entries=recipes.map((r,i)=>({r,i})).filter(x=>recipeProfession(x.r)===activeProfession&&professionRecipeKnown(x.r)).filter(({r})=>{
-      const typeOk=recipeFilter==='all'||(recipeFilter==='Accessories'?(r[1]==='Ring'||r[1]==='Amulet'):r[1]===recipeFilter);
+      const typeOk=recipeFilter==='all'||(recipeFilter==='Accessories'?(r[1]==='Ring'||r[1]==='Amulet'||r[1]==='Accessories'):r[1]===recipeFilter);
       const craftable=professionState(activeProfession).level>=professionRecipeRequirement(r)&&maxCraftQuantity(r)>0&&professionWorkerAvailable(activeProfession);
       return typeOk&&(!recipeCraftableOnly||craftable);
     }).map(({r,i})=>({tier:r[4]||1,name:r[0],level:professionRecipeRequirement(r),section:r[1]==='Material'||r[5]?.processing?'refining':'equipment',craftable:professionState(activeProfession).level>=professionRecipeRequirement(r)&&maxCraftQuantity(r)>0&&professionWorkerAvailable(activeProfession),html:()=>renderProfessionRecipe(r,i)}));

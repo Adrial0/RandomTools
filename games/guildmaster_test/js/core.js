@@ -1,12 +1,12 @@
 // Shared definitions, assets, persistence, character generation, items, and mission setup.
 const $=x=>document.getElementById(x);
 const C={
-Warrior:{hp:132,str:17,dex:9,int:5,def:15,mdef:7,block:1,manaRegen:1,armor:'Heavy',threat:1.6,icon:'W',slots:['Weapon','Armor','Accessories'],weapons:['Longsword','Greatsword','Battle Axe','Greataxe','Warhammer','Mace','Spear','Halberd',]},
-Ranger:{hp:96,str:8,dex:18,int:7,def:9,mdef:8,block:0,manaRegen:1,armor:'Medium',threat:1,icon:'R',slots:['Weapon','Armor','Accessories'],weapons:['Shortbow','Longbow','Recurve Bow','Light Crossbow','Heavy Crossbow','Hunting Bow','Spear']},
-Mage:{hp:74,str:4,dex:8,int:21,def:5,mdef:15,block:0,manaRegen:2,armor:'Light',threat:1,icon:'M',slots:['Weapon','Armor','Accessories'],weapons:['Oak Staff','Arcane Staff','Wand','Crystal Wand','Orb','Spellbook','Scepter']},
-Priest:{hp:104,str:9,dex:6,int:17,def:11,mdef:15,block:0,manaRegen:2,armor:'Light',threat:1,icon:'P',slots:['Weapon','Armor','Accessories'],weapons:['Oak Staff','Holy Staff','Scepter','Wand']},
-Rogue:{hp:84,str:7,dex:20,int:6,def:7,mdef:8,block:0,manaRegen:1,armor:'Light',threat:1,icon:'G',slots:['Weapon','Armor','Accessories'],weapons:['Dagger','Knife','Dirk','Kris','Shortsword','Twin Blades']},
-Paladin:{hp:122,str:15,dex:7,int:11,def:18,mdef:13,block:2,manaRegen:1,armor:'Heavy',threat:2,icon:'P',slots:['Weapon','Armor','Accessories'],weapons:['Longsword','Greatsword','Mace','Warhammer','Spear',]}
+Warrior:{hp:132,str:17,dex:9,int:5,def:15,mdef:7,block:1,manaRegen:1,armor:'Heavy',threat:1.6,icon:'W',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Longsword','Greatsword','Battle Axe','Greataxe','Warhammer','Mace','Spear','Halberd',]},
+Ranger:{hp:96,str:8,dex:18,int:7,def:9,mdef:8,block:0,manaRegen:1,armor:'Medium',threat:1,icon:'R',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Shortbow','Longbow','Recurve Bow','Light Crossbow','Heavy Crossbow','Hunting Bow','Spear']},
+Mage:{hp:74,str:4,dex:8,int:21,def:5,mdef:15,block:0,manaRegen:2,armor:'Light',threat:1,icon:'M',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Oak Staff','Arcane Staff','Wand','Crystal Wand','Orb','Spellbook','Scepter']},
+Priest:{hp:104,str:9,dex:6,int:17,def:11,mdef:15,block:0,manaRegen:2,armor:'Light',threat:1,icon:'P',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Oak Staff','Holy Staff','Scepter','Wand']},
+Rogue:{hp:84,str:7,dex:20,int:6,def:7,mdef:8,block:0,manaRegen:1,armor:'Light',threat:1,icon:'G',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Dagger','Knife','Dirk','Kris','Shortsword','Twin Blades']},
+Paladin:{hp:122,str:15,dex:7,int:11,def:18,mdef:13,block:2,manaRegen:1,armor:'Heavy',threat:2,icon:'P',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Longsword','Greatsword','Mace','Warhammer','Spear',]}
 };
 
 const ASSET_CONFIG={base:'',version:'',guildhallBackground:''};
@@ -69,6 +69,12 @@ const CLASS_ATTACK_SPEED={};
 function weaponAttackTime(name){
   return WEAPON_ATTACK_TIMES[name]||WEAPON_ATTACK_TIMES[weaponTypeFor(name)]||2.20;
 }
+const TWO_HANDED_WEAPONS=new Set(['Greatsword','Greataxe','Warhammer','Runic Hammer','Spear','Halberd','Shortbow','Longbow','Recurve Bow','Hunting Bow','Light Crossbow','Heavy Crossbow','Oak Staff','Arcane Staff','Holy Staff','Spellbook','Twin Blades']);
+function weaponHands(it){
+  if(!it||it.slot!=='Weapon')return 0;
+  return TWO_HANDED_WEAPONS.has(it.weaponTemplate||it.weaponType||it.name)?2:1;
+}
+function slotLabel(slot){return({MainHand:'Main Hand',OffHand:'Off Hand',Accessories:'Accessories'}[slot]||slot)}
 function effectiveAttackSpeedBonus(unit,now=Date.now()){
   let bonus=Number(unit.attackSpeed||0);
   if(unit.buffs?.battleShout>now)bonus+=.20;
@@ -159,6 +165,8 @@ function armorNamesForTier(tier){
 function applyRecipeModifiers(it,meta={}){
   if(meta.damageType)it.damageType=meta.damageType;
   if(!it||!meta)return it;
+  if(meta.accessoryType)it.accessoryType=meta.accessoryType;
+  if(meta.allowedClasses)it.allowedClasses=[...meta.allowedClasses];
   if(meta.armorClass)it.armorClass=meta.armorClass;
   if(meta.block)it.block=(it.block||0)+meta.block;
   if(meta.stats)it.extraStats=Object.assign({},it.extraStats||{},meta.stats);
@@ -392,8 +400,12 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
     }
     h.bonus=Object.assign({hp:0,str:0,dex:0,int:0,def:0,mdef:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0},h.bonus||{});
     h.equip=h.equip||{};
+    if(h.equip.MainHand==null)h.equip.MainHand=h.equip.Weapon||null;
+    if(h.equip.OffHand==null)h.equip.OffHand=null;
     if(h.equip.Accessories==null)h.equip.Accessories=h.equip.Jewelry||h.equip.Ring||h.equip.Amulet||null;
-    delete h.equip.Jewelry;delete h.equip.Ring;delete h.equip.Amulet;
+    const mainItem=s.inventory?.find?.(it=>it.id===h.equip.MainHand);
+    if(mainItem&&weaponHands(mainItem)===2)h.equip.OffHand=mainItem.id;
+    delete h.equip.Weapon;delete h.equip.Jewelry;delete h.equip.Ring;delete h.equip.Amulet;
     return h;
   });
   s.inventory=(s.inventory||[]).map(it=>{
@@ -496,7 +508,7 @@ function hero(){
   const lv=clamp(rnd(Math.max(1,recruitBase-2),recruitBase+1),1,15);
   return{
     id:id(),name:pick(FN)+' '+pick(LN),class:c,race:pick(RACE_NAMES),rarity:ra,trait:t.name,professionTrait:typeof rollProfessionTrait==='function'?rollProfessionTrait():null,level:lv,xp:0,busy:false,subclass:null,
-    equip:{Weapon:null,Armor:null,Accessories:null},
+    equip:{MainHand:null,OffHand:null,Armor:null,Accessories:null},
     skills:rolledRecruitSkills(),
     bonus:{
       hp:t.hp+lv*3,
@@ -613,6 +625,13 @@ function makeSpecificItem(slot,name,tier=1,forcedRarity=null){
     return applyRarityBonuses(it,tier);
   }
 
+  if(slot==='Accessories'||slot==='OffHand'){
+    it.name=name;
+    it.accessoryType=name;
+    it.power=0;
+    return applyRarityBonuses(it,tier);
+  }
+
   return applyRarityBonuses(it,tier);
 }
 
@@ -635,7 +654,7 @@ function hs(h){
   const b=C[h.class];
   const e={hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:0,regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,power:0,damageBonus:0,healBonus:0,critBonus:0,threatBonus:0,physicalDodgeBonus:0,magicalDodgeBonus:0,armorPen:0,parry:0,weaponCritChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0,damageVariance:0};
 
-  Object.values(h.equip||{}).forEach(i=>{
+  [...new Set(Object.values(h.equip||{}).filter(Boolean))].forEach(i=>{
     if(!i)return;
     const it=s.inventory.find(x=>x.id===i);
     if(!it)return;

@@ -87,41 +87,61 @@ function allowedWeapons(h){
 function itemEquipSlot(it){
   return it&&(it.slot==='Ring'||it.slot==='Amulet'||it.slot==='Jewelry')?'Accessories':it?.slot;
 }
+function canDualWield(h){return !!h&&['Warrior','Rogue'].includes(h.class)}
+function accessoryAllowed(h,it){return !it?.allowedClasses?.length||it.allowedClasses.includes(h?.class)}
+function equipmentTargetsForItem(h,it){
+  if(!h||!it)return[];
+  if(it.slot==='Weapon'){
+    if(!allowedWeapons(h).includes(it.weaponType))return[];
+    if(weaponHands(it)===2)return['MainHand'];
+    return canDualWield(h)?['MainHand','OffHand']:['MainHand'];
+  }
+  if(it.slot==='OffHand')return accessoryAllowed(h,it)?['OffHand']:[];
+  if(itemEquipSlot(it)==='Accessories')return accessoryAllowed(h,it)?['Accessories']:[];
+  if(it.slot==='Armor')return canEquipArmor(h,it)?['Armor']:[];
+  return[];
+}
+function detachItemFromHero(h,itemId){
+  if(!h||!itemId)return;
+  Object.keys(h.equip||{}).forEach(slot=>{if(h.equip[slot]===itemId)h.equip[slot]=null});
+  const it=s.inventory.find(x=>x.id===itemId);if(it&&it.equipped===h.id)it.equipped=null;
+}
 function unequipItem(hid,slot){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
   const itemId=h.equip?.[slot];if(!itemId)return;
-  const it=s.inventory.find(x=>x.id===itemId);
-  if(it)it.equipped=null;
-  h.equip[slot]=null;
+  detachItemFromHero(h,itemId);
   save();renderRoster();renderInv();
 }
-function equip(hid,iid){
+function equip(hid,iid,targetSlot=null){
   const h=s.members.find(x=>x.id===hid),it=s.inventory.find(x=>x.id===iid);
   if(!h||!it)return;
-  const slot=itemEquipSlot(it);
-  if(slot==='Weapon'&&!allowedWeapons(h).includes(it.weaponType))return notify('That class cannot use this weapon.');
-  if(slot==='Armor'&&!canEquipArmor(h,it))return notify(displayClass(h)+' can only equip up to '+maxArmorClass(h)+' armor.');
-  const old=s.inventory.find(x=>x.id===h.equip[slot]);
-  if(old)old.equipped=null;
+  const targets=equipmentTargetsForItem(h,it),slot=targetSlot||targets[0];
+  if(!targets.includes(slot))return notify('That item cannot be equipped in '+slotLabel(slot)+'.');
   if(it.equipped){
     const previous=s.members.find(x=>x.id===it.equipped);
-    if(previous){
-      const previousSlot=itemEquipSlot(it);
-      if(previous.equip[previousSlot]===it.id)previous.equip[previousSlot]=null;
-    }
+    if(previous)detachItemFromHero(previous,it.id);
   }
+  const conflicts=new Set();
+  if(slot==='MainHand'){
+    if(h.equip.MainHand)conflicts.add(h.equip.MainHand);
+    if(weaponHands(it)===2&&h.equip.OffHand)conflicts.add(h.equip.OffHand);
+  }else if(slot==='OffHand'){
+    if(h.equip.OffHand)conflicts.add(h.equip.OffHand);
+    const main=s.inventory.find(x=>x.id===h.equip.MainHand);
+    if(main&&weaponHands(main)===2)conflicts.add(main.id);
+  }else if(h.equip[slot])conflicts.add(h.equip[slot]);
+  conflicts.forEach(id=>detachItemFromHero(h,id));
   h.equip[slot]=it.id;
+  if(it.slot==='Weapon'&&weaponHands(it)===2){h.equip.MainHand=it.id;h.equip.OffHand=it.id}
   it.equipped=h.id;
   setOnboardingFlag('itemEquipped');
   save();closeModal();renderRoster();renderInv();
 }
 function equipModal(hid,slot){
   const h=s.members.find(x=>x.id===hid);
-  let a=s.inventory.filter(x=>itemEquipSlot(x)===slot&&!x.equipped);
-  if(slot==='Weapon'&&h)a=a.filter(it=>allowedWeapons(h).includes(it.weaponType));
-  if(slot==='Armor'&&h)a=a.filter(it=>canEquipArmor(h,it));
+  let a=s.inventory.filter(x=>!x.equipped&&equipmentTargetsForItem(h,x).includes(slot));
   const current=s.inventory.find(x=>x.id===h?.equip?.[slot]);
-  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+  showModal('Choose '+slotLabel(slot),a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id},'${slot}')">Equip in ${slotLabel(slot)}</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
 const BOSS_RESOURCE_SOURCE={};
 const BOSS_RESOURCES=new Set();
 
@@ -389,10 +409,11 @@ function runeDetailsHtml(it){
   return ids.map(id=>{const r=RUNES[id];return `<div class="runeDetailRow"><span>${runeIcon(id,'gameAsset')} <b>${r?.name||id}</b></span><span>${runeBonusText(id)}</span></div>`}).join('');
 }
 function itemProfileParts(it){
-  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`];
+  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,weaponHands(it)===2?'Two-handed':'One-handed',`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`];
   if(it.slot==='Armor')return[`${armorClassForItem(it)} armor`];
   if(it.slot==='Ring')return['Ring'];
   if(it.slot==='Amulet'||it.slot==='Jewelry')return['Amulet'];
+  if(it.slot==='Accessories'||it.slot==='OffHand')return[it.accessoryType||slotLabel(it.slot),...(it.allowedClasses?.length?[`Usable by ${it.allowedClasses.join(', ')}`]:[])];
   return[it.slot||'Equipment'];
 }
 function itemStatParts(it){
@@ -400,7 +421,11 @@ function itemStatParts(it){
   if(it.stat&&it.value!=null)parts.push(it.stat==='regen'?`+${it.value} HP / round`:it.stat==='manaRegen'?`+${it.value} Mana Regen`:it.stat==='lifesteal'?`${it.value}% lifesteal`:`+${it.value} ${statName(it.stat)}`);
   if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${it.secondaryValue} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${it.secondaryValue}% Attack Speed`:`+${it.secondaryValue} ${statName(it.secondaryStat)}`);
   if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${it.tertiaryValue} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${it.tertiaryValue}% Attack Speed`:`+${it.tertiaryValue} ${statName(it.tertiaryStat)}`);
-  Object.entries(it.extraStats||{}).forEach(([k,v])=>parts.push(`+${v}${['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k)?'%':''} ${statName(k)}`));
+  Object.entries(it.extraStats||{}).forEach(([k,v])=>{
+    const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
+    const wholePercent=['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k);
+    parts.push(`+${decimalPercent?Math.round(v*100):v}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+  });
   const block=itemBlockValue(it);if(block)parts.push(`+${block} Block`);
   if(it.damageBonus)parts.push(`+${Math.round(it.damageBonus*100)}% damage`);
   if(it.healBonus)parts.push(`+${Math.round(it.healBonus*100)}% healing`);

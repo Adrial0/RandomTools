@@ -215,6 +215,7 @@ function inventoryMatchesFilter(it){
   if(!inventoryRarityFilter.has(it.rarity||'Common'))return false;
   if(inventoryFilter==='all')return true;
   if(inventoryFilter==='Accessories')return itemEquipSlot(it)==='Accessories';
+  if(inventoryFilter==='OffHand')return it.slot==='OffHand';
   return it.slot===inventoryFilter;
 }
 function inventorySortValue(it,key){
@@ -238,8 +239,7 @@ function toggleEquippedItems(){
 function openInventoryEquip(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
   const owner=it.equipped?s.members.find(x=>x.id===it.equipped):null;
-  const slot=itemEquipSlot(it);
-  const candidates=s.members.filter(h=>(slot!=='Weapon'||allowedWeapons(h).includes(it.weaponType))&&(slot!=='Armor'||canEquipArmor(h,it)));
+  const candidates=s.members.filter(h=>equipmentTargetsForItem(h,it).length);
   const recipe=recipeForItem(it);
 
   const profile=itemProfileParts(it),stats=itemStatParts(it);
@@ -261,12 +261,10 @@ function openInventoryEquip(iid){
   </div>
   <h3 style="margin-top:14px">Equip on</h3>
   <div class="g2">${candidates.map(h=>{
-    const current=s.inventory.find(x=>x.id===h.equip[slot]);
+    const targets=equipmentTargetsForItem(h,it);
     return `<div class="card equipActionCard">
       <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div></div>
-      <div class="muted" style="margin:7px 0">Current ${slot}: <b>${current?current.name:'Empty'}</b></div>
-      ${equipComparison(it,current)}
-      <button class="btn ${it.equipped===h.id?'':'gold'} actionButton" ${it.equipped===h.id?'disabled':''} onclick="equip(${h.id},${it.id})">${it.equipped===h.id?'Already Equipped':'Equip Here'}</button>
+      ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b></div>${equipComparison(it,current)}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
     </div>`;
   }).join('')}</div>`);
 }
@@ -353,6 +351,7 @@ function recipePreview(r){
     const w=WEAPONS[specificName];
     if(w){
       profile.push(`${weaponTypeFor(specificName)} weapon`);
+      profile.push(TWO_HANDED_WEAPONS.has(specificName)||TWO_HANDED_WEAPONS.has(weaponTypeFor(specificName))?'Two-handed':'One-handed');
       profile.push(`Scales with ${weaponScalingLabel(w)}`);
       profile.push(`${elementIcon[w.type]||''} ${w.type} damage`);
       stats.push(`Attack ${w.base+tier*2}`);
@@ -381,9 +380,17 @@ function recipePreview(r){
     let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
     const value=stat==='hp'?Math.round(12+tier*4):Math.round(3+tier*1.8);
     stats.push(`+${value} ${statName(stat)}`);
+  }else if(slot==='Accessories'||slot==='OffHand'){
+    profile.push(meta.accessoryType||specificName||slotLabel(slot));
+    if(meta.allowedClasses?.length)profile.push(`Usable by ${meta.allowedClasses.join(', ')}`);
+    if(meta.block)stats.push(`+${meta.block} Block`);
   }
 
-  Object.entries(meta.stats||{}).forEach(([k,v])=>stats.push(`+${v}${['fire','ice','poison','lightning','holy','dark','lifesteal'].includes(k)?'%':''} ${statName(k)}`));
+  Object.entries(meta.stats||{}).forEach(([k,v])=>{
+    const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
+    const wholePercent=['fire','ice','poison','lightning','holy','dark','lifesteal','attackSpeed'].includes(k);
+    stats.push(`+${decimalPercent?Math.round(v*100):v}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+  });
   if(meta.damageBonus)stats.push(`+${Math.round(meta.damageBonus*100)}% damage`);
   if(meta.healBonus)stats.push(`+${Math.round(meta.healBonus*100)}% healing`);
   if(meta.critBonus)stats.push(`+${Math.round(meta.critBonus*100)}% crit`);
@@ -404,7 +411,7 @@ function closeRecipeMenu(){
 function setRecipeFilter(f,b){
   recipeFilter=f;
   document.querySelectorAll('[data-recipe-filter]').forEach(x=>x.classList.toggle('on',x.dataset.recipeFilter===f));
-  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',Accessories:'Accessories',Material:'Materials'};
+  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',OffHand:'Off-hand',Accessories:'Accessories',Material:'Materials'};
   const btn=$('recipeMenuButton');if(btn)btn.textContent=(labels[f]||'Filter')+' ▾';
   renderCraft();
 }
@@ -516,7 +523,7 @@ function renderCraft(){
   if($('smithRarityBonus'))$('smithRarityBonus').textContent='Higher rarity chance from Smithing Lv. '+s.smithing.level;
   const list=recipes.map((r,i)=>[r,i]).filter(([r])=>{
     const visible=recipeVisible(r);
-    const typeOk=recipeFilter==='all'||(recipeFilter==='Accessories'?(r[1]==='Ring'||r[1]==='Amulet'):r[1]===recipeFilter);
+    const typeOk=recipeFilter==='all'||(recipeFilter==='Accessories'?(r[1]==='Ring'||r[1]==='Amulet'||r[1]==='Accessories'):r[1]===recipeFilter);
     const craftable=Object.entries(r[3]||{}).every(([k,v])=>(s.materials[k]||0)>=v)&&(s.smithing?.level||1)>=recipeSmithLevel(r);
     return visible&&typeOk&&(!recipeCraftableOnly||craftable);
   });

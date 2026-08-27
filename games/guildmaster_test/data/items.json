@@ -693,6 +693,10 @@
       "image": "images/items/armor.png",
       "fallback": "🛡️"
     },
+    "OffHand": {
+      "image": "images/items/armor.png",
+      "fallback": "🛡️"
+    },
     "Ring": {
       "image": "images/items/ring.png",
       "fallback": "💍"

@@ -206,6 +206,7 @@ body{
 .card:has(.name.legendary){border-color:#d19a31!important;box-shadow:0 0 0 2px rgba(236,176,55,.34),0 0 15px rgba(219,151,27,.15),2px 3px 0 #100d09!important}
 .card:has(.name.mythic){border-color:#d85eae!important;box-shadow:0 0 0 2px rgba(233,84,179,.38),0 0 18px rgba(204,56,154,.18),2px 3px 0 #100d09!important}
 .equipCompare{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.equipTargetChoice{margin-top:8px;padding-top:8px;border-top:1px solid rgba(121,93,55,.35)}
 .equipGain,.equipLoss,.equipSame{font:11px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;padding:3px 6px;border-radius:2px}
 .equipGain{color:#a9d797;background:rgba(72,116,58,.18);border:1px solid rgba(112,162,91,.42)}
 .equipLoss{color:#df8f80;background:rgba(126,61,49,.18);border:1px solid rgba(172,83,66,.42)}

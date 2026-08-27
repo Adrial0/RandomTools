@@ -202,7 +202,8 @@ function makeBattle(m){
   const count=m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3);currentMissionForEnemy=m;
   const heroes=m.party.map(hid=>{
     const h=s.members.find(x=>x.id===hid),z=hs(h),ps=m.partyState[hid];
-    const wep=s.inventory.find(x=>x.id===h.equip.Weapon);
+    const mainId=h.equip.MainHand||h.equip.Weapon,wep=s.inventory.find(x=>x.id===mainId);
+    const off=s.inventory.find(x=>x.id===h.equip.OffHand&&x.id!==mainId&&x.slot==='Weapon');
     const wd=weaponDefForItem(wep)||((wep&&WEAPONS[wep.weaponType])?WEAPONS[wep.weaponType]:null);
     const baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||'');
     const previewUnit={baseAttackTime,attackSpeed:z.attackSpeed,buffs:{}};
@@ -222,6 +223,8 @@ function makeBattle(m){
       scale:wep?.scale||({Mage:'int',Priest:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),
       damageType:wep?.damageType||'physical',
       weaponPower:wep?.weaponPower||(wd?.base||8),
+      offhandWeapon:off?{weaponType:off.weaponType,scale:off.scale||'dex',damageType:off.damageType||'physical',weaponPower:off.weaponPower||8,baseAttackTime:weaponAttackTime(off.weaponTemplate||off.weaponType||'')}:null,
+      dualWield:!!off,
       armorPen:z.armorPen||0,parry:z.parry||0,critDamage:z.critDamage||0,accuracy:z.accuracy||0,
       elementalDamage:z.elementalDamage||0,statusChance:z.statusChance||0,cleave:z.cleave||0,
       counter:z.counter||0,damageVariance:z.damageVariance||0,execute:z.execute||0
@@ -651,54 +654,28 @@ function healAlly(m,h,ally,mult=1,label='Heal'){
   return true;
 }
 function heroBasicAttack(m,h){
-  const b=m.battle,targets=living(b.enemies);if(!targets.length||h.hp<=0)return false;
-  const target=pick(targets);
-  let dmg=heroDamage(h,target);
-  let text='';
-
-  let critChance=(h.class==='Rogue'?.18:0)+(h.critBonus||0);
-  if(h.class==='Ranger')critChance+=(h.critBonus||0);
-  if(critChance>0&&Math.random()<critChance){
-    dmg=Math.round(dmg*(1.35+(h.critDamage||0)));
-    text='Critical! ';
-  }
-  if((h.execute||0)>0&&target.hp/target.maxHp<=.30){
-    dmg=Math.round(dmg*(1+h.execute));
-    text+='Execute! ';
-  }
-
-  const targetBefore=target.hp;
-  target.hp=Math.max(0,target.hp-dmg);
-  addHeroMetric(m,h.id,'damage',Math.min(targetBefore,dmg));
-  if(text.includes('Critical!'))addHeroMetric(m,h.id,'criticalHits',1);
-
-  if((h.cleave||0)>0){
-    const secondary=targets.find(t=>t.id!==target.id&&t.hp>0);
-    if(secondary){
-      const splash=Math.max(1,Math.round(dmg*h.cleave));
-      const secondaryBefore=secondary.hp;
-      secondary.hp=Math.max(0,secondary.hp-splash);
-      addHeroMetric(m,h.id,'damage',Math.min(secondaryBefore,splash));
-      text+=`Cleave hits ${secondary.name} for ${splash}. `;
+  const b=m.battle;if(!living(b.enemies).length||h.hp<=0)return false;
+  const weapons=[{weaponType:h.weaponType,scale:h.scale,damageType:h.damageType,weaponPower:h.weaponPower},...(h.dualWield&&h.offhandWeapon?[h.offhandWeapon]:[])];
+  weapons.forEach((weapon,index)=>{
+    const targets=living(b.enemies);if(!targets.length)return;
+    const target=pick(targets),attacker={...h,...weapon};
+    let dmg=heroDamage(attacker,target),text=index?'Off-hand: ':'';
+    let critChance=(h.class==='Rogue'?.18:0)+(h.critBonus||0);
+    if(h.class==='Ranger')critChance+=(h.critBonus||0);
+    if(critChance>0&&Math.random()<critChance){dmg=Math.round(dmg*(1.35+(h.critDamage||0)));text+='Critical! ';addHeroMetric(m,h.id,'criticalHits',1)}
+    if((h.execute||0)>0&&target.hp/target.maxHp<=.30){dmg=Math.round(dmg*(1+h.execute));text+='Execute! '}
+    const targetBefore=target.hp;target.hp=Math.max(0,target.hp-dmg);addHeroMetric(m,h.id,'damage',Math.min(targetBefore,dmg));
+    if((h.cleave||0)>0){
+      const secondary=targets.find(t=>t.id!==target.id&&t.hp>0);
+      if(secondary){const splash=Math.max(1,Math.round(dmg*h.cleave)),before=secondary.hp;secondary.hp=Math.max(0,secondary.hp-splash);addHeroMetric(m,h.id,'damage',Math.min(before,splash));text+=`Cleave hits ${secondary.name} for ${splash}. `}
     }
-  }
-
-  const basicStatus=statusForDamageType(h.damageType);
-  if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){
-    applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name,sourceId:h.id});
-    text+=`${STATUS_EFFECTS[basicStatus].name} applied. `;
-  }
-
-  const weaponName=h.weaponType||'unarmed attack';
-  text+=`${h.name.split(' ')[0]} uses ${weaponName} for ${dmg} ${elementIcon[h.damageType]} ${h.damageType} damage.`;
-
-  if(h.lifesteal>0){
-    const heal=Math.max(1,Math.floor(dmg*h.lifesteal/100));
-    h.hp=Math.min(h.maxHp,h.hp+heal);
-    text+=` Lifesteal restores ${heal} HP.`;
-  }
-
-  b.log.unshift(text);b.log=b.log.slice(0,45);
+    const basicStatus=statusForDamageType(attacker.damageType);
+    if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name,sourceId:h.id});text+=`${STATUS_EFFECTS[basicStatus].name} applied. `}
+    text+=`${h.name.split(' ')[0]} uses ${attacker.weaponType||'unarmed attack'} for ${dmg} ${elementIcon[attacker.damageType]} ${attacker.damageType} damage.`;
+    if(h.lifesteal>0){const heal=Math.max(1,Math.floor(dmg*h.lifesteal/100));h.hp=Math.min(h.maxHp,h.hp+heal);text+=` Lifesteal restores ${heal} HP.`}
+    b.log.unshift(text);
+  });
+  b.log=b.log.slice(0,45);
   syncPartyHp(m);
   return true;
 }
@@ -958,6 +935,24 @@ function enemyAction(m,e){
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} ${elemental?elementIcon[elem]+' '+elem:'physical'} damage.`);
   if(target.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,target,e.basicStatus,{power:Math.max(1,dmg*.12),duration:8000,source:e.name});
+  if(e.arenaHero&&e.dualWield&&e.offhandWeapon){
+    const offTargets=living(b.heroes),offTarget=offTargets.length?enemySingleTarget(e,offTargets):null;
+    if(offTarget){
+      const offType=e.offhandWeapon.damageType||'physical',offElemental=offType!=='physical';
+      if(Math.random()<Math.max(0,(offElemental?offTarget.magicalDodge:offTarget.physicalDodge||0)-(e.accuracy||0))){
+        b.log.unshift(`${offTarget.name.split(' ')[0]} dodges ${e.name}'s off-hand attack.`);
+      }else if(Math.random()<(offTarget.parry||0)){
+        b.log.unshift(`${offTarget.name.split(' ')[0]} parries ${e.name}'s off-hand attack.`);
+      }else{
+        const raw=(e.offhandAtk||e.atk*.75)*(.72+Math.random()*.32)*enraged*buffMult;
+        let offDamage=offElemental?Math.max(0,Math.round(mitigatedDamage(raw,offTarget.mdef,offTarget.block||0)*elementalReduction(offTarget[offType]))):mitigatedDamage(raw,offTarget.def,offTarget.block||0);
+        if(offTarget.buffs?.shieldFaith>Date.now())offDamage=Math.round(offDamage*.70);
+        const offBefore=offTarget.hp;offTarget.hp=Math.max(0,offTarget.hp-offDamage);recordHeroDamageTaken(m,offTarget,Math.min(offBefore,offDamage));
+        b.log.unshift(`${e.name} strikes ${offTarget.name.split(' ')[0]} with their off hand for ${offDamage} ${offElemental?elementIcon[offType]+' '+offType:'physical'} damage.`);
+        if(offTarget.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,offTarget,e.basicStatus,{power:Math.max(1,offDamage*.12),duration:8000,source:e.name});
+      }
+    }
+  }
   if(target.hp>0&&(target.counter||0)>0&&Math.random()<target.counter){
     const counter=Math.max(1,Math.round(heroDamage(target,e)*.55));
     const enemyBefore=e.hp;
@@ -1135,7 +1130,7 @@ function repairFiniteMissionState(m){
   if(m?.battle?.heroes)m.battle.heroes.forEach(hero=>{
     if(!hero.cooldowns||typeof hero.cooldowns!=='object')hero.cooldowns={};
     if(!hero.buffs||typeof hero.buffs!=='object')hero.buffs={};
-    const original=s.members.find(x=>x.id===hero.id),z=original?hs(original):null,wep=original?s.inventory.find(x=>x.id===original.equip?.Weapon):null;
+    const original=s.members.find(x=>x.id===hero.id),z=original?hs(original):null,wep=original?s.inventory.find(x=>x.id===original.equip?.MainHand):null;
     if(z)hero.attackSpeed=z.attackSpeed+(missionProvisionEffect(m).attackSpeed||0);
     if(!hero.baseAttackTime)hero.baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||hero.weaponType||'');
     if(!Number.isFinite(hero.nextAttackAt))scheduleNextAttack(hero,false,Date.now());
