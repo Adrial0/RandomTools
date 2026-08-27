@@ -14,6 +14,9 @@ assert.match(core,/h\.equip\.MainHand=h\.equip\.Weapon\|\|null/,'legacy Weapon s
 assert.match(core,/weaponHands\(mainItem\)===2\)h\.equip\.OffHand=mainItem\.id/,'two-handed migration occupies both hands');
 assert.match(progression,/function equipmentTargetsForItem/,'equipment targeting applies hand rules');
 assert.match(progression,/if\(weaponHands\(it\)===2\)return\['MainHand'\]/,'two-handed weapons can only be equipped through Main Hand');
+assert.match(progression,/out\.statusChance\+=it\.statusChance\|\|0/,'legacy and accessory status chance values are combined rather than overwritten');
+assert.match(progression,/const value=decimalPercent\.has\(k\)\?raw\*100:raw/,'decimal combat percentages are converted for comparison display');
+assert.doesNotMatch(progression,/Usable by \$\{it\.allowedClasses/,'item descriptions do not repeat class restrictions');
 assert.match(combat,/const weapons=\[\{weaponType:h\.weaponType/,'hero basic attacks build a per-hand attack list');
 assert.match(combat,/weapons\.forEach/,'each equipped weapon resolves its own hit');
 assert.match(combat,/e\.arenaHero&&e\.dualWield&&e\.offhandWeapon/,'arena defenders also resolve an off-hand hit');

@@ -333,7 +333,7 @@ function upgrade(k){
   save();render();
 }
 function statName(k){
-  return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',hp:'HP',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res'}[k]||String(k).toUpperCase();
+  return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',hp:'HP',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Penetration',parry:'Parry',critChance:'Critical Chance',critDamage:'Critical Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter',damageVariance:'Damage Variance',damageBonus:'Damage',healBonus:'Healing',threatBonus:'Threat',physicalDodgeBonus:'Physical Dodge',magicalDodgeBonus:'Magic Dodge'}[k]||String(k).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,x=>x.toUpperCase());
 }
 function colorizeStatTerms(root=document){
   if(!root)return;
@@ -357,7 +357,7 @@ function colorizeStatTerms(root=document){
   });
 }
 function itemCompareValues(it){
-  const out={power:it?.power||0,weaponPower:it?.slot==='Weapon'?(it.weaponPower||0):0,hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:itemBlockValue(it),regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,armorPen:0,parry:0,critChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0};
+  const out={power:it?.power||0,weaponPower:it?.slot==='Weapon'?(it.weaponPower||0):0,hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:itemBlockValue(it),regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,armorPen:0,parry:0,critChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0,damageBonus:0,healBonus:0,threatBonus:0,physicalDodgeBonus:0,magicalDodgeBonus:0};
   if(!it)return out;
   const add=(k,v)=>{if(k in out)out[k]+=(Number(v)||0)};
   add(it.stat,it.value);
@@ -365,28 +365,35 @@ function itemCompareValues(it){
   add(it.tertiaryStat,it.tertiaryValue);
   Object.entries(it.extraStats||{}).forEach(([k,v])=>add(k,v));
   (it.runes||[]).forEach(id=>{const r=RUNES[id];if(r)add(r.stat,r.value)});
-  out.armorPen=it.armorPen||0;
-  out.parry=it.parry||0;
-  out.critChance=it.weaponCritChance||0;
-  out.critDamage=it.critDamage||0;
-  out.accuracy=it.accuracy||0;
-  out.elementalDamage=it.elementalDamage||0;
-  out.healingPower=it.healingPower||0;
-  out.statusChance=it.statusChance||0;
-  out.cleave=it.cleave||0;
-  out.counter=it.counter||0;
+  out.armorPen+=it.armorPen||0;
+  out.parry+=it.parry||0;
+  out.critChance+=it.weaponCritChance||0;
+  out.critDamage+=it.critDamage||0;
+  out.accuracy+=it.accuracy||0;
+  out.elementalDamage+=it.elementalDamage||0;
+  out.healingPower+=it.healingPower||0;
+  out.statusChance+=it.statusChance||0;
+  out.cleave+=it.cleave||0;
+  out.counter+=it.counter||0;
+  out.damageBonus+=it.damageBonus||0;
+  out.healBonus+=it.healBonus||0;
+  out.threatBonus+=it.itemThreatBonus||0;
+  out.physicalDodgeBonus+=it.itemPhysicalDodgeBonus||0;
+  out.magicalDodgeBonus+=it.itemMagicalDodgeBonus||0;
   return out;
 }
 function equipComparison(newItem,oldItem){
   const a=itemCompareValues(newItem),b=itemCompareValues(oldItem);
-  const labels={power:'Power',weaponPower:'Attack',hp:'HP',str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Pen',parry:'Parry',critChance:'Crit Chance',critDamage:'Crit Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter'};
-  const percent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark','armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter']);
+  const labels={power:'Power',weaponPower:'Attack',hp:'HP',str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Pen',parry:'Parry',critChance:'Crit Chance',critDamage:'Crit Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter',damageBonus:'Damage',healBonus:'Healing',threatBonus:'Threat',physicalDodgeBonus:'Physical Dodge',magicalDodgeBonus:'Magic Dodge'};
+  const wholePercent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark']);
+  const decimalPercent=new Set(['armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter','damageBonus','healBonus','physicalDodgeBonus','magicalDodgeBonus']);
   const parts=[];
   Object.keys(labels).forEach(k=>{
-    const d=(a[k]||0)-(b[k]||0);
-    if(!d)return;
-    const sign=d>0?'+':'';
-    parts.push(`<span class="${d>0?'equipGain':'equipLoss'}">${labels[k]} ${sign}${d}${percent.has(k)?'%':''}</span>`);
+    const raw=(a[k]||0)-(b[k]||0);
+    if(Math.abs(raw)<.000001)return;
+    const value=decimalPercent.has(k)?raw*100:raw;
+    const rounded=Math.round(value*100)/100,sign=rounded>0?'+':'';
+    parts.push(`<span class="${rounded>0?'equipGain':'equipLoss'}">${labels[k]} ${sign}${rounded}${decimalPercent.has(k)||wholePercent.has(k)?'%':''}</span>`);
   });
   return parts.length?`<div class="equipCompare">${parts.join('')}</div>`:`<div class="equipCompare"><span class="equipSame">No numerical stat change</span></div>`;
 }
@@ -413,7 +420,7 @@ function itemProfileParts(it){
   if(it.slot==='Armor')return[`${armorClassForItem(it)} armor`];
   if(it.slot==='Ring')return['Ring'];
   if(it.slot==='Amulet'||it.slot==='Jewelry')return['Amulet'];
-  if(it.slot==='Accessories'||it.slot==='OffHand')return[it.accessoryType||slotLabel(it.slot),...(it.allowedClasses?.length?[`Usable by ${it.allowedClasses.join(', ')}`]:[])];
+  if(it.slot==='Accessories'||it.slot==='OffHand')return[it.accessoryType||slotLabel(it.slot)];
   return[it.slot||'Equipment'];
 }
 function itemStatParts(it){

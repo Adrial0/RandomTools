@@ -382,7 +382,6 @@ function recipePreview(r){
     stats.push(`+${value} ${statName(stat)}`);
   }else if(slot==='Accessories'||slot==='OffHand'){
     profile.push(meta.accessoryType||specificName||slotLabel(slot));
-    if(meta.allowedClasses?.length)profile.push(`Usable by ${meta.allowedClasses.join(', ')}`);
     if(meta.block)stats.push(`+${meta.block} Block`);
   }
 
