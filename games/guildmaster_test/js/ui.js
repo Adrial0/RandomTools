@@ -435,10 +435,11 @@ function buildCombatStructure(m){
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   const ordered=threatOrderedHeroes(m.battle.heroes);
   const background=combatBackgroundForMission(m).replace(/'/g,"%27");
+  const largestSide=Math.max(1,ordered.length,m.battle.enemies.length),desktopRows=Math.max(1,Math.ceil(largestSide/2));
   $('combatBody').innerHTML=`
     <div class="combatFixedTop">
       <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
-      <div class="combatGrid combatBattlefield" style="--combat-background:url('${background}')">
+      <div class="combatGrid combatBattlefield" style="--combat-background:url('${background}');--combat-rows:${desktopRows};--combat-mobile-rows:${largestSide}">
         <div class="combatFieldShade"></div>
         <div class="combatTeamPane combatHeroPane"><div class="combatTeamLabel">${arenaMode?'YOUR ARENA PARTY':'YOUR PARTY'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
         <div class="combatTeamPane combatEnemyPane"><div class="combatTeamLabel">${arenaMode?'OPPONENT PARTY':'ENEMIES'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>`<div class="combatEnemySlot" data-combat-slot="enemy:${index}" ${m.battle.enemies[index]?'':'hidden aria-hidden="true" style="display:none!important"'}>${m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false):emptyCombatSlotHtml(true,index)}</div>`).join('')}</div></div>

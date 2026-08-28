@@ -1464,7 +1464,7 @@ body.windowOpen .side{overflow:hidden!important}
   isolation:isolate;
   display:grid!important;
   grid-template-columns:1fr 1fr!important;
-  min-height:470px!important;
+  min-height:max(470px,calc(var(--combat-rows,2) * 150px + 58px))!important;
   padding:34px 22px 18px!important;
   gap:34px!important;
   overflow:hidden!important;
@@ -1491,7 +1491,7 @@ body.windowOpen .side{overflow:hidden!important}
 .combatBattlefield #combatEnemySide.compactCombatSide{
   height:100%;display:grid!important;
   grid-template-columns:repeat(2,minmax(105px,1fr))!important;
-  grid-auto-rows:118px;
+  grid-auto-rows:150px;
   align-content:center!important;
   align-items:center!important;justify-items:center!important;
   gap:2px 12px!important;
@@ -1515,7 +1515,6 @@ body.windowOpen .side{overflow:hidden!important}
   display:flex!important;align-items:center!important;justify-content:center!important;
   background:transparent!important;border:0!important;filter:drop-shadow(0 5px 4px rgba(0,0,0,.8));
 }
-.combatBattlefield .enemy .visualIcon{transform:scaleX(-1)}
 .combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{
   width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;image-rendering:pixelated;
 }
@@ -1537,8 +1536,8 @@ body.windowOpen .side{overflow:hidden!important}
 .combatBattlefield .combatant[style*="display: none"],.combatBattlefield .combatSlotEmpty{display:none!important}
 
 @media(max-width:760px){
-  .combatBattlefield.combatGrid{min-height:610px!important;padding:31px 8px 14px!important;gap:8px!important}
-  .combatBattlefield .combatSide.compactCombatSide,.combatBattlefield #combatEnemySide.compactCombatSide{grid-template-columns:1fr!important;grid-auto-rows:72px!important;align-content:center!important;gap:1px!important}
+  .combatBattlefield.combatGrid{min-height:max(610px,calc(var(--combat-mobile-rows,4) * 88px + 55px))!important;padding:31px 8px 14px!important;gap:8px!important}
+  .combatBattlefield .combatSide.compactCombatSide,.combatBattlefield #combatEnemySide.compactCombatSide{grid-template-columns:1fr!important;grid-auto-rows:88px!important;align-content:center!important;gap:1px!important}
   .combatBattlefield .combatant.combatMini{width:min(124px,100%)!important;height:72px!important;min-height:72px!important;max-height:72px!important;grid-template-columns:1fr 48px!important;grid-template-rows:auto auto!important;align-items:center!important}
   .combatBattlefield .combatMiniVitals{grid-column:1;grid-row:1/-1}
   .combatBattlefield .combatant.combatMini .visualIcon{grid-column:2;grid-row:1/-1;width:46px!important;height:46px!important}

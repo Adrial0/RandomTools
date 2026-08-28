@@ -12,6 +12,9 @@ assert.doesNotMatch(ui,/class="combatMiniClass"/,'the unselected battlefield vie
 assert.doesNotMatch(ui,/class="combatantHp"/,'the unselected battlefield view does not show numeric HP clutter');
 assert.match(css,/\.combatBattlefield\.combatGrid\{[^}]*background-image:var\(--combat-background\)!important/s,'the battlefield paints the area artwork behind combatants');
 assert.match(css,/\.combatBattlefield \.combatant\.combatMini\{[^}]*background:transparent!important[^}]*border:0!important/s,'combatants no longer render as boxed cards');
+assert.doesNotMatch(css,/\.combatBattlefield \.enemy \.visualIcon\{transform:scaleX\(-1\)/,'enemy artwork is not mirrored');
+assert.match(ui,/--combat-rows:\$\{desktopRows\}/,'battlefield row spacing scales with the larger combat team');
+assert.match(css,/grid-auto-rows:150px/,'desktop units have enough vertical separation for status effects');
 assert.match(ui,/battleShout:\{icon:/,'Battle Shout has a visible party buff icon');
 assert.match(ui,/shieldFaith:\{icon:/,'Shield of Faith has a visible buff icon');
 assert.match(css,/#combatBody\{[^}]*overflow-y:auto!important/s,'the combat body itself is scrollable');
