@@ -12,7 +12,7 @@
       "GoblinInsignia",
       "Cloth"
     ],
-    "image": "images/enemies/goblin.png",
+    "image": "images/enemies/forest-goblin.png",
     "tier": 1
   },
   "Grey Wolf": {
@@ -25,7 +25,7 @@
     "damageType": "physical",
     "ability": null,
     "drops": [],
-    "image": "images/enemies/wolf.png",
+    "image": "images/enemies/grey-wolf.png",
     "tier": 1
   },
   "Thornback Boar": {
@@ -38,7 +38,7 @@
     "damageType": "physical",
     "ability": null,
     "drops": [],
-    "image": "",
+    "image": "images/enemies/thornback-boar.png",
     "tier": 1
   },
   "Moss Slime": {
@@ -53,7 +53,7 @@
     "drops": [
       "SlimeGel"
     ],
-    "image": "images/enemies/slime.png",
+    "image": "images/enemies/moss-slime.png",
     "tier": 1
   },
   "Briar Wisp": {
@@ -66,7 +66,7 @@
     "damageType": "holy",
     "ability": "radiant_bolt",
     "drops": [],
-    "image": "",
+    "image": "images/enemies/briar-wisp.png",
     "tier": 1
   },
   "Highway Bandit": {
@@ -83,7 +83,7 @@
       "BanditToken",
       "Venom"
     ],
-    "image": "images/enemies/bandit.png",
+    "image": "images/enemies/highway-bandit.png",
     "tier": 2
   },
   "Prairie Wolf": {
@@ -96,7 +96,7 @@
     "damageType": "physical",
     "ability": null,
     "drops": [],
-    "image": "images/enemies/wolf.png",
+    "image": "images/enemies/prairie-wolf.png",
     "tier": 2
   },
   "Sunfield Raider": {
@@ -112,7 +112,7 @@
       "Cloth",
       "BanditToken"
     ],
-    "image": "",
+    "image": "images/enemies/sunfield-raider.png",
     "tier": 2
   },
   "Dust Hawk": {
@@ -127,7 +127,7 @@
     "drops": [
       "Cloth"
     ],
-    "image": "",
+    "image": "images/enemies/dust-hawk.png",
     "tier": 2
   },
   "Spark Imp": {
@@ -140,7 +140,7 @@
     "damageType": "lightning",
     "ability": "lightning_burst",
     "drops": [],
-    "image": "",
+    "image": "images/enemies/spark-imp.png",
     "tier": 2
   },
   "Dune Raider": {
@@ -156,7 +156,7 @@
       "Cloth",
       "BanditToken"
     ],
-    "image": "",
+    "image": "images/enemies/dune-raider.png",
     "tier": 3
   },
   "Sand Scorpion": {
@@ -1217,16 +1217,16 @@
     "image": "images/bosses/abyssal-demon.png",
     "tier": 7
   },
-  "Moonlit Stag":{"name":"Moonlit Stag","icon":"🦌","archetype":"beast","baseHp":25,"baseAttack":9,"baseDefense":3,"damageType":"ice","ability":"frost_bolt","drops":["Moonpetal"],"image":"","tier":1},
-  "Creek Lurker":{"name":"Creek Lurker","icon":"🐊","archetype":"tank","baseHp":29,"baseAttack":8,"baseDefense":5,"damageType":"ice","ability":null,"drops":["CreekScale"],"image":"","tier":1},
-  "Pollen Sprite":{"name":"Pollen Sprite","icon":"✨","archetype":"caster","baseHp":20,"baseAttack":9,"baseDefense":2,"damageType":"dark","ability":"regeneration","drops":["Moonpetal"],"image":"","tier":1},
-  "Briar Fox":{"name":"Briar Fox","icon":"🦊","archetype":"skirmisher","baseHp":22,"baseAttack":10,"baseDefense":2,"damageType":"dark","ability":null,"drops":["CreekScale"],"image":"","tier":1},
-  "Greenwood Poacher":{"name":"Greenwood Poacher","icon":"🏹","archetype":"caster","baseHp":25,"baseAttack":10,"baseDefense":3,"damageType":"dark","ability":"dark_bolt","drops":["Moonpetal","CreekScale"],"image":"","tier":1},
-  "Rockhorn Ram":{"name":"Rockhorn Ram","icon":"🐏","archetype":"beast","baseHp":35,"baseAttack":12,"baseDefense":7,"damageType":"ice","ability":"frost_bolt","drops":["Stormhide"],"image":"","tier":2},
-  "Hill Brigand":{"name":"Hill Brigand","icon":"🗡️","archetype":"brute","baseHp":32,"baseAttack":13,"baseDefense":5,"damageType":"fire","ability":"burning_strike","drops":["HarpyFeather"],"image":"","tier":2},
-  "Thunder Hare":{"name":"Ember Hare","icon":"🐇","archetype":"skirmisher","baseHp":24,"baseAttack":13,"baseDefense":3,"damageType":"fire","ability":"burning_strike","drops":["Stormhide"],"image":"","tier":2},
-  "Redstone Harpy":{"name":"Redstone Harpy","icon":"🦅","archetype":"skirmisher","baseHp":28,"baseAttack":14,"baseDefense":4,"damageType":"ice","ability":null,"drops":["HarpyFeather"],"image":"","tier":2},
-  "Ironback Bear":{"name":"Ironback Bear","icon":"🐻","archetype":"tank","baseHp":44,"baseAttack":11,"baseDefense":9,"damageType":"fire","ability":null,"drops":["Stormhide"],"image":"","tier":2},
+  "Moonlit Stag":{"name":"Moonlit Stag","icon":"🦌","archetype":"beast","baseHp":25,"baseAttack":9,"baseDefense":3,"damageType":"ice","ability":"frost_bolt","drops":["Moonpetal"],"image":"images/enemies/moonlit-stag.png","tier":1},
+  "Creek Lurker":{"name":"Creek Lurker","icon":"🐊","archetype":"tank","baseHp":29,"baseAttack":8,"baseDefense":5,"damageType":"ice","ability":null,"drops":["CreekScale"],"image":"images/enemies/creek-lurker.png","tier":1},
+  "Pollen Sprite":{"name":"Pollen Sprite","icon":"✨","archetype":"caster","baseHp":20,"baseAttack":9,"baseDefense":2,"damageType":"dark","ability":"regeneration","drops":["Moonpetal"],"image":"images/enemies/pollen-sprite.png","tier":1},
+  "Briar Fox":{"name":"Briar Fox","icon":"🦊","archetype":"skirmisher","baseHp":22,"baseAttack":10,"baseDefense":2,"damageType":"dark","ability":null,"drops":["CreekScale"],"image":"images/enemies/briar-fox.png","tier":1},
+  "Greenwood Poacher":{"name":"Greenwood Poacher","icon":"🏹","archetype":"caster","baseHp":25,"baseAttack":10,"baseDefense":3,"damageType":"dark","ability":"dark_bolt","drops":["Moonpetal","CreekScale"],"image":"images/enemies/greenwood-poacher.png","tier":1},
+  "Rockhorn Ram":{"name":"Rockhorn Ram","icon":"🐏","archetype":"beast","baseHp":35,"baseAttack":12,"baseDefense":7,"damageType":"ice","ability":"frost_bolt","drops":["Stormhide"],"image":"images/enemies/rockhorn-ram.png","tier":2},
+  "Hill Brigand":{"name":"Hill Brigand","icon":"🗡️","archetype":"brute","baseHp":32,"baseAttack":13,"baseDefense":5,"damageType":"fire","ability":"burning_strike","drops":["HarpyFeather"],"image":"images/enemies/hill-brigand.png","tier":2},
+  "Thunder Hare":{"name":"Ember Hare","icon":"🐇","archetype":"skirmisher","baseHp":24,"baseAttack":13,"baseDefense":3,"damageType":"fire","ability":"burning_strike","drops":["Stormhide"],"image":"images/enemies/thunder-hare.png","tier":2},
+  "Redstone Harpy":{"name":"Redstone Harpy","icon":"🦅","archetype":"skirmisher","baseHp":28,"baseAttack":14,"baseDefense":4,"damageType":"ice","ability":null,"drops":["HarpyFeather"],"image":"images/enemies/redstone-harpy.png","tier":2},
+  "Ironback Bear":{"name":"Ironback Bear","icon":"🐻","archetype":"tank","baseHp":44,"baseAttack":11,"baseDefense":9,"damageType":"fire","ability":null,"drops":["Stormhide"],"image":"images/enemies/ironback-bear.png","tier":2},
   "Drowned Acolyte":{"name":"Drowned Acolyte","icon":"🧟","archetype":"caster","baseHp":34,"baseAttack":15,"baseDefense":5,"damageType":"ice","ability":"frost_bolt","drops":["Tideglass"],"image":"","tier":3},
   "Coral Sentinel":{"name":"Coral Sentinel","icon":"🗿","archetype":"tank","baseHp":48,"baseAttack":13,"baseDefense":11,"damageType":"holy","ability":null,"drops":["ShrineRelic"],"image":"","tier":3},
   "Tide Serpent":{"name":"Tide Serpent","icon":"🐍","archetype":"beast","baseHp":38,"baseAttack":16,"baseDefense":6,"damageType":"ice","ability":"frost_bolt","drops":["Tideglass"],"image":"","tier":3},
