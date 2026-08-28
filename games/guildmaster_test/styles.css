@@ -1457,6 +1457,98 @@ body.windowOpen .side{overflow:hidden!important}
 .combatant.combatMini.combatSlotEmpty{display:none!important}
 .combatEnemySlot[hidden]{display:none!important}
 
+/* Battlefield combat view: units stand directly in the area's scene. */
+#combatModal .modal{width:min(1180px,97vw)!important}
+.combatBattlefield.combatGrid{
+  position:relative!important;
+  isolation:isolate;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  min-height:470px!important;
+  padding:34px 22px 18px!important;
+  gap:34px!important;
+  overflow:hidden!important;
+  border:1px solid #73552e;
+  background-image:var(--combat-background)!important;
+  background-position:center!important;
+  background-size:cover!important;
+  box-shadow:inset 0 0 60px rgba(0,0,0,.7);
+}
+.combatFieldShade{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,7,7,.48),rgba(8,8,7,.15) 42%,rgba(8,8,7,.15) 58%,rgba(5,7,7,.48)),linear-gradient(0deg,rgba(4,4,3,.58),transparent 48%,rgba(4,4,3,.34));
+}
+.combatBattlefield .combatTeamPane{
+  position:relative!important;
+  min-width:0!important;
+  overflow:visible!important;
+}
+.combatTeamLabel{
+  position:absolute;top:-25px;left:0;right:0;
+  color:#e3c986;font-family:var(--ui-pixel);font-size:9px;letter-spacing:.12em;text-align:center;text-shadow:0 2px 3px #000;
+}
+.combatBattlefield .combatSide.compactCombatSide,
+.combatBattlefield #combatEnemySide.compactCombatSide{
+  height:100%;display:grid!important;
+  grid-template-columns:repeat(2,minmax(105px,1fr))!important;
+  grid-auto-rows:118px;
+  align-content:center!important;
+  align-items:center!important;justify-items:center!important;
+  gap:2px 12px!important;
+}
+.combatBattlefield .combatEnemySlot{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.combatBattlefield .combatant.combatMini{
+  width:min(150px,100%)!important;height:118px!important;min-height:118px!important;max-height:118px!important;
+  display:grid!important;grid-template-columns:1fr!important;grid-template-rows:auto 1fr auto!important;
+  justify-items:center!important;align-items:end!important;gap:2px!important;
+  position:relative!important;padding:0!important;margin:0!important;
+  overflow:visible!important;background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;cursor:pointer;transition:filter .12s ease,transform .12s ease;
+}
+.combatBattlefield .combatant.combatMini:hover{background:transparent!important;filter:brightness(1.16);transform:translateY(-2px)}
+.combatBattlefield .combatant.combatMini.selected{filter:brightness(1.2);transform:translateY(-2px)}
+.combatBattlefield .combatant.combatMini.selected .visualIcon{filter:drop-shadow(0 0 7px rgba(242,201,105,.9))}
+.combatBattlefield .combatant.combatMini.combatThreatFront{border:0!important}
+.combatBattlefield .combatMiniVitals{order:1;width:100%;align-self:start;filter:drop-shadow(0 2px 2px #000)}
+.combatBattlefield .combatant.combatMini .visualIcon{
+  order:2;width:60px!important;height:60px!important;margin:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:transparent!important;border:0!important;filter:drop-shadow(0 5px 4px rgba(0,0,0,.8));
+}
+.combatBattlefield .enemy .visualIcon{transform:scaleX(-1)}
+.combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{
+  width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;image-rendering:pixelated;
+}
+.combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:46px!important;line-height:58px!important}
+.combatBattlefield .combatMiniNameRow{height:15px;display:block!important;text-align:center!important}
+.combatBattlefield .combatMiniNameRow .name{
+  color:#fff0c8!important;font-size:11px!important;line-height:14px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-shadow:0 2px 3px #000,1px 0 #000,-1px 0 #000;
+}
+.combatBattlefield .hpTrack,.combatBattlefield .manaTrack,.combatBattlefield .attackTrack,.combatBattlefield .cooldownTrack{
+  width:100%!important;height:5px!important;min-height:5px!important;margin:1px 0 0!important;border:1px solid rgba(13,10,7,.9)!important;background:rgba(8,8,7,.88)!important;box-shadow:0 1px 2px #000!important;
+}
+.combatBattlefield .hpTrack{height:7px!important;min-height:7px!important}
+.combatBattlefield .combatStatusRow{
+  order:3;min-height:22px!important;margin:0!important;display:flex!important;justify-content:center!important;gap:3px!important;overflow:visible!important;
+}
+.combatBattlefield .combatEffect{width:20px!important;height:20px!important;box-shadow:0 1px 3px #000}
+.combatBattlefield .combatFloat{right:4px!important;top:47px!important;font-size:14px!important;text-shadow:0 2px 3px #000!important}
+.combatBattlefield .castTrack{position:absolute!important;top:36px;left:0;right:0;z-index:5}
+.combatBattlefield .combatant[style*="display: none"],.combatBattlefield .combatSlotEmpty{display:none!important}
+
+@media(max-width:760px){
+  .combatBattlefield.combatGrid{min-height:610px!important;padding:31px 8px 14px!important;gap:8px!important}
+  .combatBattlefield .combatSide.compactCombatSide,.combatBattlefield #combatEnemySide.compactCombatSide{grid-template-columns:1fr!important;grid-auto-rows:72px!important;align-content:center!important;gap:1px!important}
+  .combatBattlefield .combatant.combatMini{width:min(124px,100%)!important;height:72px!important;min-height:72px!important;max-height:72px!important;grid-template-columns:1fr 48px!important;grid-template-rows:auto auto!important;align-items:center!important}
+  .combatBattlefield .combatMiniVitals{grid-column:1;grid-row:1/-1}
+  .combatBattlefield .combatant.combatMini .visualIcon{grid-column:2;grid-row:1/-1;width:46px!important;height:46px!important}
+  .combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{width:44px!important;height:44px!important;max-width:44px!important;max-height:44px!important}
+  .combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:34px!important;line-height:44px!important}
+  .combatBattlefield .combatStatusRow{position:absolute;bottom:-1px;left:2px;justify-content:flex-start!important}
+  .combatBattlefield .combatEffect{width:16px!important;height:16px!important}
+  .combatBattlefield .combatMiniNameRow .name{font-size:9px!important}
+}
+
 /* Grouped navigation and compact guild-ledger typography. */
 .shell{grid-template-columns:230px minmax(0,1fr)!important}
 .side{display:flex!important;flex-direction:column!important;padding:9px!important}

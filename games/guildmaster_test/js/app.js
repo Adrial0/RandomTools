@@ -141,17 +141,18 @@ function refreshCombatActionBars(now=Date.now()){
       if(track)track.title=`Attack · ${p>=.9999?'Ready':fmt(Math.max(0,(x.nextAttackAt||now)-now))}`;
     }
 
-    if(side==='hero'){
+    {
       const bar=el.querySelector('.cooldownFill');
       const track=el.querySelector('.cooldownTrack');
-      const type=bar?.dataset.cooldownType||track?.dataset.cooldownTrack||primaryActiveType(x);
-      if(bar&&type){
-        const progress=clamp(cooldownProgress(x,type,now),0,1);
+      const ability=combatAbilityState(x,side==='enemy',now);
+      if(bar&&ability){
+        const progress=ability.progress;
         bar.style.width=(progress*100).toFixed(3)+'%';
         bar.classList.toggle('ready',progress>=.9999);
-        if(track)track.title=`${activeName(type)} · ${progress>=.9999?'Ready':fmt(activeCooldownRemaining(x,type,now))}`;
+        if(track)track.title=`${ability.name} · ${progress>=.9999?'Ready':fmt(ability.remaining)}`;
       }
-    }else{
+    }
+    if(side==='enemy'){
       const castTrack=el.querySelector('.castTrack'),castFill=el.querySelector('.castFill'),castLabel=el.querySelector('.castLabel');
       if(castTrack){
         castTrack.style.display=x.cast?'block':'none';

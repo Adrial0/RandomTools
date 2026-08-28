@@ -250,24 +250,33 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
   const icon=enemy?x.icon:(x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset'));
   const side=options.arena?`arena-${x.side}`:(enemy?'enemy':'hero');
   const key=`${side}-${x.id}`;
-  const activeType=enemy&&!x.arenaHero?null:primaryActiveType(x);
+  const ability=combatAbilityState(x,enemy);
+  const activeType=ability?.type||null;
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
-  const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
+  const cdPct=ability?ability.progress*100:100;
   return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''} ${options.hidden?'combatSlotEmpty':''}" ${options.arena?'':`${options.slot!=null?`data-combat-slot="${enemy?'enemy':'hero'}:${options.slot}"`:''} data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
-    <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
-      <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
-      <div class="combatMiniClass">${enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`}</div>
-      <div class="hpTrack"><div class="hpFill" style="width:${pct}%"></div></div>
+      <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div></div>
+      <div class="hpTrack" title="HP ${Math.max(0,x.hp)} / ${x.maxHp}"><div class="hpFill" style="width:${pct}%"></div></div>
       <div class="manaTrack" style="display:${!enemy||x.maxMana?'block':'none'}"><div class="manaFill" style="width:${clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)}%"></div></div>
       <div class="attackTrack" title="Attack timer"><div class="attackFill ${attackPct>=100?'ready':''}" style="width:${attackPct}%"></div></div>
-      ${activeType?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${activeName(activeType)} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
+      ${ability?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${ability.name} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
       ${enemy?`<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel"></span></div>`:''}
-      <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     </div>
+    <div class="visualIcon">${icon}</div>
+    <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     <div class="combatFloat"></div>
   </div>`;
+}
+function combatAbilityState(x,enemy=false,now=Date.now()){
+  if(enemy&&!x.arenaHero){
+    if(!x.ability)return null;
+    const def=ENEMY_ABILITIES_DATA[x.ability]||{},cooldown=Math.max(1,def.cooldown||7000),remaining=Math.max(0,(x.abilityReadyAt||0)-now);
+    return{type:x.ability,name:def.name||x.ability,progress:clamp(1-remaining/cooldown,0,1),remaining};
+  }
+  const type=primaryActiveType(x);if(!type)return null;
+  return{type,name:activeName(type),progress:clamp(cooldownProgress(x,type,now),0,1),remaining:activeCooldownRemaining(x,type,now)};
 }
 const COMBAT_ENEMY_SLOT_COUNT=8;
 function emptyCombatSlotHtml(enemy,index){
@@ -335,6 +344,7 @@ function updateCombatEffects(row,x,enemy=false){
 function closeCombatInspector(){
   const p=$('combatInspectPanel');
   if(p){p.classList.remove('on');p.dataset.side='';p.dataset.id=''}
+  document.querySelectorAll('#combatBody .combatMini.selected').forEach(el=>el.classList.remove('selected'));
 }
 function findLiveCombatant(side,id){
   if($('combatModal').dataset.mode==='arena'&&typeof arenaLiveMission!=='undefined'&&arenaLiveMission?.battle)return side==='enemy'?arenaLiveMission.battle.enemies.find(x=>x.id===id):arenaLiveMission.battle.heroes.find(x=>x.id===id);
@@ -368,6 +378,8 @@ function toggleCombatantDetails(e,el){
   const p=$('combatInspectPanel');if(!p)return;
   const same=p.classList.contains('on')&&p.dataset.side===el.dataset.combatSide&&p.dataset.id===el.dataset.combatId;
   if(same){closeCombatInspector();return}
+  document.querySelectorAll('#combatBody .combatMini.selected').forEach(node=>node.classList.remove('selected'));
+  el.classList.add('selected');
   p.dataset.side=el.dataset.combatSide;
   p.dataset.id=el.dataset.combatId;
   p.classList.add('on');
@@ -388,6 +400,11 @@ function threatOrderedHeroes(heroes){
 let combatDomKey='';
 function combatStructureKey(m){
   return `${m.type}:${m.id}`;
+}
+function combatBackgroundForMission(m){
+  if(m.type==='arena')return assetUrl('images/backgrounds/guildhall.png');
+  const type=m.type==='quest'?'expedition':m.type;
+  return activityBackground(type,m.areaId||m.name)||assetUrl('images/backgrounds/guildhall.png');
 }
 function defeatAdviceHtml(m){
   const advice=m.defeatAdvice?.length?m.defeatAdvice:defeatAdviceFor(m);
@@ -417,12 +434,14 @@ function buildCombatStructure(m){
   const arenaMode=m.type==='arena';
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   const ordered=threatOrderedHeroes(m.battle.heroes);
+  const background=combatBackgroundForMission(m).replace(/'/g,"%27");
   $('combatBody').innerHTML=`
     <div class="combatFixedTop">
       <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
-      <div class="combatGrid">
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT AND BACK ROW'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>`<div class="combatEnemySlot" data-combat-slot="enemy:${index}" ${m.battle.enemies[index]?'':'hidden aria-hidden="true" style="display:none!important"'}>${m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false):emptyCombatSlotHtml(true,index)}</div>`).join('')}</div></div>
+      <div class="combatGrid combatBattlefield" style="--combat-background:url('${background}')">
+        <div class="combatFieldShade"></div>
+        <div class="combatTeamPane combatHeroPane"><div class="combatTeamLabel">${arenaMode?'YOUR ARENA PARTY':'YOUR PARTY'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
+        <div class="combatTeamPane combatEnemyPane"><div class="combatTeamLabel">${arenaMode?'OPPONENT PARTY':'ENEMIES'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>`<div class="combatEnemySlot" data-combat-slot="enemy:${index}" ${m.battle.enemies[index]?'':'hidden aria-hidden="true" style="display:none!important"'}>${m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false):emptyCombatSlotHtml(true,index)}</div>`).join('')}</div></div>
       </div>
       <div class="lootStash" style="display:${arenaMode?'none':'grid'}">
         <div class="lootBox"><span>Unclaimed gold</span><strong id="combatGold">${m.stash.gold}</strong></div>
@@ -476,16 +495,16 @@ function updateCombatantDom(x,enemy,slotElement=null){
       if(x.cast){const ability=ENEMY_ABILITIES_DATA[x.cast.abilityId],total=Math.max(1,x.cast.completeAt-x.cast.startedAt),pct=clamp((Date.now()-x.cast.startedAt)/total*100,0,100);if(fillCast)fillCast.style.width=pct+'%';if(label)label.textContent=ability?.name||'Casting'}
     }
   }
-  const activeType=primaryActiveType(x);
-  if((!enemy||x.arenaHero)&&activeType&&!el.querySelector('.cooldownTrack')){
+  const ability=combatAbilityState(x,enemy);
+  let abilityTrack=el.querySelector('.cooldownTrack');
+  if(!ability&&abilityTrack)abilityTrack.remove();
+  if(ability){
     const vitals=el.querySelector('.combatMiniVitals')||el.lastElementChild;
-    if(vitals){
-      const track=document.createElement('div');
-      track.className='cooldownTrack';
-      track.dataset.cooldownTrack=activeType;
-      track.innerHTML=`<div class="cooldownFill" data-cooldown-type="${activeType}"></div>`;
-      vitals.appendChild(track);
+    if(vitals&&!abilityTrack){
+      abilityTrack=document.createElement('div');abilityTrack.className='cooldownTrack';
+      abilityTrack.innerHTML='<div class="cooldownFill"></div>';vitals.appendChild(abilityTrack);
     }
+    if(abilityTrack){const abilityFill=abilityTrack.querySelector('.cooldownFill');abilityTrack.dataset.cooldownTrack=ability.type;abilityTrack.title=ability.name+' cooldown';if(abilityFill){abilityFill.dataset.cooldownType=ability.type;abilityFill.style.width=ability.progress*100+'%'}}
   }
   const p=$('combatInspectPanel');
   if(p?.classList.contains('on')&&p.dataset.side===(enemy?'enemy':'hero')&&+p.dataset.id===x.id)renderCombatInspector();
