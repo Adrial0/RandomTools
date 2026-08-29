@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
 <title>Guildmaster | My Random Tools</title>
-<link rel="stylesheet" href="styles.css?build=20260828b">
+<link rel="stylesheet" href="styles.css?build=20260829a">
 </head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -66,11 +66,11 @@
 </div>
 <div class="guildActivityDashboard">
   <div class="panel guildActivityColumn">
-    <div class="head guildActivityHead"><div><div class="sectionKicker">Field Operations</div><h3>Active Missions <span class="dashboardCount" id="activeMissionCount">0</span></h3><p>Expeditions, dungeons and raids currently underway.</p></div><button class="btn gold" onclick="claimAllMissionLoot()">Claim All</button></div>
+    <div class="head guildActivityHead"><div><div class="sectionKicker">Field Operations</div><h3>Active Missions <span class="dashboardCount" id="activeMissionCount">0</span></h3><p>Expeditions, dungeons and raids currently underway.</p></div></div>
     <div id="active" class="active"></div>
   </div>
   <div class="panel guildActivityColumn">
-    <div class="head"><div><div class="sectionKicker">Guild Workforce</div><h3>Active Gathering <span class="dashboardCount" id="activeGatherCount">0</span></h3><p>Gathering jobs currently underway.</p></div><button class="btn" onclick="activatePage('harvesting')">Manage</button></div>
+    <div class="head"><div><div class="sectionKicker">Guild Workforce</div><h3>Active Gathering <span class="dashboardCount" id="activeGatherCount">0</span></h3><p>Gathering jobs currently underway.</p></div><div class="headerActions"><button class="btn gold" onclick="claimAllGathering()">Claim All</button><button class="btn" onclick="activatePage('harvesting')">Manage</button></div></div>
     <div id="harvestActive" class="active"></div>
   </div>
 </div>
@@ -300,11 +300,11 @@
 <div class="modalBg" id="combatModal"><div class="modal"><div class="head"><div><h3 id="combatTitle">Expedition Combat</h3><div class="muted" id="combatSubtitle"></div></div><button class="btn" onclick="closeCombat()">Close</button></div><div id="combatBody"></div></div></div>
 <div class="noticeStack" id="noticeStack"></div>
 
-<script src="js/core.js?build=20260827j"></script>
-<script src="js/combat.js?build=20260827j"></script>
+<script src="js/core.js?build=20260829a"></script>
+<script src="js/combat.js?build=20260829a"></script>
 <script src="js/progression.js?build=20260827k"></script>
-<script src="js/ui.js?build=20260828b"></script>
-<script src="js/activities.js?build=20260827i"></script>
+<script src="js/ui.js?build=20260829b"></script>
+<script src="js/activities.js?build=20260829a"></script>
 <script src="js/economy.js?build=20260827k"></script>
 <script src="js/professions.js?build=20260827j"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

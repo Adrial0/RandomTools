@@ -20,7 +20,10 @@ for(let tier=1;tier<=10;tier++){
 }
 
 assert.match(core,/expeditionGates:\[\]/,'new saves need expedition gate progress');
-assert.match(activities,/s\.expeditionGates.*includes\(\(q\.tier\|\|1\)-1\)/s,'expedition cards must be gated by the preceding tier boss');
+assert.match(core,/expeditionClears:\[\]/,'new saves need per-area clear progress');
+assert.match(activities,/function expeditionAreaUnlocked\(/,'expedition cards use sequential area unlocks');
+assert.match(activities,/previous\.bossGate.*s\.expeditionGates/s,'a new tier still requires the preceding tier boss');
+assert.match(activities,/s\.expeditionClears.*previous\.areaId/s,'later areas and gate bosses require the preceding area clear');
 assert.match(combat,/s\.expeditionGates\.push\(m\.gateTier\)/,'boss victories must persist tier unlocks');
 assert.match(combat,/if\(m\.bossGate\)return;/,'offline progress must not bypass story bosses');
 assert.match(combat,/mission\.battle=mission\.bossGate\?makeBossBattle\(mission\):makeBattle\(mission\)/,'gate expeditions must begin directly in the boss encounter');

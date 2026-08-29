@@ -324,7 +324,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:6,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:6,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -394,6 +394,7 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
   s.runes=s.runes&&typeof s.runes==='object'?s.runes:{};Object.keys(RUNES).forEach(k=>{if(s.runes[k]==null)s.runes[k]=0});s.partyPresets=Array.isArray(s.partyPresets)?s.partyPresets:[];s.market=s.market&&typeof s.market==='object'?s.market:{nextRefresh:0,offers:[]};s.market.offers=Array.isArray(s.market.offers)?s.market.offers:[];s.questBoard=s.questBoard&&typeof s.questBoard==='object'?s.questBoard:{nextRefresh:0,offers:[]};s.questBoard.offers=Array.isArray(s.questBoard.offers)?s.questBoard.offers:[];s.harvestJobs=Array.isArray(s.harvestJobs)?s.harvestJobs:[];s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];normalizeCraftQueue();s.battleSeq=s.battleSeq||1;s.lastHiddenAt=s.lastHiddenAt||0;s.knownRecipes=Array.isArray(s.knownRecipes)?s.knownRecipes:[];s.memberCap=Math.max((s.members||[]).length,6+(s.up.quarters||0));s.discoveredResources=Array.isArray(s.discoveredResources)?s.discoveredResources:[];s.applicantCap=Math.max(2,s.applicantCap||2+(s.up.recruit||0));s.nextApplicantsAt=s.nextApplicantsAt||0;
   s.memberCap=Math.max((s.members||[]).length,6+(s.up.quarters||0));
   s.expeditionGates=Array.isArray(s.expeditionGates)?[...new Set(s.expeditionGates.map(Number).filter(x=>x>=1&&x<=10))]:[];
+  s.expeditionClears=Array.isArray(s.expeditionClears)?[...new Set(s.expeditionClears.map(String))]:[];
   s.members=(s.members||[]).map(h=>{
     if(Array.isArray(h.bonus)){
       h.bonus={hp:h.bonus[0]||0,str:h.bonus[1]||0,dex:Math.floor((h.bonus[3]||0)*.8),int:h.bonus[1]||0,def:h.bonus[2]||0,mdef:Math.floor((h.bonus[2]||0)*.8),fire:t.fire||0,ice:t.ice||0,poison:t.poison||0,lightning:t.lightning||0,holy:t.holy||0,dark:t.dark||0};
@@ -423,6 +424,11 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
 
   s.missions=Array.isArray(s.missions)?s.missions:[];s.missions.forEach(m=>{
   m.battleNumber=Math.max(m.battleNumber||0,m.battle?.id||0);
+  if(m.type==='quest'&&!m.bossGate){
+    m.maxFights=25;
+    if(m.finiteStage==null)m.finiteStage=Math.min(20,Math.floor(Math.max(0,m.fights||0)/5)*5);
+    m.completedStages=Math.floor((m.finiteStage||0)/5);
+  }
   if((m.type==='dungeon'||m.type==='raid')&&m.finiteStage==null){
     const old=m.normalEncountersCompleted!=null?m.normalEncountersCompleted:(m.fights||0);
     m.finiteStage=Math.max(0,Math.min(old,m.maxFights||old));

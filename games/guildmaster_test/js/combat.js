@@ -98,14 +98,14 @@ let currentMissionForEnemy=null;
 function makeEnemy(type,level,index,forcedName=null){
   const names=forcedName?[]:(currentMissionForEnemy?.enemyPool&&currentMissionForEnemy.enemyPool.length)?currentMissionForEnemy.enemyPool:(enemyPools[type]||enemyPools.quest);
   const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
-  if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:[]}}
+  if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,level,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:[]}}
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
   const hp=Math.round((tpl.baseHp||35)*scale*2.25*(ar.hpMult||1));
   const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1));
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
   const interval=Math.round(ar.attackInterval||2400);
-  return {id:index+1,name,icon:gameIcon('enemy',name,tpl.icon||'❓','gameAsset combatAsset'),archetype:tpl.archetype,ability:tpl.ability||null,drops:tpl.drops||['Iron'],maxHp:hp,hp,atk,def,mdef:Math.round(def*.94),block:0,fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),holy:rnd(0,18),dark:rnd(0,18),damageType:tpl.damageType||'physical',elementalMult:type==='raid'?1.30:type==='dungeon'?1.12:1.0,mage:maxMana>0,maxMana,mana:maxMana,manaRegen:ar.manaRegen||0,abilityReadyAt:0,attackInterval:interval,attackStartedAt:Date.now(),nextAttackAt:Date.now()+interval,enrageThreshold:ar.enrageThreshold||0,enrageMult:ar.enrageMult||1,basicStatus:ar.basicStatus||null,basicStatusChance:ar.basicStatusChance||0,protectorAura:ar.protectorAura||0,executeThreshold:ar.executeThreshold||0,executeMult:ar.executeMult||1};
+  return {id:index+1,name,level,icon:gameIcon('enemy',name,tpl.icon||'❓','gameAsset combatAsset'),archetype:tpl.archetype,ability:tpl.ability||null,drops:tpl.drops||['Iron'],maxHp:hp,hp,atk,def,mdef:Math.round(def*.94),block:0,fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),holy:rnd(0,18),dark:rnd(0,18),damageType:tpl.damageType||'physical',elementalMult:type==='raid'?1.30:type==='dungeon'?1.12:1.0,mage:maxMana>0,maxMana,mana:maxMana,manaRegen:ar.manaRegen||0,abilityReadyAt:0,attackInterval:interval,attackStartedAt:Date.now(),nextAttackAt:Date.now()+interval,enrageThreshold:ar.enrageThreshold||0,enrageMult:ar.enrageMult||1,basicStatus:ar.basicStatus||null,basicStatusChance:ar.basicStatusChance||0,protectorAura:ar.protectorAura||0,executeThreshold:ar.executeThreshold||0,executeMult:ar.executeMult||1};
 }
 
 function ensurePartyState(m){
@@ -199,7 +199,8 @@ function applyProvisionRecovery(m){
 }
 function makeBattle(m){
   ensurePartyState(m);
-  const count=m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3);currentMissionForEnemy=m;
+  const areaFinal=isStagedExpedition(m)&&expeditionEncounterCount(m)===EXPEDITION_MAX_ENCOUNTERS-1;
+  const count=areaFinal?1:m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3),encounterLevel=missionEncounterLevel(m);currentMissionForEnemy=m;
   const heroes=m.party.map(hid=>{
     const h=s.members.find(x=>x.id===hid),z=hs(h),ps=m.partyState[hid];
     const mainId=h.equip.MainHand||h.equip.Weapon,wep=s.inventory.find(x=>x.id===mainId);
@@ -250,14 +251,18 @@ function makeBattle(m){
     id:++m.battleNumber,
     resolved:false,actionSeq:0,
     kind:'normal',
-    encounterNumber:(m.type==='dungeon'||m.type==='raid')?(Math.max(0,m.finiteStage||0)+1):null,
+    encounterNumber:m.maxFights?(Math.max(0,m.finiteStage||0)+1):null,
     heroes,
-    enemies:Array.from({length:count},(_,i)=>({...makeEnemy(m.type,m.level,i),statuses:{},cast:null})),
+    enemies:Array.from({length:count},(_,i)=>({...makeEnemy(m.type,encounterLevel,i),statuses:{},cast:null})),
     phase:cycle.phase,
     turn:cycle.phase==='heroes'?cycle.heroTurn:cycle.enemyTurn,
     round:cycle.round,
     log:[`Battle #${m.battleNumber}: a new enemy group approaches.`]
   };
+  if(areaFinal&&battle.enemies[0]){
+    const champion=battle.enemies[0],originalName=champion.name;
+    champion.templateName=originalName;champion.name=`${m.name} Champion`;champion.boss=true;champion.maxHp=Math.round(champion.maxHp*2.8);champion.hp=champion.maxHp;champion.atk=Math.round(champion.atk*1.35);champion.def=Math.round(champion.def*1.2);champion.mdef=Math.round(champion.mdef*1.2);battle.kind='areaBoss';battle.areaBoss=true;battle.log=[`Final encounter: the ${m.name} Champion blocks the road home.`];
+  }
   ensureCombatReport(m);heroes.forEach(h=>heroReport(m,h.id));
   // A changed party/save can leave a cursor beyond the available actor list.
   if(battle.phase==='heroes'&&battle.turn>=battle.heroes.length){
@@ -300,6 +305,11 @@ function syncPartyHp(m){
   });
 }
 function emptyStash(){return{gold:0,rep:0,materials:{},items:[]}}
+const EXPEDITION_STAGE_SIZE=5,EXPEDITION_STAGE_COUNT=5,EXPEDITION_MAX_ENCOUNTERS=25,EXPEDITION_INTERMISSION_MS=5000;
+function isStagedExpedition(m){return m?.type==='quest'&&!m.bossGate}
+function expeditionEncounterCount(m){return Math.max(0,Math.min(EXPEDITION_MAX_ENCOUNTERS,m?.finiteStage||0))}
+function expeditionStage(m){return Math.min(EXPEDITION_STAGE_COUNT,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)+1)}
+function missionEncounterLevel(m){return isStagedExpedition(m)?(m.level||1)+Math.min(EXPEDITION_STAGE_COUNT-1,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)):(m.level||1)}
 function missionLocationKey(type,q){
   if(!q)return '';
   return `${type}:${q.areaId||q.name||q.id}`;
@@ -327,6 +337,7 @@ function send(type,qid,ids,provision=null){
     kills:0,fights:0,finiteStage:0,normalEncountersCompleted:0,goldEarned:0,repEarned:0,battle:null,
     stash:emptyStash(),partyState:{},combatCycle:{phase:'heroes',heroTurn:0,enemyTurn:0,round:1},nextRegenAt:now+5000,defeated:false,completed:false,bossDefeated:false,battleNumber:0,lastRewardedBattleId:null
   };
+  if(type==='quest'&&!mission.bossGate){mission.maxFights=EXPEDITION_MAX_ENCOUNTERS;mission.finiteStage=0;mission.completedStages=0;mission.stageIntermission=null;mission.lastCheckpoint=0}
   ensurePartyState(mission);
   mission.battle=mission.bossGate?makeBossBattle(mission):makeBattle(mission);
   s.missions.push(mission);
@@ -338,36 +349,39 @@ function send(type,qid,ids,provision=null){
 function pendingCount(m){
   return (m.stash?.items?.length||0)+Object.values(m.stash?.materials||{}).reduce((a,v)=>a+v,0);
 }
-function claimAllMissionLoot(){
-  const claimable=s.missions.filter(m=>m.stash&&((m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0));
+function claimAllGathering(){
   const harvestable=s.harvestJobs.filter(j=>Object.values(j.stash||{}).some(v=>v>0));
-  if(!claimable.length&&!harvestable.length)return notify('There is no mission or harvesting loot to claim.');
+  if(!harvestable.length)return notify('There are no gathered resources to claim.');
 
-  const goldBefore=s.gold,repClaimed=claimable.reduce((a,m)=>a+(m.stash?.rep||0),0),invBefore=s.inventory.length,matBefore={...s.materials};
-  claimable.forEach(m=>collectLoot(m.id,true));
+  const matBefore={...s.materials};
   harvestable.forEach(j=>collectHarvest(j.id,true));
 
   const parts=[];
-  const g=s.gold-goldBefore;
-  if(g)parts.push(`${g} gold`);
-  if(repClaimed)parts.push(`${repClaimed} reputation`);
   Object.keys(s.materials).forEach(k=>{const gained=(s.materials[k]||0)-(matBefore[k]||0);if(gained>0)parts.push(`${gained} ${RESOURCE_NAMES[k]||k}`)});
-  s.inventory.slice(invBefore).forEach(it=>parts.push(`${it.rarity} ${it.name}`));
 
   render();
   notify(parts.length?'Claimed: '+parts.join(' · '):'Nothing could be collected — resource storage may be full.','good');
 }
+function claimAllMissionLoot(){return claimAllGathering()}
+function depositMissionStash(m,reason='Mission rewards delivered'){
+  if(!m?.stash)return{gold:0,rep:0,materials:0,items:0,text:'No rewards'};
+  const delivered={gold:m.stash.gold||0,rep:m.stash.rep||0,materials:0,items:(m.stash.items||[]).length};
+  s.gold+=delivered.gold;grantGuildReputation(delivered.rep);
+  m.stash.gold=0;m.stash.rep=0;
+  Object.entries(m.stash.materials||{}).forEach(([k,v])=>{const added=addStoredResource(k,v);delivered.materials+=added;m.stash.materials[k]=v-added;if(m.stash.materials[k]<=0)delete m.stash.materials[k]});
+  (m.stash.items||[]).forEach(it=>receiveInventoryItem(it,'mission'));m.stash.items=[];
+  const claimed=delivered.gold||delivered.rep||delivered.materials||delivered.items;
+  if(claimed){s.onboarding.flags.lootClaimed=true;completeOnboardingGoals(true)}
+  discoverRecipes();
+  delivered.text=`${delivered.gold}g · ${delivered.rep} reputation · ${delivered.materials} resources · ${delivered.items} items`;
+  log(`${reason}: ${delivered.text}.`);
+  return delivered;
+}
 function collectLoot(mid,quiet=false){
   const m=s.missions.find(x=>x.id===mid);if(!m||!m.stash)return;
   const claimedAnything=(m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0;
-  s.gold+=m.stash.gold||0;
-  grantGuildReputation(m.stash.rep||0);
-  Object.entries(m.stash.materials||{}).forEach(([k,v])=>{const added=addStoredResource(k,v);m.stash.materials[k]=v-added;if(m.stash.materials[k]<=0)delete m.stash.materials[k]});
-  (m.stash.items||[]).forEach(it=>receiveInventoryItem(it,'mission'));
-  const summary=`${m.stash.gold||0}g, ${m.stash.rep||0} reputation, ${pendingCount(m)} loot/material drops`;
-  m.stash=emptyStash();discoverRecipes();save();
-  if(claimedAnything)setOnboardingFlag('lootClaimed');
-  if(!quiet)notify('Collected '+summary+'.','good');
+  const delivered=depositMissionStash(m,'Party delivery');save();
+  if(!quiet)notify('Collected '+delivered.text+'.','good');
   renderResourcesLite();renderInv();renderActive();renderCombat();
 }
 function heroXpNeeded(level){
@@ -397,14 +411,14 @@ function grantFightRewards(m,enemySnapshots){
   // Gold is rolled independently for every kill.
   // Higher-level encounters can drop larger amounts.
   defeated.forEach(enemy=>{
-    const base=Math.max(1,Math.floor(1+m.level/8));
+    const rewardLevel=enemy.level||missionEncounterLevel(m),base=Math.max(1,Math.floor(1+rewardLevel/8));
     const amount=rnd(base,Math.max(base,Math.ceil(base*1.6)));
     m.stash.gold+=amount*5;
   });
 
   // Reputation is guaranteed after every completed fight and scales with the
   // number of enemies defeated and encounter difficulty.
-  const repPerEnemy=Math.max(1,Math.floor(1+m.level/15))*50;
+  const rewardLevel=Math.max(missionEncounterLevel(m),...defeated.map(e=>e.level||0)),repPerEnemy=Math.max(1,Math.floor(1+rewardLevel/15))*50;
   const typeRep=m.type==='raid'?1.5:m.type==='dungeon'?1.25:1;
   const repMult=missionReputationMultiplier(m);
   if(repMult>0){
@@ -421,7 +435,7 @@ function grantFightRewards(m,enemySnapshots){
       return;
     }
 
-    const pool=(ENEMIES_DATA[enemy.name]?.drops)||[];
+    const pool=(ENEMIES_DATA[enemy.templateName||enemy.name]?.drops)||[];
     if(pool.length){
       const k=pick(pool);
       if(k){m.stash.materials[k]=(m.stash.materials[k]||0)+1;markResourceFound(k);}
@@ -432,7 +446,7 @@ function grantFightRewards(m,enemySnapshots){
   m.party.forEach(hid=>{
     const hero=s.members.find(x=>x.id===hid);if(!hero)return;
 
-    const fullPartyXp=defeated.reduce(sum=>sum+xpForEnemy(hero,m.level,m.type),0);
+    const fullPartyXp=defeated.reduce((sum,enemy)=>sum+xpForEnemy(hero,enemy.level||missionEncounterLevel(m),m.type),0);
     const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2));
     hero.xp+=gained;
 
@@ -1022,18 +1036,61 @@ function expeditionDefeated(m){
   if(m.type==='arena'){finishArenaClientBattle(m,false);return}
   syncPartyHp(m);
   m.defeated=true;
+  if(isStagedExpedition(m)){
+    m.failedStage=Math.min(EXPEDITION_STAGE_COUNT,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)+1);
+    m.lastCheckpoint=Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)*EXPEDITION_STAGE_SIZE;
+    m.lostStageRewards={gold:m.stash.gold||0,rep:m.stash.rep||0,materials:Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0),items:m.stash.items?.length||0};
+    m.stash=emptyStash();m.stageIntermission=null;
+  }
   m.defeatAdvice=defeatAdviceFor(m);
   m.battle.log.unshift('The entire party has fallen. The expedition can no longer continue.');
   log(m.name+' expedition was defeated.');
   save();
 }
 function normalEncounterCount(m){
-  if(m.type!=='dungeon'&&m.type!=='raid')return m.fights||0;
+  if(!m.maxFights)return m.fights||0;
   if(m.finiteStage==null){
     const old=m.normalEncountersCompleted!=null?m.normalEncountersCompleted:(m.fights||0);
     m.finiteStage=Math.max(0,Math.min(old,m.maxFights||old));
   }
   return m.finiteStage;
+}
+
+function markExpeditionAreaCleared(m){
+  const key=String(m.areaId||'');if(!key)return false;
+  s.expeditionClears=Array.isArray(s.expeditionClears)?s.expeditionClears:[];
+  if(s.expeditionClears.includes(key))return false;
+  s.expeditionClears.push(key);return true;
+}
+function beginExpeditionStageIntermission(m,offline=false,finalStage=false){
+  const stage=Math.min(EXPEDITION_STAGE_COUNT,Math.ceil(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE));
+  if(finalStage&&markExpeditionAreaCleared(m)){
+    const reward=bossItemDrop(m,'Rare');
+    if(reward){m.stash.items.push(reward);m.firstClearReward=reward.name}
+  }
+  const delivered=depositMissionStash(m,finalStage?'Area cleared':'Stage delivery');
+  m.completedStages=stage;m.lastCheckpoint=expeditionEncounterCount(m);
+  const hidden=typeof document!=='undefined'&&document.hidden;
+  m.stageIntermission={stage,finalStage,offlinePaused:!!offline||hidden,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
+  if(finalStage){m.completed=true;m.bossDefeated=true;log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`)}
+  save();
+}
+function continueExpeditionStage(mid){
+  const m=s.missions.find(x=>x.id===mid);if(!m?.stageIntermission||m.completed)return;
+  m.stageIntermission.offlinePaused=false;m.stageIntermission.until=Date.now();advanceExpeditionIntermission(m,Date.now());save();renderActive();renderCombat();
+}
+function advanceExpeditionIntermission(m,now=Date.now()){
+  const pause=m?.stageIntermission;if(!pause||pause.finalStage||pause.offlinePaused||now<pause.until)return false;
+  m.stageIntermission=null;
+  const next=makeBattle(m);m.battle=m.battle?advanceBattleInPlace(m.battle,next,now):next;m.lastSim=now;return true;
+}
+function resetMissionPartyState(m){
+  m.partyState={};ensurePartyState(m);m.combatCycle={phase:'heroes',heroTurn:0,enemyTurn:0,round:1};m.nextRegenAt=Date.now()+5000;
+}
+function restartExpedition(mid,fromBeginning=false){
+  const m=s.missions.find(x=>x.id===mid);if(!m||!isStagedExpedition(m)||!m.defeated)return;
+  const restartAt=fromBeginning?0:Math.max(0,Math.min(EXPEDITION_MAX_ENCOUNTERS-1,m.lastCheckpoint||0));
+  m.finiteStage=restartAt;m.normalEncountersCompleted=restartAt;m.completedStages=Math.floor(restartAt/EXPEDITION_STAGE_SIZE);m.fights=restartAt;m.kills=0;m.defeated=false;m.completed=false;m.bossDefeated=false;m.defeatAdvice=[];m.failedStage=null;m.lostStageRewards=null;m.stageIntermission=null;m.stash=emptyStash();m.battleNumber=0;m.lastRewardedBattleId=null;m.combatReport=null;resetMissionPartyState(m);m.battle=makeBattle(m);m.lastSim=Date.now();activeMissionDomKey='__force__';save();render();openCombat(mid);notify(fromBeginning?'Expedition restarted from Stage 1.':`Expedition restarted from Stage ${expeditionStage(m)}.`,'good');
 }
 
 function createCurrentFiniteBattle(m){
@@ -1092,7 +1149,7 @@ function finishCurrentFight(m){
   syncPartyHp(m);
   applyProvisionRecovery(m);
 
-  if(b.kind==='boss'||b.boss){
+  if((b.kind==='boss'||b.boss)&&!b.areaBoss){
     if(!m.completed)bossReward(m);
     return;
   }
@@ -1102,17 +1159,22 @@ function finishCurrentFight(m){
     b.resolved=true;
     ensureCombatReport(m).encounters++;
     try{
-      grantFightRewards(m,b.enemies.map(e=>({name:e.name})));
+      grantFightRewards(m,b.enemies.map(e=>({name:e.name,templateName:e.templateName,level:e.level})));
     }catch(err){
       console.error('Guildmaster reward error',err);
       notify('The fight ended, but reward processing had an error.');
     }
 
-    if(m.type==='dungeon'||m.type==='raid'){
+    if(m.maxFights){
       // ONE and only one place increments finite dungeon progress.
       m.finiteStage=Math.min((m.finiteStage||0)+1,m.maxFights);
       m.normalEncountersCompleted=m.finiteStage;
     }
+  }
+
+  if(isStagedExpedition(m)){
+    if(m.finiteStage>=EXPEDITION_MAX_ENCOUNTERS){beginExpeditionStageIntermission(m,false,true);return}
+    if(m.finiteStage%EXPEDITION_STAGE_SIZE===0){beginExpeditionStageIntermission(m,false,false);return}
   }
 
   const transitionNow=Date.now();
@@ -1227,6 +1289,7 @@ function processBossMechanics(m,now=Date.now()){
 function stepBattle(m){
   if(!m||m.defeated||m.completed)return;
   const now=Date.now();
+  if(m.stageIntermission){advanceExpeditionIntermission(m,now);return}
   if(!m.battle)m.battle=makeBattle(m);
   let b=m.battle;
   if(!b)return;
@@ -1292,9 +1355,9 @@ function stepBattle(m){
   m.lastSim=now;
 }
 function offlineEnemySnapshot(m){
-  const pool=enemyPools[m.type]||enemyPools.quest;
+  const pool=(m.enemyPool?.length?m.enemyPool:(enemyPools[m.type]||enemyPools.quest)),level=missionEncounterLevel(m);
   const count=m.type==='raid'?3:m.type==='dungeon'?2:1;
-  return Array.from({length:count},()=>({name:pick(pool)[0]}));
+  return Array.from({length:count},()=>({name:pick(pool),level}));
 }
 function offlineCompositionFactor(m,party){
   const members=party||[];
@@ -1320,7 +1383,7 @@ function offlineCatchup(hiddenMs){
   if(!hiddenMs||hiddenMs<60000)return;
 
   s.missions.forEach(m=>{
-    if(m.defeated||m.completed)return;
+    if(m.defeated||m.completed||m.stageIntermission)return;
     // Story gates are deliberate live boss attempts; background time cannot
     // bypass them or silently advance the expedition chapter.
     if(m.bossGate)return;
@@ -1340,6 +1403,7 @@ function offlineCatchup(hiddenMs){
     if(m.type==='dungeon'||m.type==='raid'){
       possible=Math.min(possible,Math.max(0,m.maxFights-normalEncounterCount(m)));
     }
+    if(isStagedExpedition(m))possible=Math.min(possible,EXPEDITION_STAGE_SIZE-(expeditionEncounterCount(m)%EXPEDITION_STAGE_SIZE||0));
     if(possible<=0)return;
 
     const healer=(party.some(h=>h.class==='Priest')?.35:0)+(mealEffect.healing||0)*.25;
@@ -1365,15 +1429,16 @@ function offlineCatchup(hiddenMs){
       applyProvisionRecovery(m);
 
       grantFightRewards(m,offlineEnemySnapshot(m));
-      if(m.type==='dungeon'||m.type==='raid'){
+      if(m.maxFights){
         m.finiteStage=Math.min((m.finiteStage||0)+1,m.maxFights);
         m.normalEncountersCompleted=m.finiteStage;
       }
       completed++;
+      if(isStagedExpedition(m)&&m.finiteStage%EXPEDITION_STAGE_SIZE===0){beginExpeditionStageIntermission(m,true,m.finiteStage>=EXPEDITION_MAX_ENCOUNTERS);break}
     }
     if(completed){const report=ensureCombatReport(m);report.encounters+=completed;report.offlineEncounters=(report.offlineEncounters||0)+completed}
 
-    if(!m.defeated){
+    if(!m.defeated&&!m.completed&&!m.stageIntermission){
       // Offline simulation resolves complete encounters, so resume at the start
       // of a fresh global round rather than halfway through an actor sequence.
       const c=ensureCombatCycle(m);
