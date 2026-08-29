@@ -416,7 +416,9 @@ function runeDetailsHtml(it){
   return ids.map(id=>{const r=RUNES[id];return `<div class="runeDetailRow"><span>${runeIcon(id,'gameAsset')} <b>${r?.name||id}</b></span><span>${runeBonusText(id)}</span></div>`}).join('');
 }
 function itemProfileParts(it){
-  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,weaponHands(it)===2?'Two-handed':'One-handed',`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`];
+  const itemLevel=it.rarity==='Unique'&&it.itemLevel?`Item level ${it.itemLevel}`:null;
+  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,itemLevel,weaponHands(it)===2?'Two-handed · 2× weapon damage and item effects':'One-handed',`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`].filter(Boolean);
+  if(itemLevel)return[itemLevel,it.slot==='Armor'?`${armorClassForItem(it)} armor`:it.slot==='Accessories'||it.slot==='OffHand'?(it.accessoryType||slotLabel(it.slot)):(it.slot||'Equipment')];
   if(it.slot==='Armor')return[`${armorClassForItem(it)} armor`];
   if(it.slot==='Ring')return['Ring'];
   if(it.slot==='Amulet'||it.slot==='Jewelry')return['Amulet'];
@@ -441,11 +443,11 @@ function itemStatParts(it){
   if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(it.itemPhysicalDodgeBonus*100)}% physical dodge`);
   if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(it.itemMagicalDodgeBonus*100)}% magic dodge`);
   if(it.mythicEffect)parts.push(`Mythic: ${it.mythicEffect}`);
+  if(it.uniquePassive)parts.push(`Unique: ${it.uniquePassive}`);
   if(it.slot==='Weapon'){
-    const w=weaponDefForItem(it);
     parts.unshift(`Attack ${it.weaponPower||0}`);
     parts.unshift(`Attack Speed ${weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)}s`);
-    weaponSpecials(w||it).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
+    weaponSpecials(it).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
   }
   return parts;
 }

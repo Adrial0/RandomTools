@@ -4,9 +4,9 @@ function makeBoss(m){
   if(!info)throw new Error('Missing boss definition for '+m.type+' / '+m.boss);
 
   const raid=m.type==='raid';
-  const scale=1+(m.level||1)*.12;
+  const level=m.level||1,scale=1+level*.12,hpScale=1.12+Math.max(0,level-1)*.20;
 
-  const maxHp=Math.round((raid?720:360)*scale);
+  const maxHp=Math.round((raid?720:360)*hpScale);
   const atk=Math.round((raid?18:13)*scale);
   const def=Math.round((raid?10:7)*scale);
   const mdef=Math.round((raid?11:8)*scale);
@@ -61,6 +61,23 @@ function bossItemDrop(m,rarity){
   it.dropSource=m.boss;
   return it;
 }
+function awardAreaGuildBonus(m,major=false){
+  const key=major?`boss:${m.type}:${m.boss||m.name}`:`area:${m.areaId||m.name}`;
+  s.areaRewards=Array.isArray(s.areaRewards)?s.areaRewards:[];
+  if(s.areaRewards.some(x=>x.key===key))return null;
+  s.guildBonuses=Object.assign({maxHp:0,gatherSpeed:0,cooldownReduction:0},s.guildBonuses||{});
+  const kinds=[['maxHp','Maximum HP'],['gatherSpeed','Gathering speed'],['cooldownReduction','Ability cooldown recovery']],kind=kinds[s.areaRewards.length%kinds.length],amount=major?.005:.0025;
+  s.guildBonuses[kind[0]]=Math.min(.20,(s.guildBonuses[kind[0]]||0)+amount);
+  const reward={key,type:kind[0],label:kind[1],amount,source:m.name};s.areaRewards.push(reward);
+  return reward;
+}
+function victoryPresentation(m,{major=false,guildBonus=null,item=null,unique=null}={}){
+  const unlockText=major?(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions and gathering progression unlocked.`:'The final expedition chapter is complete.'):'The next expedition area is now available.';
+  const title=major?`Tier ${tierLabel(m.gateTier||m.tier||1)} Conquered`:`${m.name} Cleared`;
+  const itemHtml=item?`<div class="victoryRewardItem ${rarityClass(item.rarity)}"><b>${item.rarity} ${item.name}</b><span>${item.uniquePassive||'Guaranteed first-clear equipment reward'}</span></div>`:'';
+  m.victoryPresentation={title,major,unlockText,guildBonus,itemName:item?.name||null,unique:!!unique};
+  if(typeof showModal==='function')setTimeout(()=>showModal(title,`<div class="victoryPresentation ${major?'major':''}"><div class="victoryCrest">${major?'👑':'⚔️'}</div><h2>${title}</h2><p>${unlockText}</p>${guildBonus?`<div class="victoryGuildBonus"><b>Permanent Guild Bonus</b><span>+${(guildBonus.amount*100).toFixed(guildBonus.amount<.01?2:1)}% ${guildBonus.label}</span></div>`:''}${itemHtml}${unique?'<div class="unique victoryUniqueCallout">A Unique boss item has been discovered!</div>':''}</div>`),80);
+}
 
 function bossReward(m){
   ensureCombatReport(m).encounters++;
@@ -68,9 +85,11 @@ function bossReward(m){
   m.stash.materials[k]=(m.stash.materials[k]||0)+1;
   markResourceFound(k);
 
-  const roll=Math.random();
-  let bonusItem=null;
-  if(roll<.01)bonusItem=bossItemDrop(m,'Legendary');
+  const bossKey=`${m.type}:${m.boss}`,firstClear=!(s.bossClears||[]).includes(bossKey),roll=Math.random();
+  let bonusItem=null,unique=false;
+  if(roll<(firstClear ? .10 : .0015)){bonusItem=makeUniqueItem(m.tier||1,m.boss,m.level||1);unique=true}
+  else if(firstClear&&m.bossGate)bonusItem=bossItemDrop(m,'Rare');
+  else if(roll<.01)bonusItem=bossItemDrop(m,'Legendary');
   else if(roll<.06)bonusItem=bossItemDrop(m,'Rare');
 
   if(bonusItem){
@@ -80,6 +99,7 @@ function bossReward(m){
 
   m.completed=true;
   m.bossDefeated=true;
+  if(firstClear){s.bossClears.push(bossKey);const guildBonus=awardAreaGuildBonus(m,true);victoryPresentation(m,{major:!!m.bossGate,guildBonus,item:bonusItem,unique})}
   if(m.bossGate&&m.gateTier){
     s.expeditionGates=Array.isArray(s.expeditionGates)?s.expeditionGates:[];
     if(!s.expeditionGates.includes(m.gateTier)){
@@ -223,7 +243,7 @@ function makeBattle(m){
       str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,physicalDodge:z.physicalDodge,magicalDodge:z.magicalDodge,
       regen:z.regen||0,lifesteal:z.lifesteal||0,damageMult:z.damageMult||1,healMult:z.healMult||1,critBonus:z.critBonus||0,element:z.element||null,elementMult:z.elementMult||1,activeType:z.activeType||null,
       fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
-      weaponType:wep?.weaponType||null,
+      weaponType:wep?.weaponType||null,twoHanded:weaponHands(wep)===2,
       scale:wep?.scale||({Mage:'int',Priest:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),
       damageType:wep?.damageType||'physical',
       weaponPower:wep?.weaponPower||(wd?.base||8),
@@ -231,7 +251,7 @@ function makeBattle(m){
       dualWield:!!off,
       armorPen:z.armorPen||0,parry:z.parry||0,critDamage:z.critDamage||0,accuracy:z.accuracy||0,
       elementalDamage:z.elementalDamage||0,statusChance:z.statusChance||0,cleave:z.cleave||0,
-      counter:z.counter||0,damageVariance:z.damageVariance||0,execute:z.execute||0
+      counter:z.counter||0,damageVariance:z.damageVariance||0,execute:z.execute||0,uniqueDamageReduction:z.uniqueDamageReduction||0,uniqueCooldownReduction:z.uniqueCooldownReduction||0,uniqueOnHit:z.uniqueOnHit||null
     };
   });
   let partyDamage=0,partyDefense=0,partyMdef=0;
@@ -453,13 +473,19 @@ function grantFightRewards(m,enemySnapshots){
     const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2));
     hero.xp+=gained;
 
-    let need=heroXpNeeded(hero.level);
+    let need=heroXpNeeded(hero.level),levelsGained=0;
     while(hero.xp>=need){
       hero.xp-=need;
       hero.level++;
       syncNaturalHeroBonus(hero);
+      levelsGained++;
 
       need=heroXpNeeded(hero.level);
+    }
+    if(levelsGained){
+      const row=heroReport(m,hero.id);row.levelsGained=(row.levelsGained||0)+levelsGained;row.lastLevel=hero.level;
+      const combatHero=m.battle?.heroes?.find(x=>x.id===hero.id);if(combatHero){combatHero.level=hero.level;combatHero.levelUpUntil=Date.now()+1800;combatHero.levelUpText=`LEVEL ${hero.level}`}
+      m.battle?.log?.unshift(`${hero.name} reached level ${hero.level}!`);
     }
   });
 
@@ -484,7 +510,7 @@ function ensureCombatReport(m){
 }
 function heroReport(m,id){
   const report=ensureCombatReport(m),member=s.members.find(h=>h.id===id),key=String(id);
-  if(!report.heroes[key])report.heroes[key]={id,name:member?.name||'Unknown',damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0};
+  if(!report.heroes[key])report.heroes[key]={id,name:member?.name||'Unknown',damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0,levelsGained:0,lastLevel:null};
   if(member)report.heroes[key].name=member.name;
   return report.heroes[key];
 }
@@ -500,6 +526,7 @@ function recordHeroDamageTaken(m,target,amount){
     if(!already){report.deaths.push({id:target.id,name:target.name,battleId:m.battle.id,order:report.deaths.length+1});addHeroMetric(m,target.id,'deaths',1)}
   }
 }
+function applyUniqueDamageReduction(target,damage){return Math.max(0,Math.round(damage*(1-clamp(target?.uniqueDamageReduction||0,0,.60))))}
 const STATUS_EFFECTS={
   bleed:{name:'Bleeding',icon:'🩸',damageType:'physical',maxStacks:3},
   burning:{name:'Burning',icon:'🔥',damageType:'fire',maxStacks:3},
@@ -592,7 +619,7 @@ function heroDamage(h,target,forcedElement=null){
   const statuses=target?.statuses||{};
   if(h.subclass==='venomblade'&&statuses.poison)synergy+=.08*Math.min(3,statuses.poison.stacks||1);
   if(h.subclass==='marksman'&&statuses.frostbite)synergy+=.18;
-  const raw=base*roll*mult*synergy*(element==='physical'?1:(1+(h.elementalDamage||0)));
+  const raw=base*roll*mult*synergy*(h.twoHanded?2:1)*(element==='physical'?1:(1+(h.elementalDamage||0)));
 
   const protectionMult=(1-clamp(target.protection||0,0,.6))*(target.buffs?.shieldFaith>Date.now()?.70:1);
   if(element==='physical')return Math.max(1,Math.round(mitigatedDamage(raw,target.def,target.block||0,h.armorPen||0)*protectionMult));
@@ -610,7 +637,7 @@ const ACTIVE_COOLDOWNS={};
 const ACTIVE_DISPLAY_NAMES={};
 const COMBAT_BUFF_DURATIONS={battleShout:12000,shieldFaith:10000};
 function manaCost(type){return ACTIVE_MANA_COSTS[type]||0}
-function activeCooldownMs(type){return ACTIVE_COOLDOWNS[type]||10000}
+function activeCooldownMs(type,h=null){const reduction=1-clamp((s?.guildBonuses?.cooldownReduction||0)+(h?.uniqueCooldownReduction||0),0,.70);return Math.max(1000,Math.round((ACTIVE_COOLDOWNS[type]||10000)*reduction))}
 function activeName(type){return ACTIVE_DISPLAY_NAMES[type]||type||'Active'}
 function canSpendMana(h,type){return (h.mana||0)>=manaCost(type)}
 function spendMana(h,type){
@@ -628,7 +655,7 @@ function activeReady(h,type,now=Date.now()){
   return (ensureCooldownMap(h)[type]||0)<=now;
 }
 function startActiveCooldown(h,type,now=Date.now()){
-  ensureCooldownMap(h)[type]=now+activeCooldownMs(type);
+  ensureCooldownMap(h)[type]=now+activeCooldownMs(type,h);
 }
 function activeCooldownRemaining(h,type,now=Date.now()){
   return Math.max(0,(ensureCooldownMap(h)[type]||0)-now);
@@ -642,7 +669,7 @@ function primaryActiveType(h){
 function cooldownProgress(h,type,now=Date.now()){
   if(!type)return 1;
   const remaining=activeCooldownRemaining(h,type,now);
-  const total=activeCooldownMs(type);
+  const total=activeCooldownMs(type,h);
   return clamp(1-remaining/Math.max(1,total),0,1);
 }
 function healAlly(m,h,ally,mult=1,label='Heal'){
@@ -674,6 +701,7 @@ function heroBasicAttack(m,h){
     }
     const basicStatus=statusForDamageType(attacker.damageType);
     if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name,sourceId:h.id});text+=`${STATUS_EFFECTS[basicStatus].name} applied. `}
+    if(h.uniqueOnHit){applyStatus(m,target,h.uniqueOnHit,{power:Math.max(1,dmg*.20),duration:10000,source:h.name,sourceId:h.id});text+=`${STATUS_EFFECTS[h.uniqueOnHit]?.name||h.uniqueOnHit} applied. `}
     text+=`${h.name.split(' ')[0]} uses ${attacker.weaponType||'unarmed attack'} for ${dmg} ${elementIcon[attacker.damageType]} ${attacker.damageType} damage.`;
     if(h.lifesteal>0){const heal=Math.max(1,Math.floor(dmg*h.lifesteal/100));h.hp=Math.min(h.maxHp,h.hp+heal);text+=` Lifesteal restores ${heal} HP.`}
     b.log.unshift(text);
@@ -684,7 +712,7 @@ function heroBasicAttack(m,h){
 }
 function activeDamageHit(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
-  const dmg=Math.max(1,Math.round(heroDamage(h,target,element)*mult));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
   const before=target.hp;
   target.hp=Math.max(0,target.hp-dmg);
   addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -790,7 +818,7 @@ function tryActiveSkill(m,h,now=Date.now()){
 function arenaDefenderDamage(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
   const type=element||h.damageType||'physical';
-  const dmg=Math.max(1,Math.round(heroDamage(h,target,element)*mult));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} for ${dmg} ${elementIcon[type]||''} ${type} damage.`);
   return true;
@@ -861,10 +889,10 @@ function resolveEnemyAbility(m,e,abilityId,now=Date.now()){
   if(ab.type==='heal'){
     const heal=Math.max(1,Math.round(e.maxHp*(ab.power||.08)));e.hp=Math.min(e.maxHp,e.hp+heal);b.log.unshift(`${e.name} uses ${ab.name} and restores ${heal} HP.`);
   }else if(ab.type==='aoe'){
-    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg)});
+    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=applyUniqueDamageReduction(t,d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d])));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg)});
     b.log.unshift(`⚠ ${e.name} releases ${ab.name} on the whole party.`);
   }else{
-    const t=enemySingleTarget(e,targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
+    const t=enemySingleTarget(e,targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=applyUniqueDamageReduction(t,d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d])));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
   }
   e.mana=Math.max(0,(e.mana||0)-(ab.manaCost||0));e.abilityReadyAt=now+(ab.cooldown||7000);b.actionSeq=(b.actionSeq||0)+1;syncPartyHp(m);return true;
 }
@@ -910,7 +938,7 @@ function enemyAction(m,e){
       const raw=e.atk*1.05*(e.elementalMult||1)*enraged*buffMult;
       const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0);
       let dmg=Math.max(0,Math.round(afterDefense*elementalReduction(target[elem])));
-      if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
+      if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);dmg=applyUniqueDamageReduction(target,dmg);
       const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
       return `${target.name.split(' ')[0]} ${dmg}`;
     });
@@ -934,7 +962,7 @@ function enemyAction(m,e){
     const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1)*enraged*execute*buffMult;
     dmg=Math.max(0,Math.round(mitigatedDamage(raw,target.mdef,target.block||0)*elementalReduction(target[elem])));
   }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute*buffMult,target.def,target.block||0);
-  if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
+  if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);dmg=applyUniqueDamageReduction(target,dmg);
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} ${elemental?elementIcon[elem]+' '+elem:'physical'} damage.`);
   if(target.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,target,e.basicStatus,{power:Math.max(1,dmg*.12),duration:8000,source:e.name});
@@ -1053,15 +1081,15 @@ function markExpeditionAreaCleared(m){
 }
 function beginExpeditionStageIntermission(m,offline=false,finalStage=false){
   const stage=Math.min(EXPEDITION_STAGE_COUNT,Math.ceil(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE));
+  let firstClearBonus=null;
   if(finalStage&&markExpeditionAreaCleared(m)){
-    const reward=bossItemDrop(m,'Rare');
-    if(reward){m.stash.items.push(reward);m.firstClearReward=reward.name}
+    firstClearBonus=awardAreaGuildBonus(m,false);
   }
   const delivered=depositMissionStash(m,finalStage?'Area cleared':'Stage delivery');
   m.completedStages=stage;m.lastCheckpoint=expeditionEncounterCount(m);
   const hidden=typeof document!=='undefined'&&document.hidden;
   m.stageIntermission={stage,finalStage,offlinePaused:!!offline||hidden,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
-  if(finalStage){m.completed=true;m.bossDefeated=true;log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`)}
+  if(finalStage){m.completed=true;m.bossDefeated=true;log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
   save();
 }
 function continueExpeditionStage(mid){
@@ -1108,8 +1136,10 @@ function advanceBattleInPlace(currentBattle,nextBattle,now=Date.now()){
   const heroes=(nextBattle.heroes||[]).map(nextHero=>{
     const hero=currentHeroesById.get(nextHero.id);
     if(!hero)return nextHero;
+    const levelUpUntil=hero.levelUpUntil,levelUpText=hero.levelUpText;
     Object.keys(hero).forEach(key=>{if(!(key in nextHero))delete hero[key]});
     Object.assign(hero,nextHero);
+    if(levelUpUntil>now){hero.levelUpUntil=levelUpUntil;hero.levelUpText=levelUpText}
     return hero;
   });
   const currentEnemies=currentBattle.enemies||[];

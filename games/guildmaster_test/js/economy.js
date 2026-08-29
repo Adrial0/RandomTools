@@ -85,7 +85,7 @@ function receiveInventoryItem(it,source='loot'){if(!it)return false;s.inventoryA
 function bulkSellSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let gold=0;items.forEach(it=>{gold+=itemSellValue(it);detachItem(it)});const ids=new Set(items.map(it=>it.id));s.inventory=s.inventory.filter(it=>!ids.has(it.id));s.gold+=gold;selectedInventoryItems.clear();save();render();notify(`Sold ${items.length} selected item${items.length===1?'':'s'} for ${gold} gold.`,'good')}
 function bulkScrapSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let scrapped=0,skipped=0;const removeIds=new Set();items.forEach(it=>{const recovered=scrapItemCore(it);if(recovered){detachItem(it);removeIds.add(it.id);scrapped++}else skipped++});s.inventory=s.inventory.filter(it=>!removeIds.has(it.id));removeIds.forEach(id=>selectedInventoryItems.delete(id));save();render();notify(`Scrapped ${scrapped} item${scrapped===1?'':'s'}${skipped?` · ${skipped} could not be scrapped`:''}.`,'good')}
 function itemSellValue(it){
-  const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9}[it.rarity]||1;
+  const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9,Unique:14}[it.rarity]||1;
   return Math.max(1,Math.round(((it.power||10)*.45+5)*rarityMult*.5));
 }
 function recipeForItem(it){

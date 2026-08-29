@@ -87,7 +87,9 @@ function render(){completeOnboardingGoals(false);updateNavigationLocks();complet
   const guildNeed=guildRepNeeded(s.level),guildPct=clamp((s.rep||0)/guildNeed*100,0,100);
   if($('guildLevelHall'))$('guildLevelHall').textContent=s.level;
   if($('guildRepText'))$('guildRepText').textContent=`${(s.rep||0).toLocaleString()} / ${guildNeed.toLocaleString()}`;
-  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
+  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';
+  if($('guildPermanentBonuses')){const b=s.guildBonuses||{};$('guildPermanentBonuses').innerHTML=`<span>Permanent Area Bonuses</span><b>+${((b.maxHp||0)*100).toFixed(2)}% Max HP</b><b>+${((b.gatherSpeed||0)*100).toFixed(2)}% Gathering Speed</b><b>+${((b.cooldownReduction||0)*100).toFixed(2)}% Cooldown Recovery</b>`}
+  renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
@@ -275,6 +277,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
     <div class="visualIcon">${icon}</div>
     <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     <div class="combatFloat"></div>
+    ${enemy?'':'<div class="combatLevelUp"></div>'}
   </div>`;
 }
 function combatAbilityState(x,enemy=false,now=Date.now()){
@@ -424,7 +427,7 @@ function combatReportHtml(m){
   const duration=fmt(Date.now()-(report.startedAt||m.start||Date.now()));
   const deathOrder=report.deaths.length?report.deaths.map((x,i)=>`${i+1}. ${x.name}`).join(' · '):'No recorded deaths';
   return `<div class="combatReportHead"><div><div class="name">Mission Report</div><div class="muted" data-report-summary>${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active</div></div><span class="chip" data-report-deaths>${deathOrder}</span></div>
-    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow" data-report-hero="${row.id}"><span><b data-report-name>${row.name}</b><small data-report-actions>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small></span><span data-report-damage>${Math.round(row.damage||0).toLocaleString()}</span><span data-report-status>${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied</span><span data-report-healing>${Math.round(row.healing||0).toLocaleString()}</span><span data-report-taken>${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths</span><span data-report-utility>${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses</span></div>`).join('')}</div>`;
+    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow" data-report-hero="${row.id}"><span><b data-report-name>${row.name}</b><small data-report-actions>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small><small class="reportLevelUp" data-report-level>${row.levelsGained?`LEVEL UP → ${row.lastLevel} · ${row.levelsGained} gained`:''}</small></span><span data-report-damage>${Math.round(row.damage||0).toLocaleString()}</span><span data-report-status>${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied</span><span data-report-healing>${Math.round(row.healing||0).toLocaleString()}</span><span data-report-taken>${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths</span><span data-report-utility>${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses</span></div>`).join('')}</div>`;
 }
 function combatReportKey(m){return Object.values(ensureCombatReport(m).heroes).map(row=>row.id).join('-')}
 function updateCombatReport(m){
@@ -436,7 +439,7 @@ function updateCombatReport(m){
   rows.forEach(row=>{
     const card=el.querySelector(`[data-report-hero="${row.id}"]`);if(!card)return;
     const set=(selector,value)=>{const node=card.querySelector(selector);if(node)node.textContent=value};
-    set('[data-report-name]',row.name);set('[data-report-actions]',`${row.abilityUses||0} abilities · ${row.criticalHits||0} crits`);set('[data-report-damage]',Math.round(row.damage||0).toLocaleString());set('[data-report-status]',`${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied`);set('[data-report-healing]',Math.round(row.healing||0).toLocaleString());set('[data-report-taken]',`${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths`);set('[data-report-utility]',`${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses`);
+    set('[data-report-name]',row.name);set('[data-report-actions]',`${row.abilityUses||0} abilities · ${row.criticalHits||0} crits`);set('[data-report-level]',row.levelsGained?`LEVEL UP → ${row.lastLevel} · ${row.levelsGained} gained`:'');set('[data-report-damage]',Math.round(row.damage||0).toLocaleString());set('[data-report-status]',`${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied`);set('[data-report-healing]',Math.round(row.healing||0).toLocaleString());set('[data-report-taken]',`${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths`);set('[data-report-utility]',`${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses`);
   });
 }
 function buildCombatStructure(m){
@@ -486,6 +489,7 @@ function updateCombatantDom(x,enemy,slotElement=null){
   el.dataset.lastHp=x.hp;
   const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaTrack=el.querySelector('.manaTrack'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass'),visualIcon=el.querySelector('.visualIcon');
   if(name)name.textContent=combatDisplayName(x,enemy);
+  if(!enemy){const levelUp=el.querySelector('.combatLevelUp');if(levelUp){const active=(x.levelUpUntil||0)>Date.now();levelUp.textContent=active?(x.levelUpText||`LEVEL ${x.level}`):'';levelUp.classList.toggle('on',active)}}
   if(classLine)classLine.textContent=enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`;
   const iconKey=enemy?`enemy:${x.name}`:`hero:${x.class}:${x.subclass||''}`;
   if(visualIcon&&el.dataset.iconKey!==iconKey){
@@ -579,14 +583,13 @@ function updateStageIntermissionUi(m){
   if(!field||!box)return;field.classList.toggle('stageIntermission',!!pause);
   if(!pause){box.classList.remove('on');box.replaceChildren();return}
   const remaining=Math.max(0,(pause.until||Date.now())-Date.now()),title=pause.finalStage?`${m.name} Cleared`:`Stage ${pause.stage} Complete`;
-  const campers=(m.battle?.heroes||[]).map(hero=>`<div class="stageCamper" title="${hero.name}"><div class="stageCamperIcon">${hero.icon}</div><span>${hero.name}</span></div>`).join('');
   box.classList.add('on');box.innerHTML=`
     <div class="stageDeliveryBanner">
       <div><div class="name">${title}</div><div class="stageDeliveryText">The party delivers its reports, recovered items, and supplies to the guild.</div></div>
       <div class="stageDeliveryRewards">${pause.delivered?.text||'Rewards delivered'}</div>
       <div class="stageDeliveryNext">${pause.finalStage?`<span class="good">The next expedition area is now available.</span>`:pause.offlinePaused?`<button class="btn gold" onclick="continueExpeditionStage(${m.id})">Continue Expedition</button>`:`<span class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</span>`}</div>
     </div>
-    <div class="stageCampScene"><div class="stageCampParty">${campers}</div><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div></div>`;
+    <div class="stageCampScene"><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div></div>`;
 }
 function renderCombat(){
   if(!$('combatModal').classList.contains('on'))return;

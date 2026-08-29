@@ -200,11 +200,13 @@ body{
 .epic{color:#c993f0!important}
 .legendary{color:#ffd36f!important;text-shadow:0 0 8px rgba(255,191,67,.42)}
 .mythic{color:#ff91d7!important;text-shadow:0 0 9px rgba(255,73,184,.48)}
+.unique{color:#d68b43!important;text-shadow:0 0 9px rgba(221,111,35,.62)}
 .card:has(.name.uncommon){border-color:#587a4d!important;box-shadow:0 0 0 1px rgba(111,162,93,.18),1px 2px 0 #100d09!important}
 .card:has(.name.rare){border-color:#3f79aa!important;box-shadow:0 0 0 1px rgba(83,160,221,.25),1px 2px 0 #100d09!important}
 .card:has(.name.epic){border-color:#8758a8!important;box-shadow:0 0 0 2px rgba(171,99,220,.23),1px 2px 0 #100d09!important}
 .card:has(.name.legendary){border-color:#d19a31!important;box-shadow:0 0 0 2px rgba(236,176,55,.34),0 0 15px rgba(219,151,27,.15),2px 3px 0 #100d09!important}
 .card:has(.name.mythic){border-color:#d85eae!important;box-shadow:0 0 0 2px rgba(233,84,179,.38),0 0 18px rgba(204,56,154,.18),2px 3px 0 #100d09!important}
+.card:has(.name.unique){border-color:#d77728!important;box-shadow:0 0 0 2px rgba(215,119,40,.42),0 0 22px rgba(215,92,30,.24),2px 3px 0 #100d09!important}
 .equipCompare{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
 .equipTargetChoice{margin-top:8px;padding-top:8px;border-top:1px solid rgba(121,93,55,.35)}
 .equipGain,.equipLoss,.equipSame{font:11px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;padding:3px 6px;border-radius:2px}
@@ -1533,6 +1535,10 @@ body.windowOpen .side{overflow:hidden!important}
 }
 .combatBattlefield .combatEffect{width:20px!important;height:20px!important;box-shadow:0 1px 3px #000}
 .combatBattlefield .combatFloat{right:4px!important;top:47px!important;font-size:14px!important;text-shadow:0 2px 3px #000!important}
+.combatLevelUp{position:absolute;left:50%;top:40%;z-index:8;transform:translate(-50%,-50%);opacity:0;pointer-events:none;color:#ffe88e;font-family:var(--ui-pixel);font-size:13px;font-weight:900;white-space:nowrap;text-shadow:0 0 5px #fff,0 0 12px #e2a932,0 2px 3px #000}
+.combatLevelUp.on{animation:combatLevelUp 1.8s ease-out}
+@keyframes combatLevelUp{0%{opacity:0;transform:translate(-50%,15px) scale(.7)}20%{opacity:1;transform:translate(-50%,-8px) scale(1.15)}72%{opacity:1}100%{opacity:0;transform:translate(-50%,-42px) scale(1)}}
+.reportLevelUp{display:block;color:#e8c361!important;font-family:var(--ui-pixel);font-size:8px!important;margin-top:3px}
 .combatBattlefield .castTrack{position:absolute!important;top:36px;left:0;right:0;z-index:5}
 .combatBattlefield .combatant[style*="display: none"],.combatBattlefield .combatSlotEmpty{display:none!important}
 .combatStageIntermission{
@@ -1548,22 +1554,22 @@ body.windowOpen .side{overflow:hidden!important}
 .stageDeliveryText{margin-top:2px;color:#d6c39a;font-size:11px}
 .stageDeliveryRewards{padding:7px 10px;border:1px solid #80623b;background:#17130e;color:#e9c878;font-family:var(--ui-pixel);font-size:10px;white-space:nowrap}
 .stageDeliveryNext{white-space:nowrap;text-align:right}
-.stageCampScene{position:absolute;left:50%;bottom:24px;width:min(570px,72%);height:235px;transform:translateX(-50%);display:flex;align-items:flex-end;justify-content:center}
-.stageCampParty{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;gap:15px;padding-bottom:61px}
-.stageCamper{width:68px;text-align:center;color:#fff0c8;font-size:9px;text-shadow:0 2px 3px #000;filter:drop-shadow(0 5px 4px rgba(0,0,0,.85))}
-.stageCamper:nth-child(odd){transform:translateY(-25px)}
-.stageCamper:nth-child(3n){transform:translateY(6px)}
-.stageCamperIcon{height:54px;display:flex;align-items:flex-end;justify-content:center}
-.stageCamperIcon img,.stageCamperIcon .gameAsset{width:52px!important;height:52px!important;object-fit:contain!important;image-rendering:pixelated;transform:rotate(4deg)}
-.stageCamper:nth-child(even) .stageCamperIcon img,.stageCamper:nth-child(even) .stageCamperIcon .gameAsset{transform:scaleX(-1) rotate(4deg)}
-.stageCamper span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stageCampScene{position:absolute;left:75%;bottom:24px;width:180px;height:150px;transform:translateX(-50%);display:flex;align-items:flex-end;justify-content:center}
 .stageCampfire{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);font-size:62px;line-height:1;filter:drop-shadow(0 0 12px #f19b38);animation:stageFire 1s ease-in-out infinite alternate}
 .stageCampGlow{position:absolute;left:50%;bottom:15px;width:250px;height:95px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(239,139,48,.28),rgba(239,139,48,0) 70%);mix-blend-mode:screen}
 @keyframes stageFire{to{transform:translateX(-50%) scale(.94) translateY(2px);filter:drop-shadow(0 0 18px #ffc04f)}}
 .combatBattlefield.stageIntermission .combatEnemyPane{visibility:hidden}
-.combatBattlefield.stageIntermission .combatHeroPane{visibility:hidden}
+.combatBattlefield.stageIntermission .combatHeroPane{visibility:visible}
+.combatBattlefield.stageIntermission .combatHeroPane .combatant{animation:stageRest 1.8s ease-in-out infinite alternate}
+@keyframes stageRest{to{transform:translateY(2px)}}
 .activeMissionActions,.defeatRestartActions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
 .defeatRestartActions{margin-top:10px}
+.victoryPresentation{text-align:center;padding:8px 4px 14px}.victoryPresentation.major{padding:18px 10px 24px;background:radial-gradient(circle at 50% 20%,rgba(210,154,54,.18),transparent 55%)}
+.victoryCrest{font-size:54px;filter:drop-shadow(0 0 12px rgba(235,183,76,.6));animation:victoryCrest 1s ease-out}.victoryPresentation.major .victoryCrest{font-size:76px}
+@keyframes victoryCrest{from{opacity:0;transform:scale(.45) rotate(-8deg)}to{opacity:1;transform:scale(1)}}
+.victoryGuildBonus,.victoryRewardItem{display:flex;flex-direction:column;gap:5px;margin:12px auto 0;max-width:620px;padding:12px;border:1px solid #80623b;background:#17130e}
+.victoryGuildBonus span{color:#9fd283}.victoryUniqueCallout{margin-top:12px;font-size:15px;font-weight:900}
+.guildPermanentBonuses{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid #5c4729;font-family:var(--ui-pixel);font-size:9px}.guildPermanentBonuses>span{color:var(--muted);margin-right:4px}.guildPermanentBonuses>b{padding:4px 7px;border:1px solid #5e4b2e;background:#17130e;color:#a9cf8b}
 
 @media(max-width:760px){
   .combatBattlefield.combatGrid{min-height:max(610px,calc(var(--combat-mobile-rows,4) * 88px + 55px))!important;padding:31px 8px 14px!important;gap:8px!important}
@@ -1577,7 +1583,7 @@ body.windowOpen .side{overflow:hidden!important}
   .combatBattlefield .combatEffect{width:16px!important;height:16px!important}
   .combatBattlefield .combatMiniNameRow .name{font-size:9px!important}
   .stageDeliveryBanner{top:5px;grid-template-columns:1fr;text-align:center;gap:5px;padding:7px 9px}.stageDeliveryNext{text-align:center}.stageDeliveryRewards{white-space:normal}.stageDeliveryText{display:none}
-  .stageCampScene{bottom:12px;width:92%;height:390px}.stageCampParty{align-content:center;align-items:center;flex-wrap:wrap;padding:88px 18px}.stageCamper:nth-child(n){transform:none}.stageCampfire{bottom:12px}
+  .stageCampScene{left:75%;bottom:12px;width:110px;height:180px}.stageCampfire{bottom:12px}
 }
 
 /* Grouped navigation and compact guild-ledger typography. */

@@ -214,7 +214,11 @@ function cancelProfessionJob(pid,jid){
   const paid=j.paidMaterials||{};Object.entries(paid).forEach(([k,v])=>s.materials[k]=(s.materials[k]||0)+Math.floor(v*ratio));
   p.jobs.splice(index,1);normalizeProfessionQueue(pid);syncProfessionBusy(pid);save();render();notify('Work order cancelled and unused materials refunded.','good');
 }
-function improvedRarity(tier,chance){const base=itemRarity(tier);if(Math.random()>=chance)return base;return rar[Math.min(rar.length-1,rar.indexOf(base)+1)]}
+function improvedRarity(tier,chance){
+  const base=itemRarity(tier);if(Math.random()>=chance)return base;
+  const craftRarities=rar.filter(rarity=>rarity!=='Unique');
+  return craftRarities[Math.min(craftRarities.length-1,craftRarities.indexOf(base)+1)];
+}
 function completeProfessionUnit(pid,j){
   const p=professionState(pid),bonusYield=Math.random()<(j.effects?.yield||0)?1:0,outputs=1+bonusYield;let xp=1;
   if(j.kind==='meal'){

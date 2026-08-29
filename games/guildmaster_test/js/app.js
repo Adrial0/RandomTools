@@ -107,15 +107,16 @@ function refreshHarvestProgressUI(now=Date.now()){
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!area)return;
     const card=fill.closest('[data-harvest-card]');
     const stash=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
-    const capped=stash>=cap;
+    const progressLocked=typeof harvestAreaUnlocked==='function'&&!harvestAreaUnlocked(area),capped=stash>=cap;
     card?.classList.toggle('cappedHarvest',capped);
     const label=card?.querySelector('[data-harvest-label]'),time=card?.querySelector('[data-harvest-time]');
-    if(capped){
+    if(progressLocked){fill.style.width='0%';if(label)label.textContent='EXPEDITION LOCKED';if(time&&now-lastTimerTextUpdate<120)time.textContent='PAUSED'}
+    else if(capped){
       fill.style.width='100%';
       if(label)label.textContent='CAP REACHED';
       if(time&&now-lastTimerTextUpdate<120)time.textContent='FULL';
     }else{
-      const total=area.cycle*1000,start=j.lastTick||now;
+      const total=(typeof gatheringCycleSeconds==='function'?gatheringCycleSeconds(area):area.cycle)*1000,start=j.lastTick||now;
       const elapsed=Math.max(0,now-start);
       const phase=elapsed%total;
       const pct=clamp(phase/total*100,0,100);
