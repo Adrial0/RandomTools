@@ -100,7 +100,10 @@ function makeEnemy(type,level,index,forcedName=null){
   const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
   if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,level,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:[]}}
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
-  const hp=Math.round((tpl.baseHp||35)*scale*2.25*(ar.hpMult||1));
+  // Preserve the original level-1 baseline, then let durability grow faster
+  // than unequipped hero damage. Attack and defenses retain gentler scaling.
+  const hpScale=1.12+Math.max(0,level-1)*.20;
+  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*(ar.hpMult||1));
   const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1));
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
@@ -454,21 +457,7 @@ function grantFightRewards(m,enemySnapshots){
     while(hero.xp>=need){
       hero.xp-=need;
       hero.level++;
-
-      // Universal class main-stat growth: +2 every level.
-      const mainStat={Warrior:'str',Paladin:'str',Rogue:'dex',Ranger:'dex',Mage:'int',Priest:'int'}[hero.class];
-      if(mainStat)hero.bonus[mainStat]=(hero.bonus[mainStat]||0)+2;
-
-      // Class-specific growth is added on top of the universal +2 main stat.
-      const growth={
-        Warrior:{hp:5,str:2,def:1},
-        Paladin:{hp:5,int:1,def:2,mdef:1},
-        Rogue:{hp:3,dex:1,int:1,mdef:1},
-        Ranger:{hp:3,dex:2,mdef:1},
-        Mage:{hp:2,int:2,mdef:1},
-        Priest:{hp:2,int:1,mdef:1}
-      }[hero.class]||{};
-      Object.entries(growth).forEach(([stat,value])=>hero.bonus[stat]=(hero.bonus[stat]||0)+value);
+      syncNaturalHeroBonus(hero);
 
       need=heroXpNeeded(hero.level);
     }

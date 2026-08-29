@@ -24,6 +24,10 @@ assert.match(core,/expeditionClears:\[\]/,'new saves need per-area clear progres
 assert.match(activities,/function expeditionAreaUnlocked\(/,'expedition cards use sequential area unlocks');
 assert.match(activities,/previous\.bossGate.*s\.expeditionGates/s,'a new tier still requires the preceding tier boss');
 assert.match(activities,/s\.expeditionClears.*previous\.areaId/s,'later areas and gate bosses require the preceding area clear');
+assert.match(activities,/function harvestAreaUnlocked\(area\)[\s\S]*expeditionGates[\s\S]*tier-1/,'gathering tiers require the previous expedition tier clear');
+assert.match(activities,/openHarvestPicker\(areaId\)[\s\S]*!harvestAreaUnlocked\(a\)/,'locked gathering areas cannot be opened through the UI');
+assert.match(activities,/confirmHarvestParty\(areaId\)[\s\S]*!harvestAreaUnlocked\(a\)/,'locked gathering areas cannot be started indirectly');
+assert.match(activities,/processHarvesting\(\)[\s\S]*!harvestAreaUnlocked\(area\)[\s\S]*progressLocked=true/,'legacy gathering jobs pause if their expedition tier is locked');
 assert.match(combat,/s\.expeditionGates\.push\(m\.gateTier\)/,'boss victories must persist tier unlocks');
 assert.match(combat,/if\(m\.bossGate\)return;/,'offline progress must not bypass story bosses');
 assert.match(combat,/mission\.battle=mission\.bossGate\?makeBossBattle\(mission\):makeBattle\(mission\)/,'gate expeditions must begin directly in the boss encounter');

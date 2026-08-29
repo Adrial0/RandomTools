@@ -8,6 +8,14 @@ Priest:{hp:104,str:9,dex:6,int:17,def:11,mdef:15,block:0,manaRegen:2,armor:'Ligh
 Rogue:{hp:84,str:7,dex:20,int:6,def:7,mdef:8,block:0,manaRegen:1,armor:'Light',threat:1,icon:'G',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Dagger','Knife','Dirk','Kris','Shortsword','Twin Blades']},
 Paladin:{hp:122,str:15,dex:7,int:11,def:18,mdef:13,block:2,manaRegen:1,armor:'Heavy',threat:2,icon:'P',slots:['MainHand','OffHand','Armor','Accessories'],weapons:['Longsword','Greatsword','Mace','Warhammer','Spear',]}
 };
+const CLASS_LEVEL_GROWTH={
+  Warrior:{hp:5,str:4,def:1},
+  Paladin:{hp:5,str:2,int:1,def:2,mdef:1},
+  Rogue:{hp:3,dex:3,int:1,mdef:1},
+  Ranger:{hp:3,dex:4,mdef:1},
+  Mage:{hp:2,int:4,mdef:1},
+  Priest:{hp:2,int:3,mdef:1}
+};
 
 const ASSET_CONFIG={base:'',version:'',guildhallBackground:''};
 const ICONS={};
@@ -275,6 +283,18 @@ const traits=[
 {name:'Heavy Sleeper',desc:'+10% max HP, but -6% physical and magical dodge.',hp:8,str:0,dex:0,int:0,def:1,mdef:1,hpMult:1.10,physicalDodgePenalty:.06,magicalDodgePenalty:.06}
 ];
 function traitDef(h){return traits.find(t=>t.name===h?.trait)||traits.find(t=>t.name==='Balanced')}
+function naturalHeroBonus(h){
+  const trait=traitDef(h)||{},growth=CLASS_LEVEL_GROWTH[h?.class]||{},levels=Math.max(0,(h?.level||1)-1);
+  const out={hp:(trait.hp||0)+3,str:trait.str||0,dex:trait.dex||0,int:trait.int||0,def:trait.def||0,mdef:trait.mdef||0};
+  Object.entries(growth).forEach(([stat,value])=>out[stat]=(out[stat]||0)+value*levels);
+  ['fire','ice','poison','lightning','holy','dark'].forEach(stat=>out[stat]=trait[stat]||0);
+  return out;
+}
+function syncNaturalHeroBonus(h){
+  if(!h)return h;
+  h.bonus=Object.assign({},h.bonus||{},naturalHeroBonus(h));
+  return h;
+}
 
 
 
@@ -407,8 +427,9 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
     const mainItem=s.inventory?.find?.(it=>it.id===h.equip.MainHand);
     if(mainItem&&weaponHands(mainItem)===2)h.equip.OffHand=mainItem.id;
     delete h.equip.Weapon;delete h.equip.Jewelry;delete h.equip.Ring;delete h.equip.Amulet;
-    return h;
+    return syncNaturalHeroBonus(h);
   });
+  s.recruits=(s.recruits||[]).map(h=>syncNaturalHeroBonus(h));
   s.inventory=(s.inventory||[]).map(it=>{
     it.runes=Array.isArray(it.runes)?it.runes:[];
     it.tier=itemTier(it);
@@ -512,21 +533,14 @@ function hero(){
   let c=pick(Object.keys(C)),t=pick(traits),ra=recruitRarity();
   const recruitBase=1+Math.floor(Math.max(0,(s.level||1)-1)*.18);
   const lv=clamp(rnd(Math.max(1,recruitBase-2),recruitBase+1),1,15);
-  return{
+  const recruit={
     id:id(),name:pick(FN)+' '+pick(LN),class:c,race:pick(RACE_NAMES),rarity:ra,trait:t.name,professionTrait:typeof rollProfessionTrait==='function'?rollProfessionTrait():null,level:lv,xp:0,busy:false,subclass:null,
     equip:{MainHand:null,OffHand:null,Armor:null,Accessories:null},
     skills:rolledRecruitSkills(),
-    bonus:{
-      hp:t.hp+lv*3,
-      str:t.str+Math.floor(lv*.8),
-      dex:t.dex+Math.floor(lv*.8),
-      int:t.int+Math.floor(lv*.8),
-      def:t.def+Math.floor(lv*.7),
-      mdef:t.mdef+Math.floor(lv*.7),
-      
-      fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0
-    }
+    bonus:null
   };
+  recruit.bonus=naturalHeroBonus(recruit);
+  return recruit;
 }
 function applyRarityBonuses(it,tier){
   const rarity=it.rarity;

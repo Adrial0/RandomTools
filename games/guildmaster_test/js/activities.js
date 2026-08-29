@@ -34,7 +34,7 @@ function questRewardFor(diff,type){
   return{gold:Math.round(base*diff.reward*typeMult),item:questWeaponReward(rewardDiff)};
 }
 function makeGatherQuest(diff){
-  let pool=HARVEST_AREAS.filter(a=>a.req<=Math.max(3,(s.level||1)+3));if(!pool.length)pool=HARVEST_AREAS.slice(0,5);
+  let pool=HARVEST_AREAS.filter(a=>harvestAreaUnlocked(a)&&a.req<=Math.max(3,(s.level||1)+3));if(!pool.length)pool=HARVEST_AREAS.filter(harvestAreaUnlocked).slice(0,5);
   const a=pick(pool),resource=a.resources[0][0],target=Math.max(10,Math.round((22+(s.level||1)*3)*diff.mult/5)*5);
   return{kind:'gather',key:resource,title:`Gather ${RESOURCE_NAMES[resource]||resource}`,desc:`Gather ${target} ${RESOURCE_NAMES[resource]||resource}.`,target,progress:0,source:a.name};
 }
@@ -145,6 +145,12 @@ function gatheringSkill(h,key){if(!h.skills)h.skills={};if(!h.skills[key])h.skil
 function grantSkillXp(h,key,amount=1){const sk=gatheringSkill(h,key);sk.xp+=amount*raceGatheringXpMult(h,key);let need=skillXpNeeded(sk.level);while(sk.xp>=need){sk.xp-=need;sk.level++;need=skillXpNeeded(sk.level)}}
 function gatheringBonusChance(level){return Math.min(.35,Math.max(0,level-1)*.015)}
 function addStoredResource(k,amount){const add=Math.max(0,Math.min(amount,resourceSpace()));if(add){s.materials[k]=(s.materials[k]||0)+add;markResourceFound(k)}return add}
+function harvestAreaTier(area){return Math.max(1,Math.min(...(area?.resources||[]).map(x=>resourceTier(x[0]))))}
+function harvestAreaUnlocked(area){
+  const tier=harvestAreaTier(area);
+  return tier<=1||(s.expeditionGates||[]).includes(tier-1);
+}
+function harvestAreaLockText(area){return `Clear the Tier ${tierLabel(harvestAreaTier(area)-1)} expedition boss to unlock this gathering area.`}
 
 function weightedResource(list){
   const total=list.reduce((a,x)=>a+x[1],0);
@@ -154,6 +160,7 @@ function weightedResource(list){
 }
 function openHarvestPicker(areaId){
   const a=HARVEST_AREAS.find(x=>x.id===areaId);if(!a)return;
+  if(!harvestAreaUnlocked(a))return notify(harvestAreaLockText(a));
   if(harvestLocationOccupied(areaId))return notify('A gathering party is already working at '+a.name+'.');
   const available=s.members.filter(x=>!x.busy&&gatheringSkill(x,a.skill).level>=a.req);
   if(!available.length)return notify('No available guild members meet '+SKILL_NAMES[a.skill]+' Lv. '+a.req+'.');
@@ -171,6 +178,7 @@ function confirmHarvestParty(areaId){
   const ids=[...document.querySelectorAll('#harvestPartyPicker .partyMember.on')].map(x=>+x.dataset.h);
   if(!ids.length)return notify('Choose at least one guild member.');
   const a=HARVEST_AREAS.find(x=>x.id===areaId);if(!a)return;
+  if(!harvestAreaUnlocked(a))return notify(harvestAreaLockText(a));
   if(harvestLocationOccupied(areaId))return notify('A gathering party is already working at '+a.name+'.');
   const crew=ids.map(id=>s.members.find(x=>x.id===id)).filter(Boolean);
   if(crew.some(x=>x.busy))return notify('One of those guild members is already busy.');
@@ -187,6 +195,12 @@ function processHarvesting(){
   s.harvestJobs.forEach(j=>{
     if(j.stopped)return;
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!area)return;
+    if(!harvestAreaUnlocked(area)){
+      if(j.progressLocked!==true){j.progressLocked=true;changed=true}
+      j.lastTick=now;
+      return;
+    }
+    if(j.progressLocked){j.progressLocked=false;changed=true}
     let stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
 
     if(stashCount>=cap){
@@ -251,11 +265,11 @@ function renderHarvestAreas(){
     });
   $('harvestList').innerHTML=areas.map(a=>{
     const qualified=s.members.filter(h=>!h.busy&&gatheringSkill(h,a.skill).level>=a.req).length;
-    const occupied=harvestLocationOccupied(a.id);
-    return `<div class="card quest actionCard">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
+    const occupied=harvestLocationOccupied(a.id),unlocked=harvestAreaUnlocked(a),tier=harvestAreaTier(a);
+    return `<div class="card quest actionCard ${unlocked?'':'areaLocked'}">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
       <div class="muted">${a.kind} · ${SKILL_NAMES[a.skill]} Lv. ${a.req} required</div><div class="muted" style="margin-top:5px">${a.desc}</div>
-      <div class="chips">${a.resources.map(x=>`<span class="chip">${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span></div>
-      <button class="btn ${qualified&&!occupied?'gold':''} actionButton" ${qualified&&!occupied?'':'disabled'} onclick="openHarvestPicker('${a.id}')">${occupied?'Party Gathering':qualified?'Start Harvesting':'No Eligible Members'}</button></div>`;
+      <div class="chips">${a.resources.map(x=>`<span class="chip">${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span>${unlocked?'':`<span class="chip dangerText">Requires Tier ${tierLabel(tier-1)} expedition clear</span>`}</div>
+      <button class="btn ${unlocked&&qualified&&!occupied?'gold':''} actionButton" ${unlocked&&qualified&&!occupied?'':'disabled'} onclick="openHarvestPicker('${a.id}')">${!unlocked?'Expedition Locked':occupied?'Party Gathering':qualified?'Start Harvesting':'No Eligible Members'}</button></div>`;
   }).join('')||'<div class="empty">No gathering areas match this filter.</div>';
 }
 function openHarvestJobDetails(jobId){
@@ -282,12 +296,12 @@ function renderHarvestActive(){
   $('harvestActive').innerHTML=s.harvestJobs.length?s.harvestJobs.map(j=>{
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId),stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
     const names=j.party.map(id=>s.members.find(x=>x.id===id)?.name.split(' ')[0]).filter(Boolean).join(' · ');
-    const capped=stashCount>=cap,cycleMs=(area?.cycle||30)*1000,start=j.lastTick||Date.now();
+    const progressLocked=!harvestAreaUnlocked(area),capped=stashCount>=cap,cycleMs=(area?.cycle||30)*1000,start=j.lastTick||Date.now();
     return `<div class="card harvestCard ${capped?'cappedHarvest':''}" data-harvest-card="${j.id}" style="cursor:pointer" onclick="openHarvestJobDetails(${j.id})">
       <div class="heroTop"><div class="visualIcon">${area?.icon||'⛏️'}</div><div><div class="name">${area?.name||'Harvesting'}</div><div class="muted">${names}</div></div></div>
       <div class="chips"><span class="chip">${j.cycles} cycles</span><span class="chip ${capped?'harvestCapText':''}">${stashCount}/${cap} resources</span></div>
-      <div class="progressWrap harvestProgress"><div class="progressMeta"><span data-harvest-label>${capped?'CAP REACHED':'Next harvest'}</span><span data-harvest-time>${capped?'FULL':fmt(cycleMs-(Date.now()-start))}</span></div><div class="progressTrack"><div class="progressFill" data-harvest-job="${j.id}" style="width:${capped?100:clamp((Date.now()-start)/cycleMs*100,0,100)}%"></div></div></div>
-      <div class="actionRow"><div class="actionRowInfo muted">${capped?'Harvesting paused until resources are collected.':'Gathering continues automatically.'}</div><div class="actionRowButtons"><button class="btn gold" onclick="event.stopPropagation();collectHarvest(${j.id})" ${stashCount?'':'disabled'}>Collect</button><button class="btn" onclick="event.stopPropagation();stopHarvest(${j.id})">Recall</button></div></div>
+      <div class="progressWrap harvestProgress"><div class="progressMeta"><span data-harvest-label>${progressLocked?'EXPEDITION LOCKED':capped?'CAP REACHED':'Next harvest'}</span><span data-harvest-time>${progressLocked?'PAUSED':capped?'FULL':fmt(cycleMs-(Date.now()-start))}</span></div><div class="progressTrack"><div class="progressFill" data-harvest-job="${j.id}" style="width:${progressLocked?0:capped?100:clamp((Date.now()-start)/cycleMs*100,0,100)}%"></div></div></div>
+      <div class="actionRow"><div class="actionRowInfo muted">${progressLocked?harvestAreaLockText(area):capped?'Harvesting paused until resources are collected.':'Gathering continues automatically.'}</div><div class="actionRowButtons"><button class="btn gold" onclick="event.stopPropagation();collectHarvest(${j.id})" ${stashCount?'':'disabled'}>Collect</button><button class="btn" onclick="event.stopPropagation();stopHarvest(${j.id})">Recall</button></div></div>
     </div>`;
   }).join(''):'<div class="empty">No active harvesting jobs.</div>';
 }
