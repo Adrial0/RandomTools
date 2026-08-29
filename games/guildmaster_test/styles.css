@@ -1476,6 +1476,12 @@ body.windowOpen .side{overflow:hidden!important}
   background-size:cover!important;
   box-shadow:inset 0 0 60px rgba(0,0,0,.7);
 }
+.upgradeEffectComparison{display:flex;align-items:stretch;gap:7px;margin:8px 0;padding:7px;border:1px solid #544129;background:#19140f}
+.upgradeEffectComparison>span{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.upgradeEffectComparison small{color:#8f8064;font:8px var(--ui-pixel);letter-spacing:.07em;text-transform:uppercase}
+.upgradeEffectComparison b{color:#d4be8d;font-size:11px;line-height:1.25}
+.upgradeEffectComparison .next b{color:#a9d58c}
+.upgradeEffectComparison i{align-self:center;color:#a77b3f;font-style:normal;font-size:16px}
 .combatFieldShade{
   position:absolute;inset:0;z-index:-1;pointer-events:none;
   background:linear-gradient(90deg,rgba(5,7,7,.48),rgba(8,8,7,.15) 42%,rgba(8,8,7,.15) 58%,rgba(5,7,7,.48)),linear-gradient(0deg,rgba(4,4,3,.58),transparent 48%,rgba(4,4,3,.34));
@@ -1520,7 +1526,7 @@ body.windowOpen .side{overflow:hidden!important}
 .combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{
   width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;image-rendering:pixelated;
 }
-.combatBattlefield .combatHeroPane .visualIcon img,.combatBattlefield .combatHeroPane .visualIcon .gameAsset{transform:none}
+.combatBattlefield .combatHeroPane .visualIcon img,.combatBattlefield .combatHeroPane .visualIcon .gameAsset{transform:scaleX(-1)!important}
 .combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:46px!important;line-height:58px!important}
 .combatBattlefield .combatMiniNameRow{height:15px;display:block!important;text-align:center!important}
 .combatBattlefield .combatMiniNameRow .name{

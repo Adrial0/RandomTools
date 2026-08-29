@@ -141,7 +141,7 @@ function equipModal(hid,slot){
   const h=s.members.find(x=>x.id===hid);
   let a=s.inventory.filter(x=>!x.equipped&&equipmentTargetsForItem(h,x).includes(slot));
   const current=s.inventory.find(x=>x.id===h?.equip?.[slot]);
-  showModal('Choose '+slotLabel(slot),a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id},'${slot}')">Equip in ${slotLabel(slot)}</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+  showModal('Choose '+slotLabel(slot),a.length?`<div class="inventory">${a.map(it=>{const offhand=slot==='MainHand'&&weaponHands(it)===2?s.inventory.find(x=>x.id===h?.equip?.OffHand&&x.id!==h?.equip?.MainHand):null;return `<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}${offhand?` · also replaces ${offhand.name}`:''}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current,offhand?[offhand]:[])}<button class="btn gold" onclick="equip(${hid},${it.id},'${slot}')">Equip in ${slotLabel(slot)}</button></div>`}).join('')}</div>`:'<div class="empty">No matching items.</div>')}
 const BOSS_RESOURCE_SOURCE={};
 const BOSS_RESOURCES=new Set();
 
@@ -317,8 +317,23 @@ function upgradeResourceProgressHtml(cost){
 }
 
 function upgradeCost(u,l){
-  const cost=u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l);
+  const cost=u[3]*Math.pow(u[0]==='quarters'?1.42:1.95,l);
   return Math.max(1,Math.round(l===0?cost*.5:cost));
+}
+const UPGRADE_STORAGE_CAPS=[200,1000,3000,8000,16000,26000,40000,60000,90000,130000,200000];
+function upgradeEffectValue(key,level){
+  const l=Math.max(0,level||0);
+  if(key==='quarters')return `${6+l} member slots`;
+  if(key==='party')return `${2+l} expedition party slots`;
+  if(key==='recruit')return `${2+l} applicants per batch`;
+  if(key==='smith')return `+${l*10}% Smithing XP`;
+  if(key==='craftSpeed')return `${Math.round((1-Math.pow(.88,l))*100)}% faster crafting`;
+  if(key==='training')return `+${l*10}% adventurer XP`;
+  if(key==='storage')return `${UPGRADE_STORAGE_CAPS[Math.min(l,UPGRADE_STORAGE_CAPS.length-1)].toLocaleString()} resource capacity`;
+  if(key==='afkHarvest')return `${20+l*20} resources per gathering job`;
+  if(key==='gatherParty')return `${2+l} workers per gathering job`;
+  if(key==='board')return `+${l*5}% mission gold and reputation`;
+  return `Level ${l}`;
 }
 function upgrade(k){
   let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=upgradeCost(u,l),rc=upgradeResourceCost(k,l);
@@ -382,8 +397,14 @@ function itemCompareValues(it){
   out.magicalDodgeBonus+=it.itemMagicalDodgeBonus||0;
   return out;
 }
-function equipComparison(newItem,oldItem){
-  const a=itemCompareValues(newItem),b=itemCompareValues(oldItem);
+function addCompareValues(target,source,multiplier=1){Object.keys(target).forEach(k=>target[k]+=(source[k]||0)*multiplier);return target}
+function equipmentComparisonValues(items){
+  const total=itemCompareValues(null);
+  (items||[]).filter(Boolean).forEach(entry=>{const it=entry.item||entry,mult=entry.multiplier||((it.slot==='Weapon'&&weaponHands(it)===2)?2:1);addCompareValues(total,itemCompareValues(it),mult)});
+  return total;
+}
+function equipComparison(newItem,oldItem,additionalOldItems=[]){
+  const a=equipmentComparisonValues([newItem]),b=equipmentComparisonValues([oldItem,...additionalOldItems]);
   const labels={power:'Power',weaponPower:'Attack',hp:'HP',str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Pen',parry:'Parry',critChance:'Crit Chance',critDamage:'Crit Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter',damageBonus:'Damage',healBonus:'Healing',threatBonus:'Threat',physicalDodgeBonus:'Physical Dodge',magicalDodgeBonus:'Magic Dodge'};
   const wholePercent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark']);
   const decimalPercent=new Set(['armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter','damageBonus','healBonus','physicalDodgeBonus','magicalDodgeBonus']);

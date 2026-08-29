@@ -8,6 +8,6 @@ assert(html.indexOf('navMissionBlock')>html.indexOf('navGuildColumn'),'missions 
 assert(ui.includes('compactEquipmentSlots(h)'),'member cards show their compact equipment loadout');
 assert(economy.includes("compactEquipmentSlots(h,'equip')"),'item equip targets show their compact equipment loadout');
 assert(ui.includes("event.stopPropagation();equipModal"),'slot clicks do not trigger the surrounding character card');
-assert(styles.includes('.combatHeroPane .visualIcon .gameAsset{transform:none}'),'player combat sprites are not mirrored toward the left');
+assert(styles.includes('.combatHeroPane .visualIcon .gameAsset{transform:scaleX(-1)!important}'),'player combat sprites are force-mirrored to face right');
 assert(!progression.includes('2× weapon damage and item effects'),'two-handed item profiles contain no redundant boost explanation');
 console.log('Navigation, compact equipment slots, orientation, and item-profile UI tests passed.');

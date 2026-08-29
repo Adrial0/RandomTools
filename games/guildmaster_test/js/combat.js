@@ -436,7 +436,7 @@ function grantFightRewards(m,enemySnapshots){
   defeated.forEach(enemy=>{
     const rewardLevel=enemy.level||missionEncounterLevel(m),base=Math.max(1,Math.floor(1+rewardLevel/8));
     const amount=rnd(base,Math.max(base,Math.ceil(base*1.6)));
-    m.stash.gold+=amount*5;
+    m.stash.gold+=Math.round(amount*5*(1+(s.up.board||0)*.05));
   });
 
   // Reputation is guaranteed after every completed fight and scales with the
@@ -445,7 +445,7 @@ function grantFightRewards(m,enemySnapshots){
   const typeRep=m.type==='raid'?1.5:m.type==='dungeon'?1.25:1;
   const repMult=missionReputationMultiplier(m);
   if(repMult>0){
-    m.stash.rep+=Math.round(defeated.length*repPerEnemy*typeRep*repMult);
+    m.stash.rep+=Math.round(defeated.length*repPerEnemy*typeRep*repMult*(1+(s.up.board||0)*.05));
   }
 
   // Roughly 70% material/equipment loot chance per killed enemy.
@@ -470,7 +470,7 @@ function grantFightRewards(m,enemySnapshots){
     const hero=s.members.find(x=>x.id===hid);if(!hero)return;
 
     const fullPartyXp=defeated.reduce((sum,enemy)=>sum+xpForEnemy(hero,enemy.level||missionEncounterLevel(m),m.type),0);
-    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2));
+    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2*(1+(s.up.training||0)*.10)));
     hero.xp+=gained;
 
     let need=heroXpNeeded(hero.level),levelsGained=0;

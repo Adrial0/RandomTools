@@ -264,7 +264,7 @@ function openInventoryEquip(iid){
     const targets=equipmentTargetsForItem(h,it);
     return `<div class="card equipActionCard" onclick="inspectRosterHero(${h.id})">
       <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div>${compactEquipmentSlots(h,'equip')}</div>
-      ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b></div>${equipComparison(it,current)}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="event.stopPropagation();equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
+      ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),offhand=target==='MainHand'&&weaponHands(it)===2?s.inventory.find(x=>x.id===h.equip.OffHand&&x.id!==h.equip.MainHand):null,here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b>${offhand?` · replaces ${offhand.name} in Off Hand`:''}</div>${equipComparison(it,current,offhand?[offhand]:[])}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="event.stopPropagation();equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
     </div>`;
   }).join('')}</div>`);
 }
@@ -560,6 +560,7 @@ function renderUp(){
       </div>
 
       <div class="muted upgradeDesc">${u[2]}</div>
+      <div class="upgradeEffectComparison"><span><small>Current</small><b>${upgradeEffectValue(u[0],l)}</b></span>${l<u[4]?`<i aria-hidden="true">→</i><span class="next"><small>After upgrade</small><b>${upgradeEffectValue(u[0],l+1)}</b></span>`:''}</div>
 
       ${l<u[4]?`
         <div class="upgradeCosts">
