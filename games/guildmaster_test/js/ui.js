@@ -579,7 +579,14 @@ function updateStageIntermissionUi(m){
   if(!field||!box)return;field.classList.toggle('stageIntermission',!!pause);
   if(!pause){box.classList.remove('on');box.replaceChildren();return}
   const remaining=Math.max(0,(pause.until||Date.now())-Date.now()),title=pause.finalStage?`${m.name} Cleared`:`Stage ${pause.stage} Complete`;
-  box.classList.add('on');box.innerHTML=`<div class="stageDeliveryIcon">📦</div><div class="name">${title}</div><div class="stageDeliveryText">The party delivers its reports, recovered items, and supplies to the guild.</div><div class="stageDeliveryRewards">${pause.delivered?.text||'Rewards delivered'}</div>${pause.finalStage?`<div class="good">The next expedition area is now available.</div>`:pause.offlinePaused?`<button class="btn gold" onclick="continueExpeditionStage(${m.id})">Continue Expedition</button>`:`<div class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</div>`}`;
+  const campers=(m.battle?.heroes||[]).map(hero=>`<div class="stageCamper" title="${hero.name}"><div class="stageCamperIcon">${hero.icon}</div><span>${hero.name}</span></div>`).join('');
+  box.classList.add('on');box.innerHTML=`
+    <div class="stageDeliveryBanner">
+      <div><div class="name">${title}</div><div class="stageDeliveryText">The party delivers its reports, recovered items, and supplies to the guild.</div></div>
+      <div class="stageDeliveryRewards">${pause.delivered?.text||'Rewards delivered'}</div>
+      <div class="stageDeliveryNext">${pause.finalStage?`<span class="good">The next expedition area is now available.</span>`:pause.offlinePaused?`<button class="btn gold" onclick="continueExpeditionStage(${m.id})">Continue Expedition</button>`:`<span class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</span>`}</div>
+    </div>
+    <div class="stageCampScene"><div class="stageCampParty">${campers}</div><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div></div>`;
 }
 function renderCombat(){
   if(!$('combatModal').classList.contains('on'))return;

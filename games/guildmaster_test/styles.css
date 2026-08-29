@@ -1518,6 +1518,7 @@ body.windowOpen .side{overflow:hidden!important}
 .combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{
   width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;image-rendering:pixelated;
 }
+.combatBattlefield .combatHeroPane .visualIcon img,.combatBattlefield .combatHeroPane .visualIcon .gameAsset{transform:scaleX(-1)}
 .combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:46px!important;line-height:58px!important}
 .combatBattlefield .combatMiniNameRow{height:15px;display:block!important;text-align:center!important}
 .combatBattlefield .combatMiniNameRow .name{
@@ -1535,16 +1536,32 @@ body.windowOpen .side{overflow:hidden!important}
 .combatBattlefield .castTrack{position:absolute!important;top:36px;left:0;right:0;z-index:5}
 .combatBattlefield .combatant[style*="display: none"],.combatBattlefield .combatSlotEmpty{display:none!important}
 .combatStageIntermission{
-  display:none;position:absolute;inset:0;z-index:20;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:28px;
-  background:linear-gradient(rgba(8,7,5,.56),rgba(8,7,5,.76));backdrop-filter:blur(1px);
+  display:none;position:absolute;inset:0;z-index:20;pointer-events:none;
 }
-.combatStageIntermission.on{display:flex}
-.combatStageIntermission .stageDeliveryIcon{font-size:48px;filter:drop-shadow(0 4px 4px #000);margin-bottom:8px}
-.combatStageIntermission .name{font-size:24px;color:#f1d69a;text-shadow:0 2px 4px #000}
-.stageDeliveryText{max-width:520px;margin:7px 0;color:#d6c39a}
-.stageDeliveryRewards{margin:7px 0 12px;padding:8px 12px;border:1px solid #80623b;background:#17130e;color:#e9c878;font-family:var(--ui-pixel);font-size:11px}
+.combatStageIntermission.on{display:block}
+.stageDeliveryBanner{
+  position:absolute;top:8px;left:50%;z-index:4;transform:translateX(-50%);width:min(850px,calc(100% - 28px));
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:10px 14px;text-align:left;
+  border:1px solid #8b6937;background:linear-gradient(90deg,rgba(23,18,12,.97),rgba(42,31,18,.95),rgba(23,18,12,.97));box-shadow:0 4px 16px rgba(0,0,0,.8);pointer-events:auto;
+}
+.combatStageIntermission .name{font-size:18px;color:#f1d69a;text-shadow:0 2px 4px #000}
+.stageDeliveryText{margin-top:2px;color:#d6c39a;font-size:11px}
+.stageDeliveryRewards{padding:7px 10px;border:1px solid #80623b;background:#17130e;color:#e9c878;font-family:var(--ui-pixel);font-size:10px;white-space:nowrap}
+.stageDeliveryNext{white-space:nowrap;text-align:right}
+.stageCampScene{position:absolute;left:50%;bottom:24px;width:min(570px,72%);height:235px;transform:translateX(-50%);display:flex;align-items:flex-end;justify-content:center}
+.stageCampParty{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;gap:15px;padding-bottom:61px}
+.stageCamper{width:68px;text-align:center;color:#fff0c8;font-size:9px;text-shadow:0 2px 3px #000;filter:drop-shadow(0 5px 4px rgba(0,0,0,.85))}
+.stageCamper:nth-child(odd){transform:translateY(-25px)}
+.stageCamper:nth-child(3n){transform:translateY(6px)}
+.stageCamperIcon{height:54px;display:flex;align-items:flex-end;justify-content:center}
+.stageCamperIcon img,.stageCamperIcon .gameAsset{width:52px!important;height:52px!important;object-fit:contain!important;image-rendering:pixelated;transform:rotate(4deg)}
+.stageCamper:nth-child(even) .stageCamperIcon img,.stageCamper:nth-child(even) .stageCamperIcon .gameAsset{transform:scaleX(-1) rotate(4deg)}
+.stageCamper span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stageCampfire{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);font-size:62px;line-height:1;filter:drop-shadow(0 0 12px #f19b38);animation:stageFire 1s ease-in-out infinite alternate}
+.stageCampGlow{position:absolute;left:50%;bottom:15px;width:250px;height:95px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(239,139,48,.28),rgba(239,139,48,0) 70%);mix-blend-mode:screen}
+@keyframes stageFire{to{transform:translateX(-50%) scale(.94) translateY(2px);filter:drop-shadow(0 0 18px #ffc04f)}}
 .combatBattlefield.stageIntermission .combatEnemyPane{visibility:hidden}
-.combatBattlefield.stageIntermission .combatHeroPane{opacity:.32;filter:saturate(.55)}
+.combatBattlefield.stageIntermission .combatHeroPane{visibility:hidden}
 .activeMissionActions,.defeatRestartActions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
 .defeatRestartActions{margin-top:10px}
 
@@ -1559,6 +1576,8 @@ body.windowOpen .side{overflow:hidden!important}
   .combatBattlefield .combatStatusRow{position:absolute;bottom:-1px;left:2px;justify-content:flex-start!important}
   .combatBattlefield .combatEffect{width:16px!important;height:16px!important}
   .combatBattlefield .combatMiniNameRow .name{font-size:9px!important}
+  .stageDeliveryBanner{top:5px;grid-template-columns:1fr;text-align:center;gap:5px;padding:7px 9px}.stageDeliveryNext{text-align:center}.stageDeliveryRewards{white-space:normal}.stageDeliveryText{display:none}
+  .stageCampScene{bottom:12px;width:92%;height:390px}.stageCampParty{align-content:center;align-items:center;flex-wrap:wrap;padding:88px 18px}.stageCamper:nth-child(n){transform:none}.stageCampfire{bottom:12px}
 }
 
 /* Grouped navigation and compact guild-ledger typography. */
