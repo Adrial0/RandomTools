@@ -417,7 +417,7 @@ function runeDetailsHtml(it){
 }
 function itemProfileParts(it){
   const itemLevel=it.rarity==='Unique'&&it.itemLevel?`Item level ${it.itemLevel}`:null;
-  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,itemLevel,weaponHands(it)===2?'Two-handed · 2× weapon damage and item effects':'One-handed',`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`].filter(Boolean);
+  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,itemLevel,weaponHands(it)===2?'Two-handed':'One-handed',`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`].filter(Boolean);
   if(itemLevel)return[itemLevel,it.slot==='Armor'?`${armorClassForItem(it)} armor`:it.slot==='Accessories'||it.slot==='OffHand'?(it.accessoryType||slotLabel(it.slot)):(it.slot||'Equipment')];
   if(it.slot==='Armor')return[`${armorClassForItem(it)} armor`];
   if(it.slot==='Ring')return['Ring'];

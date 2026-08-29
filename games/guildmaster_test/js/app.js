@@ -32,7 +32,7 @@ function showNavGroup(group){
     b.classList.toggle('on',on);
     b.setAttribute('aria-selected',on?'true':'false');
   });
-  document.querySelectorAll('.navSubgroup').forEach(p=>p.classList.toggle('on',p.dataset.navPanel===group));
+  document.querySelectorAll('.navSubgroup').forEach(p=>p.classList.add('on'));
 }
 function activatePage(p){
   const access=featureAccess(p);

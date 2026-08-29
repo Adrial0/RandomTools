@@ -661,6 +661,22 @@ function sortedRosterMembers(){
     return rosterSortDirection==='asc'?cmp:-cmp;
   });
 }
+function equipmentSlotIcon(it,slot){
+  if(!it)return itemIcons[slot]||({MainHand:'⚔️',OffHand:'🛡️',Armor:'🛡️',Accessories:'💎'}[slot]||'□');
+  return it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons.Weapon||'⚔️'):(itemIcons[it.slot]||itemIcons[slot]||'🎒');
+}
+function compactEquipmentSlots(h,context='roster'){
+  const slots=[...new Set(C[h.class]?.slots||['MainHand','Armor','Accessories'])];
+  return `<div class="compactEquipmentSlots" aria-label="${h.name} equipment">${slots.map(slot=>{
+    const it=s.inventory.find(x=>x.id===h.equip?.[slot]);
+    const occupied=slot==='OffHand'&&it&&h.equip?.MainHand===h.equip?.OffHand;
+    const label=it?(occupied?'Occupied by '+it.name:it.name):'Empty '+slotLabel(slot);
+    return `<button class="compactEquipmentSlot ${it?'filled':'empty'} rarityBorder-${String(it?.rarity||'common').toLowerCase()}" title="${label}" aria-label="${label}" onclick="event.stopPropagation();equipModal(${h.id},'${slot}')">${equipmentSlotIcon(it,slot)}</button>`;
+  }).join('')}</div>`;
+}
+function inspectRosterHero(hid){
+  closeModal();s.selected=hid;save();activatePage('roster');renderRoster();
+}
 function renderRoster(){
   const members=sortedRosterMembers();
   if(!s.selected&&members[0])s.selected=members[0].id;
@@ -671,6 +687,7 @@ function renderRoster(){
       <div class="heroTop">
         <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
         <div style="min-width:0"><div class="name">${h.name}</div><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level}</div></div>
+        ${compactEquipmentSlots(h)}
       </div>
       <div class="power"><span>${h.busy?(h.professionBusy?'Working · '+PROFESSION_DEFS[h.professionBusy].name:'Away'):'Available'}</span><strong>${z.power}</strong></div>
     </div>`;

@@ -12,7 +12,8 @@ assert.match(combat,/if\(m\.stageIntermission\)\{advanceExpeditionIntermission\(
 
 assert.match(combat,/\(h\.twoHanded\?2:1\)/,'two-handed attacks deal double damage');
 assert.match(core,/gearMult=weaponHands\(it\)===2\?2:1/,'two-handed item stats and special effects are doubled');
-assert.match(progression,/Two-handed · 2× weapon damage and item effects/,'the two-handed rule is visible on item profiles');
+assert.match(progression,/weaponHands\(it\)===2\?'Two-handed':'One-handed'/,'weapon profiles identify handedness without redundant balance explanations');
+assert.doesNotMatch(progression,/2× weapon damage and item effects/,'item profiles do not explain the visible two-handed stat boost');
 
 assert.match(core,/guildBonuses:\{maxHp:0,gatherSpeed:0,cooldownReduction:0\}/,'new saves track permanent first-clear guild bonuses');
 assert.match(combat,/function awardAreaGuildBonus/,'area clears award permanent guild bonuses');

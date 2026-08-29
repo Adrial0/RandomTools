@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
 <title>Guildmaster | My Random Tools</title>
-<link rel="stylesheet" href="styles.css?build=20260829c">
+<link rel="stylesheet" href="styles.css?build=20260830a">
 </head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -11,35 +11,35 @@
 <div class="res"><span>Guild Lv. <strong id="lv"></strong></span><span>Gold <strong id="gold"></strong></span><span>Reputation <strong id="rep"></strong></span></div></div>
 <div class="shell">
 <aside class="side" aria-label="Game navigation">
-<div class="navPrimary" role="tablist" aria-label="Game sections">
-  <button class="navGroup on" data-nav-group="guild" role="tab" aria-selected="true">Guild</button>
-  <button class="navGroup" data-nav-group="missions" role="tab" aria-selected="false">Missions</button>
-  <button class="navGroup" data-nav-group="workshop" role="tab" aria-selected="false">Workshop</button>
-  <button class="navGroup" data-nav-group="arena" role="tab" aria-selected="false">Arena <small>Beta</small></button>
-</div>
-<div class="navSubgroups">
-  <div class="navSubgroup on" data-nav-panel="guild">
+<div class="navDirectory" aria-label="Game sections">
+  <div class="navColumn navWorkshopColumn">
+    <div class="navSectionTitle">Workshop</div>
+    <div class="navSubgroup on" data-nav-panel="workshop">
+      <button class="nav" data-p="inventory">Inventory</button>
+      <button class="nav" data-p="crafting">Professions</button>
+      <button class="nav" data-p="market">Market</button>
+    </div>
+  </div>
+  <div class="navColumn navGuildColumn">
+    <div class="navSectionTitle">Guild</div>
+    <div class="navSubgroup on" data-nav-panel="guild">
     <button class="nav on" data-p="hall">Overview</button>
     <button class="nav" data-p="roster">Members</button>
     <button class="nav" data-p="questboard">Contracts</button>
     <button class="nav" data-p="upgrades">Upgrades</button>
-  </div>
-  <div class="navSubgroup" data-nav-panel="missions">
-    <button class="nav" data-p="harvesting">Gathering</button>
-    <button class="nav" data-p="quests">Expeditions</button>
-    <button class="nav" data-p="dungeons">Dungeons</button>
-    <button class="nav" data-p="raids">Raids</button>
-  </div>
-  <div class="navSubgroup" data-nav-panel="workshop">
-    <button class="nav" data-p="inventory">Inventory</button>
-    <button class="nav" data-p="crafting">Professions</button>
-    <button class="nav" data-p="market">Market</button>
-  </div>
-  <div class="navSubgroup" data-nav-panel="arena">
-    <button class="nav" data-p="arena">Arena <small>Online</small></button>
+    </div>
+    <div class="navMissionBlock">
+      <div class="navSectionTitle">Missions</div>
+      <div class="navSubgroup on" data-nav-panel="missions">
+        <button class="nav" data-p="harvesting">Gathering</button>
+        <button class="nav" data-p="quests">Expeditions</button>
+        <button class="nav" data-p="dungeons">Dungeons</button>
+        <button class="nav" data-p="raids">Raids</button>
+      </div>
+    </div>
   </div>
 </div>
-<div class="navUtility"><button class="nav navSettings" data-p="settings">Settings</button></div>
+<div class="navUtility"><button class="nav navArena" data-p="arena">Arena <small>Online Beta</small></button><button class="nav navSettings" data-p="settings">Settings</button></div>
 </aside>
 <main>
 <section class="page on" id="hall">
@@ -303,12 +303,12 @@
 
 <script src="js/core.js?build=20260829d"></script>
 <script src="js/combat.js?build=20260829d"></script>
-<script src="js/progression.js?build=20260829d"></script>
-<script src="js/ui.js?build=20260829d"></script>
+<script src="js/progression.js?build=20260830a"></script>
+<script src="js/ui.js?build=20260830a"></script>
 <script src="js/activities.js?build=20260829c"></script>
-<script src="js/economy.js?build=20260829c"></script>
+<script src="js/economy.js?build=20260830a"></script>
 <script src="js/professions.js?build=20260829d"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/arena-client.js?build=20260827j"></script>
-<script src="js/app.js?build=20260829c"></script>
+<script src="js/app.js?build=20260830a"></script>
 </body></html>

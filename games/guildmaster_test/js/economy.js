@@ -262,9 +262,9 @@ function openInventoryEquip(iid){
   <h3 style="margin-top:14px">Equip on</h3>
   <div class="g2">${candidates.map(h=>{
     const targets=equipmentTargetsForItem(h,it);
-    return `<div class="card equipActionCard">
-      <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div></div>
-      ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b></div>${equipComparison(it,current)}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
+    return `<div class="card equipActionCard" onclick="inspectRosterHero(${h.id})">
+      <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div>${compactEquipmentSlots(h,'equip')}</div>
+      ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b></div>${equipComparison(it,current)}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="event.stopPropagation();equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
     </div>`;
   }).join('')}</div>`);
 }
