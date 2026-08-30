@@ -6,8 +6,9 @@ function makeBoss(m){
   const raid=m.type==='raid';
   const level=m.level||1,scale=1+level*.12,hpScale=1.12+Math.max(0,level-1)*.20;
 
-  const maxHp=Math.round((raid?720:360)*hpScale);
-  const atk=Math.round((raid?18:13)*scale);
+  const gapMult=underlevelEnemyMultiplier(m,level);
+  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult);
+  const atk=Math.round((raid?18:13)*scale*1.10*gapMult);
   const def=Math.round((raid?10:7)*scale);
   const mdef=Math.round((raid?11:8)*scale);
 
@@ -116,6 +117,29 @@ function bossReward(m){
   if(typeof renderOffers==='function')renderOffers('quest');
 }
 let currentMissionForEnemy=null;
+function averageMissionPartyLevel(m){
+  const levels=(m?.party||[]).map(id=>s.members.find(h=>h.id===id)?.level).filter(Number.isFinite);
+  return levels.length?levels.reduce((sum,level)=>sum+level,0)/levels.length:(m?.level||1);
+}
+function underlevelEnemyMultiplier(m,encounterLevel){
+  if(!m||m.type==='arena')return 1;
+  const gap=Math.max(0,(encounterLevel||m.level||1)-averageMissionPartyLevel(m));
+  return 1+Math.min(.40,gap*.03);
+}
+function stageEnemyMultiplier(m){
+  if(!isStagedExpedition(m))return 1;
+  return 1+Math.min(4,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE))*.07;
+}
+function encounterEnemyCount(m,areaFinal=false){
+  if(areaFinal)return 1;
+  if(m.type==='raid')return 3;
+  if(m.type==='dungeon')return rnd(2,3);
+  const tier=Math.max(1,m.tier||1),partySize=Math.max(1,m.party?.length||1);
+  if(tier===1)return rnd(1,3);
+  if(tier===2)return rnd(2,4);
+  const minimum=Math.min(5,Math.max(3,partySize-1)),maximum=Math.min(5,Math.max(minimum,partySize));
+  return rnd(minimum,maximum);
+}
 function makeEnemy(type,level,index,forcedName=null){
   const names=forcedName?[]:(currentMissionForEnemy?.enemyPool&&currentMissionForEnemy.enemyPool.length)?currentMissionForEnemy.enemyPool:(enemyPools[type]||enemyPools.quest);
   const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
@@ -123,9 +147,9 @@ function makeEnemy(type,level,index,forcedName=null){
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
   // Preserve the original level-1 baseline, then let durability grow faster
   // than unequipped hero damage. Attack and defenses retain gentler scaling.
-  const hpScale=1.12+Math.max(0,level-1)*.20;
-  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*(ar.hpMult||1));
-  const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1));
+  const hpScale=1.12+Math.max(0,level-1)*.20,difficulty=underlevelEnemyMultiplier(currentMissionForEnemy,level)*stageEnemyMultiplier(currentMissionForEnemy);
+  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*(ar.hpMult||1)*difficulty);
+  const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1)*difficulty);
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
   const interval=Math.round(ar.attackInterval||2400);
@@ -224,7 +248,7 @@ function applyProvisionRecovery(m){
 function makeBattle(m){
   ensurePartyState(m);
   const areaFinal=isStagedExpedition(m)&&expeditionEncounterCount(m)===EXPEDITION_MAX_ENCOUNTERS-1;
-  const count=areaFinal?1:m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3),encounterLevel=missionEncounterLevel(m);currentMissionForEnemy=m;
+  const count=encounterEnemyCount(m,areaFinal),encounterLevel=missionEncounterLevel(m);currentMissionForEnemy=m;
   const heroes=m.party.map(hid=>{
     const h=s.members.find(x=>x.id===hid),z=hs(h),ps=m.partyState[hid];
     const mainId=h.equip.MainHand||h.equip.Weapon,wep=s.inventory.find(x=>x.id===mainId);
@@ -285,7 +309,7 @@ function makeBattle(m){
   };
   if(areaFinal&&battle.enemies[0]){
     const champion=battle.enemies[0],originalName=champion.name;
-    champion.templateName=originalName;champion.name=`${m.name} Champion`;champion.boss=true;champion.maxHp=Math.round(champion.maxHp*2.8);champion.hp=champion.maxHp;champion.atk=Math.round(champion.atk*1.35);champion.def=Math.round(champion.def*1.2);champion.mdef=Math.round(champion.mdef*1.2);battle.kind='areaBoss';battle.areaBoss=true;battle.log=[`Final encounter: the ${m.name} Champion blocks the road home.`];
+    champion.templateName=originalName;champion.name=`${m.name} Champion`;champion.boss=true;champion.maxHp=Math.round(champion.maxHp*3.2);champion.hp=champion.maxHp;champion.atk=Math.round(champion.atk*1.45);champion.def=Math.round(champion.def*1.25);champion.mdef=Math.round(champion.mdef*1.25);battle.kind='areaBoss';battle.areaBoss=true;battle.log=[`Final encounter: the ${m.name} Champion blocks the road home.`];
   }
   ensureCombatReport(m);heroes.forEach(h=>heroReport(m,h.id));
   // A changed party/save can leave a cursor beyond the available actor list.
