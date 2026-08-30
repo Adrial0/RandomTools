@@ -29,6 +29,9 @@ assert.match(activities,/openHarvestPicker\(areaId\)[\s\S]*!harvestAreaUnlocked\
 assert.match(activities,/confirmHarvestParty\(areaId\)[\s\S]*!harvestAreaUnlocked\(a\)/,'locked gathering areas cannot be started indirectly');
 assert.match(activities,/processHarvesting\(\)[\s\S]*!harvestAreaUnlocked\(area\)[\s\S]*progressLocked=true/,'legacy gathering jobs pause if their expedition tier is locked');
 assert.match(combat,/s\.expeditionGates\.push\(m\.gateTier\)/,'boss victories must persist tier unlocks');
+assert.match(core,/function expeditionPartySize\(\)\{[\s\S]*return 3\+clearedTiers\.size/,'expedition parties start at three and gain slots from the first five tier-boss clears');
+assert.doesNotMatch(core,/\['party','Expedition Logistics'/,'Expedition Logistics is no longer a purchasable guild upgrade');
+assert.match(combat,/Expedition party capacity increased to/,'tier boss victory presentation announces party-capacity unlocks');
 assert.match(combat,/if\(m\.bossGate\)return;/,'offline progress must not bypass story bosses');
 assert.match(combat,/mission\.battle=mission\.bossGate\?makeBossBattle\(mission\):makeBattle\(mission\)/,'gate expeditions must begin directly in the boss encounter');
 

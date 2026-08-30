@@ -322,7 +322,6 @@ const rar=['Common','Uncommon','Rare','Epic','Legendary','Mythic','Unique'],rm={
 const recipes=[];
 const upgrades=[
 ['quarters','Guild Quarters','Adds one permanent guild member slot per level. Starts at 6 slots.',350,26],
-['party','Expedition Logistics','Adds one expedition party slot per level.',500,6],
 ['recruit','Recruitment Hall','Adds one applicant to each recruitment batch.',260,4],
 ['smith','Blacksmith','Forge facilities. +10% Smithing XP gained per level.',320,5],
 ['craftSpeed','Workshop Tools','Reduces crafting time by 12% per level.',280,6],
@@ -805,7 +804,10 @@ function grantGuildReputation(amount){
   }
   return amount;
 }
-function expeditionPartySize(){return 2+(s.up.party||0)}
+function expeditionPartySize(){
+  const clearedTiers=new Set((s.expeditionGates||[]).map(Number).filter(tier=>tier>=1&&tier<=5));
+  return 3+clearedTiers.size;
+}
 function partySizeFor(type){return type==='raid'?20:expeditionPartySize()}
 function applicantBatchSize(){return 2+(s.up.recruit||0)}
 function fillApplicants(){

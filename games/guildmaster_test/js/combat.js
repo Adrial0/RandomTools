@@ -72,7 +72,8 @@ function awardAreaGuildBonus(m,major=false){
   return reward;
 }
 function victoryPresentation(m,{major=false,guildBonus=null,item=null,unique=null}={}){
-  const unlockText=major?(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions and gathering progression unlocked.`:'The final expedition chapter is complete.'):'The next expedition area is now available.';
+  const partyUnlock=major&&m.gateTier<=5?` Expedition party capacity increased to ${Math.min(8,3+m.gateTier)}.`:'';
+  const unlockText=(major?(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions and gathering progression unlocked.`:'The final expedition chapter is complete.'):'The next expedition area is now available.')+partyUnlock;
   const title=major?`Tier ${tierLabel(m.gateTier||m.tier||1)} Conquered`:`${m.name} Cleared`;
   const itemHtml=item?`<div class="victoryRewardItem ${rarityClass(item.rarity)}"><b>${item.rarity} ${item.name}</b><span>${item.uniquePassive||'Guaranteed first-clear equipment reward'}</span></div>`:'';
   m.victoryPresentation={title,major,unlockText,guildBonus,itemName:item?.name||null,unique:!!unique};

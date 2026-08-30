@@ -317,7 +317,7 @@ function upgradeResourceProgressHtml(cost){
 }
 
 function upgradeCost(u,l){
-  const cost=u[3]*Math.pow(u[0]==='quarters'?1.42:1.95,l);
+  const cost=u[3]*Math.pow(u[0]==='quarters'?1.50:2.15,l);
   return Math.max(1,Math.round(l===0?cost*.5:cost));
 }
 const UPGRADE_STORAGE_CAPS=[200,1000,3000,8000,16000,26000,40000,60000,90000,130000,200000];
@@ -447,28 +447,28 @@ function itemProfileParts(it){
   return[it.slot||'Equipment'];
 }
 function itemStatParts(it){
-  const parts=[];
-  if(it.stat&&it.value!=null)parts.push(it.stat==='regen'?`+${it.value} HP / round`:it.stat==='manaRegen'?`+${it.value} Mana Regen`:it.stat==='lifesteal'?`${it.value}% lifesteal`:`+${it.value} ${statName(it.stat)}`);
-  if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${it.secondaryValue} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${it.secondaryValue}% Attack Speed`:`+${it.secondaryValue} ${statName(it.secondaryStat)}`);
-  if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${it.tertiaryValue} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${it.tertiaryValue}% Attack Speed`:`+${it.tertiaryValue} ${statName(it.tertiaryStat)}`);
+  const parts=[],gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1,scaled=v=>(Number(v)||0)*gearMult;
+  if(it.stat&&it.value!=null)parts.push(it.stat==='regen'?`+${scaled(it.value)} HP / round`:it.stat==='manaRegen'?`+${scaled(it.value)} Mana Regen`:it.stat==='lifesteal'?`${scaled(it.value)}% lifesteal`:`+${scaled(it.value)} ${statName(it.stat)}`);
+  if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${scaled(it.secondaryValue)} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${scaled(it.secondaryValue)}% Attack Speed`:`+${scaled(it.secondaryValue)} ${statName(it.secondaryStat)}`);
+  if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${scaled(it.tertiaryValue)} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${scaled(it.tertiaryValue)}% Attack Speed`:`+${scaled(it.tertiaryValue)} ${statName(it.tertiaryStat)}`);
   Object.entries(it.extraStats||{}).forEach(([k,v])=>{
     const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
     const wholePercent=['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k);
-    parts.push(`+${decimalPercent?Math.round(v*100):v}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+    parts.push(`+${decimalPercent?Math.round(scaled(v)*100):scaled(v)}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
   });
-  const block=itemBlockValue(it);if(block)parts.push(`+${block} Block`);
-  if(it.damageBonus)parts.push(`+${Math.round(it.damageBonus*100)}% damage`);
-  if(it.healBonus)parts.push(`+${Math.round(it.healBonus*100)}% healing`);
-  if(it.itemCritBonus)parts.push(`+${Math.round(it.itemCritBonus*100)}% crit`);
-  if(it.itemThreatBonus)parts.push(`+${it.itemThreatBonus.toFixed(2)} Threat`);
-  if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(it.itemPhysicalDodgeBonus*100)}% physical dodge`);
-  if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(it.itemMagicalDodgeBonus*100)}% magic dodge`);
+  const block=scaled(itemBlockValue(it));if(block)parts.push(`+${block} Block`);
+  if(it.damageBonus)parts.push(`+${Math.round(scaled(it.damageBonus)*100)}% damage`);
+  if(it.healBonus)parts.push(`+${Math.round(scaled(it.healBonus)*100)}% healing`);
+  if(it.itemCritBonus)parts.push(`+${Math.round(scaled(it.itemCritBonus)*100)}% crit`);
+  if(it.itemThreatBonus)parts.push(`+${scaled(it.itemThreatBonus).toFixed(2)} Threat`);
+  if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(scaled(it.itemPhysicalDodgeBonus)*100)}% physical dodge`);
+  if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(scaled(it.itemMagicalDodgeBonus)*100)}% magic dodge`);
   if(it.mythicEffect)parts.push(`Mythic: ${it.mythicEffect}`);
   if(it.uniquePassive)parts.push(`Unique: ${it.uniquePassive}`);
   if(it.slot==='Weapon'){
-    parts.unshift(`Attack ${it.weaponPower||0}`);
+    parts.unshift(`Attack ${scaled(it.weaponPower||0)}`);
     parts.unshift(`Attack Speed ${weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)}s`);
-    weaponSpecials(it).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
+    weaponSpecials(it).forEach(([k,v])=>parts.push(`+${Math.round(scaled(v)*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
   }
   return parts;
 }

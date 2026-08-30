@@ -17,7 +17,7 @@ assert.equal(JSON.stringify(vm.runInContext("upgradeResourceCost('smith',0)",con
 assert.ok(Object.hasOwn(vm.runInContext("upgradeResourceCost('board',0)",context),'PlantFiber'),'first textile-based upgrade uses raw plant fiber rather than processed cloth');
 assert.ok(Object.keys(vm.runInContext("upgradeResourceCost('smith',1)",context)).some(k=>k.endsWith('Bar')),'later upgrades use processed metal');
 assert.equal(vm.runInContext("upgradeCost(['test','','',400,5],0)",context),200,'initial gold cost is halved');
-assert.equal(vm.runInContext("upgradeCost(['test','','',400,5],3)",context),Math.round(400*Math.pow(1.95,3)),'upgrade gold costs scale sharply after the opening purchase');
+assert.equal(vm.runInContext("upgradeCost(['test','','',400,5],3)",context),Math.round(400*Math.pow(2.15,3)),'upgrade gold costs scale sharply after the opening purchase');
 assert.equal(vm.runInContext("upgradeEffectValue('gatherParty',0)",context),'2 workers per gathering job','upgrade cards show the current effect');
 assert.equal(vm.runInContext("upgradeEffectValue('gatherParty',1)",context),'3 workers per gathering job','upgrade cards show the next effect');
 

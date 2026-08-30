@@ -12,6 +12,7 @@ assert.match(combat,/if\(m\.stageIntermission\)\{advanceExpeditionIntermission\(
 
 assert.match(combat,/\(h\.twoHanded\?2:1\)/,'two-handed attacks deal double damage');
 assert.match(core,/gearMult=weaponHands\(it\)===2\?2:1/,'two-handed item stats and special effects are doubled');
+assert.match(progression,/gearMult=it\.slot==='Weapon'&&weaponHands\(it\)===2\?2:1/,'two-handed recipe and item panels display their effective doubled stats');
 assert.match(progression,/weaponHands\(it\)===2\?'Two-handed':'One-handed'/,'weapon profiles identify handedness without redundant balance explanations');
 assert.doesNotMatch(progression,/2× weapon damage and item effects/,'item profiles do not explain the visible two-handed stat boost');
 
