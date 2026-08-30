@@ -1526,7 +1526,8 @@ body.windowOpen .side{overflow:hidden!important}
 .combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{
   width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;image-rendering:pixelated;
 }
-.combatBattlefield .combatHeroPane .visualIcon img,.combatBattlefield .combatHeroPane .visualIcon .gameAsset{transform:scaleX(-1)!important}
+.combatBattlefield .combatHeroPane .visualIcon>.iconFallback.gameAsset{transform:scaleX(-1)!important}
+.combatBattlefield .combatHeroPane .visualIcon>.iconFallback.gameAsset>img.gameAsset{transform:none!important}
 .combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:46px!important;line-height:58px!important}
 .combatBattlefield .combatMiniNameRow{height:15px;display:block!important;text-align:center!important}
 .combatBattlefield .combatMiniNameRow .name{
