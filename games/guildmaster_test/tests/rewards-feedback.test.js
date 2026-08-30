@@ -18,6 +18,7 @@ assert.doesNotMatch(progression,/2× weapon damage and item effects/,'item profi
 
 assert.match(core,/guildBonuses:\{maxHp:0,gatherSpeed:0,cooldownReduction:0\}/,'new saves track permanent first-clear guild bonuses');
 assert.match(combat,/function awardAreaGuildBonus/,'area clears award permanent guild bonuses');
+assert.match(combat,/amount=major\?\.02:\.01/,'normal area clears grant 1% bonuses and tier bosses grant 2% bonuses');
 assert.match(combat,/function victoryPresentation/,'area and tier clears have a dedicated victory presentation');
 assert.match(core,/guildHp=1\+\(s\?\.guildBonuses\?\.maxHp/,'maximum-HP bonuses affect character stats');
 assert.match(activities,/guildBonuses\?\.gatherSpeed/,'gathering-speed bonuses affect gathering cycles');

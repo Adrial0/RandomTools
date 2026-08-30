@@ -66,7 +66,7 @@ function awardAreaGuildBonus(m,major=false){
   s.areaRewards=Array.isArray(s.areaRewards)?s.areaRewards:[];
   if(s.areaRewards.some(x=>x.key===key))return null;
   s.guildBonuses=Object.assign({maxHp:0,gatherSpeed:0,cooldownReduction:0},s.guildBonuses||{});
-  const kinds=[['maxHp','Maximum HP'],['gatherSpeed','Gathering speed'],['cooldownReduction','Ability cooldown recovery']],kind=kinds[s.areaRewards.length%kinds.length],amount=major?.005:.0025;
+  const kinds=[['maxHp','Maximum HP'],['gatherSpeed','Gathering speed'],['cooldownReduction','Ability cooldown recovery']],kind=kinds[s.areaRewards.length%kinds.length],amount=major?.02:.01;
   s.guildBonuses[kind[0]]=Math.min(.20,(s.guildBonuses[kind[0]]||0)+amount);
   const reward={key,type:kind[0],label:kind[1],amount,source:m.name};s.areaRewards.push(reward);
   return reward;
