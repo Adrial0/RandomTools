@@ -7,7 +7,7 @@ function setAreaMode(mode,btn){
     document.querySelector('[data-p="quests"]')?.click();
   }
 }
-const SKILL_NAMES={woodcutting:'Woodcutting',mining:'Mining',fishing:'Fishing',herbalism:'Herbalism',hunting:'Hunting'};
+const SKILL_NAMES={woodcutting:'Woodcutting',mining:'Mining',fishing:'Fishing',harvesting:'Harvesting',hunting:'Hunting'};
 const QUEST_BOARD_REFRESH_MS=30*60*1000;
 const QUEST_DIFFICULTIES=[
   {id:'easy',label:'Routine',mult:.75,reward:.75},
@@ -16,12 +16,12 @@ const QUEST_DIFFICULTIES=[
   {id:'elite',label:'Elite',mult:1.7,reward:2.25}
 ];
 function questDifficulty(){const r=Math.random();return r<.18?QUEST_DIFFICULTIES[3]:r<.46?QUEST_DIFFICULTIES[2]:r<.82?QUEST_DIFFICULTIES[1]:QUEST_DIFFICULTIES[0]}
-function questGuildTier(){return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/5),1,7)}
+function questGuildTier(){return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/10),1,10)}
 function questWeaponReward(diff){
   const chance=diff.id==='elite'?.72:diff.id==='hard'?.38:diff.id==='normal'?.14:.05;
   if(Math.random()>=chance)return null;
   const tier=questGuildTier();
-  let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon'&&x.r[4]>=Math.max(1,tier-1)&&x.r[4]<=Math.min(7,tier+1));
+  let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon'&&x.r[4]>=Math.max(1,tier-1)&&x.r[4]<=Math.min(10,tier+1));
   if(!pool.length)pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon');
   const chosen=pick(pool);if(!chosen)return null;
   const rarity=(diff.id==='elite'||(diff.id==='hard'&&Math.random()<.55))?'Rare':'Uncommon';
@@ -34,7 +34,7 @@ function questRewardFor(diff,type){
   return{gold:Math.round(base*diff.reward*typeMult),item:questWeaponReward(rewardDiff)};
 }
 function makeGatherQuest(diff){
-  let pool=HARVEST_AREAS.filter(a=>a.req<=Math.max(3,(s.level||1)+3));if(!pool.length)pool=HARVEST_AREAS.slice(0,5);
+  let pool=HARVEST_AREAS.filter(a=>harvestAreaUnlocked(a)&&a.req<=Math.max(3,(s.level||1)+3));if(!pool.length)pool=HARVEST_AREAS.filter(harvestAreaUnlocked).slice(0,5);
   const a=pick(pool),resource=a.resources[0][0],target=Math.max(10,Math.round((22+(s.level||1)*3)*diff.mult/5)*5);
   return{kind:'gather',key:resource,title:`Gather ${RESOURCE_NAMES[resource]||resource}`,desc:`Gather ${target} ${RESOURCE_NAMES[resource]||resource}.`,target,progress:0,source:a.name};
 }
@@ -133,7 +133,7 @@ function renderProceduralQuests(){
 }
 
 function resourceCapacity(){
-  const caps=[100,500,1500,4000,8000,13000,20000,30000,45000,65000,100000];
+  const caps=[200,1000,3000,8000,16000,26000,40000,60000,90000,130000,200000];
   return caps[Math.min(s.up.storage||0,caps.length-1)];
 }
 function resourceCount(){return Object.values(s.materials||{}).reduce((a,v)=>a+(Number(v)||0),0)}
@@ -144,7 +144,14 @@ function skillXpNeeded(level){return 20+(level-1)*15}
 function gatheringSkill(h,key){if(!h.skills)h.skills={};if(!h.skills[key])h.skills[key]={level:1,xp:0};return h.skills[key]}
 function grantSkillXp(h,key,amount=1){const sk=gatheringSkill(h,key);sk.xp+=amount*raceGatheringXpMult(h,key);let need=skillXpNeeded(sk.level);while(sk.xp>=need){sk.xp-=need;sk.level++;need=skillXpNeeded(sk.level)}}
 function gatheringBonusChance(level){return Math.min(.35,Math.max(0,level-1)*.015)}
+function gatheringCycleSeconds(area){return (area?.cycle||30)/Math.max(1,1+(s?.guildBonuses?.gatherSpeed||0))}
 function addStoredResource(k,amount){const add=Math.max(0,Math.min(amount,resourceSpace()));if(add){s.materials[k]=(s.materials[k]||0)+add;markResourceFound(k)}return add}
+function harvestAreaTier(area){return Math.max(1,Math.min(...(area?.resources||[]).map(x=>resourceTier(x[0]))))}
+function harvestAreaUnlocked(area){
+  const tier=harvestAreaTier(area);
+  return tier<=1||(s.expeditionGates||[]).includes(tier-1);
+}
+function harvestAreaLockText(area){return `Clear the Tier ${tierLabel(harvestAreaTier(area)-1)} expedition boss to unlock this gathering area.`}
 
 function weightedResource(list){
   const total=list.reduce((a,x)=>a+x[1],0);
@@ -154,6 +161,7 @@ function weightedResource(list){
 }
 function openHarvestPicker(areaId){
   const a=HARVEST_AREAS.find(x=>x.id===areaId);if(!a)return;
+  if(!harvestAreaUnlocked(a))return notify(harvestAreaLockText(a));
   if(harvestLocationOccupied(areaId))return notify('A gathering party is already working at '+a.name+'.');
   const available=s.members.filter(x=>!x.busy&&gatheringSkill(x,a.skill).level>=a.req);
   if(!available.length)return notify('No available guild members meet '+SKILL_NAMES[a.skill]+' Lv. '+a.req+'.');
@@ -171,6 +179,7 @@ function confirmHarvestParty(areaId){
   const ids=[...document.querySelectorAll('#harvestPartyPicker .partyMember.on')].map(x=>+x.dataset.h);
   if(!ids.length)return notify('Choose at least one guild member.');
   const a=HARVEST_AREAS.find(x=>x.id===areaId);if(!a)return;
+  if(!harvestAreaUnlocked(a))return notify(harvestAreaLockText(a));
   if(harvestLocationOccupied(areaId))return notify('A gathering party is already working at '+a.name+'.');
   const crew=ids.map(id=>s.members.find(x=>x.id===id)).filter(Boolean);
   if(crew.some(x=>x.busy))return notify('One of those guild members is already busy.');
@@ -187,6 +196,12 @@ function processHarvesting(){
   s.harvestJobs.forEach(j=>{
     if(j.stopped)return;
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!area)return;
+    if(!harvestAreaUnlocked(area)){
+      if(j.progressLocked!==true){j.progressLocked=true;changed=true}
+      j.lastTick=now;
+      return;
+    }
+    if(j.progressLocked){j.progressLocked=false;changed=true}
     let stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
 
     if(stashCount>=cap){
@@ -196,7 +211,7 @@ function processHarvesting(){
     }
     if(j.capped!==false){j.capped=false;changed=true}
 
-    const elapsed=now-(j.lastTick||j.start||now),cycles=Math.floor(elapsed/(area.cycle*1000));
+    const cycleSeconds=gatheringCycleSeconds(area),elapsed=now-(j.lastTick||j.start||now),cycles=Math.floor(elapsed/(cycleSeconds*1000));
     if(cycles<=0)return;
     const crew=j.party.map(id=>s.members.find(x=>x.id===id)).filter(Boolean);
 
@@ -213,7 +228,7 @@ function processHarvesting(){
     }
 
     if(stashCount>=cap){j.capped=true;j.lastTick=now}
-    else{j.capped=false;j.lastTick+=(cycles*area.cycle*1000)}
+    else{j.capped=false;j.lastTick+=(cycles*cycleSeconds*1000)}
     changed=true;
   });
   if(changed)save();
@@ -242,14 +257,20 @@ function setHarvestFilter(filter,btn){
 }
 function renderHarvestAreas(){
   if(!$('harvestList'))return;
-  const areas=HARVEST_AREAS.filter(a=>harvestFilter==='all'||a.skill===harvestFilter);
+  const areas=HARVEST_AREAS
+    .filter(a=>harvestFilter==='all'||a.skill===harvestFilter)
+    .slice()
+    .sort((a,b)=>{
+      const aTier=Math.min(...(a.resources||[]).map(x=>resourceTier(x[0]))),bTier=Math.min(...(b.resources||[]).map(x=>resourceTier(x[0])));
+      return aTier-bTier||(a.req||1)-(b.req||1)||a.name.localeCompare(b.name);
+    });
   $('harvestList').innerHTML=areas.map(a=>{
     const qualified=s.members.filter(h=>!h.busy&&gatheringSkill(h,a.skill).level>=a.req).length;
-    const occupied=harvestLocationOccupied(a.id);
-    return `<div class="card quest actionCard">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
+    const occupied=harvestLocationOccupied(a.id),unlocked=harvestAreaUnlocked(a),tier=harvestAreaTier(a);
+    return `<div class="card quest actionCard ${unlocked?'':'areaLocked'}">${sceneBanner('harvest',a.id)}<div class="name">${a.name}</div>
       <div class="muted">${a.kind} · ${SKILL_NAMES[a.skill]} Lv. ${a.req} required</div><div class="muted" style="margin-top:5px">${a.desc}</div>
-      <div class="chips">${a.resources.map(x=>`<span class="chip">T${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${a.cycle}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span></div>
-      <button class="btn ${qualified&&!occupied?'gold':''} actionButton" ${qualified&&!occupied?'':'disabled'} onclick="openHarvestPicker('${a.id}')">${occupied?'Party Gathering':qualified?'Start Harvesting':'No Eligible Members'}</button></div>`;
+      <div class="chips">${a.resources.map(x=>`<span class="chip">${tierLabel(resourceTier(x[0]))} · ${RESOURCE_NAMES[x[0]]||x[0]}</span>`).join('')}<span class="chip">${Math.ceil(gatheringCycleSeconds(a))}s cycle</span><span class="chip">${(a.xp||1)*2} skill XP / cycle</span><span class="chip">${qualified} eligible</span>${unlocked?'':`<span class="chip dangerText">Requires Tier ${tierLabel(tier-1)} expedition clear</span>`}</div>
+      <button class="btn ${unlocked&&qualified&&!occupied?'gold':''} actionButton" ${unlocked&&qualified&&!occupied?'':'disabled'} onclick="openHarvestPicker('${a.id}')">${!unlocked?'Expedition Locked':occupied?'Party Gathering':qualified?'Start Harvesting':'No Eligible Members'}</button></div>`;
   }).join('')||'<div class="empty">No gathering areas match this filter.</div>';
 }
 function openHarvestJobDetails(jobId){
@@ -276,12 +297,12 @@ function renderHarvestActive(){
   $('harvestActive').innerHTML=s.harvestJobs.length?s.harvestJobs.map(j=>{
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId),stashCount=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
     const names=j.party.map(id=>s.members.find(x=>x.id===id)?.name.split(' ')[0]).filter(Boolean).join(' · ');
-    const capped=stashCount>=cap,cycleMs=(area?.cycle||30)*1000,start=j.lastTick||Date.now();
+    const progressLocked=!harvestAreaUnlocked(area),capped=stashCount>=cap,cycleMs=gatheringCycleSeconds(area)*1000,start=j.lastTick||Date.now();
     return `<div class="card harvestCard ${capped?'cappedHarvest':''}" data-harvest-card="${j.id}" style="cursor:pointer" onclick="openHarvestJobDetails(${j.id})">
       <div class="heroTop"><div class="visualIcon">${area?.icon||'⛏️'}</div><div><div class="name">${area?.name||'Harvesting'}</div><div class="muted">${names}</div></div></div>
       <div class="chips"><span class="chip">${j.cycles} cycles</span><span class="chip ${capped?'harvestCapText':''}">${stashCount}/${cap} resources</span></div>
-      <div class="progressWrap harvestProgress"><div class="progressMeta"><span data-harvest-label>${capped?'CAP REACHED':'Next harvest'}</span><span data-harvest-time>${capped?'FULL':fmt(cycleMs-(Date.now()-start))}</span></div><div class="progressTrack"><div class="progressFill" data-harvest-job="${j.id}" style="width:${capped?100:clamp((Date.now()-start)/cycleMs*100,0,100)}%"></div></div></div>
-      <div class="actionRow"><div class="actionRowInfo muted">${capped?'Harvesting paused until resources are collected.':'Gathering continues automatically.'}</div><div class="actionRowButtons"><button class="btn gold" onclick="event.stopPropagation();collectHarvest(${j.id})" ${stashCount?'':'disabled'}>Collect</button><button class="btn" onclick="event.stopPropagation();stopHarvest(${j.id})">Recall</button></div></div>
+      <div class="progressWrap harvestProgress"><div class="progressMeta"><span data-harvest-label>${progressLocked?'EXPEDITION LOCKED':capped?'CAP REACHED':'Next harvest'}</span><span data-harvest-time>${progressLocked?'PAUSED':capped?'FULL':fmt(cycleMs-(Date.now()-start))}</span></div><div class="progressTrack"><div class="progressFill" data-harvest-job="${j.id}" style="width:${progressLocked?0:capped?100:clamp((Date.now()-start)/cycleMs*100,0,100)}%"></div></div></div>
+      <div class="actionRow"><div class="actionRowInfo muted">${progressLocked?harvestAreaLockText(area):capped?'Harvesting paused until resources are collected.':'Gathering continues automatically.'}</div><div class="actionRowButtons"><button class="btn gold" onclick="event.stopPropagation();collectHarvest(${j.id})" ${stashCount?'':'disabled'}>Collect</button><button class="btn" onclick="event.stopPropagation();stopHarvest(${j.id})">Recall</button></div></div>
     </div>`;
   }).join(''):'<div class="empty">No active harvesting jobs.</div>';
 }
@@ -309,17 +330,25 @@ function threatIntelHtml(q,type){
 }
 function renderOffers(type){
  const box=type==='raid'?'raidList':type==='dungeon'?'dungeonList':'questList';
- $(box).innerHTML=arr(type).map(q=>{
+ const offers=type==='quest'?arr(type).filter(q=>expeditionAreaUnlocked(q)):arr(type);
+ $(box).innerHTML=offers.map(q=>{
    const locked=false,occupied=missionLocationOccupied(type,q);
    const sceneType=type==='quest'?'expedition':type;
    const sceneKey=type==='quest'?(AREAS.find(a=>a.name===q.name)?.id||q.areaId||q.id):q.name;
    return `<div class="card quest actionCard" data-id="${q.id}">
     ${sceneBanner(sceneType,sceneKey)}<div class="name">${q.name}</div><div class="muted">${q.desc}</div>
-    <div class="chips"><span class="chip">Tier ${tierLabel(q.tier||1)}</span><span class="chip">Level ${q.level}</span><span class="chip">Target ${q.target}</span>${type==='quest'?'<span class="chip">Endless area</span>':`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
+    <div class="chips"><span class="chip">${tierLabel(q.tier||1)}</span><span class="chip">Levels ${q.level}–${q.level+(q.bossGate?0:4)}</span><span class="chip">Target ${q.target}</span>${type==='quest'?(q.bossGate?`<span class="chip gateBossChip">Tier Boss</span><span class="chip">Boss: ${q.boss}</span>${(s.expeditionGates||[]).includes(q.gateTier)?'<span class="chip good">Cleared</span>':''}`:`<span class="chip">5 stages · 25 encounters</span>${(s.expeditionClears||[]).includes(String(q.areaId))?'<span class="chip good">Cleared</span>':''}`):`<span class="chip">${q.maxFights} normal encounters, then boss</span><span class="chip">Boss: ${q.boss}</span>`}</div>
     ${threatIntelHtml(q,type)}
     <button class="btn ${occupied?'':'gold'} actionButton" ${occupied?'disabled':''} onclick="openPartyPicker('${type}',${q.id})">${occupied?'Party Deployed':type==='raid'?'Start Raid':type==='dungeon'?'Start Dungeon':'Start Expedition'}</button>
    </div>`;
  }).join('');
+}
+function expeditionAreaUnlocked(q){
+  const list=arr('quest'),index=list.findIndex(x=>x.id===q.id);if(index<=0)return true;
+  const previous=list[index-1];
+  if(q.bossGate)return (s.expeditionClears||[]).includes(String(previous.areaId));
+  if(previous.bossGate)return (s.expeditionGates||[]).includes(previous.gateTier);
+  return (s.expeditionClears||[]).includes(String(previous.areaId));
 }
 let currentPartyPickerType='quest';
 function availablePresetMembers(preset){
@@ -400,7 +429,7 @@ function openPartyPicker(type,qid){
    </div>
    <div style="margin-top:10px"><div class="muted" style="margin-bottom:6px">Saved parties available now</div><div id="partyPresetList" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
    <div class="card" style="margin-top:10px"><div class="name">Mission Provision</div><div class="muted">Optional · consumes one serving per selected party member and supports them until the mission ends.</div><select id="missionProvisionSelect" style="width:100%;margin-top:8px" onchange="updateProvisionDescription(this.value)"><option value="">No provision</option>${availableMeals.map(([id,count])=>`<option value="${id}">${MEALS[id].icon||'🍲'} ${MEALS[id].name} ×${count}</option>`).join('')}</select><div class="muted" id="missionProvisionDescription" style="margin-top:7px">No meal selected.</div></div>
-   <div class="party" id="expeditionPartyPicker" style="margin-top:10px">${available.map(h=>{const z=hs(h),p=h.class==='Mage'||h.class==='Priest'?'INT '+z.int:h.class==='Ranger'||h.class==='Rogue'?'DEX '+z.dex:'STR '+z.str;return `<button class="partyMember" data-h="${h.id}" onclick="toggleExpeditionMember(this)"><span class="miniClass">${classIcon(h)}</span><span>${h.name} · ${displayClass(h)} · ${p} · ${z.power} power</span></button>`}).join('')}</div>
+   <div class="party" id="expeditionPartyPicker" style="margin-top:10px">${available.map(h=>{const z=hs(h);return `<button class="partyMember characterRarity rarityBorder-${String(h.rarity||'Common').toLowerCase()}" data-h="${h.id}" onclick="toggleExpeditionMember(this)"><span class="miniClass">${classIcon(h)}</span><span>${h.name} · ${displayClass(h)} · Lv. ${h.level} · ${z.power} power</span></button>`}).join('')}</div>
    <div class="modalActionRow"><button class="btn gold" onclick="confirmExpeditionParty('${type}',${qid})">Send Party</button></div>
  </div>`);
  updatePartyPresetButtons();

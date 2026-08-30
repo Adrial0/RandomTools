@@ -12,7 +12,7 @@
       "GoblinInsignia",
       "Cloth"
     ],
-    "image": "images/enemies/goblin.png",
+    "image": "images/enemies/forest-goblin.png",
     "tier": 1
   },
   "Grey Wolf": {
@@ -25,7 +25,7 @@
     "damageType": "physical",
     "ability": null,
     "drops": [],
-    "image": "images/enemies/wolf.png",
+    "image": "images/enemies/grey-wolf.png",
     "tier": 1
   },
   "Thornback Boar": {
@@ -38,7 +38,7 @@
     "damageType": "physical",
     "ability": null,
     "drops": [],
-    "image": "",
+    "image": "images/enemies/thornback-boar.png",
     "tier": 1
   },
   "Moss Slime": {
@@ -53,7 +53,7 @@
     "drops": [
       "SlimeGel"
     ],
-    "image": "images/enemies/slime.png",
+    "image": "images/enemies/moss-slime.png",
     "tier": 1
   },
   "Briar Wisp": {
@@ -66,7 +66,7 @@
     "damageType": "holy",
     "ability": "radiant_bolt",
     "drops": [],
-    "image": "",
+    "image": "images/enemies/briar-wisp.png",
     "tier": 1
   },
   "Highway Bandit": {
@@ -83,7 +83,7 @@
       "BanditToken",
       "Venom"
     ],
-    "image": "images/enemies/bandit.png",
+    "image": "images/enemies/highway-bandit.png",
     "tier": 2
   },
   "Prairie Wolf": {
@@ -96,7 +96,7 @@
     "damageType": "physical",
     "ability": null,
     "drops": [],
-    "image": "images/enemies/wolf.png",
+    "image": "images/enemies/prairie-wolf.png",
     "tier": 2
   },
   "Sunfield Raider": {
@@ -112,7 +112,7 @@
       "Cloth",
       "BanditToken"
     ],
-    "image": "",
+    "image": "images/enemies/sunfield-raider.png",
     "tier": 2
   },
   "Dust Hawk": {
@@ -127,7 +127,7 @@
     "drops": [
       "Cloth"
     ],
-    "image": "",
+    "image": "images/enemies/dust-hawk.png",
     "tier": 2
   },
   "Spark Imp": {
@@ -140,7 +140,7 @@
     "damageType": "lightning",
     "ability": "lightning_burst",
     "drops": [],
-    "image": "",
+    "image": "images/enemies/spark-imp.png",
     "tier": 2
   },
   "Dune Raider": {
@@ -156,7 +156,7 @@
       "Cloth",
       "BanditToken"
     ],
-    "image": "",
+    "image": "images/enemies/dune-raider.png",
     "tier": 3
   },
   "Sand Scorpion": {
@@ -1216,5 +1216,75 @@
     ],
     "image": "images/bosses/abyssal-demon.png",
     "tier": 7
-  }
+  },
+  "Moonlit Stag":{"name":"Moonlit Stag","icon":"🦌","archetype":"beast","baseHp":25,"baseAttack":9,"baseDefense":3,"damageType":"ice","ability":"frost_bolt","drops":["Moonpetal"],"image":"images/enemies/moonlit-stag.png","tier":1},
+  "Creek Lurker":{"name":"Creek Lurker","icon":"🐊","archetype":"tank","baseHp":29,"baseAttack":8,"baseDefense":5,"damageType":"ice","ability":null,"drops":["CreekScale"],"image":"images/enemies/creek-lurker.png","tier":1},
+  "Pollen Sprite":{"name":"Pollen Sprite","icon":"✨","archetype":"caster","baseHp":20,"baseAttack":9,"baseDefense":2,"damageType":"dark","ability":"regeneration","drops":["Moonpetal"],"image":"images/enemies/pollen-sprite.png","tier":1},
+  "Briar Fox":{"name":"Briar Fox","icon":"🦊","archetype":"skirmisher","baseHp":22,"baseAttack":10,"baseDefense":2,"damageType":"dark","ability":null,"drops":["CreekScale"],"image":"images/enemies/briar-fox.png","tier":1},
+  "Greenwood Poacher":{"name":"Greenwood Poacher","icon":"🏹","archetype":"caster","baseHp":25,"baseAttack":10,"baseDefense":3,"damageType":"dark","ability":"dark_bolt","drops":["Moonpetal","CreekScale"],"image":"images/enemies/greenwood-poacher.png","tier":1},
+  "Rockhorn Ram":{"name":"Rockhorn Ram","icon":"🐏","archetype":"beast","baseHp":35,"baseAttack":12,"baseDefense":7,"damageType":"ice","ability":"frost_bolt","drops":["Stormhide"],"image":"images/enemies/rockhorn-ram.png","tier":2},
+  "Hill Brigand":{"name":"Hill Brigand","icon":"🗡️","archetype":"brute","baseHp":32,"baseAttack":13,"baseDefense":5,"damageType":"fire","ability":"burning_strike","drops":["HarpyFeather"],"image":"images/enemies/hill-brigand.png","tier":2},
+  "Thunder Hare":{"name":"Ember Hare","icon":"🐇","archetype":"skirmisher","baseHp":24,"baseAttack":13,"baseDefense":3,"damageType":"fire","ability":"burning_strike","drops":["Stormhide"],"image":"images/enemies/thunder-hare.png","tier":2},
+  "Redstone Harpy":{"name":"Redstone Harpy","icon":"🦅","archetype":"skirmisher","baseHp":28,"baseAttack":14,"baseDefense":4,"damageType":"ice","ability":null,"drops":["HarpyFeather"],"image":"images/enemies/redstone-harpy.png","tier":2},
+  "Ironback Bear":{"name":"Ironback Bear","icon":"🐻","archetype":"tank","baseHp":44,"baseAttack":11,"baseDefense":9,"damageType":"fire","ability":null,"drops":["Stormhide"],"image":"images/enemies/ironback-bear.png","tier":2},
+  "Drowned Acolyte":{"name":"Drowned Acolyte","icon":"🧟","archetype":"caster","baseHp":34,"baseAttack":15,"baseDefense":5,"damageType":"ice","ability":"frost_bolt","drops":["Tideglass"],"image":"","tier":3},
+  "Coral Sentinel":{"name":"Coral Sentinel","icon":"🗿","archetype":"tank","baseHp":48,"baseAttack":13,"baseDefense":11,"damageType":"holy","ability":null,"drops":["ShrineRelic"],"image":"","tier":3},
+  "Tide Serpent":{"name":"Tide Serpent","icon":"🐍","archetype":"beast","baseHp":38,"baseAttack":16,"baseDefense":6,"damageType":"ice","ability":"frost_bolt","drops":["Tideglass"],"image":"","tier":3},
+  "Shrine Wisp":{"name":"Shrine Wisp","icon":"🟡","archetype":"caster","baseHp":29,"baseAttack":17,"baseDefense":4,"damageType":"holy","ability":"regeneration","drops":["ShrineRelic"],"image":"","tier":3},
+  "Tempest Priest":{"name":"Tempest Priest","icon":"⚡","archetype":"caster","baseHp":33,"baseAttack":17,"baseDefense":5,"damageType":"lightning","ability":"lightning_burst","drops":["Tideglass","ShrineRelic"],"image":"","tier":3},
+  "Runebark Treant":{"name":"Runebark Treant","icon":"🌳","archetype":"tank","baseHp":58,"baseAttack":16,"baseDefense":14,"damageType":"physical","ability":"regeneration","drops":["RunebarkRelic"],"image":"","tier":4},
+  "Ruin Stalker":{"name":"Ruin Stalker","icon":"🐈","archetype":"skirmisher","baseHp":38,"baseAttack":19,"baseDefense":7,"damageType":"fire","ability":"burning_strike","drops":["RunebarkRelic"],"image":"","tier":4},
+  "Fungal Knight":{"name":"Fungal Knight","icon":"🍄","archetype":"tank","baseHp":50,"baseAttack":18,"baseDefense":11,"damageType":"physical","ability":null,"drops":["Sporecap"],"image":"","tier":4},
+  "Elder Moth":{"name":"Elder Moth","icon":"🦋","archetype":"caster","baseHp":35,"baseAttack":20,"baseDefense":6,"damageType":"holy","ability":"radiant_bolt","drops":["Sporecap"],"image":"","tier":4},
+  "Lost Druid":{"name":"Lost Druid","icon":"🧙","archetype":"caster","baseHp":41,"baseAttack":19,"baseDefense":8,"damageType":"holy","ability":"regeneration","drops":["RunebarkRelic"],"image":"","tier":4},
+  "Rift Crab":{"name":"Rift Crab","icon":"🦀","archetype":"tank","baseHp":72,"baseAttack":20,"baseDefense":18,"damageType":"ice","ability":null,"drops":["Shardglass"],"image":"","tier":6},
+  "Ashen Corsair":{"name":"Ashen Corsair","icon":"🏴‍☠️","archetype":"skirmisher","baseHp":52,"baseAttack":25,"baseDefense":10,"damageType":"physical","ability":"cleave","drops":["CorsairSeal"],"image":"","tier":6},
+  "Cinder Gull":{"name":"Storm Gull","icon":"🦅","archetype":"skirmisher","baseHp":43,"baseAttack":25,"baseDefense":8,"damageType":"lightning","ability":"lightning_burst","drops":["Shardglass"],"image":"","tier":6},
+  "Tide Revenant":{"name":"Tide Revenant","icon":"👻","archetype":"caster","baseHp":50,"baseAttack":24,"baseDefense":10,"damageType":"dark","ability":"dark_bolt","drops":["CorsairSeal"],"image":"","tier":6},
+  "Glass Serpent":{"name":"Glass Serpent","icon":"🐉","archetype":"beast","baseHp":60,"baseAttack":26,"baseDefense":12,"damageType":"ice","ability":"frost_bolt","drops":["Shardglass"],"image":"","tier":6},
+  "Starved Horror":{"name":"Starved Horror","icon":"👁️","archetype":"brute","baseHp":72,"baseAttack":28,"baseDefense":14,"damageType":"holy","ability":"radiant_bolt","drops":["CometDust"],"image":"","tier":7},
+  "Astral Hound":{"name":"Astral Hound","icon":"🐕","archetype":"beast","baseHp":62,"baseAttack":30,"baseDefense":12,"damageType":"holy","ability":"radiant_bolt","drops":["CometDust"],"image":"","tier":7},
+  "Phase Moth":{"name":"Phase Moth","icon":"🦋","archetype":"skirmisher","baseHp":48,"baseAttack":30,"baseDefense":9,"damageType":"lightning","ability":"lightning_burst","drops":["PhaseSilk"],"image":"","tier":7},
+  "Comet Golem":{"name":"Comet Golem","icon":"☄️","archetype":"tank","baseHp":88,"baseAttack":25,"baseDefense":21,"damageType":"fire","ability":"burning_strike","drops":["CometDust"],"image":"","tier":7},
+  "Rift Seer":{"name":"Rift Seer","icon":"🔮","archetype":"caster","baseHp":54,"baseAttack":31,"baseDefense":10,"damageType":"lightning","ability":"regeneration","drops":["PhaseSilk"],"image":"","tier":7},
+  "Fallen Herald":{"name":"Fallen Herald","icon":"📯","archetype":"caster","baseHp":62,"baseAttack":33,"baseDefense":12,"damageType":"holy","ability":"radiant_bolt","drops":["AngelicSigil"],"image":"","tier":8},
+  "Radiant Sentinel":{"name":"Radiant Sentinel","icon":"🛡️","archetype":"tank","baseHp":96,"baseAttack":28,"baseDefense":24,"damageType":"holy","ability":null,"drops":["AngelicSigil"],"image":"","tier":8},
+  "Banner Wraith":{"name":"Banner Wraith","icon":"👻","archetype":"caster","baseHp":64,"baseAttack":34,"baseDefense":13,"damageType":"dark","ability":"dark_bolt","drops":["Godthread"],"image":"","tier":8},
+  "Seraphic Hound":{"name":"Seraphic Hound","icon":"🐕","archetype":"beast","baseHp":72,"baseAttack":35,"baseDefense":14,"damageType":"holy","ability":"radiant_bolt","drops":["AngelicSigil"],"image":"","tier":8},
+  "Halo Construct":{"name":"Halo Construct","icon":"⭕","archetype":"brute","baseHp":84,"baseAttack":32,"baseDefense":19,"damageType":"lightning","ability":"lightning_burst","drops":["Godthread"],"image":"","tier":8},
+  "Trench Stalker":{"name":"Trench Stalker","icon":"🦑","archetype":"skirmisher","baseHp":68,"baseAttack":36,"baseDefense":13,"damageType":"poison","ability":"venom_strike","drops":["TrenchPearl"],"image":"","tier":8},
+  "Leviathan Spawn":{"name":"Leviathan Spawn","icon":"🐋","archetype":"brute","baseHp":102,"baseAttack":34,"baseDefense":20,"damageType":"physical","ability":"cleave","drops":["LeviathanScale"],"image":"","tier":8},
+  "Abyssal Angler":{"name":"Abyssal Angler","icon":"🐟","archetype":"caster","baseHp":65,"baseAttack":36,"baseDefense":12,"damageType":"poison","ability":"poison_spit","drops":["TrenchPearl"],"image":"","tier":8},
+  "Pearlback Turtle":{"name":"Pearlback Turtle","icon":"🐢","archetype":"tank","baseHp":108,"baseAttack":27,"baseDefense":27,"damageType":"physical","ability":null,"drops":["LeviathanScale"],"image":"","tier":8},
+  "Tide Oracle":{"name":"Tide Oracle","icon":"🔮","archetype":"caster","baseHp":66,"baseAttack":37,"baseDefense":13,"damageType":"ice","ability":"frost_bolt","drops":["TrenchPearl"],"image":"","tier":8},
+  "Rust Colossus":{"name":"Rust Colossus","icon":"🤖","archetype":"tank","baseHp":118,"baseAttack":36,"baseDefense":29,"damageType":"physical","ability":"cleave","drops":["Gearheart"],"image":"","tier":9},
+  "Chrono Wisp":{"name":"Chrono Wisp","icon":"⏳","archetype":"caster","baseHp":70,"baseAttack":40,"baseDefense":14,"damageType":"lightning","ability":"lightning_burst","drops":["ChronoShard"],"image":"","tier":9},
+  "Gearhound":{"name":"Gearhound","icon":"🐕","archetype":"beast","baseHp":82,"baseAttack":41,"baseDefense":17,"damageType":"physical","ability":null,"drops":["Gearheart"],"image":"","tier":9},
+  "Wastes Artificer":{"name":"Wastes Artificer","icon":"🧑‍🔧","archetype":"caster","baseHp":74,"baseAttack":41,"baseDefense":15,"damageType":"fire","ability":"fireball","drops":["ChronoShard"],"image":"","tier":9},
+  "Pendulum Knight":{"name":"Pendulum Knight","icon":"⚔️","archetype":"brute","baseHp":94,"baseAttack":40,"baseDefense":22,"damageType":"physical","ability":"cleave","drops":["Gearheart"],"image":"","tier":9},
+  "Dream Eater":{"name":"Dream Eater","icon":"👁️","archetype":"caster","baseHp":76,"baseAttack":42,"baseDefense":15,"damageType":"dark","ability":"dark_bolt","drops":["NightmareBloom"],"image":"","tier":9},
+  "Lullaby Dryad":{"name":"Lullaby Dryad","icon":"🌿","archetype":"caster","baseHp":78,"baseAttack":40,"baseDefense":17,"damageType":"poison","ability":"poison_spit","drops":["DreamEssence"],"image":"","tier":9},
+  "Memory Stag":{"name":"Memory Stag","icon":"🦌","archetype":"beast","baseHp":88,"baseAttack":41,"baseDefense":18,"damageType":"holy","ability":"radiant_bolt","drops":["DreamEssence"],"image":"","tier":9},
+  "Nightmare Bloom":{"name":"Nightmare Bloom","icon":"🌺","archetype":"tank","baseHp":106,"baseAttack":37,"baseDefense":25,"damageType":"poison","ability":"regeneration","drops":["NightmareBloom"],"image":"","tier":9},
+  "Somnolent Giant":{"name":"Somnolent Giant","icon":"🗿","archetype":"brute","baseHp":122,"baseAttack":39,"baseDefense":24,"damageType":"physical","ability":"cleave","drops":["DreamEssence"],"image":"","tier":9},
+  "Endborn Ravager":{"name":"Endborn Ravager","icon":"😈","archetype":"brute","baseHp":126,"baseAttack":46,"baseDefense":25,"damageType":"dark","ability":"dark_bolt","drops":["Endstone"],"image":"","tier":10},
+  "Worldscar Elemental":{"name":"Worldscar Elemental","icon":"🌐","archetype":"caster","baseHp":92,"baseAttack":48,"baseDefense":20,"damageType":"fire","ability":"fireball","drops":["StarlightCore"],"image":"","tier":10},
+  "Last Pilgrim":{"name":"Last Pilgrim","icon":"🧙","archetype":"caster","baseHp":88,"baseAttack":47,"baseDefense":19,"damageType":"holy","ability":"radiant_bolt","drops":["Godthread"],"image":"","tier":10},
+  "Entropy Drake":{"name":"Entropy Drake","icon":"🐉","archetype":"beast","baseHp":132,"baseAttack":47,"baseDefense":26,"damageType":"lightning","ability":"lightning_burst","drops":["Endstone"],"image":"","tier":10},
+  "Godless Shade":{"name":"Godless Shade","icon":"👤","archetype":"skirmisher","baseHp":86,"baseAttack":50,"baseDefense":17,"damageType":"dark","ability":"dark_bolt","drops":["StarlightCore"],"image":"","tier":10},
+  "Constellation Knight":{"name":"Constellation Knight","icon":"🌠","archetype":"tank","baseHp":138,"baseAttack":45,"baseDefense":31,"damageType":"holy","ability":null,"drops":["CrownShard"],"image":"","tier":10},
+  "Throne Seraph":{"name":"Throne Seraph","icon":"👼","archetype":"caster","baseHp":96,"baseAttack":51,"baseDefense":21,"damageType":"holy","ability":"radiant_bolt","drops":["SeraphFeather"],"image":"","tier":10},
+  "Starlight Devourer":{"name":"Starlight Devourer","icon":"🌑","archetype":"brute","baseHp":142,"baseAttack":49,"baseDefense":27,"damageType":"ice","ability":"frost_bolt","drops":["CrownShard"],"image":"","tier":10},
+  "Crown of Eyes":{"name":"Crown of Eyes","icon":"👁️","archetype":"caster","baseHp":94,"baseAttack":52,"baseDefense":20,"damageType":"lightning","ability":"lightning_burst","drops":["CrownShard"],"image":"","tier":10},
+  "Eternal Regent":{"name":"Eternal Regent","icon":"👑","archetype":"caster","baseHp":150,"baseAttack":50,"baseDefense":30,"damageType":"holy","ability":"regeneration","drops":["SeraphFeather"],"image":"","tier":10},
+  "Elder Briarheart":{"name":"Elder Briarheart","icon":"🌳","archetype":"boss","baseHp":70,"baseAttack":15,"baseDefense":8,"damageType":"poison","ability":"poison_spit","drops":["GoblinInsignia"],"image":"","tier":1,"boss":true},
+  "Stormclaw Matriarch":{"name":"Stormclaw Matriarch","icon":"🦅","archetype":"boss","baseHp":82,"baseAttack":20,"baseDefense":10,"damageType":"lightning","ability":"lightning_burst","drops":["BanditToken"],"image":"","tier":2,"boss":true},
+  "Tempest Hierophant":{"name":"Tempest Hierophant","icon":"🔱","archetype":"boss","baseHp":94,"baseAttack":24,"baseDefense":12,"damageType":"lightning","ability":"lightning_burst","drops":["CultistRune"],"image":"","tier":3,"boss":true},
+  "Mirewood Colossus":{"name":"Mirewood Colossus","icon":"🍄","archetype":"boss","baseHp":108,"baseAttack":27,"baseDefense":16,"damageType":"poison","ability":"poison_spit","drops":["ColossusIchor"],"image":"","tier":4,"boss":true},
+  "Starforged Titan":{"name":"Starforged Titan","icon":"⭐","archetype":"boss","baseHp":122,"baseAttack":31,"baseDefense":20,"damageType":"ice","ability":"frost_bolt","drops":["HighRune"],"image":"","tier":5,"boss":true},
+  "Pyroclast Sovereign":{"name":"Pyroclast Sovereign","icon":"🔥","archetype":"boss","baseHp":136,"baseAttack":35,"baseDefense":22,"damageType":"fire","ability":"fireball","drops":["DemonHorn"],"image":"","tier":6,"boss":true},
+  "Voidbound Archon":{"name":"Voidbound Archon","icon":"🕳️","archetype":"boss","baseHp":150,"baseAttack":39,"baseDefense":24,"damageType":"dark","ability":"dark_bolt","drops":["AbyssalHorn"],"image":"","tier":7,"boss":true},
+  "Drowned Seraph":{"name":"Drowned Seraph","icon":"🪽","archetype":"boss","baseHp":164,"baseAttack":43,"baseDefense":27,"damageType":"holy","ability":"radiant_bolt","drops":["AngelicSigil"],"image":"","tier":8,"boss":true},
+  "The Chronophage":{"name":"The Chronophage","icon":"⏳","archetype":"boss","baseHp":180,"baseAttack":47,"baseDefense":29,"damageType":"lightning","ability":"lightning_burst","drops":["Gearheart"],"image":"","tier":9,"boss":true},
+  "Endfall Sovereign":{"name":"Endfall Sovereign","icon":"🌠","archetype":"boss","baseHp":200,"baseAttack":52,"baseDefense":34,"damageType":"dark","ability":"royal_decree","drops":["CrownShard"],"image":"","tier":10,"boss":true}
 }

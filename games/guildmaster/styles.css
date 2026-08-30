@@ -200,12 +200,15 @@ body{
 .epic{color:#c993f0!important}
 .legendary{color:#ffd36f!important;text-shadow:0 0 8px rgba(255,191,67,.42)}
 .mythic{color:#ff91d7!important;text-shadow:0 0 9px rgba(255,73,184,.48)}
+.unique{color:#d68b43!important;text-shadow:0 0 9px rgba(221,111,35,.62)}
 .card:has(.name.uncommon){border-color:#587a4d!important;box-shadow:0 0 0 1px rgba(111,162,93,.18),1px 2px 0 #100d09!important}
 .card:has(.name.rare){border-color:#3f79aa!important;box-shadow:0 0 0 1px rgba(83,160,221,.25),1px 2px 0 #100d09!important}
 .card:has(.name.epic){border-color:#8758a8!important;box-shadow:0 0 0 2px rgba(171,99,220,.23),1px 2px 0 #100d09!important}
 .card:has(.name.legendary){border-color:#d19a31!important;box-shadow:0 0 0 2px rgba(236,176,55,.34),0 0 15px rgba(219,151,27,.15),2px 3px 0 #100d09!important}
 .card:has(.name.mythic){border-color:#d85eae!important;box-shadow:0 0 0 2px rgba(233,84,179,.38),0 0 18px rgba(204,56,154,.18),2px 3px 0 #100d09!important}
+.card:has(.name.unique){border-color:#d77728!important;box-shadow:0 0 0 2px rgba(215,119,40,.42),0 0 22px rgba(215,92,30,.24),2px 3px 0 #100d09!important}
 .equipCompare{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.equipTargetChoice{margin-top:8px;padding-top:8px;border-top:1px solid rgba(121,93,55,.35)}
 .equipGain,.equipLoss,.equipSame{font:11px/1.35 ui-monospace,SFMono-Regular,Menlo,monospace;padding:3px 6px;border-radius:2px}
 .equipGain{color:#a9d797;background:rgba(72,116,58,.18);border:1px solid rgba(112,162,91,.42)}
 .equipLoss{color:#df8f80;background:rgba(126,61,49,.18);border:1px solid rgba(172,83,66,.42)}
@@ -703,6 +706,15 @@ body.windowOpen .side{overflow:hidden!important}
 .rosterPageLayout{height:100%!important;min-height:0!important;align-items:stretch!important}
 .rosterListPanel,.rosterDetailPanel{height:100%!important;max-height:none!important;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain}
 .rosterDetailPanel{position:static!important}
+
+/* Character presentation and workshop workspace refinements. */
+.detailIdentity{padding-left:2px;overflow:visible!important}
+.detailIdentity>.portrait{width:48px!important;height:48px!important;flex:0 0 48px!important;overflow:hidden!important}
+.characterRarity.rarityBorder-uncommon{border-color:#587a4d!important}
+.characterRarity.rarityBorder-rare{border-color:#3f79aa!important;box-shadow:0 0 0 1px rgba(83,160,221,.2),1px 2px 0 #100d09!important}
+.characterRarity.rarityBorder-epic{border-color:#8758a8!important;box-shadow:0 0 0 1px rgba(171,99,220,.22),1px 2px 0 #100d09!important}
+.characterRarity.rarityBorder-legendary{border-color:#d19a31!important;box-shadow:0 0 0 1px rgba(236,176,55,.28),1px 2px 0 #100d09!important}
+.characterRarity.rarityBorder-mythic{border-color:#d85eae!important;box-shadow:0 0 0 1px rgba(233,84,179,.3),1px 2px 0 #100d09!important}
 
 .inventoryItemCard{position:relative}
 .runeSlotRow{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
@@ -1447,19 +1459,157 @@ body.windowOpen .side{overflow:hidden!important}
 .combatant.combatMini.combatSlotEmpty{display:none!important}
 .combatEnemySlot[hidden]{display:none!important}
 
-/* Grouped navigation and compact guild-ledger typography. */
+/* Battlefield combat view: units stand directly in the area's scene. */
+#combatModal .modal{width:min(1180px,97vw)!important}
+.combatBattlefield.combatGrid{
+  position:relative!important;
+  isolation:isolate;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  min-height:max(470px,calc(var(--combat-rows,2) * 150px + 58px))!important;
+  padding:34px 22px 18px!important;
+  gap:34px!important;
+  overflow:hidden!important;
+  border:1px solid #73552e;
+  background-image:var(--combat-background)!important;
+  background-position:center!important;
+  background-size:cover!important;
+  box-shadow:inset 0 0 60px rgba(0,0,0,.7);
+}
+.upgradeEffectComparison{display:flex;align-items:stretch;gap:7px;margin:8px 0;padding:7px;border:1px solid #544129;background:#19140f}
+.upgradeEffectComparison>span{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.upgradeEffectComparison small{color:#8f8064;font:8px var(--ui-pixel);letter-spacing:.07em;text-transform:uppercase}
+.upgradeEffectComparison b{color:#d4be8d;font-size:11px;line-height:1.25}
+.upgradeEffectComparison .next b{color:#a9d58c}
+.upgradeEffectComparison i{align-self:center;color:#a77b3f;font-style:normal;font-size:16px}
+.combatFieldShade{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,7,7,.48),rgba(8,8,7,.15) 42%,rgba(8,8,7,.15) 58%,rgba(5,7,7,.48)),linear-gradient(0deg,rgba(4,4,3,.58),transparent 48%,rgba(4,4,3,.34));
+}
+.combatBattlefield .combatTeamPane{
+  position:relative!important;
+  min-width:0!important;
+  overflow:visible!important;
+}
+.combatTeamLabel{
+  position:absolute;top:-25px;left:0;right:0;
+  color:#e3c986;font-family:var(--ui-pixel);font-size:9px;letter-spacing:.12em;text-align:center;text-shadow:0 2px 3px #000;
+}
+.combatBattlefield .combatSide.compactCombatSide,
+.combatBattlefield #combatEnemySide.compactCombatSide{
+  height:100%;display:grid!important;
+  grid-template-columns:repeat(2,minmax(105px,1fr))!important;
+  grid-auto-rows:150px;
+  align-content:center!important;
+  align-items:center!important;justify-items:center!important;
+  gap:2px 12px!important;
+}
+.combatBattlefield .combatEnemySlot{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.combatBattlefield .combatant.combatMini{
+  width:min(150px,100%)!important;height:118px!important;min-height:118px!important;max-height:118px!important;
+  display:grid!important;grid-template-columns:1fr!important;grid-template-rows:auto 1fr auto!important;
+  justify-items:center!important;align-items:end!important;gap:2px!important;
+  position:relative!important;padding:0!important;margin:0!important;
+  overflow:visible!important;background:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;cursor:pointer;transition:filter .12s ease,transform .12s ease;
+}
+.combatBattlefield .combatant.combatMini:hover{background:transparent!important;filter:brightness(1.16);transform:translateY(-2px)}
+.combatBattlefield .combatant.combatMini.selected{filter:brightness(1.2);transform:translateY(-2px)}
+.combatBattlefield .combatant.combatMini.selected .visualIcon{filter:drop-shadow(0 0 7px rgba(242,201,105,.9))}
+.combatBattlefield .combatant.combatMini.combatThreatFront{border:0!important}
+.combatBattlefield .combatMiniVitals{order:1;width:100%;align-self:start;filter:drop-shadow(0 2px 2px #000)}
+.combatBattlefield .combatant.combatMini .visualIcon{
+  order:2;width:60px!important;height:60px!important;margin:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:transparent!important;border:0!important;filter:drop-shadow(0 5px 4px rgba(0,0,0,.8));
+}
+.combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{
+  width:58px!important;height:58px!important;max-width:58px!important;max-height:58px!important;object-fit:contain!important;image-rendering:pixelated;
+}
+.combatBattlefield .combatHeroPane .visualIcon>.iconFallback.gameAsset{transform:scaleX(-1)!important}
+.combatBattlefield .combatHeroPane .visualIcon>.iconFallback.gameAsset>img.gameAsset{transform:none!important}
+.combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:46px!important;line-height:58px!important}
+.combatBattlefield .combatMiniNameRow{height:15px;display:block!important;text-align:center!important}
+.combatBattlefield .combatMiniNameRow .name{
+  color:#fff0c8!important;font-size:11px!important;line-height:14px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-shadow:0 2px 3px #000,1px 0 #000,-1px 0 #000;
+}
+.combatBattlefield .hpTrack,.combatBattlefield .manaTrack,.combatBattlefield .attackTrack,.combatBattlefield .cooldownTrack{
+  width:100%!important;height:5px!important;min-height:5px!important;margin:1px 0 0!important;border:1px solid rgba(13,10,7,.9)!important;background:rgba(8,8,7,.88)!important;box-shadow:0 1px 2px #000!important;
+}
+.combatBattlefield .hpTrack{height:7px!important;min-height:7px!important}
+.combatBattlefield .combatStatusRow{
+  order:3;min-height:22px!important;margin:0!important;display:flex!important;justify-content:center!important;gap:3px!important;overflow:visible!important;
+}
+.combatBattlefield .combatEffect{width:20px!important;height:20px!important;box-shadow:0 1px 3px #000}
+.combatBattlefield .combatFloat{right:4px!important;top:47px!important;font-size:14px!important;text-shadow:0 2px 3px #000!important}
+.combatLevelUp{position:absolute;left:50%;top:40%;z-index:8;transform:translate(-50%,-50%);opacity:0;pointer-events:none;color:#ffe88e;font-family:var(--ui-pixel);font-size:13px;font-weight:900;white-space:nowrap;text-shadow:0 0 5px #fff,0 0 12px #e2a932,0 2px 3px #000}
+.combatLevelUp.on{animation:combatLevelUp 1.8s ease-out}
+@keyframes combatLevelUp{0%{opacity:0;transform:translate(-50%,15px) scale(.7)}20%{opacity:1;transform:translate(-50%,-8px) scale(1.15)}72%{opacity:1}100%{opacity:0;transform:translate(-50%,-42px) scale(1)}}
+.reportLevelUp{display:block;color:#e8c361!important;font-family:var(--ui-pixel);font-size:8px!important;margin-top:3px}
+.combatBattlefield .castTrack{position:absolute!important;top:36px;left:0;right:0;z-index:5}
+.combatBattlefield .combatant[style*="display: none"],.combatBattlefield .combatSlotEmpty{display:none!important}
+.combatStageIntermission{
+  display:none;position:absolute;inset:0;z-index:20;pointer-events:none;
+}
+.combatStageIntermission.on{display:block}
+.stageDeliveryBanner{
+  position:absolute;top:8px;left:50%;z-index:4;transform:translateX(-50%);width:min(850px,calc(100% - 28px));
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:10px 14px;text-align:left;
+  border:1px solid #8b6937;background:linear-gradient(90deg,rgba(23,18,12,.97),rgba(42,31,18,.95),rgba(23,18,12,.97));box-shadow:0 4px 16px rgba(0,0,0,.8);pointer-events:auto;
+}
+.combatStageIntermission .name{font-size:18px;color:#f1d69a;text-shadow:0 2px 4px #000}
+.stageDeliveryText{margin-top:2px;color:#d6c39a;font-size:11px}
+.stageDeliveryRewards{padding:7px 10px;border:1px solid #80623b;background:#17130e;color:#e9c878;font-family:var(--ui-pixel);font-size:10px;white-space:nowrap}
+.stageDeliveryNext{white-space:nowrap;text-align:right}
+.stageCampScene{position:absolute;left:75%;bottom:24px;width:180px;height:150px;transform:translateX(-50%);display:flex;align-items:flex-end;justify-content:center}
+.stageCampfire{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);font-size:62px;line-height:1;filter:drop-shadow(0 0 12px #f19b38);animation:stageFire 1s ease-in-out infinite alternate}
+.stageCampGlow{position:absolute;left:50%;bottom:15px;width:250px;height:95px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(239,139,48,.28),rgba(239,139,48,0) 70%);mix-blend-mode:screen}
+@keyframes stageFire{to{transform:translateX(-50%) scale(.94) translateY(2px);filter:drop-shadow(0 0 18px #ffc04f)}}
+.combatBattlefield.stageIntermission .combatEnemyPane{visibility:hidden}
+.combatBattlefield.stageIntermission .combatHeroPane{visibility:visible}
+.combatBattlefield.stageIntermission .combatHeroPane .combatant{animation:stageRest 1.8s ease-in-out infinite alternate}
+@keyframes stageRest{to{transform:translateY(2px)}}
+.activeMissionActions,.defeatRestartActions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.defeatRestartActions{margin-top:10px}
+.victoryPresentation{text-align:center;padding:8px 4px 14px}.victoryPresentation.major{padding:18px 10px 24px;background:radial-gradient(circle at 50% 20%,rgba(210,154,54,.18),transparent 55%)}
+.victoryCrest{font-size:54px;filter:drop-shadow(0 0 12px rgba(235,183,76,.6));animation:victoryCrest 1s ease-out}.victoryPresentation.major .victoryCrest{font-size:76px}
+@keyframes victoryCrest{from{opacity:0;transform:scale(.45) rotate(-8deg)}to{opacity:1;transform:scale(1)}}
+.victoryGuildBonus,.victoryRewardItem{display:flex;flex-direction:column;gap:5px;margin:12px auto 0;max-width:620px;padding:12px;border:1px solid #80623b;background:#17130e}
+.victoryGuildBonus span{color:#9fd283}.victoryUniqueCallout{margin-top:12px;font-size:15px;font-weight:900}
+.guildPermanentBonuses{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:9px;padding-top:8px;border-top:1px solid #5c4729;font-family:var(--ui-pixel);font-size:9px}.guildPermanentBonuses>span{color:var(--muted);margin-right:4px}.guildPermanentBonuses>b{padding:4px 7px;border:1px solid #5e4b2e;background:#17130e;color:#a9cf8b}
+
+@media(max-width:760px){
+  .combatBattlefield.combatGrid{min-height:max(610px,calc(var(--combat-mobile-rows,4) * 88px + 55px))!important;padding:31px 8px 14px!important;gap:8px!important}
+  .combatBattlefield .combatSide.compactCombatSide,.combatBattlefield #combatEnemySide.compactCombatSide{grid-template-columns:1fr!important;grid-auto-rows:88px!important;align-content:center!important;gap:1px!important}
+  .combatBattlefield .combatant.combatMini{width:min(124px,100%)!important;height:72px!important;min-height:72px!important;max-height:72px!important;grid-template-columns:1fr 48px!important;grid-template-rows:auto auto!important;align-items:center!important}
+  .combatBattlefield .combatMiniVitals{grid-column:1;grid-row:1/-1}
+  .combatBattlefield .combatant.combatMini .visualIcon{grid-column:2;grid-row:1/-1;width:46px!important;height:46px!important}
+  .combatBattlefield .combatant.combatMini .visualIcon img,.combatBattlefield .combatant.combatMini .visualIcon .gameAsset{width:44px!important;height:44px!important;max-width:44px!important;max-height:44px!important}
+  .combatBattlefield .combatant.combatMini .visualIcon>.iconFallback{font-size:34px!important;line-height:44px!important}
+  .combatBattlefield .combatStatusRow{position:absolute;bottom:-1px;left:2px;justify-content:flex-start!important}
+  .combatBattlefield .combatEffect{width:16px!important;height:16px!important}
+  .combatBattlefield .combatMiniNameRow .name{font-size:9px!important}
+  .stageDeliveryBanner{top:5px;grid-template-columns:1fr;text-align:center;gap:5px;padding:7px 9px}.stageDeliveryNext{text-align:center}.stageDeliveryRewards{white-space:normal}.stageDeliveryText{display:none}
+  .stageCampScene{left:75%;bottom:12px;width:110px;height:180px}.stageCampfire{bottom:12px}
+}
+
+/* Always-visible navigation directory and compact guild-ledger typography. */
 .shell{grid-template-columns:230px minmax(0,1fr)!important}
 .side{display:flex!important;flex-direction:column!important;padding:9px!important}
+.navDirectory{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;flex:1 1 auto}
+.navColumn{min-width:0}
+.navSectionTitle{padding:4px 6px 7px;color:#d5b877;font-family:var(--ui-pixel);font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(121,93,55,.55)}
+.navMissionBlock{margin-top:12px;padding-top:7px;border-top:1px solid rgba(121,93,55,.45)}
 .navPrimary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;padding-bottom:9px;border-bottom:1px solid rgba(121,93,55,.45)}
 .navGroup{min-width:0;border:1px solid #4e3c27;background:#211a12;color:#9f8f6d;padding:9px 7px;text-align:center;font-family:var(--ui-pixel);font-size:10px;font-weight:800;letter-spacing:.045em;text-transform:uppercase}
 .navGroup:hover{color:#dfc691;border-color:#80623b;background:#2a2015}
 .navGroup.on{color:#f0d79b;border-color:#a67937;background:linear-gradient(180deg,#50391d,#2f2417);box-shadow:inset 0 0 0 1px rgba(238,197,112,.08)}
 .navGroup small{display:block;margin-top:2px;color:#c99a45;font-size:7px;letter-spacing:.08em}
 .navSubgroups{padding-top:8px;flex:1 1 auto}
-.navSubgroup{display:none;gap:3px}
-.navSubgroup.on{display:grid}
-.navSubgroup .nav{padding:10px 11px!important}
-.navUtility{margin-top:auto;padding-top:9px;border-top:1px solid rgba(121,93,55,.45)}
+.navSubgroup{display:grid!important;gap:3px;padding-top:6px}
+.navSubgroup .nav{padding:9px 7px!important;font-size:11px!important}
+.navUtility{display:grid;grid-template-columns:1fr;gap:3px;margin-top:9px;padding-top:9px;border-top:1px solid rgba(121,93,55,.45)}
+.navArena small{display:block;color:#b98c45;font-size:7px}
 .navSettings{font-family:var(--ui-pixel)!important;font-size:10px!important;letter-spacing:.04em}
 .page.on{animation:pageReveal .13s ease-out}
 @keyframes pageReveal{from{opacity:.72;transform:translateY(2px)}to{opacity:1;transform:none}}
@@ -1472,17 +1622,22 @@ body.windowOpen .side{overflow:hidden!important}
 @media(max-width:900px){
   .shell{grid-template-columns:1fr!important}
   .side{display:block!important;overflow:visible!important}
-  .navPrimary{grid-template-columns:repeat(4,minmax(105px,1fr));overflow-x:auto;padding-bottom:7px}
-  .navSubgroups{padding-top:7px}
-  .navSubgroup.on{display:flex;overflow-x:auto;gap:4px}
-  .navSubgroup .nav{width:auto!important;white-space:nowrap}
-  .navUtility{position:absolute;right:23px;margin-top:-45px;border:0;padding:0}
-  .navSettings{width:auto!important}
+  .navDirectory{grid-template-columns:1fr 1fr}
+  .navUtility{grid-template-columns:1fr 1fr}
 }
 @media(max-width:600px){
-  .navPrimary{grid-template-columns:repeat(4,105px)}
-  .navUtility{position:static;margin-top:7px;padding-top:7px;border-top:1px solid rgba(121,93,55,.45)}
+  .navDirectory{grid-template-columns:1fr}
+  .navMissionBlock{margin-top:8px}
 }
+
+.compactEquipmentSlots{display:grid;grid-template-columns:repeat(2,23px);gap:3px;margin-left:auto;align-items:center;justify-content:end;flex:0 0 49px}
+.compactEquipmentSlot{display:grid;place-items:center;width:23px;height:23px;padding:1px;border:1px solid #56442c;background:#17130e;color:#cbb17b;font-size:13px;line-height:1;cursor:pointer;overflow:hidden}
+.compactEquipmentSlot.empty{opacity:.62;filter:saturate(.55)}
+.compactEquipmentSlot:hover{opacity:1;border-color:#c19249;background:#302317;transform:translateY(-1px)}
+.compactEquipmentSlot .gameAsset,.compactEquipmentSlot img{width:19px!important;height:19px!important;max-width:19px!important;max-height:19px!important;object-fit:contain}
+.compactRoster .heroTop{align-items:center}
+.equipActionCard{cursor:pointer}
+.equipActionCard .heroTop{align-items:center}
 
 /* Guild Overview: identity, operations, notices, then historical detail. */
 #hall{padding-bottom:24px}
@@ -1509,6 +1664,36 @@ body.windowOpen .side{overflow:hidden!important}
 .guildShortcutArrow{flex:0 0 auto;color:#9e773d;font-size:20px;line-height:1}
 .resourceTier{display:inline-block;color:#e0bd76;font-family:var(--ui-pixel);font-size:8px;font-weight:800;letter-spacing:.04em}
 .workshopTabs{display:flex;gap:7px}
+.professionNavSticky{position:sticky;top:0;z-index:30;margin-bottom:10px;padding:8px;background:rgba(20,16,11,.97);border:1px solid #70522e;box-shadow:0 5px 14px rgba(0,0,0,.45)}
+.professionTabs{display:flex;gap:6px;flex-wrap:wrap;margin:0;padding:0;border:0}
+.professionTabs .professionTab{flex:1 1 140px}
+.professionWorkspaceTop{display:grid;grid-template-columns:minmax(680px,1fr) minmax(280px,340px);gap:10px;align-items:start}
+.professionContentColumn{min-width:0}
+.professionQueuePanel{align-self:start;max-height:calc(100vh - 150px);overflow-y:auto}
+.professionMainPanel,.professionQueuePanel{margin:0!important;min-width:0}
+.professionQueuePanel #craftQueue.active{grid-template-columns:1fr!important}
+.professionQueuePanel .active .card{min-width:0}
+.gateBossChip{border-color:#a46a32!important;color:#efb86a!important;background:rgba(130,62,24,.2)!important}
+@media(max-width:1050px){.professionWorkspaceTop{grid-template-columns:1fr}.professionQueuePanel{max-height:460px;min-height:0}}
+.professionRecipeControls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.professionRecipeControls select{min-width:145px}
+.professionPassiveCard{border-left:2px solid #9b7138!important}
+.professionTab{flex:1 1 135px;min-width:120px}
+.professionTab.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#b18443!important;color:#f0d698!important}
+.professionStation{margin-top:10px;padding:12px;border:1px solid #60482d;background:linear-gradient(135deg,rgba(126,87,37,.16),transparent 45%),#1c1710}
+.professionStationTop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:10px}
+.professionStationTop h3{margin:2px 0 4px!important}
+.professionEffectRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.professionWorkerChoice{display:flex!important;flex-direction:column;gap:5px;text-align:left;cursor:pointer}
+.professionSimpleRecipe{display:grid!important;grid-template-columns:minmax(220px,1fr) minmax(300px,1.4fr) auto;align-items:center;gap:12px}
+.professionSimpleRecipe .recipeDetailMaterials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.professionSimpleRecipe .recipeDetailMaterials>span{padding:7px;border:1px solid #4b3926;background:#211a12;font:11px var(--ui-pixel)}
+.professionSimpleRecipe .recipeDetailMaterials .enough{color:#a7b982;border-color:#536542}.professionSimpleRecipe .recipeDetailMaterials .missing{color:#d68b79;border-color:#73483d}
+.professionSocketList{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.professionRecipeSection{display:grid;gap:7px;margin-bottom:14px}.professionRecipeSection:last-child{margin-bottom:0}
+.professionRecipeSectionHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 10px;border-left:3px solid #8d6837;background:#211a12}
+.professionRecipeSectionHead h3{margin:1px 0 0!important;font-size:16px!important}
+#crafting #recipeList.recipes{display:grid!important;grid-template-columns:1fr!important}
+@media(max-width:760px){.professionStationTop,.professionSimpleRecipe{grid-template-columns:1fr;display:grid!important}.professionStationTop{display:flex!important;flex-direction:column}.professionSimpleRecipe .recipeDetailMaterials{grid-template-columns:1fr}}
 .workshopMode.on{background:linear-gradient(180deg,#785626,#543a1b)!important;border-color:#a67937!important;color:#f0d698!important}
 .runeTierList{display:grid;gap:10px}
 .runeTierGroup{border:1px solid #594329;background:#1c1710;padding:9px}

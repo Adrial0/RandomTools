@@ -1,7 +1,7 @@
 [
   {
     "name": "Bone Crypt",
-    "level": 8,
+    "level": 19,
     "boss": "Skeleton King",
     "theme": "dark",
     "enemyPool": [
@@ -17,7 +17,7 @@
   },
   {
     "name": "Silken Depths",
-    "level": 14,
+    "level": 29,
     "boss": "Broodmother",
     "theme": "poison",
     "enemyPool": [
@@ -33,7 +33,7 @@
   },
   {
     "name": "Rotting Vault",
-    "level": 20,
+    "level": 39,
     "boss": "Rotting Colossus",
     "theme": "poison",
     "enemyPool": [
@@ -49,7 +49,7 @@
   },
   {
     "name": "Cultist Sanctum",
-    "level": 28,
+    "level": 49,
     "boss": "High Cultist",
     "theme": "dark",
     "enemyPool": [

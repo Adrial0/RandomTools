@@ -15,6 +15,10 @@ function resourceSourceEntries(k){
     }
   });
 
+  recipes.forEach(r=>{
+    if(r[1]==='Material'&&r[5]?.outputResource===k)add('Workshop',r[0],`Produces ${r[5]?.outputQty||1} per craft`);
+  });
+
   // Every enemy owns its drop table. Show exact enemies and where they appear.
   Object.entries(ENEMIES_DATA||{}).forEach(([enemyName,enemy])=>{
     if(!(enemy.drops||[]).includes(k))return;
@@ -39,7 +43,7 @@ function openResourceSell(k){
   const owned=s.materials[k]||0;if(owned<=0)return;
   const initial=Math.min(owned,10);
   showModal('Sell '+(RESOURCE_NAMES[k]||k),`<div class="card">
-    <div class="name">Tier ${tierLabel(resourceTier(k))} · ${RESOURCE_NAMES[k]||k}</div>
+    <div class="name">${tierLabel(resourceTier(k))} · ${RESOURCE_NAMES[k]||k}</div>
     <div class="muted">You have ${owned}. Resources sell for 1 gold each.</div>
     <input id="resourceSellRange" type="range" min="1" max="${owned}" value="${initial}" oninput="$('resourceSellAmount').value=this.value;$('resourceSellTotal').textContent=this.value+'g'" style="width:100%;margin-top:14px">
     <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
@@ -63,7 +67,7 @@ function sellResource(k){
 function matHtml(){
   const e=Object.entries(s.materials||{}).filter(([k,v])=>v>0);
   const head=`<div class="mat"><b>Storage ${resourceCount()} / ${resourceCapacity()}</b></div>`;
-  return head+(e.length?e.sort((a,b)=>resourceTier(a[0])-resourceTier(b[0])||(RESOURCE_NAMES[a[0]]||a[0]).localeCompare(RESOURCE_NAMES[b[0]]||b[0])).map(([k,v])=>`<button class="mat" style="cursor:pointer" onclick="openResourceSell('${k}')">${gameIcon('resource',k,'','gameAsset')} <span class="resourceTier">T${tierLabel(resourceTier(k))}</span> ${RESOURCE_NAMES[k]||k} <b>${v}</b></button>`).join(''):'<div class="muted">No resources yet.</div>');
+  return head+(e.length?e.sort((a,b)=>resourceTier(a[0])-resourceTier(b[0])||(RESOURCE_NAMES[a[0]]||a[0]).localeCompare(RESOURCE_NAMES[b[0]]||b[0])).map(([k,v])=>`<button class="mat" style="cursor:pointer" onclick="openResourceSell('${k}')">${gameIcon('resource',k,'','gameAsset')} <span class="resourceTier">${tierLabel(resourceTier(k))}</span> ${RESOURCE_NAMES[k]||k} <b>${v}</b></button>`).join(''):'<div class="muted">No resources yet.</div>');
 }
 
 function detachItem(it){
@@ -81,7 +85,7 @@ function receiveInventoryItem(it,source='loot'){if(!it)return false;s.inventoryA
 function bulkSellSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let gold=0;items.forEach(it=>{gold+=itemSellValue(it);detachItem(it)});const ids=new Set(items.map(it=>it.id));s.inventory=s.inventory.filter(it=>!ids.has(it.id));s.gold+=gold;selectedInventoryItems.clear();save();render();notify(`Sold ${items.length} selected item${items.length===1?'':'s'} for ${gold} gold.`,'good')}
 function bulkScrapSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let scrapped=0,skipped=0;const removeIds=new Set();items.forEach(it=>{const recovered=scrapItemCore(it);if(recovered){detachItem(it);removeIds.add(it.id);scrapped++}else skipped++});s.inventory=s.inventory.filter(it=>!removeIds.has(it.id));removeIds.forEach(id=>selectedInventoryItems.delete(id));save();render();notify(`Scrapped ${scrapped} item${scrapped===1?'':'s'}${skipped?` · ${skipped} could not be scrapped`:''}.`,'good')}
 function itemSellValue(it){
-  const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9}[it.rarity]||1;
+  const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9,Unique:14}[it.rarity]||1;
   return Math.max(1,Math.round(((it.power||10)*.45+5)*rarityMult*.5));
 }
 function recipeForItem(it){
@@ -113,13 +117,13 @@ function marketRarity(){
   return'Common';
 }
 function marketTier(){
-  return clamp(1+Math.floor((s.level||1)/6),1,7);
+  return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/10),1,10);
 }
 function generateMarket(){
   const tier=marketTier();
-  const minTier=Math.max(1,tier-1),maxTier=Math.min(7,tier+1);
-  let gearPool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]>=minTier&&x.r[4]<=maxTier);
-  if(!gearPool.length)gearPool=recipes.map((r,i)=>({r,i}));
+  const minTier=Math.max(1,tier-1),maxTier=Math.min(10,tier+1);
+  let gearPool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]!=='Material'&&x.r[4]>=minTier&&x.r[4]<=maxTier);
+  if(!gearPool.length)gearPool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]!=='Material');
 
   const offers=[];
   const used=new Set();
@@ -210,7 +214,8 @@ function toggleInventorySortDirection(){
 function inventoryMatchesFilter(it){
   if(!inventoryRarityFilter.has(it.rarity||'Common'))return false;
   if(inventoryFilter==='all')return true;
-  if(inventoryFilter==='Jewelry')return itemEquipSlot(it)==='Jewelry';
+  if(inventoryFilter==='Accessories')return itemEquipSlot(it)==='Accessories';
+  if(inventoryFilter==='OffHand')return it.slot==='OffHand';
   return it.slot===inventoryFilter;
 }
 function inventorySortValue(it,key){
@@ -234,13 +239,12 @@ function toggleEquippedItems(){
 function openInventoryEquip(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
   const owner=it.equipped?s.members.find(x=>x.id===it.equipped):null;
-  const slot=itemEquipSlot(it);
-  const candidates=s.members.filter(h=>(slot!=='Weapon'||allowedWeapons(h).includes(it.weaponType))&&(slot!=='Armor'||canEquipArmor(h,it)));
+  const candidates=s.members.filter(h=>equipmentTargetsForItem(h,it).length);
   const recipe=recipeForItem(it);
 
   const profile=itemProfileParts(it),stats=itemStatParts(it);
   showModal(it.name,`<div class="card itemDetailCard">
-    <div class="itemDetailHeader"><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity}</div></div></div>
+    <div class="itemDetailHeader"><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity}</div></div></div>
     <div class="itemDetailLayout">
       <div class="itemDetailInformation">
         <section class="recipeInfoSection"><h4>Item Profile</h4><div class="recipeProfileList">${profile.map(x=>`<span>${x}</span>`).join('')}</div></section>
@@ -257,12 +261,10 @@ function openInventoryEquip(iid){
   </div>
   <h3 style="margin-top:14px">Equip on</h3>
   <div class="g2">${candidates.map(h=>{
-    const current=s.inventory.find(x=>x.id===h.equip[slot]);
-    return `<div class="card equipActionCard">
-      <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div></div>
-      <div class="muted" style="margin:7px 0">Current ${slot}: <b>${current?current.name:'Empty'}</b></div>
-      ${equipComparison(it,current)}
-      <button class="btn ${it.equipped===h.id?'':'gold'} actionButton" ${it.equipped===h.id?'disabled':''} onclick="equip(${h.id},${it.id})">${it.equipped===h.id?'Already Equipped':'Equip Here'}</button>
+    const targets=equipmentTargetsForItem(h,it);
+    return `<div class="card equipActionCard" onclick="inspectRosterHero(${h.id})">
+      <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div>${compactEquipmentSlots(h,'equip')}</div>
+      ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),offhand=target==='MainHand'&&weaponHands(it)===2?s.inventory.find(x=>x.id===h.equip.OffHand&&x.id!==h.equip.MainHand):null,here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b>${offhand?` · replaces ${offhand.name} in Off Hand`:''}</div>${equipComparison(it,current,offhand?[offhand]:[])}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="event.stopPropagation();equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
     </div>`;
   }).join('')}</div>`);
 }
@@ -270,7 +272,7 @@ function renderInv(){
   $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();if($('runeCraftMats'))$('runeCraftMats').innerHTML=matHtml();
   const existingIds=new Set(s.inventory.map(it=>it.id));[...selectedInventoryItems].forEach(id=>{if(!existingIds.has(id))selectedInventoryItems.delete(id)});
   const visible=sortedInventoryItems();
-  $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
+  $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
   const sel=$('inventorySortSelect'),dir=$('inventorySortDir');if(sel)sel.value=inventorySortKey;if(dir)dir.textContent=inventorySortDirection==='desc'?'Highest first':'Lowest first';updateInventoryControlUI();
 }
 
@@ -312,11 +314,11 @@ function socketRune(iid,rid){
 function renderRunecrafting(){
   if(!$('runeRecipes'))return;
   const owned=Object.entries(s.runes||{}).filter(([k,v])=>v>0);
-  $('runeInventory').innerHTML=owned.length?owned.sort((a,b)=>runeTier(a[0])-runeTier(b[0])).map(([id,v])=>`<div class="mat">${runeIcon(id)} <span class="resourceTier">T${tierLabel(runeTier(id))}</span> ${RUNES[id]?.name||id} <b>${v}</b></div>`).join(''):'<div class="muted">No runes crafted yet.</div>';
+  $('runeInventory').innerHTML=owned.length?owned.sort((a,b)=>runeTier(a[0])-runeTier(b[0])).map(([id,v])=>`<div class="mat">${runeIcon(id)} <span class="resourceTier">${tierLabel(runeTier(id))}</span> ${RUNES[id]?.name||id} <b>${v}</b></div>`).join(''):'<div class="muted">No runes crafted yet.</div>';
   const runeGroups=new Map();Object.entries(RUNES).forEach(entry=>{const t=runeTier(entry[0]);if(!runeGroups.has(t))runeGroups.set(t,[]);runeGroups.get(t).push(entry)});
-  $('runeRecipes').innerHTML=[...runeGroups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="runeTierGroup"><div class="runeTierHeading"><span>Tier ${tierLabel(tier)}</span><small>${TIER_IDENTITIES[tier]||'Masterwork'} runes · ${entries.length}</small></div><div class="recipes">${entries.map(([id,r])=>{const ok=Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v);return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">Tier ${tierLabel(tier)} · ${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">T${tierLabel(resourceTier(k))} · ${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''} actionButton" ${ok?'':'disabled'} onclick="craftRune('${id}')">Create Rune</button></div>`}).join('')}</div></div>`).join('');
+  $('runeRecipes').innerHTML=[...runeGroups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="runeTierGroup"><div class="runeTierHeading"><span>${tierLabel(tier)}</span><small>${TIER_IDENTITIES[tier]||'Masterwork'} runes · ${entries.length}</small></div><div class="recipes">${entries.map(([id,r])=>{const ok=Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v);return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${tierLabel(tier)} · ${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">${tierLabel(resourceTier(k))} · ${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''} actionButton" ${ok?'':'disabled'} onclick="craftRune('${id}')">Create Rune</button></div>`}).join('')}</div></div>`).join('');
   const gear=s.inventory.filter(it=>!it.equipped);
-  $('runeSocketItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openRuneSocketItem(${it.id})"`:''}><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">T${tierLabel(runeTier(id))} · ${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items have no rune slots.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear is available for rune socketing.</div>';
+  $('runeSocketItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openRuneSocketItem(${it.id})"`:''}><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">${tierLabel(runeTier(id))} · ${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items have no rune slots.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear is available for rune socketing.</div>';
 }
 
 function renderCraftQueue(){normalizeCraftQueue();$('craftQueue').innerHTML=s.craftJobs.length?s.craftJobs.map((j,index)=>{const r=recipes[j.recipe],now=Date.now(),waiting=index>0&&now<j.start,total=Math.max(1,j.end-j.start),pct=waiting?0:clamp((now-j.start)/total*100,0,100),remainingTime=waiting?j.start-now:j.end-now,count=Math.max(1,j.remaining||j.qty||1);return `<div class="card"><div class="mission-row"><div><div class="name">${r?r[0]:'Unknown recipe'} ×${count}</div><div class="muted">${index===0?'Crafting now':'Queue group '+(index+1)} · ${waiting?'waiting':'crafting'} · current item</div></div><span class="chip">${index===0?'Active':'#'+(index+1)}</span></div><div class="progressWrap"><div class="progressMeta"><span>${waiting?'Waiting':Math.floor(pct)+'%'}</span><span class="timer" data-start="${j.start}" data-end="${waiting?j.start:j.end}">${fmt(remainingTime)}</span></div><div class="progressTrack"><div class="progressFill" ${waiting?'':`data-start="${j.start}" data-end="${j.end}"`} style="width:${pct}%"></div></div></div><button class="btn" style="margin-top:9px" onclick="cancelCraftJob(${j.id})">Cancel Group</button></div>`}).join(''):'<div class="empty">Nothing is being crafted.</div>'}
@@ -332,7 +334,7 @@ function renderCooking(){
   normalizeCookingQueue();const now=Date.now();
   $('cookingQueue').innerHTML=s.cookingJobs.length?s.cookingJobs.map((j,index)=>{const meal=MEALS[j.meal],waiting=index>0&&now<j.start,total=Math.max(1,j.end-j.start),pct=waiting?0:clamp((now-j.start)/total*100,0,100),remaining=Math.max(1,j.remaining||j.qty||1);return `<div class="card"><div class="mission-row"><div><div class="name">${meal?.icon||'🍲'} ${meal?.name||'Unknown meal'} ×${remaining}</div><div class="muted">${index===0?'Cooking now':'Queue group '+(index+1)}</div></div><span class="chip">${index===0?'Active':'#'+(index+1)}</span></div><div class="progressWrap"><div class="progressMeta"><span>${waiting?'Waiting':Math.floor(pct)+'%'}</span><span class="timer" data-start="${j.start}" data-end="${waiting?j.start:j.end}">${fmt(waiting?j.start-now:j.end-now)}</span></div><div class="progressTrack"><div class="progressFill" ${waiting?'':`data-start="${j.start}" data-end="${j.end}"`} style="width:${pct}%"></div></div></div><button class="btn" style="margin-top:9px" onclick="cancelCookingJob(${j.id})">Cancel Group</button></div>`}).join(''):'<div class="empty">Nothing is being cooked.</div>';
   const groups=new Map();Object.entries(MEALS).forEach(entry=>{const tier=entry[1].tier||1;if(!groups.has(tier))groups.set(tier,[]);groups.get(tier).push(entry)});
-  $('cookingRecipes').innerHTML=[...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="recipeCategory open"><div class="recipeCategoryHeader"><span class="recipeCategoryName">Tier ${tierLabel(tier)} · Provisions</span><span class="recipeCategoryCount">${entries.length} recipe${entries.length===1?'':'s'}</span></div><div class="recipeCategoryBody">${entries.map(([id,meal])=>{const levelOk=s.cooking.level>=meal.level,materialOk=Object.entries(meal.cost).every(([k,v])=>(s.materials[k]||0)>=v),max=maxCookQuantity(meal);return `<div class="recipeLine ${materialOk?'':'unaffordable'} ${levelOk?'':'recipeLocked'}"><div class="recipeLineHeader"><div class="recipeLineIcon">${meal.icon||'🍲'}</div><div><div class="recipeLineName">${meal.name}</div><div class="recipeLineType">Cooking ${meal.level} · +${meal.xp} XP · ${Math.ceil(cookingDuration(meal)/1000)}s per serving</div></div></div><div class="recipeLineDetails recipeDetailLayout"><div class="recipeItemInformation"><section class="recipeInfoSection"><h4>Mission Provision</h4><div class="recipeProfileList"><span>${meal.desc}</span><span>One serving supports the whole party for one mission.</span></div></section></div><aside class="recipeCraftingBox"><h4>Ingredients</h4><div class="recipeDetailMaterials">${Object.entries(meal.cost).map(([k,v])=>{const have=s.materials[k]||0;return `<span class="${have>=v?'enough':'missing'}"><b>${have}/${v}</b> ${RESOURCE_NAMES[k]||k} <small>T${tierLabel(resourceTier(k))}</small></span>`}).join('')}</div><div class="recipeLineAction">${levelOk&&materialOk?`<div class="recipeQuantityControl"><span>×</span><input type="number" id="cookQty-${id}" min="1" max="${max}" value="1"><button class="btn gold" onclick="cookMeal('${id}',$('cookQty-${id}').value)">Cook</button></div>`:`<button class="btn" disabled>${levelOk?'Missing ingredients':'Requires Cooking '+meal.level}</button>`}</div></aside></div></div>`}).join('')}</div></div>`).join('');
+  $('cookingRecipes').innerHTML=[...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="recipeCategory open"><div class="recipeCategoryHeader"><span class="recipeCategoryName">${tierLabel(tier)} · Provisions</span><span class="recipeCategoryCount">${entries.length} recipe${entries.length===1?'':'s'}</span></div><div class="recipeCategoryBody">${entries.map(([id,meal])=>{const levelOk=s.cooking.level>=meal.level,materialOk=Object.entries(meal.cost).every(([k,v])=>(s.materials[k]||0)>=v),max=maxCookQuantity(meal);return `<div class="recipeLine ${materialOk?'':'unaffordable'} ${levelOk?'':'recipeLocked'}"><div class="recipeLineHeader"><div class="recipeLineIcon">${meal.icon||'🍲'}</div><div><div class="recipeLineName">${meal.name}</div><div class="recipeLineType">Cooking ${meal.level} · +${meal.xp} XP · ${Math.ceil(cookingDuration(meal)/1000)}s per serving</div></div></div><div class="recipeLineDetails recipeDetailLayout"><div class="recipeItemInformation"><section class="recipeInfoSection"><h4>Mission Provision</h4><div class="recipeProfileList"><span>${meal.desc}</span><span>One serving supports the whole party for one mission.</span></div></section></div><aside class="recipeCraftingBox"><h4>Ingredients</h4><div class="recipeDetailMaterials">${Object.entries(meal.cost).map(([k,v])=>{const have=s.materials[k]||0;return `<span class="${have>=v?'enough':'missing'}"><b>${have}/${v}</b> ${RESOURCE_NAMES[k]||k} <small>${tierLabel(resourceTier(k))}</small></span>`}).join('')}</div><div class="recipeLineAction">${levelOk&&materialOk?`<div class="recipeQuantityControl"><span>×</span><input type="number" id="cookQty-${id}" min="1" max="${max}" value="1"><button class="btn gold" onclick="cookMeal('${id}',$('cookQty-${id}').value)">Cook</button></div>`:`<button class="btn" disabled>${levelOk?'Missing ingredients':'Requires Cooking '+meal.level}</button>`}</div></aside></div></div>`}).join('')}</div></div>`).join('');
 }
 
 let recipeFilter='all';
@@ -340,10 +342,16 @@ function recipePreview(r){
   const [displayName,slot,specificName,cost,tier,meta={}]=r;
   const profile=[],stats=[];
 
+  if(slot==='Material'){
+    const output=meta.outputResource||specificName,qty=Math.max(1,Math.floor(meta.outputQty||1));
+    return{profile:['Processed material',`Produces ${qty} ${RESOURCE_NAMES[output]||output}`],stats:['Profession material']};
+  }
+
   if(slot==='Weapon'){
     const w=WEAPONS[specificName];
     if(w){
       profile.push(`${weaponTypeFor(specificName)} weapon`);
+      profile.push(TWO_HANDED_WEAPONS.has(specificName)||TWO_HANDED_WEAPONS.has(weaponTypeFor(specificName))?'Two-handed':'One-handed');
       profile.push(`Scales with ${weaponScalingLabel(w)}`);
       profile.push(`${elementIcon[w.type]||''} ${w.type} damage`);
       stats.push(`Attack ${w.base+tier*2}`);
@@ -372,9 +380,16 @@ function recipePreview(r){
     let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
     const value=stat==='hp'?Math.round(12+tier*4):Math.round(3+tier*1.8);
     stats.push(`+${value} ${statName(stat)}`);
+  }else if(slot==='Accessories'||slot==='OffHand'){
+    profile.push(meta.accessoryType||specificName||slotLabel(slot));
+    if(meta.block)stats.push(`+${meta.block} Block`);
   }
 
-  Object.entries(meta.stats||{}).forEach(([k,v])=>stats.push(`+${v}${['fire','ice','poison','lightning','holy','dark','lifesteal'].includes(k)?'%':''} ${statName(k)}`));
+  Object.entries(meta.stats||{}).forEach(([k,v])=>{
+    const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
+    const wholePercent=['fire','ice','poison','lightning','holy','dark','lifesteal','attackSpeed'].includes(k);
+    stats.push(`+${decimalPercent?Math.round(v*100):v}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+  });
   if(meta.damageBonus)stats.push(`+${Math.round(meta.damageBonus*100)}% damage`);
   if(meta.healBonus)stats.push(`+${Math.round(meta.healBonus*100)}% healing`);
   if(meta.critBonus)stats.push(`+${Math.round(meta.critBonus*100)}% crit`);
@@ -395,7 +410,7 @@ function closeRecipeMenu(){
 function setRecipeFilter(f,b){
   recipeFilter=f;
   document.querySelectorAll('[data-recipe-filter]').forEach(x=>x.classList.toggle('on',x.dataset.recipeFilter===f));
-  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',Jewelry:'Jewelry'};
+  const labels={all:'All',Weapon:'Weapons',Armor:'Armor',OffHand:'Off-hand',Accessories:'Accessories',Material:'Materials'};
   const btn=$('recipeMenuButton');if(btn)btn.textContent=(labels[f]||'Filter')+' ▾';
   renderCraft();
 }
@@ -411,9 +426,9 @@ document.addEventListener('click',e=>{
   if(!e.target.closest('.recipeMenuWrap'))closeRecipeMenu();
 });
 let expandedRecipes=new Set();
-const TIER_IDENTITIES={1:'Copper',2:'Iron',3:'Silver',4:'Mithril',5:'Star Metal',6:'Cinder',7:'Voidstone'};
-function recipeTierCategory(r){const tier=Math.max(1,Number(r?.[4])||1);return `Tier ${tierLabel(tier)} · ${TIER_IDENTITIES[tier]||'Masterwork'}`}
-let expandedRecipeCategories=new Set(['Tier I · Copper']);
+const TIER_IDENTITIES={1:'Copper',2:'Iron',3:'Silver',4:'Mithril',5:'Star Metal',6:'Cinder',7:'Voidstone',8:'Adamantite',9:'Orichalcum',10:'Eternium'};
+function recipeTierCategory(r){const tier=Math.max(1,Number(r?.[4])||1);return `${tierLabel(tier)} · ${TIER_IDENTITIES[tier]||'Masterwork'}`}
+let expandedRecipeCategories=new Set(['I · Copper']);
 function toggleRecipeRow(i){
   if(expandedRecipes.has(i))expandedRecipes.delete(i);else expandedRecipes.add(i);
   renderCraft();
@@ -423,6 +438,7 @@ function toggleRecipeCategory(name){
   renderCraft();
 }
 function recipeTypeLabel(r){
+  if(r[1]==='Material')return 'Textile Processing';
   if(r[1]==='Armor')return `${armorProfile(r[2]).armorClass} Armor`;
   if(r[1]==='Weapon')return weaponTypeFor(r[2]);
   return r[1];
@@ -458,7 +474,7 @@ function recipeMaterialCategory(r){
 function renderRecipeLine(r,i){
   const mat=Object.entries(r[3]).every(([k,v])=>(s.materials[k]||0)>=v);
   const preview=recipePreview(r),open=expandedRecipes.has(i);
-  const icon=r[1]==='Weapon'?(WEAPONS[r[2]]?.icon||'⚔️'):(itemIcons[r[1]]||'🔨');
+  const icon=r[1]==='Material'?'🧵':r[1]==='Weapon'?(WEAPONS[r[2]]?.icon||'⚔️'):(itemIcons[r[1]]||'🔨');
   const time=Math.ceil(craftDuration(r)/1000);
   const smithReq=recipeSmithLevel(r),smithXp=recipeSmithXp(r),smithOk=(s.smithing?.level||1)>=smithReq;
   return `<div class="recipeLine ${mat?'':'unaffordable'} ${smithOk?'':'recipeLocked'}">
@@ -466,7 +482,7 @@ function renderRecipeLine(r,i){
       <div class="recipeLineIcon">${icon}</div>
       <div>
         <div class="recipeLineName">${r[0]}</div>
-        <div class="recipeLineType">Tier ${tierLabel(r[4])} · ${recipeTypeLabel(r)}</div>
+        <div class="recipeLineType">${tierLabel(r[4])} · ${recipeTypeLabel(r)}</div>
       </div>
       <div class="recipeChevron">${open?'▾':'▸'}</div>
     </div>
@@ -483,10 +499,10 @@ function renderRecipeLine(r,i){
       </div>
       <aside class="recipeCraftingBox">
         <h4>Crafting Requirements</h4>
-        <div class="recipeCraftMeta"><span class="${smithOk?'enough':'missing'}">Blacksmithing ${smithReq}</span><span>+${smithXp} XP</span><span>${time}s per item</span></div>
+        <div class="recipeCraftMeta">${r[1]==='Material'?'<span class="enough">Workshop processing</span>':`<span class="${smithOk?'enough':'missing'}">Blacksmithing ${smithReq}</span><span>+${smithXp} XP</span>`}<span>${time}s per item</span></div>
         <div class="recipeCostLabel">Material Cost</div>
         <div class="recipeDetailMaterials">
-          ${Object.entries(r[3]).map(([k,v])=>{const have=s.materials[k]||0,ok=have>=v;return `<span class="${ok?'enough':'missing'}"><b>${have}/${v}</b> ${RESOURCE_NAMES[k]||k} <small>T${tierLabel(resourceTier(k))}</small>${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?`<em>${BOSS_RESOURCE_SOURCE[k]}</em>`:''}</span>`}).join('')}
+          ${Object.entries(r[3]).map(([k,v])=>{const have=s.materials[k]||0,ok=have>=v;return `<span class="${ok?'enough':'missing'}"><b>${have}/${v}</b> ${RESOURCE_NAMES[k]||k} <small>${tierLabel(resourceTier(k))}</small>${BOSS_RESOURCES.has(k)&&!s.discoveredResources.includes(k)?`<em>${BOSS_RESOURCE_SOURCE[k]}</em>`:''}</span>`}).join('')}
         </div>
         <div class="recipeLineAction">
           ${mat&&smithOk?`<div class="recipeQuantityControl" onclick="event.stopPropagation()"><span>×</span><input type="number" id="craftQty-${i}" min="1" max="${maxCraftQuantity(r)}" value="1"><button class="btn gold" onclick="craft(${i},$('craftQty-${i}').value)">Craft</button></div>`:`<button class="btn" disabled>${!smithOk?'Requires Blacksmithing '+smithReq:'Missing materials'}</button>`}
@@ -506,7 +522,7 @@ function renderCraft(){
   if($('smithRarityBonus'))$('smithRarityBonus').textContent='Higher rarity chance from Smithing Lv. '+s.smithing.level;
   const list=recipes.map((r,i)=>[r,i]).filter(([r])=>{
     const visible=recipeVisible(r);
-    const typeOk=recipeFilter==='all'||(recipeFilter==='Jewelry'?(r[1]==='Ring'||r[1]==='Amulet'):r[1]===recipeFilter);
+    const typeOk=recipeFilter==='all'||(recipeFilter==='Accessories'?(r[1]==='Ring'||r[1]==='Amulet'||r[1]==='Accessories'):r[1]===recipeFilter);
     const craftable=Object.entries(r[3]||{}).every(([k,v])=>(s.materials[k]||0)>=v)&&(s.smithing?.level||1)>=recipeSmithLevel(r);
     return visible&&typeOk&&(!recipeCraftableOnly||craftable);
   });
@@ -544,6 +560,7 @@ function renderUp(){
       </div>
 
       <div class="muted upgradeDesc">${u[2]}</div>
+      <div class="upgradeEffectComparison"><span><small>Current</small><b>${upgradeEffectValue(u[0],l)}</b></span>${l<u[4]?`<i aria-hidden="true">→</i><span class="next"><small>After upgrade</small><b>${upgradeEffectValue(u[0],l+1)}</b></span>`:''}</div>
 
       ${l<u[4]?`
         <div class="upgradeCosts">

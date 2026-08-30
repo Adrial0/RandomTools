@@ -4,10 +4,11 @@ function makeBoss(m){
   if(!info)throw new Error('Missing boss definition for '+m.type+' / '+m.boss);
 
   const raid=m.type==='raid';
-  const scale=1+(m.level||1)*.12;
+  const level=m.level||1,scale=1+level*.12,hpScale=1.12+Math.max(0,level-1)*.20;
 
-  const maxHp=Math.round((raid?720:360)*scale);
-  const atk=Math.round((raid?18:13)*scale);
+  const gapMult=underlevelEnemyMultiplier(m,level);
+  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult);
+  const atk=Math.round((raid?18:13)*scale*1.10*gapMult);
   const def=Math.round((raid?10:7)*scale);
   const mdef=Math.round((raid?11:8)*scale);
 
@@ -24,7 +25,7 @@ function makeBoss(m){
     damageType:({
       'Skeleton King':'dark','Broodmother':'poison','Rotting Colossus':'poison','High Cultist':'dark',
       'Ancient Drake':'fire','War Ogre':'physical','Wraith Lord':'dark','Abyssal Demon':'dark'
-    })[m.boss]||m.theme||'physical',
+    })[m.boss]||bossTpl.damageType||m.theme||'physical',
     aoeChance:raid?(m.boss==='War Ogre'?.25:.78):.48,
     elementalMult:raid?1.55:1.20,
     mage:true,boss:true,maxMana:80,mana:80,manaRegen:4,ability:ENEMIES_DATA[m.boss]?.ability||null,drops:ENEMIES_DATA[m.boss]?.drops||[],abilityReadyAt:0,attackInterval:raid?4500:4000,attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:4000)
@@ -47,7 +48,7 @@ function makeBossBattle(m){
   return b;
 }
 function bossItemDrop(m,rarity){
-  const targetTier=clamp(m.tier||1,1,7);
+  const targetTier=clamp(m.tier||1,1,10);
   let candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]===targetTier);
   if(!candidates.length)candidates=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]<=targetTier).sort((a,b)=>b.r[4]-a.r[4]);
   if(!candidates.length)return null;
@@ -61,6 +62,24 @@ function bossItemDrop(m,rarity){
   it.dropSource=m.boss;
   return it;
 }
+function awardAreaGuildBonus(m,major=false){
+  const key=major?`boss:${m.type}:${m.boss||m.name}`:`area:${m.areaId||m.name}`;
+  s.areaRewards=Array.isArray(s.areaRewards)?s.areaRewards:[];
+  if(s.areaRewards.some(x=>x.key===key))return null;
+  s.guildBonuses=Object.assign({maxHp:0,gatherSpeed:0,cooldownReduction:0},s.guildBonuses||{});
+  const kinds=[['maxHp','Maximum HP'],['gatherSpeed','Gathering speed'],['cooldownReduction','Ability cooldown recovery']],kind=kinds[s.areaRewards.length%kinds.length],amount=major?.02:.01;
+  s.guildBonuses[kind[0]]=Math.min(.20,(s.guildBonuses[kind[0]]||0)+amount);
+  const reward={key,type:kind[0],label:kind[1],amount,source:m.name};s.areaRewards.push(reward);
+  return reward;
+}
+function victoryPresentation(m,{major=false,guildBonus=null,item=null,unique=null}={}){
+  const partyUnlock=major&&m.gateTier<=5?` Expedition party capacity increased to ${Math.min(8,3+m.gateTier)}.`:'';
+  const unlockText=(major?(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions and gathering progression unlocked.`:'The final expedition chapter is complete.'):'The next expedition area is now available.')+partyUnlock;
+  const title=major?`Tier ${tierLabel(m.gateTier||m.tier||1)} Conquered`:`${m.name} Cleared`;
+  const itemHtml=item?`<div class="victoryRewardItem ${rarityClass(item.rarity)}"><b>${item.rarity} ${item.name}</b><span>${item.uniquePassive||'Guaranteed first-clear equipment reward'}</span></div>`:'';
+  m.victoryPresentation={title,major,unlockText,guildBonus,itemName:item?.name||null,unique:!!unique};
+  if(typeof showModal==='function')setTimeout(()=>showModal(title,`<div class="victoryPresentation ${major?'major':''}"><div class="victoryCrest">${major?'👑':'⚔️'}</div><h2>${title}</h2><p>${unlockText}</p>${guildBonus?`<div class="victoryGuildBonus"><b>Permanent Guild Bonus</b><span>+${(guildBonus.amount*100).toFixed(guildBonus.amount<.01?2:1)}% ${guildBonus.label}</span></div>`:''}${itemHtml}${unique?'<div class="unique victoryUniqueCallout">A Unique boss item has been discovered!</div>':''}</div>`),80);
+}
 
 function bossReward(m){
   ensureCombatReport(m).encounters++;
@@ -68,9 +87,11 @@ function bossReward(m){
   m.stash.materials[k]=(m.stash.materials[k]||0)+1;
   markResourceFound(k);
 
-  const roll=Math.random();
-  let bonusItem=null;
-  if(roll<.01)bonusItem=bossItemDrop(m,'Legendary');
+  const bossKey=`${m.type}:${m.boss}`,firstClear=!(s.bossClears||[]).includes(bossKey),roll=Math.random();
+  let bonusItem=null,unique=false;
+  if(roll<(firstClear ? .10 : .0015)){bonusItem=makeUniqueItem(m.tier||1,m.boss,m.level||1);unique=true}
+  else if(firstClear&&m.bossGate)bonusItem=bossItemDrop(m,'Rare');
+  else if(roll<.01)bonusItem=bossItemDrop(m,'Legendary');
   else if(roll<.06)bonusItem=bossItemDrop(m,'Rare');
 
   if(bonusItem){
@@ -80,23 +101,59 @@ function bossReward(m){
 
   m.completed=true;
   m.bossDefeated=true;
+  if(firstClear){s.bossClears.push(bossKey);const guildBonus=awardAreaGuildBonus(m,true);victoryPresentation(m,{major:!!m.bossGate,guildBonus,item:bonusItem,unique})}
+  if(m.bossGate&&m.gateTier){
+    s.expeditionGates=Array.isArray(s.expeditionGates)?s.expeditionGates:[];
+    if(!s.expeditionGates.includes(m.gateTier)){
+      s.expeditionGates.push(m.gateTier);
+      s.expeditionGates.sort((a,b)=>a-b);
+      m.battle.log.unshift(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions unlocked.`:'The final expedition chapter is complete.');
+    }
+  }
   trackQuestProgress('boss',m.boss,1,{contentType:m.type});
   m.battle.log.unshift(m.boss+' dropped '+RESOURCE_NAMES[k]+'.');
   log(m.name+' completed. '+m.boss+' defeated.');
   save();
+  if(typeof renderOffers==='function')renderOffers('quest');
 }
 let currentMissionForEnemy=null;
+function averageMissionPartyLevel(m){
+  const levels=(m?.party||[]).map(id=>s.members.find(h=>h.id===id)?.level).filter(Number.isFinite);
+  return levels.length?levels.reduce((sum,level)=>sum+level,0)/levels.length:(m?.level||1);
+}
+function underlevelEnemyMultiplier(m,encounterLevel){
+  if(!m||m.type==='arena')return 1;
+  const gap=Math.max(0,(encounterLevel||m.level||1)-averageMissionPartyLevel(m));
+  return 1+Math.min(.40,gap*.03);
+}
+function stageEnemyMultiplier(m){
+  if(!isStagedExpedition(m))return 1;
+  return 1+Math.min(4,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE))*.07;
+}
+function encounterEnemyCount(m,areaFinal=false){
+  if(areaFinal)return 1;
+  if(m.type==='raid')return 3;
+  if(m.type==='dungeon')return rnd(2,3);
+  const tier=Math.max(1,m.tier||1),partySize=Math.max(1,m.party?.length||1);
+  if(tier===1)return rnd(1,3);
+  if(tier===2)return rnd(2,4);
+  const minimum=Math.min(5,Math.max(3,partySize-1)),maximum=Math.min(5,Math.max(minimum,partySize));
+  return rnd(minimum,maximum);
+}
 function makeEnemy(type,level,index,forcedName=null){
   const names=forcedName?[]:(currentMissionForEnemy?.enemyPool&&currentMissionForEnemy.enemyPool.length)?currentMissionForEnemy.enemyPool:(enemyPools[type]||enemyPools.quest);
   const name=forcedName||pick(names),tpl=ENEMIES_DATA[name]||null;
-  if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:[]}}
+  if(!tpl){console.warn('Missing enemy data:',name);return {id:index+1,name,level,icon:'❓',maxHp:50,hp:50,atk:12,def:6,mdef:6,block:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,damageType:'physical',attackInterval:2400,attackStartedAt:Date.now(),nextAttackAt:Date.now()+2400,mana:0,maxMana:0,manaRegen:0,drops:[]}}
   const ar=ENEMY_ARCHETYPES_DATA[tpl.archetype]||ENEMY_ARCHETYPES_DATA.brute,scale=1+level*.12;
-  const hp=Math.round((tpl.baseHp||35)*scale*2.25*(ar.hpMult||1));
-  const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1));
+  // Preserve the original level-1 baseline, then let durability grow faster
+  // than unequipped hero damage. Attack and defenses retain gentler scaling.
+  const hpScale=1.12+Math.max(0,level-1)*.20,difficulty=underlevelEnemyMultiplier(currentMissionForEnemy,level)*stageEnemyMultiplier(currentMissionForEnemy);
+  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*(ar.hpMult||1)*difficulty);
+  const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1)*difficulty);
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
   const interval=Math.round(ar.attackInterval||2400);
-  return {id:index+1,name,icon:gameIcon('enemy',name,tpl.icon||'❓','gameAsset combatAsset'),archetype:tpl.archetype,ability:tpl.ability||null,drops:tpl.drops||['Iron'],maxHp:hp,hp,atk,def,mdef:Math.round(def*.94),block:0,fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),holy:rnd(0,18),dark:rnd(0,18),damageType:tpl.damageType||'physical',elementalMult:type==='raid'?1.30:type==='dungeon'?1.12:1.0,mage:maxMana>0,maxMana,mana:maxMana,manaRegen:ar.manaRegen||0,abilityReadyAt:0,attackInterval:interval,attackStartedAt:Date.now(),nextAttackAt:Date.now()+interval,enrageThreshold:ar.enrageThreshold||0,enrageMult:ar.enrageMult||1,basicStatus:ar.basicStatus||null,basicStatusChance:ar.basicStatusChance||0,protectorAura:ar.protectorAura||0,executeThreshold:ar.executeThreshold||0,executeMult:ar.executeMult||1};
+  return {id:index+1,name,level,icon:gameIcon('enemy',name,tpl.icon||'❓','gameAsset combatAsset'),archetype:tpl.archetype,ability:tpl.ability||null,drops:tpl.drops||['Iron'],maxHp:hp,hp,atk,def,mdef:Math.round(def*.94),block:0,fire:rnd(0,18),ice:rnd(0,18),poison:rnd(0,18),lightning:rnd(0,18),holy:rnd(0,18),dark:rnd(0,18),damageType:tpl.damageType||'physical',elementalMult:type==='raid'?1.30:type==='dungeon'?1.12:1.0,mage:maxMana>0,maxMana,mana:maxMana,manaRegen:ar.manaRegen||0,abilityReadyAt:0,attackInterval:interval,attackStartedAt:Date.now(),nextAttackAt:Date.now()+interval,enrageThreshold:ar.enrageThreshold||0,enrageMult:ar.enrageMult||1,basicStatus:ar.basicStatus||null,basicStatusChance:ar.basicStatusChance||0,protectorAura:ar.protectorAura||0,executeThreshold:ar.executeThreshold||0,executeMult:ar.executeMult||1};
 }
 
 function ensurePartyState(m){
@@ -190,10 +247,12 @@ function applyProvisionRecovery(m){
 }
 function makeBattle(m){
   ensurePartyState(m);
-  const count=m.type==='raid'?3:m.type==='dungeon'?rnd(2,3):rnd(1,3);currentMissionForEnemy=m;
+  const areaFinal=isStagedExpedition(m)&&expeditionEncounterCount(m)===EXPEDITION_MAX_ENCOUNTERS-1;
+  const count=encounterEnemyCount(m,areaFinal),encounterLevel=missionEncounterLevel(m);currentMissionForEnemy=m;
   const heroes=m.party.map(hid=>{
     const h=s.members.find(x=>x.id===hid),z=hs(h),ps=m.partyState[hid];
-    const wep=s.inventory.find(x=>x.id===h.equip.Weapon);
+    const mainId=h.equip.MainHand||h.equip.Weapon,wep=s.inventory.find(x=>x.id===mainId);
+    const off=s.inventory.find(x=>x.id===h.equip.OffHand&&x.id!==mainId&&x.slot==='Weapon');
     const wd=weaponDefForItem(wep)||((wep&&WEAPONS[wep.weaponType])?WEAPONS[wep.weaponType]:null);
     const baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||'');
     const previewUnit={baseAttackTime,attackSpeed:z.attackSpeed,buffs:{}};
@@ -209,13 +268,15 @@ function makeBattle(m){
       str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,physicalDodge:z.physicalDodge,magicalDodge:z.magicalDodge,
       regen:z.regen||0,lifesteal:z.lifesteal||0,damageMult:z.damageMult||1,healMult:z.healMult||1,critBonus:z.critBonus||0,element:z.element||null,elementMult:z.elementMult||1,activeType:z.activeType||null,
       fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
-      weaponType:wep?.weaponType||null,
+      weaponType:wep?.weaponType||null,twoHanded:weaponHands(wep)===2,
       scale:wep?.scale||({Mage:'int',Priest:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),
       damageType:wep?.damageType||'physical',
       weaponPower:wep?.weaponPower||(wd?.base||8),
+      offhandWeapon:off?{weaponType:off.weaponType,scale:off.scale||'dex',damageType:off.damageType||'physical',weaponPower:off.weaponPower||8,baseAttackTime:weaponAttackTime(off.weaponTemplate||off.weaponType||'')}:null,
+      dualWield:!!off,
       armorPen:z.armorPen||0,parry:z.parry||0,critDamage:z.critDamage||0,accuracy:z.accuracy||0,
       elementalDamage:z.elementalDamage||0,statusChance:z.statusChance||0,cleave:z.cleave||0,
-      counter:z.counter||0,damageVariance:z.damageVariance||0,execute:z.execute||0
+      counter:z.counter||0,damageVariance:z.damageVariance||0,execute:z.execute||0,uniqueDamageReduction:z.uniqueDamageReduction||0,uniqueCooldownReduction:z.uniqueCooldownReduction||0,uniqueOnHit:z.uniqueOnHit||null
     };
   });
   let partyDamage=0,partyDefense=0,partyMdef=0;
@@ -238,14 +299,18 @@ function makeBattle(m){
     id:++m.battleNumber,
     resolved:false,actionSeq:0,
     kind:'normal',
-    encounterNumber:(m.type==='dungeon'||m.type==='raid')?(Math.max(0,m.finiteStage||0)+1):null,
+    encounterNumber:m.maxFights?(Math.max(0,m.finiteStage||0)+1):null,
     heroes,
-    enemies:Array.from({length:count},(_,i)=>({...makeEnemy(m.type,m.level,i),statuses:{},cast:null})),
+    enemies:Array.from({length:count},(_,i)=>({...makeEnemy(m.type,encounterLevel,i),statuses:{},cast:null})),
     phase:cycle.phase,
     turn:cycle.phase==='heroes'?cycle.heroTurn:cycle.enemyTurn,
     round:cycle.round,
     log:[`Battle #${m.battleNumber}: a new enemy group approaches.`]
   };
+  if(areaFinal&&battle.enemies[0]){
+    const champion=battle.enemies[0],originalName=champion.name;
+    champion.templateName=originalName;champion.name=`${m.name} Champion`;champion.boss=true;champion.maxHp=Math.round(champion.maxHp*3.2);champion.hp=champion.maxHp;champion.atk=Math.round(champion.atk*1.45);champion.def=Math.round(champion.def*1.25);champion.mdef=Math.round(champion.mdef*1.25);battle.kind='areaBoss';battle.areaBoss=true;battle.log=[`Final encounter: the ${m.name} Champion blocks the road home.`];
+  }
   ensureCombatReport(m);heroes.forEach(h=>heroReport(m,h.id));
   // A changed party/save can leave a cursor beyond the available actor list.
   if(battle.phase==='heroes'&&battle.turn>=battle.heroes.length){
@@ -288,6 +353,11 @@ function syncPartyHp(m){
   });
 }
 function emptyStash(){return{gold:0,rep:0,materials:{},items:[]}}
+const EXPEDITION_STAGE_SIZE=5,EXPEDITION_STAGE_COUNT=5,EXPEDITION_MAX_ENCOUNTERS=25,EXPEDITION_INTERMISSION_MS=5000;
+function isStagedExpedition(m){return m?.type==='quest'&&!m.bossGate}
+function expeditionEncounterCount(m){return Math.max(0,Math.min(EXPEDITION_MAX_ENCOUNTERS,m?.finiteStage||0))}
+function expeditionStage(m){return Math.min(EXPEDITION_STAGE_COUNT,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)+1)}
+function missionEncounterLevel(m){return isStagedExpedition(m)?(m.level||1)+Math.min(EXPEDITION_STAGE_COUNT-1,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)):(m.level||1)}
 function missionLocationKey(type,q){
   if(!q)return '';
   return `${type}:${q.areaId||q.name||q.id}`;
@@ -315,8 +385,9 @@ function send(type,qid,ids,provision=null){
     kills:0,fights:0,finiteStage:0,normalEncountersCompleted:0,goldEarned:0,repEarned:0,battle:null,
     stash:emptyStash(),partyState:{},combatCycle:{phase:'heroes',heroTurn:0,enemyTurn:0,round:1},nextRegenAt:now+5000,defeated:false,completed:false,bossDefeated:false,battleNumber:0,lastRewardedBattleId:null
   };
+  if(type==='quest'&&!mission.bossGate){mission.maxFights=EXPEDITION_MAX_ENCOUNTERS;mission.finiteStage=0;mission.completedStages=0;mission.stageIntermission=null;mission.lastCheckpoint=0}
   ensurePartyState(mission);
-  mission.battle=makeBattle(mission);
+  mission.battle=mission.bossGate?makeBossBattle(mission):makeBattle(mission);
   s.missions.push(mission);
   setOnboardingFlag('expeditionStarted');
   
@@ -326,36 +397,39 @@ function send(type,qid,ids,provision=null){
 function pendingCount(m){
   return (m.stash?.items?.length||0)+Object.values(m.stash?.materials||{}).reduce((a,v)=>a+v,0);
 }
-function claimAllMissionLoot(){
-  const claimable=s.missions.filter(m=>m.stash&&((m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0));
+function claimAllGathering(){
   const harvestable=s.harvestJobs.filter(j=>Object.values(j.stash||{}).some(v=>v>0));
-  if(!claimable.length&&!harvestable.length)return notify('There is no mission or harvesting loot to claim.');
+  if(!harvestable.length)return notify('There are no gathered resources to claim.');
 
-  const goldBefore=s.gold,repClaimed=claimable.reduce((a,m)=>a+(m.stash?.rep||0),0),invBefore=s.inventory.length,matBefore={...s.materials};
-  claimable.forEach(m=>collectLoot(m.id,true));
+  const matBefore={...s.materials};
   harvestable.forEach(j=>collectHarvest(j.id,true));
 
   const parts=[];
-  const g=s.gold-goldBefore;
-  if(g)parts.push(`${g} gold`);
-  if(repClaimed)parts.push(`${repClaimed} reputation`);
   Object.keys(s.materials).forEach(k=>{const gained=(s.materials[k]||0)-(matBefore[k]||0);if(gained>0)parts.push(`${gained} ${RESOURCE_NAMES[k]||k}`)});
-  s.inventory.slice(invBefore).forEach(it=>parts.push(`${it.rarity} ${it.name}`));
 
   render();
   notify(parts.length?'Claimed: '+parts.join(' · '):'Nothing could be collected — resource storage may be full.','good');
 }
+function claimAllMissionLoot(){return claimAllGathering()}
+function depositMissionStash(m,reason='Mission rewards delivered'){
+  if(!m?.stash)return{gold:0,rep:0,materials:0,items:0,text:'No rewards'};
+  const delivered={gold:m.stash.gold||0,rep:m.stash.rep||0,materials:0,items:(m.stash.items||[]).length};
+  s.gold+=delivered.gold;grantGuildReputation(delivered.rep);
+  m.stash.gold=0;m.stash.rep=0;
+  Object.entries(m.stash.materials||{}).forEach(([k,v])=>{const added=addStoredResource(k,v);delivered.materials+=added;m.stash.materials[k]=v-added;if(m.stash.materials[k]<=0)delete m.stash.materials[k]});
+  (m.stash.items||[]).forEach(it=>receiveInventoryItem(it,'mission'));m.stash.items=[];
+  const claimed=delivered.gold||delivered.rep||delivered.materials||delivered.items;
+  if(claimed){s.onboarding.flags.lootClaimed=true;completeOnboardingGoals(true)}
+  discoverRecipes();
+  delivered.text=`${delivered.gold}g · ${delivered.rep} reputation · ${delivered.materials} resources · ${delivered.items} items`;
+  log(`${reason}: ${delivered.text}.`);
+  return delivered;
+}
 function collectLoot(mid,quiet=false){
   const m=s.missions.find(x=>x.id===mid);if(!m||!m.stash)return;
   const claimedAnything=(m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0;
-  s.gold+=m.stash.gold||0;
-  grantGuildReputation(m.stash.rep||0);
-  Object.entries(m.stash.materials||{}).forEach(([k,v])=>{const added=addStoredResource(k,v);m.stash.materials[k]=v-added;if(m.stash.materials[k]<=0)delete m.stash.materials[k]});
-  (m.stash.items||[]).forEach(it=>receiveInventoryItem(it,'mission'));
-  const summary=`${m.stash.gold||0}g, ${m.stash.rep||0} reputation, ${pendingCount(m)} loot/material drops`;
-  m.stash=emptyStash();discoverRecipes();save();
-  if(claimedAnything)setOnboardingFlag('lootClaimed');
-  if(!quiet)notify('Collected '+summary+'.','good');
+  const delivered=depositMissionStash(m,'Party delivery');save();
+  if(!quiet)notify('Collected '+delivered.text+'.','good');
   renderResourcesLite();renderInv();renderActive();renderCombat();
 }
 function heroXpNeeded(level){
@@ -385,18 +459,18 @@ function grantFightRewards(m,enemySnapshots){
   // Gold is rolled independently for every kill.
   // Higher-level encounters can drop larger amounts.
   defeated.forEach(enemy=>{
-    const base=Math.max(1,Math.floor(1+m.level/8));
+    const rewardLevel=enemy.level||missionEncounterLevel(m),base=Math.max(1,Math.floor(1+rewardLevel/8));
     const amount=rnd(base,Math.max(base,Math.ceil(base*1.6)));
-    m.stash.gold+=amount*5;
+    m.stash.gold+=Math.round(amount*5*(1+(s.up.board||0)*.05));
   });
 
   // Reputation is guaranteed after every completed fight and scales with the
   // number of enemies defeated and encounter difficulty.
-  const repPerEnemy=Math.max(1,Math.floor(1+m.level/15))*50;
+  const rewardLevel=Math.max(missionEncounterLevel(m),...defeated.map(e=>e.level||0)),repPerEnemy=Math.max(1,Math.floor(1+rewardLevel/15))*50;
   const typeRep=m.type==='raid'?1.5:m.type==='dungeon'?1.25:1;
   const repMult=missionReputationMultiplier(m);
   if(repMult>0){
-    m.stash.rep+=Math.round(defeated.length*repPerEnemy*typeRep*repMult);
+    m.stash.rep+=Math.round(defeated.length*repPerEnemy*typeRep*repMult*(1+(s.up.board||0)*.05));
   }
 
   // Roughly 70% material/equipment loot chance per killed enemy.
@@ -405,11 +479,11 @@ function grantFightRewards(m,enemySnapshots){
     const lootChance=m.type==='raid'?.78:m.type==='dungeon'?.74:.70;
     const gearChance=m.type==='raid'?.018:m.type==='dungeon'?.009:.0025;
     if(Math.random()<gearChance){
-      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),clamp(m.tier||1,1,7)));
+      m.stash.items.push(item(pick(['Weapon','Armor','Ring','Amulet']),clamp(m.tier||1,1,10)));
       return;
     }
 
-    const pool=(ENEMIES_DATA[enemy.name]?.drops)||[];
+    const pool=(ENEMIES_DATA[enemy.templateName||enemy.name]?.drops)||[];
     if(pool.length){
       const k=pick(pool);
       if(k){m.stash.materials[k]=(m.stash.materials[k]||0)+1;markResourceFound(k);}
@@ -420,31 +494,23 @@ function grantFightRewards(m,enemySnapshots){
   m.party.forEach(hid=>{
     const hero=s.members.find(x=>x.id===hid);if(!hero)return;
 
-    const fullPartyXp=defeated.reduce(sum=>sum+xpForEnemy(hero,m.level,m.type),0);
-    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2));
+    const fullPartyXp=defeated.reduce((sum,enemy)=>sum+xpForEnemy(hero,enemy.level||missionEncounterLevel(m),m.type),0);
+    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2*(1+(s.up.training||0)*.10)));
     hero.xp+=gained;
 
-    let need=heroXpNeeded(hero.level);
+    let need=heroXpNeeded(hero.level),levelsGained=0;
     while(hero.xp>=need){
       hero.xp-=need;
       hero.level++;
-
-      // Universal class main-stat growth: +2 every level.
-      const mainStat={Warrior:'str',Paladin:'str',Rogue:'dex',Ranger:'dex',Mage:'int',Priest:'int'}[hero.class];
-      if(mainStat)hero.bonus[mainStat]=(hero.bonus[mainStat]||0)+2;
-
-      // Class-specific growth is added on top of the universal +2 main stat.
-      const growth={
-        Warrior:{hp:5,str:2,def:1},
-        Paladin:{hp:5,int:1,def:2,mdef:1},
-        Rogue:{hp:3,dex:1,int:1,mdef:1},
-        Ranger:{hp:3,dex:2,mdef:1},
-        Mage:{hp:2,int:2,mdef:1},
-        Priest:{hp:2,int:1,mdef:1}
-      }[hero.class]||{};
-      Object.entries(growth).forEach(([stat,value])=>hero.bonus[stat]=(hero.bonus[stat]||0)+value);
+      syncNaturalHeroBonus(hero);
+      levelsGained++;
 
       need=heroXpNeeded(hero.level);
+    }
+    if(levelsGained){
+      const row=heroReport(m,hero.id);row.levelsGained=(row.levelsGained||0)+levelsGained;row.lastLevel=hero.level;
+      const combatHero=m.battle?.heroes?.find(x=>x.id===hero.id);if(combatHero){combatHero.level=hero.level;combatHero.levelUpUntil=Date.now()+1800;combatHero.levelUpText=`LEVEL ${hero.level}`}
+      m.battle?.log?.unshift(`${hero.name} reached level ${hero.level}!`);
     }
   });
 
@@ -469,7 +535,7 @@ function ensureCombatReport(m){
 }
 function heroReport(m,id){
   const report=ensureCombatReport(m),member=s.members.find(h=>h.id===id),key=String(id);
-  if(!report.heroes[key])report.heroes[key]={id,name:member?.name||'Unknown',damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0};
+  if(!report.heroes[key])report.heroes[key]={id,name:member?.name||'Unknown',damage:0,statusDamage:0,healing:0,damageTaken:0,interrupts:0,cleanses:0,statusesApplied:0,criticalHits:0,abilityUses:0,deaths:0,levelsGained:0,lastLevel:null};
   if(member)report.heroes[key].name=member.name;
   return report.heroes[key];
 }
@@ -485,6 +551,7 @@ function recordHeroDamageTaken(m,target,amount){
     if(!already){report.deaths.push({id:target.id,name:target.name,battleId:m.battle.id,order:report.deaths.length+1});addHeroMetric(m,target.id,'deaths',1)}
   }
 }
+function applyUniqueDamageReduction(target,damage){return Math.max(0,Math.round(damage*(1-clamp(target?.uniqueDamageReduction||0,0,.60))))}
 const STATUS_EFFECTS={
   bleed:{name:'Bleeding',icon:'🩸',damageType:'physical',maxStacks:3},
   burning:{name:'Burning',icon:'🔥',damageType:'fire',maxStacks:3},
@@ -577,9 +644,9 @@ function heroDamage(h,target,forcedElement=null){
   const statuses=target?.statuses||{};
   if(h.subclass==='venomblade'&&statuses.poison)synergy+=.08*Math.min(3,statuses.poison.stacks||1);
   if(h.subclass==='marksman'&&statuses.frostbite)synergy+=.18;
-  const raw=base*roll*mult*synergy*(element==='physical'?1:(1+(h.elementalDamage||0)));
+  const raw=base*roll*mult*synergy*(h.twoHanded?2:1)*(element==='physical'?1:(1+(h.elementalDamage||0)));
 
-  const protectionMult=1-clamp(target.protection||0,0,.6);
+  const protectionMult=(1-clamp(target.protection||0,0,.6))*(target.buffs?.shieldFaith>Date.now()?.70:1);
   if(element==='physical')return Math.max(1,Math.round(mitigatedDamage(raw,target.def,target.block||0,h.armorPen||0)*protectionMult));
 
   const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0,h.armorPen||0);
@@ -595,7 +662,7 @@ const ACTIVE_COOLDOWNS={};
 const ACTIVE_DISPLAY_NAMES={};
 const COMBAT_BUFF_DURATIONS={battleShout:12000,shieldFaith:10000};
 function manaCost(type){return ACTIVE_MANA_COSTS[type]||0}
-function activeCooldownMs(type){return ACTIVE_COOLDOWNS[type]||10000}
+function activeCooldownMs(type,h=null){const reduction=1-clamp((s?.guildBonuses?.cooldownReduction||0)+(h?.uniqueCooldownReduction||0),0,.70);return Math.max(1000,Math.round((ACTIVE_COOLDOWNS[type]||10000)*reduction))}
 function activeName(type){return ACTIVE_DISPLAY_NAMES[type]||type||'Active'}
 function canSpendMana(h,type){return (h.mana||0)>=manaCost(type)}
 function spendMana(h,type){
@@ -613,7 +680,7 @@ function activeReady(h,type,now=Date.now()){
   return (ensureCooldownMap(h)[type]||0)<=now;
 }
 function startActiveCooldown(h,type,now=Date.now()){
-  ensureCooldownMap(h)[type]=now+activeCooldownMs(type);
+  ensureCooldownMap(h)[type]=now+activeCooldownMs(type,h);
 }
 function activeCooldownRemaining(h,type,now=Date.now()){
   return Math.max(0,(ensureCooldownMap(h)[type]||0)-now);
@@ -627,7 +694,7 @@ function primaryActiveType(h){
 function cooldownProgress(h,type,now=Date.now()){
   if(!type)return 1;
   const remaining=activeCooldownRemaining(h,type,now);
-  const total=activeCooldownMs(type);
+  const total=activeCooldownMs(type,h);
   return clamp(1-remaining/Math.max(1,total),0,1);
 }
 function healAlly(m,h,ally,mult=1,label='Heal'){
@@ -642,60 +709,35 @@ function healAlly(m,h,ally,mult=1,label='Heal'){
   return true;
 }
 function heroBasicAttack(m,h){
-  const b=m.battle,targets=living(b.enemies);if(!targets.length||h.hp<=0)return false;
-  const target=pick(targets);
-  let dmg=heroDamage(h,target);
-  let text='';
-
-  let critChance=(h.class==='Rogue'?.18:0)+(h.critBonus||0);
-  if(h.class==='Ranger')critChance+=(h.critBonus||0);
-  if(critChance>0&&Math.random()<critChance){
-    dmg=Math.round(dmg*(1.35+(h.critDamage||0)));
-    text='Critical! ';
-  }
-  if((h.execute||0)>0&&target.hp/target.maxHp<=.30){
-    dmg=Math.round(dmg*(1+h.execute));
-    text+='Execute! ';
-  }
-
-  const targetBefore=target.hp;
-  target.hp=Math.max(0,target.hp-dmg);
-  addHeroMetric(m,h.id,'damage',Math.min(targetBefore,dmg));
-  if(text.includes('Critical!'))addHeroMetric(m,h.id,'criticalHits',1);
-
-  if((h.cleave||0)>0){
-    const secondary=targets.find(t=>t.id!==target.id&&t.hp>0);
-    if(secondary){
-      const splash=Math.max(1,Math.round(dmg*h.cleave));
-      const secondaryBefore=secondary.hp;
-      secondary.hp=Math.max(0,secondary.hp-splash);
-      addHeroMetric(m,h.id,'damage',Math.min(secondaryBefore,splash));
-      text+=`Cleave hits ${secondary.name} for ${splash}. `;
+  const b=m.battle;if(!living(b.enemies).length||h.hp<=0)return false;
+  const weapons=[{weaponType:h.weaponType,scale:h.scale,damageType:h.damageType,weaponPower:h.weaponPower},...(h.dualWield&&h.offhandWeapon?[h.offhandWeapon]:[])];
+  weapons.forEach((weapon,index)=>{
+    const targets=living(b.enemies);if(!targets.length)return;
+    const target=pick(targets),attacker={...h,...weapon};
+    let dmg=heroDamage(attacker,target),text=index?'Off-hand: ':'';
+    let critChance=(h.class==='Rogue'?.18:0)+(h.critBonus||0);
+    if(h.class==='Ranger')critChance+=(h.critBonus||0);
+    if(critChance>0&&Math.random()<critChance){dmg=Math.round(dmg*(1.35+(h.critDamage||0)));text+='Critical! ';addHeroMetric(m,h.id,'criticalHits',1)}
+    if((h.execute||0)>0&&target.hp/target.maxHp<=.30){dmg=Math.round(dmg*(1+h.execute));text+='Execute! '}
+    const targetBefore=target.hp;target.hp=Math.max(0,target.hp-dmg);addHeroMetric(m,h.id,'damage',Math.min(targetBefore,dmg));
+    if((h.cleave||0)>0){
+      const secondary=targets.find(t=>t.id!==target.id&&t.hp>0);
+      if(secondary){const splash=Math.max(1,Math.round(dmg*h.cleave)),before=secondary.hp;secondary.hp=Math.max(0,secondary.hp-splash);addHeroMetric(m,h.id,'damage',Math.min(before,splash));text+=`Cleave hits ${secondary.name} for ${splash}. `}
     }
-  }
-
-  const basicStatus=statusForDamageType(h.damageType);
-  if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){
-    applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name,sourceId:h.id});
-    text+=`${STATUS_EFFECTS[basicStatus].name} applied. `;
-  }
-
-  const weaponName=h.weaponType||'unarmed attack';
-  text+=`${h.name.split(' ')[0]} uses ${weaponName} for ${dmg} ${elementIcon[h.damageType]} ${h.damageType} damage.`;
-
-  if(h.lifesteal>0){
-    const heal=Math.max(1,Math.floor(dmg*h.lifesteal/100));
-    h.hp=Math.min(h.maxHp,h.hp+heal);
-    text+=` Lifesteal restores ${heal} HP.`;
-  }
-
-  b.log.unshift(text);b.log=b.log.slice(0,45);
+    const basicStatus=statusForDamageType(attacker.damageType);
+    if(basicStatus&&(h.statusChance||0)>0&&Math.random()<h.statusChance){applyStatus(m,target,basicStatus,{power:Math.max(1,dmg*.16),duration:6000,source:h.name,sourceId:h.id});text+=`${STATUS_EFFECTS[basicStatus].name} applied. `}
+    if(h.uniqueOnHit){applyStatus(m,target,h.uniqueOnHit,{power:Math.max(1,dmg*.20),duration:10000,source:h.name,sourceId:h.id});text+=`${STATUS_EFFECTS[h.uniqueOnHit]?.name||h.uniqueOnHit} applied. `}
+    text+=`${h.name.split(' ')[0]} uses ${attacker.weaponType||'unarmed attack'} for ${dmg} ${elementIcon[attacker.damageType]} ${attacker.damageType} damage.`;
+    if(h.lifesteal>0){const heal=Math.max(1,Math.floor(dmg*h.lifesteal/100));h.hp=Math.min(h.maxHp,h.hp+heal);text+=` Lifesteal restores ${heal} HP.`}
+    b.log.unshift(text);
+  });
+  b.log=b.log.slice(0,45);
   syncPartyHp(m);
   return true;
 }
 function activeDamageHit(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
-  const dmg=Math.max(1,Math.round(heroDamage(h,target,element)*mult));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
   const before=target.hp;
   target.hp=Math.max(0,target.hp-dmg);
   addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -798,6 +840,45 @@ function tryActiveSkill(m,h,now=Date.now()){
   }
   return used;
 }
+function arenaDefenderDamage(m,h,target,mult,label,element=null){
+  if(!target||target.hp<=0)return false;
+  const type=element||h.damageType||'physical';
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
+  const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
+  m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} for ${dmg} ${elementIcon[type]||''} ${type} damage.`);
+  return true;
+}
+function tryArenaDefenderActive(m,h,now=Date.now()){
+  if(!h?.arenaHero||h.hp<=0)return false;
+  const b=m.battle,type=primaryActiveType(h),targets=living(b.heroes),allies=living(b.enemies);
+  if(!type||!targets.length||!activeReady(h,type,now)||!canSpendMana(h,type))return false;
+  let used=false;
+  const healTypes={Heal:1,greaterHeal:1.65,renew:.85,radiantAid:.75};
+  if(healTypes[type]){
+    const ally=[...allies].sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0];
+    const threshold=type==='greaterHeal'?.82:type==='renew'?.88:type==='radiantAid'?.90:.70;
+    if(ally&&ally.hp<ally.maxHp*threshold){
+      const amount=Math.max(2,Math.round(((h.int||1)*.38+(h.weaponPower||8)*.12)*(h.healMult||1)*healTypes[type]*2));
+      const before=ally.hp;ally.hp=Math.min(ally.maxHp,ally.hp+amount);
+      b.log.unshift(`${h.name.split(' ')[0]} uses ${activeName(type)} on ${ally.name.split(' ')[0]} for ${ally.hp-before}.`);used=true;
+    }
+  }else if(type==='elementNova'||type==='arcaneBurst'){
+    const element=type==='elementNova'?(h.element||'fire'):(h.damageType==='physical'?'fire':h.damageType);
+    const mult=type==='elementNova'?1.44:1.35;
+    targets.forEach(target=>arenaDefenderDamage(m,h,target,mult,activeName(type),element));used=true;
+  }else if(type==='commandStrike'){
+    allies.forEach(ally=>{ally.buffs=ally.buffs||{};ally.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout});
+    b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout on the defending party.`);used=true;
+  }else if(type==='shieldFaith'){
+    h.buffs=h.buffs||{};h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
+    b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith.`);used=true;
+  }else{
+    const target=pick(targets),definition={powerStrike:[2,'Power Strike'],shieldSlam:[1.7,'Shield Slam'],preciseShot:[2.2,'Precise Shot'],wardenShot:[1.5,'Warden Shot'],backstab:[2.4,'Backstab'],envenom:[1.9,'Envenom','poison'],smite:[2.1,'Smite','holy'],holyStrike:[2.1,'Holy Strike','holy'],companionStrike:[1.1,'Companion Strike'],flurry:[2.8,'Flurry']}[type];
+    if(definition){used=arenaDefenderDamage(m,h,target,definition[0],definition[1],definition[2]);if(used&&['powerStrike','backstab'].includes(type))applyStatus(m,target,'bleed',{power:Math.max(1,heroDamage(h,target)*.16),duration:7000,source:h.name});if(used&&type==='envenom')applyStatus(m,target,'poison',{power:Math.max(1,heroDamage(h,target,'poison')*.18),duration:10000,source:h.name})}
+  }
+  if(used){spendMana(h,type);startActiveCooldown(h,type,now);b.actionSeq=(b.actionSeq||0)+1;b.log=b.log.slice(0,45);syncPartyHp(m)}
+  return used;
+}
 function threatTarget(targets){
   const total=targets.reduce((sum,h)=>sum+Math.max(.01,h.threat||1),0);
   let roll=Math.random()*total;
@@ -833,10 +914,10 @@ function resolveEnemyAbility(m,e,abilityId,now=Date.now()){
   if(ab.type==='heal'){
     const heal=Math.max(1,Math.round(e.maxHp*(ab.power||.08)));e.hp=Math.min(e.maxHp,e.hp+heal);b.log.unshift(`${e.name} uses ${ab.name} and restores ${heal} HP.`);
   }else if(ab.type==='aoe'){
-    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg)});
+    targets.forEach(t=>{const raw=e.atk*(ab.power||1),d=ab.damageType||e.damageType||'physical';const dmg=applyUniqueDamageReduction(t,d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d])));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg)});
     b.log.unshift(`⚠ ${e.name} releases ${ab.name} on the whole party.`);
   }else{
-    const t=enemySingleTarget(e,targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d]));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
+    const t=enemySingleTarget(e,targets),d=ab.damageType||e.damageType||'physical',raw=e.atk*(ab.power||1.2),dmg=applyUniqueDamageReduction(t,d==='physical'?mitigatedDamage(raw,t.def,t.block||0):Math.round(mitigatedDamage(raw,t.mdef,t.block||0)*elementalReduction(t[d])));const before=t.hp;t.hp=Math.max(0,t.hp-dmg);recordHeroDamageTaken(m,t,Math.min(before,dmg));applyAbilityStatus(t,dmg);b.log.unshift(`${e.name} casts ${ab.name} on ${t.name.split(' ')[0]} for ${dmg} ${d} damage.`);
   }
   e.mana=Math.max(0,(e.mana||0)-(ab.manaCost||0));e.abilityReadyAt=now+(ab.cooldown||7000);b.actionSeq=(b.actionSeq||0)+1;syncPartyHp(m);return true;
 }
@@ -871,7 +952,7 @@ function enemyAction(m,e){
   if(e.cast)return;
   if(tryEnemyAbility(m,e,Date.now()))return;
 
-  const elem=e.damageType||'physical';
+  const elem=e.damageType||'physical',buffMult=e.buffs?.battleShout>Date.now()?1.20:1;
   const elemental=elem!=='physical';
   if(elemental && Math.random()<(e.aoeChance||.32)){
     const hit=targets.map(target=>{
@@ -879,10 +960,10 @@ function enemyAction(m,e){
         return `${target.name.split(' ')[0]} dodged`;
       }
       const enraged=e.enrageThreshold&&e.hp/e.maxHp<=e.enrageThreshold?e.enrageMult||1:1;
-      const raw=e.atk*1.05*(e.elementalMult||1)*enraged;
+      const raw=e.atk*1.05*(e.elementalMult||1)*enraged*buffMult;
       const afterDefense=mitigatedDamage(raw,target.mdef,target.block||0);
       let dmg=Math.max(0,Math.round(afterDefense*elementalReduction(target[elem])));
-      if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
+      if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);dmg=applyUniqueDamageReduction(target,dmg);
       const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
       return `${target.name.split(' ')[0]} ${dmg}`;
     });
@@ -903,13 +984,31 @@ function enemyAction(m,e){
   const enraged=e.enrageThreshold&&e.hp/e.maxHp<=e.enrageThreshold?e.enrageMult||1:1;
   const execute=e.executeThreshold&&target.hp/target.maxHp<=e.executeThreshold?e.executeMult||1:1;
   if(elemental){
-    const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1)*enraged*execute;
+    const raw=e.atk*(.72+Math.random()*.32)*(e.elementalMult||1)*enraged*execute*buffMult;
     dmg=Math.max(0,Math.round(mitigatedDamage(raw,target.mdef,target.block||0)*elementalReduction(target[elem])));
-  }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute,target.def,target.block||0);
-  if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);
+  }else dmg=mitigatedDamage(e.atk*(.72+Math.random()*.32)*enraged*execute*buffMult,target.def,target.block||0);
+  if(target.buffs?.shieldFaith>Date.now())dmg=Math.round(dmg*.70);dmg=applyUniqueDamageReduction(target,dmg);
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   b.log.unshift(`${e.name} hits ${target.name.split(' ')[0]} for ${dmg} ${elemental?elementIcon[elem]+' '+elem:'physical'} damage.`);
   if(target.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,target,e.basicStatus,{power:Math.max(1,dmg*.12),duration:8000,source:e.name});
+  if(e.arenaHero&&e.dualWield&&e.offhandWeapon){
+    const offTargets=living(b.heroes),offTarget=offTargets.length?enemySingleTarget(e,offTargets):null;
+    if(offTarget){
+      const offType=e.offhandWeapon.damageType||'physical',offElemental=offType!=='physical';
+      if(Math.random()<Math.max(0,(offElemental?offTarget.magicalDodge:offTarget.physicalDodge||0)-(e.accuracy||0))){
+        b.log.unshift(`${offTarget.name.split(' ')[0]} dodges ${e.name}'s off-hand attack.`);
+      }else if(Math.random()<(offTarget.parry||0)){
+        b.log.unshift(`${offTarget.name.split(' ')[0]} parries ${e.name}'s off-hand attack.`);
+      }else{
+        const raw=(e.offhandAtk||e.atk*.75)*(.72+Math.random()*.32)*enraged*buffMult;
+        let offDamage=offElemental?Math.max(0,Math.round(mitigatedDamage(raw,offTarget.mdef,offTarget.block||0)*elementalReduction(offTarget[offType]))):mitigatedDamage(raw,offTarget.def,offTarget.block||0);
+        if(offTarget.buffs?.shieldFaith>Date.now())offDamage=Math.round(offDamage*.70);
+        const offBefore=offTarget.hp;offTarget.hp=Math.max(0,offTarget.hp-offDamage);recordHeroDamageTaken(m,offTarget,Math.min(offBefore,offDamage));
+        b.log.unshift(`${e.name} strikes ${offTarget.name.split(' ')[0]} with their off hand for ${offDamage} ${offElemental?elementIcon[offType]+' '+offType:'physical'} damage.`);
+        if(offTarget.hp>0&&e.basicStatus&&Math.random()<(e.basicStatusChance||0))applyStatus(m,offTarget,e.basicStatus,{power:Math.max(1,offDamage*.12),duration:8000,source:e.name});
+      }
+    }
+  }
   if(target.hp>0&&(target.counter||0)>0&&Math.random()<target.counter){
     const counter=Math.max(1,Math.round(heroDamage(target,e)*.55));
     const enemyBefore=e.hp;
@@ -979,18 +1078,61 @@ function expeditionDefeated(m){
   if(m.type==='arena'){finishArenaClientBattle(m,false);return}
   syncPartyHp(m);
   m.defeated=true;
+  if(isStagedExpedition(m)){
+    m.failedStage=Math.min(EXPEDITION_STAGE_COUNT,Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)+1);
+    m.lastCheckpoint=Math.floor(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE)*EXPEDITION_STAGE_SIZE;
+    m.lostStageRewards={gold:m.stash.gold||0,rep:m.stash.rep||0,materials:Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0),items:m.stash.items?.length||0};
+    m.stash=emptyStash();m.stageIntermission=null;
+  }
   m.defeatAdvice=defeatAdviceFor(m);
   m.battle.log.unshift('The entire party has fallen. The expedition can no longer continue.');
   log(m.name+' expedition was defeated.');
   save();
 }
 function normalEncounterCount(m){
-  if(m.type!=='dungeon'&&m.type!=='raid')return m.fights||0;
+  if(!m.maxFights)return m.fights||0;
   if(m.finiteStage==null){
     const old=m.normalEncountersCompleted!=null?m.normalEncountersCompleted:(m.fights||0);
     m.finiteStage=Math.max(0,Math.min(old,m.maxFights||old));
   }
   return m.finiteStage;
+}
+
+function markExpeditionAreaCleared(m){
+  const key=String(m.areaId||'');if(!key)return false;
+  s.expeditionClears=Array.isArray(s.expeditionClears)?s.expeditionClears:[];
+  if(s.expeditionClears.includes(key))return false;
+  s.expeditionClears.push(key);return true;
+}
+function beginExpeditionStageIntermission(m,offline=false,finalStage=false){
+  const stage=Math.min(EXPEDITION_STAGE_COUNT,Math.ceil(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE));
+  let firstClearBonus=null;
+  if(finalStage&&markExpeditionAreaCleared(m)){
+    firstClearBonus=awardAreaGuildBonus(m,false);
+  }
+  const delivered=depositMissionStash(m,finalStage?'Area cleared':'Stage delivery');
+  m.completedStages=stage;m.lastCheckpoint=expeditionEncounterCount(m);
+  const hidden=typeof document!=='undefined'&&document.hidden;
+  m.stageIntermission={stage,finalStage,offlinePaused:!!offline||hidden,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
+  if(finalStage){m.completed=true;m.bossDefeated=true;log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
+  save();
+}
+function continueExpeditionStage(mid){
+  const m=s.missions.find(x=>x.id===mid);if(!m?.stageIntermission||m.completed)return;
+  m.stageIntermission.offlinePaused=false;m.stageIntermission.until=Date.now();advanceExpeditionIntermission(m,Date.now());save();renderActive();renderCombat();
+}
+function advanceExpeditionIntermission(m,now=Date.now()){
+  const pause=m?.stageIntermission;if(!pause||pause.finalStage||pause.offlinePaused||now<pause.until)return false;
+  m.stageIntermission=null;
+  const next=makeBattle(m);m.battle=m.battle?advanceBattleInPlace(m.battle,next,now):next;m.lastSim=now;return true;
+}
+function resetMissionPartyState(m){
+  m.partyState={};ensurePartyState(m);m.combatCycle={phase:'heroes',heroTurn:0,enemyTurn:0,round:1};m.nextRegenAt=Date.now()+5000;
+}
+function restartExpedition(mid,fromBeginning=false){
+  const m=s.missions.find(x=>x.id===mid);if(!m||!isStagedExpedition(m)||!m.defeated)return;
+  const restartAt=fromBeginning?0:Math.max(0,Math.min(EXPEDITION_MAX_ENCOUNTERS-1,m.lastCheckpoint||0));
+  m.finiteStage=restartAt;m.normalEncountersCompleted=restartAt;m.completedStages=Math.floor(restartAt/EXPEDITION_STAGE_SIZE);m.fights=restartAt;m.kills=0;m.defeated=false;m.completed=false;m.bossDefeated=false;m.defeatAdvice=[];m.failedStage=null;m.lostStageRewards=null;m.stageIntermission=null;m.stash=emptyStash();m.battleNumber=0;m.lastRewardedBattleId=null;m.combatReport=null;resetMissionPartyState(m);m.battle=makeBattle(m);m.lastSim=Date.now();activeMissionDomKey='__force__';save();render();openCombat(mid);notify(fromBeginning?'Expedition restarted from Stage 1.':`Expedition restarted from Stage ${expeditionStage(m)}.`,'good');
 }
 
 function createCurrentFiniteBattle(m){
@@ -1019,8 +1161,10 @@ function advanceBattleInPlace(currentBattle,nextBattle,now=Date.now()){
   const heroes=(nextBattle.heroes||[]).map(nextHero=>{
     const hero=currentHeroesById.get(nextHero.id);
     if(!hero)return nextHero;
+    const levelUpUntil=hero.levelUpUntil,levelUpText=hero.levelUpText;
     Object.keys(hero).forEach(key=>{if(!(key in nextHero))delete hero[key]});
     Object.assign(hero,nextHero);
+    if(levelUpUntil>now){hero.levelUpUntil=levelUpUntil;hero.levelUpText=levelUpText}
     return hero;
   });
   const currentEnemies=currentBattle.enemies||[];
@@ -1049,7 +1193,7 @@ function finishCurrentFight(m){
   syncPartyHp(m);
   applyProvisionRecovery(m);
 
-  if(b.kind==='boss'||b.boss){
+  if((b.kind==='boss'||b.boss)&&!b.areaBoss){
     if(!m.completed)bossReward(m);
     return;
   }
@@ -1059,17 +1203,22 @@ function finishCurrentFight(m){
     b.resolved=true;
     ensureCombatReport(m).encounters++;
     try{
-      grantFightRewards(m,b.enemies.map(e=>({name:e.name})));
+      grantFightRewards(m,b.enemies.map(e=>({name:e.name,templateName:e.templateName,level:e.level})));
     }catch(err){
       console.error('Guildmaster reward error',err);
       notify('The fight ended, but reward processing had an error.');
     }
 
-    if(m.type==='dungeon'||m.type==='raid'){
+    if(m.maxFights){
       // ONE and only one place increments finite dungeon progress.
       m.finiteStage=Math.min((m.finiteStage||0)+1,m.maxFights);
       m.normalEncountersCompleted=m.finiteStage;
     }
+  }
+
+  if(isStagedExpedition(m)){
+    if(m.finiteStage>=EXPEDITION_MAX_ENCOUNTERS){beginExpeditionStageIntermission(m,false,true);return}
+    if(m.finiteStage%EXPEDITION_STAGE_SIZE===0){beginExpeditionStageIntermission(m,false,false);return}
   }
 
   const transitionNow=Date.now();
@@ -1087,7 +1236,7 @@ function repairFiniteMissionState(m){
   if(m?.battle?.heroes)m.battle.heroes.forEach(hero=>{
     if(!hero.cooldowns||typeof hero.cooldowns!=='object')hero.cooldowns={};
     if(!hero.buffs||typeof hero.buffs!=='object')hero.buffs={};
-    const original=s.members.find(x=>x.id===hero.id),z=original?hs(original):null,wep=original?s.inventory.find(x=>x.id===original.equip?.Weapon):null;
+    const original=s.members.find(x=>x.id===hero.id),z=original?hs(original):null,wep=original?s.inventory.find(x=>x.id===original.equip?.MainHand):null;
     if(z)hero.attackSpeed=z.attackSpeed+(missionProvisionEffect(m).attackSpeed||0);
     if(!hero.baseAttackTime)hero.baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||hero.weaponType||'');
     if(!Number.isFinite(hero.nextAttackAt))scheduleNextAttack(hero,false,Date.now());
@@ -1184,6 +1333,7 @@ function processBossMechanics(m,now=Date.now()){
 function stepBattle(m){
   if(!m||m.defeated||m.completed)return;
   const now=Date.now();
+  if(m.stageIntermission){advanceExpeditionIntermission(m,now);return}
   if(!m.battle)m.battle=makeBattle(m);
   let b=m.battle;
   if(!b)return;
@@ -1206,6 +1356,14 @@ function stepBattle(m){
   if(!living(b.heroes).length){expeditionDefeated(m);return}
 
   processTimedRegen(m,now);
+
+  // Arena defenders are saved heroes, so their subclass abilities run on
+  // independent mana/cooldown timers just like the attacking party.
+  for(const defender of b.enemies){
+    if(defender.hp<=0||!defender.arenaHero)continue;
+    tryArenaDefenderActive(m,defender,now);
+    if(!living(b.heroes).length){expeditionDefeated(m);return}
+  }
 
   // Active abilities are fully independent of normal attacks.
   for(const hero of b.heroes){
@@ -1241,9 +1399,9 @@ function stepBattle(m){
   m.lastSim=now;
 }
 function offlineEnemySnapshot(m){
-  const pool=enemyPools[m.type]||enemyPools.quest;
+  const pool=(m.enemyPool?.length?m.enemyPool:(enemyPools[m.type]||enemyPools.quest)),level=missionEncounterLevel(m);
   const count=m.type==='raid'?3:m.type==='dungeon'?2:1;
-  return Array.from({length:count},()=>({name:pick(pool)[0]}));
+  return Array.from({length:count},()=>({name:pick(pool),level}));
 }
 function offlineCompositionFactor(m,party){
   const members=party||[];
@@ -1269,7 +1427,10 @@ function offlineCatchup(hiddenMs){
   if(!hiddenMs||hiddenMs<60000)return;
 
   s.missions.forEach(m=>{
-    if(m.defeated||m.completed)return;
+    if(m.defeated||m.completed||m.stageIntermission)return;
+    // Story gates are deliberate live boss attempts; background time cannot
+    // bypass them or silently advance the expedition chapter.
+    if(m.bossGate)return;
 
     ensurePartyState(m);
     repairFiniteMissionState(m);
@@ -1286,6 +1447,7 @@ function offlineCatchup(hiddenMs){
     if(m.type==='dungeon'||m.type==='raid'){
       possible=Math.min(possible,Math.max(0,m.maxFights-normalEncounterCount(m)));
     }
+    if(isStagedExpedition(m))possible=Math.min(possible,EXPEDITION_STAGE_SIZE-(expeditionEncounterCount(m)%EXPEDITION_STAGE_SIZE||0));
     if(possible<=0)return;
 
     const healer=(party.some(h=>h.class==='Priest')?.35:0)+(mealEffect.healing||0)*.25;
@@ -1311,15 +1473,16 @@ function offlineCatchup(hiddenMs){
       applyProvisionRecovery(m);
 
       grantFightRewards(m,offlineEnemySnapshot(m));
-      if(m.type==='dungeon'||m.type==='raid'){
+      if(m.maxFights){
         m.finiteStage=Math.min((m.finiteStage||0)+1,m.maxFights);
         m.normalEncountersCompleted=m.finiteStage;
       }
       completed++;
+      if(isStagedExpedition(m)&&m.finiteStage%EXPEDITION_STAGE_SIZE===0){beginExpeditionStageIntermission(m,true,m.finiteStage>=EXPEDITION_MAX_ENCOUNTERS);break}
     }
     if(completed){const report=ensureCombatReport(m);report.encounters+=completed;report.offlineEncounters=(report.offlineEncounters||0)+completed}
 
-    if(!m.defeated){
+    if(!m.defeated&&!m.completed&&!m.stageIntermission){
       // Offline simulation resolves complete encounters, so resume at the start
       // of a fresh global round rather than halfway through an actor sequence.
       const c=ensureCombatCycle(m);

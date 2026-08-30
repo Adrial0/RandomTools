@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
 <title>Guildmaster | My Random Tools</title>
-<link rel="stylesheet" href="styles.css?build=20260826h">
+<link rel="stylesheet" href="styles.css?build=20260830c">
 </head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -11,37 +11,35 @@
 <div class="res"><span>Guild Lv. <strong id="lv"></strong></span><span>Gold <strong id="gold"></strong></span><span>Reputation <strong id="rep"></strong></span></div></div>
 <div class="shell">
 <aside class="side" aria-label="Game navigation">
-<div class="navPrimary" role="tablist" aria-label="Game sections">
-  <button class="navGroup on" data-nav-group="guild" role="tab" aria-selected="true">Guild</button>
-  <button class="navGroup" data-nav-group="missions" role="tab" aria-selected="false">Missions</button>
-  <button class="navGroup" data-nav-group="workshop" role="tab" aria-selected="false">Workshop</button>
-  <button class="navGroup" data-nav-group="arena" role="tab" aria-selected="false">Arena <small>Beta</small></button>
-</div>
-<div class="navSubgroups">
-  <div class="navSubgroup on" data-nav-panel="guild">
+<div class="navDirectory" aria-label="Game sections">
+  <div class="navColumn navWorkshopColumn">
+    <div class="navSectionTitle">Workshop</div>
+    <div class="navSubgroup on" data-nav-panel="workshop">
+      <button class="nav" data-p="inventory">Inventory</button>
+      <button class="nav" data-p="crafting">Professions</button>
+      <button class="nav" data-p="market">Market</button>
+    </div>
+  </div>
+  <div class="navColumn navGuildColumn">
+    <div class="navSectionTitle">Guild</div>
+    <div class="navSubgroup on" data-nav-panel="guild">
     <button class="nav on" data-p="hall">Overview</button>
     <button class="nav" data-p="roster">Members</button>
     <button class="nav" data-p="questboard">Contracts</button>
     <button class="nav" data-p="upgrades">Upgrades</button>
-  </div>
-  <div class="navSubgroup" data-nav-panel="missions">
-    <button class="nav" data-p="harvesting">Gathering</button>
-    <button class="nav" data-p="quests">Expeditions</button>
-    <button class="nav" data-p="dungeons">Dungeons</button>
-    <button class="nav" data-p="raids">Raids</button>
-  </div>
-  <div class="navSubgroup" data-nav-panel="workshop">
-    <button class="nav" data-p="inventory">Inventory</button>
-    <button class="nav" data-p="crafting">Crafting</button>
-    <button class="nav" data-p="runecrafting">Runecrafting</button>
-    <button class="nav" data-p="cooking">Cooking</button>
-    <button class="nav" data-p="market">Market</button>
-  </div>
-  <div class="navSubgroup" data-nav-panel="arena">
-    <button class="nav" data-p="arena">Arena <small>Online</small></button>
+    </div>
+    <div class="navMissionBlock">
+      <div class="navSectionTitle">Missions</div>
+      <div class="navSubgroup on" data-nav-panel="missions">
+        <button class="nav" data-p="harvesting">Gathering</button>
+        <button class="nav" data-p="quests">Expeditions</button>
+        <button class="nav" data-p="dungeons">Dungeons</button>
+        <button class="nav" data-p="raids">Raids</button>
+      </div>
+    </div>
   </div>
 </div>
-<div class="navUtility"><button class="nav navSettings" data-p="settings">Settings</button></div>
+<div class="navUtility"><button class="nav navArena" data-p="arena">Arena <small>Online Beta</small></button><button class="nav navSettings" data-p="settings">Settings</button></div>
 </aside>
 <main>
 <section class="page on" id="hall">
@@ -59,6 +57,7 @@
     <div class="progressMeta"><span>Reputation toward next guild level</span><strong id="guildRepText"></strong></div>
     <div class="progressTrack"><div class="progressFill guildRepFill" id="guildRepFill"></div></div>
   </div>
+  <div class="guildPermanentBonuses" id="guildPermanentBonuses"></div>
 </div>
 <div class="guildCommandBar g4" aria-label="Guild shortcuts">
   <button class="card guildShortcut" onclick="activatePage('roster')"><span class="guildShortcutText"><span class="name">Members</span><br><span class="muted">Manage the guild roster</span></span><span class="guildShortcutArrow" aria-hidden="true">›</span></button>
@@ -68,11 +67,11 @@
 </div>
 <div class="guildActivityDashboard">
   <div class="panel guildActivityColumn">
-    <div class="head guildActivityHead"><div><div class="sectionKicker">Field Operations</div><h3>Active Missions <span class="dashboardCount" id="activeMissionCount">0</span></h3><p>Expeditions, dungeons and raids currently underway.</p></div><button class="btn gold" onclick="claimAllMissionLoot()">Claim All</button></div>
+    <div class="head guildActivityHead"><div><div class="sectionKicker">Field Operations</div><h3>Active Missions <span class="dashboardCount" id="activeMissionCount">0</span></h3><p>Expeditions, dungeons and raids currently underway.</p></div></div>
     <div id="active" class="active"></div>
   </div>
   <div class="panel guildActivityColumn">
-    <div class="head"><div><div class="sectionKicker">Guild Workforce</div><h3>Active Gathering <span class="dashboardCount" id="activeGatherCount">0</span></h3><p>Gathering jobs currently underway.</p></div><button class="btn" onclick="activatePage('harvesting')">Manage</button></div>
+    <div class="head"><div><div class="sectionKicker">Guild Workforce</div><h3>Active Gathering <span class="dashboardCount" id="activeGatherCount">0</span></h3><p>Gathering jobs currently underway.</p></div><div class="headerActions"><button class="btn gold" onclick="claimAllGathering()">Claim All</button><button class="btn" onclick="activatePage('harvesting')">Manage</button></div></div>
     <div id="harvestActive" class="active"></div>
   </div>
 </div>
@@ -148,7 +147,7 @@
     <div class="harvestFilters">
       <button class="btn harvestFilter on" data-harvest-filter="all" onclick="setHarvestFilter('all',this)">All</button>
       <button class="btn harvestFilter" data-harvest-filter="mining" onclick="setHarvestFilter('mining',this)">Mining</button>
-      <button class="btn harvestFilter" data-harvest-filter="herbalism" onclick="setHarvestFilter('herbalism',this)">Herbalism</button>
+      <button class="btn harvestFilter" data-harvest-filter="harvesting" onclick="setHarvestFilter('harvesting',this)">Harvesting</button>
       <button class="btn harvestFilter" data-harvest-filter="fishing" onclick="setHarvestFilter('fishing',this)">Fishing</button>
       <button class="btn harvestFilter" data-harvest-filter="woodcutting" onclick="setHarvestFilter('woodcutting',this)">Woodcutting</button>
       <button class="btn harvestFilter" data-harvest-filter="hunting" onclick="setHarvestFilter('hunting',this)">Hunting</button>
@@ -180,7 +179,7 @@
     <div><h2>Inventory</h2><p>Filter and sort equipment, then click an item for details or equipping.</p></div>
     <div class="inventoryTopActions">
       <div class="inventoryDropWrap"><button class="btn" id="rarityFilterButton" onclick="toggleInventoryMenu('rarityMenu',event)">Rarity 6/6 ▾</button><div class="inventoryDropMenu" id="rarityMenu">
-        <button class="inventoryMenuItem on" data-inv-rarity="Common" onclick="toggleInventoryRarity('Common',this)">Common</button><button class="inventoryMenuItem on" data-inv-rarity="Uncommon" onclick="toggleInventoryRarity('Uncommon',this)">Uncommon</button><button class="inventoryMenuItem on" data-inv-rarity="Rare" onclick="toggleInventoryRarity('Rare',this)">Rare</button><button class="inventoryMenuItem on" data-inv-rarity="Epic" onclick="toggleInventoryRarity('Epic',this)">Epic</button><button class="inventoryMenuItem on" data-inv-rarity="Legendary" onclick="toggleInventoryRarity('Legendary',this)">Legendary</button><button class="inventoryMenuItem on" data-inv-rarity="Mythic" onclick="toggleInventoryRarity('Mythic',this)">Mythic</button>
+        <button class="inventoryMenuItem on" data-inv-rarity="Common" onclick="toggleInventoryRarity('Common',this)">Common</button><button class="inventoryMenuItem on" data-inv-rarity="Uncommon" onclick="toggleInventoryRarity('Uncommon',this)">Uncommon</button><button class="inventoryMenuItem on" data-inv-rarity="Rare" onclick="toggleInventoryRarity('Rare',this)">Rare</button><button class="inventoryMenuItem on" data-inv-rarity="Epic" onclick="toggleInventoryRarity('Epic',this)">Epic</button><button class="inventoryMenuItem on" data-inv-rarity="Legendary" onclick="toggleInventoryRarity('Legendary',this)">Legendary</button><button class="inventoryMenuItem on" data-inv-rarity="Mythic" onclick="toggleInventoryRarity('Mythic',this)">Mythic</button><button class="inventoryMenuItem on" data-inv-rarity="Unique" onclick="toggleInventoryRarity('Unique',this)">Unique</button>
       </div></div>
       <div class="inventoryDropWrap"><button class="btn" id="inventoryAutoButton" onclick="toggleInventoryMenu('inventoryAutoMenu',event)">Auto: Off ▾</button><div class="inventoryDropMenu inventoryAutoMenu" id="inventoryAutoMenu">
         <div class="inventoryMenuLabel">New items only</div><label class="inventoryMenuField">Action<select id="inventoryAutoMode" onchange="setInventoryAutoMode(this.value)"><option value="off">Off</option><option value="sell">Auto-sell</option><option value="scrap">Auto-scrap</option></select></label><label class="inventoryMenuField">Up to rarity<select id="inventoryAutoRarity" onchange="setInventoryAutoRarity(this.value)"><option>Common</option><option>Uncommon</option><option>Rare</option><option>Epic</option><option>Legendary</option><option>Mythic</option></select></label><div class="muted" style="margin-top:5px">Only affects items that enter inventory after this rule is enabled.</div>
@@ -194,7 +193,8 @@
       <button class="btn inventoryFilter on" onclick="setInventoryFilter('all',this)">All</button>
       <button class="btn inventoryFilter" onclick="setInventoryFilter('Weapon',this)">Weapons</button>
       <button class="btn inventoryFilter" onclick="setInventoryFilter('Armor',this)">Armor</button>
-      <button class="btn inventoryFilter" onclick="setInventoryFilter('Jewelry',this)">Jewelry</button>
+      <button class="btn inventoryFilter" onclick="setInventoryFilter('OffHand',this)">Off-hand</button>
+      <button class="btn inventoryFilter" onclick="setInventoryFilter('Accessories',this)">Accessories</button>
     </div>
     <div class="inventorySortControls">
       <select id="inventorySortSelect" onchange="setInventorySort(this.value)">
@@ -224,32 +224,21 @@
 </div>
 </section>
 <section class="page" id="crafting">
-<div class="panel">
-  <div class="head">
-    <div><h2>Crafting</h2><p>Forge equipment from materials your guild has discovered.</p></div>
-  </div>
-  <div id="craftMats" class="mats"></div>
-  <div class="smithingPanel">
-    <div class="smithingTop"><div><div class="name">Blacksmithing <span id="smithLevel">Lv. 1</span></div><div class="muted">Craft gear to gain Smithing XP and unlock harder recipes.</div></div><strong id="smithXpText">0 / 0 XP</strong></div>
-    <div class="progressTrack"><div class="progressFill" id="smithXpFill"></div></div>
-    <div class="smithingBonuses"><span class="chip" id="smithSpeedBonus"></span><span class="chip" id="smithRarityBonus"></span></div>
-  </div>
+<div class="professionNavSticky">
+  <div id="professionTabs" class="professionTabs"></div>
 </div>
-<div>
-  <div class="panel"><div class="head"><div><h3>Crafting Queue</h3><p>Completed items are placed in inventory automatically.</p></div></div><div id="craftQueue" class="active"></div></div>
-  <div class="panel recipePanel"><div class="head recipePanelHead"><div><h3>Known Recipes</h3><p>Recipes appear once you've discovered every normal resource they require. Boss materials are the exception: the recipe appears before you've obtained the boss drop.</p></div>
-  <div class="recipeMenuWrap">
-    <button class="btn" id="recipeMenuButton" onclick="toggleRecipeMenu(event)">Filter ▾</button>
-    <div class="recipeMenu" id="recipeMenu">
-      <button class="recipeMenuItem on" data-recipe-filter="all" onclick="setRecipeFilter('all',this)">All recipes</button>
-      <button class="recipeMenuItem" data-recipe-filter="Weapon" onclick="setRecipeFilter('Weapon',this)">Weapons</button>
-      <button class="recipeMenuItem" data-recipe-filter="Armor" onclick="setRecipeFilter('Armor',this)">Armor</button>
-      <button class="recipeMenuItem" data-recipe-filter="Jewelry" onclick="setRecipeFilter('Jewelry',this)">Jewelry</button>
-      <div class="recipeMenuDivider"></div>
-      <button class="recipeMenuItem recipeCraftableToggle" id="recipeCraftableToggle" onclick="toggleCraftableRecipes(this)">Craftable only: Off</button>
+<div class="professionWorkspaceTop">
+  <div class="professionContentColumn">
+  <div class="panel professionMainPanel">
+    <div class="head">
+      <div><h2>Workshop</h2><p>Assign specialists, process gathered resources, and create equipment and provisions.</p></div>
     </div>
+    <div id="craftMats" class="mats"></div>
+    <div id="professionWorkstation"></div>
   </div>
-</div><div id="recipeList" class="recipes"></div></div>
+  <div class="panel recipePanel"><div class="head recipePanelHead"><div><h3 id="professionRecipeTitle">Known Recipes</h3><p id="professionRecipeHelp">Recipes are grouped by profession and tier.</p></div><div class="professionRecipeControls"><select id="professionRecipeSort" onchange="setProfessionRecipeSort(this.value)"><option value="tier">Tier</option><option value="name">Name</option><option value="level">Required level</option><option value="craftable">Craftable first</option></select><div class="recipeMenuWrap"><button class="btn" id="recipeMenuButton" onclick="toggleRecipeMenu(event)">All ▾</button><div class="recipeMenu" id="recipeMenu"><button class="recipeMenuItem on" data-recipe-filter="all" onclick="setRecipeFilter('all',this)">All recipes</button><button class="recipeMenuItem" data-recipe-filter="Weapon" onclick="setRecipeFilter('Weapon',this)">Weapons</button><button class="recipeMenuItem" data-recipe-filter="Armor" onclick="setRecipeFilter('Armor',this)">Armor</button><button class="recipeMenuItem" data-recipe-filter="Accessories" onclick="setRecipeFilter('Accessories',this)">Accessories</button><button class="recipeMenuItem" data-recipe-filter="Material" onclick="setRecipeFilter('Material',this)">Materials</button><div class="recipeMenuDivider"></div><button class="recipeMenuItem recipeCraftableToggle" id="recipeCraftableToggle" onclick="toggleCraftableRecipes(this)">Craftable only: Off</button></div></div></div></div><div id="recipeList" class="recipes"></div></div>
+  </div>
+  <aside class="panel professionQueuePanel"><div class="head"><div><h3>Work Queue</h3><p>The assigned specialist remains busy until this workstation's queue is empty.</p></div></div><div id="craftQueue" class="active"></div></aside>
 </div>
 </section>
 <section class="page" id="cooking">
@@ -262,7 +251,7 @@
   </div>
   <div class="panel"><div class="head"><div><h3>Pantry</h3><p>Prepared meals remain here until assigned to a mission.</p></div></div><div id="mealInventory" class="mats"></div></div>
   <div class="panel"><div class="head"><div><h3>Cooking Queue</h3><p>Each serving is prepared in order.</p></div></div><div id="cookingQueue" class="active"></div></div>
-  <div class="panel recipePanel"><div class="head"><div><h3>Meal Recipes</h3><p>Ingredients come from Fishing, Hunting, Herbalism, and other gathering professions.</p></div></div><div id="cookingRecipes" class="recipes"></div></div>
+  <div class="panel recipePanel"><div class="head"><div><h3>Meal Recipes</h3><p>Ingredients come from Fishing, Hunting, Harvesting, and other gathering professions.</p></div></div><div id="cookingRecipes" class="recipes"></div></div>
 </section>
 <section class="page" id="runecrafting">
 <div id="runecraftingModeSection">
@@ -312,13 +301,14 @@
 <div class="modalBg" id="combatModal"><div class="modal"><div class="head"><div><h3 id="combatTitle">Expedition Combat</h3><div class="muted" id="combatSubtitle"></div></div><button class="btn" onclick="closeCombat()">Close</button></div><div id="combatBody"></div></div></div>
 <div class="noticeStack" id="noticeStack"></div>
 
-<script src="js/core.js?build=20260826h"></script>
-<script src="js/combat.js?build=20260826h"></script>
-<script src="js/progression.js?build=20260826h"></script>
-<script src="js/ui.js?build=20260826h"></script>
-<script src="js/activities.js?build=20260826h"></script>
-<script src="js/economy.js?build=20260826h"></script>
+<script src="js/core.js?build=20260830d"></script>
+<script src="js/combat.js?build=20260830f"></script>
+<script src="js/progression.js?build=20260830d"></script>
+<script src="js/ui.js?build=20260830a"></script>
+<script src="js/activities.js?build=20260829c"></script>
+<script src="js/economy.js?build=20260830b"></script>
+<script src="js/professions.js?build=20260829d"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/arena-client.js?build=20260826h"></script>
-<script src="js/app.js?build=20260826h"></script>
+<script src="js/arena-client.js?build=20260827j"></script>
+<script src="js/app.js?build=20260830a"></script>
 </body></html>

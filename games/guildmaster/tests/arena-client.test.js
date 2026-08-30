@@ -7,7 +7,7 @@ const context={
   document:{getElementById(){return null}},window:{},
   clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),
   hs:()=>({power:123,hp:200,str:20,dex:10,int:5,def:30,mdef:15,block:2,threat:1.6,physicalDodge:.05,magicalDodge:.02,regen:1,lifesteal:0,fire:5,ice:4,poison:3,lightning:2,holy:1,dark:0,armorPen:.1,critBonus:.05,critDamage:.2,statusChance:.08,healMult:1,damageMult:1,attackSpeed:.1,activeType:'powerStrike',element:null}),
-  weaponDefForItem:()=>({base:12}),weaponAttackTime:()=>2.5,heroAttackIntervalMs:()=>2250,
+  weaponDefForItem:()=>({base:12}),weaponAttackTime:()=>2.5,heroAttackIntervalMs:()=>2250,subclassDef:()=>null,
   s:{inventory:[{id:9,weaponPower:14,damageType:'physical',weaponType:'Longsword'}]}
 };
 context.globalThis=context;
@@ -21,6 +21,10 @@ assert.equal(snapshot.weaponPower,14);
 assert.equal(snapshot.attackInterval,2250);
 assert.equal(snapshot.activeType,'powerStrike');
 assert.doesNotThrow(()=>JSON.stringify(snapshot),'Arena snapshots must be serializable');
+const defendingMage=context.arenaHeroUnit({name:'Defense Mage',class:'Mage',subclass:null,maxHp:150,maxMana:60,manaRegen:3,int:24,str:4,dex:8,weaponPower:18,attackInterval:2400},0,false);
+assert.equal(defendingMage.maxMana,60,'Arena units retain their published Mana pool');
+assert.equal(defendingMage.mana,60,'Arena units begin with full Mana');
+assert.equal(defendingMage.activeType,'arcaneBurst','A Mage from an older snapshot receives its class active ability');
 
 const online=JSON.parse(fs.readFileSync(require.resolve('../data/online.json'),'utf8'));
 assert.equal(online.enabled,true,'Arena configuration is enabled after project credentials are supplied');

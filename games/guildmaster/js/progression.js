@@ -3,7 +3,7 @@ const ONBOARDING_GOALS=[
   {id:'recruitTwo',title:'Form the Core Team',description:'Recruit your first two adventurers.',reward:{gold:20},complete:()=>s.members.length>=2},
   {id:'startExpedition',title:'Send an Expedition',description:'Choose a destination and deploy a party.',reward:{gold:25},complete:()=>!!s.onboarding.flags.expeditionStarted},
   {id:'claimLoot',title:'Bring Home the Spoils',description:'Claim rewards earned by an expedition.',reward:{gold:30,rep:250},complete:()=>!!s.onboarding.flags.lootClaimed},
-  {id:'equipItem',title:'Equip an Adventurer',description:'Equip any weapon, armor, or piece of jewelry.',reward:{gold:30},complete:()=>!!s.onboarding.flags.itemEquipped},
+  {id:'equipItem',title:'Equip an Adventurer',description:'Equip any weapon, armor, or accessory.',reward:{gold:30},complete:()=>!!s.onboarding.flags.itemEquipped},
   {id:'startHarvest',title:'Gather Resources',description:'Send a crew to a harvesting location.',reward:{gold:35,rep:250},complete:()=>!!s.onboarding.flags.harvestStarted},
   {id:'buyUpgrade',title:'Invest in the Guild',description:'Purchase your first permanent guild upgrade.',reward:{gold:50,rep:500},complete:()=>!!s.onboarding.flags.upgradePurchased}
 ];
@@ -85,43 +85,63 @@ function allowedWeapons(h){
   return base;
 }
 function itemEquipSlot(it){
-  return it&&(it.slot==='Ring'||it.slot==='Amulet')?'Jewelry':it?.slot;
+  return it&&(it.slot==='Ring'||it.slot==='Amulet'||it.slot==='Jewelry')?'Accessories':it?.slot;
+}
+function canDualWield(h){return !!h&&['Warrior','Rogue'].includes(h.class)}
+function accessoryAllowed(h,it){return !it?.allowedClasses?.length||it.allowedClasses.includes(h?.class)}
+function equipmentTargetsForItem(h,it){
+  if(!h||!it)return[];
+  if(it.slot==='Weapon'){
+    if(!allowedWeapons(h).includes(it.weaponType))return[];
+    if(weaponHands(it)===2)return['MainHand'];
+    return canDualWield(h)?['MainHand','OffHand']:['MainHand'];
+  }
+  if(it.slot==='OffHand')return accessoryAllowed(h,it)?['OffHand']:[];
+  if(itemEquipSlot(it)==='Accessories')return accessoryAllowed(h,it)?['Accessories']:[];
+  if(it.slot==='Armor')return canEquipArmor(h,it)?['Armor']:[];
+  return[];
+}
+function detachItemFromHero(h,itemId){
+  if(!h||!itemId)return;
+  Object.keys(h.equip||{}).forEach(slot=>{if(h.equip[slot]===itemId)h.equip[slot]=null});
+  const it=s.inventory.find(x=>x.id===itemId);if(it&&it.equipped===h.id)it.equipped=null;
 }
 function unequipItem(hid,slot){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
   const itemId=h.equip?.[slot];if(!itemId)return;
-  const it=s.inventory.find(x=>x.id===itemId);
-  if(it)it.equipped=null;
-  h.equip[slot]=null;
+  detachItemFromHero(h,itemId);
   save();renderRoster();renderInv();
 }
-function equip(hid,iid){
+function equip(hid,iid,targetSlot=null){
   const h=s.members.find(x=>x.id===hid),it=s.inventory.find(x=>x.id===iid);
   if(!h||!it)return;
-  const slot=itemEquipSlot(it);
-  if(slot==='Weapon'&&!allowedWeapons(h).includes(it.weaponType))return notify('That class cannot use this weapon.');
-  if(slot==='Armor'&&!canEquipArmor(h,it))return notify(displayClass(h)+' can only equip up to '+maxArmorClass(h)+' armor.');
-  const old=s.inventory.find(x=>x.id===h.equip[slot]);
-  if(old)old.equipped=null;
+  const targets=equipmentTargetsForItem(h,it),slot=targetSlot||targets[0];
+  if(!targets.includes(slot))return notify('That item cannot be equipped in '+slotLabel(slot)+'.');
   if(it.equipped){
     const previous=s.members.find(x=>x.id===it.equipped);
-    if(previous){
-      const previousSlot=itemEquipSlot(it);
-      if(previous.equip[previousSlot]===it.id)previous.equip[previousSlot]=null;
-    }
+    if(previous)detachItemFromHero(previous,it.id);
   }
+  const conflicts=new Set();
+  if(slot==='MainHand'){
+    if(h.equip.MainHand)conflicts.add(h.equip.MainHand);
+    if(weaponHands(it)===2&&h.equip.OffHand)conflicts.add(h.equip.OffHand);
+  }else if(slot==='OffHand'){
+    if(h.equip.OffHand)conflicts.add(h.equip.OffHand);
+    const main=s.inventory.find(x=>x.id===h.equip.MainHand);
+    if(main&&weaponHands(main)===2)conflicts.add(main.id);
+  }else if(h.equip[slot])conflicts.add(h.equip[slot]);
+  conflicts.forEach(id=>detachItemFromHero(h,id));
   h.equip[slot]=it.id;
+  if(it.slot==='Weapon'&&weaponHands(it)===2){h.equip.MainHand=it.id;h.equip.OffHand=it.id}
   it.equipped=h.id;
   setOnboardingFlag('itemEquipped');
   save();closeModal();renderRoster();renderInv();
 }
 function equipModal(hid,slot){
   const h=s.members.find(x=>x.id===hid);
-  let a=s.inventory.filter(x=>itemEquipSlot(x)===slot&&!x.equipped);
-  if(slot==='Weapon'&&h)a=a.filter(it=>allowedWeapons(h).includes(it.weaponType));
-  if(slot==='Armor'&&h)a=a.filter(it=>canEquipArmor(h,it));
+  let a=s.inventory.filter(x=>!x.equipped&&equipmentTargetsForItem(h,x).includes(slot));
   const current=s.inventory.find(x=>x.id===h?.equip?.[slot]);
-  showModal('Choose '+slot,a.length?`<div class="inventory">${a.map(it=>`<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">Tier ${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current)}<button class="btn gold" onclick="equip(${hid},${it.id})">Equip</button></div>`).join('')}</div>`:'<div class="empty">No matching items.</div>')}
+  showModal('Choose '+slotLabel(slot),a.length?`<div class="inventory">${a.map(it=>{const offhand=slot==='MainHand'&&weaponHands(it)===2?s.inventory.find(x=>x.id===h?.equip?.OffHand&&x.id!==h?.equip?.MainHand):null;return `<div class="card"><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · ${statText(it)}${offhand?` · also replaces ${offhand.name}`:''}</div>${runeSlotsHtml(it,true)}${equipComparison(it,current,offhand?[offhand]:[])}<button class="btn gold" onclick="equip(${hid},${it.id},'${slot}')">Equip in ${slotLabel(slot)}</button></div>`}).join('')}</div>`:'<div class="empty">No matching items.</div>')}
 const BOSS_RESOURCE_SOURCE={};
 const BOSS_RESOURCES=new Set();
 
@@ -159,12 +179,14 @@ function discoverRecipes(){syncDiscoveredResources()}
 
 function smithXpNeeded(level){return Math.round(50+25*level+6*level*level)}
 function recipeSmithLevel(r){
+  if(r?.[1]==='Material')return 1;
   const tier=Math.max(1,Number(r?.[4])||1);
-  const tierReq={1:1,2:2,3:3,4:5,5:7,6:10,7:14}[tier]||Math.max(1,Math.round(tier*2));
+  const tierReq={1:1,2:2,3:3,4:5,5:7,6:10,7:14,8:18,9:23,10:29}[tier]||Math.max(1,Math.round(tier*2));
   const boss=Object.keys(r?.[3]||{}).some(k=>BOSS_RESOURCES.has(k));
   return tierReq+(boss?(tier>=7?2:1):0);
 }
 function recipeSmithXp(r){
+  if(r?.[1]==='Material')return 0;
   const boss=Object.keys(r[3]||{}).some(k=>BOSS_RESOURCES.has(k));
   return Math.round(5+r[4]*7+Object.keys(r[3]||{}).length*2+(boss?20:0));
 }
@@ -195,6 +217,14 @@ function cancelCraftJob(jid){const index=s.craftJobs.findIndex(j=>j.id===jid);if
 function finishCraftJob(j){
   const r=recipes[j.recipe];
   if(!r)return;
+  const outputResource=r[5]?.outputResource;
+  if(r[1]==='Material'&&outputResource){
+    const amount=Math.max(1,Math.floor(r[5]?.outputQty||1));
+    const added=addStoredResource(outputResource,amount);
+    trackQuestProgress('craft',r[0],1);
+    log(`Finished ${r[0]} · ${added} ${RESOURCE_NAMES[outputResource]||outputResource}.`);
+    return;
+  }
   const it=makeSpecificItem(r[1],r[2],r[4]);
   applyRecipeModifiers(it,r[5]||{});
   it.name=r[0];
@@ -246,22 +276,31 @@ function completeCooking(){
 }
 
 const UPGRADE_RESOURCE_PATHS={
-quarters:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
-party:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','Crystal','SpiritBark','StormGlass','AstralThread','AetherCrystal']],
-recruit:[['Cloth','Iron','Silver','Mithril','Nightshade','AetherCrystal','Voidstone'],['Leather','Bone','ManaBloom','SpiritBark','DeepPearl','AstralThread','AetherCrystal']],
-smith:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
-craftSpeed:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Hardwood','Crystal','Sunstone','StormGlass','AetherCrystal','AstralThread']],
-training:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Herbs','Bone','ManaBloom','SpiritBark','Nightshade','CinderBloom','AetherCrystal']],
-storage:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal']],
-afkHarvest:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Cloth','Hardwood','ManaBloom','SpiritBark','Nightshade','AstralThread','AetherCrystal']],
-gatherParty:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Hardwood','Crystal','Ironwood','StormGlass','AetherCrystal','AstralThread']],
-board:[['Cloth','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone'],['Wood','Bone','ManaBloom','Sunstone','DeepPearl','AstralThread','AetherCrystal']]
+quarters:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal','LeviathanScale','Gearheart','Endstone']],
+party:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Cloth','Hardwood','Crystal','SpiritBark','StormGlass','AstralThread','AetherCrystal','CelestialSilk','Dreamwood','Godthread']],
+recruit:[['Cloth','Iron','Silver','Mithril','Nightshade','AetherCrystal','Voidstone','AngelicSigil','DreamEssence','StarlightCore'],['Leather','Bone','ManaBloom','SpiritBark','DeepPearl','AstralThread','AetherCrystal','CelestialSilk','NightmareBloom','Godthread']],
+smith:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal','LeviathanScale','Gearheart','Endstone']],
+craftSpeed:[['CopperOre','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Hardwood','Crystal','Sunstone','StormGlass','AetherCrystal','AstralThread','AngelicSigil','ChronoShard','StarlightCore']],
+training:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Herbs','Bone','ManaBloom','SpiritBark','Nightshade','CinderBloom','AetherCrystal','LeviathanScale','NightmareBloom','Endstone']],
+storage:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Stone','Hardwood','Crystal','Ironwood','GlacialOre','Obsidian','AetherCrystal','TrenchPearl','Gearheart','Endstone']],
+afkHarvest:[['Wood','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Cloth','Hardwood','ManaBloom','SpiritBark','Nightshade','AstralThread','AetherCrystal','CelestialSilk','DreamEssence','Godthread']],
+gatherParty:[['Leather','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Hardwood','Crystal','Ironwood','StormGlass','AetherCrystal','AstralThread','LeviathanScale','Dreamwood','Worldroot']],
+board:[['Cloth','Iron','Silver','Mithril','StarMetal','CinderOre','Voidstone','Adamantite','Orichalcum','Eternium'],['Wood','Bone','ManaBloom','Sunstone','DeepPearl','AstralThread','AetherCrystal','AngelicSigil','ChronoShard','StarlightCore']]
 };
+const UPGRADE_PROCESSED_RESOURCES={
+  CopperOre:'CopperBar',Iron:'IronBar',Silver:'SilverBar',Mithril:'MithrilBar',StarMetal:'StarMetalBar',CinderOre:'CinderBar',Voidstone:'VoidBar',Adamantite:'AdamantiteBar',Orichalcum:'OrichalcumBar',Eternium:'EterniumBar',
+  Wood:'WoodenPlank',Hardwood:'HardwoodPlank',Ironwood:'IronwoodPlank',SpiritBark:'SpiritwoodPlank',Dreamwood:'DreamwoodPlank',Worldroot:'WorldrootPlank',
+  Leather:'CuredLeather',WolfPelt:'WolfLeather',WhitePelt:'FrostLeather',Stormhide:'StormLeather'
+};
+function upgradeProcessedResource(resource){return UPGRADE_PROCESSED_RESOURCES[resource]||resource}
+const UPGRADE_RAW_RESOURCES={Cloth:'PlantFiber',CuredLeather:'Leather',WoodenPlank:'Wood',CopperBar:'CopperOre'};
+function upgradeRawResource(resource){return UPGRADE_RAW_RESOURCES[resource]||resource}
 function upgradeResourceCost(k,l){
   const upgrade=upgrades.find(x=>x[0]===k),max=Math.max(2,upgrade?.[4]||7);
-  const tier=clamp(1+Math.floor(l*6/(max-1)),1,7),index=tier-1;
+  const tier=clamp(1+Math.floor(l*9/(max-1)),1,10),index=tier-1;
   const paths=UPGRADE_RESOURCE_PATHS[k]||UPGRADE_RESOURCE_PATHS.quarters;
-  const primary=paths[0][index],secondary=paths[1][index];
+  const firstPurchase=l===0;
+  const primary=firstPurchase?upgradeRawResource(paths[0][index]):upgradeProcessedResource(paths[0][index]),secondary=firstPurchase?upgradeRawResource(paths[1][index]):upgradeProcessedResource(paths[1][index]);
   const base=Math.max(3,Math.round((10+Math.pow(l+1,1.35)*5)/(1+(tier-1)*.3)));
   const out={};
   out[primary]=(out[primary]||0)+base;
@@ -278,7 +317,23 @@ function upgradeResourceProgressHtml(cost){
 }
 
 function upgradeCost(u,l){
-  return Math.max(1,Math.round(u[3]*Math.pow(u[0]==='quarters'?1.28:1.72,l)));
+  const cost=u[3]*Math.pow(u[0]==='quarters'?1.50:2.15,l);
+  return Math.max(1,Math.round(l===0?cost*.5:cost));
+}
+const UPGRADE_STORAGE_CAPS=[200,1000,3000,8000,16000,26000,40000,60000,90000,130000,200000];
+function upgradeEffectValue(key,level){
+  const l=Math.max(0,level||0);
+  if(key==='quarters')return `${6+l} member slots`;
+  if(key==='party')return `${2+l} expedition party slots`;
+  if(key==='recruit')return `${2+l} applicants per batch`;
+  if(key==='smith')return `+${l*10}% Smithing XP`;
+  if(key==='craftSpeed')return `${Math.round((1-Math.pow(.88,l))*100)}% faster crafting`;
+  if(key==='training')return `+${l*10}% adventurer XP`;
+  if(key==='storage')return `${UPGRADE_STORAGE_CAPS[Math.min(l,UPGRADE_STORAGE_CAPS.length-1)].toLocaleString()} resource capacity`;
+  if(key==='afkHarvest')return `${20+l*20} resources per gathering job`;
+  if(key==='gatherParty')return `${2+l} workers per gathering job`;
+  if(key==='board')return `+${l*5}% mission gold and reputation`;
+  return `Level ${l}`;
 }
 function upgrade(k){
   let u=upgrades.find(x=>x[0]===k),l=s.up[k]||0,c=upgradeCost(u,l),rc=upgradeResourceCost(k,l);
@@ -289,11 +344,11 @@ function upgrade(k){
   Object.entries(rc).forEach(([r,v])=>s.materials[r]-=v);
   s.up[k]=l+1;
   setOnboardingFlag('upgradePurchased');
-  if(k==='quarters')s.memberCap=Math.max(s.members.length,4+s.up.quarters);if(k==='recruit')s.applicantCap=applicantBatchSize();
+  if(k==='quarters')s.memberCap=Math.max(s.members.length,6+s.up.quarters);if(k==='recruit')s.applicantCap=applicantBatchSize();
   save();render();
 }
 function statName(k){
-  return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',hp:'HP',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res'}[k]||String(k).toUpperCase();
+  return {str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',hp:'HP',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Penetration',parry:'Parry',critChance:'Critical Chance',critDamage:'Critical Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter',damageVariance:'Damage Variance',damageBonus:'Damage',healBonus:'Healing',threatBonus:'Threat',physicalDodgeBonus:'Physical Dodge',magicalDodgeBonus:'Magic Dodge'}[k]||String(k).replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^./,x=>x.toUpperCase());
 }
 function colorizeStatTerms(root=document){
   if(!root)return;
@@ -317,7 +372,7 @@ function colorizeStatTerms(root=document){
   });
 }
 function itemCompareValues(it){
-  const out={power:it?.power||0,weaponPower:it?.slot==='Weapon'?(it.weaponPower||0):0,hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:itemBlockValue(it),regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,armorPen:0,parry:0,critChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0};
+  const out={power:it?.power||0,weaponPower:it?.slot==='Weapon'?(it.weaponPower||0):0,hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:itemBlockValue(it),regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,armorPen:0,parry:0,critChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0,damageBonus:0,healBonus:0,threatBonus:0,physicalDodgeBonus:0,magicalDodgeBonus:0};
   if(!it)return out;
   const add=(k,v)=>{if(k in out)out[k]+=(Number(v)||0)};
   add(it.stat,it.value);
@@ -325,28 +380,41 @@ function itemCompareValues(it){
   add(it.tertiaryStat,it.tertiaryValue);
   Object.entries(it.extraStats||{}).forEach(([k,v])=>add(k,v));
   (it.runes||[]).forEach(id=>{const r=RUNES[id];if(r)add(r.stat,r.value)});
-  out.armorPen=it.armorPen||0;
-  out.parry=it.parry||0;
-  out.critChance=it.weaponCritChance||0;
-  out.critDamage=it.critDamage||0;
-  out.accuracy=it.accuracy||0;
-  out.elementalDamage=it.elementalDamage||0;
-  out.healingPower=it.healingPower||0;
-  out.statusChance=it.statusChance||0;
-  out.cleave=it.cleave||0;
-  out.counter=it.counter||0;
+  out.armorPen+=it.armorPen||0;
+  out.parry+=it.parry||0;
+  out.critChance+=it.weaponCritChance||0;
+  out.critDamage+=it.critDamage||0;
+  out.accuracy+=it.accuracy||0;
+  out.elementalDamage+=it.elementalDamage||0;
+  out.healingPower+=it.healingPower||0;
+  out.statusChance+=it.statusChance||0;
+  out.cleave+=it.cleave||0;
+  out.counter+=it.counter||0;
+  out.damageBonus+=it.damageBonus||0;
+  out.healBonus+=it.healBonus||0;
+  out.threatBonus+=it.itemThreatBonus||0;
+  out.physicalDodgeBonus+=it.itemPhysicalDodgeBonus||0;
+  out.magicalDodgeBonus+=it.itemMagicalDodgeBonus||0;
   return out;
 }
-function equipComparison(newItem,oldItem){
-  const a=itemCompareValues(newItem),b=itemCompareValues(oldItem);
-  const labels={power:'Power',weaponPower:'Attack',hp:'HP',str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Pen',parry:'Parry',critChance:'Crit Chance',critDamage:'Crit Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter'};
-  const percent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark','armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter']);
+function addCompareValues(target,source,multiplier=1){Object.keys(target).forEach(k=>target[k]+=(source[k]||0)*multiplier);return target}
+function equipmentComparisonValues(items){
+  const total=itemCompareValues(null);
+  (items||[]).filter(Boolean).forEach(entry=>{const it=entry.item||entry,mult=entry.multiplier||((it.slot==='Weapon'&&weaponHands(it)===2)?2:1);addCompareValues(total,itemCompareValues(it),mult)});
+  return total;
+}
+function equipComparison(newItem,oldItem,additionalOldItems=[]){
+  const a=equipmentComparisonValues([newItem]),b=equipmentComparisonValues([oldItem,...additionalOldItems]);
+  const labels={power:'Power',weaponPower:'Attack',hp:'HP',str:'STR',dex:'DEX',int:'INT',def:'DEF',mdef:'MDEF',block:'Block',regen:'Regen',mana:'Mana',manaRegen:'Mana Regen',attackSpeed:'Attack Speed',lifesteal:'Lifesteal',fire:'Fire Res',ice:'Ice Res',poison:'Poison Res',lightning:'Lightning Res',holy:'Holy Res',dark:'Dark Res',armorPen:'Armor Pen',parry:'Parry',critChance:'Crit Chance',critDamage:'Crit Damage',accuracy:'Accuracy',elementalDamage:'Elemental Damage',healingPower:'Healing Power',statusChance:'Status Chance',cleave:'Cleave',counter:'Counter',damageBonus:'Damage',healBonus:'Healing',threatBonus:'Threat',physicalDodgeBonus:'Physical Dodge',magicalDodgeBonus:'Magic Dodge'};
+  const wholePercent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark']);
+  const decimalPercent=new Set(['armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter','damageBonus','healBonus','physicalDodgeBonus','magicalDodgeBonus']);
   const parts=[];
   Object.keys(labels).forEach(k=>{
-    const d=(a[k]||0)-(b[k]||0);
-    if(!d)return;
-    const sign=d>0?'+':'';
-    parts.push(`<span class="${d>0?'equipGain':'equipLoss'}">${labels[k]} ${sign}${d}${percent.has(k)?'%':''}</span>`);
+    const raw=(a[k]||0)-(b[k]||0);
+    if(Math.abs(raw)<.000001)return;
+    const value=decimalPercent.has(k)?raw*100:raw;
+    const rounded=Math.round(value*100)/100,sign=rounded>0?'+':'';
+    parts.push(`<span class="${rounded>0?'equipGain':'equipLoss'}">${labels[k]} ${sign}${rounded}${decimalPercent.has(k)||wholePercent.has(k)?'%':''}</span>`);
   });
   return parts.length?`<div class="equipCompare">${parts.join('')}</div>`:`<div class="equipCompare"><span class="equipSame">No numerical stat change</span></div>`;
 }
@@ -369,31 +437,38 @@ function runeDetailsHtml(it){
   return ids.map(id=>{const r=RUNES[id];return `<div class="runeDetailRow"><span>${runeIcon(id,'gameAsset')} <b>${r?.name||id}</b></span><span>${runeBonusText(id)}</span></div>`}).join('');
 }
 function itemProfileParts(it){
-  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`];
+  const itemLevel=it.rarity==='Unique'&&it.itemLevel?`Item level ${it.itemLevel}`:null;
+  if(it.slot==='Weapon')return[`${it.weaponType||'Weapon'} weapon`,itemLevel,weaponHands(it)===2?'Two-handed':'One-handed',`Scales with ${weaponScalingLabel(it)}`,`${elementIcon[it.damageType||'physical']} ${it.damageType||'physical'} damage`].filter(Boolean);
+  if(itemLevel)return[itemLevel,it.slot==='Armor'?`${armorClassForItem(it)} armor`:it.slot==='Accessories'||it.slot==='OffHand'?(it.accessoryType||slotLabel(it.slot)):(it.slot||'Equipment')];
   if(it.slot==='Armor')return[`${armorClassForItem(it)} armor`];
   if(it.slot==='Ring')return['Ring'];
   if(it.slot==='Amulet'||it.slot==='Jewelry')return['Amulet'];
+  if(it.slot==='Accessories'||it.slot==='OffHand')return[it.accessoryType||slotLabel(it.slot)];
   return[it.slot||'Equipment'];
 }
 function itemStatParts(it){
-  const parts=[];
-  if(it.stat&&it.value!=null)parts.push(it.stat==='regen'?`+${it.value} HP / round`:it.stat==='manaRegen'?`+${it.value} Mana Regen`:it.stat==='lifesteal'?`${it.value}% lifesteal`:`+${it.value} ${statName(it.stat)}`);
-  if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${it.secondaryValue} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${it.secondaryValue}% Attack Speed`:`+${it.secondaryValue} ${statName(it.secondaryStat)}`);
-  if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${it.tertiaryValue} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${it.tertiaryValue}% Attack Speed`:`+${it.tertiaryValue} ${statName(it.tertiaryStat)}`);
-  Object.entries(it.extraStats||{}).forEach(([k,v])=>parts.push(`+${v}${['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k)?'%':''} ${statName(k)}`));
-  const block=itemBlockValue(it);if(block)parts.push(`+${block} Block`);
-  if(it.damageBonus)parts.push(`+${Math.round(it.damageBonus*100)}% damage`);
-  if(it.healBonus)parts.push(`+${Math.round(it.healBonus*100)}% healing`);
-  if(it.itemCritBonus)parts.push(`+${Math.round(it.itemCritBonus*100)}% crit`);
-  if(it.itemThreatBonus)parts.push(`+${it.itemThreatBonus.toFixed(2)} Threat`);
-  if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(it.itemPhysicalDodgeBonus*100)}% physical dodge`);
-  if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(it.itemMagicalDodgeBonus*100)}% magic dodge`);
+  const parts=[],gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1,scaled=v=>(Number(v)||0)*gearMult;
+  if(it.stat&&it.value!=null)parts.push(it.stat==='regen'?`+${scaled(it.value)} HP / round`:it.stat==='manaRegen'?`+${scaled(it.value)} Mana Regen`:it.stat==='lifesteal'?`${scaled(it.value)}% lifesteal`:`+${scaled(it.value)} ${statName(it.stat)}`);
+  if(it.secondaryStat)parts.push(it.secondaryStat==='manaRegen'?`+${scaled(it.secondaryValue)} Mana Regen`:it.secondaryStat==='attackSpeed'?`+${scaled(it.secondaryValue)}% Attack Speed`:`+${scaled(it.secondaryValue)} ${statName(it.secondaryStat)}`);
+  if(it.tertiaryStat)parts.push(it.tertiaryStat==='manaRegen'?`+${scaled(it.tertiaryValue)} Mana Regen`:it.tertiaryStat==='attackSpeed'?`+${scaled(it.tertiaryValue)}% Attack Speed`:`+${scaled(it.tertiaryValue)} ${statName(it.tertiaryStat)}`);
+  Object.entries(it.extraStats||{}).forEach(([k,v])=>{
+    const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
+    const wholePercent=['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark'].includes(k);
+    parts.push(`+${decimalPercent?Math.round(scaled(v)*100):scaled(v)}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+  });
+  const block=scaled(itemBlockValue(it));if(block)parts.push(`+${block} Block`);
+  if(it.damageBonus)parts.push(`+${Math.round(scaled(it.damageBonus)*100)}% damage`);
+  if(it.healBonus)parts.push(`+${Math.round(scaled(it.healBonus)*100)}% healing`);
+  if(it.itemCritBonus)parts.push(`+${Math.round(scaled(it.itemCritBonus)*100)}% crit`);
+  if(it.itemThreatBonus)parts.push(`+${scaled(it.itemThreatBonus).toFixed(2)} Threat`);
+  if(it.itemPhysicalDodgeBonus)parts.push(`+${Math.round(scaled(it.itemPhysicalDodgeBonus)*100)}% physical dodge`);
+  if(it.itemMagicalDodgeBonus)parts.push(`+${Math.round(scaled(it.itemMagicalDodgeBonus)*100)}% magic dodge`);
   if(it.mythicEffect)parts.push(`Mythic: ${it.mythicEffect}`);
+  if(it.uniquePassive)parts.push(`Unique: ${it.uniquePassive}`);
   if(it.slot==='Weapon'){
-    const w=weaponDefForItem(it);
-    parts.unshift(`Attack ${it.weaponPower||0}`);
+    parts.unshift(`Attack ${scaled(it.weaponPower||0)}`);
     parts.unshift(`Attack Speed ${weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)}s`);
-    weaponSpecials(w||it).forEach(([k,v])=>parts.push(`+${Math.round(v*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
+    weaponSpecials(it).forEach(([k,v])=>parts.push(`+${Math.round(scaled(v)*100)}% ${WEAPON_SPECIAL_LABELS[k]}`));
   }
   return parts;
 }

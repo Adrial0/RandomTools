@@ -1,7 +1,7 @@
 [
   {
     "name": "Drakefall Assault",
-    "level": 35,
+    "level": 50,
     "boss": "Ancient Drake",
     "theme": "fire",
     "enemyPool": [
@@ -17,7 +17,7 @@
   },
   {
     "name": "Ogre Warcamp",
-    "level": 42,
+    "level": 59,
     "boss": "War Ogre",
     "theme": "physical",
     "enemyPool": [
@@ -33,7 +33,7 @@
   },
   {
     "name": "Haunted Citadel",
-    "level": 50,
+    "level": 69,
     "boss": "Wraith Lord",
     "theme": "dark",
     "enemyPool": [
@@ -45,11 +45,11 @@
     "desc": "A fortress drowned in Dark damage. High Dark resistance is essential.",
     "image": "images/activities/raid.png",
     "background": "images/backgrounds/background15.png",
-    "tier": 6
+    "tier": 7
   },
   {
     "name": "Abyss Gate",
-    "level": 60,
+    "level": 70,
     "boss": "Abyssal Demon",
     "theme": "dark",
     "enemyPool": [

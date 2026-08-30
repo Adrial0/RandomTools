@@ -32,7 +32,7 @@ function showNavGroup(group){
     b.classList.toggle('on',on);
     b.setAttribute('aria-selected',on?'true':'false');
   });
-  document.querySelectorAll('.navSubgroup').forEach(p=>p.classList.toggle('on',p.dataset.navPanel===group));
+  document.querySelectorAll('.navSubgroup').forEach(p=>p.classList.add('on'));
 }
 function activatePage(p){
   const access=featureAccess(p);
@@ -107,15 +107,16 @@ function refreshHarvestProgressUI(now=Date.now()){
     const area=HARVEST_AREAS.find(x=>x.id===j.areaId);if(!area)return;
     const card=fill.closest('[data-harvest-card]');
     const stash=Object.values(j.stash||{}).reduce((x,v)=>x+v,0);
-    const capped=stash>=cap;
+    const progressLocked=typeof harvestAreaUnlocked==='function'&&!harvestAreaUnlocked(area),capped=stash>=cap;
     card?.classList.toggle('cappedHarvest',capped);
     const label=card?.querySelector('[data-harvest-label]'),time=card?.querySelector('[data-harvest-time]');
-    if(capped){
+    if(progressLocked){fill.style.width='0%';if(label)label.textContent='EXPEDITION LOCKED';if(time&&now-lastTimerTextUpdate<120)time.textContent='PAUSED'}
+    else if(capped){
       fill.style.width='100%';
       if(label)label.textContent='CAP REACHED';
       if(time&&now-lastTimerTextUpdate<120)time.textContent='FULL';
     }else{
-      const total=area.cycle*1000,start=j.lastTick||now;
+      const total=(typeof gatheringCycleSeconds==='function'?gatheringCycleSeconds(area):area.cycle)*1000,start=j.lastTick||now;
       const elapsed=Math.max(0,now-start);
       const phase=elapsed%total;
       const pct=clamp(phase/total*100,0,100);
@@ -141,17 +142,18 @@ function refreshCombatActionBars(now=Date.now()){
       if(track)track.title=`Attack · ${p>=.9999?'Ready':fmt(Math.max(0,(x.nextAttackAt||now)-now))}`;
     }
 
-    if(side==='hero'){
+    {
       const bar=el.querySelector('.cooldownFill');
       const track=el.querySelector('.cooldownTrack');
-      const type=bar?.dataset.cooldownType||track?.dataset.cooldownTrack||primaryActiveType(x);
-      if(bar&&type){
-        const progress=clamp(cooldownProgress(x,type,now),0,1);
+      const ability=combatAbilityState(x,side==='enemy',now);
+      if(bar&&ability){
+        const progress=ability.progress;
         bar.style.width=(progress*100).toFixed(3)+'%';
         bar.classList.toggle('ready',progress>=.9999);
-        if(track)track.title=`${activeName(type)} · ${progress>=.9999?'Ready':fmt(activeCooldownRemaining(x,type,now))}`;
+        if(track)track.title=`${ability.name} · ${progress>=.9999?'Ready':fmt(ability.remaining)}`;
       }
-    }else{
+    }
+    if(side==='enemy'){
       const castTrack=el.querySelector('.castTrack'),castFill=el.querySelector('.castFill'),castLabel=el.querySelector('.castLabel');
       if(castTrack){
         castTrack.style.display=x.cast?'block':'none';
@@ -308,6 +310,10 @@ async function loadExternalGameData(){
   Object.keys(RESOURCE_TIERS).forEach(k=>delete RESOURCE_TIERS[k]);
   Object.entries(d.resources?.tierGroups||{}).forEach(([tier,keys])=>(keys||[]).forEach(key=>RESOURCE_TIERS[key]=Number(tier)||1));
   MARKET_BASIC_RESOURCES.splice(0,MARKET_BASIC_RESOURCES.length,...(d.resources?.marketBasic||[]));
+  HARVEST_AREAS.sort((a,b)=>{
+    const aTier=Math.min(...(a.resources||[]).map(x=>resourceTier(x[0]))),bTier=Math.min(...(b.resources||[]).map(x=>resourceTier(x[0])));
+    return aTier-bTier||(a.req||1)-(b.req||1)||(SKILL_NAMES[a.skill]||a.skill).localeCompare(SKILL_NAMES[b.skill]||b.skill)||a.name.localeCompare(b.name);
+  });
 
   Object.assign(ACTIVE_MANA_COSTS,d.playerAbilities?.manaCosts||{});
   Object.assign(ACTIVE_COOLDOWNS,d.playerAbilities?.cooldowns||{});
@@ -337,7 +343,7 @@ function validateContentData(){
 
   allAreas.forEach(a=>{
     if(Object.prototype.hasOwnProperty.call(a,'resource'+'Drops'))warnings.push('Legacy area resource drop field still exists: '+a.name);
-    if(!a.tier||a.tier<1||a.tier>7)warnings.push('Area has invalid tier: '+a.name);
+    if(!a.tier||a.tier<1||a.tier>10)warnings.push('Area has invalid tier: '+a.name);
   });
 
   const gatheringOwned=new Set(HARVEST_AREAS.flatMap(a=>(a.resources||[]).map(r=>r[0])));
@@ -345,7 +351,7 @@ function validateContentData(){
   allEnemies.forEach(n=>{
     const e=ENEMIES_DATA[n];
     if(!e){warnings.push('Area references missing enemy: '+n);return}
-    if(!e.tier||e.tier<1||e.tier>7)warnings.push('Enemy has invalid tier: '+n);
+    if(!e.tier||e.tier<1||e.tier>10)warnings.push('Enemy has invalid tier: '+n);
     if(!ENEMY_ARCHETYPES_DATA[e.archetype])warnings.push('Enemy has missing archetype: '+n+' -> '+e.archetype);
     if(e.ability&&!ENEMY_ABILITIES_DATA[e.ability])warnings.push('Enemy has missing ability: '+n+' -> '+e.ability);
     (e.drops||[]).forEach(r=>{if(!RESOURCE_NAMES[r])warnings.push('Enemy drops undefined resource: '+n+' -> '+r);if(gatheringOwned.has(r))warnings.push('Enemy bypasses gathering source: '+n+' -> '+r);if(resourceTier(r)>e.tier)warnings.push('Enemy drops material above its tier: '+n+' -> '+r)});
@@ -370,6 +376,7 @@ function validateContentData(){
   const sourced=new Set();
   HARVEST_AREAS.forEach(a=>(a.resources||[]).forEach(r=>sourced.add(r[0])));
   Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>sourced.add(r)));
+  recipes.forEach(r=>{if(r[1]==='Material'&&r[5]?.outputResource)sourced.add(r[5].outputResource)});
   Object.keys(RESOURCE_NAMES).forEach(r=>{
     if(!sourced.has(r))warnings.push('Resource has no enemy/gathering source: '+r);
   });
@@ -397,6 +404,7 @@ function validateContentData(){
   Object.values(ENEMIES_DATA).forEach(e=>(e.drops||[]).forEach(r=>{
     earliestSourceTier[r]=Math.min(earliestSourceTier[r]||99,e.tier||99);
   }));
+  recipes.forEach(r=>{if(r[1]==='Material'&&r[5]?.outputResource)earliestSourceTier[r[5].outputResource]=Math.min(earliestSourceTier[r[5].outputResource]||99,r[4]||1)});
   recipes.forEach(r=>Object.keys(r[3]||{}).forEach(x=>{
     if((earliestSourceTier[x]||99)>(r[4]||1))warnings.push('Recipe needs a material before its first source: '+r[0]+' -> '+x);
   }));

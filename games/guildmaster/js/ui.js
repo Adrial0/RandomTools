@@ -87,7 +87,9 @@ function render(){completeOnboardingGoals(false);updateNavigationLocks();complet
   const guildNeed=guildRepNeeded(s.level),guildPct=clamp((s.rep||0)/guildNeed*100,0,100);
   if($('guildLevelHall'))$('guildLevelHall').textContent=s.level;
   if($('guildRepText'))$('guildRepText').textContent=`${(s.rep||0).toLocaleString()} / ${guildNeed.toLocaleString()}`;
-  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
+  if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';
+  if($('guildPermanentBonuses')){const b=s.guildBonuses||{};$('guildPermanentBonuses').innerHTML=`<span>Permanent Area Bonuses</span><b>+${((b.maxHp||0)*100).toFixed(2)}% Max HP</b><b>+${((b.gatherSpeed||0)*100).toFixed(2)}% Gathering Speed</b><b>+${((b.cooldownReduction||0)*100).toFixed(2)}% Cooldown Recovery</b>`}
+  renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
@@ -115,6 +117,7 @@ function recruitDetail(rid){
       <div class="stat"><span>Attack</span><strong>${combat.attack}</strong></div>
       <div class="stat"><span>Attack Speed</span><strong>${combat.attackSpeed>=0?'+':''}${Math.round(combat.attackSpeed*100)}%</strong></div>
       <div class="stat"><span>Attack Time</span><strong>${combat.attackTime.toFixed(2)}s</strong></div>
+      <div class="stat"><span>Hits per Attack</span><strong>${combat.hits}</strong></div>
       <div class="stat"><span class="statSTR">STR</span><strong>${z.str}</strong></div>
       <div class="stat"><span class="statDEX">DEX</span><strong>${z.dex}</strong></div>
       <div class="stat"><span class="statINT">INT</span><strong>${z.int}</strong></div>
@@ -128,6 +131,8 @@ function recruitDetail(rid){
     <div class="card racialPassiveCard"><div class="name">${h.race} · ${raceDef(h).passive}</div><div class="muted">${raceDef(h).desc}</div></div>
     <h3 style="margin-top:14px">Quirk</h3>
     <div class="card"><div class="name">${h.trait}</div><div class="muted">${traitDef(h)?.desc||''}</div></div>
+    <h3 style="margin-top:14px">Profession Affinity</h3>
+    <div class="card"><div class="name">${professionTraitDef(h).name} · ${professionTraitDef(h).professionName}</div><div class="muted">${professionTraitDef(h).desc}</div></div>
     <h3 style="margin-top:14px">Gathering Skills</h3>
     <div class="stats">${skills}</div>
     <div class="modalActionRow"><button class="btn gold" onclick="closeModal();recruit(${h.id})">Recruit · Free</button></div>
@@ -138,7 +143,7 @@ function renderRec(){
   s.applicantCap=applicantBatchSize();
   $('recruits').innerHTML=
     `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Batch every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll · ${recruitRerollCost().toLocaleString()}g</button></div></div></div>`+
-    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>${x.trait}</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
+    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard characterRarity rarityBorder-${String(x.rarity||'Common').toLowerCase()}" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>Click to inspect</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
 }
 let activeMissionDomKey='';
 function activeMissionKey(){
@@ -167,10 +172,7 @@ function activeMissionCardHtml(m){
       <div class="progressMeta"><span data-active-label></span><span data-active-percent></span></div>
       <div class="progressTrack"><div class="progressFill" data-active-progress></div></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:9px;flex-wrap:wrap">
-      <button class="btn gold" data-active-collect onclick="event.stopPropagation();collectLoot(${m.id})">Collect Loot</button>
-      <button class="btn" data-active-stop onclick="event.stopPropagation();stopExpedition(${m.id})"></button>
-    </div>
+    <div class="activeMissionActions" data-active-actions></div>
     <div class="muted" style="margin-top:7px" data-active-help></div>
   </div>`;
 }
@@ -187,19 +189,21 @@ function updateActiveMissionCard(m){
   const drops=pendingCount(m);
   const stash=(m.stash?.gold||0)+'g · '+(m.stash?.rep||0)+' rep · '+drops+' drops';
 
-  card.querySelector('[data-active-encounter]').textContent=m.maxFights?(m.battle?.boss?'Boss':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights';
+  card.querySelector('[data-active-encounter]').textContent=m.bossGate?'Tier Boss':isStagedExpedition(m)?`Stage ${Math.min(5,Math.floor(normalEncounterCount(m)/5)+1)} · ${normalEncounterCount(m)} / 25`:m.maxFights?(m.battle?.boss?'Boss':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights';
   card.querySelector('[data-active-kills]').textContent=m.kills+' kills';
   card.querySelector('[data-active-battle]').textContent=m.battle?.boss?'⚠ BOSS':'Battle #'+(m.battle?.id||'-');
   card.querySelector('[data-active-stash]').textContent=stash;
   card.querySelector('[data-active-complete]').style.display=m.completed?'':'none';
   card.querySelector('[data-active-defeated]').style.display=m.defeated?'':'none';
-  card.querySelector('[data-active-label]').textContent=m.defeated?'Expedition stopped':'Current fight';
-  card.querySelector('[data-active-percent]').textContent=Math.round(pct)+'%';
-  card.querySelector('[data-active-progress]').style.width=pct+'%';
-  const collect=card.querySelector('[data-active-collect]');
-  collect.disabled=drops===0&&(m.stash?.gold||0)===0&&(m.stash?.rep||0)===0;
-  card.querySelector('[data-active-stop]').textContent=m.completed||m.defeated?'Return to Guild':'End Expedition';
-  card.querySelector('[data-active-help]').textContent='Click the card to '+(m.defeated?'view the result':'watch combat')+'.';
+  const runPct=isStagedExpedition(m)?normalEncounterCount(m)/25*100:pct;
+  card.querySelector('[data-active-label]').textContent=m.stageIntermission?(m.completed?'Area complete':`Stage ${m.stageIntermission.stage} delivery`):m.defeated?'Expedition stopped':'Current fight';
+  card.querySelector('[data-active-percent]').textContent=Math.round(runPct)+'%';
+  card.querySelector('[data-active-progress]').style.width=runPct+'%';
+  const actions=card.querySelector('[data-active-actions]');
+  if(m.defeated&&isStagedExpedition(m))actions.innerHTML=`<button class="btn gold" onclick="event.stopPropagation();restartExpedition(${m.id},false)">Start from Last Stage</button><button class="btn" onclick="event.stopPropagation();restartExpedition(${m.id},true)">Start from Beginning</button><button class="btn" onclick="event.stopPropagation();stopExpedition(${m.id})">Return to Guild</button>`;
+  else if(m.stageIntermission?.offlinePaused&&!m.completed)actions.innerHTML=`<button class="btn gold" onclick="event.stopPropagation();continueExpeditionStage(${m.id})">Continue Expedition</button><button class="btn" onclick="event.stopPropagation();stopExpedition(${m.id})">Return to Guild</button>`;
+  else actions.innerHTML=`<button class="btn ${m.completed?'gold':''}" onclick="event.stopPropagation();stopExpedition(${m.id})">${m.completed?'Return to Guild':'End Expedition'}</button>`;
+  card.querySelector('[data-active-help]').textContent=m.stageIntermission?`${m.stageIntermission.delivered?.text||'Stage rewards delivered.'}${m.stageIntermission.offlinePaused&&!m.completed?' · Waiting for your order.':''}`:'Click the card to '+(m.defeated?'view the result':'watch combat')+'.';
 }
 function renderActive(){
   if($('activeMissionCount'))$('activeMissionCount').textContent=s.missions.length;
@@ -242,29 +246,48 @@ function combatDetailsHtml(x,enemy=false){
     <span>Crit Dmg +${Math.round((x.critDamage||0)*100)}%</span><span>Accuracy ${Math.round((x.accuracy||0)*100)}%</span><span>Status Chance ${Math.round((x.statusChance||0)*100)}%</span>${Object.values(ensureStatuses(x)).map(st=>`<span>${STATUS_EFFECTS[st.type]?.icon||'◆'} ${STATUS_EFFECTS[st.type]?.name||st.type} ×${st.stacks}</span>`).join('')}
   </div>`;
 }
+function combatDisplayName(x,enemy=false){
+  if(!enemy)return x.name;
+  let level=Number.isFinite(x.level)?x.level:null;
+  if(level===null&&$('combatModal')?.dataset.mode!=='arena'){
+    const mission=s.missions.find(m=>m.id===+$('combatModal')?.dataset.mission);
+    if(mission&&typeof missionEncounterLevel==='function')level=missionEncounterLevel(mission);
+  }
+  return level===null?x.name:`${level} ${x.name}`;
+}
 function combatantHtml(x,enemy=false,frontline=false,options={}){
   const pct=clamp(x.hp/x.maxHp*100,0,100);
   const icon=enemy?x.icon:(x.subclass?gameIcon('subclass',x.subclass,iconFallback('class',x.class),'gameAsset combatAsset'):gameIcon('class',x.class,iconFallback('class',x.class),'gameAsset combatAsset'));
   const side=options.arena?`arena-${x.side}`:(enemy?'enemy':'hero');
   const key=`${side}-${x.id}`;
-  const activeType=enemy?null:primaryActiveType(x);
+  const ability=combatAbilityState(x,enemy);
+  const activeType=ability?.type||null;
   const now=Date.now();
   const attackPct=attackTimerProgress(x,enemy,now)*100;
-  const cdPct=activeType?cooldownProgress(x,activeType,now)*100:100;
+  const cdPct=ability?ability.progress*100:100;
   return `<div class="combatant combatMini ${enemy?'enemy':''} ${options.arena?'arenaCombatant':''} ${frontline?'combatThreatFront':''} ${options.hidden?'combatSlotEmpty':''}" ${options.arena?'':`${options.slot!=null?`data-combat-slot="${enemy?'enemy':'hero'}:${options.slot}"`:''} data-combatant="${key}" data-combat-side="${side}" data-combat-id="${x.id}"`} data-entity-signature="${combatEntitySignature(x,enemy)}" data-last-hp="${x.hp}" data-last-attack="${attackPct}" ${options.arena?'':`onclick="toggleCombatantDetails(event,this)"`}>
-    <div class="visualIcon">${icon}</div>
     <div class="combatMiniVitals">
-      <div class="combatMiniNameRow"><div class="name combatantName">${x.name}</div><span class="combatantHp">${Math.max(0,x.hp)}/${x.maxHp}</span></div>
-      <div class="combatMiniClass">${enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`}</div>
-      <div class="hpTrack"><div class="hpFill" style="width:${pct}%"></div></div>
+      <div class="combatMiniNameRow"><div class="name combatantName">${combatDisplayName(x,enemy)}</div></div>
+      <div class="hpTrack" title="HP ${Math.max(0,x.hp)} / ${x.maxHp}"><div class="hpFill" style="width:${pct}%"></div></div>
       <div class="manaTrack" style="display:${!enemy||x.maxMana?'block':'none'}"><div class="manaFill" style="width:${clamp((x.mana||0)/Math.max(1,x.maxMana||1)*100,0,100)}%"></div></div>
       <div class="attackTrack" title="Attack timer"><div class="attackFill ${attackPct>=100?'ready':''}" style="width:${attackPct}%"></div></div>
-      ${activeType?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${activeName(activeType)} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
+      ${ability?`<div class="cooldownTrack" data-cooldown-track="${activeType}" title="${ability.name} cooldown"><div class="cooldownFill ${cdPct>=100?'ready':''}" data-cooldown-type="${activeType}" style="width:${cdPct}%"></div></div>`:''}
       ${enemy?`<div class="castTrack" style="display:none"><div class="castFill"></div><span class="castLabel"></span></div>`:''}
-      <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     </div>
+    <div class="visualIcon">${icon}</div>
+    <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     <div class="combatFloat"></div>
+    ${enemy?'':'<div class="combatLevelUp"></div>'}
   </div>`;
+}
+function combatAbilityState(x,enemy=false,now=Date.now()){
+  if(enemy&&!x.arenaHero){
+    if(!x.ability)return null;
+    const def=ENEMY_ABILITIES_DATA[x.ability]||{},cooldown=Math.max(1,def.cooldown||7000),remaining=Math.max(0,(x.abilityReadyAt||0)-now);
+    return{type:x.ability,name:def.name||x.ability,progress:clamp(1-remaining/cooldown,0,1),remaining};
+  }
+  const type=primaryActiveType(x);if(!type)return null;
+  return{type,name:activeName(type),progress:clamp(cooldownProgress(x,type,now),0,1),remaining:activeCooldownRemaining(x,type,now)};
 }
 const COMBAT_ENEMY_SLOT_COUNT=8;
 function emptyCombatSlotHtml(enemy,index){
@@ -332,6 +355,7 @@ function updateCombatEffects(row,x,enemy=false){
 function closeCombatInspector(){
   const p=$('combatInspectPanel');
   if(p){p.classList.remove('on');p.dataset.side='';p.dataset.id=''}
+  document.querySelectorAll('#combatBody .combatMini.selected').forEach(el=>el.classList.remove('selected'));
 }
 function findLiveCombatant(side,id){
   if($('combatModal').dataset.mode==='arena'&&typeof arenaLiveMission!=='undefined'&&arenaLiveMission?.battle)return side==='enemy'?arenaLiveMission.battle.enemies.find(x=>x.id===id):arenaLiveMission.battle.heroes.find(x=>x.id===id);
@@ -357,7 +381,7 @@ function renderCombatInspector(el=null){
   const side=p.dataset.side,id=+p.dataset.id,x=findLiveCombatant(side,id);
   if(!x){closeCombatInspector();return}
   const enemy=side==='enemy';
-  p.innerHTML=`<div class="combatInspectTop"><div><div class="combatInspectName">${x.name}</div><div class="combatInspectClass">${enemy?(x.boss?'Boss':'Enemy'):(x.displayClass||x.class)}</div></div><button class="combatInspectClose" onclick="closeCombatInspector()">×</button></div>${combatDetailsHtml(x,enemy)}`;
+  p.innerHTML=`<div class="combatInspectTop"><div><div class="combatInspectName">${combatDisplayName(x,enemy)}</div><div class="combatInspectClass">${enemy?(x.boss?'Boss':'Enemy'):(x.displayClass||x.class)}</div></div><button class="combatInspectClose" onclick="closeCombatInspector()">×</button></div>${combatDetailsHtml(x,enemy)}`;
   if(el)positionCombatInspector(el);
 }
 function toggleCombatantDetails(e,el){
@@ -365,6 +389,8 @@ function toggleCombatantDetails(e,el){
   const p=$('combatInspectPanel');if(!p)return;
   const same=p.classList.contains('on')&&p.dataset.side===el.dataset.combatSide&&p.dataset.id===el.dataset.combatId;
   if(same){closeCombatInspector();return}
+  document.querySelectorAll('#combatBody .combatMini.selected').forEach(node=>node.classList.remove('selected'));
+  el.classList.add('selected');
   p.dataset.side=el.dataset.combatSide;
   p.dataset.id=el.dataset.combatId;
   p.classList.add('on');
@@ -386,16 +412,22 @@ let combatDomKey='';
 function combatStructureKey(m){
   return `${m.type}:${m.id}`;
 }
+function combatBackgroundForMission(m){
+  if(m.type==='arena')return assetUrl('images/backgrounds/guildhall.png');
+  const type=m.type==='quest'?'expedition':m.type;
+  return activityBackground(type,m.areaId||m.name)||assetUrl('images/backgrounds/guildhall.png');
+}
 function defeatAdviceHtml(m){
   const advice=m.defeatAdvice?.length?m.defeatAdvice:defeatAdviceFor(m);
-  return `<b>Party defeated.</b> Combat has stopped.${advice.length?`<div class="defeatAdviceTitle">What to change next</div><ul class="defeatAdviceList">${advice.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}`;
+  const restart=isStagedExpedition(m)?`<div class="defeatRestartActions"><button class="btn gold" onclick="restartExpedition(${m.id},false)">Start from Last Stage</button><button class="btn" onclick="restartExpedition(${m.id},true)">Start from Beginning</button></div>`:'';
+  return `<b>Party defeated.</b> Combat has stopped.${isStagedExpedition(m)?` Stage ${m.failedStage||expeditionStage(m)} must be attempted again.`:''}${advice.length?`<div class="defeatAdviceTitle">What to change next</div><ul class="defeatAdviceList">${advice.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}${restart}`;
 }
 function combatReportHtml(m){
   const report=ensureCombatReport(m),rows=Object.values(report.heroes);
   const duration=fmt(Date.now()-(report.startedAt||m.start||Date.now()));
   const deathOrder=report.deaths.length?report.deaths.map((x,i)=>`${i+1}. ${x.name}`).join(' · '):'No recorded deaths';
   return `<div class="combatReportHead"><div><div class="name">Mission Report</div><div class="muted" data-report-summary>${report.encounters||0} encounters resolved${report.offlineEncounters?` · ${report.offlineEncounters} offline`:''} · ${duration} active</div></div><span class="chip" data-report-deaths>${deathOrder}</span></div>
-    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow" data-report-hero="${row.id}"><span><b data-report-name>${row.name}</b><small data-report-actions>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small></span><span data-report-damage>${Math.round(row.damage||0).toLocaleString()}</span><span data-report-status>${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied</span><span data-report-healing>${Math.round(row.healing||0).toLocaleString()}</span><span data-report-taken>${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths</span><span data-report-utility>${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses</span></div>`).join('')}</div>`;
+    <div class="combatReportTable"><div class="combatReportRow header"><span>Member</span><span>Damage</span><span>Status</span><span>Healing</span><span>Taken</span><span>Utility</span></div>${rows.map(row=>`<div class="combatReportRow" data-report-hero="${row.id}"><span><b data-report-name>${row.name}</b><small data-report-actions>${row.abilityUses||0} abilities · ${row.criticalHits||0} crits</small><small class="reportLevelUp" data-report-level>${row.levelsGained?`LEVEL UP → ${row.lastLevel} · ${row.levelsGained} gained`:''}</small></span><span data-report-damage>${Math.round(row.damage||0).toLocaleString()}</span><span data-report-status>${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied</span><span data-report-healing>${Math.round(row.healing||0).toLocaleString()}</span><span data-report-taken>${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths</span><span data-report-utility>${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses</span></div>`).join('')}</div>`;
 }
 function combatReportKey(m){return Object.values(ensureCombatReport(m).heroes).map(row=>row.id).join('-')}
 function updateCombatReport(m){
@@ -407,19 +439,23 @@ function updateCombatReport(m){
   rows.forEach(row=>{
     const card=el.querySelector(`[data-report-hero="${row.id}"]`);if(!card)return;
     const set=(selector,value)=>{const node=card.querySelector(selector);if(node)node.textContent=value};
-    set('[data-report-name]',row.name);set('[data-report-actions]',`${row.abilityUses||0} abilities · ${row.criticalHits||0} crits`);set('[data-report-damage]',Math.round(row.damage||0).toLocaleString());set('[data-report-status]',`${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied`);set('[data-report-healing]',Math.round(row.healing||0).toLocaleString());set('[data-report-taken]',`${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths`);set('[data-report-utility]',`${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses`);
+    set('[data-report-name]',row.name);set('[data-report-actions]',`${row.abilityUses||0} abilities · ${row.criticalHits||0} crits`);set('[data-report-level]',row.levelsGained?`LEVEL UP → ${row.lastLevel} · ${row.levelsGained} gained`:'');set('[data-report-damage]',Math.round(row.damage||0).toLocaleString());set('[data-report-status]',`${Math.round(row.statusDamage||0).toLocaleString()} · ${row.statusesApplied||0} applied`);set('[data-report-healing]',Math.round(row.healing||0).toLocaleString());set('[data-report-taken]',`${Math.round(row.damageTaken||0).toLocaleString()} · ${row.deaths||0} deaths`);set('[data-report-utility]',`${row.interrupts||0} interrupts · ${row.cleanses||0} cleanses`);
   });
 }
 function buildCombatStructure(m){
   const arenaMode=m.type==='arena';
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   const ordered=threatOrderedHeroes(m.battle.heroes);
+  const background=combatBackgroundForMission(m).replace(/'/g,"%27");
+  const largestSide=Math.max(1,ordered.length,m.battle.enemies.length),desktopRows=Math.max(1,Math.ceil(largestSide/2));
   $('combatBody').innerHTML=`
     <div class="combatFixedTop">
       <div id="combatDefeatedBanner" class="card dangerText defeatAnalysis" style="margin-bottom:7px;display:${m.defeated?'block':'none'}">${m.defeated?(arenaMode?'<b>Arena defeat.</b> Your defense and normal activities are unaffected.':defeatAdviceHtml(m)):''}</div>
-      <div class="combatGrid">
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'YOUR ARENA PARTY · ATTACKING':'YOUR PARTY · FRONT AND BACK ROW'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
-        <div class="combatTeamPane"><div class="muted" style="margin-bottom:5px">${arenaMode?'OPPONENT PARTY · DEFENDING':'ENEMIES · REAL-TIME COMBAT'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>`<div class="combatEnemySlot" data-combat-slot="enemy:${index}" ${m.battle.enemies[index]?'':'hidden aria-hidden="true" style="display:none!important"'}>${m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false):emptyCombatSlotHtml(true,index)}</div>`).join('')}</div></div>
+      <div class="combatGrid combatBattlefield" style="--combat-background:url('${background}');--combat-rows:${desktopRows};--combat-mobile-rows:${largestSide}">
+        <div class="combatFieldShade"></div>
+        <div class="combatTeamPane combatHeroPane"><div class="combatTeamLabel">${arenaMode?'YOUR ARENA PARTY':'YOUR PARTY'}</div><div class="combatSide compactCombatSide" id="combatHeroSide">${ordered.map((x,index)=>combatantHtml(x.hero,false,x.front,{slot:index})).join('')}</div></div>
+        <div class="combatTeamPane combatEnemyPane"><div class="combatTeamLabel">${arenaMode?'OPPONENT PARTY':'ENEMIES'}</div><div class="combatSide compactCombatSide" id="combatEnemySide">${Array.from({length:COMBAT_ENEMY_SLOT_COUNT},(_,index)=>`<div class="combatEnemySlot" data-combat-slot="enemy:${index}" ${m.battle.enemies[index]?'':'hidden aria-hidden="true" style="display:none!important"'}>${m.battle.enemies[index]?combatantHtml(m.battle.enemies[index],true,false):emptyCombatSlotHtml(true,index)}</div>`).join('')}</div></div>
+        <div class="combatStageIntermission" id="combatStageIntermission"></div>
       </div>
       <div class="lootStash" style="display:${arenaMode?'none':'grid'}">
         <div class="lootBox"><span>Unclaimed gold</span><strong id="combatGold">${m.stash.gold}</strong></div>
@@ -452,7 +488,8 @@ function updateCombatantDom(x,enemy,slotElement=null){
   }
   el.dataset.lastHp=x.hp;
   const hp=el.querySelector('.combatantHp'),fill=el.querySelector('.hpFill'),manaTrack=el.querySelector('.manaTrack'),manaFill=el.querySelector('.manaFill'),attackFill=el.querySelector('.attackFill'),name=el.querySelector('.combatantName'),classLine=el.querySelector('.combatMiniClass'),visualIcon=el.querySelector('.visualIcon');
-  if(name)name.textContent=x.name;
+  if(name)name.textContent=combatDisplayName(x,enemy);
+  if(!enemy){const levelUp=el.querySelector('.combatLevelUp');if(levelUp){const active=(x.levelUpUntil||0)>Date.now();levelUp.textContent=active?(x.levelUpText||`LEVEL ${x.level}`):'';levelUp.classList.toggle('on',active)}}
   if(classLine)classLine.textContent=enemy?(x.boss?'BOSS':'Enemy'):`${x.displayClass||x.class} · ${x.row==='front'?'Front':'Back'}`;
   const iconKey=enemy?`enemy:${x.name}`:`hero:${x.class}:${x.subclass||''}`;
   if(visualIcon&&el.dataset.iconKey!==iconKey){
@@ -473,16 +510,16 @@ function updateCombatantDom(x,enemy,slotElement=null){
       if(x.cast){const ability=ENEMY_ABILITIES_DATA[x.cast.abilityId],total=Math.max(1,x.cast.completeAt-x.cast.startedAt),pct=clamp((Date.now()-x.cast.startedAt)/total*100,0,100);if(fillCast)fillCast.style.width=pct+'%';if(label)label.textContent=ability?.name||'Casting'}
     }
   }
-  const activeType=primaryActiveType(x);
-  if(!enemy&&activeType&&!el.querySelector('.cooldownTrack')){
+  const ability=combatAbilityState(x,enemy);
+  let abilityTrack=el.querySelector('.cooldownTrack');
+  if(!ability&&abilityTrack)abilityTrack.remove();
+  if(ability){
     const vitals=el.querySelector('.combatMiniVitals')||el.lastElementChild;
-    if(vitals){
-      const track=document.createElement('div');
-      track.className='cooldownTrack';
-      track.dataset.cooldownTrack=activeType;
-      track.innerHTML=`<div class="cooldownFill" data-cooldown-type="${activeType}"></div>`;
-      vitals.appendChild(track);
+    if(vitals&&!abilityTrack){
+      abilityTrack=document.createElement('div');abilityTrack.className='cooldownTrack';
+      abilityTrack.innerHTML='<div class="cooldownFill"></div>';vitals.appendChild(abilityTrack);
     }
+    if(abilityTrack){const abilityFill=abilityTrack.querySelector('.cooldownFill');abilityTrack.dataset.cooldownTrack=ability.type;abilityTrack.title=ability.name+' cooldown';if(abilityFill){abilityFill.dataset.cooldownType=ability.type;abilityFill.style.width=ability.progress*100+'%'}}
   }
   const p=$('combatInspectPanel');
   if(p?.classList.contains('on')&&p.dataset.side===(enemy?'enemy':'hero')&&+p.dataset.id===x.id)renderCombatInspector();
@@ -541,6 +578,19 @@ function updateCombatLog(m){
   if(wasNearBottom||!logEl.dataset.initialized)logEl.scrollTop=logEl.scrollHeight;
   logEl.dataset.initialized='1';
 }
+function updateStageIntermissionUi(m){
+  const field=document.querySelector('.combatBattlefield'),box=$('combatStageIntermission'),pause=m.stageIntermission;
+  if(!field||!box)return;field.classList.toggle('stageIntermission',!!pause);
+  if(!pause){box.classList.remove('on');box.replaceChildren();return}
+  const remaining=Math.max(0,(pause.until||Date.now())-Date.now()),title=pause.finalStage?`${m.name} Cleared`:`Stage ${pause.stage} Complete`;
+  box.classList.add('on');box.innerHTML=`
+    <div class="stageDeliveryBanner">
+      <div><div class="name">${title}</div><div class="stageDeliveryText">The party delivers its reports, recovered items, and supplies to the guild.</div></div>
+      <div class="stageDeliveryRewards">${pause.delivered?.text||'Rewards delivered'}</div>
+      <div class="stageDeliveryNext">${pause.finalStage?`<span class="good">The next expedition area is now available.</span>`:pause.offlinePaused?`<button class="btn gold" onclick="continueExpeditionStage(${m.id})">Continue Expedition</button>`:`<span class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</span>`}</div>
+    </div>
+    <div class="stageCampScene"><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div></div>`;
+}
 function renderCombat(){
   if(!$('combatModal').classList.contains('on'))return;
   const arenaMode=$('combatModal').dataset.mode==='arena';
@@ -548,10 +598,11 @@ function renderCombat(){
   if(!m.battle)return;
 
   $('combatTitle').textContent=m.name;
-  $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
+  $('combatSubtitle').textContent=arenaMode?`${m.attackerGuild} vs ${m.defenderGuild} · real-time Arena combat`:`${m.bossGate?'TIER BOSS':isStagedExpedition(m)?`Stage ${Math.min(5,Math.floor(normalEncounterCount(m)/5)+1)} · Encounter ${Math.min(25,normalEncounterCount(m)+1)} / 25`:m.maxFights?(m.battle?.boss?'BOSS':('Encounter '+(m.battle?.encounterNumber||normalEncounterCount(m)+1)+' / '+m.maxFights)):m.fights+' fights'} · ${m.kills} kills · Battle #${m.battle?.id||'-'} · Action ${m.battle?.actionSeq||0} · ${living(m.battle?.enemies||[]).length} enemies alive · real-time combat`;
 
   if(!$('combatLog'))buildCombatStructure(m);
   renderPersistentCombatSlots(m);
+  updateStageIntermissionUi(m);
 
   const matTotal=Object.values(m.stash.materials||{}).reduce((a,v)=>a+v,0);
   
@@ -610,18 +661,35 @@ function sortedRosterMembers(){
     return rosterSortDirection==='asc'?cmp:-cmp;
   });
 }
+function equipmentSlotIcon(it,slot){
+  if(!it)return itemIcons[slot]||({MainHand:'⚔️',OffHand:'🛡️',Armor:'🛡️',Accessories:'💎'}[slot]||'□');
+  return it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons.Weapon||'⚔️'):(itemIcons[it.slot]||itemIcons[slot]||'🎒');
+}
+function compactEquipmentSlots(h,context='roster'){
+  const slots=[...new Set(C[h.class]?.slots||['MainHand','Armor','Accessories'])];
+  return `<div class="compactEquipmentSlots" aria-label="${h.name} equipment">${slots.map(slot=>{
+    const it=s.inventory.find(x=>x.id===h.equip?.[slot]);
+    const occupied=slot==='OffHand'&&it&&h.equip?.MainHand===h.equip?.OffHand;
+    const label=it?(occupied?'Occupied by '+it.name:it.name):'Empty '+slotLabel(slot);
+    return `<button class="compactEquipmentSlot ${it?'filled':'empty'} rarityBorder-${String(it?.rarity||'common').toLowerCase()}" title="${label}" aria-label="${label}" onclick="event.stopPropagation();equipModal(${h.id},'${slot}')">${equipmentSlotIcon(it,slot)}</button>`;
+  }).join('')}</div>`;
+}
+function inspectRosterHero(hid){
+  closeModal();s.selected=hid;save();activatePage('roster');renderRoster();
+}
 function renderRoster(){
   const members=sortedRosterMembers();
   if(!s.selected&&members[0])s.selected=members[0].id;
   $('rosterList').innerHTML=members.length?members.map(h=>{
     const z=hs(h);
-    return `<div class="card hero ${s.selected===h.id?'on':''}" onclick="s.selected=${h.id};save();renderRoster()">
+    return `<div class="card hero characterRarity rarityBorder-${String(h.rarity||'Common').toLowerCase()} ${s.selected===h.id?'on':''}" onclick="s.selected=${h.id};save();renderRoster()">
       ${h.level>=10&&!h.subclass?`<div class="subclassReadyBadge" title="Subclass available">!</div>`:''}
       <div class="heroTop">
         <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
         <div style="min-width:0"><div class="name">${h.name}</div><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level}</div></div>
+        ${compactEquipmentSlots(h)}
       </div>
-      <div class="power"><span>${h.busy?'Away':h.trait}</span><strong>${z.power}</strong></div>
+      <div class="power"><span>${h.busy?(h.professionBusy?'Working · '+PROFESSION_DEFS[h.professionBusy].name:'Away'):'Available'}</span><strong>${z.power}</strong></div>
     </div>`;
   }).join(''):'<div class="empty">No guild members recruited.</div>';
   const selected=s.members.find(x=>x.id===s.selected)||members[0];
@@ -662,6 +730,7 @@ function showCharacterSkills(hid){
   showModal(h.name+' · Skills',`<div class="card"><div class="name">${sub?sub.name:h.class}</div><div class="muted">${sub?'Specialization selected.':'Specialization unlocks at level 10.'}</div></div>
   <div class="card racialPassiveCard" style="margin-top:10px"><div class="name">${race.passive} · ${h.race} Racial Passive</div><div class="muted" style="margin-top:7px">${race.desc}</div></div>
   <div class="card" style="margin-top:10px"><div class="name">Quirk · ${h.trait}</div><div class="muted" style="margin-top:7px">${quirk?.desc||'No special quirk effect.'}</div></div>
+  <div class="card" style="margin-top:10px"><div class="name">Profession Affinity · ${professionTraitDef(h).name}</div><div class="muted" style="margin-top:7px">${professionTraitText(h)}</div></div>
   <div class="card" style="margin-top:10px"><div class="name">Base Skills</div>${baseSkills.map(x=>`<div class="muted" style="margin-top:7px">${x}</div>`).join('')}</div>
   ${sub?`<div class="card" style="margin-top:10px"><div class="name">Passive</div><div class="muted" style="margin-top:7px">${sub.passive}</div></div><div class="card" style="margin-top:10px"><div class="name">Active Skill</div><div class="muted" style="margin-top:7px">${sub.active}</div></div>`:''}
   ${!sub&&h.level>=10?`<button class="btn gold" style="margin-top:12px" onclick="closeModal();chooseSubclass(${h.id})">Choose Specialization</button>`:''}`);
@@ -671,19 +740,21 @@ function showGatheringSkills(hid){
   showModal(h.name+' · Gathering Skills',`<div class="stats">${Object.entries(SKILL_NAMES).map(([k,n])=>{const sk=gatheringSkill(h,k),need=skillXpNeeded(sk.level);return `<div class="stat"><span>${n}</span><strong>Lv. ${sk.level}</strong><small>${sk.xp} / ${need} XP</small><div class="progressTrack" style="margin-top:6px"><div class="progressFill" style="width:${Math.min(100,sk.xp/need*100)}%"></div></div></div>`}).join('')}</div><div class="muted" style="margin-top:12px">Higher skill slightly increases bonus yield and unlocks advanced gathering locations.</div>`);
 }
 function heroAttackDisplay(h,z=hs(h)){
-  const wep=s.inventory.find(x=>x.id===h.equip?.Weapon);
+  const mainId=h.equip?.MainHand||h.equip?.Weapon,wep=s.inventory.find(x=>x.id===mainId);
+  const off=s.inventory.find(x=>x.id===h.equip?.OffHand&&x.id!==mainId&&x.slot==='Weapon');
   const attack=wep?.weaponPower||0;
   const baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||'');
   const unit={baseAttackTime,attackSpeed:z.attackSpeed||0,buffs:{}};
   return{
-    attack,
+    attack:off?`${attack} + ${off.weaponPower||0}`:attack,
+    hits:off?2:1,
     attackSpeed:z.attackSpeed||0,
     attackTime:heroAttackIntervalMs(unit)/1000
   };
 }
 function heroDetail(h){
   const z=hs(h),combat=heroAttackDisplay(h,z),slots=C[h.class].slots,sub=subclassDef(h),quirk=traitDef(h);
-  const wep=s.inventory.find(x=>x.id===h.equip.Weapon);
+  const wep=s.inventory.find(x=>x.id===(h.equip.MainHand||h.equip.Weapon));
   const scaling=wep?`${wep.weaponType} · ${String(wep.scale).toUpperCase()} scaling · ${elementIcon[wep.damageType||'physical']} ${wep.damageType}`:'No weapon equipped';
   const baseSkills={
     Warrior:['Basic Attack — attacks with the equipped weapon.'],
@@ -699,7 +770,7 @@ function heroDetail(h){
     const icon=it&&it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[k]||'🎒'):(itemIcons[k]||'🎒');
     return `<div class="detailEquipRow" onclick="equipModal(${h.id},'${k}')">
       <div class="detailEquipIcon">${icon}</div>
-      <div class="detailEquipText"><small>${k}</small><b>${it?it.name:'Empty'}</b><small>${it?statText(it):'Click to equip'}</small></div>
+      <div class="detailEquipText"><small>${slotLabel(k)}</small><b>${it?it.name:'Empty'}</b><small>${it?(k==='OffHand'&&h.equip.MainHand===h.equip.OffHand?'Occupied by two-handed weapon':statText(it)):'Click to equip'}</small></div>
       ${it?`<button class="btn" style="padding:4px 6px" onclick="event.stopPropagation();unequipItem(${h.id},'${k}')">Unequip</button>`:''}
     </div>`;
   }).join('');
@@ -712,7 +783,7 @@ function heroDetail(h){
   return `<div class="detailHeader">
     <div class="detailIdentity">
       <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
-      <div style="min-width:0"><h2>${h.name}</h2><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level} · ${h.rarity}</div><div class="muted">${h.trait}${h.busy?' · Away':''}</div></div>
+      <div style="min-width:0"><h2>${h.name}</h2><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level} · <span class="${rarityClass(h.rarity)}">${h.rarity}</span></div><div class="muted">${h.trait}${h.busy?' · '+(h.professionBusy?'Working in '+PROFESSION_DEFS[h.professionBusy].name:'Away'):''}</div></div>
     </div>
     <div style="text-align:right"><b>${z.power} power</b></div>
   </div>
@@ -755,6 +826,7 @@ function heroDetail(h){
           <div class="stat"><span>Attack</span><strong>${combat.attack}</strong></div>
           <div class="stat"><span>Attack Speed</span><strong>${combat.attackSpeed>=0?'+':''}${Math.round(combat.attackSpeed*100)}%</strong></div>
           <div class="stat"><span>Attack Time</span><strong>${combat.attackTime.toFixed(2)}s</strong></div>
+          <div class="stat"><span>Hits per Attack</span><strong>${combat.hits}</strong></div>
           <div class="stat"><span>Lifesteal</span><strong>${z.lifesteal}%</strong></div>
         </div>
       </div>
@@ -795,6 +867,7 @@ function heroDetail(h){
     <h3>Skills & Passives</h3>
     <div class="detailSkillCard racialPassiveCard"><b>${raceDef(h).passive} · ${h.race} Racial Passive</b><span>${raceDef(h).desc}</span></div>
     <div class="detailSkillCard"><b>Quirk · ${h.trait}</b><span>${quirk?.desc||'No special quirk effect.'}</span></div>
+    <div class="detailSkillCard professionPassiveCard"><b>Profession Affinity · ${professionTraitDef(h).name}</b><span>${professionTraitDef(h).professionName}: ${professionTraitDef(h).desc}</span></div>
     ${baseSkills.map(x=>`<div class="detailSkillCard"><b>Base Skill</b><span>${x}</span></div>`).join('')}
     ${sub?`<div class="detailSkillCard"><b>${sub.name} Passive</b><span>${sub.passive}</span></div><div class="detailSkillCard"><b>${sub.name} Active</b><span>${sub.active}</span></div>`:`<div class="detailSkillCard"><b>Specialization</b><span>${h.level>=10?'Ready to choose a specialization.':'Unlocks at level 10.'}</span></div>`}
   </div>
