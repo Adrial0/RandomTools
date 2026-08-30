@@ -257,8 +257,8 @@ function raceGatheringXpMult(h,key){
   return 1+(g[key]||0)+(g.all||0);
 }
 
-const FN=["Adrian","Alden","Alric","Amelia","Ansel","Arlen","Arthur","Astrid","Aveline","Beatrice","Benjamin","Bran","Bryn","Cael","Cassian","Cedric","Clara","Corin","Dara","Edric","Edwin","Eira","Elena","Elias","Elowen","Elric","Emmett","Emric","Evelyn","Fen","Freya","Garrick","Gideon","Helena","Iris","Isolde","John","Jonas","Joren","Kael","Leo","Leona","Liora","Lucan","Lucien","Lysa","Maeve","Maren","Matilda","Merrick","Mira","Nell","Nerys","Nora","Oren","Orin","Petra","Quinn","Rhea","Roland","Ronan","Rowan","Selene","Soren","Sylvi","Tarin","Thea","Theo","Theron","Tobias","Tristan","Valen","Vera","Veya","Willa","Wren","Ysabel"]
-,LN=["Ashfall","Ashford","Blackthorn","Blackwood","Briar","Brighton","Coldwater","Crowe","Dawn","Dunley","Duskwood","Ember","Fairwind","Frost","Foxglove","Goldmere","Graves","Greenfield","Grey","Hale","Harth","Hawke","Hearth","Highland","Holloway","Ironwood","Marrow","Moonfall","North","Oakheart","Ravencrest","Redfern","Rivers","Rook","Silver","Silverhand","Stone","Stonebridge","Storm","Stormborn","Thorne","Thornfield","Underhill","Vale","Ward","West","Whitebrook","Whitlock","Wildwood","Willow","Winter","Wolfe","Woodward"];
+const FN=["Adrian","Alden","Alric","Amelia","Ansel","Arlen","Arthur","Astrid","Aveline","Beatrice","Benjamin","Bran","Bryn","Cael","Cassian","Cedric","Clara","Corin","Dara","Edric","Edwin","Eira","Elena","Elias","Elowen","Elric","Emmett","Emric","Evelyn","Fen","Freya","Garrick","Gideon","Helena","Iris","Isolde","John","Jonas","Joren","Kael","Leo","Leona","Liora","Lucan","Lucien","Lysa","Maeve","Maren","Matilda","Merrick","Mira","Nell","Nerys","Nora","Oren","Orin","Petra","Quinn","Rhea","Roland","Ronan","Rowan","Selene","Soren","Sylvi","Tarin","Thea","Theo","Theron","Tobias","Tristan","Valen","Vera","Veya","Willa","Wren","Ysabel","Aeron","Alina","Amara","Anders","Anika","Aric","Bastian","Bela","Bram","Brina","Calder","Celia","Cerys","Dain","Delia","Dorian","Elsin","Eamon","Fara","Finnian","Galen","Greta","Hagen","Ilara","Ilyan","Jessa","Kara","Kellan","Kira","Leif","Lena","Maelis","Mara","Milo","Nadia","Niall","Nyra","Odel","Orla","Perrin","Reina","Sabine","Seren","Talia","Tessa","Ulric","Varen","Yara","Yorren","Zara","Zorin"]
+,LN=["Ashfall","Ashford","Blackthorn","Blackwood","Briar","Brighton","Coldwater","Crowe","Dawn","Dunley","Duskwood","Ember","Fairwind","Frost","Foxglove","Goldmere","Graves","Greenfield","Grey","Hale","Harth","Hawke","Hearth","Highland","Holloway","Ironwood","Marrow","Moonfall","North","Oakheart","Ravencrest","Redfern","Rivers","Rook","Silver","Silverhand","Stone","Stonebridge","Storm","Stormborn","Thorne","Thornfield","Underhill","Vale","Ward","West","Whitebrook","Whitlock","Wildwood","Willow","Winter","Wolfe","Woodward","Amberfall","Ashenvale","Barkley","Bellhaven","Blazewood","Bracken","Brightforge","Brook","Cloudrest","Copperfield","Darkwater","Deepwell","Duskfall","Eaglecrest","Eastmere","Evergreen","Fallow","Farshore","Firebrand","Flint","Glenwood","Goldleaf","Graymark","Hartwell","Hazelwood","Kingsley","Lightfoot","Longmere","Mistvale","Moorland","Mossbrook","Nightbloom","Oakenfield","Pineward","Rainier","Ridgeway","Rosewood","Runebrook","Shadowmere","Skyfall","Snowmere","Starling","Steelward","Stillwater","Sunward","Swiftwater","Thistle","Voss","Wheatley","Windmere","Yarrow"];
 
 const traits=[
 {name:'Brave',desc:'+6% damage, but -5% MDEF.',hp:0,str:2,dex:0,int:0,def:0,mdef:0,damageMult:1.06,mdefMult:.95},
@@ -343,7 +343,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:6,applicantCap:2,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -410,7 +410,7 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
   const defaultSkills=()=>({woodcutting:{level:1,xp:0},mining:{level:1,xp:0},fishing:{level:1,xp:0},harvesting:{level:1,xp:0},hunting:{level:1,xp:0}});
   [...(s.members||[]),...(s.recruits||[])].forEach(h=>{h.skills=h.skills||{};if(h.skills.herbalism&&!h.skills.harvesting)h.skills.harvesting=h.skills.herbalism;delete h.skills.herbalism;h.skills=Object.assign(defaultSkills(),h.skills);Object.keys(h.skills).forEach(k=>h.skills[k]=Object.assign({level:1,xp:0},h.skills[k]||{}));if(h.subclass===undefined)h.subclass=null;if(!h.race||!RACES[h.race])h.race=pick(RACE_NAMES)});
   if(typeof normalizeProfessionState==='function')normalizeProfessionState();
-  s.runes=s.runes&&typeof s.runes==='object'?s.runes:{};Object.keys(RUNES).forEach(k=>{if(s.runes[k]==null)s.runes[k]=0});s.partyPresets=Array.isArray(s.partyPresets)?s.partyPresets:[];s.market=s.market&&typeof s.market==='object'?s.market:{nextRefresh:0,offers:[]};s.market.offers=Array.isArray(s.market.offers)?s.market.offers:[];s.questBoard=s.questBoard&&typeof s.questBoard==='object'?s.questBoard:{nextRefresh:0,offers:[]};s.questBoard.offers=Array.isArray(s.questBoard.offers)?s.questBoard.offers:[];s.harvestJobs=Array.isArray(s.harvestJobs)?s.harvestJobs:[];s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];normalizeCraftQueue();s.battleSeq=s.battleSeq||1;s.lastHiddenAt=s.lastHiddenAt||0;s.knownRecipes=Array.isArray(s.knownRecipes)?s.knownRecipes:[];s.memberCap=Math.max((s.members||[]).length,6+(s.up.quarters||0));s.discoveredResources=Array.isArray(s.discoveredResources)?s.discoveredResources:[];s.applicantCap=Math.max(2,s.applicantCap||2+(s.up.recruit||0));s.nextApplicantsAt=s.nextApplicantsAt||0;
+  s.runes=s.runes&&typeof s.runes==='object'?s.runes:{};Object.keys(RUNES).forEach(k=>{if(s.runes[k]==null)s.runes[k]=0});s.partyPresets=Array.isArray(s.partyPresets)?s.partyPresets:[];s.market=s.market&&typeof s.market==='object'?s.market:{nextRefresh:0,offers:[]};s.market.offers=Array.isArray(s.market.offers)?s.market.offers:[];s.questBoard=s.questBoard&&typeof s.questBoard==='object'?s.questBoard:{nextRefresh:0,offers:[]};s.questBoard.offers=Array.isArray(s.questBoard.offers)?s.questBoard.offers:[];s.harvestJobs=Array.isArray(s.harvestJobs)?s.harvestJobs:[];s.craftJobs=Array.isArray(s.craftJobs)?s.craftJobs:[];normalizeCraftQueue();s.battleSeq=s.battleSeq||1;s.lastHiddenAt=s.lastHiddenAt||0;s.knownRecipes=Array.isArray(s.knownRecipes)?s.knownRecipes:[];s.memberCap=Math.max((s.members||[]).length,6+(s.up.quarters||0));s.discoveredResources=Array.isArray(s.discoveredResources)?s.discoveredResources:[];s.applicantCap=Math.max(4,s.applicantCap||4+(s.up.recruit||0));s.nextApplicantsAt=s.nextApplicantsAt||0;
   s.memberCap=Math.max((s.members||[]).length,6+(s.up.quarters||0));
   s.expeditionGates=Array.isArray(s.expeditionGates)?[...new Set(s.expeditionGates.map(Number).filter(x=>x>=1&&x<=10))]:[];
   s.expeditionClears=Array.isArray(s.expeditionClears)?[...new Set(s.expeditionClears.map(String))]:[];
@@ -434,6 +434,8 @@ s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>
     return syncNaturalHeroBonus(h);
   });
   s.recruits=(s.recruits||[]).map(h=>syncNaturalHeroBonus(h));
+  s.applicantCap=applicantBatchSize();
+  if(!s.recruitBatchFourMigrated){while(s.recruits.length<s.applicantCap)s.recruits.push(hero());s.recruitBatchFourMigrated=true}
   s.inventory=(s.inventory||[]).map(it=>{
     it.runes=Array.isArray(it.runes)?it.runes:[];
     it.tier=itemTier(it);
@@ -537,8 +539,10 @@ function hero(){
   let c=pick(Object.keys(C)),t=pick(traits),ra=recruitRarity();
   const recruitBase=1+Math.floor(Math.max(0,(s.level||1)-1)*.18);
   const lv=clamp(rnd(Math.max(1,recruitBase-2),recruitBase+1),1,15);
+  const usedNames=new Set([...(s.members||[]),...(s.recruits||[])].map(h=>h.name));let generatedName='';
+  for(let attempt=0;attempt<20;attempt++){generatedName=pick(FN)+' '+pick(LN);if(!usedNames.has(generatedName))break}
   const recruit={
-    id:id(),name:pick(FN)+' '+pick(LN),class:c,race:pick(RACE_NAMES),rarity:ra,trait:t.name,professionTrait:typeof rollProfessionTrait==='function'?rollProfessionTrait():null,level:lv,xp:0,busy:false,subclass:null,
+    id:id(),name:generatedName,class:c,race:pick(RACE_NAMES),rarity:ra,trait:t.name,professionTrait:typeof rollProfessionTrait==='function'?rollProfessionTrait():null,level:lv,xp:0,busy:false,subclass:null,
     equip:{MainHand:null,OffHand:null,Armor:null,Accessories:null},
     skills:rolledRecruitSkills(),
     bonus:null
@@ -682,15 +686,14 @@ function makeUniqueItem(tier=1,boss='Unknown Boss',dropLevel=tier*10){
   it.name=template.name;it.uniqueId=template.id;it.uniquePassive=template.passive;it.dropSource=boss;it.power=Math.round(((it.power||0)*1.35+80+tier*18)*levelScale);
   return it;
 }
-function strengthHpBonus(str){
-  return Math.floor(Math.max(0,str||0)/4);
+function diminishingAttributeBonus(attribute,linearAt100,logarithmicGain){
+  const value=Math.max(0,attribute||0);
+  return value<=100?value*(linearAt100/100):linearAt100+logarithmicGain*Math.log(1+(value-100)/100);
 }
-function physicalDodgeFromDex(dex){
-  return Math.min(.40,Math.max(0,dex||0)*.0025);
-}
-function magicalDodgeFromInt(intel){
-  return Math.min(.40,Math.max(0,intel||0)*.0025);
-}
+function strengthHpBonus(str){return Math.floor(diminishingAttributeBonus(str,25,10))}
+function physicalDodgeFromDex(dex){return diminishingAttributeBonus(dex,.25,.08)}
+function magicalDodgeFromInt(intel){return diminishingAttributeBonus(intel,.25,.08)}
+function intelligenceManaBonus(intel){return Math.round(diminishingAttributeBonus(intel,100,40))}
 function hs(h){
   const b=C[h.class];
   const e={hp:0,str:0,dex:0,int:0,def:0,mdef:0,block:0,regen:0,mana:0,manaRegen:0,attackSpeed:0,lifesteal:0,fire:0,ice:0,poison:0,lightning:0,holy:0,dark:0,power:0,damageBonus:0,healBonus:0,critBonus:0,threatBonus:0,physicalDodgeBonus:0,magicalDodgeBonus:0,armorPen:0,parry:0,weaponCritChance:0,critDamage:0,accuracy:0,elementalDamage:0,healingPower:0,statusChance:0,cleave:0,counter:0,damageVariance:0,uniqueDamageReduction:0,uniqueCooldownReduction:0,uniqueOnHit:null};
@@ -743,7 +746,7 @@ function hs(h){
   const def=Math.round((b.def+(bonus.def||0)+e.def)*m*(sub.defMult||1)*(tr.defMult||1)*(rMult.def||1));
   const mdef=Math.round((b.mdef+(bonus.mdef||0)+e.mdef)*m*(sub.mdefMult||1)*(tr.mdefMult||1)*(rMult.mdef||1));
   const block=Math.max(0,Math.round((b.block||0)+(bonus.block||0)+e.block+(sub.blockBonus||0)+(rFlat.block||0)));
-  const mana=Math.max(0,Math.round((20+intel+(bonus.mana||0)+e.mana)*(rMult.mana||1)));
+  const mana=Math.max(0,Math.round((20+intelligenceManaBonus(intel)+(bonus.mana||0)+e.mana)*(rMult.mana||1)));
   const manaRegen=Math.max(0,Math.round((b.manaRegen||1)+(bonus.manaRegen||0)+e.manaRegen+(sub.manaRegenBonus||0)+(rFlat.manaRegen||0)));
   const attackSpeed=(CLASS_ATTACK_SPEED[h.class]||0)+(sub.attackSpeedBonus||0)+(bonus.attackSpeed||0)/100+e.attackSpeed/100+(rFlat.attackSpeed||0);
 
@@ -754,8 +757,8 @@ function hs(h){
   const holy=Math.round((bonus.holy||0)+e.holy+(rFlat.holy||0));
   const dark=Math.round((bonus.dark||0)+e.dark+(rFlat.dark||0));
 
-  const physicalDodge=clamp(physicalDodgeFromDex(dex)+(sub.physicalDodgeBonus||0)+(tr.physicalDodgeBonus||0)+e.physicalDodgeBonus-(tr.physicalDodgePenalty||0)+(rFlat.physicalDodge||0),0,.40);
-  const magicalDodge=clamp(magicalDodgeFromInt(intel)+(sub.magicalDodgeBonus||0)+(tr.magicalDodgeBonus||0)+e.magicalDodgeBonus-(tr.magicalDodgePenalty||0)+(rFlat.magicalDodge||0),0,.40);
+  const physicalDodge=clamp(physicalDodgeFromDex(dex)+(sub.physicalDodgeBonus||0)+(tr.physicalDodgeBonus||0)+e.physicalDodgeBonus-(tr.physicalDodgePenalty||0)+(rFlat.physicalDodge||0),0,.90);
+  const magicalDodge=clamp(magicalDodgeFromInt(intel)+(sub.magicalDodgeBonus||0)+(tr.magicalDodgeBonus||0)+e.magicalDodgeBonus-(tr.magicalDodgePenalty||0)+(rFlat.magicalDodge||0),0,.90);
 
   const power=Math.round(
     hp*.12+str*2+dex*2+intel*2+def*1.8+mdef*1.8+
@@ -809,7 +812,7 @@ function expeditionPartySize(){
   return 3+clearedTiers.size;
 }
 function partySizeFor(type){return type==='raid'?20:expeditionPartySize()}
-function applicantBatchSize(){return 2+(s.up.recruit||0)}
+function applicantBatchSize(){return 4+(s.up.recruit||0)}
 function fillApplicants(){
   const target=applicantBatchSize();
   while(s.recruits.length<target)s.recruits.push(hero());

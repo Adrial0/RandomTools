@@ -325,7 +325,7 @@ function upgradeEffectValue(key,level){
   const l=Math.max(0,level||0);
   if(key==='quarters')return `${6+l} member slots`;
   if(key==='party')return `${2+l} expedition party slots`;
-  if(key==='recruit')return `${2+l} applicants per batch`;
+  if(key==='recruit')return `${4+l} applicants per batch`;
   if(key==='smith')return `+${l*10}% Smithing XP`;
   if(key==='craftSpeed')return `${Math.round((1-Math.pow(.88,l))*100)}% faster crafting`;
   if(key==='training')return `+${l*10}% adventurer XP`;

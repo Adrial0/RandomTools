@@ -12,6 +12,13 @@ assert.match(core,/value\*levels/,'natural stat growth accounts for every prior 
 assert.match(core,/recruit\.bonus=naturalHeroBonus\(recruit\)/,'higher-level recruits receive their complete natural growth');
 assert.match(core,/return syncNaturalHeroBonus\(h\)/,'existing members migrate to deterministic natural growth');
 assert.match(core,/s\.recruits=.*syncNaturalHeroBonus\(h\)/,'saved applicants migrate to deterministic natural growth');
+assert.match(core,/value<=100\?value\*\(linearAt100\/100\):linearAt100\+logarithmicGain\*Math\.log/,'derived attribute bonuses stay linear through 100 and become logarithmic afterward');
+assert.match(core,/strengthHpBonus\(str\).*diminishingAttributeBonus\(str,25,10\)/s,'STR uses the diminishing maximum-HP curve');
+assert.match(core,/physicalDodgeFromDex\(dex\).*diminishingAttributeBonus\(dex,\.25,\.08\)/s,'DEX uses the diminishing physical-dodge curve');
+assert.match(core,/magicalDodgeFromInt\(intel\).*diminishingAttributeBonus\(intel,\.25,\.08\)/s,'INT uses the diminishing magical-dodge curve');
+assert.match(core,/intelligenceManaBonus\(intel\).*diminishingAttributeBonus\(intel,100,40\)/s,'INT uses the diminishing mana curve');
+assert.match(core,/function applicantBatchSize\(\)\{return 4\+\(s\.up\.recruit\|\|0\)\}/,'recruitment starts with four applicants');
+assert.match(core,/attempt<20[\s\S]*!usedNames\.has/,'new recruits avoid names already on the current roster and board');
 assert.match(combat,/hero\.level\+\+;\s*syncNaturalHeroBonus\(hero\)/,'level-ups use the same deterministic growth calculation');
 assert.match(combat,/hpScale=1\.12\+Math\.max\(0,level-1\)\*\.20/,'enemy health retains level-one balance and scales faster thereafter');
 assert.match(combat,/const atk=Math\.round\(\(tpl\.baseAttack\|\|12\)\*scale/,'enemy attack retains the gentler original scaling');

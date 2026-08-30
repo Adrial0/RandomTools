@@ -343,7 +343,7 @@ function syncPartyHp(m){
       m.partyState[h.id].hp=Math.max(0,h.hp);
       m.partyState[h.id].maxHp=h.maxHp;
       m.partyState[h.id].mana=Math.max(0,h.mana||0);
-      m.partyState[h.id].maxMana=h.maxMana||(20+(h.int||0));
+      m.partyState[h.id].maxMana=h.maxMana||(20+intelligenceManaBonus(h.int||0));
       m.partyState[h.id].cooldowns=Object.assign({},h.cooldowns||{});
       m.partyState[h.id].buffs=activePersistentBuffs(h.buffs);
       m.partyState[h.id].statuses=activePersistentStatuses(h.statuses);
