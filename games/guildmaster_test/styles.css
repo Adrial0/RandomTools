@@ -1784,3 +1784,13 @@ body.windowOpen .side{overflow:hidden!important}
   .guildBanner h2{font-size:19px!important}
   .guildCommandBar{grid-template-columns:1fr}
 }
+.subclassChoiceIcon{height:88px;display:grid;place-items:center;margin-bottom:8px;border:1px solid #5b452c;background:#17120d;overflow:hidden}
+.subclassChoiceIcon>.gameAsset,.subclassChoiceIcon img.gameAsset{width:78px!important;height:78px!important;max-width:78px!important;max-height:78px!important;object-fit:contain;image-rendering:pixelated}
+.milestoneChoiceGrid{align-items:stretch}.milestoneChoice{display:flex!important;flex-direction:column;gap:8px}.milestoneChoice .modalActionRow,.milestoneChoice>button{margin-top:auto}
+.milestoneTrack{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}
+.milestoneNode{display:flex;flex-direction:column;gap:3px;min-height:70px;padding:8px;text-align:left;border:1px solid #50402b;background:#18140f;color:#8e8169;font-family:inherit}
+.milestoneNode small{font:8px var(--ui-pixel);letter-spacing:.06em;text-transform:uppercase}.milestoneNode b{font-size:11px;color:#b9a783}.milestoneNode span{font:8px/1.3 var(--ui-pixel)}
+.milestoneNode.complete{border-color:#61734c;background:#1b2116}.milestoneNode.complete b,.milestoneNode.complete span{color:#a8ca8d}
+.milestoneNode.ready{cursor:pointer;border-color:#b18039;background:#382814;box-shadow:inset 0 0 0 1px rgba(226,180,85,.14)}.milestoneNode.ready b,.milestoneNode.ready span{color:#ebcb87}
+.milestoneNode.ready:hover{background:#49341a;border-color:#d09a48}.milestoneNode:disabled{opacity:1}
+@media(max-width:700px){.milestoneTrack{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -706,7 +706,7 @@ function chooseSubclass(hid){
   if(h.level<10)return notify('Subclass unlocks at level 10.');
   if(h.subclass)return showCharacterSkills(hid);
   const choices=SUBCLASSES[h.class]||[];
-  showModal('Choose '+h.class+' Specialization',`<div class="g2">${choices.map(x=>`<div class="card"><div class="name">${x.name}</div><div class="muted" style="margin-top:6px"><b>Passive:</b> ${x.passive}</div><div class="muted" style="margin-top:6px"><b>Active:</b> ${x.active}</div><div class="modalActionRow"><button class="btn gold" onclick="selectSubclass(${h.id},'${x.id}')">Choose ${x.name}</button></div></div>`).join('')}</div>`);
+  showModal('Choose '+h.class+' Specialization',`<div class="g2 milestoneChoiceGrid">${choices.map(x=>`<div class="card milestoneChoice"><div class="subclassChoiceIcon">${gameIcon('subclass',x.id,iconFallback('class',h.class),'gameAsset')}</div><div class="name">${x.name}</div><div class="muted" style="margin-top:6px"><b>Passive:</b> ${x.passive}</div><div class="muted" style="margin-top:6px"><b>Active:</b> ${x.active}</div><div class="modalActionRow"><button class="btn gold" onclick="selectSubclass(${h.id},'${x.id}')">Choose ${x.name}</button></div></div>`).join('')}</div>`);
 }
 function selectSubclass(hid,sid){
   const h=s.members.find(x=>x.id===hid);if(!h||h.level<10||h.subclass)return;
@@ -715,6 +715,13 @@ function selectSubclass(hid,sid){
   save();closeModal();renderRoster();
   notify(h.name+' specialized as '+sub.name+'.','good');
 }
+function chooseDiscipline(hid){const h=s.members.find(x=>x.id===hid);if(!h||h.level<5||h.discipline)return;showModal(h.name+' · Combat Discipline',`<div class="g3 milestoneChoiceGrid">${(CLASS_DISCIPLINES[h.class]||[]).map(choice=>`<div class="card milestoneChoice"><div class="name">${choice.name}</div><div class="muted">${choice.desc}</div><button class="btn gold" onclick="selectDiscipline(${h.id},'${choice.id}')">Choose</button></div>`).join('')}</div>`)}
+function selectDiscipline(hid,id){const h=s.members.find(x=>x.id===hid),choice=(CLASS_DISCIPLINES[h?.class]||[]).find(x=>x.id===id);if(!h||h.level<5||h.discipline||!choice)return;h.discipline=id;save();closeModal();renderRoster();notify(`${h.name} adopted ${choice.name}.`,'good')}
+function choosePassiveEvolution(hid){const h=s.members.find(x=>x.id===hid),sub=subclassDef(h);if(!h||h.level<20||!sub||h.passiveEvolution)return;showModal(h.name+' · Passive Evolution',`<div class="g2 milestoneChoiceGrid"><div class="card milestoneChoice"><div class="name">${sub.name} Mastery</div><div class="muted">Strengthens every numerical part of the subclass passive by 25%.</div><button class="btn gold" onclick="selectPassiveEvolution(${h.id},'mastery')">Choose Mastery</button></div><div class="card milestoneChoice"><div class="name">Hardened Foundation</div><div class="muted">+8% maximum HP, +5% DEF and +5% MDEF.</div><button class="btn gold" onclick="selectPassiveEvolution(${h.id},'resilience')">Choose Foundation</button></div></div>`)}
+function selectPassiveEvolution(hid,id){const h=s.members.find(x=>x.id===hid);if(!h||h.level<20||!h.subclass||h.passiveEvolution||!['mastery','resilience'].includes(id))return;h.passiveEvolution=id;save();closeModal();renderRoster();notify(`${h.name}'s passive evolved.`,'good')}
+function chooseActiveEvolution(hid){const h=s.members.find(x=>x.id===hid),sub=subclassDef(h);if(!h||h.level<30||!sub||h.activeEvolution)return;const active=sub.active.split(' — ')[0];showModal(h.name+' · Active Evolution',`<div class="g2 milestoneChoiceGrid"><div class="card milestoneChoice"><div class="name">Empowered ${active}</div><div class="muted">+25% active damage, healing, or buff duration.</div><button class="btn gold" onclick="selectActiveEvolution(${h.id},'power')">Choose Empowered</button></div><div class="card milestoneChoice"><div class="name">Accelerated ${active}</div><div class="muted">20% shorter active cooldown.</div><button class="btn gold" onclick="selectActiveEvolution(${h.id},'tempo')">Choose Accelerated</button></div></div>`)}
+function selectActiveEvolution(hid,id){const h=s.members.find(x=>x.id===hid);if(!h||h.level<30||!h.subclass||h.activeEvolution||!['power','tempo'].includes(id))return;h.activeEvolution=id;save();closeModal();renderRoster();notify(`${h.name}'s active ability evolved.`,'good')}
+function milestoneTrackHtml(h){const entries=[{level:5,label:'Discipline',value:disciplineDef(h)?.name,ready:h.level>=5&&!h.discipline,action:`chooseDiscipline(${h.id})`},{level:10,label:'Subclass',value:subclassDef(h)?.name,ready:h.level>=10&&!h.subclass,action:`chooseSubclass(${h.id})`},{level:20,label:'Passive Evolution',value:h.passiveEvolution==='mastery'?'Subclass Mastery':h.passiveEvolution==='resilience'?'Hardened Foundation':null,ready:h.level>=20&&h.subclass&&!h.passiveEvolution,action:`choosePassiveEvolution(${h.id})`},{level:30,label:'Active Evolution',value:h.activeEvolution?activeEvolutionName(h):null,ready:h.level>=30&&h.subclass&&!h.activeEvolution,action:`chooseActiveEvolution(${h.id})`}];return `<div class="milestoneTrack">${entries.map(x=>`<button class="milestoneNode ${x.value?'complete':x.ready?'ready':'locked'}" ${x.ready?`onclick="${x.action}"`:''} ${x.ready?'':'disabled'}><small>Level ${x.level}</small><b>${x.label}</b><span>${x.value||(x.ready?'Ready to choose':`Unlocks at ${x.level}`)}</span></button>`).join('')}</div>`}
 function showCharacterSkills(hid){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
   const sub=subclassDef(h);
@@ -731,6 +738,7 @@ function showCharacterSkills(hid){
   <div class="card racialPassiveCard" style="margin-top:10px"><div class="name">${race.passive} · ${h.race} Racial Passive</div><div class="muted" style="margin-top:7px">${race.desc}</div></div>
   <div class="card" style="margin-top:10px"><div class="name">Quirk · ${h.trait}</div><div class="muted" style="margin-top:7px">${quirk?.desc||'No special quirk effect.'}</div></div>
   <div class="card" style="margin-top:10px"><div class="name">Profession Affinity · ${professionTraitDef(h).name}</div><div class="muted" style="margin-top:7px">${professionTraitText(h)}</div></div>
+  <div class="card" style="margin-top:10px"><div class="name">Character Milestones</div>${milestoneTrackHtml(h)}</div>
   <div class="card" style="margin-top:10px"><div class="name">Base Skills</div>${baseSkills.map(x=>`<div class="muted" style="margin-top:7px">${x}</div>`).join('')}</div>
   ${sub?`<div class="card" style="margin-top:10px"><div class="name">Passive</div><div class="muted" style="margin-top:7px">${sub.passive}</div></div><div class="card" style="margin-top:10px"><div class="name">Active Skill</div><div class="muted" style="margin-top:7px">${sub.active}</div></div>`:''}
   ${!sub&&h.level>=10?`<button class="btn gold" style="margin-top:12px" onclick="closeModal();chooseSubclass(${h.id})">Choose Specialization</button>`:''}`);
@@ -796,6 +804,11 @@ function heroDetail(h){
   <div class="detailSection">
     <div style="display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-bottom:5px"><span>Level ${h.level} XP</span><span>${h.xp} / ${heroXpNeeded(h.level)}</span></div>
     <div class="progressTrack"><div class="progressFill" style="width:${Math.min(100,h.xp/heroXpNeeded(h.level)*100)}%"></div></div>
+  </div>
+
+  <div class="detailSection">
+    <h3>Character Development</h3>
+    ${milestoneTrackHtml(h)}
   </div>
 
   <div class="detailSection">
@@ -868,8 +881,9 @@ function heroDetail(h){
     <div class="detailSkillCard racialPassiveCard"><b>${raceDef(h).passive} · ${h.race} Racial Passive</b><span>${raceDef(h).desc}</span></div>
     <div class="detailSkillCard"><b>Quirk · ${h.trait}</b><span>${quirk?.desc||'No special quirk effect.'}</span></div>
     <div class="detailSkillCard professionPassiveCard"><b>Profession Affinity · ${professionTraitDef(h).name}</b><span>${professionTraitDef(h).professionName}: ${professionTraitDef(h).desc}</span></div>
+    ${disciplineDef(h)?`<div class="detailSkillCard"><b>Discipline · ${disciplineDef(h).name}</b><span>${disciplineDef(h).desc}</span></div>`:''}
     ${baseSkills.map(x=>`<div class="detailSkillCard"><b>Base Skill</b><span>${x}</span></div>`).join('')}
-    ${sub?`<div class="detailSkillCard"><b>${sub.name} Passive</b><span>${sub.passive}</span></div><div class="detailSkillCard"><b>${sub.name} Active</b><span>${sub.active}</span></div>`:`<div class="detailSkillCard"><b>Specialization</b><span>${h.level>=10?'Ready to choose a specialization.':'Unlocks at level 10.'}</span></div>`}
+    ${sub?`<div class="detailSkillCard"><b>${sub.name} Passive${h.passiveEvolution?' · Evolved':''}</b><span>${sub.passive}${h.passiveEvolution==='mastery'?' · Numerical effects ×1.25.':h.passiveEvolution==='resilience'?' · +8% HP, +5% DEF and MDEF.':''}</span></div><div class="detailSkillCard"><b>${sub.name} Active${h.activeEvolution?' · Evolved':''}</b><span>${sub.active}${h.activeEvolution==='power'?' · 25% stronger.':h.activeEvolution==='tempo'?' · 20% shorter cooldown.':''}</span></div>`:`<div class="detailSkillCard"><b>Specialization</b><span>${h.level>=10?'Ready to choose a specialization.':'Unlocks at level 10.'}</span></div>`}
   </div>
 
   <div class="detailSection">

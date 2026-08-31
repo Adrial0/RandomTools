@@ -161,18 +161,10 @@ function syncDiscoveredResources(){
     Object.entries(j.stash||{}).forEach(([k,v])=>{if(v>0)markResourceFound(k)});
   });
 }
+function unlockedCraftingTier(){return clamp(1+Math.max(0,...(s.expeditionGates||[]).map(Number)),1,10)}
 
 function recipeVisible(r){
-  const required=Object.keys(r[3]);
-  const normal=required.filter(k=>!BOSS_RESOURCES.has(k));
-  const bosses=required.filter(k=>BOSS_RESOURCES.has(k));
-
-  // Every ordinary ingredient must have been discovered at least once.
-  if(!normal.every(k=>s.discoveredResources.includes(k)))return false;
-
-  // Boss materials are intentionally exempt. Once all other ingredients
-  // are known, the player can see what boss material the recipe needs.
-  return true;
+  return Math.max(1,Number(r?.[4])||1)<=unlockedCraftingTier();
 }
 
 function discoverRecipes(){syncDiscoveredResources()}

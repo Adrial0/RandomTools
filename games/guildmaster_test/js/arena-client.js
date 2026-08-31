@@ -83,7 +83,7 @@ function arenaHeroSnapshot(h){
     dualWield:!!off,offhandWeapon:off?{weaponType:off.weaponType,scale:off.scale||'dex',weaponPower:off.weaponPower||8,damageType:off.damageType||'physical'}:null,
     critChance:clamp((h.class==='Rogue' ? .18 : 0)+(z.critBonus||0),0,.75),critDamage:z.critDamage||0,
     statusChance:clamp(z.statusChance||0,0,.75),attackInterval:heroAttackIntervalMs({baseAttackTime:weaponAttackTime(weapon?.weaponTemplate||weapon?.weaponType||''),attackSpeed:z.attackSpeed,buffs:{}}),
-    activeType:z.activeType||(h.class==='Priest'?'Heal':h.class==='Mage'?'arcaneBurst':null),element:z.element||null,healMult:z.healMult||1,damageMult:z.damageMult||1
+    activeType:z.activeType||(h.class==='Priest'?'Heal':h.class==='Mage'?'arcaneBurst':null),activeEvolution:h.activeEvolution||null,disciplineCooldownReduction:z.disciplineCooldownReduction||0,element:z.element||null,healMult:z.healMult||1,damageMult:z.damageMult||1
   };
 }
 function openArenaPartyPicker(){

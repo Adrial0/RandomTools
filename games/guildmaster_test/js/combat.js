@@ -268,7 +268,7 @@ function makeBattle(m){
       str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,physicalDodge:z.physicalDodge,magicalDodge:z.magicalDodge,
       regen:z.regen||0,lifesteal:z.lifesteal||0,damageMult:z.damageMult||1,healMult:z.healMult||1,critBonus:z.critBonus||0,element:z.element||null,elementMult:z.elementMult||1,activeType:z.activeType||null,
       fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
-      weaponType:wep?.weaponType||null,twoHanded:weaponHands(wep)===2,
+      weaponType:wep?.weaponType||null,twoHanded:weaponHands(wep)===2,discipline:h.discipline||null,passiveEvolution:h.passiveEvolution||null,activeEvolution:h.activeEvolution||null,disciplineCooldownReduction:z.disciplineCooldownReduction||0,
       scale:wep?.scale||({Mage:'int',Priest:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),
       damageType:wep?.damageType||'physical',
       weaponPower:wep?.weaponPower||(wd?.base||8),
@@ -281,7 +281,7 @@ function makeBattle(m){
   });
   let partyDamage=0,partyDefense=0,partyMdef=0;
   m.party.forEach(hid=>{
-    const original=s.members.find(x=>x.id===hid),sub=subclassDef(original);
+    const original=s.members.find(x=>x.id===hid),sub=evolvedSubclassDef(original);
     if(!sub)return;
     partyDamage+=sub.partyDamage||0;
     partyDefense+=sub.partyDefense||0;
@@ -662,7 +662,8 @@ const ACTIVE_COOLDOWNS={};
 const ACTIVE_DISPLAY_NAMES={};
 const COMBAT_BUFF_DURATIONS={battleShout:12000,shieldFaith:10000};
 function manaCost(type){return ACTIVE_MANA_COSTS[type]||0}
-function activeCooldownMs(type,h=null){const reduction=1-clamp((s?.guildBonuses?.cooldownReduction||0)+(h?.uniqueCooldownReduction||0),0,.70);return Math.max(1000,Math.round((ACTIVE_COOLDOWNS[type]||10000)*reduction))}
+function activeCooldownMs(type,h=null){const reduction=1-clamp((s?.guildBonuses?.cooldownReduction||0)+(h?.uniqueCooldownReduction||0)+(h?.disciplineCooldownReduction||0)+(h?.activeEvolution==='tempo'?.20:0),0,.70);return Math.max(1000,Math.round((ACTIVE_COOLDOWNS[type]||10000)*reduction))}
+function activePowerMultiplier(h){return h?.activeEvolution==='power'?1.25:1}
 function activeName(type){return ACTIVE_DISPLAY_NAMES[type]||type||'Active'}
 function canSpendMana(h,type){return (h.mana||0)>=manaCost(type)}
 function spendMana(h,type){
@@ -699,7 +700,7 @@ function cooldownProgress(h,type,now=Date.now()){
 }
 function healAlly(m,h,ally,mult=1,label='Heal'){
   if(!ally)return false;
-  const heal=Math.max(2,Math.round((h.int*.38+h.weaponPower*.12)*(h.healMult||1)*mult*2));
+  const heal=Math.max(2,Math.round((h.int*.38+h.weaponPower*.12)*(h.healMult||1)*mult*activePowerMultiplier(h)*2));
   const before=ally.hp;
   ally.hp=Math.min(ally.maxHp,ally.hp+heal);
   const effective=Math.max(0,ally.hp-before);
@@ -737,7 +738,7 @@ function heroBasicAttack(m,h){
 }
 function activeDamageHit(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
-  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult*activePowerMultiplier(h))));
   const before=target.hp;
   target.hp=Math.max(0,target.hp-dmg);
   addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -773,7 +774,7 @@ function tryActiveSkill(m,h,now=Date.now()){
   }else if(type==='elementNova'){
     const elem=h.element||'fire';
     const hits=targets.map(t=>{
-      const dmg=Math.max(1,Math.round(heroDamage(h,t,elem)*1.44));
+      const dmg=Math.max(1,Math.round(heroDamage(h,t,elem)*1.44*activePowerMultiplier(h)));
       const before=t.hp;
       t.hp=Math.max(0,t.hp-dmg);
       addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -787,7 +788,7 @@ function tryActiveSkill(m,h,now=Date.now()){
   }else if(type==='arcaneBurst'){
     const elem=h.damageType==='physical'?'fire':h.damageType;
     const hits=targets.map(t=>{
-      const dmg=Math.max(1,Math.round(((h.int*.24+h.weaponPower*.16-t.mdef*.42)*elementalReduction(t[elem]))*2));
+      const dmg=Math.max(1,Math.round(((h.int*.24+h.weaponPower*.16-t.mdef*.42)*elementalReduction(t[elem]))*2*activePowerMultiplier(h)));
       const before=t.hp;
       t.hp=Math.max(0,t.hp-dmg);
       addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -798,14 +799,14 @@ function tryActiveSkill(m,h,now=Date.now()){
   }else if(type==='commandStrike'){
     living(b.heroes).forEach(x=>{
       if(!x.buffs)x.buffs={};
-      x.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout;
+      x.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout*activePowerMultiplier(h);
     });
     b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout! Party damage and Attack Speed increased for 12 seconds.`);
     targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Battle Shout',h.id));
     used=true;
   }else if(type==='shieldFaith'){
     if(!h.buffs)h.buffs={};
-    h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
+    h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith*activePowerMultiplier(h);
     b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith! Damage taken reduced for 10 seconds.`);
     used=true;
   }else{
@@ -820,8 +821,8 @@ function tryActiveSkill(m,h,now=Date.now()){
     else if(type==='holyStrike')used=activeDamageHit(m,h,target,2.10,'Holy Strike','holy');
     else if(type==='companionStrike')used=activeDamageHit(m,h,target,1.10,'Companion Strike');
     else if(type==='flurry'){
-      const d1=Math.max(1,Math.round(heroDamage(h,target)*1.40));
-      const d2=Math.max(1,Math.round(heroDamage(h,target)*1.40));
+      const d1=Math.max(1,Math.round(heroDamage(h,target)*1.40*activePowerMultiplier(h)));
+      const d2=Math.max(1,Math.round(heroDamage(h,target)*1.40*activePowerMultiplier(h)));
       const before=target.hp;
       target.hp=Math.max(0,target.hp-d1-d2);
       addHeroMetric(m,h.id,'damage',Math.min(before,d1+d2));
@@ -843,7 +844,7 @@ function tryActiveSkill(m,h,now=Date.now()){
 function arenaDefenderDamage(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
   const type=element||h.damageType||'physical';
-  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult*activePowerMultiplier(h))));
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} for ${dmg} ${elementIcon[type]||''} ${type} damage.`);
   return true;
@@ -858,7 +859,7 @@ function tryArenaDefenderActive(m,h,now=Date.now()){
     const ally=[...allies].sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0];
     const threshold=type==='greaterHeal'?.82:type==='renew'?.88:type==='radiantAid'?.90:.70;
     if(ally&&ally.hp<ally.maxHp*threshold){
-      const amount=Math.max(2,Math.round(((h.int||1)*.38+(h.weaponPower||8)*.12)*(h.healMult||1)*healTypes[type]*2));
+      const amount=Math.max(2,Math.round(((h.int||1)*.38+(h.weaponPower||8)*.12)*(h.healMult||1)*healTypes[type]*activePowerMultiplier(h)*2));
       const before=ally.hp;ally.hp=Math.min(ally.maxHp,ally.hp+amount);
       b.log.unshift(`${h.name.split(' ')[0]} uses ${activeName(type)} on ${ally.name.split(' ')[0]} for ${ally.hp-before}.`);used=true;
     }
@@ -867,10 +868,10 @@ function tryArenaDefenderActive(m,h,now=Date.now()){
     const mult=type==='elementNova'?1.44:1.35;
     targets.forEach(target=>arenaDefenderDamage(m,h,target,mult,activeName(type),element));used=true;
   }else if(type==='commandStrike'){
-    allies.forEach(ally=>{ally.buffs=ally.buffs||{};ally.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout});
+    allies.forEach(ally=>{ally.buffs=ally.buffs||{};ally.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout*activePowerMultiplier(h)});
     b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout on the defending party.`);used=true;
   }else if(type==='shieldFaith'){
-    h.buffs=h.buffs||{};h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
+    h.buffs=h.buffs||{};h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith*activePowerMultiplier(h);
     b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith.`);used=true;
   }else{
     const target=pick(targets),definition={powerStrike:[2,'Power Strike'],shieldSlam:[1.7,'Shield Slam'],preciseShot:[2.2,'Precise Shot'],wardenShot:[1.5,'Warden Shot'],backstab:[2.4,'Backstab'],envenom:[1.9,'Envenom','poison'],smite:[2.1,'Smite','holy'],holyStrike:[2.1,'Holy Strike','holy'],companionStrike:[1.1,'Companion Strike'],flurry:[2.8,'Flurry']}[type];
