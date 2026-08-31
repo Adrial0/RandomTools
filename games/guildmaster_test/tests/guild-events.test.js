@@ -8,8 +8,9 @@ assert.match(events,/sort\(\(a,b\)=>\(a\.joinedOrder\|\|0\)-\(b\.joinedOrder\|\|
 assert.match(events,/s\.guildIssueCursor\+\+/,'issue rotation should advance after every issue');
 assert.match(events,/while\(s\.guildActivityPoints>=GUILD_ISSUE_ACTIVITY_THRESHOLD/,'overflow activity should create every earned issue');
 assert.doesNotMatch(events,/guildIssues\.(slice|splice)\(/,'unresolved issues must not be capped');
-assert.strictEqual((events.match(/choices:\[/g)||[]).length,10,'every issue template should expose its two choices');
-assert.strictEqual((events.match(/choices:\[\[[^\n]+\],\[[^\n]+\]\]/g)||[]).length,10,'every issue must have exactly two choices');
+assert.ok((events.match(/choices:\[/g)||[]).length>=20,'the issue pool should provide substantial variation');
+assert.strictEqual((events.match(/choices:\[/g)||[]).length,(events.match(/choices:\[\[[^\n]+\],\[[^\n]+\]\]/g)||[]).length,'every issue must have exactly two choices');
+assert.match(events,/id:'perk_choice'[\s\S]*Gain \+2% Critical Chance[\s\S]*Gain \+2% Attack Speed/,'perk uncertainty should offer distinct offensive choices');
 assert.match(combat,/addGuildActivity\(levelsGained,'character levels'\)/,'level-ups should add activity');
 assert.match(combat,/addGuildActivity\(firstClear\?6:2/,'boss clears should add activity with a first-clear bonus');
 assert.match(combat,/addGuildActivity\(firstClear\?5:2/,'expedition clears should add activity with a first-clear bonus');

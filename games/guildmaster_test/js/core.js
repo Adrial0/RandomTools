@@ -817,7 +817,7 @@ function hs(h){
   const block=Math.max(0,Math.round((b.block||0)+(bonus.block||0)+e.block+(sub.blockBonus||0)+(discipline.blockBonus||0)+(rFlat.block||0)));
   const mana=Math.max(0,Math.round((20+intelligenceManaBonus(intel)+(bonus.mana||0)+e.mana+(discipline.mana||0))*(rMult.mana||1)));
   const manaRegen=Math.max(0,Math.round((b.manaRegen||1)+(bonus.manaRegen||0)+e.manaRegen+(sub.manaRegenBonus||0)+(discipline.manaRegen||0)+(rFlat.manaRegen||0)));
-  const attackSpeed=(CLASS_ATTACK_SPEED[h.class]||0)+(sub.attackSpeedBonus||0)+(discipline.attackSpeedBonus||0)+(bonus.attackSpeed||0)/100+e.attackSpeed/100+(rFlat.attackSpeed||0);
+  const attackSpeed=(CLASS_ATTACK_SPEED[h.class]||0)+(sub.attackSpeedBonus||0)+(discipline.attackSpeedBonus||0)+(bonus.attackSpeed||0)/100+e.attackSpeed/100+(rFlat.attackSpeed||0)+(eventBonus.attackSpeed||0);
 
   const fire=Math.round((bonus.fire||0)+e.fire+(rFlat.fire||0));
   const ice=Math.round((bonus.ice||0)+e.ice+(rFlat.ice||0));
@@ -826,15 +826,15 @@ function hs(h){
   const holy=Math.round((bonus.holy||0)+e.holy+(rFlat.holy||0));
   const dark=Math.round((bonus.dark||0)+e.dark+(rFlat.dark||0));
 
-  const physicalDodge=clamp(physicalDodgeFromDex(dex)+(sub.physicalDodgeBonus||0)+(discipline.physicalDodgeBonus||0)+(tr.physicalDodgeBonus||0)+e.physicalDodgeBonus-(tr.physicalDodgePenalty||0)+(rFlat.physicalDodge||0),0,.90);
-  const magicalDodge=clamp(magicalDodgeFromInt(intel)+(sub.magicalDodgeBonus||0)+(discipline.magicalDodgeBonus||0)+(tr.magicalDodgeBonus||0)+e.magicalDodgeBonus-(tr.magicalDodgePenalty||0)+(rFlat.magicalDodge||0),0,.90);
+  const physicalDodge=clamp(physicalDodgeFromDex(dex)+(sub.physicalDodgeBonus||0)+(discipline.physicalDodgeBonus||0)+(tr.physicalDodgeBonus||0)+e.physicalDodgeBonus-(tr.physicalDodgePenalty||0)+(rFlat.physicalDodge||0)+(eventBonus.physicalDodge||0),0,.90);
+  const magicalDodge=clamp(magicalDodgeFromInt(intel)+(sub.magicalDodgeBonus||0)+(discipline.magicalDodgeBonus||0)+(tr.magicalDodgeBonus||0)+e.magicalDodgeBonus-(tr.magicalDodgePenalty||0)+(rFlat.magicalDodge||0)+(eventBonus.magicalDodge||0),0,.90);
 
   const power=Math.round(
     hp*.12+str*2+dex*2+intel*2+def*1.8+mdef*1.8+
     (fire+ice+poison+lightning+holy+dark)*.45+mana*.25+manaRegen*8+Math.max(0,attackSpeed)*85+block*10+e.power*.65+e.regen*5+e.lifesteal*3+e.critBonus*100+e.threatBonus*12+e.damageBonus*80+e.healBonus*60
   );
 
-  return{hp,str,dex,int:intel,mana,manaRegen,attackSpeed,def,mdef,block,threat:Math.max(.1,(b.threat||1)+(sub.threatBonus||0)+(discipline.threatBonus||0)+(tr.threatBonus||0)+e.threatBonus),physicalDodge,magicalDodge,regen:e.regen,lifesteal:e.lifesteal+(tr.lifesteal||0),fire,ice,poison,lightning,holy,dark,power,damageMult:(sub.damageMult||1)*(discipline.damageMult||1)*(tr.damageMult||1)*(1+e.damageBonus)*(1+(rFlat.attackMult||0))*(1+(eventBonus.damage||0)),healMult:(sub.healMult||1)*(discipline.healMult||1)*(tr.healMult||1)*(1+e.healBonus)*(1+e.healingPower),critBonus:(sub.critBonus||0)+(discipline.critBonus||0)+(tr.critBonus||0)+e.critBonus+e.weaponCritChance+(eventBonus.crit||0),element:sub.element||null,elementMult:sub.elementMult||1,activeType:sub.activeType||null,subclass:h.subclass||null,armorPen:clamp(e.armorPen,0,.75),parry:clamp(e.parry,0,.40),critDamage:e.critDamage+(discipline.critDamage||0),accuracy:clamp(e.accuracy,0,.40),elementalDamage:e.elementalDamage+(discipline.elementalDamage||0),statusChance:e.statusChance+(discipline.statusChance||0),cleave:e.cleave+(discipline.cleave||0),counter:e.counter,damageVariance:e.damageVariance,execute:sub.execute||0,disciplineCooldownReduction:discipline.cooldownReduction||0,activeEvolution:h.activeEvolution||null,uniqueDamageReduction:e.uniqueDamageReduction,uniqueCooldownReduction:e.uniqueCooldownReduction,uniqueOnHit:e.uniqueOnHit};
+  return{hp,str,dex,int:intel,mana,manaRegen,attackSpeed,def,mdef,block,threat:Math.max(.1,(b.threat||1)+(sub.threatBonus||0)+(discipline.threatBonus||0)+(tr.threatBonus||0)+e.threatBonus),physicalDodge,magicalDodge,regen:e.regen+(eventBonus.regen||0),lifesteal:e.lifesteal+(tr.lifesteal||0),fire,ice,poison,lightning,holy,dark,power,damageMult:(sub.damageMult||1)*(discipline.damageMult||1)*(tr.damageMult||1)*(1+e.damageBonus)*(1+(rFlat.attackMult||0))*(1+(eventBonus.damage||0)),healMult:(sub.healMult||1)*(discipline.healMult||1)*(tr.healMult||1)*(1+e.healBonus)*(1+e.healingPower)*(1+(eventBonus.healing||0)),critBonus:(sub.critBonus||0)+(discipline.critBonus||0)+(tr.critBonus||0)+e.critBonus+e.weaponCritChance+(eventBonus.crit||0),element:sub.element||null,elementMult:sub.elementMult||1,activeType:sub.activeType||null,subclass:h.subclass||null,armorPen:clamp(e.armorPen,0,.75),parry:clamp(e.parry,0,.40),critDamage:e.critDamage+(discipline.critDamage||0)+(eventBonus.critDamage||0),accuracy:clamp(e.accuracy+(eventBonus.accuracy||0),0,.40),elementalDamage:e.elementalDamage+(discipline.elementalDamage||0),statusChance:e.statusChance+(discipline.statusChance||0)+(eventBonus.statusChance||0),cleave:e.cleave+(discipline.cleave||0),counter:e.counter,damageVariance:e.damageVariance,execute:sub.execute||0,disciplineCooldownReduction:discipline.cooldownReduction||0,activeEvolution:h.activeEvolution||null,uniqueDamageReduction:e.uniqueDamageReduction,uniqueCooldownReduction:e.uniqueCooldownReduction+(eventBonus.cooldownReduction||0),uniqueOnHit:e.uniqueOnHit};
 }
 function log(x){s.log.unshift(x);s.log=s.log.slice(0,50)}
 function guildRepNeeded(level){
