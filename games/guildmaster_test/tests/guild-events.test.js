@@ -1,0 +1,26 @@
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const root=path.resolve(__dirname,'..');
+const read=file=>fs.readFileSync(path.join(root,file),'utf8');
+const events=read('js/guild-events.js'),combat=read('js/combat.js'),core=read('js/core.js'),progression=read('js/progression.js'),html=read('index.html');
+
+assert.match(events,/GUILD_ISSUE_ACTIVITY_THRESHOLD=15/,'issues should arrive every 15 activity points');
+assert.match(events,/sort\(\(a,b\)=>\(a\.joinedOrder\|\|0\)-\(b\.joinedOrder\|\|0\)/,'members should rotate by guild tenure');
+assert.match(events,/s\.guildIssueCursor\+\+/,'issue rotation should advance after every issue');
+assert.match(events,/while\(s\.guildActivityPoints>=GUILD_ISSUE_ACTIVITY_THRESHOLD/,'overflow activity should create every earned issue');
+assert.doesNotMatch(events,/guildIssues\.(slice|splice)\(/,'unresolved issues must not be capped');
+assert.strictEqual((events.match(/choices:\[/g)||[]).length,10,'every issue template should expose its two choices');
+assert.strictEqual((events.match(/choices:\[\[[^\n]+\],\[[^\n]+\]\]/g)||[]).length,10,'every issue must have exactly two choices');
+assert.match(combat,/addGuildActivity\(levelsGained,'character levels'\)/,'level-ups should add activity');
+assert.match(combat,/addGuildActivity\(firstClear\?6:2/,'boss clears should add activity with a first-clear bonus');
+assert.match(combat,/addGuildActivity\(firstClear\?5:2/,'expedition clears should add activity with a first-clear bonus');
+assert.match(combat,/hero\.personalXpBonus\|\|0/,'personal XP issue rewards should affect combat XP');
+assert.match(events,/encounters:hard\?6:rnd\(3,5\)/,'personal quests should contain a short run before their boss');
+assert.match(events,/solo:!!solo/,'personal quests should support solo requirements');
+assert.match(combat,/ENEMIES_DATA\[m\.bossTemplate\|\|m\.boss\]/,'generated rival bosses should inherit a valid enemy template');
+assert.match(combat,/if\(m\.personalQuest\)\{personalQuestBossReward\(m\);return\}/,'personal bosses should use personal quest rewards');
+assert.match(html,/data-p="inbox"[^>]*>Inbox/,'Guild navigation should expose Inbox');
+assert.match(html,/id="guildInboxBadge"/,'Inbox should show an unresolved count');
+assert.match(html,/id="personalQuestSection"/,'personal quests should be prominent on Expeditions');
+assert.match(core,/guildActivityPoints:0/,'new saves should initialize activity state');
+assert.match(progression,/x\.joinedOrder=s\.nextJoinOrder\+\+/,'recruitment should preserve tenure order');
+console.log('guild-events tests passed');

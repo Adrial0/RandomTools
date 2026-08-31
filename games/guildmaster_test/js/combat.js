@@ -1,14 +1,15 @@
 // Mission combat, rewards, offline resolution, and encounter lifecycle.
 function makeBoss(m){
-  const bossTpl=ENEMIES_DATA[m.boss]||{};const info=[gameIcon('boss',m.boss,bossTpl.icon||'👑','gameAsset combatAsset'),(bossTpl.drops||[])[0]];
+  const bossTpl=ENEMIES_DATA[m.bossTemplate||m.boss]||{};const info=[gameIcon('boss',m.bossTemplate||m.boss,bossTpl.icon||'👑','gameAsset combatAsset'),(bossTpl.drops||[])[0]];
   if(!info)throw new Error('Missing boss definition for '+m.type+' / '+m.boss);
 
   const raid=m.type==='raid';
   const level=m.level||1,scale=1+level*.12,hpScale=1.12+Math.max(0,level-1)*.20;
 
   const gapMult=underlevelEnemyMultiplier(m,level);
-  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult);
-  const atk=Math.round((raid?18:13)*scale*1.10*gapMult);
+  const personalHp=m.personalQuest?(m.hard?4.5:3.5):1,personalAtk=m.personalQuest?(m.hard?1.55:1.35):1;
+  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult*personalHp);
+  const atk=Math.round((raid?18:13)*scale*1.10*gapMult*personalAtk);
   const def=Math.round((raid?10:7)*scale);
   const mdef=Math.round((raid?11:8)*scale);
 
@@ -28,7 +29,7 @@ function makeBoss(m){
     })[m.boss]||bossTpl.damageType||m.theme||'physical',
     aoeChance:raid?(m.boss==='War Ogre'?.25:.78):.48,
     elementalMult:raid?1.55:1.20,
-    mage:true,boss:true,maxMana:80,mana:80,manaRegen:4,ability:ENEMIES_DATA[m.boss]?.ability||null,drops:ENEMIES_DATA[m.boss]?.drops||[],abilityReadyAt:0,attackInterval:raid?4500:4000,attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:4000)
+    mage:true,boss:true,maxMana:80,mana:80,manaRegen:4,ability:bossTpl.ability||null,drops:bossTpl.drops||[],abilityReadyAt:0,attackInterval:raid?4500:4000,attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:4000)
   };
 }
 
@@ -83,11 +84,13 @@ function victoryPresentation(m,{major=false,guildBonus=null,item=null,unique=nul
 
 function bossReward(m){
   ensureCombatReport(m).encounters++;
+  if(m.personalQuest){personalQuestBossReward(m);return}
   const bossTpl=ENEMIES_DATA[m.boss]||{},k=(bossTpl.drops||[])[0];
   m.stash.materials[k]=(m.stash.materials[k]||0)+1;
   markResourceFound(k);
 
   const bossKey=`${m.type}:${m.boss}`,firstClear=!(s.bossClears||[]).includes(bossKey),roll=Math.random();
+  addGuildActivity(firstClear?6:2,firstClear?'first boss clear':'boss clear');
   let bonusItem=null,unique=false;
   if(roll<(firstClear ? .10 : .0015)){bonusItem=makeUniqueItem(m.tier||1,m.boss,m.level||1);unique=true}
   else if(firstClear&&m.bossGate)bonusItem=bossItemDrop(m,'Rare');
@@ -497,7 +500,7 @@ function grantFightRewards(m,enemySnapshots){
     const hero=s.members.find(x=>x.id===hid);if(!hero)return;
 
     const fullPartyXp=defeated.reduce((sum,enemy)=>sum+xpForEnemy(hero,enemy.level||missionEncounterLevel(m),m.type),0);
-    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2*(1+(s.up.training||0)*.10)));
+    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2*(1+(s.up.training||0)*.10)*(1+(hero.personalXpBonus||0))));
     hero.xp+=gained;
 
     let need=heroXpNeeded(hero.level),levelsGained=0;
@@ -510,6 +513,7 @@ function grantFightRewards(m,enemySnapshots){
       need=heroXpNeeded(hero.level);
     }
     if(levelsGained){
+      addGuildActivity(levelsGained,'character levels');
       const row=heroReport(m,hero.id);row.levelsGained=(row.levelsGained||0)+levelsGained;row.lastLevel=hero.level;
       const combatHero=m.battle?.heroes?.find(x=>x.id===hero.id);if(combatHero){combatHero.level=hero.level;combatHero.levelUpUntil=Date.now()+1800;combatHero.levelUpText=`LEVEL ${hero.level}`}
       m.battle?.log?.unshift(`${hero.name} reached level ${hero.level}!`);
@@ -1109,15 +1113,15 @@ function markExpeditionAreaCleared(m){
 }
 function beginExpeditionStageIntermission(m,offline=false,finalStage=false){
   const stage=Math.min(EXPEDITION_STAGE_COUNT,Math.ceil(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE));
-  let firstClearBonus=null;
-  if(finalStage&&markExpeditionAreaCleared(m)){
+  let firstClearBonus=null,firstClear=false;
+  if(finalStage&&(firstClear=markExpeditionAreaCleared(m))){
     firstClearBonus=awardAreaGuildBonus(m,false);
   }
   const delivered=depositMissionStash(m,finalStage?'Area cleared':'Stage delivery');
   m.completedStages=stage;m.lastCheckpoint=expeditionEncounterCount(m);
   const hidden=typeof document!=='undefined'&&document.hidden;
   m.stageIntermission={stage,finalStage,offlinePaused:!!offline||hidden,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
-  if(finalStage){m.completed=true;m.bossDefeated=true;log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
+  if(finalStage){m.completed=true;m.bossDefeated=true;addGuildActivity(firstClear?5:2,firstClear?'first expedition clear':'expedition clear');log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
   save();
 }
 function continueExpeditionStage(mid){
@@ -1507,6 +1511,7 @@ function offlineCatchup(hiddenMs){
 function stopExpedition(mid){
   const m=s.missions.find(x=>x.id===mid);if(!m)return;
   collectLoot(mid,true);
+  if(m.personalQuest&&m.defeated){const q=s.personalQuests?.find(x=>x.id===m.personalQuestId);if(q){q.status='available';q.missionId=null}}
   m.party.forEach(hid=>{const h=s.members.find(x=>x.id===hid);if(h)h.busy=false});
   s.missions=s.missions.filter(x=>x.id!==mid);activeMissionDomKey='__force__';
   log('Expedition ended: '+m.name+'. '+m.fights+' fights completed.');

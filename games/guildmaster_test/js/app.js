@@ -19,7 +19,7 @@ $('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
 $('combatModal').addEventListener('click',e=>{if(e.target===$('combatModal'))closeCombat()});
 
 const NAV_GROUP_FOR_PAGE={
-  hall:'guild',roster:'guild',questboard:'guild',upgrades:'guild',
+  hall:'guild',roster:'guild',inbox:'guild',questboard:'guild',upgrades:'guild',
   harvesting:'missions',quests:'missions',dungeons:'missions',raids:'missions',
   inventory:'workshop',crafting:'workshop',runecrafting:'workshop',cooking:'workshop',market:'workshop',arena:'arena'
 };

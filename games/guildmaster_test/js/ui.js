@@ -89,7 +89,7 @@ function render(){completeOnboardingGoals(false);updateNavigationLocks();complet
   if($('guildRepText'))$('guildRepText').textContent=`${(s.rep||0).toLocaleString()} / ${guildNeed.toLocaleString()}`;
   if($('guildRepFill'))$('guildRepFill').style.width=guildPct+'%';
   if($('guildPermanentBonuses')){const b=s.guildBonuses||{};$('guildPermanentBonuses').innerHTML=`<span>Permanent Area Bonuses</span><b>+${((b.maxHp||0)*100).toFixed(2)}% Max HP</b><b>+${((b.gatherSpeed||0)*100).toFixed(2)}% Gathering Speed</b><b>+${((b.cooldownReduction||0)*100).toFixed(2)}% Cooldown Recovery</b>`}
-  renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
+  renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderGuildInbox();renderPersonalQuests();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
   if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());

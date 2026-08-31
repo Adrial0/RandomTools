@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
 <title>Guildmaster | My Random Tools</title>
-<link rel="stylesheet" href="styles.css?build=20260831a">
+<link rel="stylesheet" href="styles.css?build=20260901a">
 </head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -25,6 +25,7 @@
     <div class="navSubgroup on" data-nav-panel="guild">
     <button class="nav on" data-p="hall">Overview</button>
     <button class="nav" data-p="roster">Members</button>
+    <button class="nav inboxNav" data-p="inbox">Inbox <span class="navBadge" id="guildInboxBadge" style="display:none">0</span></button>
     <button class="nav" data-p="questboard">Contracts</button>
     <button class="nav" data-p="upgrades">Upgrades</button>
     </div>
@@ -126,9 +127,17 @@
   <div class="panel rosterDetailPanel"><div id="heroDetail"></div></div>
 </div>
 </section>
+
+<section class="page" id="inbox">
+  <div class="panel">
+    <div class="head"><div><h2>Guild Inbox</h2><p>Personal concerns and opportunities raised by guild members.</p></div><span class="chip" id="guildActivityProgress">0 / 15 activity</span></div>
+    <div id="guildIssueList" class="guildIssueList"></div>
+  </div>
+</section>
 <section class="page" id="quests">
 <div class="panel">
   <div class="head"><div><h2>Expeditions</h2><p>Send guild members into persistent combat areas.</p></div></div>
+  <section class="personalQuestSection" id="personalQuestSection" style="display:none"><div class="personalQuestHeading"><div><div class="sectionKicker">Personal Matters</div><h3>Member Quests</h3></div><span class="chip" id="personalQuestCount">0 available</span></div><div id="personalQuestList" class="quests"></div></section>
   <div id="questList" class="quests"></div>
 </div>
 </section>
@@ -301,14 +310,15 @@
 <div class="modalBg" id="combatModal"><div class="modal"><div class="head"><div><h3 id="combatTitle">Expedition Combat</h3><div class="muted" id="combatSubtitle"></div></div><button class="btn" onclick="closeCombat()">Close</button></div><div id="combatBody"></div></div></div>
 <div class="noticeStack" id="noticeStack"></div>
 
-<script src="js/core.js?build=20260831d"></script>
-<script src="js/combat.js?build=20260831b"></script>
-<script src="js/progression.js?build=20260831d"></script>
-<script src="js/ui.js?build=20260831a"></script>
-<script src="js/activities.js?build=20260829c"></script>
+<script src="js/core.js?build=20260901a"></script>
+<script src="js/combat.js?build=20260901a"></script>
+<script src="js/progression.js?build=20260901a"></script>
+<script src="js/ui.js?build=20260901a"></script>
+<script src="js/activities.js?build=20260831e"></script>
 <script src="js/economy.js?build=20260831d"></script>
 <script src="js/professions.js?build=20260831b"></script>
+<script src="js/guild-events.js?build=20260901a"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/arena-client.js?build=20260831a"></script>
-<script src="js/app.js?build=20260830a"></script>
+<script src="js/app.js?build=20260901a"></script>
 </body></html>
