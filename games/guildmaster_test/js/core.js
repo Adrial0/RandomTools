@@ -334,6 +334,26 @@ const HARVEST_AREAS=[];const DUNGEON_AREAS=[];
 const RAID_AREAS=[];
 
 const rar=['Common','Uncommon','Rare','Epic','Legendary','Mythic','Unique'],rm={Common:1,Uncommon:1.06,Rare:1.14,Epic:1.26,Legendary:1.42,Mythic:1.65,Unique:2.05};
+// Character rarity keeps its existing curve. Equipment rarity separately
+// strengthens primary item values; Epic gear matches Common gear one tier up.
+const ITEM_RARITY_MULTIPLIER={Common:1,Uncommon:1.15,Rare:1.35,Epic:1.60,Legendary:1.85,Mythic:2.15,Unique:2.50};
+function equipmentTierMultiplier(tier){return Math.pow(1.6,Math.max(0,Math.min(10,Number(tier)||1)-1))}
+function equipmentPrimaryValue(base,tier,rarity){return Math.round(base*equipmentTierMultiplier(tier)*(ITEM_RARITY_MULTIPLIER[rarity]||1))}
+function migrateItemToEquipmentCurve(it){
+  if(!it||it.rarity==='Unique')return it;
+  const tier=Math.max(1,Number(it.tier)||1),rarity=it.rarity||'Common',simple={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Mythic:5}[rarity]||0;
+  let next=null,weight=4;
+  if(it.slot==='Weapon'){
+    const w=weaponDefForItem(it);if(w)next=equipmentPrimaryValue(w.base+2,tier,rarity);
+    if(next!=null){const old=Number(it.weaponPower)||0;it.weaponPower=next;it.power=Math.max(0,(Number(it.power)||0)+(next-old)*4)}
+    return it;
+  }
+  if(it.slot==='Armor'){const p=armorProfile(it.name);next=equipmentPrimaryValue(p.base+2,tier,rarity)+simple*2}
+  else if(it.slot==='Ring')next=equipmentPrimaryValue(4.6,tier,rarity)+simple*2;
+  else if(it.slot==='Amulet'){weight=it.stat==='hp'?2:4;next=equipmentPrimaryValue(it.stat==='hp'?16:4.8,tier,rarity)+simple*2}
+  if(next!=null){const old=Number(it.value)||0;it.value=next;it.power=Math.max(0,(Number(it.power)||0)+(next-old)*weight)}
+  return it;
+}
 const recipes=[];
 const upgrades=[
 ['quarters','Guild Quarters','Adds one permanent guild member slot per level. Starts at 6 slots.',350,26],
@@ -358,7 +378,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],equipmentCurveVersion:1,memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -419,6 +439,7 @@ function load(){
     }
     if(!it.extraStats)it.extraStats={};
   });
+  if((s.equipmentCurveVersion||0)<1){s.inventory.forEach(migrateItemToEquipmentCurve);s.equipmentCurveVersion=1}
 s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>[k,0])),s.materials||{});
   Object.keys(RESOURCE_NAMES).forEach(k=>{if(s.materials[k]==null)s.materials[k]=0});
   s.up=Object.assign({quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},s.up||{});
@@ -606,7 +627,7 @@ function makeSpecificItem(slot,name,tier=1,forcedRarity=null){
     it.scale=w.scale;
     it.scale2=w.scale2||null;
     it.damageType=w.type;
-    it.weaponPower=Math.round((w.base+tier*2)*rm[ra]);
+    it.weaponPower=equipmentPrimaryValue(w.base+2,tier,ra);
     it.name=name;
     const statBudget=Math.max(1,Math.round((2+tier*.7)*rm[ra]));
     it.stat=w.scale;
@@ -639,7 +660,7 @@ function makeSpecificItem(slot,name,tier=1,forcedRarity=null){
     it.armorClass=profile.armorClass;
     it.block=profile.block||0;
     it.stat=profile.stat;
-    it.value=Math.round((profile.base+tier*2)*rm[ra]);
+    it.value=equipmentPrimaryValue(profile.base+2,tier,ra);
     it.power=it.value*4+it.block*10;
     if(name.includes('Frostguard')){it.secondaryStat='ice';it.secondaryValue=12+tier*2}
     if(name.includes('Flameward')){it.secondaryStat='fire';it.secondaryValue=12+tier*2}
@@ -649,7 +670,7 @@ function makeSpecificItem(slot,name,tier=1,forcedRarity=null){
   if(slot==='Ring'){
     it.name=name;
     it.stat=name.includes('Guardian')?'def':name.includes('Crystal')?'int':name.includes('Runed')?'mdef':'str';
-    it.value=Math.round((3+tier*1.6)*rm[ra]);
+    it.value=equipmentPrimaryValue(4.6,tier,ra);
     it.power=it.value*4;
     return applyRarityBonuses(it,tier);
   }
@@ -657,7 +678,7 @@ function makeSpecificItem(slot,name,tier=1,forcedRarity=null){
   if(slot==='Amulet'){
     it.name=name;
     it.stat=name.includes('Warden')?'mdef':name.includes('Arcane')?'int':name.includes('Crystal')?'mdef':'hp';
-    it.value=it.stat==='hp'?Math.round((12+tier*4)*rm[ra]):Math.round((3+tier*1.8)*rm[ra]);
+    it.value=it.stat==='hp'?equipmentPrimaryValue(16,tier,ra):equipmentPrimaryValue(4.8,tier,ra);
     it.power=it.value*(it.stat==='hp'?2:4);
     return applyRarityBonuses(it,tier);
   }

@@ -148,7 +148,9 @@ function makeEnemy(type,level,index,forcedName=null){
   // Preserve the original level-1 baseline, then let durability grow faster
   // than unequipped hero damage. Attack and defenses retain gentler scaling.
   const hpScale=1.12+Math.max(0,level-1)*.20,difficulty=underlevelEnemyMultiplier(currentMissionForEnemy,level)*stageEnemyMultiplier(currentMissionForEnemy);
-  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*(ar.hpMult||1)*difficulty);
+  const contentTier=Math.max(1,Math.min(10,Number(currentMissionForEnemy?.tier)||Math.ceil(level/10)||1));
+  const gearDurabilityScale=typeof equipmentTierMultiplier==='function'?equipmentTierMultiplier(contentTier):Math.pow(1.6,contentTier-1);
+  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*gearDurabilityScale*(ar.hpMult||1)*difficulty);
   const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1)*difficulty);
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));

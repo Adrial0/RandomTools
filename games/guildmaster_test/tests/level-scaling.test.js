@@ -18,9 +18,15 @@ assert.match(core,/physicalDodgeFromDex\(dex\).*diminishingAttributeBonus\(dex,\
 assert.match(core,/magicalDodgeFromInt\(intel\).*diminishingAttributeBonus\(intel,\.25,\.08\)/s,'INT uses the diminishing magical-dodge curve');
 assert.match(core,/intelligenceManaBonus\(intel\).*diminishingAttributeBonus\(intel,100,40\)/s,'INT uses the diminishing mana curve');
 assert.match(core,/function applicantBatchSize\(\)\{return 4\+\(s\.up\.recruit\|\|0\)\}/,'recruitment starts with four applicants');
+assert.match(core,/ITEM_RARITY_MULTIPLIER=\{Common:1,Uncommon:1\.15,Rare:1\.35,Epic:1\.60/,'equipment rarity strengthens primary values and Epic matches the next tier');
+assert.match(core,/function equipmentTierMultiplier\(tier\)\{return Math\.pow\(1\.6/,'equipment primary values grow by sixty percent per tier');
+assert.match(core,/weaponPower=equipmentPrimaryValue/,'weapon attack uses tier and item-rarity scaling');
+assert.match(core,/it\.value=equipmentPrimaryValue\(profile\.base\+2/,'armor protection uses tier and item-rarity scaling');
+assert.match(core,/s\.inventory\.forEach\(migrateItemToEquipmentCurve\)/,'existing saved equipment migrates to the new primary-value curve');
 assert.match(core,/attempt<20[\s\S]*!usedNames\.has/,'new recruits avoid names already on the current roster and board');
 assert.match(combat,/hero\.level\+\+;\s*syncNaturalHeroBonus\(hero\)/,'level-ups use the same deterministic growth calculation');
 assert.match(combat,/hpScale=1\.12\+Math\.max\(0,level-1\)\*\.20/,'enemy health retains level-one balance and scales faster thereafter');
+assert.match(combat,/gearDurabilityScale=.*equipmentTierMultiplier.*Math\.pow\(1\.6,contentTier-1\)/,'enemy health tracks the geometric equipment tier curve');
 assert.match(combat,/const atk=Math\.round\(\(tpl\.baseAttack\|\|12\)\*scale/,'enemy attack retains the gentler original scaling');
 assert.match(combat,/Math\.min\(\.40,gap\*\.03\)/,'underlevelled parties face a capped three-percent-per-level enemy modifier');
 assert.match(combat,/EXPEDITION_STAGE_SIZE\)\)\*\.07/,'each completed expedition stage adds seven percent enemy strength');

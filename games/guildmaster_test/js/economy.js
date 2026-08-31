@@ -354,7 +354,7 @@ function recipePreview(r){
       profile.push(TWO_HANDED_WEAPONS.has(specificName)||TWO_HANDED_WEAPONS.has(weaponTypeFor(specificName))?'Two-handed':'One-handed');
       profile.push(`Scales with ${weaponScalingLabel(w)}`);
       profile.push(`${elementIcon[w.type]||''} ${w.type} damage`);
-      stats.push(`Attack ${w.base+tier*2}`);
+      stats.push(`Attack ${equipmentPrimaryValue(w.base+2,tier,'Common')}`);
       stats.push(`Attack Speed ${weaponAttackTime(specificName).toFixed(2)}s`);
       const statBudget=Math.max(1,Math.round(2+tier*.7));
       if(w.scale2){
@@ -366,7 +366,7 @@ function recipePreview(r){
   }else if(slot==='Armor'){
     const p=armorProfile(specificName);
     profile.push(`${p.armorClass} armor`);
-    stats.push(`+${p.base+tier*2} ${statName(p.stat)}`);
+    stats.push(`+${equipmentPrimaryValue(p.base+2,tier,'Common')} ${statName(p.stat)}`);
     const totalBlock=(p.block||0)+(meta.block||0);
     if(totalBlock)stats.push(`+${totalBlock} Block`);
     if(specificName.includes('Frostguard'))stats.push(`+${12+tier*2} Ice Res`);
@@ -374,11 +374,11 @@ function recipePreview(r){
   }else if(slot==='Ring'){
     profile.push('Ring');
     let stat=specificName.includes('Guardian')?'def':specificName.includes('Crystal')?'int':specificName.includes('Runed')?'mdef':'str';
-    stats.push(`+${Math.round(3+tier*1.6)} ${statName(stat)}`);
+    stats.push(`+${equipmentPrimaryValue(4.6,tier,'Common')} ${statName(stat)}`);
   }else if(slot==='Amulet'){
     profile.push('Amulet');
     let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
-    const value=stat==='hp'?Math.round(12+tier*4):Math.round(3+tier*1.8);
+    const value=stat==='hp'?equipmentPrimaryValue(16,tier,'Common'):equipmentPrimaryValue(4.8,tier,'Common');
     stats.push(`+${value} ${statName(stat)}`);
   }else if(slot==='Accessories'||slot==='OffHand'){
     profile.push(meta.accessoryType||specificName||slotLabel(slot));
