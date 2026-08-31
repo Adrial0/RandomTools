@@ -82,9 +82,10 @@ function detachItem(it){
 function rarityAtOrBelow(itemRarity,threshold){return rar.indexOf(itemRarity||'Common')<=rar.indexOf(threshold||'Common')}
 function scrapItemCore(it){const r=recipeForItem(it);if(!r)return null;const recovered={};Object.entries(r[3]||{}).forEach(([k,v])=>{let amount=Math.floor(v*.25);if(amount<1&&v>=3)amount=1;if(amount>0){const added=addStoredResource(k,amount);if(added)recovered[k]=added}});return Object.keys(recovered).length?recovered:null}
 function receiveInventoryItem(it,source='loot'){if(!it)return false;s.inventoryAuto=Object.assign({mode:'off',rarity:'Common'},s.inventoryAuto||{});const rule=s.inventoryAuto;if(rule.mode!=='off'&&rarityAtOrBelow(it.rarity,rule.rarity)){if(rule.mode==='sell'){const value=itemSellValue(it);s.gold+=value;log(`Auto-sold ${it.name} [${it.rarity}] for ${value} gold.`);return false}if(rule.mode==='scrap'){const recovered=scrapItemCore(it);if(recovered){log(`Auto-scrapped ${it.name} [${it.rarity}].`);return false}}}s.inventory.push(it);return true}
-function bulkSellSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let gold=0;items.forEach(it=>{gold+=itemSellValue(it);detachItem(it)});const ids=new Set(items.map(it=>it.id));s.inventory=s.inventory.filter(it=>!ids.has(it.id));s.gold+=gold;selectedInventoryItems.clear();save();render();notify(`Sold ${items.length} selected item${items.length===1?'':'s'} for ${gold} gold.`,'good')}
+function bulkSellSelected(){const items=s.inventory.filter(it=>!it.starter&&selectedInventoryItems.has(it.id));if(!items.length)return notify('No sellable items selected.');let gold=0;items.forEach(it=>{gold+=itemSellValue(it);detachItem(it)});const ids=new Set(items.map(it=>it.id));s.inventory=s.inventory.filter(it=>!ids.has(it.id));s.gold+=gold;selectedInventoryItems.clear();save();render();notify(`Sold ${items.length} selected item${items.length===1?'':'s'} for ${gold} gold.`,'good')}
 function bulkScrapSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let scrapped=0,skipped=0;const removeIds=new Set();items.forEach(it=>{const recovered=scrapItemCore(it);if(recovered){detachItem(it);removeIds.add(it.id);scrapped++}else skipped++});s.inventory=s.inventory.filter(it=>!removeIds.has(it.id));removeIds.forEach(id=>selectedInventoryItems.delete(id));save();render();notify(`Scrapped ${scrapped} item${scrapped===1?'':'s'}${skipped?` · ${skipped} could not be scrapped`:''}.`,'good')}
 function itemSellValue(it){
+  if(it?.starter)return 0;
   const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9,Unique:14}[it.rarity]||1;
   return Math.max(1,Math.round(((it.power||10)*.45+5)*rarityMult*.5));
 }
@@ -94,6 +95,7 @@ function recipeForItem(it){
 }
 function sellItem(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
+  if(it.starter)return notify('Starter equipment has no sell value.');
   const value=itemSellValue(it);
   detachItem(it);
   s.inventory=s.inventory.filter(x=>x.id!==iid);
@@ -103,6 +105,7 @@ function sellItem(iid){
 }
 function scrapItem(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
+  if(it.starter)return notify('Starter equipment cannot be scrapped.');
   const recovered=scrapItemCore(it);
   if(!recovered)return notify('This item cannot be scrapped right now (no recipe or no storage space).');
   detachItem(it);s.inventory=s.inventory.filter(x=>x.id!==iid);save();closeModal();render();
@@ -224,7 +227,7 @@ function inventorySortValue(it,key){
 }
 function sortedInventoryItems(){
   return s.inventory
-    .filter(it=>(inventoryShowEquipped||!it.equipped)&&inventoryMatchesFilter(it))
+    .filter(it=>!it.starter&&(inventoryShowEquipped||!it.equipped)&&inventoryMatchesFilter(it))
     .sort((a,b)=>{
       const av=inventorySortValue(a,inventorySortKey),bv=inventorySortValue(b,inventorySortKey);
       const cmp=av-bv||String(a.name||'').localeCompare(String(b.name||''));
@@ -239,7 +242,7 @@ function toggleEquippedItems(){
 function openInventoryEquip(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
   const owner=it.equipped?s.members.find(x=>x.id===it.equipped):null;
-  const candidates=s.members.filter(h=>equipmentTargetsForItem(h,it).length);
+  const candidates=it.starter?(owner?[owner]:[]):s.members.filter(h=>equipmentTargetsForItem(h,it).length);
   const recipe=recipeForItem(it);
 
   const profile=itemProfileParts(it),stats=itemStatParts(it);
@@ -253,8 +256,7 @@ function openInventoryEquip(iid){
       <aside class="itemActionBox">
         <h4>Item Actions</h4>
         ${owner?`<div class="itemOwner">Equipped by <b>${owner.name}</b></div>`:'<div class="itemOwner">Currently unequipped</div>'}
-        <div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div>
-        <div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>
+        ${it.starter?'<div class="itemValue">Basic equipment · automatically replaced by a real weapon</div>':`<div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div><div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>`}
       </aside>
     </div>
     <section class="itemRuneSection"><div class="itemSectionHeading"><h3>Runes</h3><span>${(it.runes||[]).length} / ${runeSlots(it)} socketed</span></div>${runeSlotsHtml(it)}${runeSlots(it)>0?runeDetailsHtml(it):'<div class="muted">This item has no rune slots.</div>'}</section>

@@ -62,7 +62,7 @@ function renderOnboardingGoals(){
   box.innerHTML=`<div class="goalSummary"><span>${complete} / ${ONBOARDING_GOALS.length} completed</span><div class="progressTrack"><div class="progressFill" style="width:${complete/ONBOARDING_GOALS.length*100}%"></div></div></div><div class="guildGoalList">${ONBOARDING_GOALS.map((goal,index)=>{const done=claimed.has(goal.id),active=!done&&ONBOARDING_GOALS.slice(0,index).every(g=>claimed.has(g.id));return `<div class="guildGoal ${done?'done':active?'active':''}"><span class="goalMark">${done?'✓':index+1}</span><div><div class="name">${goal.title}</div><div class="muted">${goal.description}</div></div><span class="goalReward">${done?'Complete':onboardingRewardText(goal.reward)}</span></div>`}).join('')}</div>`;
 }
 function complete(){}
-function recruit(i){if(s.members.length>=s.memberCap)return notify('Your guild has no open member slots. Upgrade Guild Quarters first.');let x=s.recruits.find(v=>v.id===i);if(!x)return;s.members.push(x);s.recruits=s.recruits.filter(v=>v.id!==i);if(!s.recruits.length)s.nextApplicantsAt=Date.now()+5*60*1000;log(x.name+' joined the guild.');if(s.members.length>=2)setOnboardingFlag('recruitedTwo');save();render();notify(x.name+' joined for free.','good')}
+function recruit(i){if(s.members.length>=s.memberCap)return notify('Your guild has no open member slots. Upgrade Guild Quarters first.');let x=s.recruits.find(v=>v.id===i);if(!x)return;s.members.push(x);ensureStarterWeapon(x);s.recruits=s.recruits.filter(v=>v.id!==i);if(!s.recruits.length)s.nextApplicantsAt=Date.now()+5*60*1000;log(x.name+' joined the guild with basic equipment.');if(s.members.length>=2)setOnboardingFlag('recruitedTwo');save();render();notify(x.name+' joined with a starter weapon.','good')}
 function dismissHero(hid){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
   if(h.busy)return notify('You cannot dismiss someone who is on an expedition.');
@@ -71,7 +71,8 @@ function dismissHero(hid){
 }
 function confirmDismiss(hid){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
-  Object.values(h.equip||{}).forEach(itemId=>{const it=s.inventory.find(x=>x.id===itemId);if(it)it.equipped=null});
+  const starterIds=new Set();Object.values(h.equip||{}).forEach(itemId=>{const it=s.inventory.find(x=>x.id===itemId);if(it?.starter)starterIds.add(it.id);else if(it)it.equipped=null});
+  if(starterIds.size)s.inventory=s.inventory.filter(it=>!starterIds.has(it.id));
   s.members=s.members.filter(x=>x.id!==hid);
   if(s.selected===hid)s.selected=s.members[0]?.id||null;
   log(h.name+' left the guild.');
@@ -109,6 +110,7 @@ function detachItemFromHero(h,itemId){
 function unequipItem(hid,slot){
   const h=s.members.find(x=>x.id===hid);if(!h)return;
   const itemId=h.equip?.[slot];if(!itemId)return;
+  const it=s.inventory.find(x=>x.id===itemId);if(it?.starter)return notify('Starter weapons are replaced automatically when real equipment is equipped.');
   detachItemFromHero(h,itemId);
   save();renderRoster();renderInv();
 }
@@ -130,7 +132,7 @@ function equip(hid,iid,targetSlot=null){
     const main=s.inventory.find(x=>x.id===h.equip.MainHand);
     if(main&&weaponHands(main)===2)conflicts.add(main.id);
   }else if(h.equip[slot])conflicts.add(h.equip[slot]);
-  conflicts.forEach(id=>detachItemFromHero(h,id));
+  conflicts.forEach(id=>{const conflict=s.inventory.find(x=>x.id===id);detachItemFromHero(h,id);if(conflict?.starter)s.inventory=s.inventory.filter(x=>x.id!==id)});
   h.equip[slot]=it.id;
   if(it.slot==='Weapon'&&weaponHands(it)===2){h.equip.MainHand=it.id;h.equip.OffHand=it.id}
   it.equipped=h.id;

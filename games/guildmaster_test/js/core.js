@@ -598,6 +598,24 @@ function hero(){
   recruit.bonus=naturalHeroBonus(recruit);
   return recruit;
 }
+const STARTER_WEAPONS={
+  Warrior:{name:'Worn Longsword',template:'Longsword',power:10},
+  Paladin:{name:'Worn Mace',template:'Mace',power:10},
+  Ranger:{name:'Crude Shortbow',template:'Shortbow',power:5},
+  Rogue:{name:'Worn Dagger',template:'Dagger',power:9},
+  Mage:{name:'Cracked Wand',template:'Wand',power:9},
+  Priest:{name:'Wooden Scepter',template:'Scepter',power:9}
+};
+function makeStarterWeapon(h){
+  const kit=STARTER_WEAPONS[h?.class]||STARTER_WEAPONS.Warrior,w=WEAPONS[kit.template];
+  return{id:id(),name:kit.name,slot:'Weapon',rarity:'Common',tier:1,starter:true,equipped:h.id,runes:[],weaponTemplate:kit.template,weaponType:weaponTypeFor(kit.template),scale:w.scale,scale2:w.scale2||null,damageType:w.type,weaponPower:kit.power,power:kit.power*4,extraStats:{}};
+}
+function ensureStarterWeapon(h){
+  if(!h)return null;h.equip=Object.assign({MainHand:null,OffHand:null,Armor:null,Accessories:null},h.equip||{});
+  const current=s.inventory.find(it=>it.id===h.equip.MainHand);if(current)return current;
+  h.equip.MainHand=null;if(h.equip.OffHand&&!s.inventory.some(it=>it.id===h.equip.OffHand))h.equip.OffHand=null;
+  const starter=makeStarterWeapon(h);s.inventory.push(starter);h.equip.MainHand=starter.id;if(weaponHands(starter)===2)h.equip.OffHand=starter.id;return starter;
+}
 function applyRarityBonuses(it,tier){
   const rarity=it.rarity;
   const simpleBonus={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Mythic:5,Unique:6}[rarity]||0;
@@ -888,6 +906,7 @@ function ensure(){
   if(!s.recruits.length){
     if(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt)fillApplicants();
   }
+  s.members.forEach(ensureStarterWeapon);
   if(s.quests.length!==AREAS.length)refreshOffers('quest');
   if(s.dungeons.length!==DUNGEON_AREAS.length)refreshOffers('dungeon');
   if(s.raids.length!==RAID_AREAS.length)refreshOffers('raid');
