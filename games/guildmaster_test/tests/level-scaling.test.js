@@ -5,6 +5,7 @@ const path=require('node:path');
 const root=path.join(__dirname,'..');
 const core=fs.readFileSync(path.join(root,'js','core.js'),'utf8');
 const combat=fs.readFileSync(path.join(root,'js','combat.js'),'utf8');
+const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
 
 assert.match(core,/const CLASS_LEVEL_GROWTH=/,'class growth has one shared definition');
 assert.match(core,/function naturalHeroBonus\(h\)/,'natural stats are derived from class, trait, and level');
@@ -27,6 +28,8 @@ assert.match(core,/attempt<20[\s\S]*!usedNames\.has/,'new recruits avoid names a
 assert.match(combat,/hero\.level\+\+;\s*syncNaturalHeroBonus\(hero\)/,'level-ups use the same deterministic growth calculation');
 assert.match(combat,/hpScale=1\.12\+Math\.max\(0,level-1\)\*\.20/,'enemy health retains level-one balance and scales faster thereafter');
 assert.match(combat,/gearDurabilityScale=.*equipmentTierMultiplier.*Math\.pow\(1\.6,contentTier-1\)/,'enemy health tracks the geometric equipment tier curve');
+assert.match(index,/js\/core\.js\?build=20260831b/,'equipment balance changes invalidate the cached core script');
+assert.match(index,/js\/economy\.js\?build=20260831b/,'recipe preview changes invalidate the cached economy script');
 assert.match(combat,/const atk=Math\.round\(\(tpl\.baseAttack\|\|12\)\*scale/,'enemy attack retains the gentler original scaling');
 assert.match(combat,/Math\.min\(\.40,gap\*\.03\)/,'underlevelled parties face a capped three-percent-per-level enemy modifier');
 assert.match(combat,/EXPEDITION_STAGE_SIZE\)\)\*\.07/,'each completed expedition stage adds seven percent enemy strength');
