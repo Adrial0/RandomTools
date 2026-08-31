@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),root=path.join(__dirname,'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
-const core=read('js/core.js'),combat=read('js/combat.js'),ui=read('js/ui.js'),progression=read('js/progression.js'),professions=read('js/professions.js');
+const core=read('js/core.js'),combat=read('js/combat.js'),ui=read('js/ui.js'),progression=read('js/progression.js'),professions=read('js/professions.js'),economy=read('js/economy.js');
 
 assert.match(core,/const CLASS_DISCIPLINES=/,'level-five disciplines have shared authored data');
 for(const cls of ['Warrior','Ranger','Mage','Priest','Rogue','Paladin'])assert.match(core,new RegExp(`${cls}:\\[\\{id:`),`${cls} has discipline choices`);
@@ -16,4 +16,7 @@ assert.match(progression,/function unlockedCraftingTier[\s\S]*s\.expeditionGates
 assert.match(professions,/function professionRecipeKnown[\s\S]*professionUnlockedTier/,'equipment and refining recipes use story-tier revelation');
 assert.match(professions,/renderMealProfession[\s\S]*professionUnlockedTier/,'meal recipes use story-tier revelation');
 assert.match(professions,/entries=.*RUNES[\s\S]*filter\(x=>x\.tier<=professionUnlockedTier\(\)\)/,'rune recipes use story-tier revelation');
+assert.match(professions,/if\(tier>professionUnlockedTier\(\)\)return notify/,'crafting queue independently rejects locked-tier recipes');
+assert.match(economy,/Object\.entries\(RUNES\)\.filter\(\(\[id\]\)=>runeTier\(id\)<=unlockedCraftingTier\(\)\)/,'standalone runecrafting view hides locked tiers');
+assert.match(economy,/Object\.entries\(MEALS\)\.filter\(\(\[,meal\]\)=>Math\.max\(1,Number\(meal\.tier\)\|\|1\)<=unlockedCraftingTier\(\)\)/,'standalone cooking view hides locked tiers');
 console.log('Character milestone, recruit rarity, subclass artwork, and recipe revelation tests passed.');

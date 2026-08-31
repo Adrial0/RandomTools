@@ -197,6 +197,8 @@ function queueProfessionJob(pid,kind,key,qty=1){
   if(!professionWorkerAvailable(pid))return notify(`${worker.name} is currently away. They must return before new work can be queued.`);
   qty=clamp(Math.floor(Number(qty)||1),1,99);
   const obj=kind==='meal'?MEALS[key]:kind==='rune'?RUNES[key]:recipes[key];if(!obj)return;
+  const tier=kind==='meal'?Math.max(1,Number(obj.tier)||1):kind==='rune'?runeTier(key):Math.max(1,Number(obj[4])||1);
+  if(tier>professionUnlockedTier())return notify(`${tierLabel(tier)} recipes unlock after clearing the previous tier boss.`);
   const cost=kind==='meal'?obj.cost:kind==='rune'?obj.cost:obj[3];
   const req=kind==='meal'?obj.level:kind==='rune'?professionRequirement(runeTier(key)):professionRecipeRequirement(obj);
   if(p.level<req)return notify(`Requires ${PROFESSION_DEFS[pid].name} level ${req}.`);
