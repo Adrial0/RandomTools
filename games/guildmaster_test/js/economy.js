@@ -373,11 +373,11 @@ function recipePreview(r){
     if(specificName.includes('Flameward'))stats.push(`+${12+tier*2} Fire Res`);
   }else if(slot==='Ring'){
     profile.push('Ring');
-    let stat=specificName.includes('Guardian')?'def':specificName.includes('Crystal')?'int':specificName.includes('Runed')?'mdef':'str';
+    let stat=meta.primaryStat||(displayName.includes('Guardian')?'def':displayName.includes('Crystal')?'int':displayName.includes('Runed')?'mdef':'str');
     stats.push(`+${equipmentPrimaryValue(4.6,tier,'Common')} ${statName(stat)}`);
   }else if(slot==='Amulet'){
     profile.push('Amulet');
-    let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
+    let stat=meta.primaryStat||(displayName.includes('Warden')?'mdef':displayName.includes('Arcane')?'int':displayName.includes('Crystal')?'mdef':'hp');
     const value=stat==='hp'?equipmentPrimaryValue(16,tier,'Common'):equipmentPrimaryValue(4.8,tier,'Common');
     stats.push(`+${value} ${statName(stat)}`);
   }else if(slot==='Accessories'||slot==='OffHand'){
@@ -388,7 +388,8 @@ function recipePreview(r){
   Object.entries(meta.stats||{}).forEach(([k,v])=>{
     const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
     const wholePercent=['fire','ice','poison','lightning','holy','dark','lifesteal','attackSpeed'].includes(k);
-    stats.push(`+${decimalPercent?Math.round(v*100):v}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+    const shown=recipeModifierStatValue(slot,tier,'Common',k,v);
+    stats.push(`+${decimalPercent?Math.round(shown*100):shown}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
   });
   if(meta.damageBonus)stats.push(`+${Math.round(meta.damageBonus*100)}% damage`);
   if(meta.healBonus)stats.push(`+${Math.round(meta.healBonus*100)}% healing`);

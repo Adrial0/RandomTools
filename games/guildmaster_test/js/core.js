@@ -188,18 +188,19 @@ function armorNamesForTier(tier){
 function applyRecipeModifiers(it,meta={}){
   if(meta.damageType)it.damageType=meta.damageType;
   if(!it||!meta)return it;
+  if(meta.primaryStat&&it.stat!==meta.primaryStat){const oldWeight=it.stat==='hp'?2:4,newWeight=meta.primaryStat==='hp'?2:4;it.power=(it.power||0)+(it.value||0)*(newWeight-oldWeight);it.stat=meta.primaryStat}
   if(meta.accessoryType)it.accessoryType=meta.accessoryType;
   if(meta.allowedClasses)it.allowedClasses=[...meta.allowedClasses];
   if(meta.armorClass)it.armorClass=meta.armorClass;
   if(meta.block)it.block=(it.block||0)+meta.block;
-  if(meta.stats)it.extraStats=Object.assign({},it.extraStats||{},meta.stats);
+  if(meta.stats)it.extraStats=Object.assign({},it.extraStats||{},Object.fromEntries(Object.entries(meta.stats).map(([k,v])=>[k,recipeModifierStatValue(it.slot,it.tier,it.rarity,k,v)])));
   if(meta.damageBonus)it.damageBonus=(it.damageBonus||0)+meta.damageBonus;
   if(meta.healBonus)it.healBonus=(it.healBonus||0)+meta.healBonus;
   if(meta.critBonus)it.itemCritBonus=(it.itemCritBonus||0)+meta.critBonus;
   if(meta.threatBonus)it.itemThreatBonus=(it.itemThreatBonus||0)+meta.threatBonus;
   if(meta.physicalDodgeBonus)it.itemPhysicalDodgeBonus=(it.itemPhysicalDodgeBonus||0)+meta.physicalDodgeBonus;
   if(meta.magicalDodgeBonus)it.itemMagicalDodgeBonus=(it.itemMagicalDodgeBonus||0)+meta.magicalDodgeBonus;
-  const statsPower=Object.entries(meta.stats||{}).reduce((p,[k,v])=>p+(k==='hp'?v*1.5:v*4),0);
+  const statsPower=Object.entries(meta.stats||{}).reduce((p,[k,v])=>{const scaled=recipeModifierStatValue(it.slot,it.tier,it.rarity,k,v);return p+(k==='hp'?scaled*1.5:scaled*4)},0);
   it.power=(it.power||0)+statsPower+(meta.block||0)*10+(meta.damageBonus||0)*100+(meta.healBonus||0)*80+(meta.critBonus||0)*100+(meta.threatBonus||0)*18+(meta.physicalDodgeBonus||0)*100+(meta.magicalDodgeBonus||0)*100;
   return it;
 }
@@ -354,6 +355,22 @@ function migrateItemToEquipmentCurve(it){
   if(next!=null){const old=Number(it.value)||0;it.value=next;it.power=Math.max(0,(Number(it.power)||0)+(next-old)*weight)}
   return it;
 }
+
+const RECIPE_FLAT_STATS=new Set(['hp','str','dex','int','def','mdef','mana','regen','manaRegen']);
+function recipeModifierStatValue(slot,tier,rarity,key,value){
+  if(!RECIPE_FLAT_STATS.has(key))return value;
+  let multiplier=ITEM_RARITY_MULTIPLIER[rarity]||1;
+  if(slot==='Accessories'||slot==='OffHand')multiplier*=Math.pow(1.28,Math.max(0,(Number(tier)||1)-1));
+  return Math.round(Number(value||0)*multiplier);
+}
+function migrateCraftedRecipeStats(it){
+  const recipe=recipes[Number(it?.recipeIndex)];if(!it||!recipe)return it;
+  const meta=recipe[5]||{},oldStats=it.extraStats||{},newStats=Object.fromEntries(Object.entries(meta.stats||{}).map(([k,v])=>[k,recipeModifierStatValue(it.slot,it.tier,it.rarity,k,v)]));
+  const statPower=stats=>Object.entries(stats).reduce((sum,[k,v])=>sum+(k==='hp'?Number(v||0)*1.5:Number(v||0)*4),0);
+  it.power=Math.max(0,(Number(it.power)||0)-statPower(oldStats)+statPower(newStats));it.extraStats=newStats;
+  if(meta.primaryStat&&it.stat!==meta.primaryStat){const oldWeight=it.stat==='hp'?2:4,newWeight=meta.primaryStat==='hp'?2:4;it.power+=(it.value||0)*(newWeight-oldWeight);it.stat=meta.primaryStat}
+  return it;
+}
 const recipes=[];
 const upgrades=[
 ['quarters','Guild Quarters','Adds one permanent guild member slot per level. Starts at 6 slots.',350,26],
@@ -378,7 +395,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],equipmentCurveVersion:1,memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],equipmentCurveVersion:1,recipeStatCurveVersion:1,memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -440,6 +457,7 @@ function load(){
     if(!it.extraStats)it.extraStats={};
   });
   if((s.equipmentCurveVersion||0)<1){s.inventory.forEach(migrateItemToEquipmentCurve);s.equipmentCurveVersion=1}
+  if((s.recipeStatCurveVersion||0)<1){s.inventory.forEach(migrateCraftedRecipeStats);s.recipeStatCurveVersion=1}
 s.materials=Object.assign(Object.fromEntries(Object.keys(RESOURCE_NAMES).map(k=>[k,0])),s.materials||{});
   Object.keys(RESOURCE_NAMES).forEach(k=>{if(s.materials[k]==null)s.materials[k]=0});
   s.up=Object.assign({quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},s.up||{});
@@ -584,7 +602,7 @@ function applyRarityBonuses(it,tier){
   const rarity=it.rarity;
   const simpleBonus={Common:0,Uncommon:1,Rare:2,Epic:3,Legendary:4,Mythic:5,Unique:6}[rarity]||0;
 
-  if(simpleBonus>0){
+  if(simpleBonus>0&&it.stat){
     if(it.stat==='regen'||it.stat==='manaRegen')it.value+=Math.max(1,Math.floor(simpleBonus/2));
     else if(it.stat==='mana')it.value+=simpleBonus*2;
     else if(it.stat==='lifesteal')it.value+=simpleBonus;
