@@ -8,10 +8,14 @@ function makeBoss(m){
 
   const gapMult=underlevelEnemyMultiplier(m,level);
   const personalHp=m.personalQuest?(m.hard?4.5:3.5):1,personalAtk=m.personalQuest?(m.hard?1.55:1.35):1;
-  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult*personalHp);
-  const atk=Math.round((raid?18:13)*scale*1.10*gapMult*personalAtk);
-  const def=Math.round((raid?10:7)*scale);
-  const mdef=Math.round((raid?11:8)*scale);
+  // Tier gates are progression checks rather than ordinary bosses. Their
+  // increased durability prevents a short burst from bypassing the fight,
+  // while the damage and defense bonuses demand an appropriately geared party.
+  const gateHp=m.bossGate?2.5:1,gateAtk=m.bossGate?1.6:1,gateDefense=m.bossGate?1.35:1;
+  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult*personalHp*gateHp);
+  const atk=Math.round((raid?18:13)*scale*1.10*gapMult*personalAtk*gateAtk);
+  const def=Math.round((raid?10:7)*scale*gateDefense);
+  const mdef=Math.round((raid?11:8)*scale*gateDefense);
 
   return{
     id:1,
@@ -27,9 +31,9 @@ function makeBoss(m){
       'Skeleton King':'dark','Broodmother':'poison','Rotting Colossus':'poison','High Cultist':'dark',
       'Ancient Drake':'fire','War Ogre':'physical','Wraith Lord':'dark','Abyssal Demon':'dark'
     })[m.boss]||bossTpl.damageType||m.theme||'physical',
-    aoeChance:raid?(m.boss==='War Ogre'?.25:.78):.48,
-    elementalMult:raid?1.55:1.20,
-    mage:true,boss:true,maxMana:80,mana:80,manaRegen:4,ability:bossTpl.ability||null,drops:bossTpl.drops||[],abilityReadyAt:0,attackInterval:raid?4500:4000,attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:4000)
+    aoeChance:raid?(m.boss==='War Ogre'?.25:.78):(m.bossGate?.62:.48),
+    elementalMult:raid?1.55:(m.bossGate?1.40:1.20),
+    mage:true,boss:true,maxMana:80,mana:80,manaRegen:m.bossGate?6:4,ability:bossTpl.ability||null,drops:bossTpl.drops||[],abilityReadyAt:0,attackInterval:raid?4500:(m.bossGate?3500:4000),attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:(m.bossGate?3500:4000))
   };
 }
 

@@ -34,5 +34,9 @@ assert.doesNotMatch(core,/\['party','Expedition Logistics'/,'Expedition Logistic
 assert.match(combat,/Expedition party capacity increased to/,'tier boss victory presentation announces party-capacity unlocks');
 assert.match(combat,/if\(m\.bossGate\)return;/,'offline progress must not bypass story bosses');
 assert.match(combat,/mission\.battle=mission\.bossGate\?makeBossBattle\(mission\):makeBattle\(mission\)/,'gate expeditions must begin directly in the boss encounter');
+assert.match(combat,/gateHp=m\.bossGate\?2\.5:1/,'tier bosses should have substantially increased health');
+assert.match(combat,/gateAtk=m\.bossGate\?1\.6:1/,'tier bosses should deal substantially increased damage');
+assert.match(combat,/gateDefense=m\.bossGate\?1\.35:1/,'tier bosses should resist undergeared parties');
+assert.match(combat,/m\.bossGate\?3500:4000/,'tier bosses should attack faster than ordinary bosses');
 
 console.log('Expedition tier gate tests passed.');
