@@ -6,7 +6,7 @@
       "base": 12,
       "parry": 0.05,
       "icon": "🗡️",
-      "image": "images/weapons/longsword.png"
+      "image": "images/items/weapons/longsword.png"
     },
     "Greatsword": {
       "scale": "str",
@@ -14,7 +14,7 @@
       "base": 17,
       "cleave": 0.22,
       "icon": "⚔️",
-      "image": "images/weapons/greatsword.png"
+      "image": "images/items/weapons/greatsword.png"
     },
     "Battle Axe": {
       "scale": "str",
@@ -22,7 +22,7 @@
       "base": 15,
       "critDamage": 0.25,
       "icon": "🪓",
-      "image": "images/weapons/battle-axe.png"
+      "image": "images/items/weapons/battle-axe.png"
     },
     "Greataxe": {
       "scale": "str",
@@ -31,7 +31,7 @@
       "critDamage": 0.4,
       "damageVariance": 0.18,
       "icon": "🪓",
-      "image": "images/weapons/greataxe.png"
+      "image": "images/items/weapons/greataxe.png"
     },
     "Warhammer": {
       "scale": "str",
@@ -39,7 +39,7 @@
       "base": 16,
       "armorPen": 0.14,
       "icon": "🔨",
-      "image": "images/weapons/warhammer.png"
+      "image": "images/items/weapons/warhammer.png"
     },
     "Mace": {
       "scale": "str",
@@ -47,7 +47,7 @@
       "base": 12,
       "armorPen": 0.1,
       "icon": "🔨",
-      "image": "images/weapons/mace.png"
+      "image": "images/items/weapons/mace.png"
     },
     "Spear": {
       "scale": "str",
@@ -56,7 +56,7 @@
       "base": 13,
       "accuracy": 0.06,
       "icon": "🔱",
-      "image": "images/weapons/spear.png"
+      "image": "images/items/weapons/spear.png"
     },
     "Halberd": {
       "scale": "str",
@@ -65,7 +65,7 @@
       "cleave": 0.16,
       "accuracy": 0.04,
       "icon": "🔱",
-      "image": "images/weapons/halberd.png"
+      "image": "images/items/weapons/halberd.png"
     },
     "Holy Sword": {
       "scale": "str",
@@ -74,7 +74,7 @@
       "parry": 0.04,
       "healingPower": 0.06,
       "icon": "⚔️",
-      "image": "images/weapons/holy-sword.png"
+      "image": "images/items/weapons/holy-sword.png"
     },
     "Shortbow": {
       "scale": "dex",
@@ -82,7 +82,7 @@
       "base": 11,
       "accuracy": 0.08,
       "icon": "🏹",
-      "image": "images/weapons/shortbow.png"
+      "image": "images/items/weapons/shortbow.png"
     },
     "Longbow": {
       "scale": "dex",
@@ -91,7 +91,7 @@
       "critChance": 0.05,
       "accuracy": 0.05,
       "icon": "🏹",
-      "image": "images/weapons/longbow.png"
+      "image": "images/items/weapons/longbow.png"
     },
     "Recurve Bow": {
       "scale": "dex",
@@ -100,7 +100,7 @@
       "critChance": 0.04,
       "accuracy": 0.06,
       "icon": "🏹",
-      "image": "images/weapons/recurve-bow.png"
+      "image": "images/items/weapons/recurve-bow.png"
     },
     "Light Crossbow": {
       "scale": "dex",
@@ -109,7 +109,7 @@
       "armorPen": 0.08,
       "accuracy": 0.05,
       "icon": "🏹",
-      "image": "images/weapons/light-crossbow.png"
+      "image": "images/items/weapons/light-crossbow.png"
     },
     "Heavy Crossbow": {
       "scale": "dex",
@@ -117,7 +117,7 @@
       "base": 17,
       "armorPen": 0.16,
       "icon": "🏹",
-      "image": "images/weapons/heavy-crossbow.png"
+      "image": "images/items/weapons/heavy-crossbow.png"
     },
     "Hunting Bow": {
       "scale": "dex",
@@ -125,7 +125,7 @@
       "base": 12,
       "statusChance": 0.08,
       "icon": "🏹",
-      "image": "images/weapons/hunting-bow.png"
+      "image": "images/items/weapons/hunting-bow.png"
     },
     "Dagger": {
       "scale": "dex",
@@ -133,7 +133,7 @@
       "base": 10,
       "critChance": 0.07,
       "icon": "🗡️",
-      "image": "images/weapons/dagger.png"
+      "image": "images/items/weapons/dagger.png"
     },
     "Knife": {
       "scale": "dex",
@@ -142,7 +142,7 @@
       "critChance": 0.05,
       "statusChance": 0.05,
       "icon": "🔪",
-      "image": "images/weapons/knife.png"
+      "image": "images/items/weapons/knife.png"
     },
     "Dirk": {
       "scale": "dex",
@@ -151,7 +151,7 @@
       "critChance": 0.06,
       "critDamage": 0.15,
       "icon": "🗡️",
-      "image": "images/weapons/dirk.png"
+      "image": "images/items/weapons/dirk.png"
     },
     "Kris": {
       "scale": "dex",
@@ -160,7 +160,7 @@
       "statusChance": 0.12,
       "critChance": 0.04,
       "icon": "🗡️",
-      "image": "images/weapons/kris.png"
+      "image": "images/items/weapons/kris.png"
     },
     "Shortsword": {
       "scale": "dex",
@@ -169,7 +169,7 @@
       "parry": 0.04,
       "critChance": 0.03,
       "icon": "🗡️",
-      "image": "images/weapons/shortsword.png"
+      "image": "images/items/weapons/shortsword.png"
     },
     "Twin Blades": {
       "scale": "dex",
@@ -178,7 +178,7 @@
       "counter": 0.08,
       "critChance": 0.04,
       "icon": "🗡️",
-      "image": "images/weapons/twin-blades.png"
+      "image": "images/items/weapons/twin-blades.png"
     },
     "Oak Staff": {
       "scale": "int",
@@ -186,7 +186,7 @@
       "base": 9,
       "healingPower": 0.08,
       "icon": "🪄",
-      "image": "images/weapons/oak-staff.png"
+      "image": "images/items/weapons/oak-staff.png"
     },
     "Arcane Staff": {
       "scale": "int",
@@ -194,7 +194,7 @@
       "base": 15,
       "elementalDamage": 0.1,
       "icon": "🪄",
-      "image": "images/weapons/arcane-staff.png"
+      "image": "images/items/weapons/arcane-staff.png"
     },
     "Holy Staff": {
       "scale": "int",
@@ -202,7 +202,7 @@
       "base": 13,
       "healingPower": 0.16,
       "icon": "🪄",
-      "image": "images/weapons/holy-staff.png"
+      "image": "images/items/weapons/holy-staff.png"
     },
     "Wand": {
       "scale": "int",
@@ -211,7 +211,7 @@
       "elementalDamage": 0.08,
       "critChance": 0.04,
       "icon": "🪄",
-      "image": "images/weapons/wand.png"
+      "image": "images/items/weapons/wand.png"
     },
     "Crystal Wand": {
       "scale": "int",
@@ -220,7 +220,7 @@
       "elementalDamage": 0.1,
       "statusChance": 0.07,
       "icon": "🪄",
-      "image": "images/weapons/crystal-wand.png"
+      "image": "images/items/weapons/crystal-wand.png"
     },
     "Orb": {
       "scale": "int",
@@ -229,7 +229,7 @@
       "statusChance": 0.1,
       "elementalDamage": 0.08,
       "icon": "🔮",
-      "image": "images/weapons/orb.png"
+      "image": "images/items/weapons/orb.png"
     },
     "Spellbook": {
       "scale": "int",
@@ -237,7 +237,7 @@
       "base": 16,
       "elementalDamage": 0.14,
       "icon": "📖",
-      "image": "images/weapons/spellbook.png"
+      "image": "images/items/weapons/spellbook.png"
     },
     "Runic Hammer": {
       "scale": "str",
@@ -276,7 +276,7 @@
       "healingPower": 0.12,
       "accuracy": 0.04,
       "icon": "🪄",
-      "image": "images/weapons/scepter.png"
+      "image": "images/items/weapons/scepter.png"
     }
   },
   "weaponTypeMap": {
@@ -686,27 +686,27 @@
   },
   "slotVisuals": {
     "Weapon": {
-      "image": "images/items/weapon.png",
+      "image": "images/items/weapons/default.png",
       "fallback": "⚔️"
     },
     "Armor": {
-      "image": "images/items/armor.png",
+      "image": "images/items/armor/default.png",
       "fallback": "🛡️"
     },
     "OffHand": {
-      "image": "images/items/armor.png",
+      "image": "images/items/armor/default.png",
       "fallback": "🛡️"
     },
     "Ring": {
-      "image": "images/items/ring.png",
+      "image": "images/items/accessories/ring.png",
       "fallback": "💍"
     },
     "Amulet": {
-      "image": "images/items/amulet.png",
+      "image": "images/items/accessories/amulet.png",
       "fallback": "📿"
     },
     "Accessories": {
-      "image": "images/items/jewelry.png",
+      "image": "images/items/accessories/amulet.png",
       "fallback": "💎"
     }
   }

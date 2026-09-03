@@ -62,6 +62,14 @@ function gameIcon(group,key,fallback='',cls='gameAsset'){
   const src=assetUrl(raw);
   return `<span class="iconFallback ${cls}"><img class="${cls}" src="${src}" alt="" data-icon-group="${group}" data-icon-key="${key}" onerror="console.warn('Guildmaster icon missing:',this.src);this.style.display='none';this.nextElementSibling.style.display='inline'"><span style="display:none">${fb}</span></span>`;
 }
+function itemImageSlug(name){return String(name||'default').trim().toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'default'}
+function itemImageFolder(slot){return slot==='Weapon'?'weapons':slot==='Armor'?'armor':'accessories'}
+function equipmentIcon(it,cls='gameAsset itemAsset'){
+  if(!it)return itemIcons.Accessories||'◇';
+  const fallback=it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons.Weapon||'⚔️'):(itemIcons[it.slot]||itemIcons.Accessories||'◇');
+  const raw=it.image||`images/items/${itemImageFolder(it.slot)}/${itemImageSlug(it.name)}.png`,src=assetUrl(raw);
+  return `<span class="iconFallback ${cls}"><img class="${cls}" src="${src}" alt="" data-item-name="${String(it.name||'').replace(/"/g,'&quot;')}" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'"><span style="display:none">${fallback}</span></span>`;
+}
 function classIcon(h,cls='gameAsset'){return h?.subclass?gameIcon('subclass',h.subclass,iconFallback('class',h.class),cls):gameIcon('class',h.class,iconFallback('class',h.class),cls)}
 function displayClass(h){return subclassDef(h)?.name||h.class}
 

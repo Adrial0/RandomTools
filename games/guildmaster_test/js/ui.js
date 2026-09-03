@@ -662,7 +662,7 @@ function sortedRosterMembers(){
 }
 function equipmentSlotIcon(it,slot){
   if(!it)return itemIcons[slot]||({MainHand:'⚔️',OffHand:'🛡️',Armor:'🛡️',Accessories:'💎'}[slot]||'□');
-  return it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons.Weapon||'⚔️'):(itemIcons[it.slot]||itemIcons[slot]||'🎒');
+  return equipmentIcon(it);
 }
 function compactEquipmentSlots(h,context='roster'){
   const slots=[...new Set(C[h.class]?.slots||['MainHand','Armor','Accessories'])];
@@ -774,7 +774,7 @@ function heroDetail(h){
 
   const equipment=slots.map(k=>{
     const it=s.inventory.find(x=>x.id===h.equip[k]);
-    const icon=it&&it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[k]||'🎒'):(itemIcons[k]||'🎒');
+    const icon=it?equipmentIcon(it):(itemIcons[k]||'🎒');
     return `<div class="detailEquipRow" onclick="equipModal(${h.id},'${k}')">
       <div class="detailEquipIcon">${icon}</div>
       <div class="detailEquipText"><small>${slotLabel(k)}</small><b>${it?it.name:'Empty'}</b><small>${it?(k==='OffHand'&&h.equip.MainHand===h.equip.OffHand?'Occupied by two-handed weapon':statText(it)):'Click to equip'}</small></div>
