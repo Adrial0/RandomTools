@@ -37,6 +37,10 @@ assert.match(combat,/mission\.battle=mission\.bossGate\?makeBossBattle\(mission\
 assert.match(combat,/gateHp=m\.bossGate\?2\.5:1/,'tier bosses should have substantially increased health');
 assert.match(combat,/gateAtk=m\.bossGate\?1\.6:1/,'tier bosses should deal substantially increased damage');
 assert.match(combat,/gateDefense=m\.bossGate\?1\.35:1/,'tier bosses should resist undergeared parties');
-assert.match(combat,/m\.bossGate\?3500:4000/,'tier bosses should attack faster than ordinary bosses');
+assert.match(combat,/m\.bossGate\?3500:\(dungeonBoss\?3700:4000\)/,'tier bosses should attack faster than ordinary bosses');
+assert.match(combat,/contentHp=raid\?1\.8:\(dungeonBoss\?1\.6:1\)/,'raid and dungeon bosses should receive separate health buffs');
+assert.match(combat,/contentAtk=raid\?1\.4:\(dungeonBoss\?1\.25:1\)/,'raid and dungeon bosses should receive separate damage buffs');
+assert.match(combat,/contentDefense=raid\?1\.25:\(dungeonBoss\?1\.15:1\)/,'raid and dungeon bosses should receive separate defense buffs');
+assert.match(combat,/dungeonBoss=m\.type==='dungeon'&&!m\.personalQuest/,'personal quest bosses should retain their dedicated balance');
 
 console.log('Expedition tier gate tests passed.');

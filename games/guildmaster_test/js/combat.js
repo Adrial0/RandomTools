@@ -12,10 +12,15 @@ function makeBoss(m){
   // increased durability prevents a short burst from bypassing the fight,
   // while the damage and defense bonuses demand an appropriately geared party.
   const gateHp=m.bossGate?2.5:1,gateAtk=m.bossGate?1.6:1,gateDefense=m.bossGate?1.35:1;
-  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult*personalHp*gateHp);
-  const atk=Math.round((raid?18:13)*scale*1.10*gapMult*personalAtk*gateAtk);
-  const def=Math.round((raid?10:7)*scale*gateDefense);
-  const mdef=Math.round((raid?11:8)*scale*gateDefense);
+  // Personal rivals already have their own large multipliers. Regular dungeon
+  // and raid bosses receive content-specific buffs, with raids remaining the
+  // more demanding endgame encounter.
+  const dungeonBoss=m.type==='dungeon'&&!m.personalQuest;
+  const contentHp=raid?1.8:(dungeonBoss?1.6:1),contentAtk=raid?1.4:(dungeonBoss?1.25:1),contentDefense=raid?1.25:(dungeonBoss?1.15:1);
+  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult*personalHp*gateHp*contentHp);
+  const atk=Math.round((raid?18:13)*scale*1.10*gapMult*personalAtk*gateAtk*contentAtk);
+  const def=Math.round((raid?10:7)*scale*gateDefense*contentDefense);
+  const mdef=Math.round((raid?11:8)*scale*gateDefense*contentDefense);
 
   return{
     id:1,
@@ -33,7 +38,7 @@ function makeBoss(m){
     })[m.boss]||bossTpl.damageType||m.theme||'physical',
     aoeChance:raid?(m.boss==='War Ogre'?.25:.78):(m.bossGate?.62:.48),
     elementalMult:raid?1.55:(m.bossGate?1.40:1.20),
-    mage:true,boss:true,maxMana:80,mana:80,manaRegen:m.bossGate?6:4,ability:bossTpl.ability||null,drops:bossTpl.drops||[],abilityReadyAt:0,attackInterval:raid?4500:(m.bossGate?3500:4000),attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:(m.bossGate?3500:4000))
+    mage:true,boss:true,maxMana:80,mana:80,manaRegen:m.bossGate?6:(raid?7:(dungeonBoss?5:4)),ability:bossTpl.ability||null,drops:bossTpl.drops||[],abilityReadyAt:0,attackInterval:raid?3800:(m.bossGate?3500:(dungeonBoss?3700:4000)),attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?3800:(m.bossGate?3500:(dungeonBoss?3700:4000)))
   };
 }
 
