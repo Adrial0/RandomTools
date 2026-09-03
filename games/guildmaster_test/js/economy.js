@@ -273,13 +273,24 @@ function openInventoryEquip(iid){
   }).join('')}</div>`);
 }
 function inventorySummaryStats(it){
-  const stats=[],gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1;
+  const stats=[],bonuses=new Map(),gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1;
+  const wholePercent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark']);
+  const decimalPercent=new Set(['armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter','damageVariance','damageBonus','healBonus','physicalDodgeBonus','magicalDodgeBonus']);
+  const add=(key,value)=>{value=(Number(value)||0)*gearMult;if(value)bonuses.set(key,(bonuses.get(key)||0)+value)};
   if(it.slot==='Weapon'){
     stats.push(['Attack',Math.round((it.weaponPower||0)*gearMult)]);
     stats.push(['Attack Speed',weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)+'s']);
   }
-  if(it.stat&&it.value!=null)stats.push(['Main Stat',`+${Math.round((Number(it.value)||0)*gearMult)} ${statName(it.stat)}`]);
-  return stats;
+  add(it.stat,it.value);add(it.secondaryStat,it.secondaryValue);add(it.tertiaryStat,it.tertiaryValue);
+  Object.entries(it.extraStats||{}).forEach(([key,value])=>add(key,value));
+  (it.runes||[]).forEach(id=>{const rune=RUNES[id];if(rune)add(rune.stat,rune.value)});
+  add('block',itemBlockValue(it));add('armorPen',it.armorPen);add('parry',it.parry);add('critChance',it.weaponCritChance);add('critDamage',it.critDamage);add('accuracy',it.accuracy);add('elementalDamage',it.elementalDamage);add('healingPower',it.healingPower);add('statusChance',it.statusChance);add('cleave',it.cleave);add('counter',it.counter);add('damageVariance',it.damageVariance);add('damageBonus',it.damageBonus);add('healBonus',it.healBonus);add('critChance',it.itemCritBonus);add('threatBonus',it.itemThreatBonus);add('physicalDodgeBonus',it.itemPhysicalDodgeBonus);add('magicalDodgeBonus',it.itemMagicalDodgeBonus);
+  const bonusLimit=it.slot==='Weapon'?3:5;
+  [...bonuses.entries()].slice(0,bonusLimit).forEach(([key,value])=>{
+    const shown=decimalPercent.has(key)?Math.round(value*100):Math.round(value*100)/100;
+    stats.push([statName(key),`${shown>0?'+':''}${shown}${decimalPercent.has(key)||wholePercent.has(key)?'%':''}`]);
+  });
+  return stats.slice(0,5);
 }
 function inventorySummaryHtml(it){
   const stats=inventorySummaryStats(it);
