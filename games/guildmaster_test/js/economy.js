@@ -39,16 +39,18 @@ function resourceSourcesHtml(k){
   if(!sources.length)return `<div class="empty" style="padding:12px">No direct source is currently defined for this resource.</div>`;
   return `<div class="resourceSourceList">${sources.map(s=>`<div class="resourceSourceRow"><div><b>${s.name}</b><span>${s.type}${s.detail?' · '+s.detail:''}</span></div></div>`).join('')}</div>`;
 }
+const RESOURCE_SELL_VALUES=[0,1,2,3,5,8,13,21,35,58,95];
+function resourceSellValue(k){const tier=Math.max(1,resourceTier(k));return RESOURCE_SELL_VALUES[tier]||Math.round(95*Math.pow(1.65,tier-10))}
 function openResourceSell(k){
   const owned=s.materials[k]||0;if(owned<=0)return;
-  const initial=Math.min(owned,10);
+  const initial=Math.min(owned,10),unitValue=resourceSellValue(k);
   showModal('Sell '+(RESOURCE_NAMES[k]||k),`<div class="card">
     <div class="name">${tierLabel(resourceTier(k))} · ${RESOURCE_NAMES[k]||k}</div>
-    <div class="muted">You have ${owned}. Resources sell for 1 gold each.</div>
-    <input id="resourceSellRange" type="range" min="1" max="${owned}" value="${initial}" oninput="$('resourceSellAmount').value=this.value;$('resourceSellTotal').textContent=this.value+'g'" style="width:100%;margin-top:14px">
+    <div class="muted">You have ${owned}. Each ${RESOURCE_NAMES[k]||k} sells for ${unitValue.toLocaleString()} gold.</div>
+    <input id="resourceSellRange" type="range" min="1" max="${owned}" value="${initial}" oninput="$('resourceSellAmount').value=this.value;$('resourceSellTotal').textContent=(this.value*${unitValue}).toLocaleString()+'g'" style="width:100%;margin-top:14px">
     <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
-      <input id="resourceSellAmount" type="number" min="1" max="${owned}" value="${initial}" oninput="let v=clamp(Math.floor(+this.value||1),1,${owned});this.value=v;$('resourceSellRange').value=v;$('resourceSellTotal').textContent=v+'g'" style="width:110px">
-      <span class="chip">Value: <b id="resourceSellTotal">${initial}g</b></span>
+      <input id="resourceSellAmount" type="number" min="1" max="${owned}" value="${initial}" oninput="let v=clamp(Math.floor(+this.value||1),1,${owned});this.value=v;$('resourceSellRange').value=v;$('resourceSellTotal').textContent=(v*${unitValue}).toLocaleString()+'g'" style="width:110px">
+      <span class="chip">Value: <b id="resourceSellTotal">${(initial*unitValue).toLocaleString()}g</b></span>
     </div>
     <div class="modalActionRow"><button class="btn gold" onclick="sellResource('${k}')">Sell Resources</button></div>
   </div>
@@ -59,9 +61,9 @@ function sellResource(k){
   const amount=clamp(Math.floor(+($('resourceSellAmount')?.value||0)),1,owned);
   if(!owned||amount<=0||amount>owned)return;
   s.materials[k]-=amount;
-  s.gold+=amount;
+  const total=amount*resourceSellValue(k);s.gold+=total;
   save();closeModal();render();
-  notify('Sold '+amount+' '+(RESOURCE_NAMES[k]||k)+' for '+amount+' gold.','good');
+  notify('Sold '+amount+' '+(RESOURCE_NAMES[k]||k)+' for '+total.toLocaleString()+' gold.','good');
 }
 
 function matHtml(){

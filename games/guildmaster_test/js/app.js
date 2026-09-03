@@ -434,9 +434,9 @@ async function bootstrapGame(){
 bootstrapGame();
 setInterval(()=>{
   if(!window.GAME_DATA_READY||!s)return;
-  if(!s.recruits.length&&s.nextApplicantsAt&&Date.now()>=s.nextApplicantsAt){
-    fillApplicants();save();render();
-  }else if(document.getElementById('recruits')&&document.getElementById('recruits').closest('.page')?.classList.contains('active')){
+  if(s.nextApplicantsAt&&Date.now()>=s.nextApplicantsAt){
+    refreshApplicantBoard();save();render();
+  }else if(document.getElementById('recruits')&&document.getElementById('recruits').closest('.page')?.classList.contains('on')){
     renderRec();
   }
 },1000);

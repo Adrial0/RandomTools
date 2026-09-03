@@ -888,6 +888,17 @@ function fillApplicants(){
   s.applicantCap=target;
   s.nextApplicantsAt=Date.now()+5*60*1000;
 }
+function refreshApplicantBoard(){
+  const target=applicantBatchSize(),locked=(s.recruits||[]).filter(r=>r.locked).slice(0,target);
+  s.recruits=locked;
+  while(s.recruits.length<target)s.recruits.push(hero());
+  s.applicantCap=target;s.nextApplicantsAt=Date.now()+5*60*1000;
+}
+function toggleApplicantLock(rid){
+  const recruit=s.recruits.find(r=>r.id===rid);if(!recruit)return;
+  recruit.locked=!recruit.locked;save();renderRec();
+  notify(recruit.locked?`${recruit.name} will remain on the board.`:`${recruit.name} will be replaced at the next refresh.`,'good');
+}
 function migrateGuildProgression(){
   if(s.xp!=null){
     s.rep=(s.rep||0)+Math.max(0,Math.round(s.xp));
@@ -905,9 +916,7 @@ function ensure(){
   migrateGuildProgression();
   normalizeOnboarding();
   s.applicantCap=applicantBatchSize();
-  if(!s.recruits.length){
-    if(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt)fillApplicants();
-  }
+  if(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt)refreshApplicantBoard();
   s.members.forEach(ensureStarterWeapon);
   if(s.quests.length!==AREAS.length)refreshOffers('quest');
   if(s.dungeons.length!==DUNGEON_AREAS.length)refreshOffers('dungeon');
@@ -919,16 +928,16 @@ function ensure(){
 function refreshRec(pay=false){
   if(pay){
     const cost=recruitRerollCost();
+    if((s.recruits||[]).filter(r=>r.locked).length>=applicantBatchSize())return notify('Every applicant is locked. Unlock someone before rerolling.');
     if(s.gold<cost)return notify('Not enough gold.');
     s.gold-=cost;
-    s.recruits=[];
-    fillApplicants();
+    refreshApplicantBoard();
     log('Recruitment board rerolled for '+cost+' gold.');
     save();render();
     return notify('New applicants arrived.','good');
   }
 
-  if(!s.recruits.length&&(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt))fillApplicants();
+  if(!s.nextApplicantsAt||Date.now()>=s.nextApplicantsAt)refreshApplicantBoard();
   save();
 }
 function recruitRerollCost(){return 50*Math.max(1,s?.level||1)}

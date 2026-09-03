@@ -91,11 +91,10 @@ function render(){completeOnboardingGoals(false);updateNavigationLocks();complet
   if($('guildPermanentBonuses')){const b=s.guildBonuses||{};$('guildPermanentBonuses').innerHTML=`<span>Permanent Area Bonuses</span><b>+${((b.maxHp||0)*100).toFixed(2)}% Max HP</b><b>+${((b.gatherSpeed||0)*100).toFixed(2)}% Gathering Speed</b><b>+${((b.cooldownReduction||0)*100).toFixed(2)}% Cooldown Recovery</b>`}
   renderOnboardingGoals();renderRec();renderActive();renderLog();renderRoster();renderGuildInbox();renderPersonalQuests();renderOffers('quest');renderOffers('dungeon');renderOffers('raid');renderHarvestAreas();renderHarvestActive();renderProceduralQuests();renderGuildOverviewSummary();renderInv();renderMarket();renderCraftQueue();renderCraft();renderRunecrafting();renderCooking();renderUp();colorizeStatTerms(document.querySelector('.game'));save()}
 function applicantTimeLeft(){
-  if(s.recruits.length)return'Current applicants remain until recruited.';
   const ms=Math.max(0,(s.nextApplicantsAt||0)-Date.now());
-  if(ms<=0)return'New applicants are arriving...';
+  if(ms<=0)return'Board refreshing...';
   const sec=Math.ceil(ms/1000),min=Math.floor(sec/60),rem=sec%60;
-  return`Next applicants in ${min}:${String(rem).padStart(2,'0')}`;
+  return`Refresh in ${min}:${String(rem).padStart(2,'0')}`;
 }
 function recruitDetail(rid){
   const h=s.recruits.find(x=>x.id===rid);if(!h)return;
@@ -142,8 +141,8 @@ function recruitDetail(rid){
 function renderRec(){
   s.applicantCap=applicantBatchSize();
   $('recruits').innerHTML=
-    `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Batch every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll · ${recruitRerollCost().toLocaleString()}g</button></div></div></div>`+
-    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard characterRarity rarityBorder-${String(x.rarity||'Common').toLowerCase()}" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>Click to inspect</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. A new batch arrives automatically every 5 minutes.</div>');
+    `<div class="card" style="grid-column:1/-1"><div class="head"><div><div class="name">Recruitment Board</div><div class="muted">${s.recruits.length} / ${s.applicantCap} applicants · ${applicantTimeLeft()}</div></div><div style="display:flex;gap:8px;align-items:center"><span class="chip">Refreshes every 5 min</span><button class="btn" onclick="refreshRec(true)">Reroll Unlocked · ${recruitRerollCost().toLocaleString()}g</button></div></div></div>`+
+    (s.recruits.length?s.recruits.map(x=>{let z=hs(x);return`<div class="card recruitActionCard characterRarity rarityBorder-${String(x.rarity||'Common').toLowerCase()}" style="cursor:pointer;position:relative" onclick="recruitDetail(${x.id})"><button class="btn applicantLock ${x.locked?'on':''}" title="${x.locked?'Unlock applicant':'Keep applicant through refreshes'}" onclick="event.stopPropagation();toggleApplicantLock(${x.id})">${x.locked?'🔒 Locked':'🔓 Lock'}</button><div class="heroTop"><div class="portrait">${classIcon(x,'gameAsset portraitAsset')}</div><div><div class="name">${x.name}</div><div class="muted">${displayClass(x)} · ${x.race} · Lv. ${x.level} · <span class="${rarityClass(x.rarity)}">${x.rarity}</span></div></div></div><div class="power"><span>Click to inspect</span><strong>${z.power} power</strong></div><button class="btn gold recruitActionButton" onclick="event.stopPropagation();recruit(${x.id})">Recruit · Free</button></div>`}).join(''):'<div class="empty">No applicants available right now. The board refreshes automatically every 5 minutes.</div>');
 }
 let activeMissionDomKey='';
 function activeMissionKey(){
