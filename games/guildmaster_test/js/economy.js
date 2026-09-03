@@ -272,11 +272,24 @@ function openInventoryEquip(iid){
     </div>`;
   }).join('')}</div>`);
 }
+function inventorySummaryStats(it){
+  const stats=[],gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1;
+  if(it.slot==='Weapon'){
+    stats.push(['Attack',Math.round((it.weaponPower||0)*gearMult)]);
+    stats.push(['Attack Speed',weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)+'s']);
+  }
+  if(it.stat&&it.value!=null)stats.push(['Main Stat',`+${Math.round((Number(it.value)||0)*gearMult)} ${statName(it.stat)}`]);
+  return stats;
+}
+function inventorySummaryHtml(it){
+  const stats=inventorySummaryStats(it);
+  return stats.length?`<div class="inventorySummaryGrid stats-${stats.length}">${stats.map(([label,value])=>`<div class="inventorySummaryStat"><span>${label}</span><strong>${value}</strong></div>`).join('')}</div>`:'';
+}
 function renderInv(){
   $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();if($('runeCraftMats'))$('runeCraftMats').innerHTML=matHtml();
   const existingIds=new Set(s.inventory.map(it=>it.id));[...selectedInventoryItems].forEach(id=>{if(!existingIds.has(id))selectedInventoryItems.delete(id)});
   const visible=sortedInventoryItems();
-  $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${equipmentIcon(it)}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
+  $('items').innerHTML=visible.length?visible.map(it=>{const selected=selectedInventoryItems.has(it.id),click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard inventorySummaryCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${equipmentIcon(it)}</div><div class="name inventorySummaryName">${it.name}</div>${inventorySummaryHtml(it)}</div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
   const sel=$('inventorySortSelect'),dir=$('inventorySortDir');if(sel)sel.value=inventorySortKey;if(dir)dir.textContent=inventorySortDirection==='desc'?'Highest first':'Lowest first';updateInventoryControlUI();
 }
 
