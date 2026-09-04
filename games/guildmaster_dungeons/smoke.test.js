@@ -21,4 +21,8 @@ assert.match(js,/requestAnimationFrame\(animateCombatMeters\)/,'combat meters an
 assert.match(js,/ITEM_DATA_URL='\.\.\/guildmaster\/data\/items\.json'/,'the roguelike loads Guildmaster equipment definitions');
 assert.match(js,/function gearStats\(/,'equipment affixes feed into combat stats');
 assert.match(js,/function canEquip\(/,'class weapon and armor restrictions are enforced');
+assert.match(js,/function inspectHero\(/,'characters open a complete inspector');
+assert.match(js,/function inspectGear\(/,'equipped gear opens an item inspector');
+assert.match(js,/fetch\('\.\.\/guildmaster\/data\/races\.json'\)/,'the roguelike shares Guildmaster races');
+assert.match(js,/fetch\('\.\.\/guildmaster\/data\/subclasses\.json'\)/,'the roguelike shares Guildmaster subclasses');
 console.log('Guildmaster: Dungeons smoke tests passed.');
