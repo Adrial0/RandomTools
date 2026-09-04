@@ -7,6 +7,7 @@ assert.match(js,/function beginDraft\(/,'a new expedition begins with a recruit 
 assert.match(js,/draftSelection\.length!==2/,'exactly two adventurers start a run');
 assert.match(js,/function makeRegionMap\(\)/,'regions use a persistent branching node map');
 assert.match(js,/Array\.from\(\{length:10\},makeNodes\)/,'each region has ten encounters before its boss');
+assert.match(js,/return pool\.slice\(0,3\)/,'each encounter row offers three distinct node types');
 assert.match(js,/r\.heroes\.push\(h\);r\.region\+\+/,'one adventurer joins after a cleared boss');
 assert.match(js,/state\.treasury\+=secured/,'gold is secured as persistent treasury currency');
 assert.match(js,/state\.history\.push/,'finished parties enter persistent history');
