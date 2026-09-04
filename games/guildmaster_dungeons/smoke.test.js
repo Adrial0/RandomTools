@@ -55,9 +55,11 @@ assert.match(js,/const ABILITY_DESCRIPTIONS=/,'character inspection explains abi
 assert.match(js,/function processOngoingEffects\(/,'status and renewal effects tick during slower combat');
 assert.match(js,/if\(relicRow\)return\['relic'\]/,'relic vaults are limited to every fifth encounter');
 assert.match(js,/shrineRow=step===3\|\|step===8/,'ability shrines are limited to two scheduled encounters');
-assert.match(js,/elite&&Math\.random\(\)<\.4\?randomUnownedRelic/,'elite victories can offer an unowned relic');
-assert.match(js,/rewards=\[\{kind:'item'[\s\S]*\{kind:'perk'/,'elite rewards retain all three standard choices');
-assert.match(js,/if\(relic\)rewards\.push\(\{kind:'relic',relic\}\)/,'an elite relic is appended as an additional choice');
+assert.match(js,/function makeRewards\(\)\{return\[\{kind:'item'[\s\S]*\{kind:'perk'/,'the first reward stage always has the three standard choices');
+assert.match(js,/function makeEliteRelicRewards\(/,'elite victories prepare a separate set of relic choices');
+assert.match(js,/r\.pendingEliteRelics=elite\?makeEliteRelicRewards\(\):null/,'only elite battles schedule the second reward stage');
+assert.match(js,/r\.pendingReward=r\.pendingEliteRelics;delete r\.pendingEliteRelics/,'claiming the normal reward opens the relic selection afterward');
+assert.match(js,/state\.run\?\.relics/,'character inspection works before a run exists during party selection');
 assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
