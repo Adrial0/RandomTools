@@ -1,6 +1,6 @@
 const fs=require('fs'),path=require('path'),assert=require('assert');
 const root=path.resolve(__dirname,'..'),read=file=>fs.readFileSync(path.join(root,file),'utf8');
-const economy=read('js/economy.js'),css=read('styles.css');
+const economy=read('js/economy.js'),css=read('styles.css'),html=read('index.html');
 
 assert.match(economy,/function inventorySummaryStats\(it\)/,'collapsed inventory cards should have a dedicated summary model');
 assert.match(economy,/stats\.push\(\['Attack',Math\.round\(\(it\.weaponPower\|\|0\)\*gearMult\)\]\)/,'weapon cards should show effective attack');
@@ -17,6 +17,12 @@ assert.match(css,/\.inventorySummaryStat\{[^}]*border:/,'every important value s
 assert.match(css,/\.inventorySummaryName\{font-size:14px/,'the compact card keeps item names readable');
 assert.match(economy,/key==='attackSpeed'[^\n]*1\/Math\.max/,'attack-speed sorting uses weapon speed instead of a permanently zero comparison value');
 assert.match(economy,/function confirmBulkInventoryAction/,'destructive selected-item actions show a confirmation with the affected item count');
-assert.match(economy,/function applyInventoryAutoToSelected/,'automatic sell and scrap rules can be applied to selected existing inventory');
+assert.match(economy,/function inventoryCleanupItems/,'one-time cleanup finds matching current inventory items');
+assert.match(economy,/function confirmInventoryCleanup/,'one-time cleanup warns with the exact affected item count');
+assert.match(economy,/function performInventoryCleanup/,'one-time cleanup can be repeatedly applied to current inventory');
+assert.doesNotMatch(economy,/Auto-sold|Auto-scrapped|inventoryAuto/,'incoming items must never be processed by a persistent automatic rule');
+assert.match(html,/One-time inventory cleanup/,'the inventory menu clearly describes the one-time action');
+assert.match(html,/Future loot is unaffected/,'the inventory menu explicitly says incoming items are safe');
+assert.doesNotMatch(html,/Automatic item rule|Incoming items use this rule automatically/,'the old persistent-rule language is removed');
 assert.match(css,/\.inventorySummaryGrid\.weaponStats>\.inventorySummaryStat:first-child/,'weapon attack is the prominent full-width first stat');
 console.log('Compact inventory item summary tests passed.');

@@ -403,7 +403,7 @@ function notify(msg,type='bad'){
   stack.appendChild(n);
   setTimeout(()=>n.remove(),3200);
 }
-function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],inventoryAuto:{mode:'off',rarity:'Common'},onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],equipmentCurveVersion:1,recipeStatCurveVersion:1,contractRewardVersion:2,guildActivityPoints:0,guildIssueCursor:0,guildIssues:[],personalQuests:[],nextJoinOrder:1,memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
+function fresh(){return{guild:'',guildNamed:false,gold:110,rep:0,level:1,wins:0,next:1,battleSeq:1,lastHiddenAt:0,musicEnabled:true,musicVolume:.10,professions:{},smithing:{level:1,xp:0},cooking:{level:1,xp:0},meals:{},cookingJobs:[],onboarding:{collapsed:false,flags:{},claimed:[]},members:[],recruits:[],inventory:[],equipmentCurveVersion:1,recipeStatCurveVersion:1,contractRewardVersion:2,guildActivityPoints:0,guildIssueCursor:0,guildIssues:[],personalQuests:[],nextJoinOrder:1,memberCap:6,applicantCap:4,recruitBatchFourMigrated:true,nextApplicantsAt:0,knownRecipes:[],discoveredResources:[],expeditionGates:[],expeditionClears:[],bossClears:[],guildBonuses:{maxHp:0,gatherSpeed:0,cooldownReduction:0},areaRewards:[],materials:{},missions:[],harvestJobs:[],craftJobs:[],quests:[],dungeons:[],raids:[],partyPresets:[],market:{nextRefresh:0,offers:[]},questBoard:{nextRefresh:0,offers:[]},runes:{},up:{quarters:0,party:0,recruit:0,smith:0,craftSpeed:0,training:0,storage:0,afkHarvest:0,gatherParty:0,board:0},log:['Guild charter signed.'],selected:null}}
 let lastSave=0;
 function save(){
   try{
@@ -436,7 +436,7 @@ function load(){
   Object.keys(MEALS).forEach(k=>{if(s.meals[k]==null)s.meals[k]=0});
   s.cookingJobs=Array.isArray(s.cookingJobs)?s.cookingJobs:[];
   normalizeCookingQueue();
-  s.inventoryAuto=Object.assign({mode:'off',rarity:'Common'},s.inventoryAuto||{});
+  delete s.inventoryAuto;
   [...(s.members||[]),...(s.recruits||[])].forEach(h=>{if(h.class==='Cl'+'eric')h.class='Priest'});
   (s.inventory||[]).forEach(it=>{
     if(it.slot==='Weapon'){
