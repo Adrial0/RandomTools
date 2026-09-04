@@ -1,0 +1,21 @@
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const root=path.resolve(__dirname,'..'),read=file=>fs.readFileSync(path.join(root,file),'utf8');
+const data=JSON.parse(read('data/items.json')),core=read('js/core.js'),ui=read('js/ui.js'),economy=read('js/economy.js'),professions=read('js/professions.js');
+
+for(const folder of ['weapons','armor','accessories'])assert.ok(fs.statSync(path.join(root,'images/items',folder)).isDirectory(),`${folder} item directory should exist`);
+assert.ok(!fs.existsSync(path.join(root,'images/items/jewelry')),'the obsolete jewelry directory should be removed');
+for(const weapon of Object.values(data.weapons))if(weapon.image)assert.match(weapon.image,/^images\/items\/weapons\//,'weapon paths should use the item hierarchy');
+assert.strictEqual(data.slotVisuals.Weapon.image,'images/items/weapons/default.png');
+assert.strictEqual(data.slotVisuals.Armor.image,'images/items/armor/default.png');
+assert.strictEqual(data.slotVisuals.OffHand.image,'images/items/armor/default.png');
+assert.strictEqual(data.slotVisuals.Ring.image,'images/items/accessories/ring.png');
+assert.strictEqual(data.slotVisuals.Amulet.image,'images/items/accessories/amulet.png');
+assert.match(data.slotVisuals.Accessories.image,/^images\/items\/accessories\//);
+assert.doesNotMatch(read('data/items.json'),/images\/weapons\/|images\/items\/jewelry/,'active item data should contain no obsolete paths');
+assert.match(core,/function itemImageSlug\(name\)/,'item names should map to predictable filenames');
+assert.match(core,/function itemImageFolder\(slot\)/,'item slots should map to the three category folders');
+assert.match(core,/function equipmentIcon\(it/,'specific item art should have one shared renderer');
+assert.match(ui,/return equipmentIcon\(it\)/,'equipment slots should use specific item art');
+assert.ok((economy.match(/equipmentIcon\(it\)/g)||[]).length>=5,'inventory, market, details, and sockets should use specific item art');
+assert.match(professions,/typeof equipmentIcon==='function'\?equipmentIcon\(\{name:r\[0\],slot:r\[1\],weaponTemplate:r\[2\]\}\)/,'recipe previews should use the finished item icon');
+console.log('Item image hierarchy and path tests passed.');

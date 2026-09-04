@@ -1,16 +1,26 @@
 // Mission combat, rewards, offline resolution, and encounter lifecycle.
 function makeBoss(m){
-  const bossTpl=ENEMIES_DATA[m.boss]||{};const info=[gameIcon('boss',m.boss,bossTpl.icon||'👑','gameAsset combatAsset'),(bossTpl.drops||[])[0]];
+  const bossTpl=ENEMIES_DATA[m.bossTemplate||m.boss]||{};const info=[gameIcon('boss',m.bossTemplate||m.boss,bossTpl.icon||'👑','gameAsset combatAsset'),(bossTpl.drops||[])[0]];
   if(!info)throw new Error('Missing boss definition for '+m.type+' / '+m.boss);
 
   const raid=m.type==='raid';
   const level=m.level||1,scale=1+level*.12,hpScale=1.12+Math.max(0,level-1)*.20;
 
   const gapMult=underlevelEnemyMultiplier(m,level);
-  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult);
-  const atk=Math.round((raid?18:13)*scale*1.10*gapMult);
-  const def=Math.round((raid?10:7)*scale);
-  const mdef=Math.round((raid?11:8)*scale);
+  const personalHp=m.personalQuest?(m.hard?4.5:3.5):1,personalAtk=m.personalQuest?(m.hard?1.55:1.35):1;
+  // Tier gates are progression checks rather than ordinary bosses. Their
+  // increased durability prevents a short burst from bypassing the fight,
+  // while the damage and defense bonuses demand an appropriately geared party.
+  const gateHp=m.bossGate?2.5:1,gateAtk=m.bossGate?1.6:1,gateDefense=m.bossGate?1.35:1;
+  // Personal rivals already have their own large multipliers. Regular dungeon
+  // and raid bosses receive content-specific buffs, with raids remaining the
+  // more demanding endgame encounter.
+  const dungeonBoss=m.type==='dungeon'&&!m.personalQuest;
+  const contentHp=raid?1.8:(dungeonBoss?1.6:1),contentAtk=raid?1.4:(dungeonBoss?1.25:1),contentDefense=raid?1.25:(dungeonBoss?1.15:1);
+  const maxHp=Math.round((raid?720:360)*hpScale*1.15*gapMult*personalHp*gateHp*contentHp);
+  const atk=Math.round((raid?18:13)*scale*1.10*gapMult*personalAtk*gateAtk*contentAtk);
+  const def=Math.round((raid?10:7)*scale*gateDefense*contentDefense);
+  const mdef=Math.round((raid?11:8)*scale*gateDefense*contentDefense);
 
   return{
     id:1,
@@ -26,9 +36,9 @@ function makeBoss(m){
       'Skeleton King':'dark','Broodmother':'poison','Rotting Colossus':'poison','High Cultist':'dark',
       'Ancient Drake':'fire','War Ogre':'physical','Wraith Lord':'dark','Abyssal Demon':'dark'
     })[m.boss]||bossTpl.damageType||m.theme||'physical',
-    aoeChance:raid?(m.boss==='War Ogre'?.25:.78):.48,
-    elementalMult:raid?1.55:1.20,
-    mage:true,boss:true,maxMana:80,mana:80,manaRegen:4,ability:ENEMIES_DATA[m.boss]?.ability||null,drops:ENEMIES_DATA[m.boss]?.drops||[],abilityReadyAt:0,attackInterval:raid?4500:4000,attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?4500:4000)
+    aoeChance:raid?(m.boss==='War Ogre'?.25:.78):(m.bossGate?.62:.48),
+    elementalMult:raid?1.55:(m.bossGate?1.40:1.20),
+    mage:true,boss:true,maxMana:80,mana:80,manaRegen:m.bossGate?6:(raid?7:(dungeonBoss?5:4)),ability:bossTpl.ability||null,drops:bossTpl.drops||[],abilityReadyAt:0,attackInterval:raid?3800:(m.bossGate?3500:(dungeonBoss?3700:4000)),attackStartedAt:Date.now(),nextAttackAt:Date.now()+(raid?3800:(m.bossGate?3500:(dungeonBoss?3700:4000)))
   };
 }
 
@@ -83,11 +93,13 @@ function victoryPresentation(m,{major=false,guildBonus=null,item=null,unique=nul
 
 function bossReward(m){
   ensureCombatReport(m).encounters++;
+  if(m.personalQuest){personalQuestBossReward(m);return}
   const bossTpl=ENEMIES_DATA[m.boss]||{},k=(bossTpl.drops||[])[0];
   m.stash.materials[k]=(m.stash.materials[k]||0)+1;
   markResourceFound(k);
 
   const bossKey=`${m.type}:${m.boss}`,firstClear=!(s.bossClears||[]).includes(bossKey),roll=Math.random();
+  addGuildActivity(firstClear?6:2,firstClear?'first boss clear':'boss clear');
   let bonusItem=null,unique=false;
   if(roll<(firstClear ? .10 : .0015)){bonusItem=makeUniqueItem(m.tier||1,m.boss,m.level||1);unique=true}
   else if(firstClear&&m.bossGate)bonusItem=bossItemDrop(m,'Rare');
@@ -148,7 +160,9 @@ function makeEnemy(type,level,index,forcedName=null){
   // Preserve the original level-1 baseline, then let durability grow faster
   // than unequipped hero damage. Attack and defenses retain gentler scaling.
   const hpScale=1.12+Math.max(0,level-1)*.20,difficulty=underlevelEnemyMultiplier(currentMissionForEnemy,level)*stageEnemyMultiplier(currentMissionForEnemy);
-  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*(ar.hpMult||1)*difficulty);
+  const contentTier=Math.max(1,Math.min(10,Number(currentMissionForEnemy?.tier)||Math.ceil(level/10)||1));
+  const gearDurabilityScale=typeof equipmentTierMultiplier==='function'?equipmentTierMultiplier(contentTier):Math.pow(1.6,contentTier-1);
+  const hp=Math.round((tpl.baseHp||35)*hpScale*2.25*gearDurabilityScale*(ar.hpMult||1)*difficulty);
   const atk=Math.round((tpl.baseAttack||12)*scale*(ar.attackMult||1)*difficulty);
   const def=Math.round((tpl.baseDefense||6)*scale*1.15*(ar.defMult||1));
   const maxMana=Math.max(0,Math.round((ar.mana||0)+level*.5));
@@ -268,7 +282,7 @@ function makeBattle(m){
       str:z.str,dex:z.dex,int:z.int,def:z.def,mdef:z.mdef,block:z.block||0,threat:z.threat||1,physicalDodge:z.physicalDodge,magicalDodge:z.magicalDodge,
       regen:z.regen||0,lifesteal:z.lifesteal||0,damageMult:z.damageMult||1,healMult:z.healMult||1,critBonus:z.critBonus||0,element:z.element||null,elementMult:z.elementMult||1,activeType:z.activeType||null,
       fire:z.fire||0,ice:z.ice||0,poison:z.poison||0,lightning:z.lightning||0,holy:z.holy||0,dark:z.dark||0,
-      weaponType:wep?.weaponType||null,twoHanded:weaponHands(wep)===2,
+      weaponType:wep?.weaponType||null,twoHanded:weaponHands(wep)===2,discipline:h.discipline||null,passiveEvolution:h.passiveEvolution||null,activeEvolution:h.activeEvolution||null,disciplineCooldownReduction:z.disciplineCooldownReduction||0,
       scale:wep?.scale||({Mage:'int',Priest:'int',Ranger:'dex',Rogue:'dex'}[h.class]||'str'),
       damageType:wep?.damageType||'physical',
       weaponPower:wep?.weaponPower||(wd?.base||8),
@@ -281,7 +295,7 @@ function makeBattle(m){
   });
   let partyDamage=0,partyDefense=0,partyMdef=0;
   m.party.forEach(hid=>{
-    const original=s.members.find(x=>x.id===hid),sub=subclassDef(original);
+    const original=s.members.find(x=>x.id===hid),sub=evolvedSubclassDef(original);
     if(!sub)return;
     partyDamage+=sub.partyDamage||0;
     partyDefense+=sub.partyDefense||0;
@@ -343,7 +357,7 @@ function syncPartyHp(m){
       m.partyState[h.id].hp=Math.max(0,h.hp);
       m.partyState[h.id].maxHp=h.maxHp;
       m.partyState[h.id].mana=Math.max(0,h.mana||0);
-      m.partyState[h.id].maxMana=h.maxMana||(20+(h.int||0));
+      m.partyState[h.id].maxMana=h.maxMana||(20+intelligenceManaBonus(h.int||0));
       m.partyState[h.id].cooldowns=Object.assign({},h.cooldowns||{});
       m.partyState[h.id].buffs=activePersistentBuffs(h.buffs);
       m.partyState[h.id].statuses=activePersistentStatuses(h.statuses);
@@ -495,7 +509,7 @@ function grantFightRewards(m,enemySnapshots){
     const hero=s.members.find(x=>x.id===hid);if(!hero)return;
 
     const fullPartyXp=defeated.reduce((sum,enemy)=>sum+xpForEnemy(hero,enemy.level||missionEncounterLevel(m),m.type),0);
-    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2*(1+(s.up.training||0)*.10)));
+    const gained=Math.max(1,Math.round((fullPartyXp/xpShareCount)*2*(1+(s.up.training||0)*.10)*(1+(hero.personalXpBonus||0))));
     hero.xp+=gained;
 
     let need=heroXpNeeded(hero.level),levelsGained=0;
@@ -508,6 +522,7 @@ function grantFightRewards(m,enemySnapshots){
       need=heroXpNeeded(hero.level);
     }
     if(levelsGained){
+      addGuildActivity(levelsGained,'character levels');
       const row=heroReport(m,hero.id);row.levelsGained=(row.levelsGained||0)+levelsGained;row.lastLevel=hero.level;
       const combatHero=m.battle?.heroes?.find(x=>x.id===hero.id);if(combatHero){combatHero.level=hero.level;combatHero.levelUpUntil=Date.now()+1800;combatHero.levelUpText=`LEVEL ${hero.level}`}
       m.battle?.log?.unshift(`${hero.name} reached level ${hero.level}!`);
@@ -662,7 +677,8 @@ const ACTIVE_COOLDOWNS={};
 const ACTIVE_DISPLAY_NAMES={};
 const COMBAT_BUFF_DURATIONS={battleShout:12000,shieldFaith:10000};
 function manaCost(type){return ACTIVE_MANA_COSTS[type]||0}
-function activeCooldownMs(type,h=null){const reduction=1-clamp((s?.guildBonuses?.cooldownReduction||0)+(h?.uniqueCooldownReduction||0),0,.70);return Math.max(1000,Math.round((ACTIVE_COOLDOWNS[type]||10000)*reduction))}
+function activeCooldownMs(type,h=null){const reduction=1-clamp((s?.guildBonuses?.cooldownReduction||0)+(h?.uniqueCooldownReduction||0)+(h?.disciplineCooldownReduction||0)+(h?.activeEvolution==='tempo'?.20:0),0,.70);return Math.max(1000,Math.round((ACTIVE_COOLDOWNS[type]||10000)*reduction))}
+function activePowerMultiplier(h){return h?.activeEvolution==='power'?1.25:1}
 function activeName(type){return ACTIVE_DISPLAY_NAMES[type]||type||'Active'}
 function canSpendMana(h,type){return (h.mana||0)>=manaCost(type)}
 function spendMana(h,type){
@@ -699,7 +715,7 @@ function cooldownProgress(h,type,now=Date.now()){
 }
 function healAlly(m,h,ally,mult=1,label='Heal'){
   if(!ally)return false;
-  const heal=Math.max(2,Math.round((h.int*.38+h.weaponPower*.12)*(h.healMult||1)*mult*2));
+  const heal=Math.max(2,Math.round((h.int*.38+h.weaponPower*.12)*(h.healMult||1)*mult*activePowerMultiplier(h)*2));
   const before=ally.hp;
   ally.hp=Math.min(ally.maxHp,ally.hp+heal);
   const effective=Math.max(0,ally.hp-before);
@@ -737,7 +753,7 @@ function heroBasicAttack(m,h){
 }
 function activeDamageHit(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
-  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult*activePowerMultiplier(h))));
   const before=target.hp;
   target.hp=Math.max(0,target.hp-dmg);
   addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -773,7 +789,7 @@ function tryActiveSkill(m,h,now=Date.now()){
   }else if(type==='elementNova'){
     const elem=h.element||'fire';
     const hits=targets.map(t=>{
-      const dmg=Math.max(1,Math.round(heroDamage(h,t,elem)*1.44));
+      const dmg=Math.max(1,Math.round(heroDamage(h,t,elem)*1.44*activePowerMultiplier(h)));
       const before=t.hp;
       t.hp=Math.max(0,t.hp-dmg);
       addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -787,7 +803,7 @@ function tryActiveSkill(m,h,now=Date.now()){
   }else if(type==='arcaneBurst'){
     const elem=h.damageType==='physical'?'fire':h.damageType;
     const hits=targets.map(t=>{
-      const dmg=Math.max(1,Math.round(((h.int*.24+h.weaponPower*.16-t.mdef*.42)*elementalReduction(t[elem]))*2));
+      const dmg=Math.max(1,Math.round(((h.int*.24+h.weaponPower*.16-t.mdef*.42)*elementalReduction(t[elem]))*2*activePowerMultiplier(h)));
       const before=t.hp;
       t.hp=Math.max(0,t.hp-dmg);
       addHeroMetric(m,h.id,'damage',Math.min(before,dmg));
@@ -798,14 +814,14 @@ function tryActiveSkill(m,h,now=Date.now()){
   }else if(type==='commandStrike'){
     living(b.heroes).forEach(x=>{
       if(!x.buffs)x.buffs={};
-      x.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout;
+      x.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout*activePowerMultiplier(h);
     });
     b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout! Party damage and Attack Speed increased for 12 seconds.`);
     targets.forEach(t=>interruptEnemy(m,t,h.name.split(' ')[0]+'\'s Battle Shout',h.id));
     used=true;
   }else if(type==='shieldFaith'){
     if(!h.buffs)h.buffs={};
-    h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
+    h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith*activePowerMultiplier(h);
     b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith! Damage taken reduced for 10 seconds.`);
     used=true;
   }else{
@@ -820,8 +836,8 @@ function tryActiveSkill(m,h,now=Date.now()){
     else if(type==='holyStrike')used=activeDamageHit(m,h,target,2.10,'Holy Strike','holy');
     else if(type==='companionStrike')used=activeDamageHit(m,h,target,1.10,'Companion Strike');
     else if(type==='flurry'){
-      const d1=Math.max(1,Math.round(heroDamage(h,target)*1.40));
-      const d2=Math.max(1,Math.round(heroDamage(h,target)*1.40));
+      const d1=Math.max(1,Math.round(heroDamage(h,target)*1.40*activePowerMultiplier(h)));
+      const d2=Math.max(1,Math.round(heroDamage(h,target)*1.40*activePowerMultiplier(h)));
       const before=target.hp;
       target.hp=Math.max(0,target.hp-d1-d2);
       addHeroMetric(m,h.id,'damage',Math.min(before,d1+d2));
@@ -843,7 +859,7 @@ function tryActiveSkill(m,h,now=Date.now()){
 function arenaDefenderDamage(m,h,target,mult,label,element=null){
   if(!target||target.hp<=0)return false;
   const type=element||h.damageType||'physical';
-  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult)));
+  const dmg=applyUniqueDamageReduction(target,Math.max(1,Math.round(heroDamage(h,target,element)*mult*activePowerMultiplier(h))));
   const before=target.hp;target.hp=Math.max(0,target.hp-dmg);recordHeroDamageTaken(m,target,Math.min(before,dmg));
   m.battle.log.unshift(`${h.name.split(' ')[0]} uses ${label} for ${dmg} ${elementIcon[type]||''} ${type} damage.`);
   return true;
@@ -858,7 +874,7 @@ function tryArenaDefenderActive(m,h,now=Date.now()){
     const ally=[...allies].sort((a,z)=>a.hp/a.maxHp-z.hp/z.maxHp)[0];
     const threshold=type==='greaterHeal'?.82:type==='renew'?.88:type==='radiantAid'?.90:.70;
     if(ally&&ally.hp<ally.maxHp*threshold){
-      const amount=Math.max(2,Math.round(((h.int||1)*.38+(h.weaponPower||8)*.12)*(h.healMult||1)*healTypes[type]*2));
+      const amount=Math.max(2,Math.round(((h.int||1)*.38+(h.weaponPower||8)*.12)*(h.healMult||1)*healTypes[type]*activePowerMultiplier(h)*2));
       const before=ally.hp;ally.hp=Math.min(ally.maxHp,ally.hp+amount);
       b.log.unshift(`${h.name.split(' ')[0]} uses ${activeName(type)} on ${ally.name.split(' ')[0]} for ${ally.hp-before}.`);used=true;
     }
@@ -867,10 +883,10 @@ function tryArenaDefenderActive(m,h,now=Date.now()){
     const mult=type==='elementNova'?1.44:1.35;
     targets.forEach(target=>arenaDefenderDamage(m,h,target,mult,activeName(type),element));used=true;
   }else if(type==='commandStrike'){
-    allies.forEach(ally=>{ally.buffs=ally.buffs||{};ally.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout});
+    allies.forEach(ally=>{ally.buffs=ally.buffs||{};ally.buffs.battleShout=now+COMBAT_BUFF_DURATIONS.battleShout*activePowerMultiplier(h)});
     b.log.unshift(`${h.name.split(' ')[0]} uses Battle Shout on the defending party.`);used=true;
   }else if(type==='shieldFaith'){
-    h.buffs=h.buffs||{};h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith;
+    h.buffs=h.buffs||{};h.buffs.shieldFaith=now+COMBAT_BUFF_DURATIONS.shieldFaith*activePowerMultiplier(h);
     b.log.unshift(`${h.name.split(' ')[0]} uses Shield of Faith.`);used=true;
   }else{
     const target=pick(targets),definition={powerStrike:[2,'Power Strike'],shieldSlam:[1.7,'Shield Slam'],preciseShot:[2.2,'Precise Shot'],wardenShot:[1.5,'Warden Shot'],backstab:[2.4,'Backstab'],envenom:[1.9,'Envenom','poison'],smite:[2.1,'Smite','holy'],holyStrike:[2.1,'Holy Strike','holy'],companionStrike:[1.1,'Companion Strike'],flurry:[2.8,'Flurry']}[type];
@@ -1106,15 +1122,15 @@ function markExpeditionAreaCleared(m){
 }
 function beginExpeditionStageIntermission(m,offline=false,finalStage=false){
   const stage=Math.min(EXPEDITION_STAGE_COUNT,Math.ceil(expeditionEncounterCount(m)/EXPEDITION_STAGE_SIZE));
-  let firstClearBonus=null;
-  if(finalStage&&markExpeditionAreaCleared(m)){
+  let firstClearBonus=null,firstClear=false;
+  if(finalStage&&(firstClear=markExpeditionAreaCleared(m))){
     firstClearBonus=awardAreaGuildBonus(m,false);
   }
   const delivered=depositMissionStash(m,finalStage?'Area cleared':'Stage delivery');
   m.completedStages=stage;m.lastCheckpoint=expeditionEncounterCount(m);
   const hidden=typeof document!=='undefined'&&document.hidden;
   m.stageIntermission={stage,finalStage,offlinePaused:!!offline||hidden,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
-  if(finalStage){m.completed=true;m.bossDefeated=true;log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
+  if(finalStage){m.completed=true;m.bossDefeated=true;addGuildActivity(firstClear?5:2,firstClear?'first expedition clear':'expedition clear');log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
   save();
 }
 function continueExpeditionStage(mid){
@@ -1504,6 +1520,7 @@ function offlineCatchup(hiddenMs){
 function stopExpedition(mid){
   const m=s.missions.find(x=>x.id===mid);if(!m)return;
   collectLoot(mid,true);
+  if(m.personalQuest&&m.defeated){const q=s.personalQuests?.find(x=>x.id===m.personalQuestId);if(q){q.status='available';q.missionId=null}}
   m.party.forEach(hid=>{const h=s.members.find(x=>x.id===hid);if(h)h.busy=false});
   s.missions=s.missions.filter(x=>x.id!==mid);activeMissionDomKey='__force__';
   log('Expedition ended: '+m.name+'. '+m.fights+' fights completed.');

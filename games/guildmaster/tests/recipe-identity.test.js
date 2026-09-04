@@ -1,0 +1,23 @@
+const assert=require('node:assert/strict');
+const fs=require('node:fs');
+const path=require('node:path');
+const root=path.join(__dirname,'..');
+const recipes=JSON.parse(fs.readFileSync(path.join(root,'data','recipes.json'),'utf8'));
+const core=fs.readFileSync(path.join(root,'js','core.js'),'utf8');
+const economy=fs.readFileSync(path.join(root,'js','economy.js'),'utf8');
+const byName=Object.fromEntries(recipes.map(recipe=>[recipe[0],recipe]));
+const meta=name=>byName[name]?.[5]||{};
+
+assert.equal(meta('Runed Ring').primaryStat,'mdef','Runed Ring has a distinct runic defensive identity');
+assert.equal(meta('Iron Band').stats.def,2,'Iron Band preserves and improves the Copper Band defensive stat');
+assert.equal(meta('Crystal Signet').primaryStat,'int','Crystal Signet has an arcane primary stat');
+assert.equal(meta('Guardian Ring').primaryStat,'def','Guardian Ring has a defensive primary stat');
+assert.equal(meta('Crystal Pendant').primaryStat,'mdef','Crystal Pendant differs from Arcane Amulet');
+assert.equal(meta('Arcane Amulet').primaryStat,'int','Arcane Amulet has an arcane primary stat');
+assert.equal(meta('Warden Amulet').primaryStat,'mdef','Warden Amulet has its intended defensive primary stat');
+assert.equal(meta('Frostguard Plate').stats.ice,22,'Frostguard Plate actually grants ice resistance');
+assert.equal(meta('Flameward Robes').stats.fire,22,'Flameward Robes actually grant fire resistance');
+assert.match(core,/slot==='Accessories'\|\|slot==='OffHand'.*Math\.pow\(1\.28/s,'accessory and off-hand flat stats scale across tiers');
+assert.match(core,/ITEM_RARITY_MULTIPLIER\[rarity\]/,'recipe-authored flat stats scale with item rarity');
+assert.match(economy,/recipeModifierStatValue\(slot,tier,'Common',k,v\)/,'recipe previews use the same recipe-stat calculation as crafted items');
+console.log('Recipe identity, accessory scaling, and named-item regression tests passed.');

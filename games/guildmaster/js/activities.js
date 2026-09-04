@@ -16,58 +16,59 @@ const QUEST_DIFFICULTIES=[
   {id:'elite',label:'Elite',mult:1.7,reward:2.25}
 ];
 function questDifficulty(){const r=Math.random();return r<.18?QUEST_DIFFICULTIES[3]:r<.46?QUEST_DIFFICULTIES[2]:r<.82?QUEST_DIFFICULTIES[1]:QUEST_DIFFICULTIES[0]}
-function questGuildTier(){return clamp(1+Math.floor(Math.max(0,(s.level||1)-1)/10),1,10)}
-function questWeaponReward(diff){
+function questGuildTier(){return typeof unlockedCraftingTier==='function'?unlockedCraftingTier():clamp(1+Math.max(0,...(s.expeditionGates||[]).map(Number)),1,10)}
+function questWeaponReward(diff,tier=questGuildTier()){
   const chance=diff.id==='elite'?.72:diff.id==='hard'?.38:diff.id==='normal'?.14:.05;
   if(Math.random()>=chance)return null;
-  const tier=questGuildTier();
-  let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon'&&x.r[4]>=Math.max(1,tier-1)&&x.r[4]<=Math.min(10,tier+1));
+  let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon'&&x.r[4]>=Math.max(1,tier-1)&&x.r[4]<=tier);
   if(!pool.length)pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[1]==='Weapon');
   const chosen=pick(pool);if(!chosen)return null;
   const rarity=(diff.id==='elite'||(diff.id==='hard'&&Math.random()<.55))?'Rare':'Uncommon';
   const [name,slot,specific,,rtier]=chosen.r,it=makeSpecificItem(slot,specific,rtier,rarity);
   applyRecipeModifiers(it,chosen.r[5]||{});it.name=name;it.recipeIndex=chosen.i;return it;
 }
-function questRewardFor(diff,type){
-  const base=70+(s.level||1)*38,typeMult=type==='boss'?2.2:type==='craft'?1.25:type==='cook'?1.2:type==='kill'?1.15:1;
+function questRewardFor(diff,type,tier=questGuildTier()){
+  tier=clamp(Number(tier)||1,1,questGuildTier());
+  const base=200*Math.pow(1.65,tier-1)+(s.level||1)*30,typeMult=type==='boss'?2.2:type==='craft'?1.25:type==='cook'?1.2:type==='kill'?1.15:1;
   const rewardDiff=type==='boss'&&diff.id!=='elite'?QUEST_DIFFICULTIES[2]:diff;
-  return{gold:Math.round(base*diff.reward*typeMult),item:questWeaponReward(rewardDiff)};
+  return{gold:Math.round(base*diff.reward*typeMult),item:questWeaponReward(rewardDiff,tier)};
 }
 function makeGatherQuest(diff){
-  let pool=HARVEST_AREAS.filter(a=>harvestAreaUnlocked(a)&&a.req<=Math.max(3,(s.level||1)+3));if(!pool.length)pool=HARVEST_AREAS.filter(harvestAreaUnlocked).slice(0,5);
-  const a=pick(pool),resource=a.resources[0][0],target=Math.max(10,Math.round((22+(s.level||1)*3)*diff.mult/5)*5);
-  return{kind:'gather',key:resource,title:`Gather ${RESOURCE_NAMES[resource]||resource}`,desc:`Gather ${target} ${RESOURCE_NAMES[resource]||resource}.`,target,progress:0,source:a.name};
+  let pool=HARVEST_AREAS.filter(a=>harvestAreaUnlocked(a)&&(s.members||[]).some(h=>(h.skills?.[a.skill]?.level||1)>=(a.req||1)));if(!pool.length)pool=HARVEST_AREAS.filter(harvestAreaUnlocked).slice(0,1);
+  const highest=Math.max(...pool.map(harvestAreaTier)),near=pool.filter(a=>harvestAreaTier(a)>=highest-1),a=pick(near.length?near:pool),resource=a.resources[0][0],target=Math.max(10,Math.round((22+(s.level||1)*3)*diff.mult/5)*5);
+  return{kind:'gather',key:resource,tier:harvestAreaTier(a),title:`Gather ${RESOURCE_NAMES[resource]||resource}`,desc:`Gather ${target} ${RESOURCE_NAMES[resource]||resource}.`,target,progress:0,source:a.name};
 }
 function makeKillQuest(diff){
-  let areas=AREAS.filter(a=>a.level<=Math.max(1,(s.level||1)+6));if(!areas.length)areas=[AREAS[0]];
+  let areas=arr('quest').filter(expeditionAreaUnlocked).map(q=>AREAS.find(a=>a.id===q.areaId||a.name===q.name)).filter(a=>a&&a.tier<=questGuildTier()&&!a.bossGate);if(!areas.length)areas=[AREAS[0]];
+  const highest=Math.max(...areas.map(a=>a.tier||1)),near=areas.filter(a=>(a.tier||1)>=highest-1);areas=near.length?near:areas;
   const area=pick(areas),enemy=pick(area.enemyPool),target=Math.max(5,Math.round((10+(s.level||1)*1.6)*diff.mult));
-  return{kind:'kill',key:enemy,title:`Hunt ${enemy}`,desc:`Defeat ${target} ${enemy}${target===1?'':'s'}.`,target,progress:0,source:area.name};
+  return{kind:'kill',key:enemy,tier:area.tier||1,title:`Hunt ${enemy}`,desc:`Defeat ${target} ${enemy}${target===1?'':'s'}.`,target,progress:0,source:area.name};
 }
 function makeCraftQuest(diff){
   const maxTier=questGuildTier();
   let pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]<=maxTier&&recipeSmithLevel(x.r)<=(s.smithing?.level||1));
   if(!pool.length)pool=recipes.map((r,i)=>({r,i})).filter(x=>x.r[4]===1);
   const chosen=pick(pool),target=Math.max(2,Math.round((3+(s.level||1)*.45)*diff.mult));
-  return{kind:'craft',key:chosen.r[0],recipeIndex:chosen.i,title:`Craft ${chosen.r[0]}`,desc:`Craft ${target} ${chosen.r[0]}.`,target,progress:0,source:'Workshop'};
+  return{kind:'craft',key:chosen.r[0],tier:chosen.r[4]||1,recipeIndex:chosen.i,title:`Craft ${chosen.r[0]}`,desc:`Craft ${target} ${chosen.r[0]}.`,target,progress:0,source:'Workshop'};
 }
 function makeCookingQuest(diff){
-  let pool=Object.entries(MEALS).filter(([,meal])=>(meal.level||1)<=(s.cooking?.level||1));
+  let pool=Object.entries(MEALS).filter(([,meal])=>(meal.level||1)<=(s.cooking?.level||1)&&(meal.tier||1)<=questGuildTier());
   if(!pool.length)pool=Object.entries(MEALS).filter(([,meal])=>(meal.level||1)===1);
   const chosen=pick(pool);if(!chosen)return null;
   const [mealId,meal]=chosen,target=clamp(Math.round((2+(s.level||1)*.28)*diff.mult),2,15);
-  return{kind:'cook',key:mealId,title:`Prepare ${meal.name}`,desc:`Cook ${target} serving${target===1?'':'s'} of ${meal.name}.`,target,progress:0,source:'Guild Kitchens'};
+  return{kind:'cook',key:mealId,tier:meal.tier||1,title:`Prepare ${meal.name}`,desc:`Cook ${target} serving${target===1?'':'s'} of ${meal.name}.`,target,progress:0,source:'Guild Kitchens'};
 }
 function makeBossQuest(diff){
-  const options=[];if((s.level||1)>=3)DUNGEON_AREAS.forEach(a=>options.push({type:'dungeon',a}));if((s.level||1)>=6)RAID_AREAS.forEach(a=>options.push({type:'raid',a}));
+  const options=[];if((s.level||1)>=3)DUNGEON_AREAS.filter(a=>(a.tier||1)<=questGuildTier()).forEach(a=>options.push({type:'dungeon',a}));if((s.level||1)>=6)RAID_AREAS.filter(a=>(a.tier||1)<=questGuildTier()).forEach(a=>options.push({type:'raid',a}));
   if(!options.length)return null;const p=pick(options);
-  return{kind:'boss',key:p.a.boss,title:`Defeat ${p.a.boss}`,desc:`Defeat ${p.a.boss} in ${p.a.name}.`,target:1,progress:0,source:p.a.name,contentType:p.type};
+  return{kind:'boss',key:p.a.boss,tier:p.a.tier||1,title:`Defeat ${p.a.boss}`,desc:`Defeat ${p.a.boss} in ${p.a.name}.`,target:1,progress:0,source:p.a.name,contentType:p.type};
 }
 function generateProceduralQuest(){
   const diff=questDifficulty(),kinds=['gather','kill','craft','cook'];if((s.level||1)>=3)kinds.push('boss');
   let kind=(diff.id==='elite'&&(s.level||1)>=3&&Math.random()<.55)?'boss':pick(kinds);
   let obj=kind==='boss'?makeBossQuest(diff):kind==='craft'?makeCraftQuest(diff):kind==='cook'?makeCookingQuest(diff):kind==='kill'?makeKillQuest(diff):makeGatherQuest(diff);
   if(!obj){kind='kill';obj=makeKillQuest(diff)}
-  return{id:id(),difficulty:diff.id,difficultyLabel:diff.label,...obj,reward:questRewardFor(diff,kind),claimed:false,createdAt:Date.now()};
+  return{id:id(),difficulty:diff.id,difficultyLabel:diff.label,...obj,reward:questRewardFor(diff,kind,obj.tier),claimed:false,createdAt:Date.now()};
 }
 function generateQuestBoard(){
   const offers=[],seen=new Set();let safety=0,bossCount=0;
@@ -80,7 +81,7 @@ function generateQuestBoard(){
     if(q.kind==='boss')bossCount++;
     offers.push(q);
   }
-  s.questBoard={nextRefresh:Date.now()+QUEST_BOARD_REFRESH_MS,offers};save();
+  s.contractRewardVersion=2;s.questBoard={nextRefresh:Date.now()+QUEST_BOARD_REFRESH_MS,offers};save();
 }
 function normalizeQuestBoardBossLimit(){
   if(!s.questBoard||!Array.isArray(s.questBoard.offers))return false;
@@ -106,6 +107,7 @@ function normalizeQuestBoardBossLimit(){
   return changed;
 }
 function ensureQuestBoard(){
+  if(s.contractRewardVersion!==2){generateQuestBoard();return}
   if(!s.questBoard||!Array.isArray(s.questBoard.offers)||!s.questBoard.offers.length||Date.now()>=(s.questBoard.nextRefresh||0)){
     generateQuestBoard();
     return;

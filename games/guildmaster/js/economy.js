@@ -39,16 +39,18 @@ function resourceSourcesHtml(k){
   if(!sources.length)return `<div class="empty" style="padding:12px">No direct source is currently defined for this resource.</div>`;
   return `<div class="resourceSourceList">${sources.map(s=>`<div class="resourceSourceRow"><div><b>${s.name}</b><span>${s.type}${s.detail?' · '+s.detail:''}</span></div></div>`).join('')}</div>`;
 }
+const RESOURCE_SELL_VALUES=[0,1,2,3,5,8,13,21,35,58,95];
+function resourceSellValue(k){const tier=Math.max(1,resourceTier(k));return RESOURCE_SELL_VALUES[tier]||Math.round(95*Math.pow(1.65,tier-10))}
 function openResourceSell(k){
   const owned=s.materials[k]||0;if(owned<=0)return;
-  const initial=Math.min(owned,10);
+  const initial=Math.min(owned,10),unitValue=resourceSellValue(k);
   showModal('Sell '+(RESOURCE_NAMES[k]||k),`<div class="card">
     <div class="name">${tierLabel(resourceTier(k))} · ${RESOURCE_NAMES[k]||k}</div>
-    <div class="muted">You have ${owned}. Resources sell for 1 gold each.</div>
-    <input id="resourceSellRange" type="range" min="1" max="${owned}" value="${initial}" oninput="$('resourceSellAmount').value=this.value;$('resourceSellTotal').textContent=this.value+'g'" style="width:100%;margin-top:14px">
+    <div class="muted">You have ${owned}. Each ${RESOURCE_NAMES[k]||k} sells for ${unitValue.toLocaleString()} gold.</div>
+    <input id="resourceSellRange" type="range" min="1" max="${owned}" value="${initial}" oninput="$('resourceSellAmount').value=this.value;$('resourceSellTotal').textContent=(this.value*${unitValue}).toLocaleString()+'g'" style="width:100%;margin-top:14px">
     <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
-      <input id="resourceSellAmount" type="number" min="1" max="${owned}" value="${initial}" oninput="let v=clamp(Math.floor(+this.value||1),1,${owned});this.value=v;$('resourceSellRange').value=v;$('resourceSellTotal').textContent=v+'g'" style="width:110px">
-      <span class="chip">Value: <b id="resourceSellTotal">${initial}g</b></span>
+      <input id="resourceSellAmount" type="number" min="1" max="${owned}" value="${initial}" oninput="let v=clamp(Math.floor(+this.value||1),1,${owned});this.value=v;$('resourceSellRange').value=v;$('resourceSellTotal').textContent=(v*${unitValue}).toLocaleString()+'g'" style="width:110px">
+      <span class="chip">Value: <b id="resourceSellTotal">${(initial*unitValue).toLocaleString()}g</b></span>
     </div>
     <div class="modalActionRow"><button class="btn gold" onclick="sellResource('${k}')">Sell Resources</button></div>
   </div>
@@ -59,9 +61,9 @@ function sellResource(k){
   const amount=clamp(Math.floor(+($('resourceSellAmount')?.value||0)),1,owned);
   if(!owned||amount<=0||amount>owned)return;
   s.materials[k]-=amount;
-  s.gold+=amount;
+  const total=amount*resourceSellValue(k);s.gold+=total;
   save();closeModal();render();
-  notify('Sold '+amount+' '+(RESOURCE_NAMES[k]||k)+' for '+amount+' gold.','good');
+  notify('Sold '+amount+' '+(RESOURCE_NAMES[k]||k)+' for '+total.toLocaleString()+' gold.','good');
 }
 
 function matHtml(){
@@ -82,9 +84,10 @@ function detachItem(it){
 function rarityAtOrBelow(itemRarity,threshold){return rar.indexOf(itemRarity||'Common')<=rar.indexOf(threshold||'Common')}
 function scrapItemCore(it){const r=recipeForItem(it);if(!r)return null;const recovered={};Object.entries(r[3]||{}).forEach(([k,v])=>{let amount=Math.floor(v*.25);if(amount<1&&v>=3)amount=1;if(amount>0){const added=addStoredResource(k,amount);if(added)recovered[k]=added}});return Object.keys(recovered).length?recovered:null}
 function receiveInventoryItem(it,source='loot'){if(!it)return false;s.inventoryAuto=Object.assign({mode:'off',rarity:'Common'},s.inventoryAuto||{});const rule=s.inventoryAuto;if(rule.mode!=='off'&&rarityAtOrBelow(it.rarity,rule.rarity)){if(rule.mode==='sell'){const value=itemSellValue(it);s.gold+=value;log(`Auto-sold ${it.name} [${it.rarity}] for ${value} gold.`);return false}if(rule.mode==='scrap'){const recovered=scrapItemCore(it);if(recovered){log(`Auto-scrapped ${it.name} [${it.rarity}].`);return false}}}s.inventory.push(it);return true}
-function bulkSellSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let gold=0;items.forEach(it=>{gold+=itemSellValue(it);detachItem(it)});const ids=new Set(items.map(it=>it.id));s.inventory=s.inventory.filter(it=>!ids.has(it.id));s.gold+=gold;selectedInventoryItems.clear();save();render();notify(`Sold ${items.length} selected item${items.length===1?'':'s'} for ${gold} gold.`,'good')}
+function bulkSellSelected(){const items=s.inventory.filter(it=>!it.starter&&selectedInventoryItems.has(it.id));if(!items.length)return notify('No sellable items selected.');let gold=0;items.forEach(it=>{gold+=itemSellValue(it);detachItem(it)});const ids=new Set(items.map(it=>it.id));s.inventory=s.inventory.filter(it=>!ids.has(it.id));s.gold+=gold;selectedInventoryItems.clear();save();render();notify(`Sold ${items.length} selected item${items.length===1?'':'s'} for ${gold} gold.`,'good')}
 function bulkScrapSelected(){const items=s.inventory.filter(it=>selectedInventoryItems.has(it.id));if(!items.length)return notify('No items selected.');let scrapped=0,skipped=0;const removeIds=new Set();items.forEach(it=>{const recovered=scrapItemCore(it);if(recovered){detachItem(it);removeIds.add(it.id);scrapped++}else skipped++});s.inventory=s.inventory.filter(it=>!removeIds.has(it.id));removeIds.forEach(id=>selectedInventoryItems.delete(id));save();render();notify(`Scrapped ${scrapped} item${scrapped===1?'':'s'}${skipped?` · ${skipped} could not be scrapped`:''}.`,'good')}
 function itemSellValue(it){
+  if(it?.starter)return 0;
   const rarityMult={Common:1,Uncommon:1.35,Rare:2,Epic:3.3,Legendary:5.5,Mythic:9,Unique:14}[it.rarity]||1;
   return Math.max(1,Math.round(((it.power||10)*.45+5)*rarityMult*.5));
 }
@@ -94,6 +97,7 @@ function recipeForItem(it){
 }
 function sellItem(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
+  if(it.starter)return notify('Starter equipment has no sell value.');
   const value=itemSellValue(it);
   detachItem(it);
   s.inventory=s.inventory.filter(x=>x.id!==iid);
@@ -103,6 +107,7 @@ function sellItem(iid){
 }
 function scrapItem(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
+  if(it.starter)return notify('Starter equipment cannot be scrapped.');
   const recovered=scrapItemCore(it);
   if(!recovered)return notify('This item cannot be scrapped right now (no recipe or no storage space).');
   detachItem(it);s.inventory=s.inventory.filter(x=>x.id!==iid);save();closeModal();render();
@@ -177,7 +182,7 @@ function renderMarket(){
   $('marketItems').innerHTML=s.market.offers.length?s.market.offers.map(o=>{
     if(o.kind==='gear'){
       const it=o.item;
-      return `<div class="card marketActionCard"><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${itemEquipSlot(it)} · ${it.rarity}</div><div class="good">${statText(it)}</div><button class="btn gold actionButton" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
+      return `<div class="card marketActionCard"><div class="itemVisual">${equipmentIcon(it)}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${itemEquipSlot(it)} · ${it.rarity}</div><div class="good">${statText(it)}</div><button class="btn gold actionButton" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
     }
     return `<div class="card marketActionCard"><div class="itemVisual">${gameIcon('ui','package','📦','gameAsset itemAsset')}</div><div class="name">${o.qty}× ${RESOURCE_NAMES[o.resource]||o.resource}</div><div class="muted">Basic resource bundle</div><button class="btn gold actionButton" onclick="buyMarketOffer(${o.id})">Buy · ${o.price}g</button></div>`;
   }).join(''):'<div class="empty">Market sold out. New stock arrives at the next refresh.</div>';
@@ -224,7 +229,7 @@ function inventorySortValue(it,key){
 }
 function sortedInventoryItems(){
   return s.inventory
-    .filter(it=>(inventoryShowEquipped||!it.equipped)&&inventoryMatchesFilter(it))
+    .filter(it=>!it.starter&&(inventoryShowEquipped||!it.equipped)&&inventoryMatchesFilter(it))
     .sort((a,b)=>{
       const av=inventorySortValue(a,inventorySortKey),bv=inventorySortValue(b,inventorySortKey);
       const cmp=av-bv||String(a.name||'').localeCompare(String(b.name||''));
@@ -239,12 +244,12 @@ function toggleEquippedItems(){
 function openInventoryEquip(iid){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
   const owner=it.equipped?s.members.find(x=>x.id===it.equipped):null;
-  const candidates=s.members.filter(h=>equipmentTargetsForItem(h,it).length);
+  const candidates=it.starter?(owner?[owner]:[]):s.members.filter(h=>equipmentTargetsForItem(h,it).length);
   const recipe=recipeForItem(it);
 
   const profile=itemProfileParts(it),stats=itemStatParts(it);
   showModal(it.name,`<div class="card itemDetailCard">
-    <div class="itemDetailHeader"><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||'⚔️'):(itemIcons[it.slot]||'🎒')}</div><div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity}</div></div></div>
+    <div class="itemDetailHeader"><div class="itemVisual">${equipmentIcon(it)}</div><div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity}</div></div></div>
     <div class="itemDetailLayout">
       <div class="itemDetailInformation">
         <section class="recipeInfoSection"><h4>Item Profile</h4><div class="recipeProfileList">${profile.map(x=>`<span>${x}</span>`).join('')}</div></section>
@@ -253,8 +258,7 @@ function openInventoryEquip(iid){
       <aside class="itemActionBox">
         <h4>Item Actions</h4>
         ${owner?`<div class="itemOwner">Equipped by <b>${owner.name}</b></div>`:'<div class="itemOwner">Currently unequipped</div>'}
-        <div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div>
-        <div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>
+        ${it.starter?'<div class="itemValue">Basic equipment · automatically replaced by a real weapon</div>':`<div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div><div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>`}
       </aside>
     </div>
     <section class="itemRuneSection"><div class="itemSectionHeading"><h3>Runes</h3><span>${(it.runes||[]).length} / ${runeSlots(it)} socketed</span></div>${runeSlotsHtml(it)}${runeSlots(it)>0?runeDetailsHtml(it):'<div class="muted">This item has no rune slots.</div>'}</section>
@@ -268,11 +272,35 @@ function openInventoryEquip(iid){
     </div>`;
   }).join('')}</div>`);
 }
+function inventorySummaryStats(it){
+  const stats=[],bonuses=new Map(),gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1;
+  const wholePercent=new Set(['lifesteal','attackSpeed','fire','ice','poison','lightning','holy','dark']);
+  const decimalPercent=new Set(['armorPen','parry','critChance','critDamage','accuracy','elementalDamage','healingPower','statusChance','cleave','counter','damageVariance','damageBonus','healBonus','physicalDodgeBonus','magicalDodgeBonus']);
+  const add=(key,value)=>{value=(Number(value)||0)*gearMult;if(value)bonuses.set(key,(bonuses.get(key)||0)+value)};
+  if(it.slot==='Weapon'){
+    stats.push(['Attack',Math.round((it.weaponPower||0)*gearMult)]);
+    stats.push(['Attack Speed',weaponAttackTime(it.weaponTemplate||it.weaponType||it.name).toFixed(2)+'s']);
+  }
+  add(it.stat,it.value);add(it.secondaryStat,it.secondaryValue);add(it.tertiaryStat,it.tertiaryValue);
+  Object.entries(it.extraStats||{}).forEach(([key,value])=>add(key,value));
+  (it.runes||[]).forEach(id=>{const rune=RUNES[id];if(rune)add(rune.stat,rune.value)});
+  add('block',itemBlockValue(it));add('armorPen',it.armorPen);add('parry',it.parry);add('critChance',it.weaponCritChance);add('critDamage',it.critDamage);add('accuracy',it.accuracy);add('elementalDamage',it.elementalDamage);add('healingPower',it.healingPower);add('statusChance',it.statusChance);add('cleave',it.cleave);add('counter',it.counter);add('damageVariance',it.damageVariance);add('damageBonus',it.damageBonus);add('healBonus',it.healBonus);add('critChance',it.itemCritBonus);add('threatBonus',it.itemThreatBonus);add('physicalDodgeBonus',it.itemPhysicalDodgeBonus);add('magicalDodgeBonus',it.itemMagicalDodgeBonus);
+  const bonusLimit=it.slot==='Weapon'?3:5;
+  [...bonuses.entries()].slice(0,bonusLimit).forEach(([key,value])=>{
+    const shown=decimalPercent.has(key)?Math.round(value*100):Math.round(value*100)/100;
+    stats.push([statName(key),`${shown>0?'+':''}${shown}${decimalPercent.has(key)||wholePercent.has(key)?'%':''}`]);
+  });
+  return stats.slice(0,5);
+}
+function inventorySummaryHtml(it){
+  const stats=inventorySummaryStats(it);
+  return stats.length?`<div class="inventorySummaryGrid stats-${stats.length}">${stats.map(([label,value])=>`<div class="inventorySummaryStat"><span>${label}</span><strong>${value}</strong></div>`).join('')}</div>`:'';
+}
 function renderInv(){
   $('matBar').innerHTML=matHtml();$('craftMats').innerHTML=matHtml();if($('runeCraftMats'))$('runeCraftMats').innerHTML=matHtml();
   const existingIds=new Set(s.inventory.map(it=>it.id));[...selectedInventoryItems].forEach(id=>{if(!existingIds.has(id))selectedInventoryItems.delete(id)});
   const visible=sortedInventoryItems();
-  $('items').innerHTML=visible.length?visible.map(it=>{const owner=it.equipped?s.members.find(h=>h.id===it.equipped):null;const selected=selectedInventoryItems.has(it.id);const click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]||'🎒'):(itemIcons[it.slot]||'🎒')}</div>${runeSlotsHtml(it,true)}<div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity}${it.slot==='Weapon'?` · ${it.weaponType}`:''}${owner?' · '+owner.name:''}</div><div class="good">${statText(it)}</div></div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
+  $('items').innerHTML=visible.length?visible.map(it=>{const selected=selectedInventoryItems.has(it.id),click=inventorySelectionMode?`toggleInventoryItemSelection(${it.id})`:`openInventoryEquip(${it.id})`;return `<div class="card inventoryItemCard inventorySummaryCard ${selected?'selectedItem':''}" style="cursor:pointer" onclick="${click}">${inventorySelectionMode?`<span class="inventorySelectMark">${selected?'✓':''}</span>`:''}<div class="itemVisual">${equipmentIcon(it)}</div><div class="name inventorySummaryName">${it.name}</div>${inventorySummaryHtml(it)}</div>`}).join(''):'<div class="empty">No items match the current inventory filter.</div>';
   const sel=$('inventorySortSelect'),dir=$('inventorySortDir');if(sel)sel.value=inventorySortKey;if(dir)dir.textContent=inventorySortDirection==='desc'?'Highest first':'Lowest first';updateInventoryControlUI();
 }
 
@@ -292,7 +320,7 @@ function openRuneSocketItem(iid){
   if(cap<=0)return notify('Common items have no rune slots.');
   const available=Object.keys(RUNES).filter(id=>(s.runes[id]||0)>0);
   showModal('Socket Rune · '+it.name,`<div class="card">
-    <div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div>
+    <div class="itemVisual">${equipmentIcon(it)}</div>
     <div class="name ${rarityClass(it.rarity)}">${it.name}</div>
     <div class="muted">${it.rarity} · Rune slots ${used}/${cap}</div>
     ${runeSlotsHtml(it)}
@@ -315,10 +343,10 @@ function renderRunecrafting(){
   if(!$('runeRecipes'))return;
   const owned=Object.entries(s.runes||{}).filter(([k,v])=>v>0);
   $('runeInventory').innerHTML=owned.length?owned.sort((a,b)=>runeTier(a[0])-runeTier(b[0])).map(([id,v])=>`<div class="mat">${runeIcon(id)} <span class="resourceTier">${tierLabel(runeTier(id))}</span> ${RUNES[id]?.name||id} <b>${v}</b></div>`).join(''):'<div class="muted">No runes crafted yet.</div>';
-  const runeGroups=new Map();Object.entries(RUNES).forEach(entry=>{const t=runeTier(entry[0]);if(!runeGroups.has(t))runeGroups.set(t,[]);runeGroups.get(t).push(entry)});
+  const runeGroups=new Map();Object.entries(RUNES).filter(([id])=>runeTier(id)<=unlockedCraftingTier()).forEach(entry=>{const t=runeTier(entry[0]);if(!runeGroups.has(t))runeGroups.set(t,[]);runeGroups.get(t).push(entry)});
   $('runeRecipes').innerHTML=[...runeGroups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="runeTierGroup"><div class="runeTierHeading"><span>${tierLabel(tier)}</span><small>${TIER_IDENTITIES[tier]||'Masterwork'} runes · ${entries.length}</small></div><div class="recipes">${entries.map(([id,r])=>{const ok=Object.entries(r.cost).every(([k,v])=>(s.materials[k]||0)>=v);return `<div class="card runeActionCard"><div class="itemVisual">${runeIcon(id,'gameAsset itemAsset')}</div><div class="name">${r.name}</div><div class="muted">${tierLabel(tier)} · ${r.desc}</div><div class="chips" style="margin-top:9px">${Object.entries(r.cost).map(([k,v])=>`<span class="chip">${tierLabel(resourceTier(k))} · ${gameIcon('resource',k,'')} ${RESOURCE_NAMES[k]||k} ${v}</span>`).join('')}</div><button class="btn ${ok?'gold':''} actionButton" ${ok?'':'disabled'} onclick="craftRune('${id}')">Create Rune</button></div>`}).join('')}</div></div>`).join('');
   const gear=s.inventory.filter(it=>!it.equipped);
-  $('runeSocketItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openRuneSocketItem(${it.id})"`:''}><div class="itemVisual">${it.slot==='Weapon'?(weaponDefForItem(it)?.icon||itemIcons[it.slot]):(itemIcons[it.slot]||'◇')}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">${tierLabel(runeTier(id))} · ${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items have no rune slots.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear is available for rune socketing.</div>';
+  $('runeSocketItems').innerHTML=gear.length?gear.map(it=>{const cap=runeSlots(it),used=(it.runes||[]).length;return `<div class="card" style="cursor:${cap?'pointer':'default'}" ${cap?`onclick="openRuneSocketItem(${it.id})"`:''}><div class="itemVisual">${equipmentIcon(it)}</div><div class="name ${rarityClass(it.rarity)}">${it.name}</div><div class="muted">${tierLabel(itemTier(it))} · ${it.rarity} · Rune slots ${used}/${cap}</div>${cap?`<div class="chips" style="margin-top:8px">${used?it.runes.map(id=>`<span class="chip">${tierLabel(runeTier(id))} · ${runeIcon(id)} ${RUNES[id]?.name||id}</span>`).join(''):'<span class="chip">Empty rune slots available</span>'}</div>`:'<div class="muted" style="margin-top:8px">Common items have no rune slots.</div>'}</div>`}).join(''):'<div class="empty">No unequipped gear is available for rune socketing.</div>';
 }
 
 function renderCraftQueue(){normalizeCraftQueue();$('craftQueue').innerHTML=s.craftJobs.length?s.craftJobs.map((j,index)=>{const r=recipes[j.recipe],now=Date.now(),waiting=index>0&&now<j.start,total=Math.max(1,j.end-j.start),pct=waiting?0:clamp((now-j.start)/total*100,0,100),remainingTime=waiting?j.start-now:j.end-now,count=Math.max(1,j.remaining||j.qty||1);return `<div class="card"><div class="mission-row"><div><div class="name">${r?r[0]:'Unknown recipe'} ×${count}</div><div class="muted">${index===0?'Crafting now':'Queue group '+(index+1)} · ${waiting?'waiting':'crafting'} · current item</div></div><span class="chip">${index===0?'Active':'#'+(index+1)}</span></div><div class="progressWrap"><div class="progressMeta"><span>${waiting?'Waiting':Math.floor(pct)+'%'}</span><span class="timer" data-start="${j.start}" data-end="${waiting?j.start:j.end}">${fmt(remainingTime)}</span></div><div class="progressTrack"><div class="progressFill" ${waiting?'':`data-start="${j.start}" data-end="${j.end}"`} style="width:${pct}%"></div></div></div><button class="btn" style="margin-top:9px" onclick="cancelCraftJob(${j.id})">Cancel Group</button></div>`}).join(''):'<div class="empty">Nothing is being crafted.</div>'}
@@ -333,7 +361,7 @@ function renderCooking(){
   $('mealInventory').innerHTML=owned.length?owned.map(([id,count])=>{const meal=MEALS[id];return `<div class="mat"><span>${meal?.icon||'🍲'}</span><span><b>${meal?.name||id}</b><small>${meal?.desc||''}</small></span><strong>${count}</strong></div>`}).join(''):'<div class="empty">No prepared meals yet.</div>';
   normalizeCookingQueue();const now=Date.now();
   $('cookingQueue').innerHTML=s.cookingJobs.length?s.cookingJobs.map((j,index)=>{const meal=MEALS[j.meal],waiting=index>0&&now<j.start,total=Math.max(1,j.end-j.start),pct=waiting?0:clamp((now-j.start)/total*100,0,100),remaining=Math.max(1,j.remaining||j.qty||1);return `<div class="card"><div class="mission-row"><div><div class="name">${meal?.icon||'🍲'} ${meal?.name||'Unknown meal'} ×${remaining}</div><div class="muted">${index===0?'Cooking now':'Queue group '+(index+1)}</div></div><span class="chip">${index===0?'Active':'#'+(index+1)}</span></div><div class="progressWrap"><div class="progressMeta"><span>${waiting?'Waiting':Math.floor(pct)+'%'}</span><span class="timer" data-start="${j.start}" data-end="${waiting?j.start:j.end}">${fmt(waiting?j.start-now:j.end-now)}</span></div><div class="progressTrack"><div class="progressFill" ${waiting?'':`data-start="${j.start}" data-end="${j.end}"`} style="width:${pct}%"></div></div></div><button class="btn" style="margin-top:9px" onclick="cancelCookingJob(${j.id})">Cancel Group</button></div>`}).join(''):'<div class="empty">Nothing is being cooked.</div>';
-  const groups=new Map();Object.entries(MEALS).forEach(entry=>{const tier=entry[1].tier||1;if(!groups.has(tier))groups.set(tier,[]);groups.get(tier).push(entry)});
+  const groups=new Map();Object.entries(MEALS).filter(([,meal])=>Math.max(1,Number(meal.tier)||1)<=unlockedCraftingTier()).forEach(entry=>{const tier=entry[1].tier||1;if(!groups.has(tier))groups.set(tier,[]);groups.get(tier).push(entry)});
   $('cookingRecipes').innerHTML=[...groups.entries()].sort((a,b)=>a[0]-b[0]).map(([tier,entries])=>`<div class="recipeCategory open"><div class="recipeCategoryHeader"><span class="recipeCategoryName">${tierLabel(tier)} · Provisions</span><span class="recipeCategoryCount">${entries.length} recipe${entries.length===1?'':'s'}</span></div><div class="recipeCategoryBody">${entries.map(([id,meal])=>{const levelOk=s.cooking.level>=meal.level,materialOk=Object.entries(meal.cost).every(([k,v])=>(s.materials[k]||0)>=v),max=maxCookQuantity(meal);return `<div class="recipeLine ${materialOk?'':'unaffordable'} ${levelOk?'':'recipeLocked'}"><div class="recipeLineHeader"><div class="recipeLineIcon">${meal.icon||'🍲'}</div><div><div class="recipeLineName">${meal.name}</div><div class="recipeLineType">Cooking ${meal.level} · +${meal.xp} XP · ${Math.ceil(cookingDuration(meal)/1000)}s per serving</div></div></div><div class="recipeLineDetails recipeDetailLayout"><div class="recipeItemInformation"><section class="recipeInfoSection"><h4>Mission Provision</h4><div class="recipeProfileList"><span>${meal.desc}</span><span>One serving supports the whole party for one mission.</span></div></section></div><aside class="recipeCraftingBox"><h4>Ingredients</h4><div class="recipeDetailMaterials">${Object.entries(meal.cost).map(([k,v])=>{const have=s.materials[k]||0;return `<span class="${have>=v?'enough':'missing'}"><b>${have}/${v}</b> ${RESOURCE_NAMES[k]||k} <small>${tierLabel(resourceTier(k))}</small></span>`}).join('')}</div><div class="recipeLineAction">${levelOk&&materialOk?`<div class="recipeQuantityControl"><span>×</span><input type="number" id="cookQty-${id}" min="1" max="${max}" value="1"><button class="btn gold" onclick="cookMeal('${id}',$('cookQty-${id}').value)">Cook</button></div>`:`<button class="btn" disabled>${levelOk?'Missing ingredients':'Requires Cooking '+meal.level}</button>`}</div></aside></div></div>`}).join('')}</div></div>`).join('');
 }
 
@@ -354,7 +382,7 @@ function recipePreview(r){
       profile.push(TWO_HANDED_WEAPONS.has(specificName)||TWO_HANDED_WEAPONS.has(weaponTypeFor(specificName))?'Two-handed':'One-handed');
       profile.push(`Scales with ${weaponScalingLabel(w)}`);
       profile.push(`${elementIcon[w.type]||''} ${w.type} damage`);
-      stats.push(`Attack ${w.base+tier*2}`);
+      stats.push(`Attack ${equipmentPrimaryValue(w.base+2,tier,'Common')}`);
       stats.push(`Attack Speed ${weaponAttackTime(specificName).toFixed(2)}s`);
       const statBudget=Math.max(1,Math.round(2+tier*.7));
       if(w.scale2){
@@ -366,19 +394,19 @@ function recipePreview(r){
   }else if(slot==='Armor'){
     const p=armorProfile(specificName);
     profile.push(`${p.armorClass} armor`);
-    stats.push(`+${p.base+tier*2} ${statName(p.stat)}`);
+    stats.push(`+${equipmentPrimaryValue(p.base+2,tier,'Common')} ${statName(p.stat)}`);
     const totalBlock=(p.block||0)+(meta.block||0);
     if(totalBlock)stats.push(`+${totalBlock} Block`);
     if(specificName.includes('Frostguard'))stats.push(`+${12+tier*2} Ice Res`);
     if(specificName.includes('Flameward'))stats.push(`+${12+tier*2} Fire Res`);
   }else if(slot==='Ring'){
     profile.push('Ring');
-    let stat=specificName.includes('Guardian')?'def':specificName.includes('Crystal')?'int':specificName.includes('Runed')?'mdef':'str';
-    stats.push(`+${Math.round(3+tier*1.6)} ${statName(stat)}`);
+    let stat=meta.primaryStat||(displayName.includes('Guardian')?'def':displayName.includes('Crystal')?'int':displayName.includes('Runed')?'mdef':'str');
+    stats.push(`+${equipmentPrimaryValue(4.6,tier,'Common')} ${statName(stat)}`);
   }else if(slot==='Amulet'){
     profile.push('Amulet');
-    let stat=specificName.includes('Warden')?'mdef':specificName.includes('Arcane')?'int':specificName.includes('Crystal')?'mdef':'hp';
-    const value=stat==='hp'?Math.round(12+tier*4):Math.round(3+tier*1.8);
+    let stat=meta.primaryStat||(displayName.includes('Warden')?'mdef':displayName.includes('Arcane')?'int':displayName.includes('Crystal')?'mdef':'hp');
+    const value=stat==='hp'?equipmentPrimaryValue(16,tier,'Common'):equipmentPrimaryValue(4.8,tier,'Common');
     stats.push(`+${value} ${statName(stat)}`);
   }else if(slot==='Accessories'||slot==='OffHand'){
     profile.push(meta.accessoryType||specificName||slotLabel(slot));
@@ -388,7 +416,8 @@ function recipePreview(r){
   Object.entries(meta.stats||{}).forEach(([k,v])=>{
     const decimalPercent=['statusChance','accuracy','armorPen','parry','critChance','critDamage','cleave','counter','damageVariance'].includes(k);
     const wholePercent=['fire','ice','poison','lightning','holy','dark','lifesteal','attackSpeed'].includes(k);
-    stats.push(`+${decimalPercent?Math.round(v*100):v}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
+    const shown=recipeModifierStatValue(slot,tier,'Common',k,v);
+    stats.push(`+${decimalPercent?Math.round(shown*100):shown}${decimalPercent||wholePercent?'%':''} ${statName(k)}`);
   });
   if(meta.damageBonus)stats.push(`+${Math.round(meta.damageBonus*100)}% damage`);
   if(meta.healBonus)stats.push(`+${Math.round(meta.healBonus*100)}% healing`);
@@ -526,7 +555,7 @@ function renderCraft(){
     const craftable=Object.entries(r[3]||{}).every(([k,v])=>(s.materials[k]||0)>=v)&&(s.smithing?.level||1)>=recipeSmithLevel(r);
     return visible&&typeOk&&(!recipeCraftableOnly||craftable);
   });
-  if(!list.length){$('recipeList').innerHTML=`<div class="empty">${recipeCraftableOnly?'No currently craftable recipes match this filter.':'No recipes discovered here yet. Find new crafting resources to reveal recipes.'}</div>`;return}
+  if(!list.length){$('recipeList').innerHTML=`<div class="empty">${recipeCraftableOnly?'No currently craftable recipes match this filter.':'No recipes are available in the tiers you have unlocked.'}</div>`;return}
 
   const groups=new Map();
   list.forEach(([r,i])=>{

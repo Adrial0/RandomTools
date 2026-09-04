@@ -43,7 +43,7 @@ assert.ok(woodenWeapon,'Woodworking weapons consume processed planks');
 
 context.s={
   professions:{smelting:{level:11,xp:23,workerId:1,jobs:[{id:77,kind:'recipe',recipe:context.recipes.findIndex(r=>r[5]?.outputResource==='CopperBar'),qty:1,remaining:1,start:Date.now(),end:Date.now()+5000,duration:5000,effects:{}}]}},smithing:{level:8,xp:17},cooking:{level:4,xp:9},craftJobs:[],cookingJobs:[],
-  members:[{id:1,name:'Ada Forge',class:'Warrior',busy:true,professionBusy:'smelting',professionTrait:{profession:'smelting',trait:'swift_hands'}}],recruits:[],materials:{},discoveredResources:[],up:{craftSpeed:0,smith:0},inventory:[],runes:{},meals:{},next:2
+  members:[{id:1,name:'Ada Forge',class:'Warrior',busy:true,professionBusy:'smelting',professionTrait:{profession:'smelting',trait:'swift_hands'}}],recruits:[],materials:{},discoveredResources:[],expeditionGates:[1,2,3,4,5,6,7,8,9],up:{craftSpeed:0,smith:0},inventory:[],runes:{},meals:{},next:2
 };
 vm.runInContext('normalizeProfessionState()',context);
 assert.equal(context.s.professions.smithing.level,11,'legacy Smelting level merged into Smithing');

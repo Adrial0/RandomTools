@@ -70,67 +70,67 @@
     },
     "GoblinInsignia": {
       "name": "Goblin Insignia",
-      "image": ""
+      "image": "images/resources/goblin-insignia.png"
     },
     "WolfPelt": {
       "name": "Wolf Pelt",
-      "image": ""
+      "image": "images/resources/wolf-pelt.png"
     },
     "BanditToken": {
       "name": "Bandit Token",
-      "image": ""
+      "image": "images/resources/bandit-token.png"
     },
     "SlimeGel": {
       "name": "Slime Gel",
-      "image": ""
+      "image": "images/resources/slime-gel.png"
     },
     "GraveDust": {
       "name": "Grave Dust",
-      "image": ""
+      "image": "images/resources/grave-dust.png"
     },
     "SpiderSilk": {
       "name": "Spider Silk",
-      "image": ""
+      "image": "images/resources/spider-silk.png"
     },
     "GhoulIchor": {
       "name": "Ghoul Ichor",
-      "image": ""
+      "image": "images/resources/ghoul-ichor.png"
     },
     "CultistRune": {
       "name": "Cultist Rune",
-      "image": ""
+      "image": "images/resources/cultist-rune.png"
     },
     "DrakeScale": {
       "name": "Drake Scale",
-      "image": ""
+      "image": "images/resources/drake-scale.png"
     },
     "OgreHeart": {
       "name": "Ogre Heart",
-      "image": ""
+      "image": "images/resources/ogre-heart.png"
     },
     "WraithEssence": {
       "name": "Wraith Essence",
-      "image": ""
+      "image": "images/resources/wraith-essence.png"
     },
     "DemonHorn": {
       "name": "Demon Horn",
-      "image": ""
+      "image": "images/resources/demon-horn.png"
     },
     "CrownBone": {
       "name": "Crown Bone",
-      "image": ""
+      "image": "images/resources/crown-bone.png"
     },
     "BroodSilk": {
       "name": "Broodmother Silk",
-      "image": ""
+      "image": "images/resources/broodmother-silk.png"
     },
     "ColossusIchor": {
       "name": "Colossus Ichor",
-      "image": ""
+      "image": "images/resources/solossus-ichor.png"
     },
     "HighRune": {
       "name": "High Cultist Rune",
-      "image": ""
+      "image": "images/resources/high-cultist-rune.png"
     },
     "AncientDrakeScale": {
       "name": "Ancient Drake Scale",
@@ -160,17 +160,17 @@
       "name": "Fish",
       "image": "images/resources/fish.png"
     },
-    "GameMeat": {"name":"Game Meat","image":""},
-    "WolfMeat": {"name":"Wolf Meat","image":""},
-    "Pearlfin": {"name":"Pearlfin","image":""},
-    "RedMeat": {"name":"Red Meat","image":""},
-    "FrostVenison": {"name":"Frost Venison","image":""},
-    "StormEel": {"name":"Storm Eel","image":""},
-    "SkyKoi": {"name":"Sky Koi","image":""},
-    "DuskmothMeat": {"name":"Duskmoth Meat","image":""},
+    "GameMeat": {"name":"Game Meat","image":"images/resources/game-meat.png"},
+    "WolfMeat": {"name":"Wolf Meat","image":"images/resources/wolf-meat.png"},
+    "Pearlfin": {"name":"Pearlfin","image":"images/resources/pearlfin.png"},
+    "RedMeat": {"name":"Red Meat","image":"images/resources/red-meat.png"},
+    "FrostVenison": {"name":"Frost Venison","image":"images/resources/frost-venison.png"},
+    "StormEel": {"name":"Storm Eel","image":"images/resources/storm-eel.png"},
+    "SkyKoi": {"name":"Sky Koi","image":"images/resources/sky-koi.png"},
+    "DuskmothMeat": {"name":"Duskmoth Meat","image":"images/resources/duskmoth-meat.png"},
     "Mithril": {
       "name": "Mithril Ore",
-      "image": "images/resources/mithril.png"
+      "image": "images/resources/mithril-ore.png"
     },
     "Hardwood": {
       "name": "Hardwood",
@@ -178,71 +178,71 @@
     },
     "Ironwood": {
       "name": "Ironwood",
-      "image": ""
+      "image": "images/resources/ironwood.png"
     },
     "SpiritBark": {
       "name": "Spirit Bark",
-      "image": ""
+      "image": "images/resources/spirit-bark.png"
     },
     "ManaBloom": {
       "name": "Mana Bloom",
-      "image": ""
+      "image": "images/resources/manabloom.png"
     },
     "Sunstone": {
       "name": "Sunstone",
-      "image": ""
+      "image": "images/resources/sunstone.png"
     },
     "Sandglass": {
       "name": "Sandglass",
-      "image": ""
+      "image": "images/resources/sandglass.png"
     },
     "CinderBloom": {
       "name": "Cinder Bloom",
-      "image": ""
+      "image": "images/resources/cinder-bloom.png"
     },
     "Nightshade": {
       "name": "Nightshade",
-      "image": ""
+      "image": "images/resources/nightshade.png"
     },
     "BogIron": {
       "name": "Bog Iron",
-      "image": ""
+      "image": "images/resources/bog-iron.png"
     },
     "VenomSap": {
       "name": "Venom Sap",
-      "image": ""
+      "image": "images/resources/venom-sap.png"
     },
     "StarMetal": {
       "name": "Star Metal",
-      "image": ""
+      "image": "images/resources/star-metal.png"
     },
     "SkyCrystal": {
       "name": "Sky Crystal",
-      "image": ""
+      "image": "images/resources/sky-crystal.png"
     },
     "GlacialOre": {
       "name": "Glacial Ore",
-      "image": ""
+      "image": "images/resources/glacial-ore.png"
     },
     "Frostbloom": {
       "name": "Frostbloom",
-      "image": ""
+      "image": "images/resources/frostbloom.png"
     },
     "WhitePelt": {
       "name": "White Pelt",
-      "image": ""
+      "image": "images/resources/white-pelt.png"
     },
     "CinderOre": {
       "name": "Cinder Ore",
-      "image": ""
+      "image": "images/resources/cinder-ore.png"
     },
     "StormGlass": {
       "name": "Storm Glass",
-      "image": ""
+      "image": "images/resources/storm-glass.png"
     },
     "MagmaCore": {
       "name": "Magma Core",
-      "image": ""
+      "image": "images/resources/magma-core.png"
     },
     "Voidstone": {
       "name": "Voidstone",
@@ -250,7 +250,7 @@
     },
     "AetherCrystal": {
       "name": "Aether Crystal",
-      "image": ""
+      "image": "images/resources/aether-crystal.png"
     },
     "AstralThread": {
       "name": "Astral Thread",
@@ -258,7 +258,7 @@
     },
     "DeepPearl": {
       "name": "Deep Pearl",
-      "image": ""
+      "image": "images/resources/deep-pearl.png"
     },
     "Adamantite": {"name":"Adamantite","image":""},
     "CelestialSilk": {"name":"Celestial Silk","image":""},
@@ -276,47 +276,47 @@
     "Worldroot": {"name":"Worldroot","image":""},
     "StarlightCore": {"name":"Starlight Core","image":""},
     "Endstone": {"name":"Endstone","image":""},
-    "Moonpetal": {"name":"Moonpetal","image":""},
-    "CreekScale": {"name":"Creek Scale","image":""},
-    "Stormhide": {"name":"Stormhide","image":""},
-    "HarpyFeather": {"name":"Harpy Feather","image":""},
-    "Tideglass": {"name":"Tideglass","image":""},
-    "ShrineRelic": {"name":"Shrine Relic","image":""},
-    "RunebarkRelic": {"name":"Runebark Relic","image":""},
-    "Sporecap": {"name":"Sporecap","image":""},
+    "Moonpetal": {"name":"Moonpetal","image":"images/resources/moonpetal.png"},
+    "CreekScale": {"name":"Creek Scale","image":"images/resources/creek-scale.png"},
+    "Stormhide": {"name":"Stormhide","image":"images/resources/stormhide.png"},
+    "HarpyFeather": {"name":"Harpy Feather","image":"images/resources/harpy-feather.png"},
+    "Tideglass": {"name":"Tideglass","image":"images/resources/tideglass.png"},
+    "ShrineRelic": {"name":"Shrine Relic","image":"images/resources/shrine-relic.png"},
+    "RunebarkRelic": {"name":"Runebark Relic","image":"images/resources/runebark-relic.png"},
+    "Sporecap": {"name":"Sporecap","image":"images/resources/sporecap.png"},
     "Shardglass": {"name":"Shardglass","image":""},
     "CorsairSeal": {"name":"Corsair Seal","image":""},
     "CometDust": {"name":"Comet Dust","image":""},
     "PhaseSilk": {"name":"Phase Silk","image":""},
     "CrownShard": {"name":"Crown Shard","image":""},
     "SeraphFeather": {"name":"Seraph Feather","image":""},
-    "CopperBar": {"name":"Copper Ingot","image":""},
-    "IronBar": {"name":"Iron Ingot","image":""},
-    "SilverBar": {"name":"Silver Ingot","image":""},
-    "MithrilBar": {"name":"Mithril Ingot","image":""},
-    "StarMetalBar": {"name":"Star Metal Ingot","image":""},
+    "CopperBar": {"name":"Copper Ingot","image":"images/resources/copper-ingot.png"},
+    "IronBar": {"name":"Iron Ingot","image":"images/resources/iron-ingot.png"},
+    "SilverBar": {"name":"Silver Ingot","image":"images/resources/silver-ingot.png"},
+    "MithrilBar": {"name":"Mithril Ingot","image":"images/resources/mithril-ingot.png"},
+    "StarMetalBar": {"name":"Star Metal Ingot","image":"images/resources/star-metal-ingot.png"},
     "CinderBar": {"name":"Cinder Ingot","image":""},
     "VoidBar": {"name":"Void Ingot","image":""},
     "AdamantiteBar": {"name":"Adamantite Ingot","image":""},
     "OrichalcumBar": {"name":"Orichalcum Ingot","image":""},
     "EterniumBar": {"name":"Eternium Ingot","image":""},
-    "WoodenPlank": {"name":"Wooden Plank","image":""},
-    "HardwoodPlank": {"name":"Hardwood Plank","image":""},
-    "IronwoodPlank": {"name":"Ironwood Plank","image":""},
-    "SpiritwoodPlank": {"name":"Spiritwood Plank","image":""},
+    "WoodenPlank": {"name":"Wooden Plank","image":"images/resources/wooden-plank.png"},
+    "HardwoodPlank": {"name":"Hardwood Plank","image":"images/resources/hardwood-plank.png"},
+    "IronwoodPlank": {"name":"Ironwood Plank","image":"images/resources/ironwood-plank.png"},
+    "SpiritwoodPlank": {"name":"Spiritwood Plank","image":"images/resources/spiritwood-plank.png"},
     "DreamwoodPlank": {"name":"Dreamwood Plank","image":""},
     "WorldrootPlank": {"name":"Worldroot Plank","image":""},
-    "CuredLeather": {"name":"Cured Leather","image":""},
-    "WolfLeather": {"name":"Wolf Leather","image":""},
-    "FrostLeather": {"name":"Frost Leather","image":""},
-    "StormLeather": {"name":"Storm Leather","image":""},
-    "PlantFiber": {"name":"Plant Fiber","image":""},
-    "Flax": {"name":"Flax","image":""},
-    "Linen": {"name":"Linen","image":""},
-    "CottonBoll": {"name":"Cotton Boll","image":""},
-    "CottonCloth": {"name":"Cotton Cloth","image":""},
-    "Silkgrass": {"name":"Silkgrass","image":""},
-    "WovenSilk": {"name":"Woven Silk","image":""}
+    "CuredLeather": {"name":"Cured Leather","image":"images/resources/cured-leather.png"},
+    "WolfLeather": {"name":"Wolf Leather","image":"images/resources/wolf-leather.png"},
+    "FrostLeather": {"name":"Frost Leather","image":"images/resources/frost-leather.png"},
+    "StormLeather": {"name":"Storm Leather","image":"images/resources/storm-leather.png"},
+    "PlantFiber": {"name":"Plant Fiber","image":"images/resources/plant-fiber.png"},
+    "Flax": {"name":"Flax","image":"images/resources/flax.png"},
+    "Linen": {"name":"Linen","image":"images/resources/linen.png"},
+    "CottonBoll": {"name":"Cotton Boll","image":"images/resources/cotton-boll.png"},
+    "CottonCloth": {"name":"Cotton Cloth","image":"images/resources/cotton-cloth.png"},
+    "Silkgrass": {"name":"Silkgrass","image":"images/resources/silkgrass.png"},
+    "WovenSilk": {"name":"Woven Silk","image":"images/resources/woven-silk.png"}
   },
   "tierGroups": {
     "1": ["Stone", "CopperOre", "CopperBar", "Wood", "WoodenPlank", "Cloth", "PlantFiber", "Herbs", "Leather", "CuredLeather", "Fish", "GameMeat", "GoblinInsignia", "WolfPelt", "SlimeGel", "Moonpetal", "CreekScale"],

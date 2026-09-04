@@ -388,7 +388,12 @@
       "FrostShard": 4,
       "Crystal": 3
     },
-    5
+    5,
+    {
+      "stats": {
+        "ice": 22
+      }
+    }
   ],
   [
     "Flameward Robes",
@@ -399,7 +404,12 @@
       "Emberstone": 4,
       "ArcaneDust": 2
     },
-    5
+    5,
+    {
+      "stats": {
+        "fire": 22
+      }
+    }
   ],
   [
     "Iron Band",
@@ -408,7 +418,12 @@
     {
       "Iron": 4
     },
-    2
+    2,
+    {
+      "stats": {
+        "def": 2
+      }
+    }
   ],
   [
     "Crystal Signet",
@@ -419,7 +434,13 @@
       "Crystal": 3,
       "Sandglass": 2
     },
-    3
+    3,
+    {
+      "primaryStat": "int",
+      "stats": {
+        "mana": 10
+      }
+    }
   ],
   [
     "Runed Ring",
@@ -429,7 +450,13 @@
       "Iron": 3,
       "GraveDust": 3
     },
-    2
+    2,
+    {
+      "primaryStat": "mdef",
+      "stats": {
+        "manaRegen": 1
+      }
+    }
   ],
   [
     "Guardian Ring",
@@ -442,6 +469,7 @@
     },
     4,
     {
+      "primaryStat": "def",
       "stats": {
         "holy": 10
       }
@@ -465,7 +493,13 @@
       "Crystal": 4,
       "Cloth": 2
     },
-    3
+    3,
+    {
+      "primaryStat": "mdef",
+      "stats": {
+        "mana": 8
+      }
+    }
   ],
   [
     "Arcane Amulet",
@@ -475,7 +509,13 @@
       "Crystal": 5,
       "Essence": 4
     },
-    3
+    3,
+    {
+      "primaryStat": "int",
+      "stats": {
+        "mana": 14
+      }
+    }
   ],
   [
     "Warden Amulet",
@@ -488,6 +528,7 @@
     },
     4,
     {
+      "primaryStat": "mdef",
       "stats": {
         "dark": 10
       }
