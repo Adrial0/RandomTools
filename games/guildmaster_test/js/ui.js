@@ -685,7 +685,7 @@ function renderRoster(){
       ${h.level>=10&&!h.subclass?`<div class="subclassReadyBadge" title="Subclass available">!</div>`:''}
       <div class="heroTop">
         <div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div>
-        <div style="min-width:0"><div class="name">${h.name}</div><div class="muted">${displayClass(h)} · ${h.race} · Lv. ${h.level}</div></div>
+        <div style="min-width:0"><div class="name">${h.name}</div><div class="muted">${displayClass(h)} · Lv. ${h.level}</div></div>
         ${compactEquipmentSlots(h)}
       </div>
       <div class="power"><span>${h.busy?(h.professionBusy?'Working · '+PROFESSION_DEFS[h.professionBusy].name:'Away'):'Available'}</span><strong>${z.power}</strong></div>
