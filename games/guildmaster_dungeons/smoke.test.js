@@ -34,11 +34,16 @@ assert.match(js,/state\.gearTierUnlocked=Math\.max/,'boss victories unlock the n
 assert.match(js,/function applyRarityAffixes\(/,'drops use Guildmaster rarity affix rules');
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use Guildmaster exact named equipment recipes');
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');
-assert.match(js,/h\.speed\*=\.65/,'hero basic attack timers are slowed without changing ability cooldowns');
+assert.match(js,/h\.speed\*=h\.slowAttackMigration\?\.35\/\.65:\.35/,'hero basic attacks use the slower versioned timing');
 assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleHero\(/,'each battle levels one surviving adventurer');
 assert.match(js,/Array\.from\(\{length:6\},makeCanonicalItem\)/,'traders stock six canonical items');
 assert.match(js,/boss\?335:elite\?150:105/,'elite and boss durability uses the reduced balance values');
 assert.match(js,/boss\?22:elite\?16:12/,'elite and boss damage uses the reduced balance values');
+assert.match(js,/const ABILITY_AUGMENTS=/,'runs provide class-specific ability augments');
+assert.match(js,/function abilityShrine\(/,'ability shrine encounters build hero abilities');
+assert.match(js,/const RELICS=/,'runs provide party-wide relics');
+assert.match(js,/function relicVault\(/,'relic vault encounters offer party rule changes');
+assert.match(js,/function processOngoingEffects\(/,'status and renewal effects tick during slower combat');
 console.log('Guildmaster: Dungeons smoke tests passed.');
