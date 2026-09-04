@@ -64,8 +64,14 @@ assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdr
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleParty\(/,'each battle levels the entire party');
 assert.match(js,/const target=currentPartyLevel\(\)\+1/,'battle leveling synchronizes every party member');
-assert.match(js,/Array\.from\(\{length:6\},makeCanonicalItem\)/,'traders stock six canonical items');
-assert.match(js,/class="traderPrice">\$\{cost\}g/,'trader cards show a prominent item cost');
+assert.match(js,/Array\.from\(\{length:6\},\(\)=>\{const item=makeCanonicalItem\(\)/,'traders stock six canonical items');
+assert.match(js,/const CONSUMABLES=/,'the run defines purchasable combat consumables');
+assert.match(js,/function combatConsumablesHtml\(/,'owned consumables appear during combat');
+assert.match(js,/function useConsumable\(/,'consumables apply their combat effects');
+assert.match(js,/function buyMerchantStock\(/,'trader purchases leave the shop open');
+assert.match(js,/r\.merchantStock\.splice\(index,1\);save\(\);merchantEvent\(\)/,'purchased stock is removed without ending the encounter');
+assert.match(js,/function leaveMerchant\(/,'the trader advances only when the player leaves');
+assert.match(js,/class="traderPrice">\$\{stock\.cost\}g/,'trader cards show a prominent item cost');
 assert.match(js,/boss\?335:elite\?150:105/,'elite and boss durability uses the reduced balance values');
 assert.match(js,/boss\?22:elite\?16:12/,'elite and boss damage uses the reduced balance values');
 assert.match(js,/const ABILITY_AUGMENTS=/,'runs provide class-specific ability augments');
