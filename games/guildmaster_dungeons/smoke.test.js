@@ -8,11 +8,14 @@ assert.match(js,/draftSelection\.length!==2/,'exactly two adventurers start a ru
 assert.match(js,/state\.draft=classRoster\(1,2\)/,'the initial draft offers two candidates of every class');
 assert.match(js,/flatMap\(cls=>Array\.from\(\{length:copies\}/,'class rosters support duplicate-class candidates');
 assert.match(js,/function makeRegionMap\(\)/,'regions use a persistent branching node map');
-assert.match(js,/Array\.from\(\{length:10\},\(_,index\)=>makeNodes\(index\)\)/,'each region has ten encounters before its boss');
-assert.match(js,/relicRow=step%5===0/,'relic vault appears only on every fifth encounter');
+assert.match(js,/Array\.from\(\{length:12\},\(_,index\)=>makeNodes\(index\)\)/,'each region has twelve encounters before its boss');
+assert.match(js,/relicRow=step===5\|\|step===10/,'relic vaults have non-conflicting scheduled encounters');
 assert.match(js,/if\(relicRow\)return\['relic'\]/,'relic milestone rows contain only the relic vault');
 assert.match(js,/if\(shrineRow\)return\['shrine'\]/,'ability shrine milestone rows contain only the shrine');
+assert.match(js,/preBossRow=step===12/,'the final encounter row is reserved for pre-boss preparation');
+assert.match(js,/if\(preBossRow\)return\['camp',\.\.\.pool\.slice\(0,2\)\]/,'camp is always an option immediately before the boss');
 assert.match(js,/function normalizeRegionMap\(/,'saved maps are migrated to the scheduled-camp rules');
+assert.match(js,/r\.nodes\.length===12\?r\.nodes:makeRegionMap\(\)/,'old maps migrate to the extended route');
 assert.match(js,/ascending=\[\.\.\.nodes\][\s\S]*\.reverse\(\)/,'the encounter route renders upward from the bottom');
 assert.match(js,/function focusCurrentMapNode\(/,'the route scrolls to the current encounter');
 assert.match(css,/\.mapScroll\{[^}]*overflow-y:auto/,'the encounter tree has independent scrolling');
