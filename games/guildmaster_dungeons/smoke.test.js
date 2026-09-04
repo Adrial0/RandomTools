@@ -17,4 +17,8 @@ assert.match(js,/function castHeroAbility\(/,'heroes use visible class abilities
 assert.match(js,/classRoster\(1\+\(r\.region\+1\)\*5\)/,'post-boss recruitment offers one hero of each class');
 assert.match(js,/function chooseEquipTarget\(/,'equipment rewards let the player choose who equips them');
 assert.match(js,/function itemFolder\(/,'equipment art uses the correct asset folders');
+assert.match(js,/requestAnimationFrame\(animateCombatMeters\)/,'combat meters animate every presentation frame');
+assert.match(js,/ITEM_DATA_URL='\.\.\/guildmaster\/data\/items\.json'/,'the roguelike loads Guildmaster equipment definitions');
+assert.match(js,/function gearStats\(/,'equipment affixes feed into combat stats');
+assert.match(js,/function canEquip\(/,'class weapon and armor restrictions are enforced');
 console.log('Guildmaster: Dungeons smoke tests passed.');
