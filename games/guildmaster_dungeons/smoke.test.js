@@ -39,4 +39,6 @@ assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdr
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleHero\(/,'each battle levels one surviving adventurer');
 assert.match(js,/Array\.from\(\{length:6\},makeCanonicalItem\)/,'traders stock six canonical items');
+assert.match(js,/boss\?335:elite\?150:105/,'elite and boss durability uses the reduced balance values');
+assert.match(js,/boss\?22:elite\?16:12/,'elite and boss damage uses the reduced balance values');
 console.log('Guildmaster: Dungeons smoke tests passed.');
