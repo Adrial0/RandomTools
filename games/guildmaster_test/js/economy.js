@@ -247,10 +247,10 @@ function toggleEquippedItems(){
   if($('equippedToggle'))$('equippedToggle').textContent=inventoryShowEquipped?'Hide Equipped':'Show Equipped';
   renderInv();
 }
-function openInventoryEquip(iid){
+function openInventoryEquip(iid,readOnly=false){
   const it=s.inventory.find(x=>x.id===iid);if(!it)return;
   const owner=it.equipped?s.members.find(x=>x.id===it.equipped):null;
-  const candidates=it.starter?(owner?[owner]:[]):s.members.filter(h=>equipmentTargetsForItem(h,it).length);
+  const candidates=readOnly?[]:(it.starter?(owner?[owner]:[]):s.members.filter(h=>equipmentTargetsForItem(h,it).length));
   const recipe=recipeForItem(it);
 
   const profile=itemProfileParts(it),stats=itemStatParts(it);
@@ -264,19 +264,20 @@ function openInventoryEquip(iid){
       <aside class="itemActionBox">
         <h4>Item Actions</h4>
         ${owner?`<div class="itemOwner">Equipped by <b>${owner.name}</b></div>`:'<div class="itemOwner">Currently unequipped</div>'}
-        ${it.starter?'<div class="itemValue">Basic equipment · automatically replaced by a real weapon</div>':`<div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div><div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>`}
+        ${!readOnly&&owner?`<button class="btn" onclick="equipModal(${owner.id},'${itemEquipSlot(it)}')">Swap this slot</button>`:''}
+        ${readOnly?'<div class="itemValue">Combat inspection · equipment changes and item actions are unavailable.</div>':it.starter?'<div class="itemValue">Basic equipment · automatically replaced by a real weapon</div>':`<div class="itemValue">Sell value <strong>${itemSellValue(it)}g</strong></div><div class="itemActionButtons"><button class="btn" onclick="scrapItem(${it.id})" ${recipe?'':'disabled'}>Scrap${(it.runes||[]).length?' · destroys runes':''}</button><button class="btn gold" onclick="sellItem(${it.id})">Sell Item</button></div>`}
       </aside>
     </div>
     <section class="itemRuneSection"><div class="itemSectionHeading"><h3>Runes</h3><span>${(it.runes||[]).length} / ${runeSlots(it)} socketed</span></div>${runeSlotsHtml(it)}${runeSlots(it)>0?runeDetailsHtml(it):'<div class="muted">This item has no rune slots.</div>'}</section>
   </div>
-  <h3 style="margin-top:14px">Equip on</h3>
+  ${readOnly?'':`<h3 style="margin-top:14px">Equip or swap</h3>
   <div class="g2">${candidates.map(h=>{
     const targets=equipmentTargetsForItem(h,it);
     return `<div class="card equipActionCard" onclick="inspectRosterHero(${h.id})">
       <div class="heroTop"><div class="portrait">${classIcon(h,'gameAsset portraitAsset')}</div><div><div class="name">${h.name}</div><div class="muted">${displayClass(h)}</div></div>${compactEquipmentSlots(h,'equip')}</div>
       ${targets.map(target=>{const current=s.inventory.find(x=>x.id===h.equip[target]),offhand=target==='MainHand'&&weaponHands(it)===2?s.inventory.find(x=>x.id===h.equip.OffHand&&x.id!==h.equip.MainHand):null,here=h.equip[target]===it.id;return `<div class="equipTargetChoice"><div class="muted">${slotLabel(target)}: <b>${current?current.name:'Empty'}</b>${offhand?` · replaces ${offhand.name} in Off Hand`:''}</div>${equipComparison(it,current,offhand?[offhand]:[])}<button class="btn ${here?'':'gold'}" ${here?'disabled':''} onclick="event.stopPropagation();equip(${h.id},${it.id},'${target}')">${here?'Equipped':'Equip in '+slotLabel(target)}</button></div>`}).join('')}
     </div>`;
-  }).join('')}</div>`);
+  }).join('')}</div>`}`);
 }
 function inventorySummaryStats(it){
   const stats=[],bonuses=new Map(),gearMult=it.slot==='Weapon'&&weaponHands(it)===2?2:1;

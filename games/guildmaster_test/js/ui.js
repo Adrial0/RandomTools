@@ -237,7 +237,7 @@ function combatDetailsHtml(x,enemy=false){
   return `<div class="combatDetailStats">
     <span>HP ${Math.max(0,x.hp)}/${x.maxHp}</span>${enemy?'':`<span>Mana ${Math.max(0,x.mana||0)}/${x.maxMana||0}</span><span>Mana Regen ${x.manaRegen||0}</span>${primaryActiveType(x)?`<span>${activeName(primaryActiveType(x))}: ${activeCooldownRemaining(x,primaryActiveType(x))<=0?'Ready':fmt(activeCooldownRemaining(x,primaryActiveType(x)))}</span>`:''}`}<span>DEF ${x.def||0}</span>
     <span>MDEF ${x.mdef||0}</span><span>Block ${x.block||0}</span>
-    <span>Position ${x.row==='front'?'Front':'Back'}</span><span>Threat ${(x.threat||1).toFixed(1)}</span><span>Attack ${x.weaponPower||0}</span><span>Attack Speed ${Math.round((x.attackSpeed||0)*100)}%</span><span>Attack Time ${(heroAttackIntervalMs(x)/1000).toFixed(2)}s</span><span>Regen ${x.regen||0}</span>
+    <span>Position ${x.row==='front'?'Front':'Back'}</span><span>Threat ${(x.threat||1).toFixed(1)}</span><span>Attack ${combatAttackDisplay(x)}</span><span>Attack Speed ${Math.round((x.attackSpeed||0)*100)}%</span><span>Attack Time ${(heroAttackIntervalMs(x)/1000).toFixed(2)}s</span><span>Regen ${x.regen||0}</span>
     <span>Lifesteal ${x.lifesteal||0}%</span><span>Phys Dodge ${Math.round((x.physicalDodge||0)*100)}%</span>
     <span>Magic Dodge ${Math.round((x.magicalDodge||0)*100)}%</span><span>Armor Pen ${Math.round((x.armorPen||0)*100)}%</span>
     <span>Parry ${Math.round((x.parry||0)*100)}%</span><span>Crit ${Math.round((x.critBonus||0)*100)}%</span>
@@ -276,8 +276,10 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
     <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     <div class="combatFloat"></div>
     ${enemy?'':'<div class="combatLevelUp"></div>'}
-  </div>`;
+  </div>${combatEquipmentHtml(x)}`;
 }
+function combatAttackDisplay(x){const main=(x.weaponPower||0)*(x.twoHanded?2:1);return x.dualWield&&x.offhandWeapon?`${main} + ${x.offhandWeapon.weaponPower||0}`:main}
+function combatEquipmentHtml(x){const h=s.members.find(hero=>hero.id===x.id);if(!h)return'';const slots=C[h.class]?.slots||['MainHand','OffHand','Armor','Accessories'];return `<div class="combatInspectEquipment"><div class="combatInspectSectionTitle">Equipment</div><div class="combatInspectGearGrid">${slots.map(slot=>{const it=s.inventory.find(item=>item.id===h.equip?.[slot]);const label=it?(slot==='OffHand'&&h.equip.MainHand===h.equip.OffHand?'Two-handed · '+it.name:it.name):'Empty';return `<button class="combatInspectGear ${it?'filled':'empty'} rarityBorder-${String(it?.rarity||'common').toLowerCase()}" ${it?`onclick="openInventoryEquip(${it.id},true)"`:''} ${it?'':'disabled'} title="${slotLabel(slot)}: ${label}"><small>${slotLabel(slot)}</small><span>${equipmentSlotIcon(it,slot)}</span><b>${label}</b></button>`}).join('')}</div></div>`}
 function combatAbilityState(x,enemy=false,now=Date.now()){
   if(enemy&&!x.arenaHero){
     if(!x.ability)return null;
@@ -671,7 +673,7 @@ function compactEquipmentSlots(h,context='roster'){
     const it=s.inventory.find(x=>x.id===h.equip?.[slot]);
     const occupied=slot==='OffHand'&&it&&h.equip?.MainHand===h.equip?.OffHand;
     const label=it?(occupied?'Occupied by '+it.name:it.name):'Empty '+slotLabel(slot);
-    return `<button class="compactEquipmentSlot ${it?'filled':'empty'} rarityBorder-${String(it?.rarity||'common').toLowerCase()}" title="${label}" aria-label="${label}" onclick="event.stopPropagation();equipModal(${h.id},'${slot}')">${equipmentSlotIcon(it,slot)}</button>`;
+    return `<button class="compactEquipmentSlot ${it?'filled':'empty'} rarityBorder-${String(it?.rarity||'common').toLowerCase()}" title="${label}" aria-label="${label}" onclick="event.stopPropagation();${it?`openInventoryEquip(${it.id})`:`equipModal(${h.id},'${slot}')`}">${equipmentSlotIcon(it,slot)}</button>`;
   }).join('')}</div>`;
 }
 function inspectRosterHero(hid){
@@ -754,7 +756,7 @@ function heroAttackDisplay(h,z=hs(h)){
   const baseAttackTime=weaponAttackTime(wep?.weaponTemplate||wep?.weaponType||'');
   const unit={baseAttackTime,attackSpeed:z.attackSpeed||0,buffs:{}};
   return{
-    attack:off?`${attack} + ${off.weaponPower||0}`:attack,
+    attack:off?`${attack} + ${off.weaponPower||0}`:attack*(wep&&weaponHands(wep)===2?2:1),
     hits:off?2:1,
     attackSpeed:z.attackSpeed||0,
     attackTime:heroAttackIntervalMs(unit)/1000
@@ -776,10 +778,10 @@ function heroDetail(h){
   const equipment=slots.map(k=>{
     const it=s.inventory.find(x=>x.id===h.equip[k]);
     const icon=it?equipmentIcon(it):(itemIcons[k]||'🎒');
-    return `<div class="detailEquipRow" onclick="equipModal(${h.id},'${k}')">
+    return `<div class="detailEquipRow" onclick="${it?`openInventoryEquip(${it.id})`:`equipModal(${h.id},'${k}')`}">
       <div class="detailEquipIcon">${icon}</div>
       <div class="detailEquipText"><small>${slotLabel(k)}</small><b>${it?it.name:'Empty'}</b><small>${it?(k==='OffHand'&&h.equip.MainHand===h.equip.OffHand?'Occupied by two-handed weapon':statText(it)):'Click to equip'}</small></div>
-      ${it?`<button class="btn" style="padding:4px 6px" onclick="event.stopPropagation();unequipItem(${h.id},'${k}')">Unequip</button>`:''}
+      ${it?`<button class="btn" style="padding:4px 6px" onclick="event.stopPropagation();equipModal(${h.id},'${k}')">Swap</button>`:''}
     </div>`;
   }).join('');
 
