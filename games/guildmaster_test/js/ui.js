@@ -276,7 +276,7 @@ function combatantHtml(x,enemy=false,frontline=false,options={}){
     <div class="combatStatusRow">${combatEffectIcons(x,enemy)}</div>
     <div class="combatFloat"></div>
     ${enemy?'':'<div class="combatLevelUp"></div>'}
-  </div>${combatEquipmentHtml(x)}`;
+  </div>`;
 }
 function combatAttackDisplay(x){const main=(x.weaponPower||0)*(x.twoHanded?2:1);return x.dualWield&&x.offhandWeapon?`${main} + ${x.offhandWeapon.weaponPower||0}`:main}
 function combatEquipmentHtml(x){const h=s.members.find(hero=>hero.id===x.id);if(!h)return'';const slots=C[h.class]?.slots||['MainHand','OffHand','Armor','Accessories'];return `<div class="combatInspectEquipment"><div class="combatInspectSectionTitle">Equipment</div><div class="combatInspectGearGrid">${slots.map(slot=>{const it=s.inventory.find(item=>item.id===h.equip?.[slot]);const label=it?(slot==='OffHand'&&h.equip.MainHand===h.equip.OffHand?'Two-handed · '+it.name:it.name):'Empty';return `<button class="combatInspectGear ${it?'filled':'empty'} rarityBorder-${String(it?.rarity||'common').toLowerCase()}" ${it?`onclick="openInventoryEquip(${it.id},true)"`:''} ${it?'':'disabled'} title="${slotLabel(slot)}: ${label}"><small>${slotLabel(slot)}</small><span>${equipmentSlotIcon(it,slot)}</span><b>${label}</b></button>`}).join('')}</div></div>`}
@@ -381,7 +381,7 @@ function renderCombatInspector(el=null){
   const side=p.dataset.side,id=+p.dataset.id,x=findLiveCombatant(side,id);
   if(!x){closeCombatInspector();return}
   const enemy=side==='enemy';
-  p.innerHTML=`<div class="combatInspectTop"><div><div class="combatInspectName">${combatDisplayName(x,enemy)}</div><div class="combatInspectClass">${enemy?(x.boss?'Boss':'Enemy'):(x.displayClass||x.class)}</div></div><button class="combatInspectClose" onclick="closeCombatInspector()">×</button></div>${combatDetailsHtml(x,enemy)}`;
+  p.innerHTML=`<div class="combatInspectTop"><div><div class="combatInspectName">${combatDisplayName(x,enemy)}</div><div class="combatInspectClass">${enemy?(x.boss?'Boss':'Enemy'):(x.displayClass||x.class)}</div></div><button class="combatInspectClose" onclick="closeCombatInspector()">×</button></div>${combatDetailsHtml(x,enemy)}${enemy?'':combatEquipmentHtml(x)}`;
   if(el)positionCombatInspector(el);
 }
 function toggleCombatantDetails(e,el){

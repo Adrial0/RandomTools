@@ -10,6 +10,8 @@ assert.match(ui,/class="combatGrid combatBattlefield"/,'combatants render on a s
 assert.match(ui,/function combatAbilityState\(/,'heroes and ability-using enemies expose a compact ability bar');
 assert.doesNotMatch(ui,/class="combatMiniClass"/,'the unselected battlefield view does not show class or role clutter');
 assert.doesNotMatch(ui,/class="combatantHp"/,'the unselected battlefield view does not show numeric HP clutter');
+assert.doesNotMatch(ui,/<\/div>\$\{combatEquipmentHtml\(x\)\}`/,'equipment is not rendered underneath every battlefield character');
+assert.match(ui,/\$\{combatDetailsHtml\(x,enemy\)\}\$\{enemy\?'':combatEquipmentHtml\(x\)\}/,'hero equipment renders only inside the clicked character inspector');
 assert.match(css,/\.combatBattlefield\.combatGrid\{[^}]*background-image:var\(--combat-background\)!important/s,'the battlefield paints the area artwork behind combatants');
 assert.match(css,/\.combatBattlefield \.combatant\.combatMini\{[^}]*background:transparent!important[^}]*border:0!important/s,'combatants no longer render as boxed cards');
 assert.doesNotMatch(css,/\.combatBattlefield \.enemy \.visualIcon\{transform:scaleX\(-1\)/,'enemy artwork is not mirrored');
