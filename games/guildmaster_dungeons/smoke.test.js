@@ -58,4 +58,12 @@ assert.match(js,/elite&&Math\.random\(\)<\.4\?randomUnownedRelic/,'elite victori
 assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
+assert.match(js,/Warrior:\{hp:145,atk:17,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base threat');
+assert.match(js,/Paladin:\{hp:170,atk:13,speed:\.85,threat:2/,'Paladins use Guildmaster base threat');
+assert.match(js,/function heroThreat\(/,'threat combines class, subclass, and equipment bonuses');
+assert.match(js,/sub\?\.threatBonus\|\|0/,'Guardian and Templar subclass threat applies');
+assert.match(js,/gear\.threatBonus\|\|0/,'canonical Guildmaster threat equipment applies');
+assert.match(js,/function assignPartyFormation\(/,'high-threat durable heroes form the frontline');
+assert.match(js,/function threatTarget\(/,'enemy targets are weighted by threat');
+assert.match(js,/Math\.random\(\)<\.9\?front:back/,'ordinary enemies strongly prefer the frontline');
 console.log('Guildmaster: Dungeons smoke tests passed.');
