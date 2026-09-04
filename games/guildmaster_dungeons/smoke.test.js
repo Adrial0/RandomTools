@@ -64,7 +64,9 @@ assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdr
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleParty\(/,'each battle levels the entire party');
 assert.match(js,/const target=currentPartyLevel\(\)\+1/,'battle leveling synchronizes every party member');
-assert.match(js,/Array\.from\(\{length:6\},\(\)=>\{const item=makeCanonicalItem\(\)/,'traders stock six canonical items');
+assert.match(js,/Array\.from\(\{length:6\},\(_,index\)=>\{const item=makeCanonicalItem\(rollShopRarity\(index===0\)\)/,'traders stock six canonical items with a guaranteed premium roll');
+assert.match(js,/function rollShopRarity\(guaranteed=false\)/,'shops use elevated rarity odds');
+assert.match(js,/function shopItemCost\(/,'shop prices scale by rarity and tier');
 assert.match(js,/const CONSUMABLES=/,'the run defines purchasable combat consumables');
 assert.match(js,/function combatConsumablesHtml\(/,'owned consumables appear during combat');
 assert.match(js,/function useConsumable\(/,'consumables apply their combat effects');
@@ -77,9 +79,14 @@ assert.match(js,/boss\?22:elite\?16:12/,'elite and boss damage uses the reduced 
 assert.match(js,/const ABILITY_AUGMENTS=/,'runs provide class-specific ability augments');
 assert.match(js,/function abilityShrine\(/,'ability shrine encounters build hero abilities');
 assert.match(js,/const RELICS=/,'runs provide party-wide relics');
+assert.match(js,/phoenixFeather/,'relic pool includes a once-per-battle revival');
+assert.match(js,/echoStone/,'relic pool includes ability echoes');
+assert.match(js,/alchemySatchel/,'relic pool includes consumable preservation');
 assert.match(js,/function relicVault\(/,'relic vault encounters offer party rule changes');
 assert.match(js,/function inspectRelic\(/,'sidebar relics open a description');
 assert.match(js,/function inspectBoon\(/,'sidebar boons open a description');
+assert.match(js,/function groupedBoons\(/,'duplicate run boons consolidate into stacks');
+assert.match(js,/function boonTotalDescription\(/,'stacked boon inspection displays its final total');
 assert.match(js,/row\.length===1\?'singlePathRow'/,'single milestone nodes render without fake alternatives');
 assert.match(js,/const CLASS_PASSIVES=/,'character inspection explains class passives');
 assert.match(js,/const ABILITY_DESCRIPTIONS=/,'character inspection explains abilities');
@@ -103,5 +110,7 @@ assert.match(js,/sub\?\.threatBonus\|\|0/,'Guardian and Templar subclass threat 
 assert.match(js,/gear\.threatBonus\|\|0/,'canonical Guildmaster threat equipment applies');
 assert.match(js,/function assignPartyFormation\(/,'high-threat durable heroes form the frontline');
 assert.match(js,/function threatTarget\(/,'enemy targets are weighted by threat');
+assert.match(js,/level=r\.enemyLevelBase\+r\.step\+1/,'enemy levels increase with route progress');
+assert.match(js,/r\.enemyLevelBase=Math\.max\(\.\.\.b\.enemies\.map\(e=>e\.level\)\)/,'the defeated boss level becomes the next region floor');
 assert.match(js,/Math\.random\(\)<\.9\?front:back/,'ordinary enemies strongly prefer the frontline');
 console.log('Guildmaster: Dungeons smoke tests passed.');
