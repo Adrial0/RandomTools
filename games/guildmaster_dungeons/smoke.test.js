@@ -19,6 +19,7 @@ assert.match(js,/function normalizeRegionMap\(/,'saved maps are migrated to the 
 assert.match(js,/r\.nodes\.length===12\?r\.nodes:makeRegionMap\(\)/,'old maps migrate to the extended route');
 assert.match(js,/ascending=\[\.\.\.nodes\][\s\S]*\.reverse\(\)/,'the encounter route renders upward from the bottom');
 assert.match(js,/function focusCurrentMapNode\(/,'the route scrolls to the current encounter');
+assert.match(js,/getBoundingClientRect\(\)[\s\S]*scroller\.scrollTop\+=/,'map centering uses coordinates relative to its scroll container');
 assert.match(css,/\.mapScroll\{[^}]*overflow-y:auto/,'the encounter tree has independent scrolling');
 assert.match(css,/\.runMapGrid>aside\{position:sticky/,'the party remains visible while the route scrolls');
 assert.match(js,/r\.heroes\.push\(h\);r\.region\+\+/,'one adventurer joins after a cleared boss');
@@ -56,6 +57,8 @@ assert.match(js,/state\.gearTierUnlocked=Math\.max/,'boss victories unlock the n
 assert.match(js,/function applyRarityAffixes\(/,'drops use Guildmaster rarity affix rules');
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use Guildmaster exact named equipment recipes');
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');
+assert.match(js,/function partyCanEquip\(/,'generated equipment must be usable by the current party');
+assert.match(js,/if\(partyCanEquip\(item\)\)return item/,'item generation filters incompatible equipment');
 assert.match(js,/h\.speed\*=h\.slowAttackMigration\?\.35\/\.65:\.35/,'hero basic attacks use the slower versioned timing');
 assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
@@ -75,6 +78,8 @@ assert.match(js,/row\.length===1\?'singlePathRow'/,'single milestone nodes rende
 assert.match(js,/const CLASS_PASSIVES=/,'character inspection explains class passives');
 assert.match(js,/const ABILITY_DESCRIPTIONS=/,'character inspection explains abilities');
 assert.match(js,/function processOngoingEffects\(/,'status and renewal effects tick during slower combat');
+assert.match(js,/resolveStory\('\$\{effect\}'\)/,'event buttons carry their explicit promised outcome');
+assert.match(js,/effect==='randomGear'[\s\S]*r\.inventory\.push\(item\)/,'the random gear event always adds its item to inventory');
 assert.match(js,/if\(relicRow\)return\['relic'\]/,'relic vaults are limited to every fifth encounter');
 assert.match(js,/shrineRow=step===3\|\|step===8/,'ability shrines are limited to two scheduled encounters');
 assert.match(js,/function makeRewards\(\)\{return\[\{kind:'item'[\s\S]*\{kind:'perk'/,'the first reward stage always has the three standard choices');
