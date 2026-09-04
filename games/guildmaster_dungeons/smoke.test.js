@@ -17,7 +17,7 @@ assert.match(js,/localStorage\.setItem\(SAVE_KEY/,'campaign progression is persi
 assert.match(css,/\.combatField/,'the game includes a visual combat field');
 assert.match(js,/const ABILITIES=/,'combat defines class abilities, mana costs, and cooldowns');
 assert.match(js,/function castHeroAbility\(/,'heroes use visible class abilities during combat');
-assert.match(js,/classRoster\(1\+\(r\.region\+1\)\*5\)/,'post-boss recruitment offers one hero of each class');
+assert.match(js,/r\.recruitChoices=classRoster\(currentPartyLevel\(\)\)/,'post-boss recruitment offers one hero of each class at party level');
 assert.match(js,/function chooseInventoryTarget\(/,'inventory equipment lets the player choose who equips it');
 assert.match(js,/function itemFolder\(/,'equipment art uses the correct asset folders');
 assert.match(js,/requestAnimationFrame\(animateCombatMeters\)/,'combat meters animate every presentation frame');
@@ -37,7 +37,8 @@ assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is conve
 assert.match(js,/h\.speed\*=h\.slowAttackMigration\?\.35\/\.65:\.35/,'hero basic attacks use the slower versioned timing');
 assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
-assert.match(js,/function levelBattleHero\(/,'each battle levels one surviving adventurer');
+assert.match(js,/function levelBattleParty\(/,'each battle levels the entire party');
+assert.match(js,/const target=currentPartyLevel\(\)\+1/,'battle leveling synchronizes every party member');
 assert.match(js,/Array\.from\(\{length:6\},makeCanonicalItem\)/,'traders stock six canonical items');
 assert.match(js,/boss\?335:elite\?150:105/,'elite and boss durability uses the reduced balance values');
 assert.match(js,/boss\?22:elite\?16:12/,'elite and boss damage uses the reduced balance values');
@@ -45,6 +46,11 @@ assert.match(js,/const ABILITY_AUGMENTS=/,'runs provide class-specific ability a
 assert.match(js,/function abilityShrine\(/,'ability shrine encounters build hero abilities');
 assert.match(js,/const RELICS=/,'runs provide party-wide relics');
 assert.match(js,/function relicVault\(/,'relic vault encounters offer party rule changes');
+assert.match(js,/function inspectRelic\(/,'sidebar relics open a description');
+assert.match(js,/function inspectBoon\(/,'sidebar boons open a description');
+assert.match(js,/const mandatory=row\.find/,'relic vault and shrine milestone paths cannot be skipped');
+assert.match(js,/const CLASS_PASSIVES=/,'character inspection explains class passives');
+assert.match(js,/const ABILITY_DESCRIPTIONS=/,'character inspection explains abilities');
 assert.match(js,/function processOngoingEffects\(/,'status and renewal effects tick during slower combat');
 assert.match(js,/campRow\?\['camp','relic',pool\[0\]\]/,'relic vaults are limited to every fifth encounter');
 assert.match(js,/shrineRow=step===3\|\|step===8/,'ability shrines are limited to two scheduled encounters');
