@@ -7,8 +7,8 @@ assert.match(js,/function beginDraft\(/,'a new expedition begins with a recruit 
 assert.match(js,/draftSelection\.length!==2/,'exactly two adventurers start a run');
 assert.match(js,/function makeRegionMap\(\)/,'regions use a persistent branching node map');
 assert.match(js,/Array\.from\(\{length:10\},\(_,index\)=>makeNodes\(index\)\)/,'each region has ten encounters before its boss');
-assert.match(js,/campRow=\(index\+1\)%5===0/,'camp appears only on every fifth encounter');
-assert.match(js,/campRow\?\['camp',\.\.\.pool\.slice\(0,2\)\]/,'scheduled camp rows contain exactly one camp option');
+assert.match(js,/campRow=step%5===0/,'camp appears only on every fifth encounter');
+assert.match(js,/campRow\?\['camp','relic',pool\[0\]\]/,'scheduled milestone rows contain one camp and one relic option');
 assert.match(js,/function normalizeRegionMap\(/,'saved maps are migrated to the scheduled-camp rules');
 assert.match(js,/r\.heroes\.push\(h\);r\.region\+\+/,'one adventurer joins after a cleared boss');
 assert.match(js,/state\.treasury\+=secured/,'gold is secured as persistent treasury currency');
@@ -46,4 +46,10 @@ assert.match(js,/function abilityShrine\(/,'ability shrine encounters build hero
 assert.match(js,/const RELICS=/,'runs provide party-wide relics');
 assert.match(js,/function relicVault\(/,'relic vault encounters offer party rule changes');
 assert.match(js,/function processOngoingEffects\(/,'status and renewal effects tick during slower combat');
+assert.match(js,/campRow\?\['camp','relic',pool\[0\]\]/,'relic vaults are limited to every fifth encounter');
+assert.match(js,/shrineRow=step===3\|\|step===8/,'ability shrines are limited to two scheduled encounters');
+assert.match(js,/elite&&Math\.random\(\)<\.4\?randomUnownedRelic/,'elite victories can offer an unowned relic');
+assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
+assert.match(js,/damageTaken/,'combat tracks damage taken');
+assert.match(js,/applyHealing/,'combat tracks effective healing');
 console.log('Guildmaster: Dungeons smoke tests passed.');
