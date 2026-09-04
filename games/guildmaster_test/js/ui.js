@@ -661,7 +661,7 @@ function sortedRosterMembers(){
   });
 }
 function equipmentSlotIcon(it,slot){
-  if(!it)return itemIcons[slot]||({MainHand:'⚔️',OffHand:'🛡️',Armor:'🛡️',Accessories:'💎'}[slot]||'□');
+  if(!it)return '<span class="emptyEquipmentGlyph" aria-hidden="true">+</span>';
   return equipmentIcon(it);
 }
 function compactEquipmentSlots(h,context='roster'){
