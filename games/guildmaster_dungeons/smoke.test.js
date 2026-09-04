@@ -12,4 +12,9 @@ assert.match(js,/state\.treasury\+=secured/,'gold is secured as persistent treas
 assert.match(js,/state\.history\.push/,'finished parties enter persistent history');
 assert.match(js,/localStorage\.setItem\(SAVE_KEY/,'campaign progression is persisted separately');
 assert.match(css,/\.combatField/,'the game includes a visual combat field');
+assert.match(js,/const ABILITIES=/,'combat defines class abilities, mana costs, and cooldowns');
+assert.match(js,/function castHeroAbility\(/,'heroes use visible class abilities during combat');
+assert.match(js,/classRoster\(1\+\(r\.region\+1\)\*5\)/,'post-boss recruitment offers one hero of each class');
+assert.match(js,/function chooseEquipTarget\(/,'equipment rewards let the player choose who equips them');
+assert.match(js,/function itemFolder\(/,'equipment art uses the correct asset folders');
 console.log('Guildmaster: Dungeons smoke tests passed.');
