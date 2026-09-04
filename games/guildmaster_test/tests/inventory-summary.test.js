@@ -22,8 +22,9 @@ assert.match(economy,/function confirmInventoryCleanup/,'one-time cleanup warns 
 assert.match(economy,/function performInventoryCleanup/,'one-time cleanup can be repeatedly applied to current inventory');
 assert.doesNotMatch(economy,/Auto-sold|Auto-scrapped|inventoryAuto/,'incoming items must never be processed by a persistent automatic rule');
 assert.match(html,/One-time inventory cleanup/,'the inventory menu clearly describes the one-time action');
-assert.match(html,/Future loot is unaffected/,'the inventory menu explicitly says incoming items are safe');
+assert.match(economy,/Future loot is unaffected/,'the cleanup confirmation explicitly says incoming items are safe');
 assert.match(economy,/`\$\{inventoryCleanupMode==='sell'\?'Sell':'Scrap'\} \$\{count\} Item/,'the cleanup button explicitly names the action and affected count');
+assert.match(html,/<\/div><\/div><button class="btn danger inventoryAutoApply inventoryCleanupToolbarAction" id="inventoryCleanupApply"/,'the cleanup action stays visible in the toolbar instead of being clipped inside its settings menu');
 assert.doesNotMatch(html,/Automatic item rule|Incoming items use this rule automatically/,'the old persistent-rule language is removed');
 assert.match(css,/\.inventorySummaryGrid\.weaponStats>\.inventorySummaryStat:first-child/,'weapon attack is the prominent full-width first stat');
 console.log('Compact inventory item summary tests passed.');
