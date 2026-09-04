@@ -588,8 +588,10 @@ function updateStageIntermissionUi(m){
       <div class="stageDeliveryRewards">${pause.delivered?.text||'Rewards delivered'}</div>
       <div class="stageDeliveryNext">${pause.finalStage?`<span class="good">The next expedition area is now available.</span>`:pause.offlinePaused?`<button class="btn gold" onclick="continueExpeditionStage(${m.id})">Continue Expedition</button>`:`<span class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</span>`}</div>
     </div>
-    <div class="stageCampScene"><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div></div>`;
+    <div class="stageCampScene"><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div>${lootPileHtml(pause.delivered)}</div>`;
 }
+function lootPileHtml(delivered={}){const drops=[delivered.gold?['🪙',delivered.gold+' gold']:null,delivered.rep?['📜',delivered.rep+' reputation']:null,delivered.materials?['🎒',delivered.materials+' resources']:null,delivered.items?['📦',delivered.items+' items']:null].filter(Boolean);return drops.length?`<div class="campLootPile" aria-label="Delivered loot">${drops.map((drop,index)=>`<div class="campLootDrop loot-${index}" title="${drop[1]}"><span>${drop[0]}</span><b>${drop[1]}</b></div>`).join('')}</div>`:''}
+function showLootCollectionBurst(delivered,title='Loot collected'){if(typeof document==='undefined'||!delivered)return;const overlay=document.createElement('div');overlay.className='lootCollectionBurst';overlay.innerHTML=`<div class="lootBurstTitle">${title}</div>${lootPileHtml(delivered)}`;document.body.appendChild(overlay);setTimeout(()=>overlay.remove(),1800)}
 function renderCombat(){
   if(!$('combatModal').classList.contains('on'))return;
   const arenaMode=$('combatModal').dataset.mode==='arena';

@@ -14,5 +14,9 @@ const renderStart=economy.indexOf('function renderInv()'),renderEnd=economy.inde
 assert.doesNotMatch(render,/statText\(it\)|itemTier\(it\)|it\.rarity|it\.weaponType|runeSlotsHtml/,'collapsed cards should hide detailed item information');
 assert.match(css,/\.inventorySummaryGrid\{display:grid/,'important values should be laid out as boxes');
 assert.match(css,/\.inventorySummaryStat\{[^}]*border:/,'every important value should have its own bordered box');
-assert.match(css,/\.inventorySummaryName\{font-size:15px/,'the reduced information should allow a larger name');
+assert.match(css,/\.inventorySummaryName\{font-size:14px/,'the compact card keeps item names readable');
+assert.match(economy,/key==='attackSpeed'[^\n]*1\/Math\.max/,'attack-speed sorting uses weapon speed instead of a permanently zero comparison value');
+assert.match(economy,/function confirmBulkInventoryAction/,'destructive selected-item actions show a confirmation with the affected item count');
+assert.match(economy,/function applyInventoryAutoToSelected/,'automatic sell and scrap rules can be applied to selected existing inventory');
+assert.match(css,/\.inventorySummaryGrid\.weaponStats>\.inventorySummaryStat:first-child/,'weapon attack is the prominent full-width first stat');
 console.log('Compact inventory item summary tests passed.');

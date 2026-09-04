@@ -83,12 +83,15 @@ function awardAreaGuildBonus(m,major=false){
   return reward;
 }
 function victoryPresentation(m,{major=false,guildBonus=null,item=null,unique=null}={}){
-  const partyUnlock=major&&m.gateTier<=5?` Expedition party capacity increased to ${Math.min(8,3+m.gateTier)}.`:'';
-  const unlockText=(major?(m.gateTier<10?`Tier ${tierLabel(m.gateTier+1)} expeditions and gathering progression unlocked.`:'The final expedition chapter is complete.'):'The next expedition area is now available.')+partyUnlock;
+  const nextTier=Math.min(10,(m.gateTier||m.tier||1)+1),unlocks=[];
+  if(major&&m.gateTier<10){unlocks.push(`Tier ${tierLabel(nextTier)} expedition areas`);unlocks.push(`Tier ${tierLabel(nextTier)} gathering areas`);unlocks.push(`All Tier ${tierLabel(nextTier)} crafting recipes`);if(m.gateTier<=5)unlocks.push(`Expedition party capacity increased to ${Math.min(8,3+m.gateTier)} members · +1 party size`)}
+  else if(major)unlocks.push('Final expedition chapter completed');
+  else unlocks.push('Next expedition area');
+  const unlockText=unlocks.join(' · ');
   const title=major?`Tier ${tierLabel(m.gateTier||m.tier||1)} Conquered`:`${m.name} Cleared`;
   const itemHtml=item?`<div class="victoryRewardItem ${rarityClass(item.rarity)}"><b>${item.rarity} ${item.name}</b><span>${item.uniquePassive||'Guaranteed first-clear equipment reward'}</span></div>`:'';
   m.victoryPresentation={title,major,unlockText,guildBonus,itemName:item?.name||null,unique:!!unique};
-  if(typeof showModal==='function')setTimeout(()=>showModal(title,`<div class="victoryPresentation ${major?'major':''}"><div class="victoryCrest">${major?'👑':'⚔️'}</div><h2>${title}</h2><p>${unlockText}</p>${guildBonus?`<div class="victoryGuildBonus"><b>Permanent Guild Bonus</b><span>+${(guildBonus.amount*100).toFixed(guildBonus.amount<.01?2:1)}% ${guildBonus.label}</span></div>`:''}${itemHtml}${unique?'<div class="unique victoryUniqueCallout">A Unique boss item has been discovered!</div>':''}</div>`),80);
+  if(typeof showModal==='function')setTimeout(()=>showModal(title,`<div class="victoryPresentation ${major?'major':''}"><div class="victoryCrest">${major?'👑':'⚔️'}</div><h2>${title}</h2><div class="victoryUnlockList">${unlocks.map(x=>`<div><span>✓</span><b>${x}</b></div>`).join('')}${guildBonus?`<div><span>✓</span><b>Permanent guild bonus · +${(guildBonus.amount*100).toFixed(guildBonus.amount<.01?2:1)}% ${guildBonus.label}</b></div>`:''}</div>${itemHtml}${unique?'<div class="unique victoryUniqueCallout">A Unique boss item has been discovered!</div>':''}</div>`),80);
 }
 
 function bossReward(m){
@@ -442,9 +445,9 @@ function depositMissionStash(m,reason='Mission rewards delivered'){
 function collectLoot(mid,quiet=false){
   const m=s.missions.find(x=>x.id===mid);if(!m||!m.stash)return;
   const claimedAnything=(m.stash.gold||0)>0||(m.stash.rep||0)>0||pendingCount(m)>0;
-  const delivered=depositMissionStash(m,'Party delivery');save();
+  const delivered=depositMissionStash(m,'Party delivery');save();if(delivered.gold||delivered.rep||delivered.materials||delivered.items)showLootCollectionBurst(delivered,quiet?'Party returned with loot':'Loot collected');
   if(!quiet)notify('Collected '+delivered.text+'.','good');
-  renderResourcesLite();renderInv();renderActive();renderCombat();
+  renderResourcesLite();renderInv();renderActive();renderCombat();return delivered;
 }
 function heroXpNeeded(level){
   const n=Math.max(0,(level||1)-1);

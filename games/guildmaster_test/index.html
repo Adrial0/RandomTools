@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Guildmaster: recruit adventurers, run quests and dungeons, collect loot, craft equipment, and grow your guild.">
 <title>Guildmaster | My Random Tools</title>
-<link rel="stylesheet" href="styles.css?build=20260904f">
+<link rel="stylesheet" href="styles.css?build=20260904g">
 </head><body>
 <audio id="bgMusic" src="audio/music/main-theme.mp3" loop preload="auto"></audio>
 <header class="site"><a class="brand" href="/"><span class="mark">MR/</span>My Random Tools</a><nav><a href="/">Home</a><a href="/#tools">All Tools</a></nav></header>
@@ -191,7 +191,7 @@
         <button class="inventoryMenuItem on" data-inv-rarity="Common" onclick="toggleInventoryRarity('Common',this)">Common</button><button class="inventoryMenuItem on" data-inv-rarity="Uncommon" onclick="toggleInventoryRarity('Uncommon',this)">Uncommon</button><button class="inventoryMenuItem on" data-inv-rarity="Rare" onclick="toggleInventoryRarity('Rare',this)">Rare</button><button class="inventoryMenuItem on" data-inv-rarity="Epic" onclick="toggleInventoryRarity('Epic',this)">Epic</button><button class="inventoryMenuItem on" data-inv-rarity="Legendary" onclick="toggleInventoryRarity('Legendary',this)">Legendary</button><button class="inventoryMenuItem on" data-inv-rarity="Mythic" onclick="toggleInventoryRarity('Mythic',this)">Mythic</button><button class="inventoryMenuItem on" data-inv-rarity="Unique" onclick="toggleInventoryRarity('Unique',this)">Unique</button>
       </div></div>
       <div class="inventoryDropWrap"><button class="btn" id="inventoryAutoButton" onclick="toggleInventoryMenu('inventoryAutoMenu',event)">Auto: Off ▾</button><div class="inventoryDropMenu inventoryAutoMenu" id="inventoryAutoMenu">
-        <div class="inventoryMenuLabel">New items only</div><label class="inventoryMenuField">Action<select id="inventoryAutoMode" onchange="setInventoryAutoMode(this.value)"><option value="off">Off</option><option value="sell">Auto-sell</option><option value="scrap">Auto-scrap</option></select></label><label class="inventoryMenuField">Up to rarity<select id="inventoryAutoRarity" onchange="setInventoryAutoRarity(this.value)"><option>Common</option><option>Uncommon</option><option>Rare</option><option>Epic</option><option>Legendary</option><option>Mythic</option></select></label><div class="muted" style="margin-top:5px">Only affects items that enter inventory after this rule is enabled.</div>
+        <div class="inventoryMenuLabel">Automatic item rule</div><label class="inventoryMenuField">Action<select id="inventoryAutoMode" onchange="setInventoryAutoMode(this.value)"><option value="off">Off</option><option value="sell">Auto-sell</option><option value="scrap">Auto-scrap</option></select></label><label class="inventoryMenuField">Up to rarity<select id="inventoryAutoRarity" onchange="setInventoryAutoRarity(this.value)"><option>Common</option><option>Uncommon</option><option>Rare</option><option>Epic</option><option>Legendary</option><option>Mythic</option></select></label><div class="muted" style="margin-top:5px">Incoming items use this rule automatically. You can also apply it to currently selected inventory items.</div><button class="btn danger inventoryAutoApply" id="inventoryAutoApply" onclick="applyInventoryAutoToSelected()" disabled>Select an action</button>
       </div></div>
       <button class="btn" id="inventorySelectToggle" onclick="toggleInventorySelectionMode()">Select Items</button><button class="btn" id="equippedToggle" onclick="toggleEquippedItems()">Show Equipped</button>
     </div>
@@ -311,11 +311,11 @@
 <div class="noticeStack" id="noticeStack"></div>
 
 <script src="js/core.js?build=20260903d"></script>
-<script src="js/combat.js?build=20260903b"></script>
+<script src="js/combat.js?build=20260904a"></script>
 <script src="js/progression.js?build=20260903c"></script>
-<script src="js/ui.js?build=20260904b"></script>
+<script src="js/ui.js?build=20260904c"></script>
 <script src="js/activities.js?build=20260831e"></script>
-<script src="js/economy.js?build=20260904c"></script>
+<script src="js/economy.js?build=20260904d"></script>
 <script src="js/professions.js?build=20260903d"></script>
 <script src="js/guild-events.js?build=20260901b"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
