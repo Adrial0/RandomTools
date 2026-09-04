@@ -32,4 +32,6 @@ assert.match(js,/state\.gearTierUnlocked=Math\.max/,'boss victories unlock the n
 assert.match(js,/function applyRarityAffixes\(/,'drops use Guildmaster rarity affix rules');
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use Guildmaster exact named equipment recipes');
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');
+assert.match(js,/h\.speed\*=\.65/,'hero basic attack timers are slowed without changing ability cooldowns');
+assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
 console.log('Guildmaster: Dungeons smoke tests passed.');
