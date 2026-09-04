@@ -1131,8 +1131,7 @@ function beginExpeditionStageIntermission(m,offline=false,finalStage=false){
   }
   const delivered=depositMissionStash(m,finalStage?'Area cleared':'Stage delivery');
   m.completedStages=stage;m.lastCheckpoint=expeditionEncounterCount(m);
-  const hidden=typeof document!=='undefined'&&document.hidden;
-  m.stageIntermission={stage,finalStage,offlinePaused:!!offline||hidden,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
+  m.stageIntermission={stage,finalStage,offlinePaused:false,until:Date.now()+EXPEDITION_INTERMISSION_MS,delivered};
   if(finalStage){m.completed=true;m.bossDefeated=true;addGuildActivity(firstClear?5:2,firstClear?'first expedition clear':'expedition clear');log(`${m.name} cleared after ${EXPEDITION_MAX_ENCOUNTERS} encounters.`);if(firstClearBonus)victoryPresentation(m,{major:false,guildBonus:firstClearBonus})}
   save();
 }
@@ -1141,7 +1140,7 @@ function continueExpeditionStage(mid){
   m.stageIntermission.offlinePaused=false;m.stageIntermission.until=Date.now();advanceExpeditionIntermission(m,Date.now());save();renderActive();renderCombat();
 }
 function advanceExpeditionIntermission(m,now=Date.now()){
-  const pause=m?.stageIntermission;if(!pause||pause.finalStage||pause.offlinePaused||now<pause.until)return false;
+  const pause=m?.stageIntermission;if(!pause||pause.finalStage||now<pause.until)return false;
   m.stageIntermission=null;
   const next=makeBattle(m);m.battle=m.battle?advanceBattleInPlace(m.battle,next,now):next;m.lastSim=now;return true;
 }

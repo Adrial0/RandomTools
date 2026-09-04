@@ -200,9 +200,8 @@ function updateActiveMissionCard(m){
   card.querySelector('[data-active-progress]').style.width=runPct+'%';
   const actions=card.querySelector('[data-active-actions]');
   if(m.defeated&&isStagedExpedition(m))actions.innerHTML=`<button class="btn gold" onclick="event.stopPropagation();restartExpedition(${m.id},false)">Start from Last Stage</button><button class="btn" onclick="event.stopPropagation();restartExpedition(${m.id},true)">Start from Beginning</button><button class="btn" onclick="event.stopPropagation();stopExpedition(${m.id})">Return to Guild</button>`;
-  else if(m.stageIntermission?.offlinePaused&&!m.completed)actions.innerHTML=`<button class="btn gold" onclick="event.stopPropagation();continueExpeditionStage(${m.id})">Continue Expedition</button><button class="btn" onclick="event.stopPropagation();stopExpedition(${m.id})">Return to Guild</button>`;
   else actions.innerHTML=`<button class="btn ${m.completed?'gold':''}" onclick="event.stopPropagation();stopExpedition(${m.id})">${m.completed?'Return to Guild':'End Expedition'}</button>`;
-  card.querySelector('[data-active-help]').textContent=m.stageIntermission?`${m.stageIntermission.delivered?.text||'Stage rewards delivered.'}${m.stageIntermission.offlinePaused&&!m.completed?' · Waiting for your order.':''}`:'Click the card to '+(m.defeated?'view the result':'watch combat')+'.';
+  card.querySelector('[data-active-help]').textContent=m.stageIntermission?`${m.stageIntermission.delivered?.text||'Stage rewards delivered.'} · Continuing automatically.`:'Click the card to '+(m.defeated?'view the result':'watch combat')+'.';
 }
 function renderActive(){
   if($('activeMissionCount'))$('activeMissionCount').textContent=s.missions.length;
@@ -586,7 +585,7 @@ function updateStageIntermissionUi(m){
     <div class="stageDeliveryBanner">
       <div><div class="name">${title}</div><div class="stageDeliveryText">The party delivers its reports, recovered items, and supplies to the guild.</div></div>
       <div class="stageDeliveryRewards">${pause.delivered?.text||'Rewards delivered'}</div>
-      <div class="stageDeliveryNext">${pause.finalStage?`<span class="good">The next expedition area is now available.</span>`:pause.offlinePaused?`<button class="btn gold" onclick="continueExpeditionStage(${m.id})">Continue Expedition</button>`:`<span class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</span>`}</div>
+      <div class="stageDeliveryNext">${pause.finalStage?`<span class="good">The next expedition area is now available.</span>`:`<span class="muted">Departing for Stage ${pause.stage+1} in ${fmt(remaining)}</span>`}</div>
     </div>
     <div class="stageCampScene"><div class="stageCampfire" aria-label="Campfire">🔥</div><div class="stageCampGlow"></div>${lootPileHtml(pause.delivered)}</div>`;
 }

@@ -14,7 +14,8 @@ assert.match(combat,/missionEncounterLevel\(m\).*m\.level.*Math\.floor\(expediti
 assert.match(combat,/m\.finiteStage%EXPEDITION_STAGE_SIZE===0.*beginExpeditionStageIntermission/s,'every fifth victory enters a delivery intermission');
 assert.match(combat,/depositMissionStash\(m,finalStage\?'Area cleared':'Stage delivery'\)/,'stage rewards are deposited automatically');
 assert.match(combat,/possible=Math\.min\(possible,EXPEDITION_STAGE_SIZE-/,'offline progress stops at the next stage boundary');
-assert.match(combat,/offlinePaused:!!offline\|\|hidden/,'hidden and offline play pauses after delivery');
+assert.match(combat,/offlinePaused:false/,'stage delivery always continues automatically, including after background progress');
+assert.doesNotMatch(ui,/>Continue Expedition</,'stage delivery never requires a manual continue button');
 assert.match(combat,/m\.lastCheckpoint=Math\.floor\(expeditionEncounterCount\(m\)\/EXPEDITION_STAGE_SIZE\)\*EXPEDITION_STAGE_SIZE/,'defeat records the beginning of the failed stage');
 assert.match(combat,/function restartExpedition\(mid,fromBeginning=false\)/,'failed expeditions support checkpoint and full restart');
 assert.match(ui,/Start from Last Stage/,'checkpoint restart is the primary failed-expedition action');
