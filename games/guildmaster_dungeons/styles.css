@@ -35,3 +35,22 @@
 /* Readability floor: dense labels should remain legible at normal desktop scaling. */
 .title p,.muted{font-size:12px;line-height:1.5}.screenTitle .eyebrow,.regionHead .eyebrow{font-size:11px}.nodeDesc{font-size:11px;line-height:1.35}.sub,.stats{font-size:11px}.gearSlot{font-size:10px}.choiceHint{font-size:11px}.rewardType{font-size:11px}.unitName small{font-size:11px;line-height:1.35}.meterLabel,.abilityLine{font-size:10px}.initiativeToken{font-size:12px}.initiativeToken small{font-size:10px}.turnPrompt,.enemyThinking{font-size:12px}.turnAction small,.turnAction span{font-size:11px;line-height:1.45}.combatLog{font-size:12px;line-height:1.55}.reportRow{font-size:11px}.reportRow small{font-size:9px}.enemyRole{font-size:11px}.enemyIntent b{font-size:12px}.enemyIntent span{font-size:10px;line-height:1.4}.itemStats span{font-size:10px}.inspectHint,.gearInspectCard span,.gearInspectCard small{font-size:10px}.slotNumber{font-size:11px}.sidebarEffect{font-size:12px}
 @media(max-width:700px){.turnAction small,.turnAction span,.combatLog{font-size:10px}.unitName small{font-size:10px}}
+
+/* Keep turn controls in view while crowded battlefields scroll independently. */
+.turnBasedCombat .combatSides{flex:0 1 auto;max-height:clamp(250px,40vh,390px);overflow-y:auto;overscroll-behavior:contain;padding:26px 8px 10px;scrollbar-color:#85602b rgba(10,8,5,.45)}
+.turnBasedCombat .turnPrompt{position:relative;z-index:15;flex:0 0 auto;margin-top:10px}
+
+/* Combatants remain clickable without opaque cards obscuring the scenery. */
+.turnBasedCombat .unit,.turnBasedCombat .unit.enemy{background:transparent;border-color:transparent;box-shadow:none}
+.turnBasedCombat .unit.activeTurn{outline:0;box-shadow:none}
+.turnBasedCombat .unit.inspectable:not(.targetable):hover{background:rgba(15,11,7,.16);border-color:transparent;box-shadow:none;filter:brightness(1.12)}
+
+/* Small sprite reactions communicate attacks and impacts without moving the layout. */
+.turnBasedCombat .combatSide:first-child .unit.dealingHit .portrait{animation:heroStrike .28s ease-out}
+.turnBasedCombat .combatSide:nth-child(2) .unit.dealingHit .portrait{animation:enemyStrike .28s ease-out}
+.turnBasedCombat .combatSide:first-child .unit.takingHit .portrait{animation:heroRecoil .3s ease-out}
+.turnBasedCombat .combatSide:nth-child(2) .unit.takingHit .portrait{animation:enemyRecoil .3s ease-out}
+@keyframes heroStrike{0%,100%{transform:scaleX(-1) translateX(0)}45%{transform:scaleX(-1) translateX(-12px) scale(1.06)}}
+@keyframes enemyStrike{0%,100%{transform:translateX(0)}45%{transform:translateX(-12px) scale(1.06)}}
+@keyframes heroRecoil{0%,100%{transform:scaleX(-1) translateX(0);filter:none}30%{transform:scaleX(-1) translateX(-7px);filter:brightness(1.8) saturate(.5)}60%{transform:scaleX(-1) translateX(4px)}}
+@keyframes enemyRecoil{0%,100%{transform:translateX(0);filter:none}30%{transform:translateX(7px);filter:brightness(1.8) saturate(.5)}60%{transform:translateX(-4px)}}

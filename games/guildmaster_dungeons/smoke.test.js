@@ -149,6 +149,11 @@ assert.match(js,/function tryWeaponStatus\(/,'basic attacks can proc weapon stat
 assert.match(js,/function playSfx\(/,'procedural combat and interface sound effects are available');
 assert.match(js,/function heroAttackSfx\(/,'weapon families and abilities select distinct sounds');
 assert.match(js,/SFX_VOLUME_KEY/,'sound volume is persisted between sessions');
+assert.match(js,/SFX_VOLUME_KEY\)\?\?\.5/,'fresh sound-effects volume defaults to 50%');
+assert.match(js,/MUSIC_VOLUME_KEY\)\?\?\.1/,'fresh music volume defaults to 10%');
+assert.match(css,/\.turnBasedCombat \.combatSides\{[^}]*overflow-y:auto/,'crowded combatants scroll without hiding the action controls');
+assert.match(css,/\.turnBasedCombat \.unit,.turnBasedCombat \.unit\.enemy\{background:transparent;border-color:transparent/,'combat cards no longer draw scenery-obscuring boxes');
+assert.match(css,/@keyframes heroStrike[\s\S]*@keyframes enemyRecoil/,'combat sprites animate attacks and incoming hits');
 assert.match(js,/function openSettings\(/,'the header settings window exposes audio controls');
 assert.match(js,/MUSIC_VOLUME_KEY[\s\S]*MASTER_MUTE_KEY/,'music, effects, and master mute preferences persist separately');
 assert.match(js,/function confirmResetProgress\(/,'progress reset requires a dedicated warning confirmation');
