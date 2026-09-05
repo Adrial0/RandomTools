@@ -104,6 +104,8 @@ assert.match(js,/function combatReportRows\(/,'combat renders a per-character li
 assert.match(js,/crit:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'character sheets include stacked critical-chance boons');
 assert.match(js,/setTimeout\(\(\)=>completeBattleVictory\(b\.id\),2000\)/,'victory keeps the final battle report visible for two seconds');
 assert.match(js,/manaRegenElapsed>=5/,'mana regeneration uses Guildmaster five-second ticks');
+assert.match(js,/r\.lockedNodeType&&r\.lockedNodeType!==type/,'choosing an encounter locks out the other options');
+assert.match(js,/delete r\.lockedNodeType;r\.step\+\+/,'the encounter lock clears only after advancing');
 assert.match(js,/Paladin:\{name:'Holy Guard',cost:24,cooldown:8,maxMana:60,regen:1\}/,'Paladins use Guildmaster base mana regeneration');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
