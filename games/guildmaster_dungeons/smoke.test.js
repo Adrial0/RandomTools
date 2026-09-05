@@ -104,7 +104,12 @@ assert.match(js,/function combatReportRows\(/,'combat renders a per-character li
 assert.match(js,/crit:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'character sheets include stacked critical-chance boons');
 assert.match(js,/setTimeout\(\(\)=>completeBattleVictory\(b\.id\),2000\)/,'victory keeps the final battle report visible for two seconds');
 assert.match(js,/manaRegenElapsed>=5/,'mana regeneration uses Guildmaster five-second ticks');
+assert.match(js,/\['manaRegen','Meditation','Mana Regen','\+0\.2'/,'Mana Regen training grants 0.2 per rank');
+assert.match(js,/\['Field Medicine','Heal 4% after each battle','heal',\.04\]/,'Field Medicine heals 4% per copy');
+assert.doesNotMatch(js,/heroPower| PWR/,'character Power is removed from Dungeons');
+assert.match(css,/\.combatSide:first-child \.unit \.portrait\{transform:scaleX\(-1\)\}/,'friendly combatants face right');
 assert.match(js,/r\.lockedNodeType&&r\.lockedNodeType!==type/,'choosing an encounter locks out the other options');
+assert.match(js,/r\.lockedNodeType=type;save\(\);render\(\)/,'the map immediately redraws locked alternatives as disabled');
 assert.match(js,/delete r\.lockedNodeType;r\.step\+\+/,'the encounter lock clears only after advancing');
 assert.match(js,/Paladin:\{name:'Holy Guard',cost:24,cooldown:8,maxMana:60,regen:1\}/,'Paladins use Guildmaster base mana regeneration');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
