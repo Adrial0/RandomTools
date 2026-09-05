@@ -114,6 +114,8 @@ assert.match(css,/\.combatSide:first-child \.unit \.portrait\{transform:scaleX\(
 assert.match(js,/r\.lockedNodeType&&r\.lockedNodeType!==type/,'choosing an encounter locks out the other options');
 assert.match(js,/r\.lockedNodeType=type;save\(\);render\(\)/,'the map immediately redraws locked alternatives as disabled');
 assert.match(js,/delete r\.lockedNodeType;r\.step\+\+/,'the encounter lock clears only after advancing');
+assert.match(js,/delete r\.recruitChoices;delete r\.lockedNodeType/,'entering a new region clears the defeated boss path lock');
+assert.match(js,/!current\.includes\(r\.lockedNodeType\)\)delete r\.lockedNodeType/,'invalid saved path locks are repaired when the map renders');
 assert.match(js,/Paladin:\{name:'Holy Guard',cost:24,cooldown:8,maxMana:60,regen:2\}/,'Paladins use the increased turn-based mana regeneration');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
