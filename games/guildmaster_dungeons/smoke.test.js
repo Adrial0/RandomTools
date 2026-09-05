@@ -151,7 +151,8 @@ assert.match(js,/function heroAttackSfx\(/,'weapon families and abilities select
 assert.match(js,/SFX_VOLUME_KEY/,'sound volume is persisted between sessions');
 assert.match(js,/SFX_VOLUME_KEY\)\?\?\.5/,'fresh sound-effects volume defaults to 50%');
 assert.match(js,/MUSIC_VOLUME_KEY\)\?\?\.1/,'fresh music volume defaults to 10%');
-assert.match(css,/\.turnBasedCombat \.combatSides\{[^}]*overflow-y:auto/,'crowded combatants scroll without hiding the action controls');
+assert.match(css,/\.turnBasedCombat \.combatSides\{[^}]*grid-template-columns:1fr[^}]*overflow:visible/,'the battlefield uses full-width rows without an internal scrollbar');
+assert.match(css,/\.turnBasedCombat \.combatSide\{[^}]*repeat\(auto-fit,minmax\(180px,1fr\)\)/,'party and enemy groups fit into compact horizontal rows');
 assert.match(css,/\.turnBasedCombat \.combatSide\{[^}]*grid-auto-rows:max-content/,'combat rows use compact natural heights instead of stretching');
 assert.match(css,/\.turnBasedCombat \.unit,.turnBasedCombat \.unit\.enemy\{[^}]*height:auto;padding:4px 6px/,'combatant spacing is compact without shrinking sprites or bars');
 assert.match(css,/\.turnBasedCombat\{background-size:100% auto;background-position:center top/,'combat scenery remains anchored while action content rerenders');

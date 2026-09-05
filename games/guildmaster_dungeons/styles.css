@@ -37,9 +37,9 @@
 @media(max-width:700px){.turnAction small,.turnAction span,.combatLog{font-size:10px}.unitName small{font-size:10px}}
 
 /* Keep turn controls in view while crowded battlefields scroll independently. */
-.turnBasedCombat .combatSides{flex:0 1 auto;max-height:clamp(250px,40vh,390px);overflow-y:auto;overscroll-behavior:contain;padding:26px 8px 10px;scrollbar-color:#85602b rgba(10,8,5,.45)}
+.turnBasedCombat .combatSides{display:grid;grid-template-columns:1fr;gap:5px;max-height:none;overflow:visible;padding:26px 8px 8px}
 .turnBasedCombat{background-size:100% auto;background-position:center top;background-repeat:repeat-y}
-.turnBasedCombat .combatSide{align-content:start;align-items:start;grid-auto-rows:max-content;gap:8px 12px}
+.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-content:start;align-items:start;grid-auto-rows:max-content;gap:5px 10px}
 .turnBasedCombat .unit,.turnBasedCombat .unit.enemy{align-self:start;min-height:0;height:auto;padding:4px 6px}
 .turnBasedCombat .turnPrompt{position:relative;z-index:15;flex:0 0 auto;margin-top:10px}
 
@@ -57,3 +57,4 @@
 @keyframes enemyStrike{0%,100%{transform:translateX(0)}45%{transform:translateX(-12px) scale(1.06)}}
 @keyframes heroRecoil{0%,100%{transform:scaleX(-1) translateX(0);filter:none}30%{transform:scaleX(-1) translateX(-7px);filter:brightness(1.8) saturate(.5)}60%{transform:scaleX(-1) translateX(4px)}}
 @keyframes enemyRecoil{0%,100%{transform:translateX(0);filter:none}30%{transform:translateX(7px);filter:brightness(1.8) saturate(.5)}60%{transform:translateX(-4px)}}
+@media(max-width:900px){.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}}
