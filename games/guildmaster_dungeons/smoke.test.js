@@ -101,6 +101,8 @@ assert.match(js,/r\.pendingEliteRelics=elite\?makeEliteRelicRewards\(\):null/,'o
 assert.match(js,/r\.pendingReward=r\.pendingEliteRelics;delete r\.pendingEliteRelics/,'claiming the normal reward opens the relic selection afterward');
 assert.match(js,/state\.run\?\.relics/,'character inspection works before a run exists during party selection');
 assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
+assert.match(js,/crit:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'character sheets include stacked critical-chance boons');
+assert.match(js,/setTimeout\(\(\)=>completeBattleVictory\(b\.id\),2000\)/,'victory keeps the final battle report visible for two seconds');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
 assert.match(js,/Warrior:\{hp:132,atk:17,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base HP and threat');
