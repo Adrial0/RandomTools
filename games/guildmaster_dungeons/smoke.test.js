@@ -178,6 +178,8 @@ assert.match(js,/state\.guildSeals=\(state\.guildSeals\|\|0\)\+seals/,'completed
 assert.match(js,/state\.maxDifficultyUnlocked=difficulty\+1/,'victory unlocks the next difficulty');
 assert.match(js,/const SEAL_UPGRADES=/,'Guild Seals purchase rarity access and repeatable rerolls');
 assert.match(js,/function gateHighRarity\(/,'Legendary and Mythic results require their Seal upgrade');
+assert.match(js,/rank===0\?'Unlock Legendary Items and Characters':rank===1\?'Unlock Mythic Items and Characters'/,'the rarity upgrade slot advances from Legendary unlock to Mythic unlock');
+assert.match(js,/if\(rank===1\)return rarity==='Mythic'\?'Legendary':rarity/,'the first rarity rank unlocks Legendary while keeping Mythic locked');
 assert.match(js,/function useRunReroll\(/,'Vault, Shrine, and Trader rerolls consume per-run charges');
 assert.match(js,/function rerollRecruitment\(/,'post-boss candidate rerolls consume per-run charges');
 assert.match(js,/boss&&r\.region===0/,'the first region boss receives a dedicated introductory difficulty reduction');
