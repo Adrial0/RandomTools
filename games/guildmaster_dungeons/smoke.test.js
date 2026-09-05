@@ -145,6 +145,9 @@ assert.doesNotMatch(js,/Counter:<\/b>/,'enemy inspection does not reveal counter
 assert.doesNotMatch(js,/\$\{turns\}T/,'status duration badges use an uncluttered round count');
 assert.match(js,/function weaponStatusProfile\(/,'weapon families define distinct basic-attack status effects');
 assert.match(js,/function tryWeaponStatus\(/,'basic attacks can proc weapon statuses');
+assert.match(js,/function playSfx\(/,'procedural combat and interface sound effects are available');
+assert.match(js,/function heroAttackSfx\(/,'weapon families and abilities select distinct sounds');
+assert.match(js,/SFX_VOLUME_KEY/,'sound volume is persisted between sessions');
 assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
 assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
