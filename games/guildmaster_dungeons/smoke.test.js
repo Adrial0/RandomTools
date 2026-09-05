@@ -31,11 +31,11 @@ assert.match(js,/state\.history\.push/,'finished parties enter persistent histor
 assert.match(js,/localStorage\.setItem\(SAVE_KEY/,'campaign progression is persisted separately');
 assert.match(css,/\.combatField/,'the game includes a visual combat field');
 assert.match(js,/const ABILITIES=/,'combat defines class abilities, mana costs, and cooldowns');
-assert.match(js,/function castHeroAbility\(/,'heroes use visible class abilities during combat');
+assert.match(js,/function chooseTurnAction\(/,'heroes expose player-controlled actions during combat');
 assert.match(js,/r\.recruitChoices=classRoster\(currentPartyLevel\(\)\)/,'post-boss recruitment offers one hero of each class at party level');
 assert.match(js,/function chooseInventoryTarget\(/,'inventory equipment lets the player choose who equips it');
 assert.match(js,/function itemFolder\(/,'equipment art uses the correct asset folders');
-assert.match(js,/requestAnimationFrame\(animateCombatMeters\)/,'combat meters animate every presentation frame');
+assert.match(js,/function initiativeTimeline\(/,'combat displays the upcoming initiative order');
 assert.match(js,/ITEM_DATA_URL='\.\.\/guildmaster\/data\/items\.json'/,'the roguelike loads Guildmaster equipment definitions');
 assert.match(js,/function gearStats\(/,'equipment affixes feed into combat stats');
 assert.match(js,/function canEquip\(/,'class weapon and armor restrictions are enforced');
@@ -59,7 +59,7 @@ assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use G
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');
 assert.match(js,/function partyCanEquip\(/,'generated equipment must be usable by the current party');
 assert.match(js,/if\(partyCanEquip\(item\)\)return item/,'item generation filters incompatible equipment');
-assert.match(js,/h\.speed\*=h\.slowAttackMigration\?\.35\/\.65:\.35/,'hero basic attacks use the slower versioned timing');
+assert.match(js,/function heroInitiative\(h\)/,'heroes have an initiative stat partially derived from Dexterity');
 assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleParty\(/,'each battle levels the entire party');
@@ -90,7 +90,7 @@ assert.match(js,/function boonTotalDescription\(/,'stacked boon inspection displ
 assert.match(js,/row\.length===1\?'singlePathRow'/,'single milestone nodes render without fake alternatives');
 assert.match(js,/const CLASS_PASSIVES=/,'character inspection explains class passives');
 assert.match(js,/const ABILITY_DESCRIPTIONS=/,'character inspection explains abilities');
-assert.match(js,/function processOngoingEffects\(/,'status and renewal effects tick during slower combat');
+assert.match(js,/function buildTurnOrder\(/,'each round builds a descending initiative order');
 assert.match(js,/resolveStory\('\$\{effect\}'\)/,'event buttons carry their explicit promised outcome');
 assert.match(js,/effect==='randomGear'[\s\S]*r\.inventory\.push\(item\)/,'the random gear event always adds its item to inventory');
 assert.match(js,/if\(relicRow\)return\['relic'\]/,'relic vaults are limited to every fifth encounter');
@@ -103,7 +103,7 @@ assert.match(js,/state\.run\?\.relics/,'character inspection works before a run 
 assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
 assert.match(js,/crit:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'character sheets include stacked critical-chance boons');
 assert.match(js,/setTimeout\(\(\)=>completeBattleVictory\(b\.id\),2000\)/,'victory keeps the final battle report visible for two seconds');
-assert.match(js,/manaRegenElapsed>=5/,'mana regeneration uses Guildmaster five-second ticks');
+assert.match(js,/Round \$\{b\.round\}: the party regenerates Mana/,'mana regeneration occurs at the start of each new round');
 assert.match(js,/\['manaRegen','Meditation','Mana Regen','\+0\.2'/,'Mana Regen training grants 0.2 per rank');
 assert.match(js,/\['Field Medicine','Heal 4% after each battle','heal',\.04\]/,'Field Medicine heals 4% per copy');
 assert.doesNotMatch(js,/heroPower| PWR/,'character Power is removed from Dungeons');
@@ -114,8 +114,12 @@ assert.match(js,/delete r\.lockedNodeType;r\.step\+\+/,'the encounter lock clear
 assert.match(js,/Paladin:\{name:'Holy Guard',cost:24,cooldown:8,maxMana:60,regen:1\}/,'Paladins use Guildmaster base mana regeneration');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
-assert.match(js,/Warrior:\{hp:132,atk:17,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base HP and threat');
-assert.match(js,/Paladin:\{hp:122,atk:13,speed:\.85,threat:2/,'Paladins use Guildmaster base HP and threat');
+assert.match(js,/Warrior:\{hp:132,atk:17,initiative:8,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base HP and threat plus turn initiative');
+assert.match(js,/Paladin:\{hp:122,atk:13,initiative:7,speed:\.85,threat:2/,'Paladins use Guildmaster base HP and threat plus turn initiative');
+assert.match(js,/const TURN_ABILITIES=/,'every class has two turn-based abilities');
+assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Poisoned Blade[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
+assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
+assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
 assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
 assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');
