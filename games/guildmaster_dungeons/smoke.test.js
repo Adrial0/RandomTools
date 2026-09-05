@@ -149,6 +149,10 @@ assert.match(js,/function tryWeaponStatus\(/,'basic attacks can proc weapon stat
 assert.match(js,/function playSfx\(/,'procedural combat and interface sound effects are available');
 assert.match(js,/function heroAttackSfx\(/,'weapon families and abilities select distinct sounds');
 assert.match(js,/SFX_VOLUME_KEY/,'sound volume is persisted between sessions');
+assert.match(js,/function openSettings\(/,'the header settings window exposes audio controls');
+assert.match(js,/MUSIC_VOLUME_KEY[\s\S]*MASTER_MUTE_KEY/,'music, effects, and master mute preferences persist separately');
+assert.match(js,/function confirmResetProgress\(/,'progress reset requires a dedicated warning confirmation');
+assert.match(js,/function resetAllProgress\(\)\{state=fresh\(\);save\(\)/,'confirmed reset replaces all game progression with a fresh save');
 assert.match(js,/new Audio\('MainTheme\.mp3'\)/,'the looping main theme is prepared after the first interaction');
 assert.match(js,/function failedRunGems\(/,'failed expedition rewards scale with route and battle progress');
 assert.match(js,/boss&&r\.region===0/,'the first region boss receives a dedicated introductory difficulty reduction');
