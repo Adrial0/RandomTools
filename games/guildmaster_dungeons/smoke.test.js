@@ -103,8 +103,12 @@ assert.match(js,/state\.run\?\.relics/,'character inspection works before a run 
 assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
-assert.match(js,/Warrior:\{hp:145,atk:17,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base threat');
-assert.match(js,/Paladin:\{hp:170,atk:13,speed:\.85,threat:2/,'Paladins use Guildmaster base threat');
+assert.match(js,/Warrior:\{hp:132,atk:17,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base HP and threat');
+assert.match(js,/Paladin:\{hp:122,atk:13,speed:\.85,threat:2/,'Paladins use Guildmaster base HP and threat');
+assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
+assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
+assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');
+assert.match(js,/function traitStats\(/,'character traits contribute their Guildmaster stats');
 assert.match(js,/function heroThreat\(/,'threat combines class, subclass, and equipment bonuses');
 assert.match(js,/sub\?\.threatBonus\|\|0/,'Guardian and Templar subclass threat applies');
 assert.match(js,/gear\.threatBonus\|\|0/,'canonical Guildmaster threat equipment applies');
