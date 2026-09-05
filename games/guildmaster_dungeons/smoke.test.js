@@ -138,6 +138,9 @@ assert.match(js,/function recordDamageHit\(/,'recent hits record damage for comb
 assert.match(js,/function recentDamageVisual\(/,'combat cards render recent-hit feedback');
 assert.match(js,/function recentHealingVisual\(/,'combat cards render recent-healing feedback');
 assert.match(js,/function combatStatusBadges\(/,'combat cards expose active status effects');
+assert.match(js,/function weaponStatusProfile\(/,'weapon families define distinct basic-attack status effects');
+assert.match(js,/function tryWeaponStatus\(/,'basic attacks can proc weapon statuses');
+assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
 assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
 assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');

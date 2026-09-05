@@ -17,7 +17,7 @@ let source=fs.readFileSync(__dirname+'/game.js','utf8').replace(/init\(\);\s*$/,
 source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
-  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,
+  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
   abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS
 }`;
 vm.runInContext(source,context);
@@ -30,6 +30,8 @@ assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities')
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
 assert.equal(Object.values(api.abilities).flat().every(ability=>!('cooldown' in ability)),true,'turn abilities are limited by Mana rather than cooldowns');
 assert.equal(Object.values(api.augments).every(list=>list.length===6),true,'each class has three shrine upgrades for each ability');
+assert.equal(api.weaponStatusProfile({slot:'Weapon',weaponTemplate:'Warhammer',damageType:'physical'}).name,'Armor Broken','maces and hammers can break Armor');
+assert.equal(api.weaponStatusProfile({slot:'Weapon',weaponTemplate:'Crystal Wand',damageType:'ice'}).name,'Frostbite','elemental caster weapons apply their matching status');
 
 api.chooseTurnAction('basic');
 assert.equal(battle.pendingAction,'basic','targeted actions pause for target selection');
