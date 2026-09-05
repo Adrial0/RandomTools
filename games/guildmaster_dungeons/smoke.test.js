@@ -172,6 +172,14 @@ assert.match(js,/function confirmResetProgress\(/,'progress reset requires a ded
 assert.match(js,/function resetAllProgress\(\)\{state=fresh\(\);save\(\)/,'confirmed reset replaces all game progression with a fresh save');
 assert.match(js,/new Audio\('MainTheme\.mp3'\)/,'the looping main theme is prepared after the first interaction');
 assert.match(js,/function failedRunGems\(/,'failed expedition rewards scale with route and battle progress');
+assert.match(js,/const DIFFICULTIES=/,'runs offer four escalating difficulty levels');
+assert.match(js,/difficultyMult=DIFFICULTIES\[r\.difficulty\|\|0\]\.mult/,'selected difficulty scales every enemy');
+assert.match(js,/state\.guildSeals=\(state\.guildSeals\|\|0\)\+seals/,'completed runs award difficulty-based Guild Seals');
+assert.match(js,/state\.maxDifficultyUnlocked=difficulty\+1/,'victory unlocks the next difficulty');
+assert.match(js,/const SEAL_UPGRADES=/,'Guild Seals purchase rarity access and repeatable rerolls');
+assert.match(js,/function gateHighRarity\(/,'Legendary and Mythic results require their Seal upgrade');
+assert.match(js,/function useRunReroll\(/,'Vault, Shrine, and Trader rerolls consume per-run charges');
+assert.match(js,/function rerollRecruitment\(/,'post-boss candidate rerolls consume per-run charges');
 assert.match(js,/boss&&r\.region===0/,'the first region boss receives a dedicated introductory difficulty reduction');
 assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
 assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
