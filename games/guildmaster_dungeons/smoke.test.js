@@ -25,7 +25,8 @@ assert.match(css,/\.runMapGrid>aside\{position:sticky/,'the party remains visibl
 assert.match(js,/r\.heroes\.push\(h\);applyRunRelicsToHero\(h\);r\.region\+\+/,'one adventurer joins after a cleared boss and inherits run relic rules');
 assert.match(js,/if\(saved\.gems==null\)saved\.gems=saved\.treasury\|\|0/,'old treasury balances migrate safely to gems');
 assert.match(js,/state\.gems\+=gems/,'expedition progress awards permanent gems');
-assert.match(js,/gems=won\?40\+r\.encounters\*3:Math\.floor\(r\.encounters\/2\)/,'abandoning before an encounter awards no gems');
+assert.match(js,/if\(!r\|\|\(!r\.step&&!r\.encounters&&!r\.region\)\)return 0/,'abandoning before making progress awards no gems');
+assert.match(js,/gems=won\?40\+r\.encounters\*3:failedRunGems\(r\)/,'failed runs receive progress-scaled gems');
 assert.doesNotMatch(js,/state\.treasury\+=secured/,'run gold can no longer become permanent currency');
 assert.match(js,/state\.history\.push/,'finished parties enter persistent history');
 assert.match(js,/localStorage\.setItem\(SAVE_KEY/,'campaign progression is persisted separately');
@@ -148,6 +149,9 @@ assert.match(js,/function tryWeaponStatus\(/,'basic attacks can proc weapon stat
 assert.match(js,/function playSfx\(/,'procedural combat and interface sound effects are available');
 assert.match(js,/function heroAttackSfx\(/,'weapon families and abilities select distinct sounds');
 assert.match(js,/SFX_VOLUME_KEY/,'sound volume is persisted between sessions');
+assert.match(js,/new Audio\('MainTheme\.mp3'\)/,'the looping main theme is prepared after the first interaction');
+assert.match(js,/function failedRunGems\(/,'failed expedition rewards scale with route and battle progress');
+assert.match(js,/boss&&r\.region===0/,'the first region boss receives a dedicated introductory difficulty reduction');
 assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
 assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
