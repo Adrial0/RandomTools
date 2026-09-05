@@ -152,6 +152,7 @@ assert.match(js,/SFX_VOLUME_KEY/,'sound volume is persisted between sessions');
 assert.match(js,/SFX_VOLUME_KEY\)\?\?\.5/,'fresh sound-effects volume defaults to 50%');
 assert.match(js,/MUSIC_VOLUME_KEY\)\?\?\.1/,'fresh music volume defaults to 10%');
 assert.match(css,/\.turnBasedCombat \.combatSides\{[^}]*overflow-y:auto/,'crowded combatants scroll without hiding the action controls');
+assert.match(css,/\.turnBasedCombat\{background-size:100% auto;background-position:center top/,'combat scenery remains anchored while action content rerenders');
 assert.match(css,/\.turnBasedCombat \.unit,.turnBasedCombat \.unit\.enemy\{background:transparent;border-color:transparent/,'combat cards no longer draw scenery-obscuring boxes');
 assert.match(css,/@keyframes heroStrike[\s\S]*@keyframes enemyRecoil/,'combat sprites animate attacks and incoming hits');
 assert.match(js,/function openSettings\(/,'the header settings window exposes audio controls');

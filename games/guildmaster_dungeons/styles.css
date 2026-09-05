@@ -38,6 +38,7 @@
 
 /* Keep turn controls in view while crowded battlefields scroll independently. */
 .turnBasedCombat .combatSides{flex:0 1 auto;max-height:clamp(250px,40vh,390px);overflow-y:auto;overscroll-behavior:contain;padding:26px 8px 10px;scrollbar-color:#85602b rgba(10,8,5,.45)}
+.turnBasedCombat{background-size:100% auto;background-position:center top;background-repeat:repeat-y}
 .turnBasedCombat .turnPrompt{position:relative;z-index:15;flex:0 0 auto;margin-top:10px}
 
 /* Combatants remain clickable without opaque cards obscuring the scenery. */
