@@ -59,6 +59,8 @@ assert.match(js,/function applyRarityAffixes\(/,'drops use Guildmaster rarity af
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use Guildmaster exact named equipment recipes');
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');
 assert.match(js,/function partyCanEquip\(/,'generated equipment must be usable by the current party');
+assert.match(js,/function partyPreferredArmorClasses\(/,'armor rewards derive their preferred weight classes from the current party');
+assert.match(js,/preferred\.has\(item\.armorClass\)/,'armor drops match a native armor class represented in the party');
 assert.match(js,/if\(partyCanEquip\(item\)\)return item/,'item generation filters incompatible equipment');
 assert.match(js,/function heroInitiative\(h\)/,'heroes have an initiative stat partially derived from Dexterity');
 assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
