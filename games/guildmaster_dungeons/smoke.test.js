@@ -163,7 +163,7 @@ assert.match(js,/class="unitAttack">⚔ \$\{effectiveAtk\(u\)\} ATK/,'hero cards
 assert.match(css,/\.turnBasedCombat \.turnAction\{padding:7px;min-height:60px/,'combat actions use compact always-visible controls');
 assert.match(css,/\.turnBasedCombat \.combatSide\{[^}]*grid-auto-rows:max-content/,'combat rows use compact natural heights instead of stretching');
 assert.match(css,/\.turnBasedCombat \.unit,.turnBasedCombat \.unit\.enemy\{[^}]*height:auto;padding:4px 6px/,'combatant spacing is compact without shrinking sprites or bars');
-assert.match(css,/\.turnBasedCombat\{background-size:100% auto;background-position:center top/,'combat scenery remains anchored while action content rerenders');
+assert.match(css,/\.turnBasedCombat\{background-size:cover;background-position:center/,'combat scenery fills the entire battlefield while action content rerenders');
 assert.match(css,/\.turnBasedCombat \.unit,.turnBasedCombat \.unit\.enemy\{background:transparent;border-color:transparent/,'combat cards no longer draw scenery-obscuring boxes');
 assert.match(css,/@keyframes heroStrike[\s\S]*@keyframes enemyRecoil/,'combat sprites animate attacks and incoming hits');
 assert.match(js,/function openSettings\(/,'the header settings window exposes audio controls');
@@ -205,4 +205,8 @@ assert.match(js,/r\.gemMultiplier=\(r\.gemMultiplier\|\|1\)\+m\.gems/,'each acce
 assert.match(js,/state\.endlessLeaderboard\.sort\(\(a,b\)=>b\.encounters-a\.encounters\)/,'the Endless leaderboard ranks attempts only by encounters completed');
 assert.match(js,/if\(difficulty===0\)state\.endlessUnlocked=true/,'completing Easy unlocks Endless Mode');
 assert.match(js,/function regionData\(r=state\.run\)/,'Endless regions safely cycle through the existing region themes');
+assert.match(js,/function heroCombatAbilities\(h\)/,'a selected subclass contributes a third combat ability');
+assert.match(js,/function executeSubclassAbility\(/,'subclass actives have turn-based combat effects');
+assert.match(js,/id:'loneWolf'/,'Lone Wolf can appear among Endless boss modifiers');
+assert.match(js,/function chooseLoneWolf\(/,'Lone Wolf forces the player to select the only continuing hero');
 console.log('Guildmaster: Dungeons smoke tests passed.');

@@ -39,7 +39,7 @@
 
 /* Keep turn controls in view while crowded battlefields scroll independently. */
 .turnBasedCombat .combatSides{display:grid;grid-template-columns:1fr;gap:3px;max-height:none;overflow:visible;padding:10px 8px 5px}
-.turnBasedCombat{background-size:100% auto;background-position:center top;background-repeat:no-repeat;background-color:#17110b}
+.turnBasedCombat{background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#17110b}
 .turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,220px);justify-content:center;align-content:start;align-items:start;grid-auto-rows:max-content;gap:5px 10px}
 .turnBasedCombat .unit,.turnBasedCombat .unit.enemy{align-self:start;min-height:0;height:auto;padding:4px 6px}
 .turnBasedCombat .turnPrompt{position:relative;z-index:15;flex:0 0 auto;margin-top:10px}
@@ -88,3 +88,5 @@
 .gemReward{margin-top:auto;color:#e7bbff;font:bold 14px var(--mono)}.endlessTotal{text-align:center;font-size:17px}
 .endlessLeaderboard{margin-top:18px;padding-top:15px;border-top:1px solid #65461f}.leaderboardRows{display:grid;gap:6px}.leaderboardRow{display:flex;justify-content:space-between;padding:9px 11px;border:1px solid #57401f;background:#110d08}.leaderboardRow b{color:#e8ba62}
 @media(max-width:800px){.endlessModifierGrid{grid-template-columns:1fr}.endlessModifier{min-height:170px}}
+.subclassAction{border-color:#9f62c8;background:linear-gradient(145deg,rgba(83,39,104,.82),rgba(31,19,37,.94))}.subclassAction b{color:#e6bbff}
+.loneWolfScreen{min-height:calc(100vh - 120px);display:flex;flex-direction:column;justify-content:center}.loneWolfChoices{max-width:1000px;width:100%;margin:0 auto}.loneWolfChoice{min-height:190px;padding:20px 20px 42px;text-align:center;border-color:#b25d48}.loneWolfChoice .portrait{width:88px;height:88px;border:0;background:transparent;float:none}.loneWolfChoice strong{font-size:20px;color:#ffd28a}.loneWolfChoice .itemStats{justify-content:center}
