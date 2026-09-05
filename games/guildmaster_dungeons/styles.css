@@ -37,7 +37,7 @@
 @media(max-width:700px){.turnAction small,.turnAction span,.combatLog{font-size:10px}.unitName small{font-size:10px}}
 
 /* Keep turn controls in view while crowded battlefields scroll independently. */
-.turnBasedCombat .combatSides{display:grid;grid-template-columns:1fr;gap:5px;max-height:none;overflow:visible;padding:26px 8px 8px}
+.turnBasedCombat .combatSides{display:grid;grid-template-columns:1fr;gap:3px;max-height:none;overflow:visible;padding:10px 8px 5px}
 .turnBasedCombat{background-size:100% auto;background-position:center top;background-repeat:repeat-y}
 .turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-content:start;align-items:start;grid-auto-rows:max-content;gap:5px 10px}
 .turnBasedCombat .unit,.turnBasedCombat .unit.enemy{align-self:start;min-height:0;height:auto;padding:4px 6px}
@@ -58,3 +58,20 @@
 @keyframes heroRecoil{0%,100%{transform:scaleX(-1) translateX(0);filter:none}30%{transform:scaleX(-1) translateX(-7px);filter:brightness(1.8) saturate(.5)}60%{transform:scaleX(-1) translateX(4px)}}
 @keyframes enemyRecoil{0%,100%{transform:translateX(0);filter:none}30%{transform:translateX(7px);filter:brightness(1.8) saturate(.5)}60%{transform:translateX(-4px)}}
 @media(max-width:900px){.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}}
+
+/* Enemies lead the battlefield; heroes remain oriented toward them. */
+.turnBasedCombat .combatSide.enemySide .unit .portrait{transform:none}
+.turnBasedCombat .combatSide.heroSide .unit .portrait{transform:scaleX(-1)}
+.turnBasedCombat .enemySide .unit.dealingHit .portrait{animation:enemyStrike .28s ease-out}
+.turnBasedCombat .heroSide .unit.dealingHit .portrait{animation:heroStrike .28s ease-out}
+.turnBasedCombat .enemySide .unit.takingHit .portrait{animation:enemyRecoil .3s ease-out}
+.turnBasedCombat .heroSide .unit.takingHit .portrait{animation:heroRecoil .3s ease-out}
+.unitAttack{display:inline-block;margin-left:7px;color:#f0c46d;font:10px/1 var(--mono);white-space:nowrap;text-shadow:1px 1px #000}
+
+/* Compress surrounding chrome so every action button clears a standard viewport. */
+.turnBasedCombat .initiativeTrack{margin:5px 0;padding:5px;min-height:0}
+.turnBasedCombat .initiativeToken{padding:4px 7px}
+.turnBasedCombat .turnPrompt{padding:9px 12px;margin-top:5px}
+.turnBasedCombat .turnPrompt>p{margin:4px 0 8px}
+.turnBasedCombat .turnActions{gap:5px}
+.turnBasedCombat .turnAction{padding:7px;min-height:60px}

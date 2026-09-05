@@ -153,6 +153,9 @@ assert.match(js,/SFX_VOLUME_KEY\)\?\?\.5/,'fresh sound-effects volume defaults t
 assert.match(js,/MUSIC_VOLUME_KEY\)\?\?\.1/,'fresh music volume defaults to 10%');
 assert.match(css,/\.turnBasedCombat \.combatSides\{[^}]*grid-template-columns:1fr[^}]*overflow:visible/,'the battlefield uses full-width rows without an internal scrollbar');
 assert.match(css,/\.turnBasedCombat \.combatSide\{[^}]*repeat\(auto-fit,minmax\(180px,1fr\)\)/,'party and enemy groups fit into compact horizontal rows');
+assert.match(js,/combatSide enemySide[^\n]*combatSide heroSide/,'enemies render above the hero party');
+assert.match(js,/class="unitAttack">⚔ \$\{effectiveAtk\(u\)\} ATK/,'hero cards display Attack without requiring inspection');
+assert.match(css,/\.turnBasedCombat \.turnAction\{padding:7px;min-height:60px/,'combat actions use compact always-visible controls');
 assert.match(css,/\.turnBasedCombat \.combatSide\{[^}]*grid-auto-rows:max-content/,'combat rows use compact natural heights instead of stretching');
 assert.match(css,/\.turnBasedCombat \.unit,.turnBasedCombat \.unit\.enemy\{[^}]*height:auto;padding:4px 6px/,'combatant spacing is compact without shrinking sprites or bars');
 assert.match(css,/\.turnBasedCombat\{background-size:100% auto;background-position:center top/,'combat scenery remains anchored while action content rerenders');
