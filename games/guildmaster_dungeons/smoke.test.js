@@ -209,4 +209,7 @@ assert.match(js,/function heroCombatAbilities\(h\)/,'a selected subclass contrib
 assert.match(js,/function executeSubclassAbility\(/,'subclass actives have turn-based combat effects');
 assert.match(js,/id:'loneWolf'/,'Lone Wolf can appear among Endless boss modifiers');
 assert.match(js,/function chooseLoneWolf\(/,'Lone Wolf forces the player to select the only continuing hero');
+assert.match(js,/elementalNames=\{pyromancer:'Flame Wave',frostmage:'Ice Nova'/,'elemental subclass abilities resolve to playable names instead of object strings');
+assert.match(js,/if\(b\.type==='boss'\)r\.heroes\.forEach\(h=>\{h\.hp=h\.maxHp;h\.mana=h\.maxMana\}\)/,'boss victories fully restore party Health and Mana');
+assert.match(css,/\.statusEffects\{display:flex;flex-wrap:nowrap/,'combat statuses expand horizontally without increasing combatant height');
 console.log('Guildmaster: Dungeons smoke tests passed.');
