@@ -144,7 +144,8 @@ assert.match(js,/sub\?\.threatBonus\|\|0/,'Guardian and Templar subclass threat 
 assert.match(js,/gear\.threatBonus\|\|0/,'canonical Guildmaster threat equipment applies');
 assert.match(js,/function assignPartyFormation\(/,'high-threat durable heroes form the frontline');
 assert.match(js,/function threatTarget\(/,'enemy targets are weighted by threat');
+assert.match(js,/target=taunter\|\|threatTarget\(heroes\)/,'enemy intents roll from the full party Threat pool unless Taunted');
 assert.match(js,/level=r\.enemyLevelBase\+r\.step\+1/,'enemy levels increase with route progress');
 assert.match(js,/r\.enemyLevelBase=Math\.max\(\.\.\.b\.enemies\.map\(e=>e\.level\)\)/,'the defeated boss level becomes the next region floor');
-assert.match(js,/Math\.random\(\)<\.9\?front:back/,'ordinary enemies strongly prefer the frontline');
+assert.match(js,/function enemyTarget\(heroes\)\{return threatTarget\(heroes\)\}/,'ordinary enemy targeting uses the full living-party Threat pool');
 console.log('Guildmaster: Dungeons smoke tests passed.');
