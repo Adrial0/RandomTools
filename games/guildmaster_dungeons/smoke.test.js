@@ -138,6 +138,9 @@ assert.match(js,/function recordDamageHit\(/,'recent hits record damage for comb
 assert.match(js,/function recentDamageVisual\(/,'combat cards render recent-hit feedback');
 assert.match(js,/function recentHealingVisual\(/,'combat cards render recent-healing feedback');
 assert.match(js,/function combatStatusBadges\(/,'combat cards expose active status effects');
+assert.match(js,/function combatStatusDetails\(/,'combat inspections explain active status effects');
+assert.doesNotMatch(js,/Counter:<\/b>/,'enemy inspection does not reveal counter-strategy hints');
+assert.doesNotMatch(js,/\$\{turns\}T/,'status duration badges use an uncluttered round count');
 assert.match(js,/function weaponStatusProfile\(/,'weapon families define distinct basic-attack status effects');
 assert.match(js,/function tryWeaponStatus\(/,'basic attacks can proc weapon statuses');
 assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
