@@ -17,7 +17,7 @@ let source=fs.readFileSync(__dirname+'/game.js','utf8').replace(/init\(\);\s*$/,
 source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
-  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,
+  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,
   abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS
 }`;
 vm.runInContext(source,context);
@@ -44,6 +44,8 @@ const wounded=state.run.heroes[0];wounded.hp-=20;api.applyHealing(state.run.hero
 assert.match(api.unitCard(wounded),/healingNumber[\s\S]*recentHealing/,'healing renders a green number and restored-HP highlight');
 assert.ok(target.role&&Number.isFinite(target.def)&&Number.isFinite(target.mdef),'enemies receive a tactical role and distinct defenses');
 assert.match(api.unitCard(target,true),new RegExp(target.role),'enemy roles are visible on battlefield cards');
+target.skipTurns=1;target.controlStatus='Frozen';
+assert.match(api.combatStatusBadges(target,true),/Frozen[\s\S]*1T/,'Frost Nova control is shown as a visible timed status');
 const intent=api.enemyIntent(target);
 assert.ok(intent.label&&intent.targetName&&intent.damageType,'enemy intent previews expose action, target, and damage type');
 
