@@ -125,6 +125,9 @@ assert.match(js,/All abilities cost 20% less Mana/,'the former cooldown relic no
 assert.match(js,/A Backstab kill refunds its Mana cost/,'the former Rogue cooldown reset now refunds Mana');
 assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Poisoned Blade[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
 assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
+assert.match(js,/const ENEMY_ROLES=/,'enemies use distinct tactical role profiles');
+assert.match(js,/function inspectEnemy\(/,'enemy cards open a detailed combat inspection');
+assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
 assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');

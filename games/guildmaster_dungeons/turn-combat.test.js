@@ -17,7 +17,7 @@ let source=fs.readFileSync(__dirname+'/game.js','utf8').replace(/init\(\);\s*$/,
 source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
-  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,
+  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,
   abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS
 }`;
 vm.runInContext(source,context);
@@ -38,6 +38,8 @@ assert.match(api.unitCard(target,true),/targetable[\s\S]*chooseTurnTarget/,'the 
 assert.doesNotMatch(api.turnActionPanel(),/targetAction/,'the action panel does not duplicate enemy target buttons');
 api.chooseTurnTarget(target.id);
 assert.ok(target.hp<before,'the selected target takes damage');
+assert.ok(target.role&&Number.isFinite(target.def)&&Number.isFinite(target.mdef),'enemies receive a tactical role and distinct defenses');
+assert.match(api.unitCard(target,true),new RegExp(target.role),'enemy roles are visible on battlefield cards');
 
 state.run.heroes.forEach(hero=>hero.mana=0);
 battle.round=1;
