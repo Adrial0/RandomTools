@@ -127,6 +127,8 @@ assert.match(js,/A Backstab kill refunds its Mana cost/,'the former Rogue cooldo
 assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Poisoned Blade[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
 assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
 assert.match(js,/function enemyIntent\(/,'enemy actions are previewed before their turns');
+assert.match(js,/function enemyIntentHtml\(e\)[\s\S]*base damage/,'enemy intent reveals attack strength without displaying its hidden target');
+assert.doesNotMatch(js,/\$\{intent\.targetName\} · \$\{damage\}/,'enemy intent UI does not reveal the Threat roll winner');
 assert.match(js,/crimsonCovenant[\s\S]*sealedReservoir[\s\S]*glassHeart/,'the relic pool includes run-changing bargains with drawbacks');
 assert.match(js,/const ENEMY_ROLES=/,'enemies use distinct tactical role profiles');
 assert.match(js,/function inspectEnemy\(/,'enemy cards open a detailed combat inspection');
