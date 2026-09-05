@@ -22,7 +22,7 @@ assert.match(js,/function focusCurrentMapNode\(/,'the route scrolls to the curre
 assert.match(js,/getBoundingClientRect\(\)[\s\S]*scroller\.scrollTop\+=/,'map centering uses coordinates relative to its scroll container');
 assert.match(css,/\.mapScroll\{[^}]*overflow-y:auto/,'the encounter tree has independent scrolling');
 assert.match(css,/\.runMapGrid>aside\{position:sticky/,'the party remains visible while the route scrolls');
-assert.match(js,/r\.heroes\.push\(h\);r\.region\+\+/,'one adventurer joins after a cleared boss');
+assert.match(js,/r\.heroes\.push\(h\);applyRunRelicsToHero\(h\);r\.region\+\+/,'one adventurer joins after a cleared boss and inherits run relic rules');
 assert.match(js,/if\(saved\.gems==null\)saved\.gems=saved\.treasury\|\|0/,'old treasury balances migrate safely to gems');
 assert.match(js,/state\.gems\+=gems/,'expedition progress awards permanent gems');
 assert.match(js,/gems=won\?40\+r\.encounters\*3:Math\.floor\(r\.encounters\/2\)/,'abandoning before an encounter awards no gems');
@@ -111,7 +111,7 @@ assert.match(css,/\.combatSide:first-child \.unit \.portrait\{transform:scaleX\(
 assert.match(js,/r\.lockedNodeType&&r\.lockedNodeType!==type/,'choosing an encounter locks out the other options');
 assert.match(js,/r\.lockedNodeType=type;save\(\);render\(\)/,'the map immediately redraws locked alternatives as disabled');
 assert.match(js,/delete r\.lockedNodeType;r\.step\+\+/,'the encounter lock clears only after advancing');
-assert.match(js,/Paladin:\{name:'Holy Guard',cost:24,cooldown:8,maxMana:60,regen:1\}/,'Paladins use Guildmaster base mana regeneration');
+assert.match(js,/Paladin:\{name:'Holy Guard',cost:24,cooldown:8,maxMana:60,regen:2\}/,'Paladins use the increased turn-based mana regeneration');
 assert.match(js,/damageTaken/,'combat tracks damage taken');
 assert.match(js,/applyHealing/,'combat tracks effective healing');
 assert.match(js,/Warrior:\{hp:132,atk:17,initiative:8,speed:1\.0,threat:1\.6/,'Warriors use Guildmaster base HP and threat plus turn initiative');
@@ -125,6 +125,8 @@ assert.match(js,/All abilities cost 20% less Mana/,'the former cooldown relic no
 assert.match(js,/A Backstab kill refunds its Mana cost/,'the former Rogue cooldown reset now refunds Mana');
 assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Poisoned Blade[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
 assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
+assert.match(js,/function enemyIntent\(/,'enemy actions are previewed before their turns');
+assert.match(js,/crimsonCovenant[\s\S]*sealedReservoir[\s\S]*glassHeart/,'the relic pool includes run-changing bargains with drawbacks');
 assert.match(js,/const ENEMY_ROLES=/,'enemies use distinct tactical role profiles');
 assert.match(js,/function inspectEnemy\(/,'enemy cards open a detailed combat inspection');
 assert.match(js,/function recordDamageHit\(/,'recent hits record damage for combat feedback');
