@@ -17,7 +17,7 @@ let source=fs.readFileSync(__dirname+'/game.js','utf8').replace(/init\(\);\s*$/,
 source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
-  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,
+  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,
   abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS
 }`;
 vm.runInContext(source,context);
@@ -40,6 +40,8 @@ api.chooseTurnTarget(target.id);
 assert.ok(target.hp<before,'the selected target takes damage');
 assert.ok(target.lastDamageHit?.amount>0,'a hit records its visible damage amount and HP-bar loss');
 assert.match(api.unitCard(target,true),/damageNumber[\s\S]*recentDamage/,'damaged combat cards render a floating number and trailing HP segment');
+const wounded=state.run.heroes[0];wounded.hp-=20;api.applyHealing(state.run.heroes[1],wounded,12);
+assert.match(api.unitCard(wounded),/healingNumber[\s\S]*recentHealing/,'healing renders a green number and restored-HP highlight');
 assert.ok(target.role&&Number.isFinite(target.def)&&Number.isFinite(target.mdef),'enemies receive a tactical role and distinct defenses');
 assert.match(api.unitCard(target,true),new RegExp(target.role),'enemy roles are visible on battlefield cards');
 
