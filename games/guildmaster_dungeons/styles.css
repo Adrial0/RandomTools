@@ -38,8 +38,8 @@
 
 /* Keep turn controls in view while crowded battlefields scroll independently. */
 .turnBasedCombat .combatSides{display:grid;grid-template-columns:1fr;gap:3px;max-height:none;overflow:visible;padding:10px 8px 5px}
-.turnBasedCombat{background-size:100% auto;background-position:center top;background-repeat:repeat-y}
-.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-content:start;align-items:start;grid-auto-rows:max-content;gap:5px 10px}
+.turnBasedCombat{background-size:100% auto;background-position:center top;background-repeat:no-repeat;background-color:#17110b}
+.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,220px);justify-content:center;align-content:start;align-items:start;grid-auto-rows:max-content;gap:5px 10px}
 .turnBasedCombat .unit,.turnBasedCombat .unit.enemy{align-self:start;min-height:0;height:auto;padding:4px 6px}
 .turnBasedCombat .turnPrompt{position:relative;z-index:15;flex:0 0 auto;margin-top:10px}
 
@@ -57,7 +57,7 @@
 @keyframes enemyStrike{0%,100%{transform:translateX(0)}45%{transform:translateX(-12px) scale(1.06)}}
 @keyframes heroRecoil{0%,100%{transform:scaleX(-1) translateX(0);filter:none}30%{transform:scaleX(-1) translateX(-7px);filter:brightness(1.8) saturate(.5)}60%{transform:scaleX(-1) translateX(4px)}}
 @keyframes enemyRecoil{0%,100%{transform:translateX(0);filter:none}30%{transform:translateX(7px);filter:brightness(1.8) saturate(.5)}60%{transform:translateX(-4px)}}
-@media(max-width:900px){.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}}
+@media(max-width:900px){.turnBasedCombat .combatSide{grid-template-columns:repeat(auto-fit,180px)}}
 
 /* Enemies lead the battlefield; heroes remain oriented toward them. */
 .turnBasedCombat .combatSide.enemySide .unit .portrait{transform:none}
@@ -67,6 +67,7 @@
 .turnBasedCombat .enemySide .unit.takingHit .portrait{animation:enemyRecoil .3s ease-out}
 .turnBasedCombat .heroSide .unit.takingHit .portrait{animation:heroRecoil .3s ease-out}
 .unitAttack{display:inline-block;margin-left:7px;color:#f0c46d;font:10px/1 var(--mono);white-space:nowrap;text-shadow:1px 1px #000}
+.turnBasedCombat .unit .bar{height:11px;margin-top:2px}.turnBasedCombat .resourceValue{justify-content:flex-end;margin-top:2px;line-height:1}.subclassAlert{position:absolute;z-index:4;right:7px;top:7px;display:grid;place-items:center;width:25px;height:25px;border:2px solid #f2bf58;border-radius:50%;background:#492d0d;color:#ffe39b;font:bold 17px/1 var(--mono);box-shadow:0 0 12px #d99a30}.hero.subclassReady{border-color:#d9a347;box-shadow:0 0 12px rgba(224,166,62,.35)}.subclassChoices .choice{min-height:170px}
 
 /* Compress surrounding chrome so every action button clears a standard viewport. */
 .turnBasedCombat .initiativeTrack{margin:5px 0;padding:5px;min-height:0}
