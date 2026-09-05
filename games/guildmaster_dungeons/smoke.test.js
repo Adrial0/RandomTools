@@ -30,6 +30,7 @@ assert.doesNotMatch(js,/state\.treasury\+=secured/,'run gold can no longer becom
 assert.match(js,/state\.history\.push/,'finished parties enter persistent history');
 assert.match(js,/localStorage\.setItem\(SAVE_KEY/,'campaign progression is persisted separately');
 assert.match(css,/\.combatField/,'the game includes a visual combat field');
+assert.match(css,/Readability floor/,'small interface labels receive a larger readability baseline');
 assert.match(js,/const ABILITIES=/,'combat defines class abilities, mana costs, and cooldowns');
 assert.match(js,/function chooseTurnAction\(/,'heroes expose player-controlled actions during combat');
 assert.match(js,/r\.recruitChoices=classRoster\(currentPartyLevel\(\)\)/,'post-boss recruitment offers one hero of each class at party level');
