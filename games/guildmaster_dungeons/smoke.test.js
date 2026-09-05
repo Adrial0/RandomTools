@@ -199,4 +199,10 @@ assert.match(js,/target=taunter\|\|threatTarget\(heroes\)/,'enemy intents roll f
 assert.match(js,/level=r\.enemyLevelBase\+r\.step\+1/,'enemy levels increase with route progress');
 assert.match(js,/r\.enemyLevelBase=Math\.max\(\.\.\.b\.enemies\.map\(e=>e\.level\)\)/,'the defeated boss level becomes the next region floor');
 assert.match(js,/function enemyTarget\(heroes\)\{return threatTarget\(heroes\)\}/,'ordinary enemy targeting uses the full living-party Threat pool');
+assert.match(js,/const ENDLESS_MODIFIERS=/,'Endless Mode offers a broad pool of post-boss enemy modifiers');
+assert.match(js,/if\(r\.endless\)\{r\.modifierChoices=makeEndlessModifierChoices\(\);r\.mode='endlessModifier'/,'an Endless boss victory forces a modifier choice before continuing');
+assert.match(js,/r\.gemMultiplier=\(r\.gemMultiplier\|\|1\)\+m\.gems/,'each accepted modifier increases that run’s Gem multiplier');
+assert.match(js,/state\.endlessLeaderboard\.sort\(\(a,b\)=>b\.encounters-a\.encounters\)/,'the Endless leaderboard ranks attempts only by encounters completed');
+assert.match(js,/if\(difficulty===0\)state\.endlessUnlocked=true/,'completing Easy unlocks Endless Mode');
+assert.match(js,/function regionData\(r=state\.run\)/,'Endless regions safely cycle through the existing region themes');
 console.log('Guildmaster: Dungeons smoke tests passed.');

@@ -77,3 +77,14 @@
 .turnBasedCombat .turnPrompt>p{margin:4px 0 8px}
 .turnBasedCombat .turnActions{gap:5px}
 .turnBasedCombat .turnAction{padding:7px;min-height:60px}
+
+.endlessDifficulty{border-color:#8d4bc2;background:linear-gradient(145deg,rgba(77,31,97,.42),rgba(14,9,18,.94))}
+.endlessModifierScreen{min-height:calc(100vh - 120px);display:flex;flex-direction:column;justify-content:center;background:radial-gradient(circle at 50% 25%,rgba(111,31,36,.28),transparent 42%),#120d0b}
+.endlessModifierGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:1180px;width:100%;margin:22px auto}
+.endlessModifier{position:relative;display:flex;min-height:245px;flex-direction:column;align-items:flex-start;justify-content:center;text-align:left;padding:28px;border:2px solid #70412b;background:linear-gradient(145deg,#24130f,#100b09);color:#eadbb9}
+.endlessModifier strong{font-size:24px;color:#ffe1a0}.endlessModifier p{font-size:15px;line-height:1.5}
+.modifierDifficulty{position:absolute;top:14px;right:14px;padding:4px 8px;border:1px solid #9c6040;color:#eab38d;font:11px var(--mono);text-transform:uppercase}
+.endlessModifier.hard{border-color:#a84d3c}.endlessModifier.brutal{border-color:#9f3d72;box-shadow:inset 0 0 30px rgba(144,28,83,.13)}
+.gemReward{margin-top:auto;color:#e7bbff;font:bold 14px var(--mono)}.endlessTotal{text-align:center;font-size:17px}
+.endlessLeaderboard{margin-top:18px;padding-top:15px;border-top:1px solid #65461f}.leaderboardRows{display:grid;gap:6px}.leaderboardRow{display:flex;justify-content:space-between;padding:9px 11px;border:1px solid #57401f;background:#110d08}.leaderboardRow b{color:#e8ba62}
+@media(max-width:800px){.endlessModifierGrid{grid-template-columns:1fr}.endlessModifier{min-height:170px}}
