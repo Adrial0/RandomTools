@@ -121,7 +121,8 @@ assert.match(js,/function pendingTargetSide\(/,'targeted actions turn battlefiel
 assert.match(js,/class=\"unit enemy[\s\S]*targetable/,'enemy cards visually expose direct targeting');
 assert.match(js,/Choose one of six upgrades across both class abilities/,'ability shrines offer upgrades for both abilities');
 assert.match(js,/ABILITY_AUGMENTS\[h\.class\]\.filter/,'ability shrine removes only upgrades already selected');
-assert.match(js,/has 1 less turn of cooldown/,'cooldown upgrades use whole-turn wording');
+assert.match(js,/All abilities cost 20% less Mana/,'the former cooldown relic now improves Mana efficiency');
+assert.match(js,/A Backstab kill refunds its Mana cost/,'the former Rogue cooldown reset now refunds Mana');
 assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Poisoned Blade[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
 assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');

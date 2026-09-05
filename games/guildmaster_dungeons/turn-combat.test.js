@@ -28,6 +28,7 @@ assert.equal(battle.activeUnitId,state.run.heroes[1].id,'the higher-Initiative R
 assert.ok(api.heroInitiative(state.run.heroes[1])>api.heroInitiative(state.run.heroes[0]),'class Initiative and Dexterity affect order');
 assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities');
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
+assert.equal(Object.values(api.abilities).flat().every(ability=>!('cooldown' in ability)),true,'turn abilities are limited by Mana rather than cooldowns');
 assert.equal(Object.values(api.augments).every(list=>list.length===6),true,'each class has three shrine upgrades for each ability');
 
 api.chooseTurnAction('basic');
