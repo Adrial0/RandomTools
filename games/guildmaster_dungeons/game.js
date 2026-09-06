@@ -71,6 +71,27 @@ const PERKS=[['Ferocity','Party attack +12%','attack',.12],['Endurance','Party m
 let state=load(),battleTimer=null,draftSelection=[];
 let battleFrame=null,lastCombatTick=performance.now(),ITEM_DATA={weapons:{},armorProfiles:{}};
 let RACE_DATA={},SUBCLASS_DATA={},RECIPE_DATA=[];
+const SUBCLASS_TURN_OVERRIDES={
+ pyromancer:{turnPassive:'Fire damage +20%.',turnActive:'Deal 120% of Attack as magical damage to every enemy and apply Burning for 3 rounds.',turnCost:32},
+ frostmage:{turnPassive:'Ice damage +20%, MDEF +10%, and +0.5 Mana Regen per round.',turnActive:'Deal 120% of Attack as magical damage to every enemy and Freeze them for their next turn.',manaRegenBonus:.5,turnCost:32},
+ stormcaller:{turnPassive:'Lightning damage +20% and +0.5 Mana Regen per round.',turnActive:'Deal 120% of Attack as magical damage to every enemy and reduce their Initiative by 4 for 2 rounds.',manaRegenBonus:.5,turnCost:32},
+ venomancer:{turnPassive:'Poison damage +20%.',turnActive:'Deal 100% of Attack as magical damage to every enemy and apply Poison for 4 rounds.',turnCost:32},
+ berserker:{turnPassive:'All damage +15% and Initiative +10%.',turnActive:'Deal 200% of Attack as physical damage and apply Bleeding for 3 rounds.',turnCost:24},
+ guardian:{turnPassive:'DEF +18%, +2 Block, and +0.9 Threat.',turnActive:'Deal 145% of Attack as physical damage and Stun the target for its next turn.',turnCost:24},
+ warlord:{turnPassive:'All allies deal 10% more damage.',turnActive:'Deal 70% of Attack to every enemy and make all allies deal 15% more damage for 3 rounds.',turnCost:30},
+ marksman:{turnPassive:'Damage +10%, critical chance +10%, and Initiative +8%.',turnActive:'Deal 180% of Attack as physical damage. This attack has +25% critical chance.',turnCost:24},
+ beastmaster:{turnPassive:'Maximum HP +12%.',turnActive:'Deal 210% of Attack as physical damage with your companion.',turnCost:24},
+ warden:{turnPassive:'All allies gain 8% DEF and MDEF.',turnActive:'Deal 150% of Attack as physical damage and reduce damage taken by all allies by 30% for 1 round.',turnCost:24},
+ assassin:{turnPassive:'Critical chance +18%. Deal 25% more damage to enemies below 30% HP.',turnActive:'Deal 220% of Attack as physical damage and apply Bleeding for 3 rounds.',turnCost:24},
+ duelist:{turnPassive:'Physical dodge +10% and Initiative +12%.',turnActive:'Strike twice for a total of 240% Attack as physical damage.',turnCost:24},
+ venomblade:{turnPassive:'Poison damage +20%.',turnActive:'Deal 150% of Attack as physical damage and apply a strong Poison for 5 rounds.',turnCost:24},
+ lifepriest:{turnPassive:'Healing +35% and +0.5 Mana Regen per round.',turnActive:'Heal one ally for 220% of Attack and cleanse every harmful effect.',manaRegenBonus:.5,turnCost:30},
+ battlepriest:{turnPassive:'Damage +15%, +1 Block, Medium armor proficiency, and Initiative +5%.',turnActive:'Deal 210% of Attack as magical damage.',turnCost:24},
+ oracle:{turnPassive:'All allies gain 12% MDEF. You gain +0.5 Mana Regen per round.',turnActive:'Heal one ally for 170% of Attack and cleanse every harmful effect.',manaRegenBonus:.5,turnCost:24},
+ templar:{turnPassive:'DEF +15%, MDEF +10%, +2 Block, and +1 Threat.',turnActive:'Reduce one ally’s incoming damage by 30% for 3 rounds.',turnCost:26},
+ crusader:{turnPassive:'Damage +15% and Initiative +5%.',turnActive:'Deal 210% of Attack as magical damage.',turnCost:24},
+ beacon:{turnPassive:'All allies gain 10% DEF and MDEF. You gain +0.5 Mana Regen per round.',turnActive:'Heal one ally for 170% of Attack and cleanse every harmful effect.',manaRegenBonus:.5,turnCost:26}
+};
 const CHARACTER_BASE={Warrior:{str:17,dex:9,int:5,def:15,mdef:7,block:1},Ranger:{str:8,dex:18,int:7,def:9,mdef:8,block:0},Mage:{str:4,dex:8,int:21,def:5,mdef:15,block:0},Priest:{str:9,dex:6,int:17,def:11,mdef:15,block:0},Rogue:{str:7,dex:20,int:6,def:7,mdef:8,block:0},Paladin:{str:15,dex:7,int:11,def:18,mdef:13,block:2}};
 const CLASS_LEVEL_GROWTH={Warrior:{hp:5,str:4,def:1},Paladin:{hp:5,str:2,int:1,def:2,mdef:1},Rogue:{hp:3,dex:3,int:1,mdef:1},Ranger:{hp:3,dex:4,mdef:1},Mage:{hp:2,int:4,mdef:1},Priest:{hp:2,int:3,mdef:1}};
 const CHARACTER_RARITIES=['Common','Uncommon','Rare','Epic','Legendary'];
