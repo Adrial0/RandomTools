@@ -182,7 +182,7 @@ assert.match(js,/rank===0\?'Unlock Legendary Items and Characters':rank===1\?'Un
 assert.match(js,/if\(rank===1\)return rarity==='Mythic'\?'Legendary':rarity/,'the first rarity rank unlocks Legendary while keeping Mythic locked');
 assert.match(js,/function useRunReroll\(/,'Vault, Shrine, and Trader rerolls consume per-run charges');
 assert.match(js,/function rerollRecruitment\(/,'post-boss candidate rerolls consume per-run charges');
-assert.match(js,/boss&&r\.region===0/,'the first region boss receives a dedicated introductory difficulty reduction');
+assert.match(js,/const REGION_BALANCE=\[\{hp:\.72,atk:\.68,def:\.78\},\{hp:\.84,atk:\.80,def:\.87\},\{hp:\.93,atk:\.90,def:\.94\},\{hp:1,atk:1,def:1\}\]/,'enemy strength ramps gradually while Region 4 retains its original balance');
 assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
 assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
@@ -217,4 +217,7 @@ assert.match(js,/function renderMobileParty\(\)/,'the mobile Party tab has a ded
 assert.match(css,/@media\(max-width:700px\)[\s\S]*\.mobileRunNav\{position:fixed/,'mobile run navigation remains fixed to the bottom of the viewport');
 assert.match(css,/\.turnBasedCombat \.combatSide\{display:flex[\s\S]*overflow-x:auto/,'mobile combatants use compact horizontal swipe rows');
 assert.match(css,/\.turnBasedCombat \.turnActions\{display:flex[\s\S]*overflow-x:auto/,'mobile combat actions remain visible in a horizontal action tray');
+assert.doesNotMatch(js,/function mobileRunNav\(\)[^\n]*openSettings/,'Settings is not an overlapping bottom-navigation tab');
+assert.match(css,/\.runShell \.resources>\.settingsButton\{display:grid/,'mobile Settings uses a compact top-corner gear button');
+assert.match(css,/body:has\(\.runShell\)[^\n]*overflow:hidden/,'mobile runs lock document scrolling');
 console.log('Guildmaster: Dungeons smoke tests passed.');
