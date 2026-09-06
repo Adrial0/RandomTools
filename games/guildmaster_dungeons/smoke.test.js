@@ -184,7 +184,10 @@ assert.match(js,/function useRunReroll\(/,'Vault, Shrine, and Trader rerolls con
 assert.match(js,/function rerollRecruitment\(/,'post-boss candidate rerolls consume per-run charges');
 assert.match(js,/const REGION_BALANCE=\[\{hp:\.72,atk:\.68,def:\.78\},\{hp:\.84,atk:\.80,def:\.87\},\{hp:\.93,atk:\.90,def:\.94\},\{hp:1,atk:1,def:1\}\]/,'enemy strength ramps gradually while Region 4 retains its original balance');
 assert.match(js,/Basic attacks gain \+20% weapon Status Chance/,'Ember Heart improves weapon status builds');
-assert.match(js,/damageType==='magical'\?\(target\.mdef\|\|0\):\(target\.def\|\|0\)/,'physical and magical attacks use different enemy defenses');
+assert.match(js,/const pool=damageType==='magical'\?'magicArmor':'armor'/,'physical and magical attacks use separate protection bars');
+assert.match(js,/armorDamageMult/,'Armor Broken can multiply damage dealt to Armor without multiplying HP damage');
+assert.match(js,/physicalDodgeFromDex\(dex\)/,'physical dodge scales from Dexterity');
+assert.match(js,/magicalDodgeFromInt\(intel\)/,'magical dodge scales from Intellect');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
 assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');

@@ -110,4 +110,6 @@
 }
 
 @media(max-width:700px){.turnBasedCombat .unit.activeTurn:before,.turnBasedCombat .unit.enemy.activeTurn:before{display:block;top:17px;font-size:18px;color:#ffd86f;clip-path:none}.turnBasedCombat .unit.enemy.activeTurn:before{color:#ff8a70}.modal{padding-top:12px}.modalClose{position:sticky;top:0;width:42px;height:42px;margin:-4px -2px 4px 10px;font-size:30px}}
+.protectionBars{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:3px;color:#e4d5ad;font:9px var(--mono)}.protectionBars>div>span{display:block;text-align:right;white-space:nowrap}.bar.armor>i{background:#b78a50}.bar.magicArmor>i{background:#a57ee8}.bar.armor,.bar.magicArmor{height:8px;margin-top:1px;background:#090807;border-color:#4b3d2e}
+@media(max-width:700px){.protectionBars{font-size:7px;gap:2px}.bar.armor,.bar.magicArmor{height:6px!important}}
 @media(min-width:701px){.turnBasedCombat{height:calc(100dvh - 150px)}}
