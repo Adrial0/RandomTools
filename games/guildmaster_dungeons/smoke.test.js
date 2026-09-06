@@ -220,4 +220,6 @@ assert.match(css,/\.turnBasedCombat \.turnActions\{display:flex[\s\S]*overflow-x
 assert.doesNotMatch(js,/function mobileRunNav\(\)[^\n]*openSettings/,'Settings is not an overlapping bottom-navigation tab');
 assert.match(css,/\.runShell \.resources>\.settingsButton\{display:grid/,'mobile Settings uses a compact top-corner gear button');
 assert.match(css,/body:has\(\.runShell\)[^\n]*overflow:hidden/,'mobile runs lock document scrolling');
+assert.match(js,/class="modalClose" onclick="closeOverlay\(\)"/,'popups expose an obvious top-right close control');
+assert.match(css,/@media\(max-width:700px\)\{\.turnBasedCombat \.unit\.activeTurn:before/,'the active-turn arrow remains visible inside clipped mobile combat rows');
 console.log('Guildmaster: Dungeons smoke tests passed.');
