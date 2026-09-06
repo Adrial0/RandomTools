@@ -222,4 +222,7 @@ assert.match(css,/\.runShell \.resources>\.settingsButton\{display:grid/,'mobile
 assert.match(css,/body:has\(\.runShell\)[^\n]*overflow:hidden/,'mobile runs lock document scrolling');
 assert.match(js,/class="modalClose" onclick="closeOverlay\(\)"/,'popups expose an obvious top-right close control');
 assert.match(css,/@media\(max-width:700px\)\{\.turnBasedCombat \.unit\.activeTurn:before/,'the active-turn arrow remains visible inside clipped mobile combat rows');
+assert.match(js,/preserveDraft=current\?\.querySelector\('h2'\)\?\.textContent\.startsWith\('Choose Party Slot'\)&&body\.includes\('characterInspect'\)/,'closing a draft-character inspection restores its slot chooser');
+assert.match(css,/@media\(min-width:701px\)\{\.statusEffects[\s\S]*\.statusBadge\{display:flex;flex-direction:row/,'desktop status duration stays beside its status name');
+assert.match(css,/\.turnBasedCombat \.turnPrompt\{position:absolute[\s\S]*bottom:10px/,'desktop combat reserves a visible bottom action tray');
 console.log('Guildmaster: Dungeons smoke tests passed.');
