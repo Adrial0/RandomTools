@@ -4,21 +4,22 @@ const assert=require('node:assert/strict');
 
 const app={innerHTML:''};
 const storage=new Map();
+const subclassFixture=JSON.parse(fs.readFileSync(__dirname+'/../guildmaster/data/subclasses.json','utf8'));
 const context={
   console,
   performance:{now:()=>0},
   localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},
   document:{querySelector:selector=>selector==='#app'?app:null,body:{insertAdjacentHTML(){}}},
   requestAnimationFrame:()=>0,cancelAnimationFrame(){},setInterval:()=>0,clearInterval(){},
-  setTimeout:()=>0,fetch:async()=>({ok:false}),Image:function(){}
+  setTimeout:()=>0,fetch:async()=>({ok:false}),Image:function(){},subclassFixture
 };
 vm.createContext(context);
 let source=fs.readFileSync(__dirname+'/game.js','utf8').replace(/init\(\);\s*$/,'');
 source+=`;globalThis.turnTest={
-  setup(){RACE_DATA={Human:{mult:{},flat:{}}};state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
+  setup(){RACE_DATA={Human:{mult:{},flat:{}}};SUBCLASS_DATA=JSON.parse(JSON.stringify(subclassFixture));Object.values(SUBCLASS_DATA).flat().forEach(sub=>{Object.assign(sub,SUBCLASS_TURN_OVERRIDES[sub.id]||{});sub.passive=subclassPassiveText(sub);sub.active=subclassActiveText(sub)});state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
   chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
-  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS
+  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip
 }`;
 vm.runInContext(source,context);
 
@@ -30,6 +31,14 @@ assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities')
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
 assert.equal(Object.values(api.abilities).flat().every(ability=>!('cooldown' in ability)),true,'turn abilities are limited by Mana rather than cooldowns');
 assert.equal(Object.values(api.augments).every(list=>list.length===6),true,'each class has three shrine upgrades for each ability');
+const subclassData=api.subclasses(),subclasses=Object.values(subclassData).flat();
+assert.equal(subclasses.length,19,'all nineteen subclasses are loaded');
+assert.equal(subclasses.every(sub=>!/(attack speed|\d+s\b|cooldown)/i.test(`${sub.passive} ${sub.active}`)),true,'every subclass uses turn-based wording');
+for(const sub of subclasses){const hero=api.makeHero(10,Object.keys(subclassData).find(cls=>subclassData[cls].some(candidate=>candidate.id===sub.id)));hero.subclass=sub.id;state.run.heroes.push(hero);const ability=api.subclassAbility(hero);assert.ok(ability?.name&&ability.cost>0&&ability.desc&&['enemy','ally','allEnemies'].includes(ability.target),`${sub.name} has a complete turn-based ability`);battle.enemies.forEach(enemy=>{enemy.maxHp=1000000;enemy.hp=1000000;enemy.statuses={};enemy.skipTurns=0});assert.doesNotThrow(()=>api.executeSubclassAbility(hero,ability,ability.target==='ally'?hero:battle.enemies[0],[hero],battle.enemies),`${sub.name}'s ability executes`);state.run.heroes.pop()}
+const warrior=state.run.heroes[0],baseInitiative=api.heroInitiative(warrior),baseAttack=api.effectiveAtk(warrior);warrior.subclass='berserker';assert.ok(api.heroInitiative(warrior)>baseInitiative&&api.effectiveAtk(warrior)>baseAttack,'Berserker Initiative and damage passives apply');
+warrior.subclass='guardian';assert.ok(api.heroSheetStats(warrior).block>=2,'Guardian Block passive applies');warrior.subclass=null;
+const ranger=api.makeHero(10,'Ranger'),baseHp=api.naturalMaxHp(ranger);state.run.heroes.push(ranger);ranger.subclass='beastmaster';assert.ok(api.naturalMaxHp(ranger)>baseHp,'Beastmaster maximum HP passive applies');state.run.heroes.pop();
+const priest=api.makeHero(10,'Priest');priest.subclass='battlepriest';assert.equal(api.canEquip(priest,{slot:'Armor',armorClass:'Medium'}),true,'Battle Priest Medium armor proficiency applies');
 assert.equal(api.weaponStatusProfile({slot:'Weapon',weaponTemplate:'Warhammer',damageType:'physical'}).name,'Armor Broken','maces and hammers can break Armor');
 assert.equal(api.weaponStatusProfile({slot:'Weapon',weaponTemplate:'Crystal Wand',damageType:'ice'}).name,'Frostbite','elemental caster weapons apply their matching status');
 
