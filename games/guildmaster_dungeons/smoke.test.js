@@ -212,4 +212,9 @@ assert.match(js,/function chooseLoneWolf\(/,'Lone Wolf forces the player to sele
 assert.match(js,/elementalNames=\{pyromancer:'Flame Wave',frostmage:'Ice Nova'/,'elemental subclass abilities resolve to playable names instead of object strings');
 assert.match(js,/if\(b\.type==='boss'\)r\.heroes\.forEach\(h=>\{h\.hp=h\.maxHp;h\.mana=h\.maxMana\}\)/,'boss victories fully restore party Health and Mana');
 assert.match(css,/\.statusEffects\{display:flex;flex-wrap:nowrap/,'combat statuses expand horizontally without increasing combatant height');
+assert.match(js,/function mobileRunNav\(\)/,'active runs expose mobile bottom navigation');
+assert.match(js,/function renderMobileParty\(\)/,'the mobile Party tab has a dedicated inspection screen');
+assert.match(css,/@media\(max-width:700px\)[\s\S]*\.mobileRunNav\{position:fixed/,'mobile run navigation remains fixed to the bottom of the viewport');
+assert.match(css,/\.turnBasedCombat \.combatSide\{display:flex[\s\S]*overflow-x:auto/,'mobile combatants use compact horizontal swipe rows');
+assert.match(css,/\.turnBasedCombat \.turnActions\{display:flex[\s\S]*overflow-x:auto/,'mobile combat actions remain visible in a horizontal action tray');
 console.log('Guildmaster: Dungeons smoke tests passed.');
