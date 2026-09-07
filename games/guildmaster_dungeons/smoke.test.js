@@ -151,6 +151,7 @@ assert.doesNotMatch(js,/\$\{intent\.targetName\} · \$\{damage\}/,'enemy intent 
 assert.match(js,/crimsonCovenant[\s\S]*sealedReservoir[\s\S]*glassHeart/,'the relic pool includes run-changing bargains with drawbacks');
 assert.match(js,/const ENEMY_ROLES=/,'enemies use distinct tactical role profiles');
 assert.match(js,/function inspectEnemy\(/,'enemy cards open a detailed combat inspection');
+assert.match(js,/function stunResistanceChance\([\s\S]*stunsTaken[\s\S]*bossBase/,'enemies build resistance after successful stuns and bosses have base resistance');
 assert.match(js,/function recordDamageHit\(/,'recent hits record damage for combat feedback');
 assert.match(js,/function recentDamageVisual\(/,'combat cards render recent-hit feedback');
 assert.match(js,/function recentHealingVisual\(/,'combat cards render recent-healing feedback');

@@ -19,7 +19,7 @@ source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};SUBCLASS_DATA=JSON.parse(JSON.stringify(subclassFixture));Object.values(SUBCLASS_DATA).flat().forEach(sub=>{Object.assign(sub,SUBCLASS_TURN_OVERRIDES[sub.id]||{});sub.passive=subclassPassiveText(sub);sub.active=subclassActiveText(sub)});state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
   chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
-  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription,enemyProtectionValues,heroWeaponDamageType
+  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription,enemyProtectionValues,heroWeaponDamageType,stunResistanceChance
 }`;
 vm.runInContext(source,context);
 
@@ -50,6 +50,11 @@ assert.equal(api.weaponStatusProfile({slot:'Weapon',weaponTemplate:'Crystal Wand
 api.chooseTurnAction('basic');
 assert.equal(battle.pendingAction,'basic','targeted actions pause for target selection');
 const target=battle.enemies[0],before=target.hp;
+target.stunsTaken=0;
+assert.equal(api.stunResistanceChance(target),0,'ordinary enemies have no resistance before their first successful stun');
+target.stunsTaken=1;assert.equal(api.stunResistanceChance(target),.2,'each previous stun adds 20% resistance');target.stunsTaken=0;
+assert.equal(api.stunResistanceChance({boss:true}),.25,'bosses begin with 25% stun resistance');
+assert.equal(api.stunResistanceChance({boss:true,stunsTaken:4}),.9,'stacking stun resistance is capped below immunity');
 api.ensureProtection(target);target.maxArmor=target.armor=20;const layeredHp=target.hp,layered=api.applyLayeredDamage(target,15,'physical');assert.equal(layered.hpDamage,0,'physical damage is absorbed by Armor before HP');assert.equal(target.armor,5,'Armor loses damage point for point');assert.equal(target.hp,layeredHp,'Armor prevents HP loss');target.lastDamageHit=null;api.turnDamage(state.run.heroes[0],target,.1);assert.equal(target.lastDamageHit.before,target.lastDamageHit.after,'protection-only damage does not create a false missing-HP segment');target.armor=20;const broken=api.applyLayeredDamage(target,15,'physical',0,2);assert.equal(broken.armorDamage,20,'Armor Broken doubles damage to the Armor layer');assert.equal(broken.hpDamage,5,'overflow retains normal damage against HP');target.armor=20;const pierced=api.applyLayeredDamage(target,10,'physical',.5);assert.equal(pierced.hpDamage,5,'Pierce bypasses Armor and damages HP');target.hp=before;target.armor=target.maxArmor;
 assert.match(api.unitCard(target,true),/targetable[\s\S]*chooseTurnTarget/,'the enemy battlefield card becomes the target control');
 assert.doesNotMatch(api.turnActionPanel(),/targetAction/,'the action panel does not duplicate enemy target buttons');
