@@ -88,6 +88,8 @@ assert.match(js,/echoStone/,'relic pool includes ability echoes');
 assert.match(js,/alchemySatchel/,'relic pool includes consumable preservation');
 assert.match(js,/function relicVault\(/,'relic vault encounters offer party rule changes');
 assert.match(js,/function relicGrade\(/,'relics expose Standard and Elite grades');
+assert.match(css,/\.relicStandard\{border:2px solid/,'standard relics use an outline instead of a text grade');
+assert.match(css,/\.relicElite\{border:2px solid/,'elite relics use a distinct colored outline');
 assert.match(js,/x\[3\]==='elite'/,'elite reward pools select elite-grade relics');
 assert.match(js,/x\[3\]!=='elite'&&!state\.run\.relics\.includes/,'ordinary Relic Vaults exclude elite-grade relics');
 assert.match(js,/\['adamantSoul','Adamant Soul'/,'new protection relics include run-changing elite effects');
@@ -200,6 +202,7 @@ assert.match(js,/function abilityPreviewDescription\(/,'combat abilities calcula
 assert.match(css,/\.traderItem \.choiceHint\{display:none\}/,'redundant merchant purchase prompts are hidden');
 assert.match(css,/\.turnBasedCombat \.turnPrompt:not\(\.targetPrompt\)>p\{display:none\}/,'the redundant combat action helper line is removed');
 assert.match(css,/border:0;background:transparent;box-shadow:none/,'combat status labels no longer use bulky boxes');
+assert.match(css,/\.turnBasedCombat \.statusBadge\{font-size:9px\}/,'borderless status labels use more readable text');
 assert.match(js,/const ENEMY_PROTECTION_BY_ROLE=/,'enemy roles define sharply different Armor profiles');
 assert.match(js,/'The Gilded Raider':\{armor:1\.50,magic:\.28\}/,'the armored boss carries more Armor than maximum HP');
 assert.match(js,/levelScale=1\+Math\.min\(\.75/,'enemy protection scales substantially with level');
