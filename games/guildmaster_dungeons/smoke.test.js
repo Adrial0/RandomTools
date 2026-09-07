@@ -189,6 +189,8 @@ assert.match(js,/armorDamageMult/,'Armor Broken can multiply damage dealt to Arm
 assert.match(js,/physicalDodgeFromDex\(dex\)/,'physical dodge scales from Dexterity');
 assert.match(js,/magicalDodgeFromInt\(intel\)/,'magical dodge scales from Intellect');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
+assert.match(js,/function abilityPreviewDescription\(/,'combat abilities calculate readable damage values from the acting hero');
+assert.match(css,/\.traderItem \.choiceHint\{display:none\}/,'redundant merchant purchase prompts are hidden');
 assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
 assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');

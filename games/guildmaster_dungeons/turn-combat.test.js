@@ -19,7 +19,7 @@ source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};SUBCLASS_DATA=JSON.parse(JSON.stringify(subclassFixture));Object.values(SUBCLASS_DATA).flat().forEach(sub=>{Object.assign(sub,SUBCLASS_TURN_OVERRIDES[sub.id]||{});sub.passive=subclassPassiveText(sub);sub.active=subclassActiveText(sub)});state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
   chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
-  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt
+  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription
 }`;
 vm.runInContext(source,context);
 
@@ -32,6 +32,7 @@ assert.ok(api.heroSheetStats(state.run.heroes[0]).magicalDodge>0,'Intellect gran
 assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities');
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
 assert.equal(Object.values(api.abilities).flat().every(ability=>!('cooldown' in ability)),true,'turn abilities are limited by Mana rather than cooldowns');
+assert.doesNotMatch(api.abilityPreviewDescription(state.run.heroes[0],api.abilities.Warrior[0]),/% (?:of )?Attack/,'ability cards replace Attack percentages with current numerical damage');
 assert.equal(Object.values(api.augments).every(list=>list.length===6),true,'each class has three shrine upgrades for each ability');
 const subclassData=api.subclasses(),subclasses=Object.values(subclassData).flat();
 assert.equal(subclasses.length,19,'all nineteen subclasses are loaded');
