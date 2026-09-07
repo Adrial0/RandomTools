@@ -210,7 +210,7 @@ assert.match(js,/const ENEMY_PROTECTION_BY_ROLE=/,'enemy roles define sharply di
 assert.match(js,/'The Gilded Raider':\{armor:1\.50,magic:\.28\}/,'the armored boss carries more Armor than maximum HP');
 assert.match(js,/levelScale=1\+Math\.min\(\.75/,'enemy protection scales substantially with level');
 assert.match(css,/\.turnBasedCombat \.statusBadge\{height:18px/,'combat status badges use a compact vertical footprint');
-assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
+assert.match(js,/Warrior:\{hp:5,str:3,def:2\}/,'Warriors trade excess Strength growth for frontline Armor growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
 assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');
 assert.match(js,/function traitStats\(/,'character traits contribute their Guildmaster stats');
@@ -232,6 +232,11 @@ assert.match(js,/function regionData\(r=state\.run\)/,'Endless regions safely cy
 assert.match(js,/function heroCombatAbilities\(h\)/,'a selected subclass contributes a third combat ability');
 assert.match(js,/function executeSubclassAbility\(/,'subclass actives have turn-based combat effects');
 assert.match(js,/id:'loneWolf'/,'Lone Wolf can appear among Endless boss modifiers');
+assert.match(js,/id:'noCamps'[\s\S]*?repeatable:false/,'the camp-removal modifier is a one-time Endless choice');
+assert.match(js,/m\.repeatable!==false\|\|!chosen\.has\(m\.id\)/,'one-time Endless modifiers are removed from later choice pools');
+assert.match(js,/function loneWolfActive\([\s\S]*modifiers\|\|\[\]\)\.includes\('loneWolf'\)/,'Lone Wolf state survives older saves and permanently bypasses recruitment');
+assert.match(js,/if\(r\.endless&&loneWolfActive\(r\)\)\{r\.region\+\+;r\.step=0;[\s\S]*return renderMap\(\)\}/,'a stale Lone Wolf recruitment screen migrates directly into the next region');
+assert.match(js,/Guarded Cleave[\s\S]*restores 8% maximum Armor/,'Warrior Cleave sustains Armor instead of granting lifesteal');
 assert.match(js,/function chooseLoneWolf\(/,'Lone Wolf forces the player to select the only continuing hero');
 assert.match(js,/elementalNames=\{pyromancer:'Flame Wave',frostmage:'Ice Nova'/,'elemental subclass abilities resolve to playable names instead of object strings');
 assert.match(js,/if\(b\.type==='boss'\)r\.heroes\.forEach\(h=>\{h\.hp=h\.maxHp;h\.mana=h\.maxMana\}\)/,'boss victories fully restore party Health and Mana');
