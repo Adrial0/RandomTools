@@ -77,4 +77,5 @@ state.run.heroes[0].mana=0;api.buildTurnOrder();
 assert.equal(state.run.heroes[0].mana,0,'Sealed Reservoir prevents round-based Mana regeneration');
 api.activateRelic('crimsonCovenant');state.run.heroes[0].hp-=10;
 assert.equal(api.applyHealing(state.run.heroes[1],state.run.heroes[0],10),0,'Crimson Covenant prevents non-Lifesteal healing');
+api.activateRelic('adamantSoul');const protectedHero=state.run.heroes[1];delete protectedHero.maxArmor;api.ensureProtection(protectedHero);assert.ok(protectedHero.maxArmor>api.heroSheetStats(protectedHero).def,'Adamant Soul substantially increases protection capacity');
 console.log('Guildmaster: Dungeons turn combat tests passed.');
