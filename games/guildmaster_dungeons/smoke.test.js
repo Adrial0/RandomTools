@@ -71,6 +71,9 @@ assert.match(js,/const target=currentPartyLevel\(\)\+1/,'battle leveling synchro
 assert.match(js,/Array\.from\(\{length:6\},\(_,index\)=>\{const item=makeCanonicalItem\(rollShopRarity\(index===0\)\)/,'traders stock six canonical items with a guaranteed premium roll');
 assert.match(js,/function rollShopRarity\(guaranteed=false\)/,'shops use elevated rarity odds');
 assert.match(js,/function shopItemCost\(/,'shop prices scale by rarity and tier');
+assert.match(js,/function equipmentTierForRun\(\)[\s\S]*state\.run\?\.endless\?regionTier/,'endless equipment tiers continue increasing beyond the four-region catalogue');
+assert.match(js,/Math\.pow\(1\.25,endlessTiers\)/,'post-tier-four equipment stats and prices scale each endless region');
+assert.match(js,/scaledRecipe\[4\]=tier/,'tier-four recipe templates are promoted to the current endless tier');
 assert.match(js,/const CONSUMABLES=/,'the run defines purchasable combat consumables');
 assert.match(js,/function combatConsumablesHtml\(/,'owned consumables appear during combat');
 assert.match(js,/function useConsumable\(/,'consumables apply their combat effects');
