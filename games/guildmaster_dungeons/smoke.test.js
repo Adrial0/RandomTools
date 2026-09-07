@@ -191,6 +191,10 @@ assert.match(js,/magicalDodgeFromInt\(intel\)/,'magical dodge scales from Intell
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
 assert.match(js,/function abilityPreviewDescription\(/,'combat abilities calculate readable damage values from the acting hero');
 assert.match(css,/\.traderItem \.choiceHint\{display:none\}/,'redundant merchant purchase prompts are hidden');
+assert.match(js,/const ENEMY_PROTECTION_BY_ROLE=/,'enemy roles define sharply different Armor profiles');
+assert.match(js,/'The Gilded Raider':\{armor:1\.50,magic:\.28\}/,'the armored boss carries more Armor than maximum HP');
+assert.match(js,/levelScale=1\+Math\.min\(\.75/,'enemy protection scales substantially with level');
+assert.match(css,/\.turnBasedCombat \.statusBadge\{height:18px/,'combat status badges use a compact vertical footprint');
 assert.match(js,/Warrior:\{hp:5,str:4,def:1\}/,'Warriors use Guildmaster level growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
 assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');

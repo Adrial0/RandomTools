@@ -19,7 +19,7 @@ source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};SUBCLASS_DATA=JSON.parse(JSON.stringify(subclassFixture));Object.values(SUBCLASS_DATA).flat().forEach(sub=>{Object.assign(sub,SUBCLASS_TURN_OVERRIDES[sub.id]||{});sub.passive=subclassPassiveText(sub);sub.active=subclassActiveText(sub)});state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
   chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
-  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription
+  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription,enemyProtectionValues
 }`;
 vm.runInContext(source,context);
 
@@ -27,6 +27,7 @@ const api=context.turnTest,state=api.setup(),battle=state.run.battle;
 assert.equal(battle.round,1,'combat starts in round one');
 assert.equal(battle.activeUnitId,state.run.heroes[1].id,'the higher-Initiative Rogue acts first');
 assert.ok(api.heroInitiative(state.run.heroes[1])>api.heroInitiative(state.run.heroes[0]),'class Initiative and Dexterity affect order');
+const armoredProfile=api.enemyProtectionValues({name:'Ironback',role:'Bruiser',level:30,maxHp:1000}),casterProfile=api.enemyProtectionValues({name:'Grave Wisp',role:'Caster',level:30,maxHp:1000});assert.ok(armoredProfile.armor>1000&&armoredProfile.magic<300,'Ironbacks strongly favor Armor over Magic Armor');assert.ok(casterProfile.magic>1000&&casterProfile.armor<100,'Grave Wisps strongly favor Magic Armor over Armor');
 assert.ok(api.heroSheetStats(state.run.heroes[1]).physicalDodge>0,'Dexterity grants physical dodge');
 assert.ok(api.heroSheetStats(state.run.heroes[0]).magicalDodge>0,'Intellect grants magical dodge');
 assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities');
