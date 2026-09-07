@@ -18,7 +18,7 @@ let source=fs.readFileSync(__dirname+'/game.js','utf8').replace(/init\(\);\s*$/,
 source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};SUBCLASS_DATA=JSON.parse(JSON.stringify(subclassFixture));Object.values(SUBCLASS_DATA).flat().forEach(sub=>{Object.assign(sub,SUBCLASS_TURN_OVERRIDES[sub.id]||{});sub.passive=subclassPassiveText(sub);sub.active=subclassActiveText(sub)});state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
-  chooseTurnAction,chooseTurnTarget,buildTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
+  chooseTurnAction,chooseTurnTarget,buildTurnOrder,resortRemainingTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
   abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription,enemyProtectionValues,heroWeaponDamageType,stunResistanceChance
 }`;
 vm.runInContext(source,context);
@@ -68,6 +68,8 @@ assert.ok(target.role&&Number.isFinite(target.def)&&Number.isFinite(target.mdef)
 assert.match(api.unitCard(target,true),new RegExp(target.role),'enemy roles are visible on battlefield cards');
 target.skipTurns=1;target.controlStatus='Frozen';
 assert.match(api.combatStatusBadges(target,true),/Frozen[\s\S]*<span>1<\/span>/,'Frost Nova control is shown with an uncluttered round count');
+warrior.subclassPowerRounds=4;battle.lifestealRounds=4;const partyStatuses=api.combatStatusBadges(warrior);assert.match(partyStatuses,/Battle Shout[\s\S]*<span>3<\/span>/,'Battle Shout appears as a party status');assert.match(partyStatuses,/Vampiric[\s\S]*<span>4<\/span>/,'temporary party lifesteal appears as a status');warrior.subclassPowerRounds=0;battle.lifestealRounds=0;
+const rangerTurn=api.makeHero(1,'Ranger');state.run.heroes.push(rangerTurn);battle.turnOrder=[rangerTurn.id,target.id,warrior.id];battle.turnIndex=0;target.initiative=10;target.initiativePenalty=-5;api.resortRemainingTurnOrder();assert.equal(battle.turnOrder[1],warrior.id,'an Initiative penalty immediately reorders units that have not acted');state.run.heroes.pop();target.initiativePenalty=0;
 const intent=api.enemyIntent(target);
 assert.ok(intent.label&&intent.targetName&&intent.damageType,'enemy intent previews expose action, target, and damage type');
 

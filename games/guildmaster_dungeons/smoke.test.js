@@ -64,6 +64,7 @@ assert.match(js,/function partyPreferredArmorClasses\(/,'armor rewards derive th
 assert.match(js,/preferred\.has\(item\.armorClass\)/,'armor drops match a native armor class represented in the party');
 assert.match(js,/if\(partyCanEquip\(item\)\)return item/,'item generation filters incompatible equipment');
 assert.match(js,/function heroInitiative\(h\)/,'heroes have an initiative stat partially derived from Dexterity');
+assert.match(js,/function resortRemainingTurnOrder\(\)/,'Initiative changes immediately reorder units that have not acted');
 assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdrop closes its window');
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleParty\(/,'each battle levels the entire party');
