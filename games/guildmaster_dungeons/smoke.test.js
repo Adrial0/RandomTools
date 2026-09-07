@@ -105,6 +105,8 @@ assert.match(js,/if\(relicRow\)return\['relic'\]/,'relic vaults are limited to e
 assert.match(js,/shrineRow=step===3\|\|step===8/,'ability shrines are limited to two scheduled encounters');
 assert.match(js,/function makeRewards\(\)\{return\[\{kind:'item'[\s\S]*\{kind:'perk'/,'the first reward stage always has the three standard choices');
 assert.match(js,/function makeEliteRelicRewards\(/,'elite victories prepare a separate set of relic choices');
+assert.match(js,/function declineEliteRelic\(/,'elite relic rewards can be safely declined');
+assert.match(js,/function declineVaultRelic\(/,'Relic Vault rewards can be safely declined');
 assert.match(js,/r\.pendingEliteRelics=elite\?makeEliteRelicRewards\(\):null/,'only elite battles schedule the second reward stage');
 assert.match(js,/r\.pendingReward=r\.pendingEliteRelics;delete r\.pendingEliteRelics/,'claiming the normal reward opens the relic selection afterward');
 assert.match(js,/state\.run\?\.relics/,'character inspection works before a run exists during party selection');
@@ -193,6 +195,7 @@ assert.match(js,/armorDamageMult/,'Armor Broken can multiply damage dealt to Arm
 assert.match(js,/physicalDodgeFromDex\(dex\)/,'physical dodge scales from Dexterity');
 assert.match(js,/magicalDodgeFromInt\(intel\)/,'magical dodge scales from Intellect');
 assert.match(js,/function chooseTurnTarget\(/,'targeted actions wait for player target selection');
+assert.match(js,/function heroWeaponDamageType\(/,'weapon-driven abilities inherit the equipped weapon damage type');
 assert.match(js,/function abilityPreviewDescription\(/,'combat abilities calculate readable damage values from the acting hero');
 assert.match(css,/\.traderItem \.choiceHint\{display:none\}/,'redundant merchant purchase prompts are hidden');
 assert.match(css,/\.turnBasedCombat \.turnPrompt:not\(\.targetPrompt\)>p\{display:none\}/,'the redundant combat action helper line is removed');
