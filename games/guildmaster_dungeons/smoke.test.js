@@ -72,7 +72,10 @@ assert.match(js,/Array\.from\(\{length:6\},\(_,index\)=>\{const item=makeCanonic
 assert.match(js,/function rollShopRarity\(guaranteed=false\)/,'shops use elevated rarity odds');
 assert.match(js,/function shopItemCost\(/,'shop prices scale by rarity and tier');
 assert.match(js,/function equipmentTierForRun\(\)[\s\S]*state\.run\?\.endless\?regionTier/,'endless equipment tiers continue increasing beyond the four-region catalogue');
-assert.match(js,/Math\.pow\(1\.25,endlessTiers\)/,'post-tier-four equipment stats and prices scale each endless region');
+assert.match(js,/equipmentPrimaryValue[\s\S]*Math\.pow\(1\.6,Math\.max\(0,tier-1\)\)/,'equipment keeps its original exponential tier scaling beyond tier four');
+assert.match(js,/shopItemCost[\s\S]*Math\.pow\(1\.6,endlessTiers\)/,'post-tier-four trader prices follow exponential item growth');
+assert.match(js,/function scalableWeaponRecipes\(tier\)[\s\S]*Object\.entries\(ITEM_DATA\.weapons\)/,'every standard weapon template remains available at tier four and beyond');
+assert.match(js,/endlessRegionMult=r\.endless\?Math\.pow\(1\.7,Math\.max\(0,r\.region-3\)\):1/,'enemy stats compound faster than equipment after Endless region four');
 assert.match(js,/scaledRecipe\[4\]=tier/,'tier-four recipe templates are promoted to the current endless tier');
 assert.match(js,/const CONSUMABLES=/,'the run defines purchasable combat consumables');
 assert.match(js,/function combatConsumablesHtml\(/,'owned consumables appear during combat');
