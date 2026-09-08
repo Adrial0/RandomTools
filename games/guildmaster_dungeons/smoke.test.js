@@ -273,6 +273,8 @@ assert.match(css,/\.skillLines line\.active/,'purchased paths visibly illuminate
 assert.match(js,/function enableSkillTreePan\(/,'the large skill canvas supports pointer dragging');
 assert.match(js,/viewport\.onwheel=event=>\{event\.preventDefault\(\)/,'the mouse wheel zooms instead of scrolling the skill tree');
 assert.match(js,/canvas\.style\.zoom=zoom/,'skill-tree zoom changes the complete node canvas');
+assert.match(js,/pointers\.size>=2&&pinchStart/,'mobile skill trees support two-finger pinch zooming');
+assert.match(css,/\.skillTree>\.skillNode,[^\n]*translate:200px 200px/,'the expanded skill canvas provides padding around every outer node');
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
 assert.match(js,/skillMultiplier=1\+skillBonus\(h,`\$\{key\}Pct`\)/,'skill-tree attributes scale percentage-wise with character growth');
 assert.match(js,/distance=depth===2\?285:225/,'class talents are positioned as nearby offshoots rather than distant crossing connections');
