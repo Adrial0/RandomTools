@@ -70,8 +70,8 @@
 <line data-from="str-ring-gateway" data-to="str-ring-3" x1="1200" y1="1462.4" x2="1356.8" y2="1638.8144333732"/>
 <line data-from="str-ring-3" data-to="str-ring-4" x1="1356.8" y1="1638.8144333732" x2="1513.6" y2="1910.4"/>
 <line data-from="str-ring-4" data-to="str-ring-5" x1="1513.6" y1="1910.4" x2="1356.8" y2="2181.9855666268"/>
-<line data-from="str-ring-2" data-to="str-ring-6" x1="1043.2" y1="2181.9855666268" x2="1200" y2="2224"/>
-<line data-from="str-ring-5" data-to="str-ring-6" x1="1356.8" y1="2181.9855666268" x2="1200" y2="2224"/>
+<line data-from="str-ring-2" data-to="str-ring-6" x1="1043.2" y1="2181.9855666268" x2="1200" y2="2294.4"/>
+<line data-from="str-ring-5" data-to="str-ring-6" x1="1356.8" y1="2181.9855666268" x2="1200" y2="2294.4"/>
 <line data-from="attribute-dex-6" data-to="dex-ring-gateway" x1="885.6885479612426" y1="402.07389369861573" x2="972.7549340469632" y2="1068.8"/>
 <line data-from="dex-ring-gateway" data-to="dex-ring-0" x1="972.7549340469632" y1="1068.8" x2="898.3755531515346" y2="844.8"/>
 <line data-from="dex-ring-0" data-to="dex-ring-1" x1="898.3755531515346" y1="844.8" x2="741.5755531515347" y2="573.2144333732"/>
@@ -79,8 +79,8 @@
 <line data-from="dex-ring-gateway" data-to="dex-ring-3" x1="972.7549340469632" y1="1068.8" x2="741.5755531515347" y2="1116.3855666268"/>
 <line data-from="dex-ring-3" data-to="dex-ring-4" x1="741.5755531515347" y1="1116.3855666268" x2="427.97555315153465" y2="1116.3855666268"/>
 <line data-from="dex-ring-4" data-to="dex-ring-5" x1="427.97555315153465" y1="1116.3855666268" x2="271.1755531515347" y2="844.8"/>
-<line data-from="dex-ring-2" data-to="dex-ring-6" x1="427.97555315153465" y1="573.2144333732" x2="313.18998652473465" y2="688"/>
-<line data-from="dex-ring-5" data-to="dex-ring-6" x1="271.1755531515347" y1="844.8" x2="313.18998652473465" y2="688"/>
+<line data-from="dex-ring-2" data-to="dex-ring-6" x1="427.97555315153465" y1="573.2144333732" x2="252.22179809831027" y2="652.8"/>
+<line data-from="dex-ring-5" data-to="dex-ring-6" x1="271.1755531515347" y1="844.8" x2="252.22179809831027" y2="652.8"/>
 <line data-from="attribute-int-6" data-to="int-ring-gateway" x1="2048.1800044191796" y1="1326.761350984754" x2="1427.2450659530368" y2="1068.8"/>
 <line data-from="int-ring-gateway" data-to="int-ring-0" x1="1427.2450659530368" y1="1068.8" x2="1658.4244468484653" y2="1116.3855666268"/>
 <line data-from="int-ring-0" data-to="int-ring-1" x1="1658.4244468484653" y1="1116.3855666268" x2="1972.0244468484652" y2="1116.3855666268"/>
@@ -88,36 +88,36 @@
 <line data-from="int-ring-gateway" data-to="int-ring-3" x1="1427.2450659530368" y1="1068.8" x2="1501.6244468484654" y2="844.8"/>
 <line data-from="int-ring-3" data-to="int-ring-4" x1="1501.6244468484654" y1="844.8" x2="1658.4244468484653" y2="573.2144333732"/>
 <line data-from="int-ring-4" data-to="int-ring-5" x1="1658.4244468484653" y1="573.2144333732" x2="1972.0244468484652" y2="573.2144333732"/>
-<line data-from="int-ring-2" data-to="int-ring-6" x1="2128.8244468484654" y1="844.8" x2="2086.8100134752654" y2="688"/>
-<line data-from="int-ring-5" data-to="int-ring-6" x1="1972.0244468484652" y1="573.2144333732" x2="2086.8100134752654" y2="688"/>
-<line data-from="attribute-str-9" data-to="blood-vigor" x1="351.8199955808201" y1="1326.7613509847538" x2="496" y2="1596.8"/>
-<line data-from="blood-vigor" data-to="blood-hunger" x1="496" y1="1596.8" x2="316.79999999999995" y2="1756.8000000000002"/>
-<line data-from="blood-vigor" data-to="blood-fury" x1="496" y1="1596.8" x2="636.8" y2="1776"/>
-<line data-from="blood-hunger" data-to="keystone-vital-leech" x1="316.79999999999995" y1="1756.8000000000002" x2="214.39999999999998" y2="1987.2"/>
-<line data-from="blood-fury" data-to="keystone-blood-magic" x1="636.8" y1="1776" x2="675.2" y2="2019.2"/>
-<line data-from="attribute-int-9" data-to="affliction-focus" x1="1733.8685523804224" y1="1871.16475531663" x2="1904" y2="1545.6"/>
-<line data-from="affliction-focus" data-to="affliction-decay" x1="1904" y1="1545.6" x2="2070.4" y2="1712"/>
-<line data-from="affliction-decay" data-to="keystone-deterioration" x1="2070.4" y1="1712" x2="2121.6" y2="1942.4"/>
+<line data-from="int-ring-2" data-to="int-ring-6" x1="2128.8244468484654" y1="844.8" x2="2147.7782019016895" y2="652.8"/>
+<line data-from="int-ring-5" data-to="int-ring-6" x1="1972.0244468484652" y1="573.2144333732" x2="2147.7782019016895" y2="652.8"/>
+<line data-from="attribute-str-9" data-to="blood-vigor" x1="351.8199955808201" y1="1326.7613509847538" x2="499.84000000000003" y2="1239.68"/>
+<line data-from="blood-vigor" data-to="blood-hunger" x1="499.84000000000003" y1="1239.68" x2="599.68" y2="900.48"/>
+<line data-from="blood-vigor" data-to="blood-fury" x1="499.84000000000003" y1="1239.68" x2="699.52" y2="1449.6"/>
+<line data-from="blood-hunger" data-to="keystone-vital-leech" x1="599.68" y1="900.48" x2="749.44" y2="699.52"/>
+<line data-from="blood-fury" data-to="keystone-blood-magic" x1="699.52" y1="1449.6" x2="1000.3199999999999" y2="1750.4"/>
+<line data-from="attribute-int-9" data-to="affliction-focus" x1="1733.8685523804224" y1="1871.16475531663" x2="2500.48" y2="1499.52"/>
+<line data-from="affliction-focus" data-to="affliction-decay" x1="2500.48" y1="1499.52" x2="2700.16" y2="1650.56"/>
+<line data-from="affliction-decay" data-to="keystone-deterioration" x1="2700.16" y1="1650.56" x2="2899.84" y2="1850.24"/>
 <line data-from="int-ring-2" data-to="mana-channel" x1="2128.8244468484654" y1="844.8" x2="2390.4" y2="675.2"/>
 <line data-from="mana-channel" data-to="mana-bastion" x1="2390.4" y1="675.2" x2="2556.8" y2="496"/>
 <line data-from="mana-bastion" data-to="keystone-mana-shield" x1="2556.8" y1="496" x2="2761.6000000000004" y2="316.79999999999995"/>
-<line data-from="int-ring-5" data-to="aether-reservoir" x1="1972.0244468484652" y1="573.2144333732" x2="1897.6" y2="380.79999999999995"/>
-<line data-from="aether-reservoir" data-to="aether-unraveling" x1="1897.6" y1="380.79999999999995" x2="1699.2" y2="259.19999999999993"/>
-<line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="1699.2" y1="259.19999999999993" x2="1449.6" y2="176"/>
+<line data-from="int-ring-5" data-to="aether-reservoir" x1="1972.0244468484652" y1="573.2144333732" x2="2099.84" y2="400"/>
+<line data-from="aether-reservoir" data-to="aether-unraveling" x1="2099.84" y1="400" x2="2249.6" y2="260.48"/>
+<line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="2249.6" y1="260.48" x2="2450.56" y2="169.5999999999999"/>
 <line data-from="attribute-dex-11" data-to="keystone-resolute-force" x1="1043.241700973282" y1="129.8199237108504" x2="560" y2="150.4000000000001"/>
 <line data-from="str-ring-2" data-to="keystone-immovable" x1="1043.2" y1="2181.9855666268" x2="816" y2="2352"/>
-<line data-from="str-ring-0" data-to="class-0-0" x1="1043.2" y1="1638.8144333732" x2="935.5232911355332" y2="1940.1543184998072"/>
-<line data-from="dex-ring-0" data-to="class-0-1" x1="898.3755531515346" y1="844.8" x2="691.2459118906415" y2="600.8792921641672"/>
-<line data-from="int-ring-0" data-to="class-0-2" x1="1658.4244468484653" y1="1116.3855666268" x2="2048.7843210039114" y2="1045.1857867862398"/>
-<line data-from="attribute-str-14" data-to="class-1-0" x1="517.8258739068573" y1="2313.206998580703" x2="350.62633319775364" y2="2586.0518511740124"/>
-<line data-from="attribute-dex-14" data-to="class-1-1" x1="577.0215226050552" y1="52.61637770853804" x2="424.3307193219804" y2="-228.60509834329082"/>
-<line data-from="attribute-int-14" data-to="class-1-2" x1="2505.152603488088" y1="1234.1766237107593" x2="2901.816630038389" y2="1244.5636367993231"/>
-<line data-from="str-ring-3" data-to="class-2-0" x1="1356.8" y1="1638.8144333732" x2="1464.476708864467" y2="1940.1543184998072"/>
-<line data-from="dex-ring-3" data-to="class-2-1" x1="741.5755531515347" y1="1116.3855666268" x2="426.769203026175" y2="1058.9663893360257"/>
-<line data-from="int-ring-3" data-to="class-2-2" x1="1501.6244468484654" y1="844.8" x2="1758.465202011973" y2="542.3383222835672"/>
-<line data-from="attribute-str-17" data-to="class-3-0" x1="-105.1526034880876" y1="1234.1766237107595" x2="-425.04294748026587" y2="1242.5532471692788"/>
-<line data-from="attribute-dex-17" data-to="class-3-1" x1="1822.9784773949445" y1="52.61637770853804" x2="1975.6692806780193" y2="-228.60509834329082"/>
-<line data-from="attribute-int-17" data-to="class-3-2" x1="1882.1741260931428" y1="2313.206998580703" x2="2089.5015565724316" y2="2651.534615796407"/></g>
+<line data-from="str-ring-0" data-to="class-0-0" x1="1043.2" y1="1638.8144333732" x2="853.6889923985384" y2="2169.172631196029"/>
+<line data-from="dex-ring-0" data-to="class-0-1" x1="898.3755531515346" y1="844.8" x2="533.8273845323629" y2="415.4995542089341"/>
+<line data-from="int-ring-0" data-to="class-0-2" x1="1658.4244468484653" y1="1116.3855666268" x2="2313.221655109214" y2="996.9536778619894"/>
+<line data-from="attribute-str-14" data-to="class-1-0" x1="517.8258739068573" y1="2313.206998580703" x2="223.55468225883487" y2="2793.413939144928"/>
+<line data-from="attribute-dex-14" data-to="class-1-1" x1="577.0215226050552" y1="52.61637770853804" x2="308.2857088268438" y2="-442.333420142681"/>
+<line data-from="attribute-int-14" data-to="class-1-2" x1="2505.152603488088" y1="1234.1766237107593" x2="3170.5245189918187" y2="1251.6000005044793"/>
+<line data-from="str-ring-3" data-to="class-2-0" x1="1356.8" y1="1638.8144333732" x2="1546.3110076014616" y2="2169.172631196029"/>
+<line data-from="dex-ring-3" data-to="class-2-1" x1="741.5755531515347" y1="1116.3855666268" x2="187.51637693090163" y2="1015.3278145950371"/>
+<line data-from="int-ring-3" data-to="class-2-2" x1="1501.6244468484654" y1="844.8" x2="1932.454100671123" y2="337.44492770146746"/>
+<line data-from="attribute-str-17" data-to="class-3-0" x1="-105.1526034880876" y1="1234.1766237107595" x2="-668.1596089143216" y2="1248.919480997754"/>
+<line data-from="attribute-dex-17" data-to="class-3-1" x1="1822.9784773949445" y1="52.61637770853804" x2="2091.714291173156" y2="-442.333420142681"/>
+<line data-from="attribute-int-17" data-to="class-3-2" x1="1882.1741260931428" y1="2313.206998580703" x2="2229.949170768078" y2="2880.724291974787"/></g>
 <g class="core"><polygon points="1800,1718 1882,1800 1800,1882 1718,1800"/><text x="1800" y="1807" text-anchor="middle">CLASS</text></g>
 <g id="nodes" transform="translate(600 600)"><g class="node basic " id="node-attribute-str-0" data-id="attribute-str-0" data-layout-id="attribute-str-0" data-x="1039.2656850576082" data-y="1292.8" transform="translate(1039.2656850576082 1292.8)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -431,7 +431,7 @@
 <text class="node-title" x="0" y="-5" text-anchor="middle">Heartwood 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
-<g class="node major " id="node-str-ring-6" data-id="str-ring-6" data-layout-id="str-ring-6" data-x="1200" data-y="2224" transform="translate(1200 2224)">
+<g class="node major " id="node-str-ring-6" data-id="str-ring-6" data-layout-id="str-ring-6" data-x="1200" data-y="2294.4" transform="translate(1200 2294.4)">
 <title>Titanic Bulwark — +10% Armor and +10% maximum HP.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Titanic Bulwark</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+10% Armor and +10% maximum</text>
@@ -474,7 +474,7 @@
 <text class="node-title" x="0" y="-5" text-anchor="middle">Elusive Step 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Physical Dodge.</text>
 </g>
-<g class="node major " id="node-dex-ring-6" data-id="dex-ring-6" data-layout-id="dex-ring-6" data-x="313.18998652473465" data-y="688" transform="translate(313.18998652473465 688)">
+<g class="node major " id="node-dex-ring-6" data-id="dex-ring-6" data-layout-id="dex-ring-6" data-x="252.22179809831027" data-y="652.8" transform="translate(252.22179809831027 652.8)">
 <title>Perfect Motion — +5% Critical Chance and +5% Physical Dodge.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Perfect Motion</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+5% Critical Chance and +5%</text>
@@ -516,29 +516,29 @@
 <text class="node-title" x="0" y="-5" text-anchor="middle">Expanded Mind 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node major " id="node-int-ring-6" data-id="int-ring-6" data-layout-id="int-ring-6" data-x="2086.8100134752654" data-y="688" transform="translate(2086.8100134752654 688)">
+<g class="node major " id="node-int-ring-6" data-id="int-ring-6" data-layout-id="int-ring-6" data-x="2147.7782019016895" data-y="652.8" transform="translate(2147.7782019016895 652.8)">
 <title>Arcane Citadel — +10% Magic Armor and +10% maximum Mana.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Arcane Citadel</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+10% Magic Armor and +10%</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">maximum Mana.</text>
 </g>
-<g class="node basic " id="node-blood-vigor" data-id="blood-vigor" data-layout-id="blood-vigor" data-x="496" data-y="1596.8" transform="translate(496 1596.8)">
+<g class="node basic " id="node-blood-vigor" data-id="blood-vigor" data-layout-id="blood-vigor" data-x="499.84000000000003" data-y="1239.68" transform="translate(499.84000000000003 1239.68)">
 <title>Sanguine Vigor — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Sanguine Vigor</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
-<g class="node basic " id="node-blood-hunger" data-id="blood-hunger" data-layout-id="blood-hunger" data-x="316.79999999999995" data-y="1756.8000000000002" transform="translate(316.79999999999995 1756.8000000000002)">
+<g class="node basic " id="node-blood-hunger" data-id="blood-hunger" data-layout-id="blood-hunger" data-x="599.68" data-y="900.48" transform="translate(599.68 900.48)">
 <title>Hunger — +2% Lifesteal.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hunger</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Lifesteal.</text>
 </g>
-<g class="node basic " id="node-blood-fury" data-id="blood-fury" data-layout-id="blood-fury" data-x="636.8" data-y="1776" transform="translate(636.8 1776)">
+<g class="node basic " id="node-blood-fury" data-id="blood-fury" data-layout-id="blood-fury" data-x="699.52" data-y="1449.6" transform="translate(699.52 1449.6)">
 <title>Blood Fury — +6% damage while below 35% HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Blood Fury</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+6% damage while</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">below 35% HP.</text>
 </g>
-<g class="node major keystone " id="node-keystone-vital-leech" data-id="keystone-vital-leech" data-layout-id="keystone-vital-leech" data-x="214.39999999999998" data-y="1987.2" transform="translate(214.39999999999998 1987.2)">
+<g class="node major keystone " id="node-keystone-vital-leech" data-id="keystone-vital-leech" data-layout-id="keystone-vital-leech" data-x="749.44" data-y="699.52" transform="translate(749.44 699.52)">
 <title>Vital Leech — Lifesteal is 50% more effective, but this character cannot regain HP in any other way.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Vital Leech</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Lifesteal is 50% more</text>
@@ -546,26 +546,26 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">character cannot regain HP</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">in any other way.</text>
 </g>
-<g class="node major keystone " id="node-keystone-blood-magic" data-id="keystone-blood-magic" data-layout-id="keystone-blood-magic" data-x="675.2" data-y="2019.2" transform="translate(675.2 2019.2)">
+<g class="node major keystone " id="node-keystone-blood-magic" data-id="keystone-blood-magic" data-layout-id="keystone-blood-magic" data-x="1000.3199999999999" data-y="1750.4" transform="translate(1000.3199999999999 1750.4)">
 <title>Blood Magic — Mana is disabled. Abilities spend HP instead, and cannot reduce you below 1 HP.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Blood Magic</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Mana is disabled. Abilities</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">spend HP instead, and cannot</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">reduce you below 1 HP.</text>
 </g>
-<g class="node basic " id="node-affliction-focus" data-id="affliction-focus" data-layout-id="affliction-focus" data-x="1904" data-y="1545.6" transform="translate(1904 1545.6)">
+<g class="node basic " id="node-affliction-focus" data-id="affliction-focus" data-layout-id="affliction-focus" data-x="2500.48" data-y="1499.52" transform="translate(2500.48 1499.52)">
 <title>Malign Focus — +3% Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Malign Focus</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Status Chance.</text>
 </g>
-<g class="node basic " id="node-affliction-decay" data-id="affliction-decay" data-layout-id="affliction-decay" data-x="2070.4" data-y="1712" transform="translate(2070.4 1712)">
+<g class="node basic " id="node-affliction-decay" data-id="affliction-decay" data-layout-id="affliction-decay" data-x="2700.16" data-y="1650.56" transform="translate(2700.16 1650.56)">
 <title>Lingering Agony — +20% damage with damage-over-time effects.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Lingering Agony</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+20% damage with</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage-over-time</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">effects.</text>
 </g>
-<g class="node major keystone " id="node-keystone-deterioration" data-id="keystone-deterioration" data-layout-id="keystone-deterioration" data-x="2121.6" data-y="1942.4" transform="translate(2121.6 1942.4)">
+<g class="node major keystone " id="node-keystone-deterioration" data-id="keystone-deterioration" data-layout-id="keystone-deterioration" data-x="2899.84" data-y="1850.24" transform="translate(2899.84 1850.24)">
 <title>Deterioration — Deal 30% less direct damage, but damage-over-time effects deal 60% more damage.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Deterioration</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Deal 30% less direct damage,</text>
@@ -591,18 +591,18 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">depletes Mana first. Mana</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">regeneration is halved.</text>
 </g>
-<g class="node basic " id="node-aether-reservoir" data-id="aether-reservoir" data-layout-id="aether-reservoir" data-x="1897.6" data-y="380.79999999999995" transform="translate(1897.6 380.79999999999995)">
+<g class="node basic " id="node-aether-reservoir" data-id="aether-reservoir" data-layout-id="aether-reservoir" data-x="2099.84" data-y="400" transform="translate(2099.84 400)">
 <title>Aether Reservoir — +5% Magic Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Aether Reservoir</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Magic Armor.</text>
 </g>
-<g class="node basic " id="node-aether-unraveling" data-id="aether-unraveling" data-layout-id="aether-unraveling" data-x="1699.2" data-y="259.19999999999993" transform="translate(1699.2 259.19999999999993)">
+<g class="node basic " id="node-aether-unraveling" data-id="aether-unraveling" data-layout-id="aether-unraveling" data-x="2249.6" data-y="260.48" transform="translate(2249.6 260.48)">
 <title>Unraveling Ward — +5% Magic Armor and +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Unraveling Ward</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Magic Armor and</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node major keystone " id="node-keystone-aether-conversion" data-id="keystone-aether-conversion" data-layout-id="keystone-aether-conversion" data-x="1449.6" data-y="176" transform="translate(1449.6 176)">
+<g class="node major keystone " id="node-keystone-aether-conversion" data-id="keystone-aether-conversion" data-layout-id="keystone-aether-conversion" data-x="2450.56" data-y="169.5999999999999" transform="translate(2450.56 169.5999999999999)">
 <title>Aether Conversion — Convert all Magic Armor into maximum Mana, but abilities cost twice as much.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Aether Conversion</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Convert all Magic Armor into</text>
@@ -623,73 +623,73 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">Armor, but Physical and</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Magical Dodge become 0%.</text>
 </g>
-<g class="node class-specific" id="node-class-0-0" data-id="class-0-0" data-layout-id="class-0-0" data-x="935.5232911355332" data-y="1940.1543184998072" transform="translate(935.5232911355332 1940.1543184998072)">
+<g class="node class-specific" id="node-class-0-0" data-id="class-0-0" data-layout-id="class-0-0" data-x="853.6889923985384" data-y="2169.172631196029" transform="translate(853.6889923985384 2169.172631196029)">
 <title>Class Slot 0.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 0.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-0-1" data-id="class-0-1" data-layout-id="class-0-1" data-x="691.2459118906415" data-y="600.8792921641672" transform="translate(691.2459118906415 600.8792921641672)">
+<g class="node class-specific" id="node-class-0-1" data-id="class-0-1" data-layout-id="class-0-1" data-x="533.8273845323629" data-y="415.4995542089341" transform="translate(533.8273845323629 415.4995542089341)">
 <title>Class Slot 0.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 0.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-0-2" data-id="class-0-2" data-layout-id="class-0-2" data-x="2048.7843210039114" data-y="1045.1857867862398" transform="translate(2048.7843210039114 1045.1857867862398)">
+<g class="node major class-specific" id="node-class-0-2" data-id="class-0-2" data-layout-id="class-0-2" data-x="2313.221655109214" data-y="996.9536778619894" transform="translate(2313.221655109214 996.9536778619894)">
 <title>Class Slot 0.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 0.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-1-0" data-id="class-1-0" data-layout-id="class-1-0" data-x="350.62633319775364" data-y="2586.0518511740124" transform="translate(350.62633319775364 2586.0518511740124)">
+<g class="node class-specific" id="node-class-1-0" data-id="class-1-0" data-layout-id="class-1-0" data-x="223.55468225883487" data-y="2793.413939144928" transform="translate(223.55468225883487 2793.413939144928)">
 <title>Class Slot 1.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 1.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-1-1" data-id="class-1-1" data-layout-id="class-1-1" data-x="424.3307193219804" data-y="-228.60509834329082" transform="translate(424.3307193219804 -228.60509834329082)">
+<g class="node class-specific" id="node-class-1-1" data-id="class-1-1" data-layout-id="class-1-1" data-x="308.2857088268438" data-y="-442.333420142681" transform="translate(308.2857088268438 -442.333420142681)">
 <title>Class Slot 1.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 1.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-1-2" data-id="class-1-2" data-layout-id="class-1-2" data-x="2901.816630038389" data-y="1244.5636367993231" transform="translate(2901.816630038389 1244.5636367993231)">
+<g class="node major class-specific" id="node-class-1-2" data-id="class-1-2" data-layout-id="class-1-2" data-x="3170.5245189918187" data-y="1251.6000005044793" transform="translate(3170.5245189918187 1251.6000005044793)">
 <title>Class Slot 1.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 1.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-2-0" data-id="class-2-0" data-layout-id="class-2-0" data-x="1464.476708864467" data-y="1940.1543184998072" transform="translate(1464.476708864467 1940.1543184998072)">
+<g class="node class-specific" id="node-class-2-0" data-id="class-2-0" data-layout-id="class-2-0" data-x="1546.3110076014616" data-y="2169.172631196029" transform="translate(1546.3110076014616 2169.172631196029)">
 <title>Class Slot 2.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 2.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-2-1" data-id="class-2-1" data-layout-id="class-2-1" data-x="426.769203026175" data-y="1058.9663893360257" transform="translate(426.769203026175 1058.9663893360257)">
+<g class="node class-specific" id="node-class-2-1" data-id="class-2-1" data-layout-id="class-2-1" data-x="187.51637693090163" data-y="1015.3278145950371" transform="translate(187.51637693090163 1015.3278145950371)">
 <title>Class Slot 2.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 2.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-2-2" data-id="class-2-2" data-layout-id="class-2-2" data-x="1758.465202011973" data-y="542.3383222835672" transform="translate(1758.465202011973 542.3383222835672)">
+<g class="node major class-specific" id="node-class-2-2" data-id="class-2-2" data-layout-id="class-2-2" data-x="1932.454100671123" data-y="337.44492770146746" transform="translate(1932.454100671123 337.44492770146746)">
 <title>Class Slot 2.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 2.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-3-0" data-id="class-3-0" data-layout-id="class-3-0" data-x="-425.04294748026587" data-y="1242.5532471692788" transform="translate(-425.04294748026587 1242.5532471692788)">
+<g class="node class-specific" id="node-class-3-0" data-id="class-3-0" data-layout-id="class-3-0" data-x="-668.1596089143216" data-y="1248.919480997754" transform="translate(-668.1596089143216 1248.919480997754)">
 <title>Class Slot 3.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 3.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-3-1" data-id="class-3-1" data-layout-id="class-3-1" data-x="1975.6692806780193" data-y="-228.60509834329082" transform="translate(1975.6692806780193 -228.60509834329082)">
+<g class="node class-specific" id="node-class-3-1" data-id="class-3-1" data-layout-id="class-3-1" data-x="2091.714291173156" data-y="-442.333420142681" transform="translate(2091.714291173156 -442.333420142681)">
 <title>Class Slot 3.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 3.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-3-2" data-id="class-3-2" data-layout-id="class-3-2" data-x="2089.5015565724316" data-y="2651.534615796407" transform="translate(2089.5015565724316 2651.534615796407)">
+<g class="node major class-specific" id="node-class-3-2" data-id="class-3-2" data-layout-id="class-3-2" data-x="2229.949170768078" data-y="2880.724291974787" transform="translate(2229.949170768078 2880.724291974787)">
 <title>Class Slot 3.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 3.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>

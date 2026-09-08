@@ -279,7 +279,7 @@ assert.match(css,/\.skillTree>\.skillNode,[^\n]*translate:600px 600px/,'the expa
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
 assert.match(js,/skillMultiplier=1\+skillBonus\(h,`\$\{key\}Pct`\)/,'skill-tree attributes scale percentage-wise with character growth');
 assert.match(js,/anchors=\['str-ring-0','dex-ring-0','int-ring-0'[\s\S]*'attribute-int-17'\]/,'class talents are distributed across twelve separate deep-tree anchors');
-assert.match(js,/distance=depth===2\?310:250/,'each class talent sits as a short local offshoot from its own prerequisite');
+assert.match(js,/distance=depth===2\?520:440/,'each class talent is pushed into open outer space from its own prerequisite');
 assert.match(js,/clamp\(next,\.32,1\.65\)/,'the expanded tree can zoom far enough out for a broad overview');
 assert.match(js,/mana-channel[\s\S]*requires:'int-ring-2'[\s\S]*mana-bastion[\s\S]*requires:'mana-channel'[\s\S]*keystone-mana-shield[\s\S]*requires:'mana-bastion'/,'Mana Shield sits behind a dedicated multi-node INT route');
 assert.match(js,/aether-reservoir[\s\S]*requires:'int-ring-5'[\s\S]*aether-unraveling[\s\S]*requires:'aether-reservoir'[\s\S]*keystone-aether-conversion[\s\S]*requires:'aether-unraveling'/,'Aether Conversion sits behind the opposite multi-node INT route');
