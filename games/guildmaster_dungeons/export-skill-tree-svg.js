@@ -27,7 +27,7 @@ ${wrap(genericDesc,node.basic?20:28).map((row,index)=>`<text class="node-desc" x
 </g>`}).join('\n');
 
 const svg=`<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="4400" height="4400" viewBox="0 0 4400 4400">
+<svg xmlns="http://www.w3.org/2000/svg" width="8000" height="8000" viewBox="0 0 8000 8000">
 <title>Guildmaster Dungeons — Shared Editable Skill Tree Layout</title>
 <desc>This layout controls every class. Drag nodes in a browser, press Save SVG, then replace skill-tree-layout.svg in the project.</desc>
 <style>
@@ -39,7 +39,7 @@ const svg=`<?xml version="1.0" encoding="UTF-8"?>
   .toolbar rect{fill:#1d140b;stroke:#d49d45;stroke-width:2}.toolbar text{fill:#ffe0a0;font:bold 15px Georgia,serif}.toolbar{cursor:pointer}
 </style>
 <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#71532d" opacity=".35"/></pattern></defs>
-<rect class="backdrop" width="4400" height="4400"/><rect class="grid" width="4400" height="4400"/>
+<rect class="backdrop" width="8000" height="8000"/><rect class="grid" width="8000" height="8000"/>
 <g class="connections">${lineSvg}</g>
 <g class="core"><polygon points="2000,1918 2082,2000 2000,2082 1918,2000"/><text x="2000" y="2007" text-anchor="middle">CLASS</text></g>
 <g id="nodes">${nodeSvg}</g>
