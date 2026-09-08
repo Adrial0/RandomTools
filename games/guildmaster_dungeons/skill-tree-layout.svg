@@ -103,18 +103,18 @@
 <line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="3099.52" y1="3500.16" x2="3400.3199999999997" y2="3699.84"/>
 <line data-from="attribute-dex-10" data-to="keystone-resolute-force" x1="1542.8960881012597" y1="1019.7374975411592" x2="1449.6" y2="599.6800000000001"/>
 <line data-from="str-ring-2" data-to="keystone-immovable" x1="1843.2" y1="2981.9855666268" x2="1616" y2="3152"/>
-<line data-from="attribute-str-14" data-to="class-0-0" x1="1317.8258739068574" y1="3113.206998580703" x2="1023.5546822588349" y2="3593.413939144928"/>
-<line data-from="attribute-str-15" data-to="class-0-1" x1="992.566943928993" y1="2830.463724394649" x2="557.9879785650294" y2="3188.702978055086"/>
-<line data-from="attribute-str-16" data-to="class-0-2" x1="777.080789717292" y1="2457.2307569723607" x2="165.62118457593806" y2="2685.846135458541"/>
-<line data-from="attribute-str-17" data-to="class-1-0" x1="694.8473965119124" y1="2034.1766237107595" x2="131.84039108567845" y2="2048.919480997754"/>
-<line data-from="attribute-dex-14" data-to="class-1-1" x1="1377.0215226050552" y1="852.616377708538" x2="1108.2857088268438" y2="357.666579857319"/>
-<line data-from="attribute-dex-15" data-to="class-1-2" x1="1784.5138457882992" y1="712.3055186329905" x2="1676.7707686824488" y2="68.45827794948582"/>
-<line data-from="attribute-dex-16" data-to="class-2-0" x1="2215.486154211701" y1="712.3055186329907" x2="2308.440965832435" y2="156.82946784722208"/>
-<line data-from="attribute-dex-17" data-to="class-2-1" x1="2622.9784773949445" y1="852.616377708538" x2="2891.714291173156" y2="357.666579857319"/>
-<line data-from="attribute-int-14" data-to="class-2-2" x1="3305.152603488088" y1="2034.1766237107593" x2="3957.728905232131" y2="2051.264935566139"/>
-<line data-from="attribute-int-15" data-to="class-3-0" x1="3222.9192102827083" y1="2457.2307569723607" x2="3750.452987267405" y2="2654.4675540976923"/>
-<line data-from="attribute-int-16" data-to="class-3-1" x1="3007.4330560710073" y1="2830.4637243946486" x2="3442.0120214349713" y2="3188.7029780550847"/>
-<line data-from="int-ring-6" data-to="class-3-2" x1="2947.7782019016895" y1="1452.8" x2="3513.1195854921716" y2="1126.4"/></g>
+<line data-from="attribute-str-14" data-to="class-0-0" x1="1317.8258739068574" y1="3113.206998580703" x2="1117.186425055933" y2="3440.620821692675"/>
+<line data-from="attribute-str-15" data-to="class-0-1" x1="992.566943928993" y1="2830.463724394649" x2="696.2631039081086" y2="3074.7177609813107"/>
+<line data-from="attribute-str-16" data-to="class-0-2" x1="777.080789717292" y1="2457.2307569723607" x2="345.4622449116305" y2="2618.6063182567236"/>
+<line data-from="attribute-str-17" data-to="class-1-0" x1="694.8473965119124" y1="2034.1766237107595" x2="310.97898372129816" y2="2044.2285718609828"/>
+<line data-from="attribute-dex-14" data-to="class-1-1" x1="1377.0215226050552" y1="852.616377708538" x2="1193.7925586653655" y2="515.1506064463433"/>
+<line data-from="attribute-dex-15" data-to="class-1-2" x1="1784.5138457882992" y1="712.3055186329905" x2="1708.459909007699" y2="257.82511344463455"/>
+<line data-from="attribute-dex-16" data-to="class-2-0" x1="2215.486154211701" y1="712.3055186329907" x2="2278.8644348622015" y2="333.5718476426939"/>
+<line data-from="attribute-dex-17" data-to="class-2-1" x1="2622.9784773949445" y1="852.616377708538" x2="2806.2074413346345" y2="515.1506064463433"/>
+<line data-from="attribute-int-14" data-to="class-2-2" x1="3305.152603488088" y1="2034.1766237107593" x2="3765.7946988368244" y2="2046.238961491027"/>
+<line data-from="attribute-int-15" data-to="class-3-0" x1="3222.9192102827083" y1="2457.2307569723607" x2="3582.6013309540926" y2="2591.710391375996"/>
+<line data-from="attribute-int-16" data-to="class-3-1" x1="3007.4330560710073" y1="2830.4637243946486" x2="3303.736896091892" y2="3074.7177609813098"/>
+<line data-from="int-ring-6" data-to="class-3-2" x1="2947.7782019016895" y1="1452.8" x2="3346.8427079655594" y2="1222.4"/></g>
 <g class="core"><polygon points="2000,1918 2082,2000 2000,2082 1918,2000"/><text x="2000" y="2007" text-anchor="middle">CLASS</text></g>
 <g id="nodes"><g class="node basic " id="node-attribute-str-0" data-id="attribute-str-0" data-layout-id="attribute-str-0" data-x="1839.2656850576082" data-y="2092.8" transform="translate(1839.2656850576082 2092.8)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -601,73 +601,73 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">Armor, but Physical and</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Magical Dodge become 0%.</text>
 </g>
-<g class="node class-specific" id="node-class-0-0" data-id="class-0-0" data-layout-id="class-0-0" data-x="1023.5546822588349" data-y="3593.413939144928" transform="translate(1023.5546822588349 3593.413939144928)">
+<g class="node class-specific" id="node-class-0-0" data-id="class-0-0" data-layout-id="class-0-0" data-x="1117.186425055933" data-y="3440.620821692675" transform="translate(1117.186425055933 3440.620821692675)">
 <title>Class Slot 0.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 0.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-0-1" data-id="class-0-1" data-layout-id="class-0-1" data-x="557.9879785650294" data-y="3188.702978055086" transform="translate(557.9879785650294 3188.702978055086)">
+<g class="node class-specific" id="node-class-0-1" data-id="class-0-1" data-layout-id="class-0-1" data-x="696.2631039081086" data-y="3074.7177609813107" transform="translate(696.2631039081086 3074.7177609813107)">
 <title>Class Slot 0.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 0.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-0-2" data-id="class-0-2" data-layout-id="class-0-2" data-x="165.62118457593806" data-y="2685.846135458541" transform="translate(165.62118457593806 2685.846135458541)">
+<g class="node major class-specific" id="node-class-0-2" data-id="class-0-2" data-layout-id="class-0-2" data-x="345.4622449116305" data-y="2618.6063182567236" transform="translate(345.4622449116305 2618.6063182567236)">
 <title>Class Slot 0.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 0.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-1-0" data-id="class-1-0" data-layout-id="class-1-0" data-x="131.84039108567845" data-y="2048.919480997754" transform="translate(131.84039108567845 2048.919480997754)">
+<g class="node class-specific" id="node-class-1-0" data-id="class-1-0" data-layout-id="class-1-0" data-x="310.97898372129816" data-y="2044.2285718609828" transform="translate(310.97898372129816 2044.2285718609828)">
 <title>Class Slot 1.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 1.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-1-1" data-id="class-1-1" data-layout-id="class-1-1" data-x="1108.2857088268438" data-y="357.666579857319" transform="translate(1108.2857088268438 357.666579857319)">
+<g class="node class-specific" id="node-class-1-1" data-id="class-1-1" data-layout-id="class-1-1" data-x="1193.7925586653655" data-y="515.1506064463433" transform="translate(1193.7925586653655 515.1506064463433)">
 <title>Class Slot 1.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 1.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-1-2" data-id="class-1-2" data-layout-id="class-1-2" data-x="1676.7707686824488" data-y="68.45827794948582" transform="translate(1676.7707686824488 68.45827794948582)">
+<g class="node major class-specific" id="node-class-1-2" data-id="class-1-2" data-layout-id="class-1-2" data-x="1708.459909007699" data-y="257.82511344463455" transform="translate(1708.459909007699 257.82511344463455)">
 <title>Class Slot 1.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 1.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-2-0" data-id="class-2-0" data-layout-id="class-2-0" data-x="2308.440965832435" data-y="156.82946784722208" transform="translate(2308.440965832435 156.82946784722208)">
+<g class="node class-specific" id="node-class-2-0" data-id="class-2-0" data-layout-id="class-2-0" data-x="2278.8644348622015" data-y="333.5718476426939" transform="translate(2278.8644348622015 333.5718476426939)">
 <title>Class Slot 2.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 2.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-2-1" data-id="class-2-1" data-layout-id="class-2-1" data-x="2891.714291173156" data-y="357.666579857319" transform="translate(2891.714291173156 357.666579857319)">
+<g class="node class-specific" id="node-class-2-1" data-id="class-2-1" data-layout-id="class-2-1" data-x="2806.2074413346345" data-y="515.1506064463433" transform="translate(2806.2074413346345 515.1506064463433)">
 <title>Class Slot 2.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 2.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-2-2" data-id="class-2-2" data-layout-id="class-2-2" data-x="3957.728905232131" data-y="2051.264935566139" transform="translate(3957.728905232131 2051.264935566139)">
+<g class="node major class-specific" id="node-class-2-2" data-id="class-2-2" data-layout-id="class-2-2" data-x="3765.7946988368244" data-y="2046.238961491027" transform="translate(3765.7946988368244 2046.238961491027)">
 <title>Class Slot 2.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 2.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-3-0" data-id="class-3-0" data-layout-id="class-3-0" data-x="3750.452987267405" data-y="2654.4675540976923" transform="translate(3750.452987267405 2654.4675540976923)">
+<g class="node class-specific" id="node-class-3-0" data-id="class-3-0" data-layout-id="class-3-0" data-x="3582.6013309540926" data-y="2591.710391375996" transform="translate(3582.6013309540926 2591.710391375996)">
 <title>Class Slot 3.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 3.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-3-1" data-id="class-3-1" data-layout-id="class-3-1" data-x="3442.0120214349713" data-y="3188.7029780550847" transform="translate(3442.0120214349713 3188.7029780550847)">
+<g class="node class-specific" id="node-class-3-1" data-id="class-3-1" data-layout-id="class-3-1" data-x="3303.736896091892" data-y="3074.7177609813098" transform="translate(3303.736896091892 3074.7177609813098)">
 <title>Class Slot 3.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 3.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-3-2" data-id="class-3-2" data-layout-id="class-3-2" data-x="3513.1195854921716" data-y="1126.4" transform="translate(3513.1195854921716 1126.4)">
+<g class="node major class-specific" id="node-class-3-2" data-id="class-3-2" data-layout-id="class-3-2" data-x="3346.8427079655594" data-y="1222.4" transform="translate(3346.8427079655594 1222.4)">
 <title>Class Slot 3.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 3.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
