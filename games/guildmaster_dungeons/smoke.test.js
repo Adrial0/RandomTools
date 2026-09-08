@@ -267,4 +267,7 @@ assert.match(js,/function availableSkillPoints\(/,'skill points derive from char
 assert.match(js,/function openSkillTree\(/,'characters expose an interactive skill-tree screen');
 assert.match(js,/function learnSkillNode\(/,'skill nodes enforce their ranks and prerequisites');
 assert.match(css,/\.skillNode\.major/,'transformative skill nodes receive distinct major-node presentation');
+assert.match(js,/const ATTRIBUTE_SKILL_PATHS=/,'STR, DEX, and INT provide universal progression paths');
+assert.match(css,/\.skillTreeViewport \.skillTree\{position:relative/,'the skill tree uses a freeform radial canvas instead of rigid columns');
+assert.match(css,/\.skillLines line\.active/,'purchased paths visibly illuminate their connections');
 console.log('Guildmaster: Dungeons smoke tests passed.');
