@@ -9,7 +9,7 @@ const context={
   console,
   performance:{now:()=>0},
   localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},
-  document:{querySelector:selector=>selector==='#app'?app:null,body:{insertAdjacentHTML(){}}},
+  document:{querySelector:selector=>selector==='#app'?app:null,querySelectorAll:()=>[],body:{insertAdjacentHTML(){}}},
   requestAnimationFrame:()=>0,cancelAnimationFrame(){},setInterval:()=>0,clearInterval(){},
   setTimeout:()=>0,fetch:async()=>({ok:false}),Image:function(){},confirm:()=>true,subclassFixture
 };

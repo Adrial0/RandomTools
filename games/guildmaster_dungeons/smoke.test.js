@@ -270,9 +270,12 @@ assert.match(js,/cost=100\*Math\.pow\(2,h\?\.skillRespecs\|\|0\)/,'character res
 assert.match(css,/\.skillNode\.pending/,'pending skill nodes have a distinct preview state');
 assert.match(js,/function skillNodeVisual\(/,'skill nodes choose an icon and visual weight from their effects');
 assert.match(js,/class=\"skillNodeTooltip\" role=\"tooltip\"/,'node descriptions are presented through hover tooltips');
-assert.match(css,/\.skillNode\.minor\{--node-size:54px/,'minor bonuses use the smallest circular node tier');
-assert.match(css,/\.skillNode\.keystone\{--node-size:118px/,'transformative keystones use the largest circular node tier');
+assert.match(css,/\.skillNode\.minor\{--node-size:76px/,'minor bonuses use the smallest circular node tier');
+assert.match(css,/\.skillNode\.keystone\{--node-size:136px/,'transformative keystones use the largest circular node tier');
 assert.match(css,/\.armorCluster\{/,'the defensive ring has a shield-shaped background formation');
+assert.match(js,/function rememberSkillTreeView\(/,'skill-tree pan and zoom are preserved across node selection rerenders');
+assert.match(js,/function filterSkillTree\(/,'skill nodes support live case-insensitive name and effect searching');
+assert.match(css,/\.skillNode\.ringNode\.major[\s\S]*border-radius:50%!important/,'every ring endpoint is forced to remain circular');
 assert.match(js,/function openSkillTree\(/,'characters expose an interactive skill-tree screen');
 assert.match(js,/function learnSkillNode\(/,'skill nodes enforce their ranks and prerequisites');
 assert.match(css,/\.skillNode\.major/,'transformative skill nodes receive distinct major-node presentation');
