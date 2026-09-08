@@ -268,6 +268,11 @@ assert.match(js,/function availableSkillPoints\(/,'skill points derive from char
 assert.match(js,/Spend \$\{pending\.length\} Skill Point/,'pending skill allocations require explicit confirmation');
 assert.match(js,/cost=100\*Math\.pow\(2,h\?\.skillRespecs\|\|0\)/,'character respec prices start at 100 gold and double each time');
 assert.match(css,/\.skillNode\.pending/,'pending skill nodes have a distinct preview state');
+assert.match(js,/function skillNodeVisual\(/,'skill nodes choose an icon and visual weight from their effects');
+assert.match(js,/class=\"skillNodeTooltip\" role=\"tooltip\"/,'node descriptions are presented through hover tooltips');
+assert.match(css,/\.skillNode\.minor\{--node-size:54px/,'minor bonuses use the smallest circular node tier');
+assert.match(css,/\.skillNode\.keystone\{--node-size:118px/,'transformative keystones use the largest circular node tier');
+assert.match(css,/\.armorCluster\{/,'the defensive ring has a shield-shaped background formation');
 assert.match(js,/function openSkillTree\(/,'characters expose an interactive skill-tree screen');
 assert.match(js,/function learnSkillNode\(/,'skill nodes enforce their ranks and prerequisites');
 assert.match(css,/\.skillNode\.major/,'transformative skill nodes receive distinct major-node presentation');
