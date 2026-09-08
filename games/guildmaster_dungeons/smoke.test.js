@@ -124,7 +124,7 @@ assert.match(js,/crit:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'charac
 assert.match(js,/setTimeout\(\(\)=>completeBattleVictory\(b\.id\),2000\)/,'victory keeps the final battle report visible for two seconds');
 assert.match(js,/Round \$\{b\.round\}: the party regenerates Mana/,'mana regeneration occurs at the start of each new round');
 assert.match(js,/\['manaRegen','Meditation','Mana Regen','\+0\.2'/,'Mana Regen training grants 0.2 per rank');
-assert.match(js,/\['Field Medicine','Heal 4% after each battle','heal',\.04\]/,'Field Medicine heals 4% per copy');
+assert.match(js,/\['Field Medicine','Heal 2% after each battle','heal',\.02\]/,'Field Medicine heals 2% per copy');
 assert.doesNotMatch(js,/heroPower| PWR/,'character Power is removed from Dungeons');
 assert.match(css,/\.combatSide:first-child \.unit \.portrait\{transform:scaleX\(-1\)\}/,'friendly combatants face right');
 assert.match(js,/r\.lockedNodeType&&r\.lockedNodeType!==type/,'choosing an encounter locks out the other options');
@@ -279,6 +279,8 @@ assert.match(js,/distance=depth===2\?285:225/,'class talents are positioned as n
 assert.match(js,/function ringSkillNodes\(/,'attribute paths culminate in circular two-route clusters');
 assert.match(js,/requiresAny:index===6/,'either side of an attribute ring can unlock its combined notable');
 assert.match(js,/function skillNodeUnlocked\(/,'skill prerequisites support alternate routes');
+assert.match(js,/\['Ferocity','Party attack \+6%','attack',\.06\]/,'run boons use the reduced balance values');
+assert.match(js,/const current=PERKS\.find\(boon=>boon\[0\]===p\.name\)/,'saved run boons migrate to current balance values');
 assert.match(js,/str:\{sector:90/,'attribute rings are rotated counter-clockwise into their neighboring open spaces');
 assert.match(js,/ring-gateway/,'each ring uses a gateway node to keep entrance connections clear');
 console.log('Guildmaster: Dungeons smoke tests passed.');
