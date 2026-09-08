@@ -260,4 +260,11 @@ assert.match(js,/preserveDraft=current\?\.querySelector\('h2'\)\?\.textContent\.
 assert.match(css,/@media\(min-width:701px\)\{\.statusEffects[\s\S]*\.statusBadge\{display:flex;flex-direction:row/,'desktop status duration stays beside its status name');
 assert.match(css,/\.turnBasedCombat \.turnPrompt\{position:relative[\s\S]*bottom:auto/,'desktop combat keeps actions in the static battlefield layout');
 assert.match(css,/\.turnBasedCombat \.combatBottom,[\s\S]*top:calc\(100% \+ 12px\)/,'desktop report and log remain visible below the battlefield');
+assert.match(js,/function normalizeDungeonRaces\(/,'dungeon race text is rebuilt from mechanics used by this game');
+assert.match(js,/delete race\.gathering/,'obsolete Guildmaster profession bonuses are removed from dungeon races');
+assert.match(js,/const SKILL_PATHS=/,'every class has a dedicated branching skill tree');
+assert.match(js,/function availableSkillPoints\(/,'skill points derive from character levels and purchased ranks');
+assert.match(js,/function openSkillTree\(/,'characters expose an interactive skill-tree screen');
+assert.match(js,/function learnSkillNode\(/,'skill nodes enforce their ranks and prerequisites');
+assert.match(css,/\.skillNode\.major/,'transformative skill nodes receive distinct major-node presentation');
 console.log('Guildmaster: Dungeons smoke tests passed.');
