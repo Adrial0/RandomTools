@@ -271,5 +271,7 @@ assert.match(js,/const ATTRIBUTE_SKILL_PATHS=/,'STR, DEX, and INT provide univer
 assert.match(css,/\.skillTreeViewport \.skillTree\{position:relative/,'the skill tree uses a freeform radial canvas instead of rigid columns');
 assert.match(css,/\.skillLines line\.active/,'purchased paths visibly illuminate their connections');
 assert.match(js,/function enableSkillTreePan\(/,'the large skill canvas supports pointer dragging');
+assert.match(js,/viewport\.onwheel=event=>\{event\.preventDefault\(\)/,'the mouse wheel zooms instead of scrolling the skill tree');
+assert.match(js,/canvas\.style\.zoom=zoom/,'skill-tree zoom changes the complete node canvas');
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
 console.log('Guildmaster: Dungeons smoke tests passed.');
