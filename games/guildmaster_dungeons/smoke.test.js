@@ -275,10 +275,12 @@ assert.match(js,/function enableSkillTreePan\(/,'the large skill canvas supports
 assert.match(js,/viewport\.onwheel=event=>\{event\.preventDefault\(\)/,'the mouse wheel zooms instead of scrolling the skill tree');
 assert.match(js,/canvas\.style\.zoom=zoom/,'skill-tree zoom changes the complete node canvas');
 assert.match(js,/pointers\.size>=2&&pinchStart/,'mobile skill trees support two-finger pinch zooming');
-assert.match(css,/\.skillTree>\.skillNode,[^\n]*translate:200px 200px/,'the expanded skill canvas provides padding around every outer node');
+assert.match(css,/\.skillTree>\.skillNode,[^\n]*translate:600px 600px/,'the expanded skill canvas provides generous padding around every outer node');
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
 assert.match(js,/skillMultiplier=1\+skillBonus\(h,`\$\{key\}Pct`\)/,'skill-tree attributes scale percentage-wise with character growth');
-assert.match(js,/distance=depth===2\?285:225/,'class talents are positioned as nearby offshoots rather than distant crossing connections');
+assert.match(js,/distance=depth===2\?350:275/,'class talents have enough separation to avoid overlapping neighboring nodes');
+assert.match(js,/clamp\(next,\.32,1\.65\)/,'the expanded tree can zoom far enough out for a broad overview');
+assert.match(js,/keystone-mana-shield[\s\S]*requires:'int-ring-2'[\s\S]*keystone-aether-conversion[\s\S]*requires:'int-ring-5'/,'Mana Shield and Aether Conversion occupy opposite INT ring routes');
 assert.match(js,/function ringSkillNodes\(/,'attribute paths culminate in circular two-route clusters');
 assert.match(js,/requiresAny:index===6/,'either side of an attribute ring can unlock its combined notable');
 assert.match(js,/function skillNodeUnlocked\(/,'skill prerequisites support alternate routes');
