@@ -265,6 +265,9 @@ assert.match(js,/function normalizeDungeonRaces\(/,'dungeon race text is rebuilt
 assert.match(js,/delete race\.gathering/,'obsolete Guildmaster profession bonuses are removed from dungeon races');
 assert.match(js,/const SKILL_PATHS=/,'every class has a dedicated branching skill tree');
 assert.match(js,/function availableSkillPoints\(/,'skill points derive from character levels and purchased ranks');
+assert.match(js,/Spend \$\{pending\.length\} Skill Point/,'pending skill allocations require explicit confirmation');
+assert.match(js,/cost=100\*Math\.pow\(2,h\?\.skillRespecs\|\|0\)/,'character respec prices start at 100 gold and double each time');
+assert.match(css,/\.skillNode\.pending/,'pending skill nodes have a distinct preview state');
 assert.match(js,/function openSkillTree\(/,'characters expose an interactive skill-tree screen');
 assert.match(js,/function learnSkillNode\(/,'skill nodes enforce their ranks and prerequisites');
 assert.match(css,/\.skillNode\.major/,'transformative skill nodes receive distinct major-node presentation');
