@@ -276,4 +276,7 @@ assert.match(js,/canvas\.style\.zoom=zoom/,'skill-tree zoom changes the complete
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
 assert.match(js,/skillMultiplier=1\+skillBonus\(h,`\$\{key\}Pct`\)/,'skill-tree attributes scale percentage-wise with character growth');
 assert.match(js,/distance=depth===2\?285:225/,'class talents are positioned as nearby offshoots rather than distant crossing connections');
+assert.match(js,/function ringSkillNodes\(/,'attribute paths culminate in circular two-route clusters');
+assert.match(js,/requiresAny:index===6/,'either side of an attribute ring can unlock its combined notable');
+assert.match(js,/function skillNodeUnlocked\(/,'skill prerequisites support alternate routes');
 console.log('Guildmaster: Dungeons smoke tests passed.');
