@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="3600" height="3600" viewBox="0 0 3600 3600">
+<svg xmlns="http://www.w3.org/2000/svg" width="4400" height="4400" viewBox="0 0 4400 4400">
 <title>Guildmaster Dungeons — Shared Editable Skill Tree Layout</title>
 <desc>This layout controls every class. Drag nodes in a browser, press Save SVG, then replace skill-tree-layout.svg in the project.</desc>
 <style>
@@ -11,534 +11,512 @@
   .toolbar rect{fill:#1d140b;stroke:#d49d45;stroke-width:2}.toolbar text{fill:#ffe0a0;font:bold 15px Georgia,serif}.toolbar{cursor:pointer}
 </style>
 <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#71532d" opacity=".35"/></pattern></defs>
-<rect class="backdrop" width="3600" height="3600"/><rect class="grid" width="3600" height="3600"/>
-<g class="connections" transform="translate(600 600)"><line data-from="attribute-str-0" data-to="attribute-str-1" x1="1039.2656850576082" y1="1292.8" x2="907.8526160264472" y2="1487.092434657219"/>
-<line data-from="attribute-str-0" data-to="attribute-str-2" x1="1039.2656850576082" y1="1292.8" x2="805.2969663657481" y2="1309.460838841654"/>
-<line data-from="attribute-str-1" data-to="attribute-str-3" x1="907.8526160264472" y1="1487.092434657219" x2="776.0388478110274" y2="1670.856561422477"/>
-<line data-from="attribute-str-2" data-to="attribute-str-4" x1="805.2969663657481" y1="1309.460838841654" x2="651.2863041621796" y2="1516.8"/>
-<line data-from="attribute-str-2" data-to="attribute-str-5" x1="805.2969663657481" y1="1309.460838841654" x2="580.2456801750607" y2="1331.7328473021323"/>
-<line data-from="attribute-str-3" data-to="attribute-str-6" x1="776.0388478110274" y1="1670.856561422477" x2="666.1314476195776" y2="1871.1647553166304"/>
-<line data-from="attribute-str-4" data-to="attribute-str-7" x1="651.2863041621796" y1="1516.8" x2="516.5944044060855" y2="1718.1066993495906"/>
-<line data-from="attribute-str-4" data-to="attribute-str-8" x1="651.2863041621796" y1="1516.8" x2="409.6036386953908" y2="1532.7932571979693"/>
-<line data-from="attribute-str-5" data-to="attribute-str-9" x1="580.2456801750607" y1="1331.7328473021323" x2="351.8199955808201" y2="1326.7613509847538"/>
-<line data-from="attribute-str-6" data-to="attribute-str-10" x1="666.1314476195776" y1="1871.1647553166304" x2="579.619726442709" y2="2085.994851102974"/>
-<line data-from="attribute-str-7" data-to="attribute-str-11" x1="516.5944044060855" y1="1718.1066993495906" x2="351.57601682298684" y2="1870.8467073557504"/>
-<line data-from="attribute-str-8" data-to="attribute-str-12" x1="409.6036386953908" y1="1532.7932571979693" x2="194.81771779626865" y2="1599.3333689333995"/>
-<line data-from="attribute-str-9" data-to="attribute-str-13" x1="351.8199955808201" y1="1326.7613509847538" x2="122.51581454396796" y2="1294.2676513558677"/>
-<line data-from="attribute-str-10" data-to="attribute-str-14" x1="579.619726442709" y1="2085.994851102974" x2="517.8258739068573" y2="2313.206998580703"/>
-<line data-from="attribute-str-11" data-to="attribute-str-15" x1="351.57601682298684" y1="1870.8467073557504" x2="192.56694392899306" y2="2030.463724394649"/>
-<line data-from="attribute-str-12" data-to="attribute-str-16" x1="194.81771779626865" y1="1599.3333689333995" x2="-22.919210282708036" y2="1657.2307569723607"/>
-<line data-from="attribute-str-13" data-to="attribute-str-17" x1="122.51581454396796" y1="1294.2676513558677" x2="-105.1526034880876" y2="1234.1766237107595"/>
-<line data-from="attribute-dex-0" data-to="attribute-dex-1" x1="1200" y1="1014.4" x2="1097.4443503393009" y2="803.4467265011272"/>
-<line data-from="attribute-dex-0" data-to="attribute-dex-2" x1="1200" y1="1014.4" x2="1302.5556496606991" y2="803.4467265011272"/>
-<line data-from="attribute-dex-1" data-to="attribute-dex-3" x1="1097.4443503393009" y1="803.4467265011272" x2="1004.2068323640333" y2="597.4105912753906"/>
-<line data-from="attribute-dex-2" data-to="attribute-dex-4" x1="1302.5556496606991" y1="803.4467265011272" x2="1200" y2="566.4"/>
-<line data-from="attribute-dex-2" data-to="attribute-dex-5" x1="1302.5556496606991" y1="803.4467265011272" x2="1395.7931676359667" y2="597.4105912753907"/>
-<line data-from="attribute-dex-3" data-to="attribute-dex-6" x1="1004.2068323640333" y1="597.4105912753906" x2="885.6885479612426" y2="402.07389369861573"/>
-<line data-from="attribute-dex-4" data-to="attribute-dex-7" x1="1200" y1="566.4" x2="1093.0092342893051" y2="349.1000434524401"/>
-<line data-from="attribute-dex-4" data-to="attribute-dex-8" x1="1200" y1="566.4" x2="1306.9907657106949" y2="349.1000434524401"/>
-<line data-from="attribute-dex-5" data-to="attribute-dex-9" x1="1395.7931676359667" y1="597.4105912753907" x2="1514.3114520387574" y2="402.07389369861573"/>
-<line data-from="attribute-dex-6" data-to="attribute-dex-10" x1="885.6885479612426" y1="402.07389369861573" x2="742.8960881012597" y2="219.7374975411592"/>
-<line data-from="attribute-dex-7" data-to="attribute-dex-11" x1="1093.0092342893051" y1="349.1000434524401" x2="1043.241700973282" y2="129.8199237108504"/>
-<line data-from="attribute-dex-8" data-to="attribute-dex-12" x1="1306.9907657106949" y1="349.1000434524401" x2="1356.758299026718" y2="129.8199237108504"/>
-<line data-from="attribute-dex-9" data-to="attribute-dex-13" x1="1514.3114520387574" y1="402.07389369861573" x2="1657.1039118987403" y2="219.73749754115943"/>
-<line data-from="attribute-dex-10" data-to="attribute-dex-14" x1="742.8960881012597" y1="219.7374975411592" x2="577.0215226050552" y2="52.61637770853804"/>
-<line data-from="attribute-dex-11" data-to="attribute-dex-15" x1="1043.241700973282" y1="129.8199237108504" x2="984.5138457882992" y2="-87.69448136700953"/>
-<line data-from="attribute-dex-12" data-to="attribute-dex-16" x1="1356.758299026718" y1="129.8199237108504" x2="1415.486154211701" y2="-87.6944813670093"/>
-<line data-from="attribute-dex-13" data-to="attribute-dex-17" x1="1657.1039118987403" y1="219.73749754115943" x2="1822.9784773949445" y2="52.61637770853804"/>
-<line data-from="attribute-int-0" data-to="attribute-int-1" x1="1360.7343149423918" y1="1292.8" x2="1594.7030336342518" y2="1309.4608388416539"/>
-<line data-from="attribute-int-0" data-to="attribute-int-2" x1="1360.7343149423918" y1="1292.8" x2="1492.1473839735527" y2="1487.092434657219"/>
-<line data-from="attribute-int-1" data-to="attribute-int-3" x1="1594.7030336342518" y1="1309.4608388416539" x2="1819.7543198249393" y2="1331.7328473021323"/>
-<line data-from="attribute-int-2" data-to="attribute-int-4" x1="1492.1473839735527" y1="1487.092434657219" x2="1748.7136958378205" y2="1516.8"/>
-<line data-from="attribute-int-2" data-to="attribute-int-5" x1="1492.1473839735527" y1="1487.092434657219" x2="1623.9611521889726" y2="1670.856561422477"/>
-<line data-from="attribute-int-3" data-to="attribute-int-6" x1="1819.7543198249393" y1="1331.7328473021323" x2="2048.1800044191796" y2="1326.761350984754"/>
-<line data-from="attribute-int-4" data-to="attribute-int-7" x1="1748.7136958378205" y1="1516.8" x2="1990.3963613046092" y2="1532.793257197969"/>
-<line data-from="attribute-int-4" data-to="attribute-int-8" x1="1748.7136958378205" y1="1516.8" x2="1883.4055955939148" y2="1718.1066993495906"/>
-<line data-from="attribute-int-5" data-to="attribute-int-9" x1="1623.9611521889726" y1="1670.856561422477" x2="1733.8685523804224" y2="1871.16475531663"/>
-<line data-from="attribute-int-6" data-to="attribute-int-10" x1="2048.1800044191796" y1="1326.761350984754" x2="2277.484185456032" y2="1294.267651355867"/>
-<line data-from="attribute-int-7" data-to="attribute-int-11" x1="1990.3963613046092" y1="1532.793257197969" x2="2205.182282203731" y2="1599.3333689333995"/>
-<line data-from="attribute-int-8" data-to="attribute-int-12" x1="1883.4055955939148" y1="1718.1066993495906" x2="2048.423983177013" y2="1870.84670735575"/>
-<line data-from="attribute-int-9" data-to="attribute-int-13" x1="1733.8685523804224" y1="1871.16475531663" x2="1820.3802735572913" y2="2085.9948511029734"/>
-<line data-from="attribute-int-10" data-to="attribute-int-14" x1="2277.484185456032" y1="1294.267651355867" x2="2505.152603488088" y2="1234.1766237107593"/>
-<line data-from="attribute-int-11" data-to="attribute-int-15" x1="2205.182282203731" y1="1599.3333689333995" x2="2422.9192102827083" y2="1657.2307569723605"/>
-<line data-from="attribute-int-12" data-to="attribute-int-16" x1="2048.423983177013" y1="1870.84670735575" x2="2207.4330560710073" y2="2030.4637243946486"/>
-<line data-from="attribute-int-13" data-to="attribute-int-17" x1="1820.3802735572913" y1="2085.9948511029734" x2="1882.1741260931428" y2="2313.206998580703"/>
-<line data-from="attribute-str-6" data-to="str-ring-gateway" x1="666.1314476195776" y1="1871.1647553166304" x2="1200" y2="1462.4"/>
-<line data-from="str-ring-gateway" data-to="str-ring-0" x1="1200" y1="1462.4" x2="1043.2" y2="1638.8144333732"/>
-<line data-from="str-ring-0" data-to="str-ring-1" x1="1043.2" y1="1638.8144333732" x2="886.4" y2="1910.4"/>
-<line data-from="str-ring-1" data-to="str-ring-2" x1="886.4" y1="1910.4" x2="1043.2" y2="2181.9855666268"/>
-<line data-from="str-ring-gateway" data-to="str-ring-3" x1="1200" y1="1462.4" x2="1356.8" y2="1638.8144333732"/>
-<line data-from="str-ring-3" data-to="str-ring-4" x1="1356.8" y1="1638.8144333732" x2="1513.6" y2="1910.4"/>
-<line data-from="str-ring-4" data-to="str-ring-5" x1="1513.6" y1="1910.4" x2="1356.8" y2="2181.9855666268"/>
-<line data-from="str-ring-2" data-to="str-ring-6" x1="1043.2" y1="2181.9855666268" x2="1200" y2="2294.4"/>
-<line data-from="str-ring-5" data-to="str-ring-6" x1="1356.8" y1="2181.9855666268" x2="1200" y2="2294.4"/>
-<line data-from="attribute-dex-6" data-to="dex-ring-gateway" x1="885.6885479612426" y1="402.07389369861573" x2="972.7549340469632" y2="1068.8"/>
-<line data-from="dex-ring-gateway" data-to="dex-ring-0" x1="972.7549340469632" y1="1068.8" x2="898.3755531515346" y2="844.8"/>
-<line data-from="dex-ring-0" data-to="dex-ring-1" x1="898.3755531515346" y1="844.8" x2="741.5755531515347" y2="573.2144333732"/>
-<line data-from="dex-ring-1" data-to="dex-ring-2" x1="741.5755531515347" y1="573.2144333732" x2="427.97555315153465" y2="573.2144333732"/>
-<line data-from="dex-ring-gateway" data-to="dex-ring-3" x1="972.7549340469632" y1="1068.8" x2="741.5755531515347" y2="1116.3855666268"/>
-<line data-from="dex-ring-3" data-to="dex-ring-4" x1="741.5755531515347" y1="1116.3855666268" x2="427.97555315153465" y2="1116.3855666268"/>
-<line data-from="dex-ring-4" data-to="dex-ring-5" x1="427.97555315153465" y1="1116.3855666268" x2="271.1755531515347" y2="844.8"/>
-<line data-from="dex-ring-2" data-to="dex-ring-6" x1="427.97555315153465" y1="573.2144333732" x2="252.22179809831027" y2="652.8"/>
-<line data-from="dex-ring-5" data-to="dex-ring-6" x1="271.1755531515347" y1="844.8" x2="252.22179809831027" y2="652.8"/>
-<line data-from="attribute-int-6" data-to="int-ring-gateway" x1="2048.1800044191796" y1="1326.761350984754" x2="1427.2450659530368" y2="1068.8"/>
-<line data-from="int-ring-gateway" data-to="int-ring-0" x1="1427.2450659530368" y1="1068.8" x2="1658.4244468484653" y2="1116.3855666268"/>
-<line data-from="int-ring-0" data-to="int-ring-1" x1="1658.4244468484653" y1="1116.3855666268" x2="1972.0244468484652" y2="1116.3855666268"/>
-<line data-from="int-ring-1" data-to="int-ring-2" x1="1972.0244468484652" y1="1116.3855666268" x2="2128.8244468484654" y2="844.8"/>
-<line data-from="int-ring-gateway" data-to="int-ring-3" x1="1427.2450659530368" y1="1068.8" x2="1501.6244468484654" y2="844.8"/>
-<line data-from="int-ring-3" data-to="int-ring-4" x1="1501.6244468484654" y1="844.8" x2="1658.4244468484653" y2="573.2144333732"/>
-<line data-from="int-ring-4" data-to="int-ring-5" x1="1658.4244468484653" y1="573.2144333732" x2="1972.0244468484652" y2="573.2144333732"/>
-<line data-from="int-ring-2" data-to="int-ring-6" x1="2128.8244468484654" y1="844.8" x2="2147.7782019016895" y2="652.8"/>
-<line data-from="int-ring-5" data-to="int-ring-6" x1="1972.0244468484652" y1="573.2144333732" x2="2147.7782019016895" y2="652.8"/>
-<line data-from="attribute-str-9" data-to="blood-vigor" x1="351.8199955808201" y1="1326.7613509847538" x2="499.84000000000003" y2="1239.68"/>
-<line data-from="blood-vigor" data-to="blood-hunger" x1="499.84000000000003" y1="1239.68" x2="599.68" y2="900.48"/>
-<line data-from="blood-vigor" data-to="blood-fury" x1="499.84000000000003" y1="1239.68" x2="699.52" y2="1449.6"/>
-<line data-from="blood-hunger" data-to="keystone-vital-leech" x1="599.68" y1="900.48" x2="749.44" y2="699.52"/>
-<line data-from="blood-fury" data-to="keystone-blood-magic" x1="699.52" y1="1449.6" x2="1000.3199999999999" y2="1750.4"/>
-<line data-from="attribute-int-9" data-to="affliction-focus" x1="1733.8685523804224" y1="1871.16475531663" x2="2500.48" y2="1499.52"/>
-<line data-from="affliction-focus" data-to="affliction-decay" x1="2500.48" y1="1499.52" x2="2700.16" y2="1650.56"/>
-<line data-from="affliction-decay" data-to="keystone-deterioration" x1="2700.16" y1="1650.56" x2="2899.84" y2="1850.24"/>
-<line data-from="int-ring-2" data-to="mana-channel" x1="2128.8244468484654" y1="844.8" x2="2390.4" y2="675.2"/>
-<line data-from="mana-channel" data-to="mana-bastion" x1="2390.4" y1="675.2" x2="2556.8" y2="496"/>
-<line data-from="mana-bastion" data-to="keystone-mana-shield" x1="2556.8" y1="496" x2="2761.6000000000004" y2="316.79999999999995"/>
-<line data-from="int-ring-5" data-to="aether-reservoir" x1="1972.0244468484652" y1="573.2144333732" x2="2099.84" y2="400"/>
-<line data-from="aether-reservoir" data-to="aether-unraveling" x1="2099.84" y1="400" x2="2249.6" y2="260.48"/>
-<line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="2249.6" y1="260.48" x2="2450.56" y2="169.5999999999999"/>
-<line data-from="attribute-dex-11" data-to="keystone-resolute-force" x1="1043.241700973282" y1="129.8199237108504" x2="560" y2="150.4000000000001"/>
-<line data-from="str-ring-2" data-to="keystone-immovable" x1="1043.2" y1="2181.9855666268" x2="816" y2="2352"/>
-<line data-from="str-ring-0" data-to="class-0-0" x1="1043.2" y1="1638.8144333732" x2="853.6889923985384" y2="2169.172631196029"/>
-<line data-from="dex-ring-0" data-to="class-0-1" x1="898.3755531515346" y1="844.8" x2="533.8273845323629" y2="415.4995542089341"/>
-<line data-from="int-ring-0" data-to="class-0-2" x1="1658.4244468484653" y1="1116.3855666268" x2="2313.221655109214" y2="996.9536778619894"/>
-<line data-from="attribute-str-14" data-to="class-1-0" x1="517.8258739068573" y1="2313.206998580703" x2="223.55468225883487" y2="2793.413939144928"/>
-<line data-from="attribute-dex-14" data-to="class-1-1" x1="577.0215226050552" y1="52.61637770853804" x2="308.2857088268438" y2="-442.333420142681"/>
-<line data-from="attribute-int-14" data-to="class-1-2" x1="2505.152603488088" y1="1234.1766237107593" x2="3170.5245189918187" y2="1251.6000005044793"/>
-<line data-from="str-ring-3" data-to="class-2-0" x1="1356.8" y1="1638.8144333732" x2="1546.3110076014616" y2="2169.172631196029"/>
-<line data-from="dex-ring-3" data-to="class-2-1" x1="741.5755531515347" y1="1116.3855666268" x2="187.51637693090163" y2="1015.3278145950371"/>
-<line data-from="int-ring-3" data-to="class-2-2" x1="1501.6244468484654" y1="844.8" x2="1932.454100671123" y2="337.44492770146746"/>
-<line data-from="attribute-str-17" data-to="class-3-0" x1="-105.1526034880876" y1="1234.1766237107595" x2="-668.1596089143216" y2="1248.919480997754"/>
-<line data-from="attribute-dex-17" data-to="class-3-1" x1="1822.9784773949445" y1="52.61637770853804" x2="2091.714291173156" y2="-442.333420142681"/>
-<line data-from="attribute-int-17" data-to="class-3-2" x1="1882.1741260931428" y1="2313.206998580703" x2="2229.949170768078" y2="2880.724291974787"/></g>
-<g class="core"><polygon points="1800,1718 1882,1800 1800,1882 1718,1800"/><text x="1800" y="1807" text-anchor="middle">CLASS</text></g>
-<g id="nodes" transform="translate(600 600)"><g class="node basic " id="node-attribute-str-0" data-id="attribute-str-0" data-layout-id="attribute-str-0" data-x="1039.2656850576082" data-y="1292.8" transform="translate(1039.2656850576082 1292.8)">
+<rect class="backdrop" width="4400" height="4400"/><rect class="grid" width="4400" height="4400"/>
+<g class="connections"><line data-from="attribute-str-0" data-to="attribute-str-1" x1="1839.2656850576082" y1="2092.8" x2="1707.8526160264473" y2="2287.092434657219"/>
+<line data-from="attribute-str-0" data-to="attribute-str-2" x1="1839.2656850576082" y1="2092.8" x2="1605.2969663657482" y2="2109.460838841654"/>
+<line data-from="attribute-str-1" data-to="attribute-str-3" x1="1707.8526160264473" y1="2287.092434657219" x2="1576.0388478110274" y2="2470.856561422477"/>
+<line data-from="attribute-str-2" data-to="attribute-str-4" x1="1605.2969663657482" y1="2109.460838841654" x2="1451.2863041621795" y2="2316.8"/>
+<line data-from="attribute-str-2" data-to="attribute-str-5" x1="1605.2969663657482" y1="2109.460838841654" x2="1380.2456801750607" y2="2131.732847302132"/>
+<line data-from="attribute-str-3" data-to="attribute-str-6" x1="1576.0388478110274" y1="2470.856561422477" x2="1466.1314476195776" y2="2671.1647553166304"/>
+<line data-from="attribute-str-4" data-to="attribute-str-7" x1="1451.2863041621795" y1="2316.8" x2="1316.5944044060855" y2="2518.1066993495906"/>
+<line data-from="attribute-str-4" data-to="attribute-str-8" x1="1451.2863041621795" y1="2316.8" x2="1209.6036386953908" y2="2332.7932571979695"/>
+<line data-from="attribute-str-5" data-to="attribute-str-9" x1="1380.2456801750607" y1="2131.732847302132" x2="1151.81999558082" y2="2126.761350984754"/>
+<line data-from="attribute-str-6" data-to="attribute-str-10" x1="1466.1314476195776" y1="2671.1647553166304" x2="1379.619726442709" y2="2885.994851102974"/>
+<line data-from="attribute-str-7" data-to="attribute-str-11" x1="1316.5944044060855" y1="2518.1066993495906" x2="1151.5760168229867" y2="2670.8467073557504"/>
+<line data-from="attribute-str-8" data-to="attribute-str-12" x1="1209.6036386953908" y1="2332.7932571979695" x2="994.8177177962687" y2="2399.3333689333995"/>
+<line data-from="attribute-str-9" data-to="attribute-str-13" x1="1151.81999558082" y1="2126.761350984754" x2="922.515814543968" y2="2094.2676513558677"/>
+<line data-from="attribute-str-10" data-to="attribute-str-14" x1="1379.619726442709" y1="2885.994851102974" x2="1317.8258739068574" y2="3113.206998580703"/>
+<line data-from="attribute-str-11" data-to="attribute-str-15" x1="1151.5760168229867" y1="2670.8467073557504" x2="992.566943928993" y2="2830.463724394649"/>
+<line data-from="attribute-str-12" data-to="attribute-str-16" x1="994.8177177962687" y1="2399.3333689333995" x2="777.080789717292" y2="2457.2307569723607"/>
+<line data-from="attribute-str-13" data-to="attribute-str-17" x1="922.515814543968" y1="2094.2676513558677" x2="694.8473965119124" y2="2034.1766237107595"/>
+<line data-from="attribute-dex-0" data-to="attribute-dex-1" x1="2000" y1="1814.4" x2="1897.4443503393009" y2="1603.4467265011272"/>
+<line data-from="attribute-dex-0" data-to="attribute-dex-2" x1="2000" y1="1814.4" x2="2102.555649660699" y2="1603.4467265011272"/>
+<line data-from="attribute-dex-1" data-to="attribute-dex-3" x1="1897.4443503393009" y1="1603.4467265011272" x2="1804.2068323640333" y2="1397.4105912753907"/>
+<line data-from="attribute-dex-2" data-to="attribute-dex-4" x1="2102.555649660699" y1="1603.4467265011272" x2="2000" y2="1366.4"/>
+<line data-from="attribute-dex-2" data-to="attribute-dex-5" x1="2102.555649660699" y1="1603.4467265011272" x2="2195.7931676359667" y2="1397.4105912753907"/>
+<line data-from="attribute-dex-3" data-to="attribute-dex-6" x1="1804.2068323640333" y1="1397.4105912753907" x2="1685.6885479612426" y2="1202.0738936986158"/>
+<line data-from="attribute-dex-4" data-to="attribute-dex-7" x1="2000" y1="1366.4" x2="1893.0092342893051" y2="1149.10004345244"/>
+<line data-from="attribute-dex-4" data-to="attribute-dex-8" x1="2000" y1="1366.4" x2="2106.9907657106946" y2="1149.10004345244"/>
+<line data-from="attribute-dex-5" data-to="attribute-dex-9" x1="2195.7931676359667" y1="1397.4105912753907" x2="2314.311452038757" y2="1202.0738936986158"/>
+<line data-from="attribute-dex-6" data-to="attribute-dex-10" x1="1685.6885479612426" y1="1202.0738936986158" x2="1542.8960881012597" y2="1019.7374975411592"/>
+<line data-from="attribute-dex-7" data-to="attribute-dex-11" x1="1893.0092342893051" y1="1149.10004345244" x2="1843.241700973282" y2="929.8199237108504"/>
+<line data-from="attribute-dex-8" data-to="attribute-dex-12" x1="2106.9907657106946" y1="1149.10004345244" x2="2156.758299026718" y2="929.8199237108504"/>
+<line data-from="attribute-dex-9" data-to="attribute-dex-13" x1="2314.311452038757" y1="1202.0738936986158" x2="2457.1039118987405" y2="1019.7374975411594"/>
+<line data-from="attribute-dex-10" data-to="attribute-dex-14" x1="1542.8960881012597" y1="1019.7374975411592" x2="1377.0215226050552" y2="852.616377708538"/>
+<line data-from="attribute-dex-11" data-to="attribute-dex-15" x1="1843.241700973282" y1="929.8199237108504" x2="1784.5138457882992" y2="712.3055186329905"/>
+<line data-from="attribute-dex-12" data-to="attribute-dex-16" x1="2156.758299026718" y1="929.8199237108504" x2="2215.486154211701" y2="712.3055186329907"/>
+<line data-from="attribute-dex-13" data-to="attribute-dex-17" x1="2457.1039118987405" y1="1019.7374975411594" x2="2622.9784773949445" y2="852.616377708538"/>
+<line data-from="attribute-int-0" data-to="attribute-int-1" x1="2160.734314942392" y1="2092.8" x2="2394.703033634252" y2="2109.460838841654"/>
+<line data-from="attribute-int-0" data-to="attribute-int-2" x1="2160.734314942392" y1="2092.8" x2="2292.1473839735527" y2="2287.092434657219"/>
+<line data-from="attribute-int-1" data-to="attribute-int-3" x1="2394.703033634252" y1="2109.460838841654" x2="2619.7543198249396" y2="2131.732847302132"/>
+<line data-from="attribute-int-2" data-to="attribute-int-4" x1="2292.1473839735527" y1="2287.092434657219" x2="2548.7136958378205" y2="2316.8"/>
+<line data-from="attribute-int-2" data-to="attribute-int-5" x1="2292.1473839735527" y1="2287.092434657219" x2="2423.961152188973" y2="2470.856561422477"/>
+<line data-from="attribute-int-3" data-to="attribute-int-6" x1="2619.7543198249396" y1="2131.732847302132" x2="2848.1800044191796" y2="2126.7613509847542"/>
+<line data-from="attribute-int-4" data-to="attribute-int-7" x1="2548.7136958378205" y1="2316.8" x2="2790.396361304609" y2="2332.793257197969"/>
+<line data-from="attribute-int-4" data-to="attribute-int-8" x1="2548.7136958378205" y1="2316.8" x2="2683.4055955939148" y2="2518.1066993495906"/>
+<line data-from="attribute-int-5" data-to="attribute-int-9" x1="2423.961152188973" y1="2470.856561422477" x2="2533.8685523804224" y2="2671.16475531663"/>
+<line data-from="attribute-int-6" data-to="attribute-int-10" x1="2848.1800044191796" y1="2126.7613509847542" x2="3077.484185456032" y2="2094.267651355867"/>
+<line data-from="attribute-int-7" data-to="attribute-int-11" x1="2790.396361304609" y1="2332.793257197969" x2="3005.182282203731" y2="2399.3333689333995"/>
+<line data-from="attribute-int-8" data-to="attribute-int-12" x1="2683.4055955939148" y1="2518.1066993495906" x2="2848.423983177013" y2="2670.84670735575"/>
+<line data-from="attribute-int-9" data-to="attribute-int-13" x1="2533.8685523804224" y1="2671.16475531663" x2="2620.3802735572913" y2="2885.9948511029734"/>
+<line data-from="attribute-int-10" data-to="attribute-int-14" x1="3077.484185456032" y1="2094.267651355867" x2="3305.152603488088" y2="2034.1766237107593"/>
+<line data-from="attribute-int-11" data-to="attribute-int-15" x1="3005.182282203731" y1="2399.3333689333995" x2="3222.9192102827083" y2="2457.2307569723607"/>
+<line data-from="attribute-int-12" data-to="attribute-int-16" x1="2848.423983177013" y1="2670.84670735575" x2="3007.4330560710073" y2="2830.4637243946486"/>
+<line data-from="attribute-int-13" data-to="attribute-int-17" x1="2620.3802735572913" y1="2885.9948511029734" x2="2682.174126093143" y2="3113.206998580703"/>
+<line data-from="attribute-str-6" data-to="str-ring-0" x1="1466.1314476195776" y1="2671.1647553166304" x2="1843.2" y2="2438.8144333732"/>
+<line data-from="str-ring-0" data-to="str-ring-1" x1="1843.2" y1="2438.8144333732" x2="1686.4" y2="2710.4"/>
+<line data-from="str-ring-1" data-to="str-ring-2" x1="1686.4" y1="2710.4" x2="1843.2" y2="2981.9855666268"/>
+<line data-from="str-ring-0" data-to="str-ring-3" x1="1843.2" y1="2438.8144333732" x2="2156.8" y2="2438.8144333732"/>
+<line data-from="str-ring-3" data-to="str-ring-4" x1="2156.8" y1="2438.8144333732" x2="2313.6" y2="2710.4"/>
+<line data-from="str-ring-4" data-to="str-ring-5" x1="2313.6" y1="2710.4" x2="2156.8" y2="2981.9855666268"/>
+<line data-from="str-ring-2" data-to="str-ring-6" x1="1843.2" y1="2981.9855666268" x2="2000" y2="3094.4"/>
+<line data-from="str-ring-5" data-to="str-ring-6" x1="2156.8" y1="2981.9855666268" x2="2000" y2="3094.4"/>
+<line data-from="attribute-dex-6" data-to="dex-ring-0" x1="1685.6885479612426" y1="1202.0738936986158" x2="1698.3755531515346" y2="1644.8"/>
+<line data-from="dex-ring-0" data-to="dex-ring-1" x1="1698.3755531515346" y1="1644.8" x2="1541.5755531515347" y2="1373.2144333731999"/>
+<line data-from="dex-ring-1" data-to="dex-ring-2" x1="1541.5755531515347" y1="1373.2144333731999" x2="1227.9755531515348" y2="1373.2144333731999"/>
+<line data-from="dex-ring-0" data-to="dex-ring-3" x1="1698.3755531515346" y1="1644.8" x2="1541.5755531515347" y2="1916.3855666268"/>
+<line data-from="dex-ring-3" data-to="dex-ring-4" x1="1541.5755531515347" y1="1916.3855666268" x2="1227.9755531515348" y2="1916.3855666268"/>
+<line data-from="dex-ring-4" data-to="dex-ring-5" x1="1227.9755531515348" y1="1916.3855666268" x2="1071.1755531515346" y2="1644.8"/>
+<line data-from="dex-ring-2" data-to="dex-ring-6" x1="1227.9755531515348" y1="1373.2144333731999" x2="1052.2217980983103" y2="1452.8"/>
+<line data-from="dex-ring-5" data-to="dex-ring-6" x1="1071.1755531515346" y1="1644.8" x2="1052.2217980983103" y2="1452.8"/>
+<line data-from="attribute-int-6" data-to="int-ring-0" x1="2848.1800044191796" y1="2126.7613509847542" x2="2458.4244468484653" y2="1916.3855666268"/>
+<line data-from="int-ring-0" data-to="int-ring-1" x1="2458.4244468484653" y1="1916.3855666268" x2="2772.0244468484652" y2="1916.3855666268"/>
+<line data-from="int-ring-1" data-to="int-ring-2" x1="2772.0244468484652" y1="1916.3855666268" x2="2928.8244468484654" y2="1644.8"/>
+<line data-from="int-ring-0" data-to="int-ring-3" x1="2458.4244468484653" y1="1916.3855666268" x2="2301.624446848465" y2="1644.8"/>
+<line data-from="int-ring-3" data-to="int-ring-4" x1="2301.624446848465" y1="1644.8" x2="2458.4244468484653" y2="1373.2144333731999"/>
+<line data-from="int-ring-4" data-to="int-ring-5" x1="2458.4244468484653" y1="1373.2144333731999" x2="2772.0244468484652" y2="1373.2144333731999"/>
+<line data-from="int-ring-2" data-to="int-ring-6" x1="2928.8244468484654" y1="1644.8" x2="2947.7782019016895" y2="1452.8"/>
+<line data-from="int-ring-5" data-to="int-ring-6" x1="2772.0244468484652" y1="1373.2144333731999" x2="2947.7782019016895" y2="1452.8"/>
+<line data-from="attribute-str-17" data-to="blood-vigor" x1="694.8473965119124" y1="2034.1766237107595" x2="599.6800000000001" y2="1800.32"/>
+<line data-from="blood-vigor" data-to="blood-hunger" x1="599.6800000000001" y1="1800.32" x2="699.52" y2="1550.72"/>
+<line data-from="blood-vigor" data-to="blood-fury" x1="599.6800000000001" y1="1800.32" x2="849.28" y2="1800.32"/>
+<line data-from="blood-hunger" data-to="keystone-vital-leech" x1="699.52" y1="1550.72" x2="599.6800000000001" y2="1249.92"/>
+<line data-from="blood-fury" data-to="keystone-blood-magic" x1="849.28" y1="1800.32" x2="800.6399999999999" y2="1449.6"/>
+<line data-from="attribute-int-10" data-to="affliction-focus" x1="3077.484185456032" y1="2094.267651355867" x2="3450.24" y2="2099.84"/>
+<line data-from="affliction-focus" data-to="affliction-decay" x1="3450.24" y1="2099.84" x2="3749.76" y2="2249.6"/>
+<line data-from="affliction-decay" data-to="keystone-deterioration" x1="3749.76" y1="2249.6" x2="4050.56" y2="2400.64"/>
+<line data-from="int-ring-2" data-to="mana-channel" x1="2928.8244468484654" y1="1644.8" x2="3300.48" y2="1349.76"/>
+<line data-from="mana-channel" data-to="mana-bastion" x1="3300.48" y1="1349.76" x2="3699.84" y2="1349.76"/>
+<line data-from="mana-bastion" data-to="keystone-mana-shield" x1="3699.84" y1="1349.76" x2="4000.6400000000003" y2="1000.3199999999999"/>
+<line data-from="attribute-int-17" data-to="aether-reservoir" x1="2682.174126093143" y1="3113.206998580703" x2="2849.92" y2="3300.48"/>
+<line data-from="aether-reservoir" data-to="aether-unraveling" x1="2849.92" y1="3300.48" x2="3099.52" y2="3500.16"/>
+<line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="3099.52" y1="3500.16" x2="3400.3199999999997" y2="3699.84"/>
+<line data-from="attribute-dex-10" data-to="keystone-resolute-force" x1="1542.8960881012597" y1="1019.7374975411592" x2="1449.6" y2="599.6800000000001"/>
+<line data-from="str-ring-2" data-to="keystone-immovable" x1="1843.2" y1="2981.9855666268" x2="1616" y2="3152"/>
+<line data-from="attribute-str-14" data-to="class-0-0" x1="1317.8258739068574" y1="3113.206998580703" x2="1023.5546822588349" y2="3593.413939144928"/>
+<line data-from="attribute-str-15" data-to="class-0-1" x1="992.566943928993" y1="2830.463724394649" x2="557.9879785650294" y2="3188.702978055086"/>
+<line data-from="attribute-str-16" data-to="class-0-2" x1="777.080789717292" y1="2457.2307569723607" x2="165.62118457593806" y2="2685.846135458541"/>
+<line data-from="attribute-str-17" data-to="class-1-0" x1="694.8473965119124" y1="2034.1766237107595" x2="131.84039108567845" y2="2048.919480997754"/>
+<line data-from="attribute-dex-14" data-to="class-1-1" x1="1377.0215226050552" y1="852.616377708538" x2="1108.2857088268438" y2="357.666579857319"/>
+<line data-from="attribute-dex-15" data-to="class-1-2" x1="1784.5138457882992" y1="712.3055186329905" x2="1676.7707686824488" y2="68.45827794948582"/>
+<line data-from="attribute-dex-16" data-to="class-2-0" x1="2215.486154211701" y1="712.3055186329907" x2="2308.440965832435" y2="156.82946784722208"/>
+<line data-from="attribute-dex-17" data-to="class-2-1" x1="2622.9784773949445" y1="852.616377708538" x2="2891.714291173156" y2="357.666579857319"/>
+<line data-from="attribute-int-14" data-to="class-2-2" x1="3305.152603488088" y1="2034.1766237107593" x2="3957.728905232131" y2="2051.264935566139"/>
+<line data-from="attribute-int-15" data-to="class-3-0" x1="3222.9192102827083" y1="2457.2307569723607" x2="3750.452987267405" y2="2654.4675540976923"/>
+<line data-from="attribute-int-16" data-to="class-3-1" x1="3007.4330560710073" y1="2830.4637243946486" x2="3442.0120214349713" y2="3188.7029780550847"/>
+<line data-from="int-ring-6" data-to="class-3-2" x1="2947.7782019016895" y1="1452.8" x2="3513.1195854921716" y2="1126.4"/></g>
+<g class="core"><polygon points="2000,1918 2082,2000 2000,2082 1918,2000"/><text x="2000" y="2007" text-anchor="middle">CLASS</text></g>
+<g id="nodes"><g class="node basic " id="node-attribute-str-0" data-id="attribute-str-0" data-layout-id="attribute-str-0" data-x="1839.2656850576082" data-y="2092.8" transform="translate(1839.2656850576082 2092.8)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-1" data-id="attribute-str-1" data-layout-id="attribute-str-1" data-x="907.8526160264472" data-y="1487.092434657219" transform="translate(907.8526160264472 1487.092434657219)">
+<g class="node basic " id="node-attribute-str-1" data-id="attribute-str-1" data-layout-id="attribute-str-1" data-x="1707.8526160264473" data-y="2287.092434657219" transform="translate(1707.8526160264473 2287.092434657219)">
 <title>Hardy Frame — +2% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hardy Frame</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP.</text>
 </g>
-<g class="node basic " id="node-attribute-str-2" data-id="attribute-str-2" data-layout-id="attribute-str-2" data-x="805.2969663657481" data-y="1309.460838841654" transform="translate(805.2969663657481 1309.460838841654)">
+<g class="node basic " id="node-attribute-str-2" data-id="attribute-str-2" data-layout-id="attribute-str-2" data-x="1605.2969663657482" data-y="2109.460838841654" transform="translate(1605.2969663657482 2109.460838841654)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-3" data-id="attribute-str-3" data-layout-id="attribute-str-3" data-x="776.0388478110274" data-y="1670.856561422477" transform="translate(776.0388478110274 1670.856561422477)">
+<g class="node basic " id="node-attribute-str-3" data-id="attribute-str-3" data-layout-id="attribute-str-3" data-x="1576.0388478110274" data-y="2470.856561422477" transform="translate(1576.0388478110274 2470.856561422477)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-4" data-id="attribute-str-4" data-layout-id="attribute-str-4" data-x="651.2863041621796" data-y="1516.8" transform="translate(651.2863041621796 1516.8)">
+<g class="node basic " id="node-attribute-str-4" data-id="attribute-str-4" data-layout-id="attribute-str-4" data-x="1451.2863041621795" data-y="2316.8" transform="translate(1451.2863041621795 2316.8)">
 <title>Hardy Frame — +2% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hardy Frame</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP.</text>
 </g>
-<g class="node basic " id="node-attribute-str-5" data-id="attribute-str-5" data-layout-id="attribute-str-5" data-x="580.2456801750607" data-y="1331.7328473021323" transform="translate(580.2456801750607 1331.7328473021323)">
+<g class="node basic " id="node-attribute-str-5" data-id="attribute-str-5" data-layout-id="attribute-str-5" data-x="1380.2456801750607" data-y="2131.732847302132" transform="translate(1380.2456801750607 2131.732847302132)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-6" data-id="attribute-str-6" data-layout-id="attribute-str-6" data-x="666.1314476195776" data-y="1871.1647553166304" transform="translate(666.1314476195776 1871.1647553166304)">
+<g class="node basic " id="node-attribute-str-6" data-id="attribute-str-6" data-layout-id="attribute-str-6" data-x="1466.1314476195776" data-y="2671.1647553166304" transform="translate(1466.1314476195776 2671.1647553166304)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-7" data-id="attribute-str-7" data-layout-id="attribute-str-7" data-x="516.5944044060855" data-y="1718.1066993495906" transform="translate(516.5944044060855 1718.1066993495906)">
+<g class="node basic " id="node-attribute-str-7" data-id="attribute-str-7" data-layout-id="attribute-str-7" data-x="1316.5944044060855" data-y="2518.1066993495906" transform="translate(1316.5944044060855 2518.1066993495906)">
 <title>Hardy Frame — +2% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hardy Frame</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP.</text>
 </g>
-<g class="node basic " id="node-attribute-str-8" data-id="attribute-str-8" data-layout-id="attribute-str-8" data-x="409.6036386953908" data-y="1532.7932571979693" transform="translate(409.6036386953908 1532.7932571979693)">
+<g class="node basic " id="node-attribute-str-8" data-id="attribute-str-8" data-layout-id="attribute-str-8" data-x="1209.6036386953908" data-y="2332.7932571979695" transform="translate(1209.6036386953908 2332.7932571979695)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-9" data-id="attribute-str-9" data-layout-id="attribute-str-9" data-x="351.8199955808201" data-y="1326.7613509847538" transform="translate(351.8199955808201 1326.7613509847538)">
+<g class="node basic " id="node-attribute-str-9" data-id="attribute-str-9" data-layout-id="attribute-str-9" data-x="1151.81999558082" data-y="2126.761350984754" transform="translate(1151.81999558082 2126.761350984754)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-10" data-id="attribute-str-10" data-layout-id="attribute-str-10" data-x="579.619726442709" data-y="2085.994851102974" transform="translate(579.619726442709 2085.994851102974)">
+<g class="node basic " id="node-attribute-str-10" data-id="attribute-str-10" data-layout-id="attribute-str-10" data-x="1379.619726442709" data-y="2885.994851102974" transform="translate(1379.619726442709 2885.994851102974)">
 <title>Hardy Frame — +2% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hardy Frame</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP.</text>
 </g>
-<g class="node basic " id="node-attribute-str-11" data-id="attribute-str-11" data-layout-id="attribute-str-11" data-x="351.57601682298684" data-y="1870.8467073557504" transform="translate(351.57601682298684 1870.8467073557504)">
+<g class="node basic " id="node-attribute-str-11" data-id="attribute-str-11" data-layout-id="attribute-str-11" data-x="1151.5760168229867" data-y="2670.8467073557504" transform="translate(1151.5760168229867 2670.8467073557504)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-12" data-id="attribute-str-12" data-layout-id="attribute-str-12" data-x="194.81771779626865" data-y="1599.3333689333995" transform="translate(194.81771779626865 1599.3333689333995)">
+<g class="node basic " id="node-attribute-str-12" data-id="attribute-str-12" data-layout-id="attribute-str-12" data-x="994.8177177962687" data-y="2399.3333689333995" transform="translate(994.8177177962687 2399.3333689333995)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-13" data-id="attribute-str-13" data-layout-id="attribute-str-13" data-x="122.51581454396796" data-y="1294.2676513558677" transform="translate(122.51581454396796 1294.2676513558677)">
+<g class="node basic " id="node-attribute-str-13" data-id="attribute-str-13" data-layout-id="attribute-str-13" data-x="922.515814543968" data-y="2094.2676513558677" transform="translate(922.515814543968 2094.2676513558677)">
 <title>Hardy Frame — +2% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hardy Frame</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP.</text>
 </g>
-<g class="node basic " id="node-attribute-str-14" data-id="attribute-str-14" data-layout-id="attribute-str-14" data-x="517.8258739068573" data-y="2313.206998580703" transform="translate(517.8258739068573 2313.206998580703)">
+<g class="node basic " id="node-attribute-str-14" data-id="attribute-str-14" data-layout-id="attribute-str-14" data-x="1317.8258739068574" data-y="3113.206998580703" transform="translate(1317.8258739068574 3113.206998580703)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-15" data-id="attribute-str-15" data-layout-id="attribute-str-15" data-x="192.56694392899306" data-y="2030.463724394649" transform="translate(192.56694392899306 2030.463724394649)">
+<g class="node basic " id="node-attribute-str-15" data-id="attribute-str-15" data-layout-id="attribute-str-15" data-x="992.566943928993" data-y="2830.463724394649" transform="translate(992.566943928993 2830.463724394649)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-str-16" data-id="attribute-str-16" data-layout-id="attribute-str-16" data-x="-22.919210282708036" data-y="1657.2307569723607" transform="translate(-22.919210282708036 1657.2307569723607)">
+<g class="node basic " id="node-attribute-str-16" data-id="attribute-str-16" data-layout-id="attribute-str-16" data-x="777.080789717292" data-y="2457.2307569723607" transform="translate(777.080789717292 2457.2307569723607)">
 <title>Hardy Frame — +2% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hardy Frame</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP.</text>
 </g>
-<g class="node basic " id="node-attribute-str-17" data-id="attribute-str-17" data-layout-id="attribute-str-17" data-x="-105.1526034880876" data-y="1234.1766237107595" transform="translate(-105.1526034880876 1234.1766237107595)">
+<g class="node basic " id="node-attribute-str-17" data-id="attribute-str-17" data-layout-id="attribute-str-17" data-x="694.8473965119124" data-y="2034.1766237107595" transform="translate(694.8473965119124 2034.1766237107595)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Might</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% STR.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-0" data-id="attribute-dex-0" data-layout-id="attribute-dex-0" data-x="1200" data-y="1014.4" transform="translate(1200 1014.4)">
+<g class="node basic " id="node-attribute-dex-0" data-id="attribute-dex-0" data-layout-id="attribute-dex-0" data-x="2000" data-y="1814.4" transform="translate(2000 1814.4)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-1" data-id="attribute-dex-1" data-layout-id="attribute-dex-1" data-x="1097.4443503393009" data-y="803.4467265011272" transform="translate(1097.4443503393009 803.4467265011272)">
+<g class="node basic " id="node-attribute-dex-1" data-id="attribute-dex-1" data-layout-id="attribute-dex-1" data-x="1897.4443503393009" data-y="1603.4467265011272" transform="translate(1897.4443503393009 1603.4467265011272)">
 <title>Quick Step — +2% Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Quick Step</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Initiative.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-2" data-id="attribute-dex-2" data-layout-id="attribute-dex-2" data-x="1302.5556496606991" data-y="803.4467265011272" transform="translate(1302.5556496606991 803.4467265011272)">
+<g class="node basic " id="node-attribute-dex-2" data-id="attribute-dex-2" data-layout-id="attribute-dex-2" data-x="2102.555649660699" data-y="1603.4467265011272" transform="translate(2102.555649660699 1603.4467265011272)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-3" data-id="attribute-dex-3" data-layout-id="attribute-dex-3" data-x="1004.2068323640333" data-y="597.4105912753906" transform="translate(1004.2068323640333 597.4105912753906)">
+<g class="node basic " id="node-attribute-dex-3" data-id="attribute-dex-3" data-layout-id="attribute-dex-3" data-x="1804.2068323640333" data-y="1397.4105912753907" transform="translate(1804.2068323640333 1397.4105912753907)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-4" data-id="attribute-dex-4" data-layout-id="attribute-dex-4" data-x="1200" data-y="566.4" transform="translate(1200 566.4)">
+<g class="node basic " id="node-attribute-dex-4" data-id="attribute-dex-4" data-layout-id="attribute-dex-4" data-x="2000" data-y="1366.4" transform="translate(2000 1366.4)">
 <title>Quick Step — +2% Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Quick Step</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Initiative.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-5" data-id="attribute-dex-5" data-layout-id="attribute-dex-5" data-x="1395.7931676359667" data-y="597.4105912753907" transform="translate(1395.7931676359667 597.4105912753907)">
+<g class="node basic " id="node-attribute-dex-5" data-id="attribute-dex-5" data-layout-id="attribute-dex-5" data-x="2195.7931676359667" data-y="1397.4105912753907" transform="translate(2195.7931676359667 1397.4105912753907)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-6" data-id="attribute-dex-6" data-layout-id="attribute-dex-6" data-x="885.6885479612426" data-y="402.07389369861573" transform="translate(885.6885479612426 402.07389369861573)">
+<g class="node basic " id="node-attribute-dex-6" data-id="attribute-dex-6" data-layout-id="attribute-dex-6" data-x="1685.6885479612426" data-y="1202.0738936986158" transform="translate(1685.6885479612426 1202.0738936986158)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-7" data-id="attribute-dex-7" data-layout-id="attribute-dex-7" data-x="1093.0092342893051" data-y="349.1000434524401" transform="translate(1093.0092342893051 349.1000434524401)">
+<g class="node basic " id="node-attribute-dex-7" data-id="attribute-dex-7" data-layout-id="attribute-dex-7" data-x="1893.0092342893051" data-y="1149.10004345244" transform="translate(1893.0092342893051 1149.10004345244)">
 <title>Quick Step — +2% Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Quick Step</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Initiative.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-8" data-id="attribute-dex-8" data-layout-id="attribute-dex-8" data-x="1306.9907657106949" data-y="349.1000434524401" transform="translate(1306.9907657106949 349.1000434524401)">
+<g class="node basic " id="node-attribute-dex-8" data-id="attribute-dex-8" data-layout-id="attribute-dex-8" data-x="2106.9907657106946" data-y="1149.10004345244" transform="translate(2106.9907657106946 1149.10004345244)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-9" data-id="attribute-dex-9" data-layout-id="attribute-dex-9" data-x="1514.3114520387574" data-y="402.07389369861573" transform="translate(1514.3114520387574 402.07389369861573)">
+<g class="node basic " id="node-attribute-dex-9" data-id="attribute-dex-9" data-layout-id="attribute-dex-9" data-x="2314.311452038757" data-y="1202.0738936986158" transform="translate(2314.311452038757 1202.0738936986158)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-10" data-id="attribute-dex-10" data-layout-id="attribute-dex-10" data-x="742.8960881012597" data-y="219.7374975411592" transform="translate(742.8960881012597 219.7374975411592)">
+<g class="node basic " id="node-attribute-dex-10" data-id="attribute-dex-10" data-layout-id="attribute-dex-10" data-x="1542.8960881012597" data-y="1019.7374975411592" transform="translate(1542.8960881012597 1019.7374975411592)">
 <title>Quick Step — +2% Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Quick Step</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Initiative.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-11" data-id="attribute-dex-11" data-layout-id="attribute-dex-11" data-x="1043.241700973282" data-y="129.8199237108504" transform="translate(1043.241700973282 129.8199237108504)">
+<g class="node basic " id="node-attribute-dex-11" data-id="attribute-dex-11" data-layout-id="attribute-dex-11" data-x="1843.241700973282" data-y="929.8199237108504" transform="translate(1843.241700973282 929.8199237108504)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-12" data-id="attribute-dex-12" data-layout-id="attribute-dex-12" data-x="1356.758299026718" data-y="129.8199237108504" transform="translate(1356.758299026718 129.8199237108504)">
+<g class="node basic " id="node-attribute-dex-12" data-id="attribute-dex-12" data-layout-id="attribute-dex-12" data-x="2156.758299026718" data-y="929.8199237108504" transform="translate(2156.758299026718 929.8199237108504)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-13" data-id="attribute-dex-13" data-layout-id="attribute-dex-13" data-x="1657.1039118987403" data-y="219.73749754115943" transform="translate(1657.1039118987403 219.73749754115943)">
+<g class="node basic " id="node-attribute-dex-13" data-id="attribute-dex-13" data-layout-id="attribute-dex-13" data-x="2457.1039118987405" data-y="1019.7374975411594" transform="translate(2457.1039118987405 1019.7374975411594)">
 <title>Quick Step — +2% Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Quick Step</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Initiative.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-14" data-id="attribute-dex-14" data-layout-id="attribute-dex-14" data-x="577.0215226050552" data-y="52.61637770853804" transform="translate(577.0215226050552 52.61637770853804)">
+<g class="node basic " id="node-attribute-dex-14" data-id="attribute-dex-14" data-layout-id="attribute-dex-14" data-x="1377.0215226050552" data-y="852.616377708538" transform="translate(1377.0215226050552 852.616377708538)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-15" data-id="attribute-dex-15" data-layout-id="attribute-dex-15" data-x="984.5138457882992" data-y="-87.69448136700953" transform="translate(984.5138457882992 -87.69448136700953)">
+<g class="node basic " id="node-attribute-dex-15" data-id="attribute-dex-15" data-layout-id="attribute-dex-15" data-x="1784.5138457882992" data-y="712.3055186329905" transform="translate(1784.5138457882992 712.3055186329905)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-16" data-id="attribute-dex-16" data-layout-id="attribute-dex-16" data-x="1415.486154211701" data-y="-87.6944813670093" transform="translate(1415.486154211701 -87.6944813670093)">
+<g class="node basic " id="node-attribute-dex-16" data-id="attribute-dex-16" data-layout-id="attribute-dex-16" data-x="2215.486154211701" data-y="712.3055186329907" transform="translate(2215.486154211701 712.3055186329907)">
 <title>Quick Step — +2% Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Quick Step</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Initiative.</text>
 </g>
-<g class="node basic " id="node-attribute-dex-17" data-id="attribute-dex-17" data-layout-id="attribute-dex-17" data-x="1822.9784773949445" data-y="52.61637770853804" transform="translate(1822.9784773949445 52.61637770853804)">
+<g class="node basic " id="node-attribute-dex-17" data-id="attribute-dex-17" data-layout-id="attribute-dex-17" data-x="2622.9784773949445" data-y="852.616377708538" transform="translate(2622.9784773949445 852.616377708538)">
 <title>Finesse — +1% DEX.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Finesse</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% DEX.</text>
 </g>
-<g class="node basic " id="node-attribute-int-0" data-id="attribute-int-0" data-layout-id="attribute-int-0" data-x="1360.7343149423918" data-y="1292.8" transform="translate(1360.7343149423918 1292.8)">
+<g class="node basic " id="node-attribute-int-0" data-id="attribute-int-0" data-layout-id="attribute-int-0" data-x="2160.734314942392" data-y="2092.8" transform="translate(2160.734314942392 2092.8)">
 <title>Insight — +1% INT.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Insight</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% INT.</text>
 </g>
-<g class="node basic " id="node-attribute-int-1" data-id="attribute-int-1" data-layout-id="attribute-int-1" data-x="1594.7030336342518" data-y="1309.4608388416539" transform="translate(1594.7030336342518 1309.4608388416539)">
+<g class="node basic " id="node-attribute-int-1" data-id="attribute-int-1" data-layout-id="attribute-int-1" data-x="2394.703033634252" data-y="2109.460838841654" transform="translate(2394.703033634252 2109.460838841654)">
 <title>Arcane Well — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Well</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-attribute-int-2" data-id="attribute-int-2" data-layout-id="attribute-int-2" data-x="1492.1473839735527" data-y="1487.092434657219" transform="translate(1492.1473839735527 1487.092434657219)">
+<g class="node basic " id="node-attribute-int-2" data-id="attribute-int-2" data-layout-id="attribute-int-2" data-x="2292.1473839735527" data-y="2287.092434657219" transform="translate(2292.1473839735527 2287.092434657219)">
 <title>Meditation — +0.15 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Meditation</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+0.15 Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-attribute-int-3" data-id="attribute-int-3" data-layout-id="attribute-int-3" data-x="1819.7543198249393" data-y="1331.7328473021323" transform="translate(1819.7543198249393 1331.7328473021323)">
+<g class="node basic " id="node-attribute-int-3" data-id="attribute-int-3" data-layout-id="attribute-int-3" data-x="2619.7543198249396" data-y="2131.732847302132" transform="translate(2619.7543198249396 2131.732847302132)">
 <title>Insight — +1% INT.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Insight</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% INT.</text>
 </g>
-<g class="node basic " id="node-attribute-int-4" data-id="attribute-int-4" data-layout-id="attribute-int-4" data-x="1748.7136958378205" data-y="1516.8" transform="translate(1748.7136958378205 1516.8)">
+<g class="node basic " id="node-attribute-int-4" data-id="attribute-int-4" data-layout-id="attribute-int-4" data-x="2548.7136958378205" data-y="2316.8" transform="translate(2548.7136958378205 2316.8)">
 <title>Arcane Well — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Well</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-attribute-int-5" data-id="attribute-int-5" data-layout-id="attribute-int-5" data-x="1623.9611521889726" data-y="1670.856561422477" transform="translate(1623.9611521889726 1670.856561422477)">
+<g class="node basic " id="node-attribute-int-5" data-id="attribute-int-5" data-layout-id="attribute-int-5" data-x="2423.961152188973" data-y="2470.856561422477" transform="translate(2423.961152188973 2470.856561422477)">
 <title>Meditation — +0.15 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Meditation</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+0.15 Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-attribute-int-6" data-id="attribute-int-6" data-layout-id="attribute-int-6" data-x="2048.1800044191796" data-y="1326.761350984754" transform="translate(2048.1800044191796 1326.761350984754)">
+<g class="node basic " id="node-attribute-int-6" data-id="attribute-int-6" data-layout-id="attribute-int-6" data-x="2848.1800044191796" data-y="2126.7613509847542" transform="translate(2848.1800044191796 2126.7613509847542)">
 <title>Insight — +1% INT.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Insight</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% INT.</text>
 </g>
-<g class="node basic " id="node-attribute-int-7" data-id="attribute-int-7" data-layout-id="attribute-int-7" data-x="1990.3963613046092" data-y="1532.793257197969" transform="translate(1990.3963613046092 1532.793257197969)">
+<g class="node basic " id="node-attribute-int-7" data-id="attribute-int-7" data-layout-id="attribute-int-7" data-x="2790.396361304609" data-y="2332.793257197969" transform="translate(2790.396361304609 2332.793257197969)">
 <title>Arcane Well — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Well</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-attribute-int-8" data-id="attribute-int-8" data-layout-id="attribute-int-8" data-x="1883.4055955939148" data-y="1718.1066993495906" transform="translate(1883.4055955939148 1718.1066993495906)">
+<g class="node basic " id="node-attribute-int-8" data-id="attribute-int-8" data-layout-id="attribute-int-8" data-x="2683.4055955939148" data-y="2518.1066993495906" transform="translate(2683.4055955939148 2518.1066993495906)">
 <title>Meditation — +0.15 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Meditation</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+0.15 Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-attribute-int-9" data-id="attribute-int-9" data-layout-id="attribute-int-9" data-x="1733.8685523804224" data-y="1871.16475531663" transform="translate(1733.8685523804224 1871.16475531663)">
+<g class="node basic " id="node-attribute-int-9" data-id="attribute-int-9" data-layout-id="attribute-int-9" data-x="2533.8685523804224" data-y="2671.16475531663" transform="translate(2533.8685523804224 2671.16475531663)">
 <title>Insight — +1% INT.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Insight</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% INT.</text>
 </g>
-<g class="node basic " id="node-attribute-int-10" data-id="attribute-int-10" data-layout-id="attribute-int-10" data-x="2277.484185456032" data-y="1294.267651355867" transform="translate(2277.484185456032 1294.267651355867)">
+<g class="node basic " id="node-attribute-int-10" data-id="attribute-int-10" data-layout-id="attribute-int-10" data-x="3077.484185456032" data-y="2094.267651355867" transform="translate(3077.484185456032 2094.267651355867)">
 <title>Arcane Well — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Well</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-attribute-int-11" data-id="attribute-int-11" data-layout-id="attribute-int-11" data-x="2205.182282203731" data-y="1599.3333689333995" transform="translate(2205.182282203731 1599.3333689333995)">
+<g class="node basic " id="node-attribute-int-11" data-id="attribute-int-11" data-layout-id="attribute-int-11" data-x="3005.182282203731" data-y="2399.3333689333995" transform="translate(3005.182282203731 2399.3333689333995)">
 <title>Meditation — +0.15 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Meditation</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+0.15 Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-attribute-int-12" data-id="attribute-int-12" data-layout-id="attribute-int-12" data-x="2048.423983177013" data-y="1870.84670735575" transform="translate(2048.423983177013 1870.84670735575)">
+<g class="node basic " id="node-attribute-int-12" data-id="attribute-int-12" data-layout-id="attribute-int-12" data-x="2848.423983177013" data-y="2670.84670735575" transform="translate(2848.423983177013 2670.84670735575)">
 <title>Insight — +1% INT.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Insight</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% INT.</text>
 </g>
-<g class="node basic " id="node-attribute-int-13" data-id="attribute-int-13" data-layout-id="attribute-int-13" data-x="1820.3802735572913" data-y="2085.9948511029734" transform="translate(1820.3802735572913 2085.9948511029734)">
+<g class="node basic " id="node-attribute-int-13" data-id="attribute-int-13" data-layout-id="attribute-int-13" data-x="2620.3802735572913" data-y="2885.9948511029734" transform="translate(2620.3802735572913 2885.9948511029734)">
 <title>Arcane Well — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Well</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-attribute-int-14" data-id="attribute-int-14" data-layout-id="attribute-int-14" data-x="2505.152603488088" data-y="1234.1766237107593" transform="translate(2505.152603488088 1234.1766237107593)">
+<g class="node basic " id="node-attribute-int-14" data-id="attribute-int-14" data-layout-id="attribute-int-14" data-x="3305.152603488088" data-y="2034.1766237107593" transform="translate(3305.152603488088 2034.1766237107593)">
 <title>Meditation — +0.15 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Meditation</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+0.15 Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-attribute-int-15" data-id="attribute-int-15" data-layout-id="attribute-int-15" data-x="2422.9192102827083" data-y="1657.2307569723605" transform="translate(2422.9192102827083 1657.2307569723605)">
+<g class="node basic " id="node-attribute-int-15" data-id="attribute-int-15" data-layout-id="attribute-int-15" data-x="3222.9192102827083" data-y="2457.2307569723607" transform="translate(3222.9192102827083 2457.2307569723607)">
 <title>Insight — +1% INT.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Insight</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+1% INT.</text>
 </g>
-<g class="node basic " id="node-attribute-int-16" data-id="attribute-int-16" data-layout-id="attribute-int-16" data-x="2207.4330560710073" data-y="2030.4637243946486" transform="translate(2207.4330560710073 2030.4637243946486)">
+<g class="node basic " id="node-attribute-int-16" data-id="attribute-int-16" data-layout-id="attribute-int-16" data-x="3007.4330560710073" data-y="2830.4637243946486" transform="translate(3007.4330560710073 2830.4637243946486)">
 <title>Arcane Well — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Well</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-attribute-int-17" data-id="attribute-int-17" data-layout-id="attribute-int-17" data-x="1882.1741260931428" data-y="2313.206998580703" transform="translate(1882.1741260931428 2313.206998580703)">
+<g class="node basic " id="node-attribute-int-17" data-id="attribute-int-17" data-layout-id="attribute-int-17" data-x="2682.174126093143" data-y="3113.206998580703" transform="translate(2682.174126093143 3113.206998580703)">
 <title>Meditation — +0.15 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Meditation</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+0.15 Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-str-ring-gateway" data-id="str-ring-gateway" data-layout-id="str-ring-gateway" data-x="1200" data-y="1462.4" transform="translate(1200 1462.4)">
-<title>Fortified Heart — +2% maximum HP and +2% Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
-<text class="node-title" x="0" y="-5" text-anchor="middle">Fortified Heart</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+2% maximum HP and</text>
-<text class="node-desc" x="0" y="26" text-anchor="middle">+2% Armor.</text>
-</g>
-<g class="node basic " id="node-str-ring-0" data-id="str-ring-0" data-layout-id="str-ring-0" data-x="1043.2" data-y="1638.8144333732" transform="translate(1043.2 1638.8144333732)">
+<g class="node basic " id="node-str-ring-0" data-id="str-ring-0" data-layout-id="str-ring-0" data-x="1843.2" data-y="2438.8144333732" transform="translate(1843.2 2438.8144333732)">
 <title>Plated 1 — +3% Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Plated 1</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Armor.</text>
 </g>
-<g class="node basic " id="node-str-ring-1" data-id="str-ring-1" data-layout-id="str-ring-1" data-x="886.4" data-y="1910.4" transform="translate(886.4 1910.4)">
+<g class="node basic " id="node-str-ring-1" data-id="str-ring-1" data-layout-id="str-ring-1" data-x="1686.4" data-y="2710.4" transform="translate(1686.4 2710.4)">
 <title>Plated 2 — +3% Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Plated 2</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Armor.</text>
 </g>
-<g class="node basic " id="node-str-ring-2" data-id="str-ring-2" data-layout-id="str-ring-2" data-x="1043.2" data-y="2181.9855666268" transform="translate(1043.2 2181.9855666268)">
+<g class="node basic " id="node-str-ring-2" data-id="str-ring-2" data-layout-id="str-ring-2" data-x="1843.2" data-y="2981.9855666268" transform="translate(1843.2 2981.9855666268)">
 <title>Plated 3 — +3% Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Plated 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Armor.</text>
 </g>
-<g class="node basic " id="node-str-ring-3" data-id="str-ring-3" data-layout-id="str-ring-3" data-x="1356.8" data-y="1638.8144333732" transform="translate(1356.8 1638.8144333732)">
+<g class="node basic " id="node-str-ring-3" data-id="str-ring-3" data-layout-id="str-ring-3" data-x="2156.8" data-y="2438.8144333732" transform="translate(2156.8 2438.8144333732)">
 <title>Heartwood 1 — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Heartwood 1</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
-<g class="node basic " id="node-str-ring-4" data-id="str-ring-4" data-layout-id="str-ring-4" data-x="1513.6" data-y="1910.4" transform="translate(1513.6 1910.4)">
+<g class="node basic " id="node-str-ring-4" data-id="str-ring-4" data-layout-id="str-ring-4" data-x="2313.6" data-y="2710.4" transform="translate(2313.6 2710.4)">
 <title>Heartwood 2 — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Heartwood 2</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
-<g class="node basic " id="node-str-ring-5" data-id="str-ring-5" data-layout-id="str-ring-5" data-x="1356.8" data-y="2181.9855666268" transform="translate(1356.8 2181.9855666268)">
+<g class="node basic " id="node-str-ring-5" data-id="str-ring-5" data-layout-id="str-ring-5" data-x="2156.8" data-y="2981.9855666268" transform="translate(2156.8 2981.9855666268)">
 <title>Heartwood 3 — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Heartwood 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
-<g class="node major " id="node-str-ring-6" data-id="str-ring-6" data-layout-id="str-ring-6" data-x="1200" data-y="2294.4" transform="translate(1200 2294.4)">
+<g class="node major " id="node-str-ring-6" data-id="str-ring-6" data-layout-id="str-ring-6" data-x="2000" data-y="3094.4" transform="translate(2000 3094.4)">
 <title>Titanic Bulwark — +10% Armor and +10% maximum HP.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Titanic Bulwark</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+10% Armor and +10% maximum</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">HP.</text>
 </g>
-<g class="node basic " id="node-dex-ring-gateway" data-id="dex-ring-gateway" data-layout-id="dex-ring-gateway" data-x="972.7549340469632" data-y="1068.8" transform="translate(972.7549340469632 1068.8)">
-<title>Measured Motion — +1% Critical Chance and +1% Physical Dodge.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
-<text class="node-title" x="0" y="-5" text-anchor="middle">Measured Motion</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+1% Critical Chance</text>
-<text class="node-desc" x="0" y="26" text-anchor="middle">and +1% Physical</text>
-<text class="node-desc" x="0" y="39" text-anchor="middle">Dodge.</text>
-</g>
-<g class="node basic " id="node-dex-ring-0" data-id="dex-ring-0" data-layout-id="dex-ring-0" data-x="898.3755531515346" data-y="844.8" transform="translate(898.3755531515346 844.8)">
+<g class="node basic " id="node-dex-ring-0" data-id="dex-ring-0" data-layout-id="dex-ring-0" data-x="1698.3755531515346" data-y="1644.8" transform="translate(1698.3755531515346 1644.8)">
 <title>Deadly Precision 1 — +2% Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Deadly Precision 1</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Critical Chance.</text>
 </g>
-<g class="node basic " id="node-dex-ring-1" data-id="dex-ring-1" data-layout-id="dex-ring-1" data-x="741.5755531515347" data-y="573.2144333732" transform="translate(741.5755531515347 573.2144333732)">
+<g class="node basic " id="node-dex-ring-1" data-id="dex-ring-1" data-layout-id="dex-ring-1" data-x="1541.5755531515347" data-y="1373.2144333731999" transform="translate(1541.5755531515347 1373.2144333731999)">
 <title>Deadly Precision 2 — +2% Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Deadly Precision 2</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Critical Chance.</text>
 </g>
-<g class="node basic " id="node-dex-ring-2" data-id="dex-ring-2" data-layout-id="dex-ring-2" data-x="427.97555315153465" data-y="573.2144333732" transform="translate(427.97555315153465 573.2144333732)">
+<g class="node basic " id="node-dex-ring-2" data-id="dex-ring-2" data-layout-id="dex-ring-2" data-x="1227.9755531515348" data-y="1373.2144333731999" transform="translate(1227.9755531515348 1373.2144333731999)">
 <title>Deadly Precision 3 — +2% Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Deadly Precision 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Critical Chance.</text>
 </g>
-<g class="node basic " id="node-dex-ring-3" data-id="dex-ring-3" data-layout-id="dex-ring-3" data-x="741.5755531515347" data-y="1116.3855666268" transform="translate(741.5755531515347 1116.3855666268)">
+<g class="node basic " id="node-dex-ring-3" data-id="dex-ring-3" data-layout-id="dex-ring-3" data-x="1541.5755531515347" data-y="1916.3855666268" transform="translate(1541.5755531515347 1916.3855666268)">
 <title>Elusive Step 1 — +2% Physical Dodge.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Elusive Step 1</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Physical Dodge.</text>
 </g>
-<g class="node basic " id="node-dex-ring-4" data-id="dex-ring-4" data-layout-id="dex-ring-4" data-x="427.97555315153465" data-y="1116.3855666268" transform="translate(427.97555315153465 1116.3855666268)">
+<g class="node basic " id="node-dex-ring-4" data-id="dex-ring-4" data-layout-id="dex-ring-4" data-x="1227.9755531515348" data-y="1916.3855666268" transform="translate(1227.9755531515348 1916.3855666268)">
 <title>Elusive Step 2 — +2% Physical Dodge.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Elusive Step 2</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Physical Dodge.</text>
 </g>
-<g class="node basic " id="node-dex-ring-5" data-id="dex-ring-5" data-layout-id="dex-ring-5" data-x="271.1755531515347" data-y="844.8" transform="translate(271.1755531515347 844.8)">
+<g class="node basic " id="node-dex-ring-5" data-id="dex-ring-5" data-layout-id="dex-ring-5" data-x="1071.1755531515346" data-y="1644.8" transform="translate(1071.1755531515346 1644.8)">
 <title>Elusive Step 3 — +2% Physical Dodge.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Elusive Step 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Physical Dodge.</text>
 </g>
-<g class="node major " id="node-dex-ring-6" data-id="dex-ring-6" data-layout-id="dex-ring-6" data-x="252.22179809831027" data-y="652.8" transform="translate(252.22179809831027 652.8)">
+<g class="node major " id="node-dex-ring-6" data-id="dex-ring-6" data-layout-id="dex-ring-6" data-x="1052.2217980983103" data-y="1452.8" transform="translate(1052.2217980983103 1452.8)">
 <title>Perfect Motion — +5% Critical Chance and +5% Physical Dodge.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Perfect Motion</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+5% Critical Chance and +5%</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">Physical Dodge.</text>
 </g>
-<g class="node basic " id="node-int-ring-gateway" data-id="int-ring-gateway" data-layout-id="int-ring-gateway" data-x="1427.2450659530368" data-y="1068.8" transform="translate(1427.2450659530368 1068.8)">
-<title>Arcane Foundation — +2% Magic Armor and +2% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
-<text class="node-title" x="0" y="-5" text-anchor="middle">Arcane Foundation</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+2% Magic Armor and</text>
-<text class="node-desc" x="0" y="26" text-anchor="middle">+2% maximum Mana.</text>
-</g>
-<g class="node basic " id="node-int-ring-0" data-id="int-ring-0" data-layout-id="int-ring-0" data-x="1658.4244468484653" data-y="1116.3855666268" transform="translate(1658.4244468484653 1116.3855666268)">
+<g class="node basic " id="node-int-ring-0" data-id="int-ring-0" data-layout-id="int-ring-0" data-x="2458.4244468484653" data-y="1916.3855666268" transform="translate(2458.4244468484653 1916.3855666268)">
 <title>Runic Ward 1 — +3% Magic Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Runic Ward 1</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Magic Armor.</text>
 </g>
-<g class="node basic " id="node-int-ring-1" data-id="int-ring-1" data-layout-id="int-ring-1" data-x="1972.0244468484652" data-y="1116.3855666268" transform="translate(1972.0244468484652 1116.3855666268)">
+<g class="node basic " id="node-int-ring-1" data-id="int-ring-1" data-layout-id="int-ring-1" data-x="2772.0244468484652" data-y="1916.3855666268" transform="translate(2772.0244468484652 1916.3855666268)">
 <title>Runic Ward 2 — +3% Magic Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Runic Ward 2</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Magic Armor.</text>
 </g>
-<g class="node basic " id="node-int-ring-2" data-id="int-ring-2" data-layout-id="int-ring-2" data-x="2128.8244468484654" data-y="844.8" transform="translate(2128.8244468484654 844.8)">
+<g class="node basic " id="node-int-ring-2" data-id="int-ring-2" data-layout-id="int-ring-2" data-x="2928.8244468484654" data-y="1644.8" transform="translate(2928.8244468484654 1644.8)">
 <title>Runic Ward 3 — +3% Magic Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Runic Ward 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Magic Armor.</text>
 </g>
-<g class="node basic " id="node-int-ring-3" data-id="int-ring-3" data-layout-id="int-ring-3" data-x="1501.6244468484654" data-y="844.8" transform="translate(1501.6244468484654 844.8)">
+<g class="node basic " id="node-int-ring-3" data-id="int-ring-3" data-layout-id="int-ring-3" data-x="2301.624446848465" data-y="1644.8" transform="translate(2301.624446848465 1644.8)">
 <title>Expanded Mind 1 — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Expanded Mind 1</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-int-ring-4" data-id="int-ring-4" data-layout-id="int-ring-4" data-x="1658.4244468484653" data-y="573.2144333732" transform="translate(1658.4244468484653 573.2144333732)">
+<g class="node basic " id="node-int-ring-4" data-id="int-ring-4" data-layout-id="int-ring-4" data-x="2458.4244468484653" data-y="1373.2144333731999" transform="translate(2458.4244468484653 1373.2144333731999)">
 <title>Expanded Mind 2 — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Expanded Mind 2</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-int-ring-5" data-id="int-ring-5" data-layout-id="int-ring-5" data-x="1972.0244468484652" data-y="573.2144333732" transform="translate(1972.0244468484652 573.2144333732)">
+<g class="node basic " id="node-int-ring-5" data-id="int-ring-5" data-layout-id="int-ring-5" data-x="2772.0244468484652" data-y="1373.2144333731999" transform="translate(2772.0244468484652 1373.2144333731999)">
 <title>Expanded Mind 3 — +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Expanded Mind 3</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node major " id="node-int-ring-6" data-id="int-ring-6" data-layout-id="int-ring-6" data-x="2147.7782019016895" data-y="652.8" transform="translate(2147.7782019016895 652.8)">
+<g class="node major " id="node-int-ring-6" data-id="int-ring-6" data-layout-id="int-ring-6" data-x="2947.7782019016895" data-y="1452.8" transform="translate(2947.7782019016895 1452.8)">
 <title>Arcane Citadel — +10% Magic Armor and +10% maximum Mana.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Arcane Citadel</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+10% Magic Armor and +10%</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">maximum Mana.</text>
 </g>
-<g class="node basic " id="node-blood-vigor" data-id="blood-vigor" data-layout-id="blood-vigor" data-x="499.84000000000003" data-y="1239.68" transform="translate(499.84000000000003 1239.68)">
+<g class="node basic " id="node-blood-vigor" data-id="blood-vigor" data-layout-id="blood-vigor" data-x="599.6800000000001" data-y="1800.32" transform="translate(599.6800000000001 1800.32)">
 <title>Sanguine Vigor — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Sanguine Vigor</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
-<g class="node basic " id="node-blood-hunger" data-id="blood-hunger" data-layout-id="blood-hunger" data-x="599.68" data-y="900.48" transform="translate(599.68 900.48)">
+<g class="node basic " id="node-blood-hunger" data-id="blood-hunger" data-layout-id="blood-hunger" data-x="699.52" data-y="1550.72" transform="translate(699.52 1550.72)">
 <title>Hunger — +2% Lifesteal.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hunger</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2% Lifesteal.</text>
 </g>
-<g class="node basic " id="node-blood-fury" data-id="blood-fury" data-layout-id="blood-fury" data-x="699.52" data-y="1449.6" transform="translate(699.52 1449.6)">
+<g class="node basic " id="node-blood-fury" data-id="blood-fury" data-layout-id="blood-fury" data-x="849.28" data-y="1800.32" transform="translate(849.28 1800.32)">
 <title>Blood Fury — +6% damage while below 35% HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Blood Fury</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+6% damage while</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">below 35% HP.</text>
 </g>
-<g class="node major keystone " id="node-keystone-vital-leech" data-id="keystone-vital-leech" data-layout-id="keystone-vital-leech" data-x="749.44" data-y="699.52" transform="translate(749.44 699.52)">
+<g class="node major keystone " id="node-keystone-vital-leech" data-id="keystone-vital-leech" data-layout-id="keystone-vital-leech" data-x="599.6800000000001" data-y="1249.92" transform="translate(599.6800000000001 1249.92)">
 <title>Vital Leech — Lifesteal is 50% more effective, but this character cannot regain HP in any other way.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Vital Leech</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Lifesteal is 50% more</text>
@@ -546,150 +524,150 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">character cannot regain HP</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">in any other way.</text>
 </g>
-<g class="node major keystone " id="node-keystone-blood-magic" data-id="keystone-blood-magic" data-layout-id="keystone-blood-magic" data-x="1000.3199999999999" data-y="1750.4" transform="translate(1000.3199999999999 1750.4)">
+<g class="node major keystone " id="node-keystone-blood-magic" data-id="keystone-blood-magic" data-layout-id="keystone-blood-magic" data-x="800.6399999999999" data-y="1449.6" transform="translate(800.6399999999999 1449.6)">
 <title>Blood Magic — Mana is disabled. Abilities spend HP instead, and cannot reduce you below 1 HP.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Blood Magic</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Mana is disabled. Abilities</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">spend HP instead, and cannot</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">reduce you below 1 HP.</text>
 </g>
-<g class="node basic " id="node-affliction-focus" data-id="affliction-focus" data-layout-id="affliction-focus" data-x="2500.48" data-y="1499.52" transform="translate(2500.48 1499.52)">
+<g class="node basic " id="node-affliction-focus" data-id="affliction-focus" data-layout-id="affliction-focus" data-x="3450.24" data-y="2099.84" transform="translate(3450.24 2099.84)">
 <title>Malign Focus — +3% Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Malign Focus</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Status Chance.</text>
 </g>
-<g class="node basic " id="node-affliction-decay" data-id="affliction-decay" data-layout-id="affliction-decay" data-x="2700.16" data-y="1650.56" transform="translate(2700.16 1650.56)">
+<g class="node basic " id="node-affliction-decay" data-id="affliction-decay" data-layout-id="affliction-decay" data-x="3749.76" data-y="2249.6" transform="translate(3749.76 2249.6)">
 <title>Lingering Agony — +20% damage with damage-over-time effects.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Lingering Agony</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+20% damage with</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage-over-time</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">effects.</text>
 </g>
-<g class="node major keystone " id="node-keystone-deterioration" data-id="keystone-deterioration" data-layout-id="keystone-deterioration" data-x="2899.84" data-y="1850.24" transform="translate(2899.84 1850.24)">
+<g class="node major keystone " id="node-keystone-deterioration" data-id="keystone-deterioration" data-layout-id="keystone-deterioration" data-x="4050.56" data-y="2400.64" transform="translate(4050.56 2400.64)">
 <title>Deterioration — Deal 30% less direct damage, but damage-over-time effects deal 60% more damage.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Deterioration</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Deal 30% less direct damage,</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">but damage-over-time effects</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">deal 60% more damage.</text>
 </g>
-<g class="node basic " id="node-mana-channel" data-id="mana-channel" data-layout-id="mana-channel" data-x="2390.4" data-y="675.2" transform="translate(2390.4 675.2)">
+<g class="node basic " id="node-mana-channel" data-id="mana-channel" data-layout-id="mana-channel" data-x="3300.48" data-y="1349.76" transform="translate(3300.48 1349.76)">
 <title>Mana Channel — +5% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Mana Channel</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% maximum Mana.</text>
 </g>
-<g class="node basic " id="node-mana-bastion" data-id="mana-bastion" data-layout-id="mana-bastion" data-x="2556.8" data-y="496" transform="translate(2556.8 496)">
+<g class="node basic " id="node-mana-bastion" data-id="mana-bastion" data-layout-id="mana-bastion" data-x="3699.84" data-y="1349.76" transform="translate(3699.84 1349.76)">
 <title>Mana Bastion — +5% maximum Mana and +0.2 Mana regeneration.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Mana Bastion</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% maximum Mana and</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">+0.2 Mana</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node major keystone " id="node-keystone-mana-shield" data-id="keystone-mana-shield" data-layout-id="keystone-mana-shield" data-x="2761.6000000000004" data-y="316.79999999999995" transform="translate(2761.6000000000004 316.79999999999995)">
+<g class="node major keystone " id="node-keystone-mana-shield" data-id="keystone-mana-shield" data-layout-id="keystone-mana-shield" data-x="4000.6400000000003" data-y="1000.3199999999999" transform="translate(4000.6400000000003 1000.3199999999999)">
 <title>Mana Shield — Damage that reaches HP depletes Mana first. Mana regeneration is halved.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Mana Shield</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Damage that reaches HP</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">depletes Mana first. Mana</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">regeneration is halved.</text>
 </g>
-<g class="node basic " id="node-aether-reservoir" data-id="aether-reservoir" data-layout-id="aether-reservoir" data-x="2099.84" data-y="400" transform="translate(2099.84 400)">
+<g class="node basic " id="node-aether-reservoir" data-id="aether-reservoir" data-layout-id="aether-reservoir" data-x="2849.92" data-y="3300.48" transform="translate(2849.92 3300.48)">
 <title>Aether Reservoir — +5% Magic Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Aether Reservoir</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Magic Armor.</text>
 </g>
-<g class="node basic " id="node-aether-unraveling" data-id="aether-unraveling" data-layout-id="aether-unraveling" data-x="2249.6" data-y="260.48" transform="translate(2249.6 260.48)">
+<g class="node basic " id="node-aether-unraveling" data-id="aether-unraveling" data-layout-id="aether-unraveling" data-x="3099.52" data-y="3500.16" transform="translate(3099.52 3500.16)">
 <title>Unraveling Ward — +5% Magic Armor and +3% maximum Mana.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Unraveling Ward</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Magic Armor and</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">+3% maximum Mana.</text>
 </g>
-<g class="node major keystone " id="node-keystone-aether-conversion" data-id="keystone-aether-conversion" data-layout-id="keystone-aether-conversion" data-x="2450.56" data-y="169.5999999999999" transform="translate(2450.56 169.5999999999999)">
+<g class="node major keystone " id="node-keystone-aether-conversion" data-id="keystone-aether-conversion" data-layout-id="keystone-aether-conversion" data-x="3400.3199999999997" data-y="3699.84" transform="translate(3400.3199999999997 3699.84)">
 <title>Aether Conversion — Convert all Magic Armor into maximum Mana, but abilities cost twice as much.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Aether Conversion</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Convert all Magic Armor into</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">maximum Mana, but abilities</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">cost twice as much.</text>
 </g>
-<g class="node major keystone " id="node-keystone-resolute-force" data-id="keystone-resolute-force" data-layout-id="keystone-resolute-force" data-x="560" data-y="150.4000000000001" transform="translate(560 150.4000000000001)">
+<g class="node major keystone " id="node-keystone-resolute-force" data-id="keystone-resolute-force" data-layout-id="keystone-resolute-force" data-x="1449.6" data-y="599.6800000000001" transform="translate(1449.6 599.6800000000001)">
 <title>Resolute Force — Critical hits are disabled, but all damage is increased by 30%.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Resolute Force</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Critical hits are disabled,</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">but all damage is increased</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">by 30%.</text>
 </g>
-<g class="node major keystone " id="node-keystone-immovable" data-id="keystone-immovable" data-layout-id="keystone-immovable" data-x="816" data-y="2352" transform="translate(816 2352)">
+<g class="node major keystone " id="node-keystone-immovable" data-id="keystone-immovable" data-layout-id="keystone-immovable" data-x="1616" data-y="3152" transform="translate(1616 3152)">
 <title>Immovable — Gain 35% Armor and Magic Armor, but Physical and Magical Dodge become 0%.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Immovable</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Gain 35% Armor and Magic</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">Armor, but Physical and</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Magical Dodge become 0%.</text>
 </g>
-<g class="node class-specific" id="node-class-0-0" data-id="class-0-0" data-layout-id="class-0-0" data-x="853.6889923985384" data-y="2169.172631196029" transform="translate(853.6889923985384 2169.172631196029)">
+<g class="node class-specific" id="node-class-0-0" data-id="class-0-0" data-layout-id="class-0-0" data-x="1023.5546822588349" data-y="3593.413939144928" transform="translate(1023.5546822588349 3593.413939144928)">
 <title>Class Slot 0.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 0.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-0-1" data-id="class-0-1" data-layout-id="class-0-1" data-x="533.8273845323629" data-y="415.4995542089341" transform="translate(533.8273845323629 415.4995542089341)">
+<g class="node class-specific" id="node-class-0-1" data-id="class-0-1" data-layout-id="class-0-1" data-x="557.9879785650294" data-y="3188.702978055086" transform="translate(557.9879785650294 3188.702978055086)">
 <title>Class Slot 0.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 0.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-0-2" data-id="class-0-2" data-layout-id="class-0-2" data-x="2313.221655109214" data-y="996.9536778619894" transform="translate(2313.221655109214 996.9536778619894)">
+<g class="node major class-specific" id="node-class-0-2" data-id="class-0-2" data-layout-id="class-0-2" data-x="165.62118457593806" data-y="2685.846135458541" transform="translate(165.62118457593806 2685.846135458541)">
 <title>Class Slot 0.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 0.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-1-0" data-id="class-1-0" data-layout-id="class-1-0" data-x="223.55468225883487" data-y="2793.413939144928" transform="translate(223.55468225883487 2793.413939144928)">
+<g class="node class-specific" id="node-class-1-0" data-id="class-1-0" data-layout-id="class-1-0" data-x="131.84039108567845" data-y="2048.919480997754" transform="translate(131.84039108567845 2048.919480997754)">
 <title>Class Slot 1.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 1.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-1-1" data-id="class-1-1" data-layout-id="class-1-1" data-x="308.2857088268438" data-y="-442.333420142681" transform="translate(308.2857088268438 -442.333420142681)">
+<g class="node class-specific" id="node-class-1-1" data-id="class-1-1" data-layout-id="class-1-1" data-x="1108.2857088268438" data-y="357.666579857319" transform="translate(1108.2857088268438 357.666579857319)">
 <title>Class Slot 1.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 1.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-1-2" data-id="class-1-2" data-layout-id="class-1-2" data-x="3170.5245189918187" data-y="1251.6000005044793" transform="translate(3170.5245189918187 1251.6000005044793)">
+<g class="node major class-specific" id="node-class-1-2" data-id="class-1-2" data-layout-id="class-1-2" data-x="1676.7707686824488" data-y="68.45827794948582" transform="translate(1676.7707686824488 68.45827794948582)">
 <title>Class Slot 1.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 1.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-2-0" data-id="class-2-0" data-layout-id="class-2-0" data-x="1546.3110076014616" data-y="2169.172631196029" transform="translate(1546.3110076014616 2169.172631196029)">
+<g class="node class-specific" id="node-class-2-0" data-id="class-2-0" data-layout-id="class-2-0" data-x="2308.440965832435" data-y="156.82946784722208" transform="translate(2308.440965832435 156.82946784722208)">
 <title>Class Slot 2.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 2.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-2-1" data-id="class-2-1" data-layout-id="class-2-1" data-x="187.51637693090163" data-y="1015.3278145950371" transform="translate(187.51637693090163 1015.3278145950371)">
+<g class="node class-specific" id="node-class-2-1" data-id="class-2-1" data-layout-id="class-2-1" data-x="2891.714291173156" data-y="357.666579857319" transform="translate(2891.714291173156 357.666579857319)">
 <title>Class Slot 2.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 2.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-2-2" data-id="class-2-2" data-layout-id="class-2-2" data-x="1932.454100671123" data-y="337.44492770146746" transform="translate(1932.454100671123 337.44492770146746)">
+<g class="node major class-specific" id="node-class-2-2" data-id="class-2-2" data-layout-id="class-2-2" data-x="3957.728905232131" data-y="2051.264935566139" transform="translate(3957.728905232131 2051.264935566139)">
 <title>Class Slot 2.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 2.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-3-0" data-id="class-3-0" data-layout-id="class-3-0" data-x="-668.1596089143216" data-y="1248.919480997754" transform="translate(-668.1596089143216 1248.919480997754)">
+<g class="node class-specific" id="node-class-3-0" data-id="class-3-0" data-layout-id="class-3-0" data-x="3750.452987267405" data-y="2654.4675540976923" transform="translate(3750.452987267405 2654.4675540976923)">
 <title>Class Slot 3.1 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 3.1</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node class-specific" id="node-class-3-1" data-id="class-3-1" data-layout-id="class-3-1" data-x="2091.714291173156" data-y="-442.333420142681" transform="translate(2091.714291173156 -442.333420142681)">
+<g class="node class-specific" id="node-class-3-1" data-id="class-3-1" data-layout-id="class-3-1" data-x="3442.0120214349713" data-y="3188.7029780550847" transform="translate(3442.0120214349713 3188.7029780550847)">
 <title>Class Slot 3.2 — Class-specific name and effect appear here in game.</title><rect x="-90" y="-46" width="180" height="92" rx="12"/>
 <text class="node-title" x="0" y="-21" text-anchor="middle">Class Slot 3.2</text>
 <text class="node-desc" x="0" y="-3" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="10" text-anchor="middle">effect appear here in game.</text>
 </g>
-<g class="node major class-specific" id="node-class-3-2" data-id="class-3-2" data-layout-id="class-3-2" data-x="2229.949170768078" data-y="2880.724291974787" transform="translate(2229.949170768078 2880.724291974787)">
+<g class="node major class-specific" id="node-class-3-2" data-id="class-3-2" data-layout-id="class-3-2" data-x="3513.1195854921716" data-y="1126.4" transform="translate(3513.1195854921716 1126.4)">
 <title>Class Slot 3.3 — Class-specific name and effect appear here in game.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 3.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
@@ -701,8 +679,8 @@
 (()=>{const root=document.documentElement,nodes=document.getElementById('nodes'),lines=[...document.querySelectorAll('.connections line')];let active=null,offset=null;
 const point=e=>{const p=root.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(root.getScreenCTM().inverse())};
 const update=id=>{const node=document.querySelector('[data-id="'+CSS.escape(id)+'"]'),x=Number(node.dataset.x),y=Number(node.dataset.y);lines.forEach(line=>{if(line.dataset.from===id){line.x1.baseVal.value=x;line.y1.baseVal.value=y}if(line.dataset.to===id){line.x2.baseVal.value=x;line.y2.baseVal.value=y}})};
-nodes.addEventListener('pointerdown',e=>{active=e.target.closest('.node');if(!active)return;const p=point(e);offset={x:p.x-600-Number(active.dataset.x),y:p.y-600-Number(active.dataset.y)};active.setPointerCapture(e.pointerId)});
-nodes.addEventListener('pointermove',e=>{if(!active)return;const p=point(e),x=Math.round(p.x-600-offset.x),y=Math.round(p.y-600-offset.y);active.dataset.x=x;active.dataset.y=y;active.setAttribute('transform','translate('+x+' '+y+')');update(active.dataset.id)});
+nodes.addEventListener('pointerdown',e=>{active=e.target.closest('.node');if(!active)return;const p=point(e);offset={x:p.x-Number(active.dataset.x),y:p.y-Number(active.dataset.y)};active.setPointerCapture(e.pointerId)});
+nodes.addEventListener('pointermove',e=>{if(!active)return;const p=point(e),x=Math.round(p.x-offset.x),y=Math.round(p.y-offset.y);active.dataset.x=x;active.dataset.y=y;active.setAttribute('transform','translate('+x+' '+y+')');update(active.dataset.id)});
 const release=()=>{active=null;offset=null};nodes.addEventListener('pointerup',release);nodes.addEventListener('pointercancel',release);
 document.getElementById('save').addEventListener('click',()=>{const clone=root.cloneNode(true);clone.querySelector('#save')?.remove();const xml='<?xml version="1.0" encoding="UTF-8"?>
 '+new XMLSerializer().serializeToString(clone),blob=new Blob([xml],{type:'image/svg+xml'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='skill-tree-layout.svg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});

@@ -27,7 +27,7 @@ ${wrap(genericDesc,node.basic?20:28).map((row,index)=>`<text class="node-desc" x
 </g>`}).join('\n');
 
 const svg=`<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="3600" height="3600" viewBox="0 0 3600 3600">
+<svg xmlns="http://www.w3.org/2000/svg" width="4400" height="4400" viewBox="0 0 4400 4400">
 <title>Guildmaster Dungeons — Shared Editable Skill Tree Layout</title>
 <desc>This layout controls every class. Drag nodes in a browser, press Save SVG, then replace skill-tree-layout.svg in the project.</desc>
 <style>
@@ -39,18 +39,18 @@ const svg=`<?xml version="1.0" encoding="UTF-8"?>
   .toolbar rect{fill:#1d140b;stroke:#d49d45;stroke-width:2}.toolbar text{fill:#ffe0a0;font:bold 15px Georgia,serif}.toolbar{cursor:pointer}
 </style>
 <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#71532d" opacity=".35"/></pattern></defs>
-<rect class="backdrop" width="3600" height="3600"/><rect class="grid" width="3600" height="3600"/>
-<g class="connections" transform="translate(600 600)">${lineSvg}</g>
-<g class="core"><polygon points="1800,1718 1882,1800 1800,1882 1718,1800"/><text x="1800" y="1807" text-anchor="middle">CLASS</text></g>
-<g id="nodes" transform="translate(600 600)">${nodeSvg}</g>
+<rect class="backdrop" width="4400" height="4400"/><rect class="grid" width="4400" height="4400"/>
+<g class="connections">${lineSvg}</g>
+<g class="core"><polygon points="2000,1918 2082,2000 2000,2082 1918,2000"/><text x="2000" y="2007" text-anchor="middle">CLASS</text></g>
+<g id="nodes">${nodeSvg}</g>
 <g class="toolbar" id="save" transform="translate(28 28)"><rect width="180" height="48" rx="5"/><text x="90" y="30" text-anchor="middle">Save SVG</text></g>
 <text x="230" y="58" fill="#b9a983" font-family="Courier New" font-size="13">Drag nodes freely. Connections follow automatically.</text>
 <script><![CDATA[
 (()=>{const root=document.documentElement,nodes=document.getElementById('nodes'),lines=[...document.querySelectorAll('.connections line')];let active=null,offset=null;
 const point=e=>{const p=root.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(root.getScreenCTM().inverse())};
 const update=id=>{const node=document.querySelector('[data-id="'+CSS.escape(id)+'"]'),x=Number(node.dataset.x),y=Number(node.dataset.y);lines.forEach(line=>{if(line.dataset.from===id){line.x1.baseVal.value=x;line.y1.baseVal.value=y}if(line.dataset.to===id){line.x2.baseVal.value=x;line.y2.baseVal.value=y}})};
-nodes.addEventListener('pointerdown',e=>{active=e.target.closest('.node');if(!active)return;const p=point(e);offset={x:p.x-600-Number(active.dataset.x),y:p.y-600-Number(active.dataset.y)};active.setPointerCapture(e.pointerId)});
-nodes.addEventListener('pointermove',e=>{if(!active)return;const p=point(e),x=Math.round(p.x-600-offset.x),y=Math.round(p.y-600-offset.y);active.dataset.x=x;active.dataset.y=y;active.setAttribute('transform','translate('+x+' '+y+')');update(active.dataset.id)});
+nodes.addEventListener('pointerdown',e=>{active=e.target.closest('.node');if(!active)return;const p=point(e);offset={x:p.x-Number(active.dataset.x),y:p.y-Number(active.dataset.y)};active.setPointerCapture(e.pointerId)});
+nodes.addEventListener('pointermove',e=>{if(!active)return;const p=point(e),x=Math.round(p.x-offset.x),y=Math.round(p.y-offset.y);active.dataset.x=x;active.dataset.y=y;active.setAttribute('transform','translate('+x+' '+y+')');update(active.dataset.id)});
 const release=()=>{active=null;offset=null};nodes.addEventListener('pointerup',release);nodes.addEventListener('pointercancel',release);
 document.getElementById('save').addEventListener('click',()=>{const clone=root.cloneNode(true);clone.querySelector('#save')?.remove();const xml='<?xml version="1.0" encoding="UTF-8"?>\n'+new XMLSerializer().serializeToString(clone),blob=new Blob([xml],{type:'image/svg+xml'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='skill-tree-layout.svg';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 })();
