@@ -278,9 +278,10 @@ assert.match(js,/pointers\.size>=2&&pinchStart/,'mobile skill trees support two-
 assert.match(css,/\.skillTree>\.skillNode,[^\n]*translate:600px 600px/,'the expanded skill canvas provides generous padding around every outer node');
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
 assert.match(js,/skillMultiplier=1\+skillBonus\(h,`\$\{key\}Pct`\)/,'skill-tree attributes scale percentage-wise with character growth');
-assert.match(js,/distance=depth===2\?350:275/,'class talents have enough separation to avoid overlapping neighboring nodes');
+assert.match(js,/distance=250\+depth\*225/,'class talents form spaced local chains away from their branch anchor');
 assert.match(js,/clamp\(next,\.32,1\.65\)/,'the expanded tree can zoom far enough out for a broad overview');
-assert.match(js,/keystone-mana-shield[\s\S]*requires:'int-ring-2'[\s\S]*keystone-aether-conversion[\s\S]*requires:'int-ring-5'/,'Mana Shield and Aether Conversion occupy opposite INT ring routes');
+assert.match(js,/mana-channel[\s\S]*requires:'int-ring-2'[\s\S]*mana-bastion[\s\S]*requires:'mana-channel'[\s\S]*keystone-mana-shield[\s\S]*requires:'mana-bastion'/,'Mana Shield sits behind a dedicated multi-node INT route');
+assert.match(js,/aether-reservoir[\s\S]*requires:'int-ring-5'[\s\S]*aether-unraveling[\s\S]*requires:'aether-reservoir'[\s\S]*keystone-aether-conversion[\s\S]*requires:'aether-unraveling'/,'Aether Conversion sits behind the opposite multi-node INT route');
 assert.match(js,/function ringSkillNodes\(/,'attribute paths culminate in circular two-route clusters');
 assert.match(js,/requiresAny:index===6/,'either side of an attribute ring can unlock its combined notable');
 assert.match(js,/function skillNodeUnlocked\(/,'skill prerequisites support alternate routes');
