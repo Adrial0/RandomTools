@@ -279,4 +279,6 @@ assert.match(js,/distance=depth===2\?285:225/,'class talents are positioned as n
 assert.match(js,/function ringSkillNodes\(/,'attribute paths culminate in circular two-route clusters');
 assert.match(js,/requiresAny:index===6/,'either side of an attribute ring can unlock its combined notable');
 assert.match(js,/function skillNodeUnlocked\(/,'skill prerequisites support alternate routes');
+assert.match(js,/str:\{sector:90/,'attribute rings are rotated counter-clockwise into their neighboring open spaces');
+assert.match(js,/ring-gateway/,'each ring uses a gateway node to keep entrance connections clear');
 console.log('Guildmaster: Dungeons smoke tests passed.');
