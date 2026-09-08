@@ -120,7 +120,7 @@ assert.match(js,/r\.pendingEliteRelics=elite\?makeEliteRelicRewards\(\):null/,'o
 assert.match(js,/r\.pendingReward=r\.pendingEliteRelics;delete r\.pendingEliteRelics/,'claiming the normal reward opens the relic selection afterward');
 assert.match(js,/state\.run\?\.relics/,'character inspection works before a run exists during party selection');
 assert.match(js,/function combatReportRows\(/,'combat renders a per-character live report');
-assert.match(js,/crit:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'character sheets include stacked critical-chance boons');
+assert.match(js,/crit:skillBonus\(h,'noCrit'\)\?0:h\.crit\+gear\.critChance\+runBoonTotal\('crit'\)/,'character sheets include stacked critical-chance boons and respect Resolute Force');
 assert.match(js,/setTimeout\(\(\)=>completeBattleVictory\(b\.id\),2000\)/,'victory keeps the final battle report visible for two seconds');
 assert.match(js,/Round \$\{b\.round\}: the party regenerates Mana/,'mana regeneration occurs at the start of each new round');
 assert.match(js,/\['manaRegen','Meditation','Mana Regen','\+0\.2'/,'Mana Regen training grants 0.2 per rank');
@@ -149,7 +149,8 @@ assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
 assert.match(js,/function enemyIntent\(/,'enemy actions are previewed before their turns');
 assert.match(js,/function enemyIntentHtml\(e\)[\s\S]*base damage/,'enemy intent reveals attack strength without displaying its hidden target');
 assert.doesNotMatch(js,/\$\{intent\.targetName\} · \$\{damage\}/,'enemy intent UI does not reveal the Threat roll winner');
-assert.match(js,/crimsonCovenant[\s\S]*sealedReservoir[\s\S]*glassHeart/,'the relic pool includes run-changing bargains with drawbacks');
+assert.doesNotMatch(js,/\['crimsonCovenant'/,'Crimson Covenant is removed because Vital Leech now owns that tradeoff');
+for(const keystone of ['keystone-mana-shield','keystone-blood-magic','keystone-deterioration','keystone-vital-leech','keystone-aether-conversion','keystone-resolute-force'])assert.match(js,new RegExp(keystone),`the skill tree includes ${keystone}`);
 assert.match(js,/const ENEMY_ROLES=/,'enemies use distinct tactical role profiles');
 assert.match(js,/function inspectEnemy\(/,'enemy cards open a detailed combat inspection');
 assert.match(js,/function stunResistanceChance\([\s\S]*stunsTaken[\s\S]*bossBase/,'enemies build resistance after successful stuns and bosses have base resistance');
