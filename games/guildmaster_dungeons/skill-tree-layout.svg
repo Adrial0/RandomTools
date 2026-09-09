@@ -109,9 +109,16 @@
 <line data-from="cluster-vitality-2" data-to="cluster-vitality-3" x1="1850.9502216373771" y1="5399.112779628418" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="cluster-vitality-1" data-to="cluster-vitality-4" x1="2248.9643095552824" y1="5873.447498807689" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="cluster-vitality-3" data-to="cluster-vitality-4" x1="1733.734119476816" y1="5901.622864496658" x2="1733.734119476816" y2="5901.622864496658"/>
+<line data-from="attribute-str-15" data-to="cluster-regeneration-0" x1="2646.2618309045847" y1="5115.93562965531" x2="3115.1867357038395" y2="6031.34152897182"/>
+<line data-from="cluster-regeneration-0" data-to="cluster-regeneration-1" x1="3115.1867357038395" y1="6031.34152897182" x2="2995.321465011663" y2="6359.354267873667"/>
+<line data-from="cluster-vitality-2" data-to="cluster-regeneration-1" x1="1850.9502216373771" y1="5399.112779628418" x2="2995.321465011663" y2="6359.354267873667"/>
+<line data-from="attribute-str-15" data-to="cluster-regeneration-2" x1="2646.2618309045847" y1="5115.93562965531" x2="2459.078534988338" y2="6049.754267873667"/>
+<line data-from="cluster-regeneration-2" data-to="cluster-regeneration-3" x1="2459.078534988338" y1="6049.754267873667" x2="2520.800000000001" y2="6562.049554555884"/>
+<line data-from="cluster-regeneration-1" data-to="cluster-regeneration-4" x1="2995.321465011663" y1="6359.354267873667" x2="2520.800000000001" y2="6562.049554555884"/>
+<line data-from="cluster-regeneration-3" data-to="cluster-regeneration-4" x1="2520.800000000001" y1="6562.049554555884" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="attribute-str-16" data-to="cluster-armor-0" x1="2356.702311182611" y1="4614.40382968161" x2="2016.4725498231658" y2="4987.350887169799"/>
 <line data-from="cluster-armor-0" data-to="cluster-armor-1" x1="2016.4725498231658" y1="4987.350887169799" x2="1713.807900901019" y2="5161.57531224514"/>
-<line data-from="cluster-vitality-2" data-to="cluster-armor-1" x1="1850.9502216373771" y1="5399.112779628418" x2="1713.807900901019" y2="5161.57531224514"/>
+<line data-from="cluster-regeneration-2" data-to="cluster-armor-1" x1="2459.078534988338" y1="6049.754267873667" x2="1713.807900901019" y2="5161.57531224514"/>
 <line data-from="attribute-str-16" data-to="cluster-armor-2" x1="2356.702311182611" y1="4614.40382968161" x2="1502.029028153765" y2="4579.717641454506"/>
 <line data-from="cluster-armor-2" data-to="cluster-armor-3" x1="1502.029028153765" y1="4579.717641454506" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-1" data-to="cluster-armor-4" x1="1713.807900901019" y1="5161.57531224514" x2="1220.0133506669686" y2="5011.832392014659"/>
@@ -240,7 +247,7 @@
 <line data-from="cluster-tempo-4" data-to="keystone-opening-salvo" x1="4513.720768809847" y1="1086.5447434886837" x2="4612.283474453597" y2="527.5678628789547"/>
 <line data-from="bridge-str-dex-2" data-to="keystone-relentless-control" x1="2301.897388259473" y1="3019.6" x2="946.3944262560694" y2="2236.9999999999995"/>
 <line data-from="cluster-ward-4" data-to="keystone-calculated-violence" x1="6266.265880523184" y1="5901.622864496658" x2="6701.072706437516" y2="6266.469111754737"/>
-<line data-from="cluster-restoration-4" data-to="keystone-pure-renewal" x1="5479.2" y1="6562.049554555882" x2="5763" y2="7053.60557374393"/>
+<line data-from="cluster-regeneration-4" data-to="keystone-pure-renewal" x1="2520.800000000001" y1="6562.049554555884" x2="2910.406077833936" y2="7353.425276456712"/>
 <line data-from="attribute-dex-17" data-to="keystone-tempo-gambit" x1="4837.127328999457" y1="2458.203257545848" x2="5434.153403485272" y2="778.8387163521893"/>
 <line data-from="cluster-armor-4" data-to="keystone-reprisal" x1="1220.0133506669686" y1="5011.832392014659" x2="686.6438191088873" y2="5205.963025366309"/>
 <line data-from="cluster-affliction-3" data-to="keystone-compressed-agony" x1="5479.2" y1="1437.9504454441171" x2="6359.354518021335" y2="1379.671345366708"/>
@@ -753,10 +760,9 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
 <g class="node basic " id="node-cluster-vitality-1" data-id="cluster-vitality-1" data-layout-id="cluster-vitality-1" data-x="2248.9643095552824" data-y="5873.447498807689" transform="translate(2248.9643095552824 5873.447498807689)">
-<title>Recovery — +0.5 HP regeneration per round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
-<text class="node-title" x="0" y="-5" text-anchor="middle">Recovery</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+0.5 HP regeneration</text>
-<text class="node-desc" x="0" y="26" text-anchor="middle">per round.</text>
+<title>Fortitude — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Fortitude</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
 <g class="node basic " id="node-cluster-vitality-2" data-id="cluster-vitality-2" data-layout-id="cluster-vitality-2" data-x="1850.9502216373771" data-y="5399.112779628418" transform="translate(1850.9502216373771 5399.112779628418)">
 <title>Endurance — +3% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -764,17 +770,46 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% maximum HP.</text>
 </g>
 <g class="node basic " id="node-cluster-vitality-3" data-id="cluster-vitality-3" data-layout-id="cluster-vitality-3" data-x="1733.734119476816" data-y="5901.622864496658" transform="translate(1733.734119476816 5901.622864496658)">
-<title>Second Wind — Regenerate 2% maximum HP each round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
-<text class="node-title" x="0" y="-5" text-anchor="middle">Second Wind</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">Regenerate 2%</text>
+<title>Heartwood — +4% maximum HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Heartwood</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+4% maximum HP.</text>
+</g>
+<g class="node major " id="node-cluster-vitality-4" data-id="cluster-vitality-4" data-layout-id="cluster-vitality-4" data-x="1733.734119476816" data-y="5901.622864496658" transform="translate(1733.734119476816 5901.622864496658)">
+<title>Unbroken — +12% maximum HP.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
+<text class="node-title" x="0" y="-31" text-anchor="middle">Unbroken</text>
+<text class="node-desc" x="0" y="-13" text-anchor="middle">+12% maximum HP.</text>
+</g>
+<g class="node basic " id="node-cluster-regeneration-0" data-id="cluster-regeneration-0" data-layout-id="cluster-regeneration-0" data-x="3115.1867357038395" data-y="6031.34152897182" transform="translate(3115.1867357038395 6031.34152897182)">
+<title>Recovery — +0.5 HP regeneration per round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Recovery</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+0.5 HP regeneration</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">per round.</text>
+</g>
+<g class="node basic " id="node-cluster-regeneration-1" data-id="cluster-regeneration-1" data-layout-id="cluster-regeneration-1" data-x="2995.321465011663" data-y="6359.354267873667" transform="translate(2995.321465011663 6359.354267873667)">
+<title>Deep Recovery — Regenerate 0.5% maximum HP each round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Deep Recovery</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Regenerate 0.5%</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">maximum HP each</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">round.</text>
 </g>
-<g class="node major " id="node-cluster-vitality-4" data-id="cluster-vitality-4" data-layout-id="cluster-vitality-4" data-x="1733.734119476816" data-y="5901.622864496658" transform="translate(1733.734119476816 5901.622864496658)">
-<title>Unbroken — +8% maximum HP and +1 HP regeneration.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
-<text class="node-title" x="0" y="-31" text-anchor="middle">Unbroken</text>
-<text class="node-desc" x="0" y="-13" text-anchor="middle">+8% maximum HP and +1 HP</text>
-<text class="node-desc" x="0" y="0" text-anchor="middle">regeneration.</text>
+<g class="node basic " id="node-cluster-regeneration-2" data-id="cluster-regeneration-2" data-layout-id="cluster-regeneration-2" data-x="2459.078534988338" data-y="6049.754267873667" transform="translate(2459.078534988338 6049.754267873667)">
+<title>Recovery — +0.5 HP regeneration per round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Recovery</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+0.5 HP regeneration</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">per round.</text>
+</g>
+<g class="node basic " id="node-cluster-regeneration-3" data-id="cluster-regeneration-3" data-layout-id="cluster-regeneration-3" data-x="2520.800000000001" data-y="6562.049554555884" transform="translate(2520.800000000001 6562.049554555884)">
+<title>Second Wind — Regenerate 1% maximum HP each round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Second Wind</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Regenerate 1%</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">maximum HP each</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">round.</text>
+</g>
+<g class="node major " id="node-cluster-regeneration-4" data-id="cluster-regeneration-4" data-layout-id="cluster-regeneration-4" data-x="2520.800000000001" data-y="6562.049554555884" transform="translate(2520.800000000001 6562.049554555884)">
+<title>Undying Growth — +1 HP and 2% maximum HP regeneration per round.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
+<text class="node-title" x="0" y="-31" text-anchor="middle">Undying Growth</text>
+<text class="node-desc" x="0" y="-13" text-anchor="middle">+1 HP and 2% maximum HP</text>
+<text class="node-desc" x="0" y="0" text-anchor="middle">regeneration per round.</text>
 </g>
 <g class="node basic " id="node-cluster-armor-0" data-id="cluster-armor-0" data-layout-id="cluster-armor-0" data-x="2016.4725498231658" data-y="4987.350887169799" transform="translate(2016.4725498231658 4987.350887169799)">
 <title>Plating — +4% Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -971,20 +1006,19 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">Magical Dodge.</text>
 </g>
 <g class="node basic " id="node-cluster-restoration-0" data-id="cluster-restoration-0" data-layout-id="cluster-restoration-0" data-x="5316.786735703839" data-y="5781.941528971819" transform="translate(5316.786735703839 5781.941528971819)">
-<title>Mending — +4% healing.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<title>Mending — +4% Healing Done.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Mending</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+4% healing.</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+4% Healing Done.</text>
 </g>
 <g class="node basic " id="node-cluster-restoration-1" data-id="cluster-restoration-1" data-layout-id="cluster-restoration-1" data-x="5540.921465011662" data-y="6049.754267873666" transform="translate(5540.921465011662 6049.754267873666)">
-<title>Renewal — +0.5 HP regeneration per round.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
-<text class="node-title" x="0" y="-5" text-anchor="middle">Renewal</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+0.5 HP regeneration</text>
-<text class="node-desc" x="0" y="26" text-anchor="middle">per round.</text>
+<title>Restorative Focus — +5% Healing Done.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Restorative Focus</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+5% Healing Done.</text>
 </g>
 <g class="node basic " id="node-cluster-restoration-2" data-id="cluster-restoration-2" data-layout-id="cluster-restoration-2" data-x="5004.678534988338" data-y="6359.354267873667" transform="translate(5004.678534988338 6359.354267873667)">
-<title>Mending — +4% healing.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<title>Mending — +4% Healing Done.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Mending</text>
-<text class="node-desc" x="0" y="13" text-anchor="middle">+4% healing.</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">+4% Healing Done.</text>
 </g>
 <g class="node basic " id="node-cluster-restoration-3" data-id="cluster-restoration-3" data-layout-id="cluster-restoration-3" data-x="5479.2" data-y="6562.049554555882" transform="translate(5479.2 6562.049554555882)">
 <title>Overflow — Overhealing restores 10% as Magic Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -993,10 +1027,11 @@
 <text class="node-desc" x="0" y="26" text-anchor="middle">10% as Magic Armor.</text>
 </g>
 <g class="node major " id="node-cluster-restoration-4" data-id="cluster-restoration-4" data-layout-id="cluster-restoration-4" data-x="5479.2" data-y="6562.049554555882" transform="translate(5479.2 6562.049554555882)">
-<title>Miracle Worker — +12% healing and +1 HP regeneration.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
+<title>Miracle Worker — +15% Healing Done and 15% stronger overhealing conversion.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Miracle Worker</text>
-<text class="node-desc" x="0" y="-13" text-anchor="middle">+12% healing and +1 HP</text>
-<text class="node-desc" x="0" y="0" text-anchor="middle">regeneration.</text>
+<text class="node-desc" x="0" y="-13" text-anchor="middle">+15% Healing Done and 15%</text>
+<text class="node-desc" x="0" y="0" text-anchor="middle">stronger overhealing</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">conversion.</text>
 </g>
 <g class="node basic " id="node-weapon-sword-0" data-id="weapon-sword-0" data-layout-id="weapon-sword-0" data-x="3434.6356778780537" data-y="6109.968374945841" transform="translate(3434.6356778780537 6109.968374945841)">
 <title>Serration — +5% Sword bleed chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -1407,7 +1442,7 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">Critical Chance, but maximum</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Mana is reduced by 15%.</text>
 </g>
-<g class="node major keystone " id="node-keystone-pure-renewal" data-id="keystone-pure-renewal" data-layout-id="keystone-pure-renewal" data-x="5763" data-y="7053.60557374393" transform="translate(5763 7053.60557374393)">
+<g class="node major keystone " id="node-keystone-pure-renewal" data-id="keystone-pure-renewal" data-layout-id="keystone-pure-renewal" data-x="2910.406077833936" data-y="7353.425276456712" transform="translate(2910.406077833936 7353.425276456712)">
 <title>Pure Renewal — Double HP regeneration, but Lifesteal cannot restore HP.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Pure Renewal</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Double HP regeneration, but</text>
