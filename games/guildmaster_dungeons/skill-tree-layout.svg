@@ -103,39 +103,39 @@
 <line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="5477.48" y1="6015.84" x2="5881.68" y2="6284.16"/>
 <line data-from="attribute-dex-10" data-to="keystone-resolute-force" x1="3385.7666183860674" y1="2682.772262320933" x2="3260.4" y2="2118.3199999999997"/>
 <line data-from="str-ring-2" data-to="keystone-immovable" x1="3789.3" y1="5319.543105154762" x2="3484" y2="5548"/>
-<line data-from="attribute-str-15" data-to="cluster-vitality-0" x1="2646.2618309045847" y1="5115.93562965531" x2="2473.7877838850814" y2="5606.212685599758"/>
+<line data-from="route-vitality" data-to="cluster-vitality-0" x1="2413.993273395774" y1="5301.564639075523" x2="2473.7877838850814" y2="5606.212685599758"/>
 <line data-from="cluster-vitality-0" data-to="cluster-vitality-1" x1="2473.7877838850814" y1="5606.212685599758" x2="2248.9643095552824" y2="5873.447498807689"/>
-<line data-from="attribute-str-15" data-to="cluster-vitality-2" x1="2646.2618309045847" y1="5115.93562965531" x2="1850.9502216373771" y2="5399.112779628418"/>
+<line data-from="route-vitality" data-to="cluster-vitality-2" x1="2413.993273395774" y1="5301.564639075523" x2="1850.9502216373771" y2="5399.112779628418"/>
 <line data-from="cluster-vitality-2" data-to="cluster-vitality-3" x1="1850.9502216373771" y1="5399.112779628418" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="cluster-vitality-1" data-to="cluster-vitality-4" x1="2248.9643095552824" y1="5873.447498807689" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="cluster-vitality-3" data-to="cluster-vitality-4" x1="1733.734119476816" y1="5901.622864496658" x2="1733.734119476816" y2="5901.622864496658"/>
-<line data-from="attribute-str-15" data-to="cluster-regeneration-0" x1="2646.2618309045847" y1="5115.93562965531" x2="3115.1867357038395" y2="6031.34152897182"/>
+<line data-from="route-regeneration" data-to="cluster-regeneration-0" x1="2713.8798170365067" y1="5559.749518663678" x2="3115.1867357038395" y2="6031.34152897182"/>
 <line data-from="cluster-regeneration-0" data-to="cluster-regeneration-1" x1="3115.1867357038395" y1="6031.34152897182" x2="2995.321465011663" y2="6359.354267873667"/>
-<line data-from="attribute-str-15" data-to="cluster-regeneration-2" x1="2646.2618309045847" y1="5115.93562965531" x2="2459.078534988338" y2="6049.754267873667"/>
+<line data-from="route-regeneration" data-to="cluster-regeneration-2" x1="2713.8798170365067" y1="5559.749518663678" x2="2459.078534988338" y2="6049.754267873667"/>
 <line data-from="cluster-regeneration-2" data-to="cluster-regeneration-3" x1="2459.078534988338" y1="6049.754267873667" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="cluster-regeneration-1" data-to="cluster-regeneration-4" x1="2995.321465011663" y1="6359.354267873667" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="cluster-regeneration-3" data-to="cluster-regeneration-4" x1="2520.800000000001" y1="6562.049554555884" x2="2520.800000000001" y2="6562.049554555884"/>
-<line data-from="attribute-str-16" data-to="cluster-armor-0" x1="2356.702311182611" y1="4614.40382968161" x2="2016.4725498231658" y2="4987.350887169799"/>
+<line data-from="route-armor" data-to="cluster-armor-0" x1="2069.925580529421" y1="4695.58643830427" x2="2016.4725498231658" y2="4987.350887169799"/>
 <line data-from="cluster-armor-0" data-to="cluster-armor-1" x1="2016.4725498231658" y1="4987.350887169799" x2="1713.807900901019" y2="5161.57531224514"/>
-<line data-from="attribute-str-16" data-to="cluster-armor-2" x1="2356.702311182611" y1="4614.40382968161" x2="1502.029028153765" y2="4579.717641454506"/>
+<line data-from="route-armor" data-to="cluster-armor-2" x1="2069.925580529421" y1="4695.58643830427" x2="1502.029028153765" y2="4579.717641454506"/>
 <line data-from="cluster-armor-2" data-to="cluster-armor-3" x1="1502.029028153765" y1="4579.717641454506" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-1" data-to="cluster-armor-4" x1="1713.807900901019" y1="5161.57531224514" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-3" data-to="cluster-armor-4" x1="1220.0133506669686" y1="5011.832392014659" x2="1220.0133506669686" y2="5011.832392014659"/>
-<line data-from="attribute-str-17" data-to="cluster-blood-0" x1="2246.2011890628823" y1="4045.924838111333" x2="1798.4" y2="4249.400000000001"/>
+<line data-from="route-blood" data-to="cluster-blood-0" x1="1948.6966183126988" y1="4009.4329158178934" x2="1798.4" y2="4249.400000000001"/>
 <line data-from="cluster-blood-0" data-to="cluster-blood-1" x1="1798.4" y1="4249.400000000001" x2="1454.4" y2="4309.6"/>
-<line data-from="attribute-str-17" data-to="cluster-blood-2" x1="2246.2011890628823" y1="4045.924838111333" x2="1454.4" y2="3690.4000000000005"/>
+<line data-from="route-blood" data-to="cluster-blood-2" x1="1948.6966183126988" y1="4009.4329158178934" x2="1454.4" y2="3690.4000000000005"/>
 <line data-from="cluster-blood-2" data-to="cluster-blood-3" x1="1454.4" y1="3690.4000000000005" x2="1041.6" y2="4000.0000000000005"/>
 <line data-from="cluster-blood-1" data-to="cluster-blood-4" x1="1454.4" y1="4309.6" x2="1041.6" y2="4000.0000000000005"/>
 <line data-from="cluster-blood-3" data-to="cluster-blood-4" x1="1041.6" y1="4000.0000000000005" x2="1041.6" y2="4000.0000000000005"/>
-<line data-from="attribute-dex-15" data-to="cluster-precision-0" x1="3710.4404802780273" y1="2269.660540663081" x2="3372.0851184472413" y2="1875.1551064784553"/>
+<line data-from="route-precision" data-to="cluster-precision-0" x1="3665.815321195186" y1="1975.6955646499773" x2="3372.0851184472413" y2="1875.1551064784553"/>
 <line data-from="cluster-precision-0" data-to="cluster-precision-1" x1="3372.0851184472413" y1="1875.1551064784553" x2="3253.0647185984826" y2="1546.834859737805"/>
-<line data-from="attribute-dex-15" data-to="cluster-precision-2" x1="3710.4404802780273" y1="2269.660540663081" x2="3862.8576792636413" y2="1439.3119081264417"/>
+<line data-from="route-precision" data-to="cluster-precision-2" x1="3665.815321195186" y1="1975.6955646499773" x2="3862.8576792636413" y2="1439.3119081264417"/>
 <line data-from="cluster-precision-2" data-to="cluster-precision-3" x1="3862.8576792636413" y1="1439.3119081264417" x2="3486.279231190153" y2="1086.5447434886837"/>
 <line data-from="cluster-precision-1" data-to="cluster-precision-4" x1="3253.0647185984826" y1="1546.834859737805" x2="3486.279231190153" y2="1086.5447434886837"/>
 <line data-from="cluster-precision-3" data-to="cluster-precision-4" x1="3486.279231190153" y1="1086.5447434886837" x2="3486.279231190153" y2="1086.5447434886837"/>
-<line data-from="attribute-dex-16" data-to="cluster-tempo-0" x1="4289.559519721974" y1="2269.6605406630815" x2="4136.692774350269" y2="1788.5393954581905"/>
+<line data-from="route-tempo" data-to="cluster-tempo-0" x1="4362.641683635855" y1="1980.7133023918414" x2="4136.692774350269" y2="1788.5393954581905"/>
 <line data-from="cluster-tempo-0" data-to="cluster-tempo-1" x1="4136.692774350269" y1="1788.5393954581905" x2="4137.142320736359" y2="1439.3119081264417"/>
-<line data-from="attribute-dex-16" data-to="cluster-tempo-2" x1="4289.559519721974" y1="2269.6605406630815" x2="4746.935281401517" y2="1546.8348597378053"/>
+<line data-from="route-tempo" data-to="cluster-tempo-2" x1="4362.641683635855" y1="1980.7133023918414" x2="4746.935281401517" y2="1546.8348597378053"/>
 <line data-from="cluster-tempo-2" data-to="cluster-tempo-3" x1="4746.935281401517" y1="1546.8348597378053" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="cluster-tempo-1" data-to="cluster-tempo-4" x1="4137.142320736359" y1="1439.3119081264417" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="cluster-tempo-3" data-to="cluster-tempo-4" x1="4513.720768809847" y1="1086.5447434886837" x2="4513.720768809847" y2="1086.5447434886837"/>
@@ -172,18 +172,18 @@
 <line data-from="weapon-sword-4" data-to="weapon-sword-5" x1="3119.20509357438" y1="6755.5257670387855" x2="3171.9861109080152" y2="7090.189903463986"/>
 <line data-from="weapon-sword-2" data-to="weapon-sword-6" x1="3385.0278809691317" y1="6826.752768250999" x2="3087.4040469685115" y2="7405.854463495254"/>
 <line data-from="weapon-sword-5" data-to="weapon-sword-6" x1="3171.9861109080152" y1="7090.189903463986" x2="3087.4040469685115" y2="7405.854463495254"/>
-<line data-from="attribute-str-15" data-to="weapon-axe-0" x1="2646.2618309045847" y1="5115.93562965531" x2="2716.041894892322" y2="5767.216722512636"/>
+<line data-from="route-axe" data-to="weapon-axe-0" x1="2588.7268678346113" y1="5469.5660891776415" x2="2716.041894892322" y2="5767.216722512636"/>
 <line data-from="weapon-axe-0" data-to="weapon-axe-1" x1="2716.041894892322" y1="5767.216722512636" x2="2670.7149694032696" y2="6180.752536954033"/>
 <line data-from="weapon-axe-1" data-to="weapon-axe-2" x1="2670.7149694032696" y1="6180.752536954033" x2="2531.787583755293" y2="6547.544005662096"/>
-<line data-from="attribute-str-15" data-to="weapon-axe-3" x1="2646.2618309045847" y1="5115.93562965531" x2="2336.7527541252916" y2="5938.1147848077"/>
+<line data-from="route-axe" data-to="weapon-axe-3" x1="2588.7268678346113" y1="5469.5660891776415" x2="2336.7527541252916" y2="5938.1147848077"/>
 <line data-from="weapon-axe-3" data-to="weapon-axe-4" x1="2336.7527541252916" y1="5938.1147848077" x2="2030.8442608383252" y2="6183.587377442596"/>
 <line data-from="weapon-axe-4" data-to="weapon-axe-5" x1="2030.8442608383252" y1="6183.587377442596" x2="2119.55742086592" y2="6588.207168404331"/>
 <line data-from="weapon-axe-2" data-to="weapon-axe-6" x1="2531.787583755293" y1="6547.544005662096" x2="1947.6890130956012" y2="6824.763737559567"/>
 <line data-from="weapon-axe-5" data-to="weapon-axe-6" x1="2119.55742086592" y1="6588.207168404331" x2="1947.6890130956012" y2="6824.763737559567"/>
-<line data-from="attribute-str-16" data-to="weapon-hammer-0" x1="2356.702311182611" y1="4614.40382968161" x2="1793.3548185568752" y2="4231.92775429827"/>
+<line data-from="route-hammer" data-to="weapon-hammer-0" x1="1990.3675988196974" y1="4386.938147424679" x2="1793.3548185568752" y2="4231.92775429827"/>
 <line data-from="weapon-hammer-0" data-to="weapon-hammer-1" x1="1793.3548185568752" y1="4231.92775429827" x2="1440.4002977361683" y2="4493.856420603096"/>
 <line data-from="weapon-hammer-1" data-to="weapon-hammer-2" x1="1440.4002977361683" y1="4493.856420603096" x2="1064.0732125288137" y2="4533.409991103576"/>
-<line data-from="attribute-str-16" data-to="weapon-hammer-3" x1="2356.702311182611" y1="4614.40382968161" x2="1393.6551689628732" y2="4049.1062289944043"/>
+<line data-from="route-hammer" data-to="weapon-hammer-3" x1="1990.3675988196974" y1="4386.938147424679" x2="1393.6551689628732" y2="4049.1062289944043"/>
 <line data-from="weapon-hammer-3" data-to="weapon-hammer-4" x1="1393.6551689628732" y1="4049.1062289944043" x2="1017.328083755519" y2="4088.6597994948847"/>
 <line data-from="weapon-hammer-4" data-to="weapon-hammer-5" x1="1017.328083755519" y1="4088.6597994948847" x2="773.2750103231306" y2="4563.974113763038"/>
 <line data-from="weapon-hammer-2" data-to="weapon-hammer-6" x1="1064.0732125288137" y1="4533.409991103576" x2="749.9024459364832" y2="4341.5990179586925"/>
@@ -197,18 +197,18 @@
 <line data-from="weapon-dagger-4" data-to="weapon-dagger-5" x1="1949.99246108938" y1="1888.8212556939611" x2="1673.942821624937" y2="1753.7526932837868"/>
 <line data-from="weapon-dagger-2" data-to="weapon-dagger-6" x1="1818.5630973985376" y1="2024.920345918034" x2="1500.7257977033896" y2="1586.47895767726"/>
 <line data-from="weapon-dagger-5" data-to="weapon-dagger-6" x1="1673.942821624937" y1="1753.7526932837868" x2="1500.7257977033896" y2="1586.47895767726"/>
-<line data-from="attribute-dex-16" data-to="weapon-bow-0" x1="4289.559519721974" y1="2269.6605406630815" x2="4909.463133917489" y2="1957.3123567111445"/>
+<line data-from="route-bow" data-to="weapon-bow-0" x1="4684.802397823686" y1="2072.854250047666" x2="4909.463133917489" y2="1957.3123567111445"/>
 <line data-from="weapon-bow-0" data-to="weapon-bow-1" x1="4909.463133917489" y1="1957.3123567111445" x2="4782.259847320868" y2="1524.1229248467262"/>
 <line data-from="weapon-bow-1" data-to="weapon-bow-2" x1="4782.259847320868" y1="1524.1229248467262" x2="4848.886972092938" y2="1120.7491202378906"/>
-<line data-from="attribute-dex-16" data-to="weapon-bow-3" x1="4289.559519721974" y1="2269.6605406630815" x2="5316.501230950261" y2="1761.9825137174535"/>
+<line data-from="route-bow" data-to="weapon-bow-3" x1="4684.802397823686" y1="2072.854250047666" x2="5316.501230950261" y2="1761.9825137174535"/>
 <line data-from="weapon-bow-3" data-to="weapon-bow-4" x1="5316.501230950261" y1="1761.9825137174535" x2="5571.684138179764" y2="1442.5591522394634"/>
 <line data-from="weapon-bow-4" data-to="weapon-bow-5" x1="5571.684138179764" y1="1442.5591522394634" x2="5329.215349571716" y2="1014.5334444239802"/>
 <line data-from="weapon-bow-2" data-to="weapon-bow-6" x1="4848.886972092938" y1="1120.7491202378906" x2="5434.153403485272" y2="778.8387163521893"/>
 <line data-from="weapon-bow-5" data-to="weapon-bow-6" x1="5329.215349571716" y1="1014.5334444239802" x2="5434.153403485272" y2="778.8387163521893"/>
-<line data-from="attribute-dex-15" data-to="weapon-spear-0" x1="3710.4404802780273" y1="2269.660540663081" x2="3181.7093573422817" y2="1974.6595880843095"/>
+<line data-from="route-spear" data-to="weapon-spear-0" x1="3450.967549560393" y1="2036.8597373172388" x2="3181.7093573422817" y2="1974.6595880843095"/>
 <line data-from="weapon-spear-0" data-to="weapon-spear-1" x1="3181.7093573422817" y1="1974.6595880843095" x2="2934.768519710613" y2="1684.8634136620617"/>
 <line data-from="weapon-spear-1" data-to="weapon-spear-2" x1="2934.768519710613" y1="1684.8634136620617" x2="2816.938728209855" y2="1324.3521929838585"/>
-<line data-from="attribute-dex-15" data-to="weapon-spear-3" x1="3710.4404802780273" y1="2269.660540663081" x2="3158.0343918902954" y2="1594.6581459675103"/>
+<line data-from="route-spear" data-to="weapon-spear-3" x1="3450.967549560393" y1="2036.8597373172388" x2="3158.0343918902954" y2="1594.6581459675103"/>
 <line data-from="weapon-spear-3" data-to="weapon-spear-4" x1="3158.0343918902954" y1="1594.6581459675103" x2="2992.3619134938913" y2="1253.4766255095683"/>
 <line data-from="weapon-spear-4" data-to="weapon-spear-5" x1="2992.3619134938913" y1="1253.4766255095683" x2="2788.6721195303066" y2="1001.8582878728362"/>
 <line data-from="weapon-spear-2" data-to="weapon-spear-6" x1="2816.938728209855" y1="1324.3521929838585" x2="2653.364217988479" y2="666.9594796033125"/>
@@ -250,17 +250,27 @@
 <line data-from="bridge-int-str-2" data-to="keystone-spellblade" x1="4000" y1="5960.8" x2="3266.903378176581" y2="7448.948440187399"/>
 <line data-from="cluster-vitality-4" data-to="keystone-glass-cannon" x1="1733.734119476816" y1="5901.622864496658" x2="1298.927293562484" y2="6266.469111754738"/>
 <line data-from="attribute-str-14" data-to="class-0-0" x1="3083.3285180623398" y1="5495.871904342819" x2="2813.71925866891" y2="5935.834229149532"/>
-<line data-from="attribute-str-15" data-to="class-0-1" x1="2646.2618309045847" y1="5115.93562965531" x2="2248.103545876521" y2="5444.151991318636"/>
-<line data-from="attribute-str-16" data-to="class-0-2" x1="2356.702311182611" y1="4614.40382968161" x2="1776.7148916000033" y2="4831.252240157472"/>
-<line data-from="attribute-str-17" data-to="class-1-0" x1="2246.2011890628823" y1="4045.924838111333" x2="1730.3780093754945" y2="4059.432143438196"/>
+<line data-from="route-vitality" data-to="class-0-1" x1="2413.993273395774" y1="5301.564639075523" x2="2248.103545876521" y2="5444.151991318636"/>
+<line data-from="route-armor" data-to="class-0-2" x1="2069.925580529421" y1="4695.58643830427" x2="1776.7148916000033" y2="4831.252240157472"/>
+<line data-from="route-blood" data-to="class-1-0" x1="1948.6966183126988" y1="4009.4329158178934" x2="1730.3780093754945" y2="4059.432143438196"/>
 <line data-from="attribute-dex-14" data-to="class-1-1" x1="3162.872671000543" y1="2458.203257545848" x2="2916.658750706585" y2="2004.7336274122738"/>
-<line data-from="attribute-dex-15" data-to="class-1-2" x1="3710.4404802780273" y1="2269.660540663081" x2="3608.2430027290957" y2="1658.9524961912275"/>
-<line data-from="attribute-dex-16" data-to="class-2-0" x1="4289.559519721974" y1="2269.6605406630815" x2="4374.724084346083" y2="1760.7371702698701"/>
+<line data-from="route-precision" data-to="class-1-2" x1="3665.815321195186" y1="1975.6955646499773" x2="3608.2430027290957" y2="1658.9524961912275"/>
+<line data-from="route-tempo" data-to="class-2-0" x1="4362.641683635855" y1="1980.7133023918414" x2="4374.724084346083" y2="1760.7371702698701"/>
 <line data-from="attribute-dex-17" data-to="class-2-1" x1="4837.127328999457" y1="2458.203257545848" x2="5083.341249293415" y2="2004.7336274122738"/>
 <line data-from="attribute-int-14" data-to="class-2-2" x1="5753.798810937118" y1="4045.9248381113325" x2="6372.786626561983" y2="4062.1336045035678"/>
 <line data-from="attribute-int-15" data-to="class-3-0" x1="5643.297688817389" y1="4614.40382968161" x2="6126.620538469562" y2="4795.110838411495"/>
 <line data-from="attribute-int-16" data-to="class-3-1" x1="5353.738169095415" y1="5115.935629655309" x2="5751.896454123479" y2="5444.151991318635"/>
-<line data-from="int-ring-6" data-to="class-3-2" x1="5273.576958805395" y1="3264.7" x2="5809.81988882872" y2="2955.1"/></g>
+<line data-from="int-ring-6" data-to="class-3-2" x1="5273.576958805395" y1="3264.7" x2="5809.81988882872" y2="2955.1"/>
+<line data-from="attribute-str-15" data-to="route-vitality" x1="2646.2618309045847" y1="5115.93562965531" x2="2413.993273395774" y2="5301.564639075523"/>
+<line data-from="attribute-str-15" data-to="route-regeneration" x1="2646.2618309045847" y1="5115.93562965531" x2="2713.8798170365067" y2="5559.749518663678"/>
+<line data-from="attribute-str-15" data-to="route-axe" x1="2646.2618309045847" y1="5115.93562965531" x2="2588.7268678346113" y2="5469.5660891776415"/>
+<line data-from="attribute-str-16" data-to="route-armor" x1="2356.702311182611" y1="4614.40382968161" x2="2069.925580529421" y2="4695.58643830427"/>
+<line data-from="attribute-str-16" data-to="route-hammer" x1="2356.702311182611" y1="4614.40382968161" x2="1990.3675988196974" y2="4386.938147424679"/>
+<line data-from="attribute-str-17" data-to="route-blood" x1="2246.2011890628823" y1="4045.924838111333" x2="1948.6966183126988" y2="4009.4329158178934"/>
+<line data-from="attribute-dex-15" data-to="route-precision" x1="3710.4404802780273" y1="2269.660540663081" x2="3665.815321195186" y2="1975.6955646499773"/>
+<line data-from="attribute-dex-15" data-to="route-spear" x1="3710.4404802780273" y1="2269.660540663081" x2="3450.967549560393" y2="2036.8597373172388"/>
+<line data-from="attribute-dex-16" data-to="route-tempo" x1="4289.559519721974" y1="2269.6605406630815" x2="4362.641683635855" y2="1980.7133023918414"/>
+<line data-from="attribute-dex-16" data-to="route-bow" x1="4289.559519721974" y1="2269.6605406630815" x2="4684.802397823686" y2="2072.854250047666"/></g>
 <g class="core"><polygon points="2000,1918 2082,2000 2000,2082 1918,2000"/><text x="2000" y="2007" text-anchor="middle">CLASS</text></g>
 <g id="nodes"><g class="node basic " id="node-attribute-str-0" data-id="attribute-str-0" data-layout-id="attribute-str-0" data-x="3784.0132642961607" data-y="4124.7" transform="translate(3784.0132642961607 4124.7)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -1574,6 +1584,56 @@
 <text class="node-title" x="0" y="-31" text-anchor="middle">Class Slot 3.3</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Class-specific name and</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">effect appear here in game.</text>
+</g>
+<g class="node basic " id="node-route-vitality" data-id="route-vitality" data-layout-id="route-vitality" data-x="2413.993273395774" data-y="5301.564639075523" transform="translate(2413.993273395774 5301.564639075523)">
+<title>Vitality Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Vitality Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-regeneration" data-id="route-regeneration" data-layout-id="route-regeneration" data-x="2713.8798170365067" data-y="5559.749518663678" transform="translate(2713.8798170365067 5559.749518663678)">
+<title>Regeneration Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Regeneration Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-axe" data-id="route-axe" data-layout-id="route-axe" data-x="2588.7268678346113" data-y="5469.5660891776415" transform="translate(2588.7268678346113 5469.5660891776415)">
+<title>Axe Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Axe Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-armor" data-id="route-armor" data-layout-id="route-armor" data-x="2069.925580529421" data-y="4695.58643830427" transform="translate(2069.925580529421 4695.58643830427)">
+<title>Armor Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Armor Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-hammer" data-id="route-hammer" data-layout-id="route-hammer" data-x="1990.3675988196974" data-y="4386.938147424679" transform="translate(1990.3675988196974 4386.938147424679)">
+<title>Hammer Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Hammer Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-blood" data-id="route-blood" data-layout-id="route-blood" data-x="1948.6966183126988" data-y="4009.4329158178934" transform="translate(1948.6966183126988 4009.4329158178934)">
+<title>Blood Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Blood Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-precision" data-id="route-precision" data-layout-id="route-precision" data-x="3665.815321195186" data-y="1975.6955646499773" transform="translate(3665.815321195186 1975.6955646499773)">
+<title>Precision Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Precision Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-spear" data-id="route-spear" data-layout-id="route-spear" data-x="3450.967549560393" data-y="2036.8597373172388" transform="translate(3450.967549560393 2036.8597373172388)">
+<title>Spear Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Spear Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-tempo" data-id="route-tempo" data-layout-id="route-tempo" data-x="4362.641683635855" data-y="1980.7133023918414" transform="translate(4362.641683635855 1980.7133023918414)">
+<title>Tempo Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Tempo Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-route-bow" data-id="route-bow" data-layout-id="route-bow" data-x="4684.802397823686" data-y="2072.854250047666" transform="translate(4684.802397823686 2072.854250047666)">
+<title>Bow Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Bow Route</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
 </g></g>
 <g class="toolbar" id="save" transform="translate(28 28)"><rect width="180" height="48" rx="5"/><text x="90" y="30" text-anchor="middle">Save SVG</text></g>
 <text x="230" y="58" fill="#b9a983" font-family="Courier New" font-size="13">Drag nodes freely. Connections follow automatically.</text>
