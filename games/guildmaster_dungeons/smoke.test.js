@@ -2,6 +2,8 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 const html=fs.readFileSync(__dirname+'/index.html','utf8');
 const css=fs.readFileSync(__dirname+'/styles.css','utf8');
 const js=fs.readFileSync(__dirname+'/game.js','utf8');
+const sharedItems=JSON.parse(fs.readFileSync(__dirname+'/../guildmaster/data/items.json','utf8'));
+assert.equal(sharedItems.weapons['Oak Staff'].type,'arcane','the Apprentice Staff base weapon is magical');
 assert.match(html,/Guildmaster: Dungeons/);
 assert.match(js,/function beginDraft\(/,'a new expedition begins with a recruit draft');
 assert.match(js,/draftSelection\.filter\(Boolean\)\.length!==2/,'exactly two adventurers start a run');

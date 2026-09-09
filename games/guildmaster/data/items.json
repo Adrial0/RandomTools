@@ -182,7 +182,7 @@
     },
     "Oak Staff": {
       "scale": "int",
-      "type": "physical",
+      "type": "arcane",
       "base": 9,
       "healingPower": 0.08,
       "icon": "🪄",
