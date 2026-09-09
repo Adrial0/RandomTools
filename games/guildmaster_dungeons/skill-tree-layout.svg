@@ -157,65 +157,65 @@
 <line data-from="cluster-restoration-2" data-to="cluster-restoration-3" x1="5004.678534988338" y1="6359.354267873667" x2="5479.2" y2="6562.049554555882"/>
 <line data-from="cluster-restoration-1" data-to="cluster-restoration-4" x1="5540.921465011662" y1="6049.754267873666" x2="5479.2" y2="6562.049554555882"/>
 <line data-from="cluster-restoration-3" data-to="cluster-restoration-4" x1="5479.2" y1="6562.049554555882" x2="5479.2" y2="6562.049554555882"/>
-<line data-from="attribute-str-14" data-to="weapon-sword-0" x1="3083.3285180623398" y1="5495.871904342819" x2="3111.5244768652224" y2="5995.548697674498"/>
-<line data-from="bridge-int-str-3" data-to="weapon-sword-0" x1="4000" y1="6210.2" x2="3111.5244768652224" y2="5995.548697674498"/>
-<line data-from="weapon-sword-0" data-to="weapon-sword-1" x1="3111.5244768652224" y1="5995.548697674498" x2="3128.7368903616743" y2="6379.7670377125905"/>
-<line data-from="weapon-sword-1" data-to="weapon-sword-2" x1="3128.7368903616743" y1="6379.7670377125905" x2="2950.39765113979" y2="6695.74791649129"/>
-<line data-from="attribute-str-14" data-to="weapon-sword-3" x1="3083.3285180623398" y1="5495.871904342819" x2="2814.4772529326196" y2="6239.8496324945145"/>
-<line data-from="weapon-sword-3" data-to="weapon-sword-4" x1="2814.4772529326196" y1="6239.8496324945145" x2="2698.989941196546" y2="6583.81399231683"/>
-<line data-from="weapon-sword-4" data-to="weapon-sword-5" x1="2698.989941196546" y1="6583.81399231683" x2="2698.7681314719002" y2="6922.6146280902085"/>
-<line data-from="weapon-sword-2" data-to="weapon-sword-6" x1="2950.39765113979" y1="6695.74791649129" x2="2565.846596514729" y2="7221.161283647811"/>
-<line data-from="weapon-sword-5" data-to="weapon-sword-6" x1="2698.7681314719002" y1="6922.6146280902085" x2="2565.846596514729" y2="7221.161283647811"/>
-<line data-from="attribute-str-15" data-to="weapon-axe-0" x1="2646.2618309045847" y1="5115.93562965531" x2="2376.67444322718" y2="5461.648896530291"/>
-<line data-from="weapon-axe-0" data-to="weapon-axe-1" x1="2376.67444322718" y1="5461.648896530291" x2="2246.359089417214" y2="5856.723963525645"/>
-<line data-from="weapon-axe-1" data-to="weapon-axe-2" x1="2246.359089417214" y1="5856.723963525645" x2="2034.207366032802" y2="6186.615530961103"/>
-<line data-from="attribute-str-15" data-to="weapon-axe-3" x1="2646.2618309045847" y1="5115.93562965531" x2="1970.141975112277" y2="5549.953779568576"/>
-<line data-from="weapon-axe-3" data-to="weapon-axe-4" x1="1970.141975112277" y1="5549.953779568576" x2="1619.881694575397" y2="5726.4602550255"/>
-<line data-from="weapon-axe-4" data-to="weapon-axe-5" x1="1619.881694575397" y1="5726.4602550255" x2="1622.5310743327204" y2="6140.682635863261"/>
-<line data-from="weapon-axe-2" data-to="weapon-axe-6" x1="2034.207366032802" y1="6186.615530961103" x2="1405.2355273631306" y2="6336.33642516259"/>
-<line data-from="weapon-axe-5" data-to="weapon-axe-6" x1="1622.5310743327204" y1="6140.682635863261" x2="1405.2355273631306" y2="6336.33642516259"/>
-<line data-from="attribute-str-16" data-to="weapon-hammer-0" x1="2356.702311182611" y1="4614.40382968161" x2="1889.795801644313" y2="4685.646907119133"/>
-<line data-from="weapon-hammer-0" data-to="weapon-hammer-1" x1="1889.795801644313" y1="4685.646907119133" x2="1599.0122158204658" y2="5015.23517483421"/>
-<line data-from="weapon-hammer-1" data-to="weapon-hammer-2" x1="1599.0122158204658" y1="5015.23517483421" x2="1239.1324300543793" y2="5132.16720550569"/>
-<line data-from="attribute-str-16" data-to="weapon-hammer-3" x1="2356.702311182611" y1="4614.40382968161" x2="1460.819815935989" y2="4589.922700747017"/>
-<line data-from="weapon-hammer-3" data-to="weapon-hammer-4" x1="1460.819815935989" y1="4589.922700747017" x2="1100.940030169903" y2="4706.854731418497"/>
-<line data-from="weapon-hammer-4" data-to="weapon-hammer-5" x1="1100.940030169903" y1="4706.854731418497" x2="961.0435046896764" y2="5222.523774660925"/>
-<line data-from="weapon-hammer-2" data-to="weapon-hammer-6" x1="1239.1324300543793" y1="5132.16720550569" x2="891.9473047474385" y2="5009.867537617329"/>
-<line data-from="weapon-hammer-5" data-to="weapon-hammer-6" x1="961.0435046896764" y1="5222.523774660925" x2="891.9473047474385" y2="5009.867537617329"/>
-<line data-from="attribute-dex-14" data-to="weapon-dagger-0" x1="3162.872671000543" y1="2458.203257545848" x2="2815.1005251745537" y2="2103.7644569942313"/>
-<line data-from="bridge-str-dex-3" data-to="weapon-dagger-0" x1="2085.910652555634" y1="2894.8999999999996" x2="2815.1005251745537" y2="2103.7644569942313"/>
-<line data-from="weapon-dagger-0" data-to="weapon-dagger-1" x1="2815.1005251745537" y1="2103.7644569942313" x2="2507.0022689023963" y2="1870.3663754210193"/>
-<line data-from="weapon-dagger-1" data-to="weapon-dagger-2" x1="2507.0022689023963" y1="1870.3663754210193" x2="2361.1761101409" y2="1555.8513019811808"/>
-<line data-from="attribute-dex-14" data-to="weapon-dagger-3" x1="3162.872671000543" y1="2458.203257545848" x2="2740.3851049646446" y2="1724.5325939040413"/>
-<line data-from="weapon-dagger-3" data-to="weapon-dagger-4" x1="2740.3851049646446" y1="1724.5325939040413" x2="2521.6268099336958" y2="1455.5905771882585"/>
-<line data-from="weapon-dagger-4" data-to="weapon-dagger-5" x1="2521.6268099336958" y1="1455.5905771882585" x2="2286.453067175509" y2="1257.7516762685805"/>
-<line data-from="weapon-dagger-2" data-to="weapon-dagger-6" x1="2361.1761101409" y1="1555.8513019811808" x2="2158.8485083481532" y2="1053.541694714113"/>
-<line data-from="weapon-dagger-5" data-to="weapon-dagger-6" x1="2286.453067175509" y1="1257.7516762685805" x2="2158.8485083481532" y2="1053.541694714113"/>
-<line data-from="attribute-dex-16" data-to="weapon-bow-0" x1="4289.559519721974" y1="2269.6605406630815" x2="4464.89054066851" y2="1812.8619647592109"/>
-<line data-from="weapon-bow-0" data-to="weapon-bow-1" x1="4464.89054066851" y1="1812.8619647592109" x2="4250.401803855255" y2="1415.5858117116686"/>
-<line data-from="weapon-bow-1" data-to="weapon-bow-2" x1="4250.401803855255" y1="1415.5858117116686" x2="4231.706836347032" y2="1007.1741343689828"/>
-<line data-from="attribute-dex-16" data-to="weapon-bow-3" x1="4289.559519721974" y1="2269.6605406630815" x2="4822.422520764385" y2="1537.1725685018946"/>
-<line data-from="weapon-bow-3" data-to="weapon-bow-4" x1="4822.422520764385" y1="1537.1725685018946" x2="5005.617218047619" y2="1171.6738641439938"/>
-<line data-from="weapon-bow-4" data-to="weapon-bow-5" x1="5005.617218047619" y1="1171.6738641439938" x2="4679.455405592438" y2="803.4136408019235"/>
-<line data-from="weapon-bow-2" data-to="weapon-bow-6" x1="4231.706836347032" y1="1007.1741343689828" x2="4733.09662182342" y2="551.0515598126017"/>
-<line data-from="weapon-bow-5" data-to="weapon-bow-6" x1="4679.455405592438" y1="803.4136408019235" x2="4733.09662182342" y2="551.0515598126017"/>
-<line data-from="attribute-dex-15" data-to="weapon-spear-0" x1="3710.4404802780273" y1="2269.660540663081" x2="3620.6829207043575" y2="1848.7859443201328"/>
-<line data-from="weapon-spear-0" data-to="weapon-spear-1" x1="3620.6829207043575" y1="1848.7859443201328" x2="3439.3903454683923" y2="1513.9806245232216"/>
-<line data-from="weapon-spear-1" data-to="weapon-spear-2" x1="3439.3903454683923" y1="1513.9806245232216" x2="3399.089915066941" y2="1136.8492477995956"/>
-<line data-from="attribute-dex-15" data-to="weapon-spear-3" x1="3710.4404802780273" y1="2269.660540663081" x2="3676.532052393732" y2="1472.166143341025"/>
-<line data-from="weapon-spear-3" data-to="weapon-spear-4" x1="3676.532052393732" y1="1472.166143341025" x2="3585.415541936851" y2="1103.9950125850123"/>
-<line data-from="weapon-spear-4" data-to="weapon-spear-5" x1="3585.415541936851" y1="1103.9950125850123" x2="3438.4912526962144" y2="815.5256498597241"/>
-<line data-from="weapon-spear-2" data-to="weapon-spear-6" x1="3399.089915066941" y1="1136.8492477995956" x2="3375.769530922919" y2="459.81308947171465"/>
-<line data-from="weapon-spear-5" data-to="weapon-spear-6" x1="3438.4912526962144" y1="815.5256498597241" x2="3375.769530922919" y2="459.81308947171465"/>
-<line data-from="attribute-int-14" data-to="weapon-arcane-0" x1="5753.798810937118" y1="4045.9248381113325" x2="6213.395114716498" y2="4154.775663943466"/>
-<line data-from="bridge-dex-int-3" data-to="weapon-arcane-0" x1="5914.089347444367" y1="2894.9000000000005" x2="6213.395114716498" y2="4154.775663943466"/>
-<line data-from="weapon-arcane-0" data-to="weapon-arcane-1" x1="6213.395114716498" y1="4154.775663943466" x2="6607.6707102124" y2="3940.9580903056767"/>
-<line data-from="weapon-arcane-1" data-to="weapon-arcane-2" x1="6607.6707102124" y1="3940.9580903056767" x2="6965.591222469451" y2="4000.470331950993"/>
-<line data-from="attribute-int-14" data-to="weapon-arcane-3" x1="5753.798810937118" y1="4045.9248381113325" x2="6574.075992457229" y2="4421.3849369108075"/>
-<line data-from="weapon-arcane-3" data-to="weapon-arcane-4" x1="6574.075992457229" y1="4421.3849369108075" x2="6936.795750107876" y2="4412.264771898248"/>
-<line data-from="weapon-arcane-4" data-to="weapon-arcane-5" x1="6936.795750107876" y1="4412.264771898248" x2="7260.0393162491055" y2="4227.9641561958015"/>
-<line data-from="weapon-arcane-2" data-to="weapon-arcane-6" x1="6965.591222469451" y1="4000.470331950993" x2="7517.41084121614" y2="4245.961326421786"/>
-<line data-from="weapon-arcane-5" data-to="weapon-arcane-6" x1="7260.0393162491055" y1="4227.9641561958015" x2="7517.41084121614" y2="4245.961326421786"/>
+<line data-from="attribute-str-14" data-to="weapon-sword-0" x1="3083.3285180623398" y1="5495.871904342819" x2="3434.6356778780537" y2="6109.968374945841"/>
+<line data-from="bridge-int-str-3" data-to="weapon-sword-0" x1="4000" y1="6210.2" x2="3434.6356778780537" y2="6109.968374945841"/>
+<line data-from="weapon-sword-0" data-to="weapon-sword-1" x1="3434.6356778780537" y1="6109.968374945841" x2="3511.741168484506" y2="6486.763734946915"/>
+<line data-from="weapon-sword-1" data-to="weapon-sword-2" x1="3511.741168484506" y1="6486.763734946915" x2="3385.0278809691317" y2="6826.752768250999"/>
+<line data-from="attribute-str-14" data-to="weapon-sword-3" x1="3083.3285180623398" y1="5495.871904342819" x2="3179.4626842410667" y2="6397.729983431647"/>
+<line data-from="weapon-sword-3" data-to="weapon-sword-4" x1="3179.4626842410667" y1="6397.729983431647" x2="3119.20509357438" y2="6755.5257670387855"/>
+<line data-from="weapon-sword-4" data-to="weapon-sword-5" x1="3119.20509357438" y1="6755.5257670387855" x2="3171.9861109080152" y2="7090.189903463986"/>
+<line data-from="weapon-sword-2" data-to="weapon-sword-6" x1="3385.0278809691317" y1="6826.752768250999" x2="3087.4040469685115" y2="7405.854463495254"/>
+<line data-from="weapon-sword-5" data-to="weapon-sword-6" x1="3171.9861109080152" y1="7090.189903463986" x2="3087.4040469685115" y2="7405.854463495254"/>
+<line data-from="attribute-str-15" data-to="weapon-axe-0" x1="2646.2618309045847" y1="5115.93562965531" x2="2716.041894892322" y2="5767.216722512636"/>
+<line data-from="weapon-axe-0" data-to="weapon-axe-1" x1="2716.041894892322" y1="5767.216722512636" x2="2670.7149694032696" y2="6180.752536954033"/>
+<line data-from="weapon-axe-1" data-to="weapon-axe-2" x1="2670.7149694032696" y1="6180.752536954033" x2="2531.787583755293" y2="6547.544005662096"/>
+<line data-from="attribute-str-15" data-to="weapon-axe-3" x1="2646.2618309045847" y1="5115.93562965531" x2="2336.7527541252916" y2="5938.1147848077"/>
+<line data-from="weapon-axe-3" data-to="weapon-axe-4" x1="2336.7527541252916" y1="5938.1147848077" x2="2030.8442608383252" y2="6183.587377442596"/>
+<line data-from="weapon-axe-4" data-to="weapon-axe-5" x1="2030.8442608383252" y1="6183.587377442596" x2="2119.55742086592" y2="6588.207168404331"/>
+<line data-from="weapon-axe-2" data-to="weapon-axe-6" x1="2531.787583755293" y1="6547.544005662096" x2="1947.6890130956012" y2="6824.763737559567"/>
+<line data-from="weapon-axe-5" data-to="weapon-axe-6" x1="2119.55742086592" y1="6588.207168404331" x2="1947.6890130956012" y2="6824.763737559567"/>
+<line data-from="attribute-str-16" data-to="weapon-hammer-0" x1="2356.702311182611" y1="4614.40382968161" x2="1793.3548185568752" y2="4231.92775429827"/>
+<line data-from="weapon-hammer-0" data-to="weapon-hammer-1" x1="1793.3548185568752" y1="4231.92775429827" x2="1440.4002977361683" y2="4493.856420603096"/>
+<line data-from="weapon-hammer-1" data-to="weapon-hammer-2" x1="1440.4002977361683" y1="4493.856420603096" x2="1064.0732125288137" y2="4533.409991103576"/>
+<line data-from="attribute-str-16" data-to="weapon-hammer-3" x1="2356.702311182611" y1="4614.40382968161" x2="1393.6551689628732" y2="4049.1062289944043"/>
+<line data-from="weapon-hammer-3" data-to="weapon-hammer-4" x1="1393.6551689628732" y1="4049.1062289944043" x2="1017.328083755519" y2="4088.6597994948847"/>
+<line data-from="weapon-hammer-4" data-to="weapon-hammer-5" x1="1017.328083755519" y1="4088.6597994948847" x2="773.2750103231306" y2="4563.974113763038"/>
+<line data-from="weapon-hammer-2" data-to="weapon-hammer-6" x1="1064.0732125288137" y1="4533.409991103576" x2="749.9024459364832" y2="4341.5990179586925"/>
+<line data-from="weapon-hammer-5" data-to="weapon-hammer-6" x1="773.2750103231306" y1="4563.974113763038" x2="749.9024459364832" y2="4341.5990179586925"/>
+<line data-from="attribute-dex-14" data-to="weapon-dagger-0" x1="3162.872671000543" y1="2458.203257545848" x2="2391.556206442776" y2="2446.743883653682"/>
+<line data-from="bridge-str-dex-3" data-to="weapon-dagger-0" x1="2085.910652555634" y1="2894.8999999999996" x2="2391.556206442776" y2="2446.743883653682"/>
+<line data-from="weapon-dagger-0" data-to="weapon-dagger-1" x1="2391.556206442776" y1="2446.743883653682" x2="2036.145678785297" y2="2294.814436770491"/>
+<line data-from="weapon-dagger-1" data-to="weapon-dagger-2" x1="2036.145678785297" y1="2294.814436770491" x2="1818.5630973985376" y2="2024.920345918034"/>
+<line data-from="attribute-dex-14" data-to="weapon-dagger-3" x1="3162.872671000543" y1="2458.203257545848" x2="2227.3156623356126" y2="2096.852123717294"/>
+<line data-from="weapon-dagger-3" data-to="weapon-dagger-4" x1="2227.3156623356126" y1="2096.852123717294" x2="1949.99246108938" y2="1888.8212556939611"/>
+<line data-from="weapon-dagger-4" data-to="weapon-dagger-5" x1="1949.99246108938" y1="1888.8212556939611" x2="1673.942821624937" y2="1753.7526932837868"/>
+<line data-from="weapon-dagger-2" data-to="weapon-dagger-6" x1="1818.5630973985376" y1="2024.920345918034" x2="1500.7257977033896" y2="1586.47895767726"/>
+<line data-from="weapon-dagger-5" data-to="weapon-dagger-6" x1="1673.942821624937" y1="1753.7526932837868" x2="1500.7257977033896" y2="1586.47895767726"/>
+<line data-from="attribute-dex-16" data-to="weapon-bow-0" x1="4289.559519721974" y1="2269.6605406630815" x2="4909.463133917489" y2="1957.3123567111445"/>
+<line data-from="weapon-bow-0" data-to="weapon-bow-1" x1="4909.463133917489" y1="1957.3123567111445" x2="4782.259847320868" y2="1524.1229248467262"/>
+<line data-from="weapon-bow-1" data-to="weapon-bow-2" x1="4782.259847320868" y1="1524.1229248467262" x2="4848.886972092938" y2="1120.7491202378906"/>
+<line data-from="attribute-dex-16" data-to="weapon-bow-3" x1="4289.559519721974" y1="2269.6605406630815" x2="5316.501230950261" y2="1761.9825137174535"/>
+<line data-from="weapon-bow-3" data-to="weapon-bow-4" x1="5316.501230950261" y1="1761.9825137174535" x2="5571.684138179764" y2="1442.5591522394634"/>
+<line data-from="weapon-bow-4" data-to="weapon-bow-5" x1="5571.684138179764" y1="1442.5591522394634" x2="5329.215349571716" y2="1014.5334444239802"/>
+<line data-from="weapon-bow-2" data-to="weapon-bow-6" x1="4848.886972092938" y1="1120.7491202378906" x2="5434.153403485272" y2="778.8387163521893"/>
+<line data-from="weapon-bow-5" data-to="weapon-bow-6" x1="5329.215349571716" y1="1014.5334444239802" x2="5434.153403485272" y2="778.8387163521893"/>
+<line data-from="attribute-dex-15" data-to="weapon-spear-0" x1="3710.4404802780273" y1="2269.660540663081" x2="3181.7093573422817" y2="1974.6595880843095"/>
+<line data-from="weapon-spear-0" data-to="weapon-spear-1" x1="3181.7093573422817" y1="1974.6595880843095" x2="2934.768519710613" y2="1684.8634136620617"/>
+<line data-from="weapon-spear-1" data-to="weapon-spear-2" x1="2934.768519710613" y1="1684.8634136620617" x2="2816.938728209855" y2="1324.3521929838585"/>
+<line data-from="attribute-dex-15" data-to="weapon-spear-3" x1="3710.4404802780273" y1="2269.660540663081" x2="3158.0343918902954" y2="1594.6581459675103"/>
+<line data-from="weapon-spear-3" data-to="weapon-spear-4" x1="3158.0343918902954" y1="1594.6581459675103" x2="2992.3619134938913" y2="1253.4766255095683"/>
+<line data-from="weapon-spear-4" data-to="weapon-spear-5" x1="2992.3619134938913" y1="1253.4766255095683" x2="2788.6721195303066" y2="1001.8582878728362"/>
+<line data-from="weapon-spear-2" data-to="weapon-spear-6" x1="2816.938728209855" y1="1324.3521929838585" x2="2653.364217988479" y2="666.9594796033125"/>
+<line data-from="weapon-spear-5" data-to="weapon-spear-6" x1="2788.6721195303066" y1="1001.8582878728362" x2="2653.364217988479" y2="666.9594796033125"/>
+<line data-from="attribute-int-14" data-to="weapon-arcane-0" x1="5753.798810937118" y1="4045.9248381113325" x2="6218.8" y2="4000"/>
+<line data-from="bridge-dex-int-3" data-to="weapon-arcane-0" x1="5914.089347444367" y1="2894.9000000000005" x2="6218.8" y2="4000"/>
+<line data-from="weapon-arcane-0" data-to="weapon-arcane-1" x1="6218.8" y1="4000" x2="6597.2" y2="3759.2"/>
+<line data-from="weapon-arcane-1" data-to="weapon-arcane-2" x1="6597.2" y1="3759.2" x2="6958.4" y2="3793.6"/>
+<line data-from="attribute-int-14" data-to="weapon-arcane-3" x1="5753.798810937118" y1="4045.9248381113325" x2="6597.2" y2="4240.8"/>
+<line data-from="weapon-arcane-3" data-to="weapon-arcane-4" x1="6597.2" y1="4240.8" x2="6958.4" y2="4206.4"/>
+<line data-from="weapon-arcane-4" data-to="weapon-arcane-5" x1="6958.4" y1="4206.4" x2="7268" y2="4000"/>
+<line data-from="weapon-arcane-2" data-to="weapon-arcane-6" x1="6958.4" y1="3793.6" x2="7526" y2="4000"/>
+<line data-from="weapon-arcane-5" data-to="weapon-arcane-6" x1="7268" y1="4000" x2="7526" y2="4000"/>
 <line data-from="attribute-str-13" data-to="bridge-str-dex-0" x1="2552.130625793457" y1="4126.672156509447" x2="2733.870859667151" y2="3269"/>
 <line data-from="bridge-str-dex-0" data-to="bridge-str-dex-1" x1="2733.870859667151" y1="3269" x2="2517.884123963312" y2="3144.2999999999997"/>
 <line data-from="bridge-str-dex-1" data-to="bridge-str-dex-2" x1="2517.884123963312" y1="3144.2999999999997" x2="2301.897388259473" y2="3019.6"/>
@@ -232,16 +232,16 @@
 <line data-from="cluster-affliction-4" data-to="keystone-pandemic" x1="5479.2" y1="1437.9504454441171" x2="5763" y2="946.3944262560694"/>
 <line data-from="cluster-blood-4" data-to="keystone-edge-of-death" x1="1041.6" y1="4000.0000000000005" x2="474" y2="4000.0000000000005"/>
 <line data-from="cluster-tempo-4" data-to="keystone-opening-salvo" x1="4513.720768809847" y1="1086.5447434886837" x2="4612.283474453597" y2="527.5678628789547"/>
-<line data-from="weapon-hammer-6" data-to="keystone-relentless-control" x1="891.9473047474385" y1="5009.867537617329" x2="646.5747235432887" y2="5089.593922166065"/>
+<line data-from="weapon-hammer-6" data-to="keystone-relentless-control" x1="749.9024459364832" y1="4341.5990179586925" x2="493.3157969314684" y2="4368.567361481747"/>
 <line data-from="cluster-ward-4" data-to="keystone-calculated-violence" x1="6266.265880523184" y1="5901.622864496658" x2="6701.072706437516" y2="6266.469111754737"/>
 <line data-from="cluster-restoration-4" data-to="keystone-pure-renewal" x1="5479.2" y1="6562.049554555882" x2="5763" y2="7053.60557374393"/>
-<line data-from="weapon-bow-6" data-to="keystone-tempo-gambit" x1="4733.09662182342" y1="551.0515598126017" x2="4733.09662182342" y2="551.0515598126017"/>
+<line data-from="weapon-bow-6" data-to="keystone-tempo-gambit" x1="5434.153403485272" y1="778.8387163521893" x2="5434.153403485272" y2="778.8387163521893"/>
 <line data-from="cluster-armor-4" data-to="keystone-reprisal" x1="1220.0133506669686" y1="5011.832392014659" x2="686.6438191088873" y2="5205.963025366309"/>
-<line data-from="weapon-dagger-6" data-to="keystone-compressed-agony" x1="2158.8485083481532" y1="1053.541694714113" x2="2131.50467431372" y2="1009.782412952442"/>
-<line data-from="weapon-axe-6" data-to="keystone-crowd-hunter" x1="1405.2355273631306" y1="6336.33642516259" x2="1379.671345366708" y2="6359.354518021335"/>
-<line data-from="weapon-sword-6" data-to="keystone-killing-spree" x1="2565.846596514729" y1="7221.161283647811" x2="2565.846596514729" y2="7221.161283647811"/>
+<line data-from="weapon-dagger-6" data-to="keystone-compressed-agony" x1="1500.7257977033896" y1="1586.47895767726" x2="1463.6078640059159" y2="1550.634585761576"/>
+<line data-from="weapon-axe-6" data-to="keystone-crowd-hunter" x1="1947.6890130956012" y1="6824.763737559567" x2="1927.46920041674" y2="6852.593922166065"/>
+<line data-from="weapon-sword-6" data-to="keystone-killing-spree" x1="3087.4040469685115" y1="7405.854463495254" x2="3087.4040469685115" y2="7405.854463495254"/>
 <line data-from="cluster-mana-4" data-to="keystone-attribute-echo" x1="6779.986649333032" y1="5011.832392014659" x2="7313.356180891113" y2="5205.963025366308"/>
-<line data-from="weapon-spear-6" data-to="keystone-spellblade" x1="3375.769530922919" y1="459.81308947171465" x2="3387.716525546404" y2="527.5678628789547"/>
+<line data-from="weapon-spear-6" data-to="keystone-spellblade" x1="2653.364217988479" y1="666.9594796033125" x2="2679.137151615494" y2="730.7497287975075"/>
 <line data-from="cluster-vitality-4" data-to="keystone-glass-cannon" x1="1733.734119476816" y1="5901.622864496658" x2="1298.927293562484" y2="6266.469111754738"/>
 <line data-from="attribute-str-14" data-to="class-0-0" x1="3083.3285180623398" y1="5495.871904342819" x2="2813.71925866891" y2="5935.834229149532"/>
 <line data-from="attribute-str-15" data-to="class-0-1" x1="2646.2618309045847" y1="5115.93562965531" x2="2248.103545876521" y2="5444.151991318636"/>
@@ -992,303 +992,303 @@
 <text class="node-desc" x="0" y="-13" text-anchor="middle">+12% healing and +1 HP</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">regeneration.</text>
 </g>
-<g class="node basic " id="node-weapon-sword-0" data-id="weapon-sword-0" data-layout-id="weapon-sword-0" data-x="3111.5244768652224" data-y="5995.548697674498" transform="translate(3111.5244768652224 5995.548697674498)">
+<g class="node basic " id="node-weapon-sword-0" data-id="weapon-sword-0" data-layout-id="weapon-sword-0" data-x="3434.6356778780537" data-y="6109.968374945841" transform="translate(3434.6356778780537 6109.968374945841)">
 <title>Serration — +5% Sword bleed chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Serration</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Sword bleed</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">chance.</text>
 </g>
-<g class="node basic " id="node-weapon-sword-1" data-id="weapon-sword-1" data-layout-id="weapon-sword-1" data-x="3128.7368903616743" data-y="6379.7670377125905" transform="translate(3128.7368903616743 6379.7670377125905)">
+<g class="node basic " id="node-weapon-sword-1" data-id="weapon-sword-1" data-layout-id="weapon-sword-1" data-x="3511.741168484506" data-y="6486.763734946915" transform="translate(3511.741168484506 6486.763734946915)">
 <title>Deep Cut — +12% Sword damage-over-time damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Deep Cut</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+12% Sword</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage-over-time</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">damage.</text>
 </g>
-<g class="node basic " id="node-weapon-sword-2" data-id="weapon-sword-2" data-layout-id="weapon-sword-2" data-x="2950.39765113979" data-y="6695.74791649129" transform="translate(2950.39765113979 6695.74791649129)">
+<g class="node basic " id="node-weapon-sword-2" data-id="weapon-sword-2" data-layout-id="weapon-sword-2" data-x="3385.0278809691317" data-y="6826.752768250999" transform="translate(3385.0278809691317 6826.752768250999)">
 <title>Hemorrhage — +8% Sword bleed chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hemorrhage</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+8% Sword bleed</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">chance.</text>
 </g>
-<g class="node basic " id="node-weapon-sword-3" data-id="weapon-sword-3" data-layout-id="weapon-sword-3" data-x="2814.4772529326196" data-y="6239.8496324945145" transform="translate(2814.4772529326196 6239.8496324945145)">
+<g class="node basic " id="node-weapon-sword-3" data-id="weapon-sword-3" data-layout-id="weapon-sword-3" data-x="3179.4626842410667" data-y="6397.729983431647" transform="translate(3179.4626842410667 6397.729983431647)">
 <title>Balance — +4% Sword Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Balance</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+4% Sword Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-sword-4" data-id="weapon-sword-4" data-layout-id="weapon-sword-4" data-x="2698.989941196546" data-y="6583.81399231683" transform="translate(2698.989941196546 6583.81399231683)">
+<g class="node basic " id="node-weapon-sword-4" data-id="weapon-sword-4" data-layout-id="weapon-sword-4" data-x="3119.20509357438" data-y="6755.5257670387855" transform="translate(3119.20509357438 6755.5257670387855)">
 <title>Keen Blade — +12% Sword Critical Damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Keen Blade</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+12% Sword Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Damage.</text>
 </g>
-<g class="node basic " id="node-weapon-sword-5" data-id="weapon-sword-5" data-layout-id="weapon-sword-5" data-x="2698.7681314719002" data-y="6922.6146280902085" transform="translate(2698.7681314719002 6922.6146280902085)">
+<g class="node basic " id="node-weapon-sword-5" data-id="weapon-sword-5" data-layout-id="weapon-sword-5" data-x="3171.9861109080152" data-y="7090.189903463986" transform="translate(3171.9861109080152 7090.189903463986)">
 <title>Duelist Edge — +6% Sword Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Duelist Edge</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+6% Sword Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node major " id="node-weapon-sword-6" data-id="weapon-sword-6" data-layout-id="weapon-sword-6" data-x="2565.846596514729" data-y="7221.161283647811" transform="translate(2565.846596514729 7221.161283647811)">
+<g class="node major " id="node-weapon-sword-6" data-id="weapon-sword-6" data-layout-id="weapon-sword-6" data-x="3087.4040469685115" data-y="7405.854463495254" transform="translate(3087.4040469685115 7405.854463495254)">
 <title>Master of Blades — Swords deal 20% more damage and bleeds deal 25% more damage.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Master of Blades</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Swords deal 20% more damage</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">and bleeds deal 25% more</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">damage.</text>
 </g>
-<g class="node basic " id="node-weapon-axe-0" data-id="weapon-axe-0" data-layout-id="weapon-axe-0" data-x="2376.67444322718" data-y="5461.648896530291" transform="translate(2376.67444322718 5461.648896530291)">
+<g class="node basic " id="node-weapon-axe-0" data-id="weapon-axe-0" data-layout-id="weapon-axe-0" data-x="2716.041894892322" data-y="5767.216722512636" transform="translate(2716.041894892322 5767.216722512636)">
 <title>Breach — +5% Axe Pierce.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Breach</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Axe Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-axe-1" data-id="weapon-axe-1" data-layout-id="weapon-axe-1" data-x="2246.359089417214" data-y="5856.723963525645" transform="translate(2246.359089417214 5856.723963525645)">
+<g class="node basic " id="node-weapon-axe-1" data-id="weapon-axe-1" data-layout-id="weapon-axe-1" data-x="2670.7149694032696" data-y="6180.752536954033" transform="translate(2670.7149694032696 6180.752536954033)">
 <title>Sunder — Axes deal 15% more damage to Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Sunder</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Axes deal 15% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage to Armor.</text>
 </g>
-<g class="node basic " id="node-weapon-axe-2" data-id="weapon-axe-2" data-layout-id="weapon-axe-2" data-x="2034.207366032802" data-y="6186.615530961103" transform="translate(2034.207366032802 6186.615530961103)">
+<g class="node basic " id="node-weapon-axe-2" data-id="weapon-axe-2" data-layout-id="weapon-axe-2" data-x="2531.787583755293" data-y="6547.544005662096" transform="translate(2531.787583755293 6547.544005662096)">
 <title>Rend Plate — +8% Axe Pierce.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Rend Plate</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+8% Axe Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-axe-3" data-id="weapon-axe-3" data-layout-id="weapon-axe-3" data-x="1970.141975112277" data-y="5549.953779568576" transform="translate(1970.141975112277 5549.953779568576)">
+<g class="node basic " id="node-weapon-axe-3" data-id="weapon-axe-3" data-layout-id="weapon-axe-3" data-x="2336.7527541252916" data-y="5938.1147848077" transform="translate(2336.7527541252916 5938.1147848077)">
 <title>Wide Swing — Axes deal 5% more damage per living enemy.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Wide Swing</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Axes deal 5% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage per living</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">enemy.</text>
 </g>
-<g class="node basic " id="node-weapon-axe-4" data-id="weapon-axe-4" data-layout-id="weapon-axe-4" data-x="1619.881694575397" data-y="5726.4602550255" transform="translate(1619.881694575397 5726.4602550255)">
+<g class="node basic " id="node-weapon-axe-4" data-id="weapon-axe-4" data-layout-id="weapon-axe-4" data-x="2030.8442608383252" data-y="6183.587377442596" transform="translate(2030.8442608383252 6183.587377442596)">
 <title>Execution — Axes deal 12% more damage to targets below 30% HP.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Execution</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Axes deal 12% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage to targets</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">below 30% HP.</text>
 </g>
-<g class="node basic " id="node-weapon-axe-5" data-id="weapon-axe-5" data-layout-id="weapon-axe-5" data-x="1622.5310743327204" data-y="6140.682635863261" transform="translate(1622.5310743327204 6140.682635863261)">
+<g class="node basic " id="node-weapon-axe-5" data-id="weapon-axe-5" data-layout-id="weapon-axe-5" data-x="2119.55742086592" data-y="6588.207168404331" transform="translate(2119.55742086592 6588.207168404331)">
 <title>Reaping Arc — +8% Axe Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Reaping Arc</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+8% Axe Status</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node major " id="node-weapon-axe-6" data-id="weapon-axe-6" data-layout-id="weapon-axe-6" data-x="1405.2355273631306" data-y="6336.33642516259" transform="translate(1405.2355273631306 6336.33642516259)">
+<g class="node major " id="node-weapon-axe-6" data-id="weapon-axe-6" data-layout-id="weapon-axe-6" data-x="1947.6890130956012" data-y="6824.763737559567" transform="translate(1947.6890130956012 6824.763737559567)">
 <title>Headsman — Axes deal 22% more damage and 25% more to targets below 30% HP.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Headsman</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Axes deal 22% more damage</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">and 25% more to targets</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">below 30% HP.</text>
 </g>
-<g class="node basic " id="node-weapon-hammer-0" data-id="weapon-hammer-0" data-layout-id="weapon-hammer-0" data-x="1889.795801644313" data-y="4685.646907119133" transform="translate(1889.795801644313 4685.646907119133)">
+<g class="node basic " id="node-weapon-hammer-0" data-id="weapon-hammer-0" data-layout-id="weapon-hammer-0" data-x="1793.3548185568752" data-y="4231.92775429827" transform="translate(1793.3548185568752 4231.92775429827)">
 <title>Crushing — Hammers deal 18% more damage to Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Crushing</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Hammers deal 18%</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">more damage to</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">Armor.</text>
 </g>
-<g class="node basic " id="node-weapon-hammer-1" data-id="weapon-hammer-1" data-layout-id="weapon-hammer-1" data-x="1599.0122158204658" data-y="5015.23517483421" transform="translate(1599.0122158204658 5015.23517483421)">
+<g class="node basic " id="node-weapon-hammer-1" data-id="weapon-hammer-1" data-layout-id="weapon-hammer-1" data-x="1440.4002977361683" data-y="4493.856420603096" transform="translate(1440.4002977361683 4493.856420603096)">
 <title>Fracture — +6% Hammer Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Fracture</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+6% Hammer Status</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-hammer-2" data-id="weapon-hammer-2" data-layout-id="weapon-hammer-2" data-x="1239.1324300543793" data-y="5132.16720550569" transform="translate(1239.1324300543793 5132.16720550569)">
+<g class="node basic " id="node-weapon-hammer-2" data-id="weapon-hammer-2" data-layout-id="weapon-hammer-2" data-x="1064.0732125288137" data-y="4533.409991103576" transform="translate(1064.0732125288137 4533.409991103576)">
 <title>Shatter — Hammers deal 25% more damage to Armor.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Shatter</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Hammers deal 25%</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">more damage to</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">Armor.</text>
 </g>
-<g class="node basic " id="node-weapon-hammer-3" data-id="weapon-hammer-3" data-layout-id="weapon-hammer-3" data-x="1460.819815935989" data-y="4589.922700747017" transform="translate(1460.819815935989 4589.922700747017)">
+<g class="node basic " id="node-weapon-hammer-3" data-id="weapon-hammer-3" data-layout-id="weapon-hammer-3" data-x="1393.6551689628732" data-y="4049.1062289944043" transform="translate(1393.6551689628732 4049.1062289944043)">
 <title>Stability — +2 Block while wielding a Hammer.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Stability</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+2 Block while</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">wielding a Hammer.</text>
 </g>
-<g class="node basic " id="node-weapon-hammer-4" data-id="weapon-hammer-4" data-layout-id="weapon-hammer-4" data-x="1100.940030169903" data-y="4706.854731418497" transform="translate(1100.940030169903 4706.854731418497)">
+<g class="node basic " id="node-weapon-hammer-4" data-id="weapon-hammer-4" data-layout-id="weapon-hammer-4" data-x="1017.328083755519" data-y="4088.6597994948847" transform="translate(1017.328083755519 4088.6597994948847)">
 <title>Concussion — +6% Hammer Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Concussion</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+6% Hammer Status</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-hammer-5" data-id="weapon-hammer-5" data-layout-id="weapon-hammer-5" data-x="961.0435046896764" data-y="5222.523774660925" transform="translate(961.0435046896764 5222.523774660925)">
+<g class="node basic " id="node-weapon-hammer-5" data-id="weapon-hammer-5" data-layout-id="weapon-hammer-5" data-x="773.2750103231306" data-y="4563.974113763038" transform="translate(773.2750103231306 4563.974113763038)">
 <title>Aftershock — Hammers deal 8% more damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Aftershock</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Hammers deal 8% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage.</text>
 </g>
-<g class="node major " id="node-weapon-hammer-6" data-id="weapon-hammer-6" data-layout-id="weapon-hammer-6" data-x="891.9473047474385" data-y="5009.867537617329" transform="translate(891.9473047474385 5009.867537617329)">
+<g class="node major " id="node-weapon-hammer-6" data-id="weapon-hammer-6" data-layout-id="weapon-hammer-6" data-x="749.9024459364832" data-y="4341.5990179586925" transform="translate(749.9024459364832 4341.5990179586925)">
 <title>Worldbreaker — Hammers deal 24% more damage and 40% more damage to Armor.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Worldbreaker</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Hammers deal 24% more damage</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">and 40% more damage to</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Armor.</text>
 </g>
-<g class="node basic " id="node-weapon-dagger-0" data-id="weapon-dagger-0" data-layout-id="weapon-dagger-0" data-x="2815.1005251745537" data-y="2103.7644569942313" transform="translate(2815.1005251745537 2103.7644569942313)">
+<g class="node basic " id="node-weapon-dagger-0" data-id="weapon-dagger-0" data-layout-id="weapon-dagger-0" data-x="2391.556206442776" data-y="2446.743883653682" transform="translate(2391.556206442776 2446.743883653682)">
 <title>Toxins — +5% Dagger Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Toxins</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Dagger Status</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-dagger-1" data-id="weapon-dagger-1" data-layout-id="weapon-dagger-1" data-x="2507.0022689023963" data-y="1870.3663754210193" transform="translate(2507.0022689023963 1870.3663754210193)">
+<g class="node basic " id="node-weapon-dagger-1" data-id="weapon-dagger-1" data-layout-id="weapon-dagger-1" data-x="2036.145678785297" data-y="2294.814436770491" transform="translate(2036.145678785297 2294.814436770491)">
 <title>Coated Edge — +10% Dagger damage-over-time damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Coated Edge</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+10% Dagger</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage-over-time</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">damage.</text>
 </g>
-<g class="node basic " id="node-weapon-dagger-2" data-id="weapon-dagger-2" data-layout-id="weapon-dagger-2" data-x="2361.1761101409" data-y="1555.8513019811808" transform="translate(2361.1761101409 1555.8513019811808)">
+<g class="node basic " id="node-weapon-dagger-2" data-id="weapon-dagger-2" data-layout-id="weapon-dagger-2" data-x="1818.5630973985376" data-y="2024.920345918034" transform="translate(1818.5630973985376 2024.920345918034)">
 <title>Virulence — +8% Dagger Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Virulence</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+8% Dagger Status</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-dagger-3" data-id="weapon-dagger-3" data-layout-id="weapon-dagger-3" data-x="2740.3851049646446" data-y="1724.5325939040413" transform="translate(2740.3851049646446 1724.5325939040413)">
+<g class="node basic " id="node-weapon-dagger-3" data-id="weapon-dagger-3" data-layout-id="weapon-dagger-3" data-x="2227.3156623356126" data-y="2096.852123717294" transform="translate(2227.3156623356126 2096.852123717294)">
 <title>Anatomy — +10% Dagger Critical Damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Anatomy</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+10% Dagger Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Damage.</text>
 </g>
-<g class="node basic " id="node-weapon-dagger-4" data-id="weapon-dagger-4" data-layout-id="weapon-dagger-4" data-x="2521.6268099336958" data-y="1455.5905771882585" transform="translate(2521.6268099336958 1455.5905771882585)">
+<g class="node basic " id="node-weapon-dagger-4" data-id="weapon-dagger-4" data-layout-id="weapon-dagger-4" data-x="1949.99246108938" data-y="1888.8212556939611" transform="translate(1949.99246108938 1888.8212556939611)">
 <title>Weak Point — +15% Dagger Critical Damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Weak Point</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+15% Dagger Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Damage.</text>
 </g>
-<g class="node basic " id="node-weapon-dagger-5" data-id="weapon-dagger-5" data-layout-id="weapon-dagger-5" data-x="2286.453067175509" data-y="1257.7516762685805" transform="translate(2286.453067175509 1257.7516762685805)">
+<g class="node basic " id="node-weapon-dagger-5" data-id="weapon-dagger-5" data-layout-id="weapon-dagger-5" data-x="1673.942821624937" data-y="1753.7526932837868" transform="translate(1673.942821624937 1753.7526932837868)">
 <title>Assassin — +5% Dagger Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Assassin</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Dagger Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node major " id="node-weapon-dagger-6" data-id="weapon-dagger-6" data-layout-id="weapon-dagger-6" data-x="2158.8485083481532" data-y="1053.541694714113" transform="translate(2158.8485083481532 1053.541694714113)">
+<g class="node major " id="node-weapon-dagger-6" data-id="weapon-dagger-6" data-layout-id="weapon-dagger-6" data-x="1500.7257977033896" data-y="1586.47895767726" transform="translate(1500.7257977033896 1586.47895767726)">
 <title>Death by a Thousand Cuts — Daggers deal 20% more damage; +10% Status Chance and +20% Critical Damage.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Death by a Thousand Cuts</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Daggers deal 20% more</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">damage; +10% Status Chance</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">and +20% Critical Damage.</text>
 </g>
-<g class="node basic " id="node-weapon-bow-0" data-id="weapon-bow-0" data-layout-id="weapon-bow-0" data-x="4464.89054066851" data-y="1812.8619647592109" transform="translate(4464.89054066851 1812.8619647592109)">
+<g class="node basic " id="node-weapon-bow-0" data-id="weapon-bow-0" data-layout-id="weapon-bow-0" data-x="4909.463133917489" data-y="1957.3123567111445" transform="translate(4909.463133917489 1957.3123567111445)">
 <title>Draw Speed — +4% Bow Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Draw Speed</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+4% Bow Initiative.</text>
 </g>
-<g class="node basic " id="node-weapon-bow-1" data-id="weapon-bow-1" data-layout-id="weapon-bow-1" data-x="4250.401803855255" data-y="1415.5858117116686" transform="translate(4250.401803855255 1415.5858117116686)">
+<g class="node basic " id="node-weapon-bow-1" data-id="weapon-bow-1" data-layout-id="weapon-bow-1" data-x="4782.259847320868" data-y="1524.1229248467262" transform="translate(4782.259847320868 1524.1229248467262)">
 <title>Hawkeye — +4% Bow Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hawkeye</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+4% Bow Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-bow-2" data-id="weapon-bow-2" data-layout-id="weapon-bow-2" data-x="4231.706836347032" data-y="1007.1741343689828" transform="translate(4231.706836347032 1007.1741343689828)">
+<g class="node basic " id="node-weapon-bow-2" data-id="weapon-bow-2" data-layout-id="weapon-bow-2" data-x="4848.886972092938" data-y="1120.7491202378906" transform="translate(4848.886972092938 1120.7491202378906)">
 <title>First Shot — Bows deal 12% more damage to full-health targets.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">First Shot</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Bows deal 12% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage to</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">full-health targets.</text>
 </g>
-<g class="node basic " id="node-weapon-bow-3" data-id="weapon-bow-3" data-layout-id="weapon-bow-3" data-x="4822.422520764385" data-y="1537.1725685018946" transform="translate(4822.422520764385 1537.1725685018946)">
+<g class="node basic " id="node-weapon-bow-3" data-id="weapon-bow-3" data-layout-id="weapon-bow-3" data-x="5316.501230950261" data-y="1761.9825137174535" transform="translate(5316.501230950261 1761.9825137174535)">
 <title>Bodkin — +5% Bow Pierce.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Bodkin</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Bow Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-bow-4" data-id="weapon-bow-4" data-layout-id="weapon-bow-4" data-x="5005.617218047619" data-y="1171.6738641439938" transform="translate(5005.617218047619 1171.6738641439938)">
+<g class="node basic " id="node-weapon-bow-4" data-id="weapon-bow-4" data-layout-id="weapon-bow-4" data-x="5571.684138179764" data-y="1442.5591522394634" transform="translate(5571.684138179764 1442.5591522394634)">
 <title>Penetration — +7% Bow Pierce.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Penetration</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+7% Bow Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-bow-5" data-id="weapon-bow-5" data-layout-id="weapon-bow-5" data-x="4679.455405592438" data-y="803.4136408019235" transform="translate(4679.455405592438 803.4136408019235)">
+<g class="node basic " id="node-weapon-bow-5" data-id="weapon-bow-5" data-layout-id="weapon-bow-5" data-x="5329.215349571716" data-y="1014.5334444239802" transform="translate(5329.215349571716 1014.5334444239802)">
 <title>Linebreaker — Bows deal 5% more damage per living enemy.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Linebreaker</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Bows deal 5% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">damage per living</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">enemy.</text>
 </g>
-<g class="node major " id="node-weapon-bow-6" data-id="weapon-bow-6" data-layout-id="weapon-bow-6" data-x="4733.09662182342" data-y="551.0515598126017" transform="translate(4733.09662182342 551.0515598126017)">
+<g class="node major " id="node-weapon-bow-6" data-id="weapon-bow-6" data-layout-id="weapon-bow-6" data-x="5434.153403485272" data-y="778.8387163521893" transform="translate(5434.153403485272 778.8387163521893)">
 <title>Deadeye — Bows deal 22% more damage and gain +8% Critical Chance.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Deadeye</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Bows deal 22% more damage</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">and gain +8% Critical</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-spear-0" data-id="weapon-spear-0" data-layout-id="weapon-spear-0" data-x="3620.6829207043575" data-y="1848.7859443201328" transform="translate(3620.6829207043575 1848.7859443201328)">
+<g class="node basic " id="node-weapon-spear-0" data-id="weapon-spear-0" data-layout-id="weapon-spear-0" data-x="3181.7093573422817" data-y="1974.6595880843095" transform="translate(3181.7093573422817 1974.6595880843095)">
 <title>Reach — +4% Spear Initiative.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Reach</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+4% Spear</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Initiative.</text>
 </g>
-<g class="node basic " id="node-weapon-spear-1" data-id="weapon-spear-1" data-layout-id="weapon-spear-1" data-x="3439.3903454683923" data-y="1513.9806245232216" transform="translate(3439.3903454683923 1513.9806245232216)">
+<g class="node basic " id="node-weapon-spear-1" data-id="weapon-spear-1" data-layout-id="weapon-spear-1" data-x="2934.768519710613" data-y="1684.8634136620617" transform="translate(2934.768519710613 1684.8634136620617)">
 <title>Impale — +5% Spear Pierce.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Impale</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Spear Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-spear-2" data-id="weapon-spear-2" data-layout-id="weapon-spear-2" data-x="3399.089915066941" data-y="1136.8492477995956" transform="translate(3399.089915066941 1136.8492477995956)">
+<g class="node basic " id="node-weapon-spear-2" data-id="weapon-spear-2" data-layout-id="weapon-spear-2" data-x="2816.938728209855" data-y="1324.3521929838585" transform="translate(2816.938728209855 1324.3521929838585)">
 <title>Phalanx — +3% Physical Dodge while wielding a Spear.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Phalanx</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+3% Physical Dodge</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">while wielding a</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">Spear.</text>
 </g>
-<g class="node basic " id="node-weapon-spear-3" data-id="weapon-spear-3" data-layout-id="weapon-spear-3" data-x="3676.532052393732" data-y="1472.166143341025" transform="translate(3676.532052393732 1472.166143341025)">
+<g class="node basic " id="node-weapon-spear-3" data-id="weapon-spear-3" data-layout-id="weapon-spear-3" data-x="3158.0343918902954" data-y="1594.6581459675103" transform="translate(3158.0343918902954 1594.6581459675103)">
 <title>Precision — +4% Spear Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Precision</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+4% Spear Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-spear-4" data-id="weapon-spear-4" data-layout-id="weapon-spear-4" data-x="3585.415541936851" data-y="1103.9950125850123" transform="translate(3585.415541936851 1103.9950125850123)">
+<g class="node basic " id="node-weapon-spear-4" data-id="weapon-spear-4" data-layout-id="weapon-spear-4" data-x="2992.3619134938913" data-y="1253.4766255095683" transform="translate(2992.3619134938913 1253.4766255095683)">
 <title>Driving Point — +7% Spear Pierce.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Driving Point</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+7% Spear Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-spear-5" data-id="weapon-spear-5" data-layout-id="weapon-spear-5" data-x="3438.4912526962144" data-y="815.5256498597241" transform="translate(3438.4912526962144 815.5256498597241)">
+<g class="node basic " id="node-weapon-spear-5" data-id="weapon-spear-5" data-layout-id="weapon-spear-5" data-x="2788.6721195303066" data-y="1001.8582878728362" transform="translate(2788.6721195303066 1001.8582878728362)">
 <title>Skewer — +12% Spear Critical Damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Skewer</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+12% Spear Critical</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Damage.</text>
 </g>
-<g class="node major " id="node-weapon-spear-6" data-id="weapon-spear-6" data-layout-id="weapon-spear-6" data-x="3375.769530922919" data-y="459.81308947171465" transform="translate(3375.769530922919 459.81308947171465)">
+<g class="node major " id="node-weapon-spear-6" data-id="weapon-spear-6" data-layout-id="weapon-spear-6" data-x="2653.364217988479" data-y="666.9594796033125" transform="translate(2653.364217988479 666.9594796033125)">
 <title>Unbroken Line — Spears deal 22% more damage and gain +10% Pierce.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Unbroken Line</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Spears deal 22% more damage</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">and gain +10% Pierce.</text>
 </g>
-<g class="node basic " id="node-weapon-arcane-0" data-id="weapon-arcane-0" data-layout-id="weapon-arcane-0" data-x="6213.395114716498" data-y="4154.775663943466" transform="translate(6213.395114716498 4154.775663943466)">
+<g class="node basic " id="node-weapon-arcane-0" data-id="weapon-arcane-0" data-layout-id="weapon-arcane-0" data-x="6218.8" data-y="4000" transform="translate(6218.8 4000)">
 <title>Spell Etching — +5% Arcane-weapon Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Spell Etching</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% Arcane-weapon</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Status Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-arcane-1" data-id="weapon-arcane-1" data-layout-id="weapon-arcane-1" data-x="6607.6707102124" data-y="3940.9580903056767" transform="translate(6607.6707102124 3940.9580903056767)">
+<g class="node basic " id="node-weapon-arcane-1" data-id="weapon-arcane-1" data-layout-id="weapon-arcane-1" data-x="6597.2" data-y="3759.2" transform="translate(6597.2 3759.2)">
 <title>Runic Force — Arcane weapons deal 8% more damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Runic Force</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Arcane weapons deal</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">8% more damage.</text>
 </g>
-<g class="node basic " id="node-weapon-arcane-2" data-id="weapon-arcane-2" data-layout-id="weapon-arcane-2" data-x="6965.591222469451" data-y="4000.470331950993" transform="translate(6965.591222469451 4000.470331950993)">
+<g class="node basic " id="node-weapon-arcane-2" data-id="weapon-arcane-2" data-layout-id="weapon-arcane-2" data-x="6958.4" data-y="3793.6" transform="translate(6958.4 3793.6)">
 <title>Hexcraft — +8% Arcane-weapon Status Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Hexcraft</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+8% Arcane-weapon</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Status Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-arcane-3" data-id="weapon-arcane-3" data-layout-id="weapon-arcane-3" data-x="6574.075992457229" data-y="4421.3849369108075" transform="translate(6574.075992457229 4421.3849369108075)">
+<g class="node basic " id="node-weapon-arcane-3" data-id="weapon-arcane-3" data-layout-id="weapon-arcane-3" data-x="6597.2" data-y="4240.8" transform="translate(6597.2 4240.8)">
 <title>Channeling — +5% maximum Mana while wielding an Arcane weapon.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Channeling</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+5% maximum Mana</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">while wielding an</text>
 <text class="node-desc" x="0" y="39" text-anchor="middle">Arcane weapon.</text>
 </g>
-<g class="node basic " id="node-weapon-arcane-4" data-id="weapon-arcane-4" data-layout-id="weapon-arcane-4" data-x="6936.795750107876" data-y="4412.264771898248" transform="translate(6936.795750107876 4412.264771898248)">
+<g class="node basic " id="node-weapon-arcane-4" data-id="weapon-arcane-4" data-layout-id="weapon-arcane-4" data-x="6958.4" data-y="4206.4" transform="translate(6958.4 4206.4)">
 <title>Focus — +4% Arcane-weapon Critical Chance.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Focus</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+4% Arcane-weapon</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Critical Chance.</text>
 </g>
-<g class="node basic " id="node-weapon-arcane-5" data-id="weapon-arcane-5" data-layout-id="weapon-arcane-5" data-x="7260.0393162491055" data-y="4227.9641561958015" transform="translate(7260.0393162491055 4227.9641561958015)">
+<g class="node basic " id="node-weapon-arcane-5" data-id="weapon-arcane-5" data-layout-id="weapon-arcane-5" data-x="7268" data-y="4000" transform="translate(7268 4000)">
 <title>Resonance — +15% Arcane-weapon Critical Damage.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Resonance</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">+15% Arcane-weapon</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Critical Damage.</text>
 </g>
-<g class="node major " id="node-weapon-arcane-6" data-id="weapon-arcane-6" data-layout-id="weapon-arcane-6" data-x="7517.41084121614" data-y="4245.961326421786" transform="translate(7517.41084121614 4245.961326421786)">
+<g class="node major " id="node-weapon-arcane-6" data-id="weapon-arcane-6" data-layout-id="weapon-arcane-6" data-x="7526" data-y="4000" transform="translate(7526 4000)">
 <title>Archmage Focus — Arcane weapons deal 24% more damage and gain +10% Status Chance.</title><rect x="-100" y="-56" width="200" height="112" rx="12"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Archmage Focus</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Arcane weapons deal 24% more</text>
@@ -1398,7 +1398,7 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">but abilities cost 15% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Mana.</text>
 </g>
-<g class="node major keystone " id="node-keystone-relentless-control" data-id="keystone-relentless-control" data-layout-id="keystone-relentless-control" data-x="646.5747235432887" data-y="5089.593922166065" transform="translate(646.5747235432887 5089.593922166065)">
+<g class="node major keystone " id="node-keystone-relentless-control" data-id="keystone-relentless-control" data-layout-id="keystone-relentless-control" data-x="493.3157969314684" data-y="4368.567361481747" transform="translate(493.3157969314684 4368.567361481747)">
 <title>Relentless Control — Enemy Stun Resistance is halved against this character, but this character deals 10% less damage.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Relentless Control</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Enemy Stun Resistance is</text>
@@ -1419,7 +1419,7 @@
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Double HP regeneration, but</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">Lifesteal cannot restore HP.</text>
 </g>
-<g class="node major keystone " id="node-keystone-tempo-gambit" data-id="keystone-tempo-gambit" data-layout-id="keystone-tempo-gambit" data-x="4733.09662182342" data-y="551.0515598126017" transform="translate(4733.09662182342 551.0515598126017)">
+<g class="node major keystone " id="node-keystone-tempo-gambit" data-id="keystone-tempo-gambit" data-layout-id="keystone-tempo-gambit" data-x="5434.153403485272" data-y="778.8387163521893" transform="translate(5434.153403485272 778.8387163521893)">
 <title>Tempo Gambit — Deal 30% more damage to slower targets, but take 30% more damage from faster enemies.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Tempo Gambit</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Deal 30% more damage to</text>
@@ -1434,14 +1434,14 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">taking damage since your</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">previous turn.</text>
 </g>
-<g class="node major keystone " id="node-keystone-compressed-agony" data-id="keystone-compressed-agony" data-layout-id="keystone-compressed-agony" data-x="2131.50467431372" data-y="1009.782412952442" transform="translate(2131.50467431372 1009.782412952442)">
+<g class="node major keystone " id="node-keystone-compressed-agony" data-id="keystone-compressed-agony" data-layout-id="keystone-compressed-agony" data-x="1463.6078640059159" data-y="1550.634585761576" transform="translate(1463.6078640059159 1550.634585761576)">
 <title>Compressed Agony — Damage-over-time effects deal 50% more damage but last half as many rounds.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Compressed Agony</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Damage-over-time effects</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">deal 50% more damage but</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">last half as many rounds.</text>
 </g>
-<g class="node major keystone " id="node-keystone-crowd-hunter" data-id="keystone-crowd-hunter" data-layout-id="keystone-crowd-hunter" data-x="1379.671345366708" data-y="6359.354518021335" transform="translate(1379.671345366708 6359.354518021335)">
+<g class="node major keystone " id="node-keystone-crowd-hunter" data-id="keystone-crowd-hunter" data-layout-id="keystone-crowd-hunter" data-x="1927.46920041674" data-y="6852.593922166065" transform="translate(1927.46920041674 6852.593922166065)">
 <title>Crowd Hunter — Deal 10% more damage for each living enemy, but deal 20% less damage against a lone enemy.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Crowd Hunter</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Deal 10% more damage for</text>
@@ -1449,7 +1449,7 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">20% less damage against a</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">lone enemy.</text>
 </g>
-<g class="node major keystone " id="node-keystone-killing-spree" data-id="keystone-killing-spree" data-layout-id="keystone-killing-spree" data-x="2565.846596514729" data-y="7221.161283647811" transform="translate(2565.846596514729 7221.161283647811)">
+<g class="node major keystone " id="node-keystone-killing-spree" data-id="keystone-killing-spree" data-layout-id="keystone-killing-spree" data-x="3087.4040469685115" data-y="7405.854463495254" transform="translate(3087.4040469685115 7405.854463495254)">
 <title>Killing Spree — Gain 10% damage for every enemy this character personally kills this battle; lose the stacks after battle.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Killing Spree</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Gain 10% damage for every</text>
@@ -1465,7 +1465,7 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">each other attribute, but</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">reduce your main attribute</text>
 </g>
-<g class="node major keystone " id="node-keystone-spellblade" data-id="keystone-spellblade" data-layout-id="keystone-spellblade" data-x="3387.716525546404" data-y="527.5678628789547" transform="translate(3387.716525546404 527.5678628789547)">
+<g class="node major keystone " id="node-keystone-spellblade" data-id="keystone-spellblade" data-layout-id="keystone-spellblade" data-x="2679.137151615494" data-y="730.7497287975075" transform="translate(2679.137151615494 730.7497287975075)">
 <title>Spellblade Covenant — Weapon attacks deal 40% more damage, but damaging abilities deal 25% less damage.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Spellblade Covenant</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Weapon attacks deal 40% more</text>
