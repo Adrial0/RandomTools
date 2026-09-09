@@ -111,21 +111,18 @@
 <line data-from="cluster-vitality-3" data-to="cluster-vitality-4" x1="1733.734119476816" y1="5901.622864496658" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="attribute-str-15" data-to="cluster-regeneration-0" x1="2646.2618309045847" y1="5115.93562965531" x2="3115.1867357038395" y2="6031.34152897182"/>
 <line data-from="cluster-regeneration-0" data-to="cluster-regeneration-1" x1="3115.1867357038395" y1="6031.34152897182" x2="2995.321465011663" y2="6359.354267873667"/>
-<line data-from="cluster-vitality-2" data-to="cluster-regeneration-1" x1="1850.9502216373771" y1="5399.112779628418" x2="2995.321465011663" y2="6359.354267873667"/>
 <line data-from="attribute-str-15" data-to="cluster-regeneration-2" x1="2646.2618309045847" y1="5115.93562965531" x2="2459.078534988338" y2="6049.754267873667"/>
 <line data-from="cluster-regeneration-2" data-to="cluster-regeneration-3" x1="2459.078534988338" y1="6049.754267873667" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="cluster-regeneration-1" data-to="cluster-regeneration-4" x1="2995.321465011663" y1="6359.354267873667" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="cluster-regeneration-3" data-to="cluster-regeneration-4" x1="2520.800000000001" y1="6562.049554555884" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="attribute-str-16" data-to="cluster-armor-0" x1="2356.702311182611" y1="4614.40382968161" x2="2016.4725498231658" y2="4987.350887169799"/>
 <line data-from="cluster-armor-0" data-to="cluster-armor-1" x1="2016.4725498231658" y1="4987.350887169799" x2="1713.807900901019" y2="5161.57531224514"/>
-<line data-from="cluster-regeneration-2" data-to="cluster-armor-1" x1="2459.078534988338" y1="6049.754267873667" x2="1713.807900901019" y2="5161.57531224514"/>
 <line data-from="attribute-str-16" data-to="cluster-armor-2" x1="2356.702311182611" y1="4614.40382968161" x2="1502.029028153765" y2="4579.717641454506"/>
 <line data-from="cluster-armor-2" data-to="cluster-armor-3" x1="1502.029028153765" y1="4579.717641454506" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-1" data-to="cluster-armor-4" x1="1713.807900901019" y1="5161.57531224514" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-3" data-to="cluster-armor-4" x1="1220.0133506669686" y1="5011.832392014659" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="attribute-str-17" data-to="cluster-blood-0" x1="2246.2011890628823" y1="4045.924838111333" x2="1798.4" y2="4249.400000000001"/>
 <line data-from="cluster-blood-0" data-to="cluster-blood-1" x1="1798.4" y1="4249.400000000001" x2="1454.4" y2="4309.6"/>
-<line data-from="cluster-armor-2" data-to="cluster-blood-1" x1="1502.029028153765" y1="4579.717641454506" x2="1454.4" y2="4309.6"/>
 <line data-from="attribute-str-17" data-to="cluster-blood-2" x1="2246.2011890628823" y1="4045.924838111333" x2="1454.4" y2="3690.4000000000005"/>
 <line data-from="cluster-blood-2" data-to="cluster-blood-3" x1="1454.4" y1="3690.4000000000005" x2="1041.6" y2="4000.0000000000005"/>
 <line data-from="cluster-blood-1" data-to="cluster-blood-4" x1="1454.4" y1="4309.6" x2="1041.6" y2="4000.0000000000005"/>
@@ -138,14 +135,12 @@
 <line data-from="cluster-precision-3" data-to="cluster-precision-4" x1="3486.279231190153" y1="1086.5447434886837" x2="3486.279231190153" y2="1086.5447434886837"/>
 <line data-from="attribute-dex-16" data-to="cluster-tempo-0" x1="4289.559519721974" y1="2269.6605406630815" x2="4136.692774350269" y2="1788.5393954581905"/>
 <line data-from="cluster-tempo-0" data-to="cluster-tempo-1" x1="4136.692774350269" y1="1788.5393954581905" x2="4137.142320736359" y2="1439.3119081264417"/>
-<line data-from="cluster-precision-2" data-to="cluster-tempo-1" x1="3862.8576792636413" y1="1439.3119081264417" x2="4137.142320736359" y2="1439.3119081264417"/>
 <line data-from="attribute-dex-16" data-to="cluster-tempo-2" x1="4289.559519721974" y1="2269.6605406630815" x2="4746.935281401517" y2="1546.8348597378053"/>
 <line data-from="cluster-tempo-2" data-to="cluster-tempo-3" x1="4746.935281401517" y1="1546.8348597378053" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="cluster-tempo-1" data-to="cluster-tempo-4" x1="4137.142320736359" y1="1439.3119081264417" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="cluster-tempo-3" data-to="cluster-tempo-4" x1="4513.720768809847" y1="1086.5447434886837" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="attribute-dex-17" data-to="cluster-affliction-0" x1="4837.127328999457" y1="2458.203257545848" x2="4884.813264296161" y2="1968.6584710281802"/>
 <line data-from="cluster-affliction-0" data-to="cluster-affliction-1" x1="4884.813264296161" y1="1968.6584710281802" x2="5004.678534988338" y2="1640.6457321263333"/>
-<line data-from="cluster-tempo-2" data-to="cluster-affliction-1" x1="4746.935281401517" y1="1546.8348597378053" x2="5004.678534988338" y2="1640.6457321263333"/>
 <line data-from="attribute-dex-17" data-to="cluster-affliction-2" x1="4837.127328999457" y1="2458.203257545848" x2="5540.921465011662" y2="1950.2457321263337"/>
 <line data-from="cluster-affliction-2" data-to="cluster-affliction-3" x1="5540.921465011662" y1="1950.2457321263337" x2="5479.2" y2="1437.9504454441171"/>
 <line data-from="cluster-affliction-1" data-to="cluster-affliction-4" x1="5004.678534988338" y1="1640.6457321263333" x2="5479.2" y2="1437.9504454441171"/>
@@ -158,14 +153,12 @@
 <line data-from="cluster-mana-3" data-to="cluster-mana-4" x1="6779.986649333032" y1="5011.832392014659" x2="6779.986649333032" y2="5011.832392014659"/>
 <line data-from="attribute-int-16" data-to="cluster-ward-0" x1="5353.738169095415" y1="5115.935629655309" x2="5846.834675826563" y2="5224.109717372012"/>
 <line data-from="cluster-ward-0" data-to="cluster-ward-1" x1="5846.834675826563" y1="5224.109717372012" x2="6149.049778362623" y2="5399.112779628418"/>
-<line data-from="cluster-mana-2" data-to="cluster-ward-1" x1="6286.192099098982" y1="5161.57531224514" x2="6149.049778362623" y2="5399.112779628418"/>
 <line data-from="attribute-int-16" data-to="cluster-ward-2" x1="5353.738169095415" y1="5115.935629655309" x2="5751.035690444717" y2="5873.44749880769"/>
 <line data-from="cluster-ward-2" data-to="cluster-ward-3" x1="5751.035690444717" y1="5873.44749880769" x2="6266.265880523184" y2="5901.622864496658"/>
 <line data-from="cluster-ward-1" data-to="cluster-ward-4" x1="6149.049778362623" y1="5399.112779628418" x2="6266.265880523184" y2="5901.622864496658"/>
 <line data-from="cluster-ward-3" data-to="cluster-ward-4" x1="6266.265880523184" y1="5901.622864496658" x2="6266.265880523184" y2="5901.622864496658"/>
 <line data-from="attribute-int-17" data-to="cluster-restoration-0" x1="4916.671481937661" y1="5495.871904342819" x2="5316.786735703839" y2="5781.941528971819"/>
 <line data-from="cluster-restoration-0" data-to="cluster-restoration-1" x1="5316.786735703839" y1="5781.941528971819" x2="5540.921465011662" y2="6049.754267873666"/>
-<line data-from="cluster-ward-2" data-to="cluster-restoration-1" x1="5751.035690444717" y1="5873.44749880769" x2="5540.921465011662" y2="6049.754267873666"/>
 <line data-from="attribute-int-17" data-to="cluster-restoration-2" x1="4916.671481937661" y1="5495.871904342819" x2="5004.678534988338" y2="6359.354267873667"/>
 <line data-from="cluster-restoration-2" data-to="cluster-restoration-3" x1="5004.678534988338" y1="6359.354267873667" x2="5479.2" y2="6562.049554555882"/>
 <line data-from="cluster-restoration-1" data-to="cluster-restoration-4" x1="5540.921465011662" y1="6049.754267873666" x2="5479.2" y2="6562.049554555882"/>
@@ -245,16 +238,16 @@
 <line data-from="cluster-affliction-4" data-to="keystone-pandemic" x1="5479.2" y1="1437.9504454441171" x2="5763" y2="946.3944262560694"/>
 <line data-from="cluster-blood-4" data-to="keystone-edge-of-death" x1="1041.6" y1="4000.0000000000005" x2="474" y2="4000.0000000000005"/>
 <line data-from="cluster-tempo-4" data-to="keystone-opening-salvo" x1="4513.720768809847" y1="1086.5447434886837" x2="4612.283474453597" y2="527.5678628789547"/>
-<line data-from="bridge-str-dex-2" data-to="keystone-relentless-control" x1="2301.897388259473" y1="3019.6" x2="946.3944262560694" y2="2236.9999999999995"/>
+<line data-from="bridge-str-dex-2" data-to="keystone-relentless-control" x1="2301.897388259473" y1="3019.6" x2="1298.927293562483" y2="1733.5308882452623"/>
 <line data-from="cluster-ward-4" data-to="keystone-calculated-violence" x1="6266.265880523184" y1="5901.622864496658" x2="6701.072706437516" y2="6266.469111754737"/>
 <line data-from="cluster-regeneration-4" data-to="keystone-pure-renewal" x1="2520.800000000001" y1="6562.049554555884" x2="2910.406077833936" y2="7353.425276456712"/>
-<line data-from="attribute-dex-17" data-to="keystone-tempo-gambit" x1="4837.127328999457" y1="2458.203257545848" x2="5434.153403485272" y2="778.8387163521893"/>
+<line data-from="cluster-tempo-3" data-to="keystone-tempo-gambit" x1="4513.720768809847" y1="1086.5447434886837" x2="3876.944374626982" y2="476.1479439306686"/>
 <line data-from="cluster-armor-4" data-to="keystone-reprisal" x1="1220.0133506669686" y1="5011.832392014659" x2="686.6438191088873" y2="5205.963025366309"/>
-<line data-from="cluster-affliction-3" data-to="keystone-compressed-agony" x1="5479.2" y1="1437.9504454441171" x2="6359.354518021335" y2="1379.671345366708"/>
-<line data-from="str-ring-5" data-to="keystone-crowd-hunter" x1="4210.7" y1="5319.543105154762" x2="4123.055625373019" y2="7523.852056069331"/>
-<line data-from="attribute-str-17" data-to="keystone-killing-spree" x1="2246.2011890628823" y1="4045.924838111333" x2="578.7372691508363" y2="4853.016603884428"/>
+<line data-from="cluster-affliction-3" data-to="keystone-compressed-agony" x1="5479.2" y1="1437.9504454441171" x2="6620.328654633292" y2="1640.6454819786659"/>
+<line data-from="cluster-vitality-3" data-to="keystone-crowd-hunter" x1="1733.734119476816" y1="5901.622864496658" x2="1829.177638001729" y2="6778.525917217303"/>
+<line data-from="cluster-blood-3" data-to="keystone-killing-spree" x1="1041.6" y1="4000.0000000000005" x2="527.5678628789547" y2="3387.7165255464033"/>
 <line data-from="cluster-mana-4" data-to="keystone-attribute-echo" x1="6779.986649333032" y1="5011.832392014659" x2="7313.356180891113" y2="5205.963025366308"/>
-<line data-from="bridge-int-str-2" data-to="keystone-spellblade" x1="4000" y1="5960.8" x2="4853.016603884429" y2="7421.262730849164"/>
+<line data-from="bridge-int-str-2" data-to="keystone-spellblade" x1="4000" y1="5960.8" x2="3266.903378176581" y2="7448.948440187399"/>
 <line data-from="cluster-vitality-4" data-to="keystone-glass-cannon" x1="1733.734119476816" y1="5901.622864496658" x2="1298.927293562484" y2="6266.469111754738"/>
 <line data-from="attribute-str-14" data-to="class-0-0" x1="3083.3285180623398" y1="5495.871904342819" x2="2813.71925866891" y2="5935.834229149532"/>
 <line data-from="attribute-str-15" data-to="class-0-1" x1="2646.2618309045847" y1="5115.93562965531" x2="2248.103545876521" y2="5444.151991318636"/>
@@ -1427,7 +1420,7 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">but abilities cost 15% more</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">Mana.</text>
 </g>
-<g class="node major keystone " id="node-keystone-relentless-control" data-id="keystone-relentless-control" data-layout-id="keystone-relentless-control" data-x="946.3944262560694" data-y="2236.9999999999995" transform="translate(946.3944262560694 2236.9999999999995)">
+<g class="node major keystone " id="node-keystone-relentless-control" data-id="keystone-relentless-control" data-layout-id="keystone-relentless-control" data-x="1298.927293562483" data-y="1733.5308882452623" transform="translate(1298.927293562483 1733.5308882452623)">
 <title>Relentless Control — Enemy Stun Resistance is halved against this character, but this character deals 10% less damage.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Relentless Control</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Enemy Stun Resistance is</text>
@@ -1448,7 +1441,7 @@
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Double HP regeneration, but</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">Lifesteal cannot restore HP.</text>
 </g>
-<g class="node major keystone " id="node-keystone-tempo-gambit" data-id="keystone-tempo-gambit" data-layout-id="keystone-tempo-gambit" data-x="5434.153403485272" data-y="778.8387163521893" transform="translate(5434.153403485272 778.8387163521893)">
+<g class="node major keystone " id="node-keystone-tempo-gambit" data-id="keystone-tempo-gambit" data-layout-id="keystone-tempo-gambit" data-x="3876.944374626982" data-y="476.1479439306686" transform="translate(3876.944374626982 476.1479439306686)">
 <title>Tempo Gambit — Deal 30% more damage to slower targets, but take 30% more damage from faster enemies.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Tempo Gambit</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Deal 30% more damage to</text>
@@ -1463,14 +1456,14 @@
 <text class="node-desc" x="0" y="0" text-anchor="middle">taking damage since your</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">previous turn.</text>
 </g>
-<g class="node major keystone " id="node-keystone-compressed-agony" data-id="keystone-compressed-agony" data-layout-id="keystone-compressed-agony" data-x="6359.354518021335" data-y="1379.671345366708" transform="translate(6359.354518021335 1379.671345366708)">
+<g class="node major keystone " id="node-keystone-compressed-agony" data-id="keystone-compressed-agony" data-layout-id="keystone-compressed-agony" data-x="6620.328654633292" data-y="1640.6454819786659" transform="translate(6620.328654633292 1640.6454819786659)">
 <title>Compressed Agony — Damage-over-time effects deal 50% more damage but last half as many rounds.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Compressed Agony</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Damage-over-time effects</text>
 <text class="node-desc" x="0" y="0" text-anchor="middle">deal 50% more damage but</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">last half as many rounds.</text>
 </g>
-<g class="node major keystone " id="node-keystone-crowd-hunter" data-id="keystone-crowd-hunter" data-layout-id="keystone-crowd-hunter" data-x="4123.055625373019" data-y="7523.852056069331" transform="translate(4123.055625373019 7523.852056069331)">
+<g class="node major keystone " id="node-keystone-crowd-hunter" data-id="keystone-crowd-hunter" data-layout-id="keystone-crowd-hunter" data-x="1829.177638001729" data-y="6778.525917217303" transform="translate(1829.177638001729 6778.525917217303)">
 <title>Crowd Hunter — Deal 10% more damage for each living enemy, but deal 20% less damage against a lone enemy.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Crowd Hunter</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Deal 10% more damage for</text>
@@ -1478,7 +1471,7 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">20% less damage against a</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">lone enemy.</text>
 </g>
-<g class="node major keystone " id="node-keystone-killing-spree" data-id="keystone-killing-spree" data-layout-id="keystone-killing-spree" data-x="578.7372691508363" data-y="4853.016603884428" transform="translate(578.7372691508363 4853.016603884428)">
+<g class="node major keystone " id="node-keystone-killing-spree" data-id="keystone-killing-spree" data-layout-id="keystone-killing-spree" data-x="527.5678628789547" data-y="3387.7165255464033" transform="translate(527.5678628789547 3387.7165255464033)">
 <title>Killing Spree — Gain 10% damage for every enemy this character personally kills this battle; lose the stacks after battle.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Killing Spree</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Gain 10% damage for every</text>
@@ -1494,7 +1487,7 @@
 <text class="node-desc" x="0" y="13" text-anchor="middle">each other attribute, but</text>
 <text class="node-desc" x="0" y="26" text-anchor="middle">reduce your main attribute</text>
 </g>
-<g class="node major keystone " id="node-keystone-spellblade" data-id="keystone-spellblade" data-layout-id="keystone-spellblade" data-x="4853.016603884429" data-y="7421.262730849164" transform="translate(4853.016603884429 7421.262730849164)">
+<g class="node major keystone " id="node-keystone-spellblade" data-id="keystone-spellblade" data-layout-id="keystone-spellblade" data-x="3266.903378176581" data-y="7448.948440187399" transform="translate(3266.903378176581 7448.948440187399)">
 <title>Spellblade Covenant — Weapon attacks deal 40% more damage, but damaging abilities deal 25% less damage.</title><rect x="-100" y="-56" width="200" height="112" rx="28"/>
 <text class="node-title" x="0" y="-31" text-anchor="middle">Spellblade Covenant</text>
 <text class="node-desc" x="0" y="-13" text-anchor="middle">Weapon attacks deal 40% more</text>
