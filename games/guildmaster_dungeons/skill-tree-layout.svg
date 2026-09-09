@@ -70,7 +70,7 @@
 <line data-from="str-ring-3" data-to="str-ring-4" x1="4210.7" y1="4589.656894845238" x2="4421.4" y2="4954.6"/>
 <line data-from="str-ring-4" data-to="str-ring-5" x1="4421.4" y1="4954.6" x2="4210.7" y2="5319.543105154762"/>
 <line data-from="str-ring-2" data-to="str-ring-6" x1="3789.3" y1="5319.543105154762" x2="4000" y2="5470.6"/>
-<line data-from="str-ring-5" data-to="str-ring-6" x1="4210.7" y1="5319.543105154762" x2="4000" y2="5470.6"/>
+<line data-from="junction-0" data-to="str-ring-6" x1="4021.9772501536027" y1="5454.843876765827" x2="4000" y2="5470.6"/>
 <line data-from="attribute-dex-6" data-to="dex-ring-0" x1="3577.64398632292" y1="2927.786794657515" x2="3594.692149547375" y2="3522.7"/>
 <line data-from="dex-ring-0" data-to="dex-ring-1" x1="3594.692149547375" y1="3522.7" x2="3383.9921495473745" y2="3157.7568948452376"/>
 <line data-from="dex-ring-1" data-to="dex-ring-2" x1="3383.9921495473745" y1="3157.7568948452376" x2="2962.592149547375" y2="3157.7568948452376"/>
@@ -78,41 +78,41 @@
 <line data-from="dex-ring-3" data-to="dex-ring-4" x1="3383.9921495473745" y1="3887.6431051547625" x2="2962.592149547375" y2="3887.6431051547625"/>
 <line data-from="dex-ring-4" data-to="dex-ring-5" x1="2962.592149547375" y1="3887.6431051547625" x2="2751.892149547375" y2="3522.7"/>
 <line data-from="dex-ring-2" data-to="dex-ring-6" x1="2962.592149547375" y1="3157.7568948452376" x2="2726.4230411946046" y2="3264.7"/>
-<line data-from="dex-ring-5" data-to="dex-ring-6" x1="2751.892149547375" y1="3522.7" x2="2726.4230411946046" y2="3264.7"/>
+<line data-from="junction-2" data-to="dex-ring-6" x1="2726.4230411946046" y1="3264.7" x2="2726.4230411946046" y2="3264.7"/>
 <line data-from="attribute-int-6" data-to="int-ring-0" x1="5139.7418809382725" y1="4170.335565385763" x2="4616.0078504526255" y2="3887.6431051547625"/>
 <line data-from="int-ring-0" data-to="int-ring-1" x1="4616.0078504526255" y1="3887.6431051547625" x2="5037.407850452625" y2="3887.6431051547625"/>
 <line data-from="int-ring-1" data-to="int-ring-2" x1="5037.407850452625" y1="3887.6431051547625" x2="5248.107850452625" y2="3522.7"/>
 <line data-from="int-ring-0" data-to="int-ring-3" x1="4616.0078504526255" y1="3887.6431051547625" x2="4405.307850452626" y2="3522.7"/>
 <line data-from="int-ring-3" data-to="int-ring-4" x1="4405.307850452626" y1="3522.7" x2="4616.0078504526255" y2="3157.7568948452376"/>
 <line data-from="int-ring-4" data-to="int-ring-5" x1="4616.0078504526255" y1="3157.7568948452376" x2="5037.407850452625" y2="3157.7568948452376"/>
-<line data-from="int-ring-2" data-to="int-ring-6" x1="5248.107850452625" y1="3522.7" x2="5273.576958805395" y2="3264.7"/>
-<line data-from="int-ring-5" data-to="int-ring-6" x1="5037.407850452625" y1="3157.7568948452376" x2="5273.576958805395" y2="3264.7"/>
+<line data-from="junction-3" data-to="int-ring-6" x1="5273.576958805395" y1="3264.7000000000003" x2="5273.576958805395" y2="3264.7"/>
+<line data-from="junction-4" data-to="int-ring-6" x1="5248.943130742643" y1="3253.5452046787414" x2="5273.576958805395" y2="3264.7"/>
 <line data-from="attribute-str-17" data-to="blood-vigor" x1="2246.2011890628823" y1="4045.924838111333" x2="2118.3199999999997" y2="3731.68"/>
 <line data-from="blood-vigor" data-to="blood-hunger" x1="2118.3199999999997" y1="3731.68" x2="2252.48" y2="3396.2799999999997"/>
 <line data-from="blood-vigor" data-to="blood-fury" x1="2118.3199999999997" y1="3731.68" x2="2453.7200000000003" y2="3731.68"/>
-<line data-from="blood-hunger" data-to="keystone-vital-leech" x1="2252.48" y1="3396.2799999999997" x2="2118.3199999999997" y2="2992.08"/>
-<line data-from="blood-fury" data-to="keystone-blood-magic" x1="2453.7200000000003" y1="3731.68" x2="2388.36" y2="3260.4"/>
+<line data-from="approach-keystone-vital-leech-2" data-to="keystone-vital-leech" x1="2112.7472" y1="3137.5232" x2="2118.3199999999997" y2="2992.08"/>
+<line data-from="approach-keystone-blood-magic-2" data-to="keystone-blood-magic" x1="2465.8288000000002" y1="3403.3664000000003" x2="2388.36" y2="3260.4"/>
 <line data-from="attribute-int-10" data-to="affliction-focus" x1="5447.8693742065425" y1="4126.672156509446" x2="5948.76" y2="4134.16"/>
 <line data-from="affliction-focus" data-to="affliction-decay" x1="5948.76" y1="4134.16" x2="6351.24" y2="4335.4"/>
-<line data-from="affliction-decay" data-to="keystone-deterioration" x1="6351.24" y1="4335.4" x2="6755.4400000000005" y2="4538.36"/>
+<line data-from="approach-keystone-deterioration-2" data-to="keystone-deterioration" x1="6650.4512" y1="4424.9088" x2="6755.4400000000005" y2="4538.36"/>
 <line data-from="int-ring-2" data-to="mana-channel" x1="5248.107850452625" y1="3522.7" x2="5747.52" y2="3126.24"/>
-<line data-from="mana-channel" data-to="mana-bastion" x1="5747.52" y1="3126.24" x2="6284.16" y2="3126.24"/>
+<line data-from="approach-keystone-mana-shield-2" data-to="mana-bastion" x1="6615.363200000001" y1="2855.4432" x2="6284.16" y2="3126.24"/>
 <line data-from="mana-bastion" data-to="keystone-mana-shield" x1="6284.16" y1="3126.24" x2="6688.360000000001" y2="2656.6800000000003"/>
 <line data-from="attribute-int-17" data-to="aether-reservoir" x1="4916.671481937661" y1="5495.871904342819" x2="5142.08" y2="5747.52"/>
-<line data-from="aether-reservoir" data-to="aether-unraveling" x1="5142.08" y1="5747.52" x2="5477.48" y2="6015.84"/>
+<line data-from="approach-keystone-aether-conversion-2" data-to="aether-unraveling" x1="5784.5344000000005" y1="6149.7936" x2="5477.48" y2="6015.84"/>
 <line data-from="aether-unraveling" data-to="keystone-aether-conversion" x1="5477.48" y1="6015.84" x2="5881.68" y2="6284.16"/>
-<line data-from="attribute-dex-10" data-to="keystone-resolute-force" x1="3385.7666183860674" y1="2682.772262320933" x2="3260.4" y2="2118.3199999999997"/>
-<line data-from="str-ring-2" data-to="keystone-immovable" x1="3789.3" y1="5319.543105154762" x2="3484" y2="5548"/>
+<line data-from="approach-keystone-resolute-force-2" data-to="keystone-resolute-force" x1="3368.2515893620534" y1="2283.90072973637" x2="3260.4" y2="2118.3199999999997"/>
+<line data-from="approach-keystone-immovable-2" data-to="keystone-immovable" x1="3609.1108273814284" y1="5511.529793649524" x2="3484" y2="5548"/>
 <line data-from="route-vitality" data-to="cluster-vitality-0" x1="2413.993273395774" y1="5301.564639075523" x2="2473.7877838850814" y2="5606.212685599758"/>
 <line data-from="cluster-vitality-0" data-to="cluster-vitality-1" x1="2473.7877838850814" y1="5606.212685599758" x2="2248.9643095552824" y2="5873.447498807689"/>
 <line data-from="route-vitality" data-to="cluster-vitality-2" x1="2413.993273395774" y1="5301.564639075523" x2="1850.9502216373771" y2="5399.112779628418"/>
 <line data-from="cluster-vitality-2" data-to="cluster-vitality-3" x1="1850.9502216373771" y1="5399.112779628418" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="cluster-vitality-1" data-to="cluster-vitality-4" x1="2248.9643095552824" y1="5873.447498807689" x2="1733.734119476816" y2="5901.622864496658"/>
 <line data-from="cluster-vitality-3" data-to="cluster-vitality-4" x1="1733.734119476816" y1="5901.622864496658" x2="1733.734119476816" y2="5901.622864496658"/>
-<line data-from="route-regeneration" data-to="cluster-regeneration-0" x1="2713.8798170365067" y1="5559.749518663678" x2="3115.1867357038395" y2="6031.34152897182"/>
+<line data-from="junction-6" data-to="cluster-regeneration-0" x1="2905.9031064286846" y1="5785.40386165672" x2="3115.1867357038395" y2="6031.34152897182"/>
 <line data-from="cluster-regeneration-0" data-to="cluster-regeneration-1" x1="3115.1867357038395" y1="6031.34152897182" x2="2995.321465011663" y2="6359.354267873667"/>
-<line data-from="route-regeneration" data-to="cluster-regeneration-2" x1="2713.8798170365067" y1="5559.749518663678" x2="2459.078534988338" y2="6049.754267873667"/>
-<line data-from="cluster-regeneration-2" data-to="cluster-regeneration-3" x1="2459.078534988338" y1="6049.754267873667" x2="2520.800000000001" y2="6562.049554555884"/>
+<line data-from="junction-7" data-to="cluster-regeneration-2" x1="2666.3762197347323" y1="5651.103016163066" x2="2459.078534988338" y2="6049.754267873667"/>
+<line data-from="junction-8" data-to="cluster-regeneration-3" x1="2519.741195691017" y1="6553.26135652933" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="cluster-regeneration-1" data-to="cluster-regeneration-4" x1="2995.321465011663" y1="6359.354267873667" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="cluster-regeneration-3" data-to="cluster-regeneration-4" x1="2520.800000000001" y1="6562.049554555884" x2="2520.800000000001" y2="6562.049554555884"/>
 <line data-from="route-armor" data-to="cluster-armor-0" x1="2069.925580529421" y1="4695.58643830427" x2="2016.4725498231658" y2="4987.350887169799"/>
@@ -121,11 +121,11 @@
 <line data-from="cluster-armor-2" data-to="cluster-armor-3" x1="1502.029028153765" y1="4579.717641454506" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-1" data-to="cluster-armor-4" x1="1713.807900901019" y1="5161.57531224514" x2="1220.0133506669686" y2="5011.832392014659"/>
 <line data-from="cluster-armor-3" data-to="cluster-armor-4" x1="1220.0133506669686" y1="5011.832392014659" x2="1220.0133506669686" y2="5011.832392014659"/>
-<line data-from="route-blood" data-to="cluster-blood-0" x1="1948.6966183126988" y1="4009.4329158178934" x2="1798.4" y2="4249.400000000001"/>
-<line data-from="cluster-blood-0" data-to="cluster-blood-1" x1="1798.4" y1="4249.400000000001" x2="1454.4" y2="4309.6"/>
+<line data-from="junction-9" data-to="cluster-blood-0" x1="1804.065236547352" y1="4240.35475127297" x2="1798.4" y2="4249.400000000001"/>
+<line data-from="junction-11" data-to="cluster-blood-1" x1="1759.467985850093" y1="4256.213102476234" x2="1454.4" y2="4309.6"/>
 <line data-from="route-blood" data-to="cluster-blood-2" x1="1948.6966183126988" y1="4009.4329158178934" x2="1454.4" y2="3690.4000000000005"/>
 <line data-from="cluster-blood-2" data-to="cluster-blood-3" x1="1454.4" y1="3690.4000000000005" x2="1041.6" y2="4000.0000000000005"/>
-<line data-from="cluster-blood-1" data-to="cluster-blood-4" x1="1454.4" y1="4309.6" x2="1041.6" y2="4000.0000000000005"/>
+<line data-from="junction-12" data-to="cluster-blood-4" x1="1142.2996746692781" y1="4075.524756001959" x2="1041.6" y2="4000.0000000000005"/>
 <line data-from="cluster-blood-3" data-to="cluster-blood-4" x1="1041.6" y1="4000.0000000000005" x2="1041.6" y2="4000.0000000000005"/>
 <line data-from="route-precision" data-to="cluster-precision-0" x1="3665.815321195186" y1="1975.6955646499773" x2="3372.0851184472413" y2="1875.1551064784553"/>
 <line data-from="cluster-precision-0" data-to="cluster-precision-1" x1="3372.0851184472413" y1="1875.1551064784553" x2="3253.0647185984826" y2="1546.834859737805"/>
@@ -139,10 +139,10 @@
 <line data-from="cluster-tempo-2" data-to="cluster-tempo-3" x1="4746.935281401517" y1="1546.8348597378053" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="cluster-tempo-1" data-to="cluster-tempo-4" x1="4137.142320736359" y1="1439.3119081264417" x2="4513.720768809847" y2="1086.5447434886837"/>
 <line data-from="cluster-tempo-3" data-to="cluster-tempo-4" x1="4513.720768809847" y1="1086.5447434886837" x2="4513.720768809847" y2="1086.5447434886837"/>
-<line data-from="attribute-dex-17" data-to="cluster-affliction-0" x1="4837.127328999457" y1="2458.203257545848" x2="4884.813264296161" y2="1968.6584710281802"/>
-<line data-from="cluster-affliction-0" data-to="cluster-affliction-1" x1="4884.813264296161" y1="1968.6584710281802" x2="5004.678534988338" y2="1640.6457321263333"/>
+<line data-from="junction-13" data-to="cluster-affliction-0" x1="4884.676756106375" y1="1970.059866894921" x2="4884.813264296161" y2="1968.6584710281802"/>
+<line data-from="junction-14" data-to="cluster-affliction-1" x1="4900.327911490693" y1="1926.2024544523433" x2="5004.678534988338" y2="1640.6457321263333"/>
 <line data-from="attribute-dex-17" data-to="cluster-affliction-2" x1="4837.127328999457" y1="2458.203257545848" x2="5540.921465011662" y2="1950.2457321263337"/>
-<line data-from="cluster-affliction-2" data-to="cluster-affliction-3" x1="5540.921465011662" y1="1950.2457321263337" x2="5479.2" y2="1437.9504454441171"/>
+<line data-from="junction-15" data-to="cluster-affliction-3" x1="5491.802266049503" y1="1542.5507088606707" x2="5479.2" y2="1437.9504454441171"/>
 <line data-from="cluster-affliction-1" data-to="cluster-affliction-4" x1="5004.678534988338" y1="1640.6457321263333" x2="5479.2" y2="1437.9504454441171"/>
 <line data-from="cluster-affliction-3" data-to="cluster-affliction-4" x1="5479.2" y1="1437.9504454441171" x2="5479.2" y2="1437.9504454441171"/>
 <line data-from="attribute-int-15" data-to="cluster-mana-0" x1="5643.297688817389" y1="4614.40382968161" x2="6154.127097667678" y2="4518.632207921786"/>
@@ -158,13 +158,13 @@
 <line data-from="cluster-ward-1" data-to="cluster-ward-4" x1="6149.049778362623" y1="5399.112779628418" x2="6266.265880523184" y2="5901.622864496658"/>
 <line data-from="cluster-ward-3" data-to="cluster-ward-4" x1="6266.265880523184" y1="5901.622864496658" x2="6266.265880523184" y2="5901.622864496658"/>
 <line data-from="attribute-int-17" data-to="cluster-restoration-0" x1="4916.671481937661" y1="5495.871904342819" x2="5316.786735703839" y2="5781.941528971819"/>
-<line data-from="cluster-restoration-0" data-to="cluster-restoration-1" x1="5316.786735703839" y1="5781.941528971819" x2="5540.921465011662" y2="6049.754267873666"/>
+<line data-from="junction-16" data-to="cluster-restoration-1" x1="5521.902450890752" y1="6027.02894423166" x2="5540.921465011662" y2="6049.754267873666"/>
 <line data-from="attribute-int-17" data-to="cluster-restoration-2" x1="4916.671481937661" y1="5495.871904342819" x2="5004.678534988338" y2="6359.354267873667"/>
 <line data-from="cluster-restoration-2" data-to="cluster-restoration-3" x1="5004.678534988338" y1="6359.354267873667" x2="5479.2" y2="6562.049554555882"/>
 <line data-from="cluster-restoration-1" data-to="cluster-restoration-4" x1="5540.921465011662" y1="6049.754267873666" x2="5479.2" y2="6562.049554555882"/>
 <line data-from="cluster-restoration-3" data-to="cluster-restoration-4" x1="5479.2" y1="6562.049554555882" x2="5479.2" y2="6562.049554555882"/>
 <line data-from="attribute-str-14" data-to="weapon-sword-0" x1="3083.3285180623398" y1="5495.871904342819" x2="3434.6356778780537" y2="6109.968374945841"/>
-<line data-from="bridge-int-str-3" data-to="weapon-sword-0" x1="4000" y1="6210.2" x2="3434.6356778780537" y2="6109.968374945841"/>
+<line data-from="junction-17" data-to="weapon-sword-0" x1="3926.985862467363" y1="6197.255558034938" x2="3434.6356778780537" y2="6109.968374945841"/>
 <line data-from="weapon-sword-0" data-to="weapon-sword-1" x1="3434.6356778780537" y1="6109.968374945841" x2="3511.741168484506" y2="6486.763734946915"/>
 <line data-from="weapon-sword-1" data-to="weapon-sword-2" x1="3511.741168484506" y1="6486.763734946915" x2="3385.0278809691317" y2="6826.752768250999"/>
 <line data-from="attribute-str-14" data-to="weapon-sword-3" x1="3083.3285180623398" y1="5495.871904342819" x2="3179.4626842410667" y2="6397.729983431647"/>
@@ -172,24 +172,24 @@
 <line data-from="weapon-sword-4" data-to="weapon-sword-5" x1="3119.20509357438" y1="6755.5257670387855" x2="3171.9861109080152" y2="7090.189903463986"/>
 <line data-from="weapon-sword-2" data-to="weapon-sword-6" x1="3385.0278809691317" y1="6826.752768250999" x2="3087.4040469685115" y2="7405.854463495254"/>
 <line data-from="weapon-sword-5" data-to="weapon-sword-6" x1="3171.9861109080152" y1="7090.189903463986" x2="3087.4040469685115" y2="7405.854463495254"/>
-<line data-from="route-axe" data-to="weapon-axe-0" x1="2588.7268678346113" y1="5469.5660891776415" x2="2716.041894892322" y2="5767.216722512636"/>
+<line data-from="junction-7" data-to="weapon-axe-0" x1="2666.3762197347323" y1="5651.103016163066" x2="2716.041894892322" y2="5767.216722512636"/>
 <line data-from="weapon-axe-0" data-to="weapon-axe-1" x1="2716.041894892322" y1="5767.216722512636" x2="2670.7149694032696" y2="6180.752536954033"/>
 <line data-from="weapon-axe-1" data-to="weapon-axe-2" x1="2670.7149694032696" y1="6180.752536954033" x2="2531.787583755293" y2="6547.544005662096"/>
 <line data-from="route-axe" data-to="weapon-axe-3" x1="2588.7268678346113" y1="5469.5660891776415" x2="2336.7527541252916" y2="5938.1147848077"/>
 <line data-from="weapon-axe-3" data-to="weapon-axe-4" x1="2336.7527541252916" y1="5938.1147848077" x2="2030.8442608383252" y2="6183.587377442596"/>
 <line data-from="weapon-axe-4" data-to="weapon-axe-5" x1="2030.8442608383252" y1="6183.587377442596" x2="2119.55742086592" y2="6588.207168404331"/>
-<line data-from="weapon-axe-2" data-to="weapon-axe-6" x1="2531.787583755293" y1="6547.544005662096" x2="1947.6890130956012" y2="6824.763737559567"/>
+<line data-from="junction-8" data-to="weapon-axe-6" x1="2519.741195691017" y1="6553.26135652933" x2="1947.6890130956012" y2="6824.763737559567"/>
 <line data-from="weapon-axe-5" data-to="weapon-axe-6" x1="2119.55742086592" y1="6588.207168404331" x2="1947.6890130956012" y2="6824.763737559567"/>
-<line data-from="route-hammer" data-to="weapon-hammer-0" x1="1990.3675988196974" y1="4386.938147424679" x2="1793.3548185568752" y2="4231.92775429827"/>
-<line data-from="weapon-hammer-0" data-to="weapon-hammer-1" x1="1793.3548185568752" y1="4231.92775429827" x2="1440.4002977361683" y2="4493.856420603096"/>
+<line data-from="junction-9" data-to="weapon-hammer-0" x1="1804.065236547352" y1="4240.35475127297" x2="1793.3548185568752" y2="4231.92775429827"/>
+<line data-from="junction-18" data-to="weapon-hammer-1" x1="1760.1270127686007" y1="4256.58621407411" x2="1440.4002977361683" y2="4493.856420603096"/>
 <line data-from="weapon-hammer-1" data-to="weapon-hammer-2" x1="1440.4002977361683" y1="4493.856420603096" x2="1064.0732125288137" y2="4533.409991103576"/>
-<line data-from="route-hammer" data-to="weapon-hammer-3" x1="1990.3675988196974" y1="4386.938147424679" x2="1393.6551689628732" y2="4049.1062289944043"/>
-<line data-from="weapon-hammer-3" data-to="weapon-hammer-4" x1="1393.6551689628732" y1="4049.1062289944043" x2="1017.328083755519" y2="4088.6597994948847"/>
-<line data-from="weapon-hammer-4" data-to="weapon-hammer-5" x1="1017.328083755519" y1="4088.6597994948847" x2="773.2750103231306" y2="4563.974113763038"/>
-<line data-from="weapon-hammer-2" data-to="weapon-hammer-6" x1="1064.0732125288137" y1="4533.409991103576" x2="749.9024459364832" y2="4341.5990179586925"/>
+<line data-from="junction-11" data-to="weapon-hammer-3" x1="1759.467985850093" y1="4256.213102476234" x2="1393.6551689628732" y2="4049.1062289944043"/>
+<line data-from="junction-12" data-to="weapon-hammer-4" x1="1142.2996746692781" y1="4075.524756001959" x2="1017.328083755519" y2="4088.6597994948847"/>
+<line data-from="junction-19" data-to="weapon-hammer-5" x1="854.6260348005933" y1="4405.536009006987" x2="773.2750103231306" y2="4563.974113763038"/>
+<line data-from="junction-19" data-to="weapon-hammer-6" x1="854.6260348005933" y1="4405.536009006987" x2="749.9024459364832" y2="4341.5990179586925"/>
 <line data-from="weapon-hammer-5" data-to="weapon-hammer-6" x1="773.2750103231306" y1="4563.974113763038" x2="749.9024459364832" y2="4341.5990179586925"/>
 <line data-from="attribute-dex-14" data-to="weapon-dagger-0" x1="3162.872671000543" y1="2458.203257545848" x2="2391.556206442776" y2="2446.743883653682"/>
-<line data-from="bridge-str-dex-3" data-to="weapon-dagger-0" x1="2085.910652555634" y1="2894.8999999999996" x2="2391.556206442776" y2="2446.743883653682"/>
+<line data-from="junction-20" data-to="weapon-dagger-0" x1="2167.754706861955" y1="2774.8952655699304" x2="2391.556206442776" y2="2446.743883653682"/>
 <line data-from="weapon-dagger-0" data-to="weapon-dagger-1" x1="2391.556206442776" y1="2446.743883653682" x2="2036.145678785297" y2="2294.814436770491"/>
 <line data-from="weapon-dagger-1" data-to="weapon-dagger-2" x1="2036.145678785297" y1="2294.814436770491" x2="1818.5630973985376" y2="2024.920345918034"/>
 <line data-from="attribute-dex-14" data-to="weapon-dagger-3" x1="3162.872671000543" y1="2458.203257545848" x2="2227.3156623356126" y2="2096.852123717294"/>
@@ -197,12 +197,12 @@
 <line data-from="weapon-dagger-4" data-to="weapon-dagger-5" x1="1949.99246108938" y1="1888.8212556939611" x2="1673.942821624937" y2="1753.7526932837868"/>
 <line data-from="weapon-dagger-2" data-to="weapon-dagger-6" x1="1818.5630973985376" y1="2024.920345918034" x2="1500.7257977033896" y2="1586.47895767726"/>
 <line data-from="weapon-dagger-5" data-to="weapon-dagger-6" x1="1673.942821624937" y1="1753.7526932837868" x2="1500.7257977033896" y2="1586.47895767726"/>
-<line data-from="route-bow" data-to="weapon-bow-0" x1="4684.802397823686" y1="2072.854250047666" x2="4909.463133917489" y2="1957.3123567111445"/>
-<line data-from="weapon-bow-0" data-to="weapon-bow-1" x1="4909.463133917489" y1="1957.3123567111445" x2="4782.259847320868" y2="1524.1229248467262"/>
+<line data-from="junction-13" data-to="weapon-bow-0" x1="4884.676756106375" y1="1970.059866894921" x2="4909.463133917489" y2="1957.3123567111445"/>
+<line data-from="junction-14" data-to="weapon-bow-1" x1="4900.327911490693" y1="1926.2024544523433" x2="4782.259847320868" y2="1524.1229248467262"/>
 <line data-from="weapon-bow-1" data-to="weapon-bow-2" x1="4782.259847320868" y1="1524.1229248467262" x2="4848.886972092938" y2="1120.7491202378906"/>
-<line data-from="route-bow" data-to="weapon-bow-3" x1="4684.802397823686" y1="2072.854250047666" x2="5316.501230950261" y2="1761.9825137174535"/>
-<line data-from="weapon-bow-3" data-to="weapon-bow-4" x1="5316.501230950261" y1="1761.9825137174535" x2="5571.684138179764" y2="1442.5591522394634"/>
-<line data-from="weapon-bow-4" data-to="weapon-bow-5" x1="5571.684138179764" y1="1442.5591522394634" x2="5329.215349571716" y2="1014.5334444239802"/>
+<line data-from="junction-21" data-to="weapon-bow-3" x1="4884.2232851162" y1="1974.715209349591" x2="5316.501230950261" y2="1761.9825137174535"/>
+<line data-from="junction-15" data-to="weapon-bow-4" x1="5491.802266049503" y1="1542.5507088606707" x2="5571.684138179764" y2="1442.5591522394634"/>
+<line data-from="junction-22" data-to="weapon-bow-5" x1="5501.452992255321" y1="1318.5813977516668" x2="5329.215349571716" y2="1014.5334444239802"/>
 <line data-from="weapon-bow-2" data-to="weapon-bow-6" x1="4848.886972092938" y1="1120.7491202378906" x2="5434.153403485272" y2="778.8387163521893"/>
 <line data-from="weapon-bow-5" data-to="weapon-bow-6" x1="5329.215349571716" y1="1014.5334444239802" x2="5434.153403485272" y2="778.8387163521893"/>
 <line data-from="route-spear" data-to="weapon-spear-0" x1="3450.967549560393" y1="2036.8597373172388" x2="3181.7093573422817" y2="1974.6595880843095"/>
@@ -214,7 +214,7 @@
 <line data-from="weapon-spear-2" data-to="weapon-spear-6" x1="2816.938728209855" y1="1324.3521929838585" x2="2653.364217988479" y2="666.9594796033125"/>
 <line data-from="weapon-spear-5" data-to="weapon-spear-6" x1="2788.6721195303066" y1="1001.8582878728362" x2="2653.364217988479" y2="666.9594796033125"/>
 <line data-from="attribute-int-14" data-to="weapon-arcane-0" x1="5753.798810937118" y1="4045.9248381113325" x2="6218.8" y2="4000"/>
-<line data-from="bridge-dex-int-3" data-to="weapon-arcane-0" x1="5914.089347444367" y1="2894.9000000000005" x2="6218.8" y2="4000"/>
+<line data-from="junction-5" data-to="weapon-arcane-0" x1="5977.87702490543" y1="3126.24" x2="6218.8" y2="4000"/>
 <line data-from="weapon-arcane-0" data-to="weapon-arcane-1" x1="6218.8" y1="4000" x2="6597.2" y2="3759.2"/>
 <line data-from="weapon-arcane-1" data-to="weapon-arcane-2" x1="6597.2" y1="3759.2" x2="6958.4" y2="3793.6"/>
 <line data-from="attribute-int-14" data-to="weapon-arcane-3" x1="5753.798810937118" y1="4045.9248381113325" x2="6597.2" y2="4240.8"/>
@@ -222,34 +222,34 @@
 <line data-from="weapon-arcane-4" data-to="weapon-arcane-5" x1="6958.4" y1="4206.4" x2="7268" y2="4000"/>
 <line data-from="weapon-arcane-2" data-to="weapon-arcane-6" x1="6958.4" y1="3793.6" x2="7526" y2="4000"/>
 <line data-from="weapon-arcane-5" data-to="weapon-arcane-6" x1="7268" y1="4000" x2="7526" y2="4000"/>
-<line data-from="attribute-str-13" data-to="bridge-str-dex-0" x1="2552.130625793457" y1="4126.672156509447" x2="2733.870859667151" y2="3269"/>
-<line data-from="bridge-str-dex-0" data-to="bridge-str-dex-1" x1="2733.870859667151" y1="3269" x2="2517.884123963312" y2="3144.2999999999997"/>
+<line data-from="junction-1" data-to="bridge-str-dex-0" x1="2729.0796191037552" y1="3291.610918555431" x2="2733.870859667151" y2="3269"/>
+<line data-from="junction-2" data-to="bridge-str-dex-1" x1="2726.4230411946046" y1="3264.7" x2="2517.884123963312" y2="3144.2999999999997"/>
 <line data-from="bridge-str-dex-1" data-to="bridge-str-dex-2" x1="2517.884123963312" y1="3144.2999999999997" x2="2301.897388259473" y2="3019.6"/>
 <line data-from="bridge-str-dex-2" data-to="bridge-str-dex-3" x1="2301.897388259473" y1="3019.6" x2="2085.910652555634" y2="2894.8999999999996"/>
-<line data-from="attribute-dex-13" data-to="bridge-dex-int-0" x1="4614.233381613933" y1="2682.772262320933" x2="5266.12914033285" y2="3269"/>
-<line data-from="bridge-dex-int-0" data-to="bridge-dex-int-1" x1="5266.12914033285" y1="3269" x2="5482.115876036689" y2="3144.3"/>
+<line data-from="junction-4" data-to="bridge-dex-int-0" x1="5248.943130742643" y1="3253.5452046787414" x2="5266.12914033285" y2="3269"/>
+<line data-from="junction-3" data-to="bridge-dex-int-1" x1="5273.576958805395" y1="3264.7000000000003" x2="5482.115876036689" y2="3144.3"/>
 <line data-from="bridge-dex-int-1" data-to="bridge-dex-int-2" x1="5482.115876036689" y1="3144.3" x2="5698.102611740527" y2="3019.6000000000004"/>
 <line data-from="bridge-dex-int-2" data-to="bridge-dex-int-3" x1="5698.102611740527" y1="3019.6000000000004" x2="5914.089347444367" y2="2894.9000000000005"/>
-<line data-from="attribute-int-13" data-to="bridge-int-str-0" x1="4833.63599259261" y1="5190.55558116962" x2="4000" y2="5462"/>
+<line data-from="junction-0" data-to="bridge-int-str-0" x1="4021.9772501536027" y1="5454.843876765827" x2="4000" y2="5462"/>
 <line data-from="bridge-int-str-0" data-to="bridge-int-str-1" x1="4000" y1="5462" x2="4000" y2="5711.4"/>
 <line data-from="bridge-int-str-1" data-to="bridge-int-str-2" x1="4000" y1="5711.4" x2="4000" y2="5960.8"/>
 <line data-from="bridge-int-str-2" data-to="bridge-int-str-3" x1="4000" y1="5960.8" x2="4000" y2="6210.2"/>
-<line data-from="cluster-precision-4" data-to="keystone-overcritical" x1="3486.279231190153" y1="1086.5447434886837" x2="3387.716525546404" y2="527.5678628789547"/>
-<line data-from="cluster-affliction-4" data-to="keystone-pandemic" x1="5479.2" y1="1437.9504454441171" x2="5763" y2="946.3944262560694"/>
-<line data-from="cluster-blood-4" data-to="keystone-edge-of-death" x1="1041.6" y1="4000.0000000000005" x2="474" y2="4000.0000000000005"/>
-<line data-from="cluster-tempo-4" data-to="keystone-opening-salvo" x1="4513.720768809847" y1="1086.5447434886837" x2="4612.283474453597" y2="527.5678628789547"/>
-<line data-from="bridge-str-dex-2" data-to="keystone-relentless-control" x1="2301.897388259473" y1="3019.6" x2="1298.927293562483" y2="1733.5308882452623"/>
-<line data-from="cluster-ward-4" data-to="keystone-calculated-violence" x1="6266.265880523184" y1="5901.622864496658" x2="6701.072706437516" y2="6266.469111754737"/>
-<line data-from="cluster-regeneration-4" data-to="keystone-pure-renewal" x1="2520.800000000001" y1="6562.049554555884" x2="2910.406077833936" y2="7353.425276456712"/>
-<line data-from="cluster-tempo-3" data-to="keystone-tempo-gambit" x1="4513.720768809847" y1="1086.5447434886837" x2="3876.944374626982" y2="476.1479439306686"/>
-<line data-from="cluster-armor-4" data-to="keystone-reprisal" x1="1220.0133506669686" y1="5011.832392014659" x2="686.6438191088873" y2="5205.963025366309"/>
-<line data-from="cluster-affliction-3" data-to="keystone-compressed-agony" x1="5479.2" y1="1437.9504454441171" x2="6620.328654633292" y2="1640.6454819786659"/>
-<line data-from="cluster-vitality-3" data-to="keystone-crowd-hunter" x1="1733.734119476816" y1="5901.622864496658" x2="1829.177638001729" y2="6778.525917217303"/>
-<line data-from="cluster-blood-3" data-to="keystone-killing-spree" x1="1041.6" y1="4000.0000000000005" x2="527.5678628789547" y2="3387.7165255464033"/>
-<line data-from="cluster-mana-4" data-to="keystone-attribute-echo" x1="6779.986649333032" y1="5011.832392014659" x2="7313.356180891113" y2="5205.963025366308"/>
-<line data-from="bridge-int-str-2" data-to="keystone-spellblade" x1="4000" y1="5960.8" x2="3266.903378176581" y2="7448.948440187399"/>
-<line data-from="cluster-vitality-4" data-to="keystone-glass-cannon" x1="1733.734119476816" y1="5901.622864496658" x2="1298.927293562484" y2="6266.469111754738"/>
-<line data-from="attribute-str-14" data-to="class-0-0" x1="3083.3285180623398" y1="5495.871904342819" x2="2813.71925866891" y2="5935.834229149532"/>
+<line data-from="approach-keystone-overcritical-2" data-to="keystone-overcritical" x1="3486.333817025571" y1="694.612939996818" x2="3387.716525546404" y2="527.5678628789547"/>
+<line data-from="approach-keystone-pandemic-2" data-to="keystone-pandemic" x1="5613.197277697434" y1="1069.6363523962445" x2="5763" y2="946.3944262560694"/>
+<line data-from="approach-keystone-edge-of-death-2" data-to="keystone-edge-of-death" x1="655.632" y1="3931.8880000000004" x2="474" y2="4000.0000000000005"/>
+<line data-from="approach-keystone-opening-salvo-2" data-to="keystone-opening-salvo" x1="4513.66618297443" y1="694.612939996818" x2="4612.283474453597" y2="527.5678628789547"/>
+<line data-from="approach-keystone-relentless-control-2" data-to="keystone-relentless-control" x1="1690.8473150326595" y1="2089.7257626160003" x2="1298.927293562483" y2="1733.5308882452623"/>
+<line data-from="approach-keystone-calculated-violence-2" data-to="keystone-calculated-violence" x1="6605.716071815899" y1="6097.541493522432" x2="6701.072706437516" y2="6266.469111754737"/>
+<line data-from="approach-keystone-pure-renewal-2" data-to="keystone-pure-renewal" x1="2704.987003451769" y1="7139.937077673426" x2="2910.406077833936" y2="7353.425276456712"/>
+<line data-from="approach-keystone-tempo-gambit-2" data-to="keystone-tempo-gambit" x1="4018.433214192223" y1="736.4460718882845" x2="3876.944374626982" y2="476.1479439306686"/>
+<line data-from="approach-keystone-reprisal-2" data-to="keystone-reprisal" x1="834.0263932052752" y1="5079.836878906811" x2="686.6438191088873" y2="5205.963025366309"/>
+<line data-from="approach-keystone-compressed-agony-2" data-to="keystone-compressed-agony" x1="6270.907516791653" y1="1487.1701400576496" x2="6620.328654633292" y2="1640.6454819786659"/>
+<line data-from="approach-keystone-crowd-hunter-2" data-to="keystone-crowd-hunter" x1="1709.1641139823334" y1="6507.655170933759" x2="1829.177638001729" y2="6778.525917217303"/>
+<line data-from="approach-keystone-killing-spree-2" data-to="keystone-killing-spree" x1="623.1288556010937" y1="3641.5156468939294" x2="527.5678628789547" y2="3387.7165255464033"/>
+<line data-from="approach-keystone-attribute-echo-2" data-to="keystone-attribute-echo" x1="7119.382254790329" y1="5207.84556648075" x2="7313.356180891113" y2="5205.963025366308"/>
+<line data-from="approach-keystone-spellblade-2" data-to="keystone-spellblade" x1="3582.2295577108616" y1="7012.513011234695" x2="3266.903378176581" y2="7448.948440187399"/>
+<line data-from="approach-keystone-glass-cannon-2" data-to="keystone-glass-cannon" x1="1394.2839281841004" y1="6097.541493522433" x2="1298.927293562484" y2="6266.469111754738"/>
+<line data-from="junction-6" data-to="class-0-0" x1="2905.9031064286846" y1="5785.40386165672" x2="2813.71925866891" y2="5935.834229149532"/>
 <line data-from="route-vitality" data-to="class-0-1" x1="2413.993273395774" y1="5301.564639075523" x2="2248.103545876521" y2="5444.151991318636"/>
 <line data-from="route-armor" data-to="class-0-2" x1="2069.925580529421" y1="4695.58643830427" x2="1776.7148916000033" y2="4831.252240157472"/>
 <line data-from="route-blood" data-to="class-1-0" x1="1948.6966183126988" y1="4009.4329158178934" x2="1730.3780093754945" y2="4059.432143438196"/>
@@ -270,7 +270,99 @@
 <line data-from="attribute-dex-15" data-to="route-precision" x1="3710.4404802780273" y1="2269.660540663081" x2="3665.815321195186" y2="1975.6955646499773"/>
 <line data-from="attribute-dex-15" data-to="route-spear" x1="3710.4404802780273" y1="2269.660540663081" x2="3450.967549560393" y2="2036.8597373172388"/>
 <line data-from="attribute-dex-16" data-to="route-tempo" x1="4289.559519721974" y1="2269.6605406630815" x2="4362.641683635855" y2="1980.7133023918414"/>
-<line data-from="attribute-dex-16" data-to="route-bow" x1="4289.559519721974" y1="2269.6605406630815" x2="4684.802397823686" y2="2072.854250047666"/></g>
+<line data-from="attribute-dex-16" data-to="route-bow" x1="4289.559519721974" y1="2269.6605406630815" x2="4684.802397823686" y2="2072.854250047666"/>
+<line data-from="blood-hunger" data-to="approach-keystone-vital-leech-1" x1="2252.48" y1="3396.2799999999997" x2="2158.3616" y2="3274.9512"/>
+<line data-from="approach-keystone-vital-leech-1" data-to="approach-keystone-vital-leech-2" x1="2158.3616" y1="3274.9512" x2="2112.7472" y2="3137.5232"/>
+<line data-from="blood-fury" data-to="approach-keystone-blood-magic-1" x1="2453.7200000000003" y1="3731.68" x2="2488.0512000000003" y2="3563.6016"/>
+<line data-from="approach-keystone-blood-magic-1" data-to="approach-keystone-blood-magic-2" x1="2488.0512000000003" y1="3563.6016" x2="2465.8288000000002" y2="3403.3664000000003"/>
+<line data-from="affliction-decay" data-to="approach-keystone-deterioration-1" x1="6351.24" y1="4335.4" x2="6513.0232" y2="4355.9024"/>
+<line data-from="approach-keystone-deterioration-1" data-to="approach-keystone-deterioration-2" x1="6513.0232" y1="4355.9024" x2="6650.4512" y2="4424.9088"/>
+<line data-from="mana-channel" data-to="approach-keystone-mana-shield-1" x1="5747.52" y1="3126.24" x2="6477.9352" y2="3015.0935999999997"/>
+<line data-from="approach-keystone-mana-shield-1" data-to="approach-keystone-mana-shield-2" x1="6477.9352" y1="3015.0935999999997" x2="6615.363200000001" y2="2855.4432"/>
+<line data-from="aether-reservoir" data-to="approach-keystone-aether-conversion-1" x1="5142.08" y1="5747.52" x2="5647.1064" y2="6058.5648"/>
+<line data-from="approach-keystone-aether-conversion-1" data-to="approach-keystone-aether-conversion-2" x1="5647.1064" y1="6058.5648" x2="5784.5344000000005" y2="6149.7936"/>
+<line data-from="attribute-dex-10" data-to="approach-keystone-resolute-force-1" x1="3385.7666183860674" y1="2682.772262320933" x2="3410.876239613316" y2="2475.8144989254874"/>
+<line data-from="approach-keystone-resolute-force-1" data-to="approach-keystone-resolute-force-2" x1="3410.876239613316" y1="2475.8144989254874" x2="3368.2515893620534" y2="2283.90072973637"/>
+<line data-from="str-ring-2" data-to="approach-keystone-immovable-1" x1="3789.3" y1="5319.543105154762" x2="3712.9128273814285" y2="5433.8544494021435"/>
+<line data-from="approach-keystone-immovable-1" data-to="approach-keystone-immovable-2" x1="3712.9128273814285" y1="5433.8544494021435" x2="3609.1108273814284" y2="5511.529793649524"/>
+<line data-from="cluster-precision-4" data-to="approach-keystone-overcritical-1" x1="3486.279231190153" y1="1086.5447434886837" x2="3519.8451369444456" y2="884.6650794041259"/>
+<line data-from="approach-keystone-overcritical-1" data-to="approach-keystone-overcritical-2" x1="3519.8451369444456" y1="884.6650794041259" x2="3486.333817025571" y2="694.612939996818"/>
+<line data-from="junction-22" data-to="approach-keystone-pandemic-1" x1="5501.452992255321" y1="1318.5813977516668" x2="5516.705277697434" y2="1236.7653989201808"/>
+<line data-from="approach-keystone-pandemic-1" data-to="approach-keystone-pandemic-2" x1="5516.705277697434" y1="1236.7653989201808" x2="5613.197277697434" y2="1069.6363523962445"/>
+<line data-from="cluster-blood-4" data-to="approach-keystone-edge-of-death-1" x1="1041.6" y1="4000.0000000000005" x2="848.616" y2="3931.8880000000004"/>
+<line data-from="approach-keystone-edge-of-death-1" data-to="approach-keystone-edge-of-death-2" x1="848.616" y1="3931.8880000000004" x2="655.632" y2="3931.8880000000004"/>
+<line data-from="cluster-tempo-4" data-to="approach-keystone-opening-salvo-1" x1="4513.720768809847" y1="1086.5447434886837" x2="4480.154863055554" y2="884.6650794041259"/>
+<line data-from="approach-keystone-opening-salvo-1" data-to="approach-keystone-opening-salvo-2" x1="4480.154863055554" y1="884.6650794041259" x2="4513.66618297443" y2="694.612939996818"/>
+<line data-from="junction-20" data-to="approach-keystone-relentless-control-1" x1="2167.754706861955" y1="2774.8952655699304" x2="2031.857147229636" y2="2526.989260612611"/>
+<line data-from="approach-keystone-relentless-control-1" data-to="approach-keystone-relentless-control-2" x1="2031.857147229636" y1="2526.989260612611" x2="1690.8473150326595" y2="2089.7257626160003"/>
+<line data-from="cluster-ward-4" data-to="approach-keystone-calculated-violence-1" x1="6266.265880523184" y1="5901.622864496658" x2="6457.881751005027" y2="5973.493769454685"/>
+<line data-from="approach-keystone-calculated-violence-1" data-to="approach-keystone-calculated-violence-2" x1="6457.881751005027" y1="5973.493769454685" x2="6605.716071815899" y2="6097.541493522432"/>
+<line data-from="cluster-regeneration-4" data-to="approach-keystone-pure-renewal-1" x1="2520.800000000001" y1="6562.049554555884" x2="2572.520936988231" y2="6870.869332227145"/>
+<line data-from="approach-keystone-pure-renewal-1" data-to="approach-keystone-pure-renewal-2" x1="2572.520936988231" y1="6870.869332227145" x2="2704.987003451769" y2="7139.937077673426"/>
+<line data-from="cluster-tempo-3" data-to="approach-keystone-tempo-gambit-1" x1="4513.720768809847" y1="1086.5447434886837" x2="4234.937188214398" y2="943.9809837380096"/>
+<line data-from="approach-keystone-tempo-gambit-1" data-to="approach-keystone-tempo-gambit-2" x1="4234.937188214398" y1="943.9809837380096" x2="4018.433214192223" y2="736.4460718882845"/>
+<line data-from="cluster-armor-4" data-to="approach-keystone-reprisal-1" x1="1220.0133506669686" y1="5011.832392014659" x2="1015.3720339350228" y2="5013.83246356725"/>
+<line data-from="approach-keystone-reprisal-1" data-to="approach-keystone-reprisal-2" x1="1015.3720339350228" y1="5013.83246356725" x2="834.0263932052752" y2="5079.836878906811"/>
+<line data-from="junction-23" data-to="approach-keystone-compressed-agony-1" x1="5566.656345000924" y1="1433.683681105727" x2="5882.923774216333" y2="1418.253827635903"/>
+<line data-from="approach-keystone-compressed-agony-1" data-to="approach-keystone-compressed-agony-2" x1="5882.923774216333" y1="1418.253827635903" x2="6270.907516791653" y2="1487.1701400576496"/>
+<line data-from="cluster-vitality-3" data-to="approach-keystone-crowd-hunter-1" x1="1733.734119476816" y1="5901.622864496658" x2="1676.7133176838631" y2="6209.50813300874"/>
+<line data-from="approach-keystone-crowd-hunter-1" data-to="approach-keystone-crowd-hunter-2" x1="1676.7133176838631" y1="6209.50813300874" x2="1709.1641139823334" y2="6507.655170933759"/>
+<line data-from="cluster-blood-3" data-to="approach-keystone-killing-spree-1" x1="1041.6" y1="4000.0000000000005" x2="797.8997822222491" y2="3849.692028208153"/>
+<line data-from="approach-keystone-killing-spree-1" data-to="approach-keystone-killing-spree-2" x1="797.8997822222491" y1="3849.692028208153" x2="623.1288556010937" y2="3641.5156468939294"/>
+<line data-from="cluster-mana-4" data-to="approach-keystone-attribute-echo-1" x1="6779.986649333032" y1="5011.832392014659" x2="6938.036614060581" y2="5141.84115114119"/>
+<line data-from="approach-keystone-attribute-echo-1" data-to="approach-keystone-attribute-echo-2" x1="6938.036614060581" y1="5141.84115114119" x2="7119.382254790329" y2="5207.84556648075"/>
+<line data-from="junction-17" data-to="approach-keystone-spellblade-1" x1="3926.985862467363" y1="6197.255558034938" x2="3831.482409130824" y2="6506.54254157098"/>
+<line data-from="approach-keystone-spellblade-1" data-to="approach-keystone-spellblade-2" x1="3831.482409130824" y1="6506.54254157098" x2="3582.2295577108616" y2="7012.513011234695"/>
+<line data-from="cluster-vitality-4" data-to="approach-keystone-glass-cannon-1" x1="1733.734119476816" y1="5901.622864496658" x2="1542.1182489949733" y2="5973.493769454685"/>
+<line data-from="approach-keystone-glass-cannon-1" data-to="approach-keystone-glass-cannon-2" x1="1542.1182489949733" y1="5973.493769454685" x2="1394.2839281841004" y2="6097.541493522433"/>
+<line data-from="str-ring-5" data-to="junction-0" x1="4210.7" y1="5319.543105154762" x2="4021.9772501536027" y2="5454.843876765827"/>
+<line data-from="attribute-int-13" data-to="junction-0" x1="4833.63599259261" y1="5190.55558116962" x2="4021.9772501536027" y2="5454.843876765827"/>
+<line data-from="dex-ring-5" data-to="junction-1" x1="2751.892149547375" y1="3522.7" x2="2729.0796191037552" y2="3291.610918555431"/>
+<line data-from="attribute-str-13" data-to="junction-1" x1="2552.130625793457" y1="4126.672156509447" x2="2729.0796191037552" y2="3291.610918555431"/>
+<line data-from="junction-1" data-to="junction-2" x1="2729.0796191037552" y1="3291.610918555431" x2="2726.4230411946046" y2="3264.7"/>
+<line data-from="bridge-str-dex-0" data-to="junction-2" x1="2733.870859667151" y1="3269" x2="2726.4230411946046" y2="3264.7"/>
+<line data-from="int-ring-2" data-to="junction-3" x1="5248.107850452625" y1="3522.7" x2="5273.576958805395" y2="3264.7000000000003"/>
+<line data-from="bridge-dex-int-0" data-to="junction-3" x1="5266.12914033285" y1="3269" x2="5273.576958805395" y2="3264.7000000000003"/>
+<line data-from="int-ring-5" data-to="junction-4" x1="5037.407850452625" y1="3157.7568948452376" x2="5248.943130742643" y2="3253.5452046787414"/>
+<line data-from="attribute-dex-13" data-to="junction-4" x1="4614.233381613933" y1="2682.772262320933" x2="5248.943130742643" y2="3253.5452046787414"/>
+<line data-from="mana-channel" data-to="junction-5" x1="5747.52" y1="3126.24" x2="5977.87702490543" y2="3126.24"/>
+<line data-from="bridge-dex-int-3" data-to="junction-5" x1="5914.089347444367" y1="2894.9000000000005" x2="5977.87702490543" y2="3126.24"/>
+<line data-from="route-regeneration" data-to="junction-6" x1="2713.8798170365067" y1="5559.749518663678" x2="2905.9031064286846" y2="5785.40386165672"/>
+<line data-from="attribute-str-14" data-to="junction-6" x1="3083.3285180623398" y1="5495.871904342819" x2="2905.9031064286846" y2="5785.40386165672"/>
+<line data-from="route-regeneration" data-to="junction-7" x1="2713.8798170365067" y1="5559.749518663678" x2="2666.3762197347323" y2="5651.103016163066"/>
+<line data-from="route-axe" data-to="junction-7" x1="2588.7268678346113" y1="5469.5660891776415" x2="2666.3762197347323" y2="5651.103016163066"/>
+<line data-from="cluster-regeneration-2" data-to="junction-8" x1="2459.078534988338" y1="6049.754267873667" x2="2519.741195691017" y2="6553.26135652933"/>
+<line data-from="weapon-axe-2" data-to="junction-8" x1="2531.787583755293" y1="6547.544005662096" x2="2519.741195691017" y2="6553.26135652933"/>
+<line data-from="route-blood" data-to="junction-9" x1="1948.6966183126988" y1="4009.4329158178934" x2="1804.065236547352" y2="4240.35475127297"/>
+<line data-from="route-hammer" data-to="junction-9" x1="1990.3675988196974" y1="4386.938147424679" x2="1804.065236547352" y2="4240.35475127297"/>
+<line data-from="cluster-blood-0" data-to="junction-10" x1="1798.4" y1="4249.400000000001" x2="1760.9883045766207" y2="4255.9470466990915"/>
+<line data-from="weapon-hammer-0" data-to="junction-10" x1="1793.3548185568752" y1="4231.92775429827" x2="1760.9883045766207" y2="4255.9470466990915"/>
+<line data-from="junction-10" data-to="junction-11" x1="1760.9883045766207" y1="4255.9470466990915" x2="1759.467985850093" y2="4256.213102476234"/>
+<line data-from="junction-18" data-to="junction-11" x1="1760.1270127686007" y1="4256.58621407411" x2="1759.467985850093" y2="4256.213102476234"/>
+<line data-from="cluster-blood-1" data-to="junction-12" x1="1454.4" y1="4309.6" x2="1142.2996746692781" y2="4075.524756001959"/>
+<line data-from="weapon-hammer-3" data-to="junction-12" x1="1393.6551689628732" y1="4049.1062289944043" x2="1142.2996746692781" y2="4075.524756001959"/>
+<line data-from="junction-21" data-to="junction-13" x1="4884.2232851162" y1="1974.715209349591" x2="4884.676756106375" y2="1970.059866894921"/>
+<line data-from="route-bow" data-to="junction-13" x1="4684.802397823686" y1="2072.854250047666" x2="4884.676756106375" y2="1970.059866894921"/>
+<line data-from="cluster-affliction-0" data-to="junction-14" x1="4884.813264296161" y1="1968.6584710281802" x2="4900.327911490693" y2="1926.2024544523433"/>
+<line data-from="weapon-bow-0" data-to="junction-14" x1="4909.463133917489" y1="1957.3123567111445" x2="4900.327911490693" y2="1926.2024544523433"/>
+<line data-from="cluster-affliction-2" data-to="junction-15" x1="5540.921465011662" y1="1950.2457321263337" x2="5491.802266049503" y2="1542.5507088606707"/>
+<line data-from="weapon-bow-3" data-to="junction-15" x1="5316.501230950261" y1="1761.9825137174535" x2="5491.802266049503" y2="1542.5507088606707"/>
+<line data-from="cluster-restoration-0" data-to="junction-16" x1="5316.786735703839" y1="5781.941528971819" x2="5521.902450890752" y2="6027.02894423166"/>
+<line data-from="aether-unraveling" data-to="junction-16" x1="5477.48" y1="6015.84" x2="5521.902450890752" y2="6027.02894423166"/>
+<line data-from="bridge-int-str-3" data-to="junction-17" x1="4000" y1="6210.2" x2="3926.985862467363" y2="6197.255558034938"/>
+<line data-from="bridge-int-str-2" data-to="junction-17" x1="4000" y1="5960.8" x2="3926.985862467363" y2="6197.255558034938"/>
+<line data-from="junction-10" data-to="junction-18" x1="1760.9883045766207" y1="4255.9470466990915" x2="1760.1270127686007" y2="4256.58621407411"/>
+<line data-from="route-hammer" data-to="junction-18" x1="1990.3675988196974" y1="4386.938147424679" x2="1760.1270127686007" y2="4256.58621407411"/>
+<line data-from="weapon-hammer-4" data-to="junction-19" x1="1017.328083755519" y1="4088.6597994948847" x2="854.6260348005933" y2="4405.536009006987"/>
+<line data-from="weapon-hammer-2" data-to="junction-19" x1="1064.0732125288137" y1="4533.409991103576" x2="854.6260348005933" y2="4405.536009006987"/>
+<line data-from="bridge-str-dex-3" data-to="junction-20" x1="2085.910652555634" y1="2894.8999999999996" x2="2167.754706861955" y2="2774.8952655699304"/>
+<line data-from="bridge-str-dex-2" data-to="junction-20" x1="2301.897388259473" y1="3019.6" x2="2167.754706861955" y2="2774.8952655699304"/>
+<line data-from="route-bow" data-to="junction-21" x1="4684.802397823686" y1="2072.854250047666" x2="4884.2232851162" y2="1974.715209349591"/>
+<line data-from="attribute-dex-17" data-to="junction-21" x1="4837.127328999457" y1="2458.203257545848" x2="4884.2232851162" y2="1974.715209349591"/>
+<line data-from="junction-23" data-to="junction-22" x1="5566.656345000924" y1="1433.683681105727" x2="5501.452992255321" y2="1318.5813977516668"/>
+<line data-from="cluster-affliction-4" data-to="junction-22" x1="5479.2" y1="1437.9504454441171" x2="5501.452992255321" y2="1318.5813977516668"/>
+<line data-from="cluster-affliction-3" data-to="junction-23" x1="5479.2" y1="1437.9504454441171" x2="5566.656345000924" y2="1433.683681105727"/>
+<line data-from="weapon-bow-4" data-to="junction-23" x1="5571.684138179764" y1="1442.5591522394634" x2="5566.656345000924" y2="1433.683681105727"/></g>
 <g class="core"><polygon points="2000,1918 2082,2000 2000,2082 1918,2000"/><text x="2000" y="2007" text-anchor="middle">CLASS</text></g>
 <g id="nodes"><g class="node basic " id="node-attribute-str-0" data-id="attribute-str-0" data-layout-id="attribute-str-0" data-x="3784.0132642961607" data-y="4124.7" transform="translate(3784.0132642961607 4124.7)">
 <title>Might — +1% STR.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
@@ -1634,6 +1726,504 @@
 <title>Bow Route — Travel node.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
 <text class="node-title" x="0" y="-5" text-anchor="middle">Bow Route</text>
 <text class="node-desc" x="0" y="13" text-anchor="middle">Travel node.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-vital-leech-1" data-id="approach-keystone-vital-leech-1" data-layout-id="approach-keystone-vital-leech-1" data-x="2158.3616" data-y="3274.9512" transform="translate(2158.3616 3274.9512)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-vital-leech-2" data-id="approach-keystone-vital-leech-2" data-layout-id="approach-keystone-vital-leech-2" data-x="2112.7472" data-y="3137.5232" transform="translate(2112.7472 3137.5232)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-blood-magic-1" data-id="approach-keystone-blood-magic-1" data-layout-id="approach-keystone-blood-magic-1" data-x="2488.0512000000003" data-y="3563.6016" transform="translate(2488.0512000000003 3563.6016)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-blood-magic-2" data-id="approach-keystone-blood-magic-2" data-layout-id="approach-keystone-blood-magic-2" data-x="2465.8288000000002" data-y="3403.3664000000003" transform="translate(2465.8288000000002 3403.3664000000003)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-deterioration-1" data-id="approach-keystone-deterioration-1" data-layout-id="approach-keystone-deterioration-1" data-x="6513.0232" data-y="4355.9024" transform="translate(6513.0232 4355.9024)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-deterioration-2" data-id="approach-keystone-deterioration-2" data-layout-id="approach-keystone-deterioration-2" data-x="6650.4512" data-y="4424.9088" transform="translate(6650.4512 4424.9088)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-mana-shield-1" data-id="approach-keystone-mana-shield-1" data-layout-id="approach-keystone-mana-shield-1" data-x="6477.9352" data-y="3015.0935999999997" transform="translate(6477.9352 3015.0935999999997)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-mana-shield-2" data-id="approach-keystone-mana-shield-2" data-layout-id="approach-keystone-mana-shield-2" data-x="6615.363200000001" data-y="2855.4432" transform="translate(6615.363200000001 2855.4432)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-aether-conversion-1" data-id="approach-keystone-aether-conversion-1" data-layout-id="approach-keystone-aether-conversion-1" data-x="5647.1064" data-y="6058.5648" transform="translate(5647.1064 6058.5648)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-aether-conversion-2" data-id="approach-keystone-aether-conversion-2" data-layout-id="approach-keystone-aether-conversion-2" data-x="5784.5344000000005" data-y="6149.7936" transform="translate(5784.5344000000005 6149.7936)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-resolute-force-1" data-id="approach-keystone-resolute-force-1" data-layout-id="approach-keystone-resolute-force-1" data-x="3410.876239613316" data-y="2475.8144989254874" transform="translate(3410.876239613316 2475.8144989254874)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-resolute-force-2" data-id="approach-keystone-resolute-force-2" data-layout-id="approach-keystone-resolute-force-2" data-x="3368.2515893620534" data-y="2283.90072973637" transform="translate(3368.2515893620534 2283.90072973637)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-immovable-1" data-id="approach-keystone-immovable-1" data-layout-id="approach-keystone-immovable-1" data-x="3712.9128273814285" data-y="5433.8544494021435" transform="translate(3712.9128273814285 5433.8544494021435)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-immovable-2" data-id="approach-keystone-immovable-2" data-layout-id="approach-keystone-immovable-2" data-x="3609.1108273814284" data-y="5511.529793649524" transform="translate(3609.1108273814284 5511.529793649524)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-overcritical-1" data-id="approach-keystone-overcritical-1" data-layout-id="approach-keystone-overcritical-1" data-x="3519.8451369444456" data-y="884.6650794041259" transform="translate(3519.8451369444456 884.6650794041259)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-overcritical-2" data-id="approach-keystone-overcritical-2" data-layout-id="approach-keystone-overcritical-2" data-x="3486.333817025571" data-y="694.612939996818" transform="translate(3486.333817025571 694.612939996818)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-pandemic-1" data-id="approach-keystone-pandemic-1" data-layout-id="approach-keystone-pandemic-1" data-x="5516.705277697434" data-y="1236.7653989201808" transform="translate(5516.705277697434 1236.7653989201808)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-pandemic-2" data-id="approach-keystone-pandemic-2" data-layout-id="approach-keystone-pandemic-2" data-x="5613.197277697434" data-y="1069.6363523962445" transform="translate(5613.197277697434 1069.6363523962445)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-edge-of-death-1" data-id="approach-keystone-edge-of-death-1" data-layout-id="approach-keystone-edge-of-death-1" data-x="848.616" data-y="3931.8880000000004" transform="translate(848.616 3931.8880000000004)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-edge-of-death-2" data-id="approach-keystone-edge-of-death-2" data-layout-id="approach-keystone-edge-of-death-2" data-x="655.632" data-y="3931.8880000000004" transform="translate(655.632 3931.8880000000004)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-opening-salvo-1" data-id="approach-keystone-opening-salvo-1" data-layout-id="approach-keystone-opening-salvo-1" data-x="4480.154863055554" data-y="884.6650794041259" transform="translate(4480.154863055554 884.6650794041259)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-opening-salvo-2" data-id="approach-keystone-opening-salvo-2" data-layout-id="approach-keystone-opening-salvo-2" data-x="4513.66618297443" data-y="694.612939996818" transform="translate(4513.66618297443 694.612939996818)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-relentless-control-1" data-id="approach-keystone-relentless-control-1" data-layout-id="approach-keystone-relentless-control-1" data-x="2031.857147229636" data-y="2526.989260612611" transform="translate(2031.857147229636 2526.989260612611)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-relentless-control-2" data-id="approach-keystone-relentless-control-2" data-layout-id="approach-keystone-relentless-control-2" data-x="1690.8473150326595" data-y="2089.7257626160003" transform="translate(1690.8473150326595 2089.7257626160003)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-calculated-violence-1" data-id="approach-keystone-calculated-violence-1" data-layout-id="approach-keystone-calculated-violence-1" data-x="6457.881751005027" data-y="5973.493769454685" transform="translate(6457.881751005027 5973.493769454685)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-calculated-violence-2" data-id="approach-keystone-calculated-violence-2" data-layout-id="approach-keystone-calculated-violence-2" data-x="6605.716071815899" data-y="6097.541493522432" transform="translate(6605.716071815899 6097.541493522432)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-pure-renewal-1" data-id="approach-keystone-pure-renewal-1" data-layout-id="approach-keystone-pure-renewal-1" data-x="2572.520936988231" data-y="6870.869332227145" transform="translate(2572.520936988231 6870.869332227145)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-pure-renewal-2" data-id="approach-keystone-pure-renewal-2" data-layout-id="approach-keystone-pure-renewal-2" data-x="2704.987003451769" data-y="7139.937077673426" transform="translate(2704.987003451769 7139.937077673426)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-tempo-gambit-1" data-id="approach-keystone-tempo-gambit-1" data-layout-id="approach-keystone-tempo-gambit-1" data-x="4234.937188214398" data-y="943.9809837380096" transform="translate(4234.937188214398 943.9809837380096)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-tempo-gambit-2" data-id="approach-keystone-tempo-gambit-2" data-layout-id="approach-keystone-tempo-gambit-2" data-x="4018.433214192223" data-y="736.4460718882845" transform="translate(4018.433214192223 736.4460718882845)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-reprisal-1" data-id="approach-keystone-reprisal-1" data-layout-id="approach-keystone-reprisal-1" data-x="1015.3720339350228" data-y="5013.83246356725" transform="translate(1015.3720339350228 5013.83246356725)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-reprisal-2" data-id="approach-keystone-reprisal-2" data-layout-id="approach-keystone-reprisal-2" data-x="834.0263932052752" data-y="5079.836878906811" transform="translate(834.0263932052752 5079.836878906811)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-compressed-agony-1" data-id="approach-keystone-compressed-agony-1" data-layout-id="approach-keystone-compressed-agony-1" data-x="5882.923774216333" data-y="1418.253827635903" transform="translate(5882.923774216333 1418.253827635903)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-compressed-agony-2" data-id="approach-keystone-compressed-agony-2" data-layout-id="approach-keystone-compressed-agony-2" data-x="6270.907516791653" data-y="1487.1701400576496" transform="translate(6270.907516791653 1487.1701400576496)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-crowd-hunter-1" data-id="approach-keystone-crowd-hunter-1" data-layout-id="approach-keystone-crowd-hunter-1" data-x="1676.7133176838631" data-y="6209.50813300874" transform="translate(1676.7133176838631 6209.50813300874)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-crowd-hunter-2" data-id="approach-keystone-crowd-hunter-2" data-layout-id="approach-keystone-crowd-hunter-2" data-x="1709.1641139823334" data-y="6507.655170933759" transform="translate(1709.1641139823334 6507.655170933759)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-killing-spree-1" data-id="approach-keystone-killing-spree-1" data-layout-id="approach-keystone-killing-spree-1" data-x="797.8997822222491" data-y="3849.692028208153" transform="translate(797.8997822222491 3849.692028208153)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-killing-spree-2" data-id="approach-keystone-killing-spree-2" data-layout-id="approach-keystone-killing-spree-2" data-x="623.1288556010937" data-y="3641.5156468939294" transform="translate(623.1288556010937 3641.5156468939294)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-attribute-echo-1" data-id="approach-keystone-attribute-echo-1" data-layout-id="approach-keystone-attribute-echo-1" data-x="6938.036614060581" data-y="5141.84115114119" transform="translate(6938.036614060581 5141.84115114119)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-attribute-echo-2" data-id="approach-keystone-attribute-echo-2" data-layout-id="approach-keystone-attribute-echo-2" data-x="7119.382254790329" data-y="5207.84556648075" transform="translate(7119.382254790329 5207.84556648075)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-spellblade-1" data-id="approach-keystone-spellblade-1" data-layout-id="approach-keystone-spellblade-1" data-x="3831.482409130824" data-y="6506.54254157098" transform="translate(3831.482409130824 6506.54254157098)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-spellblade-2" data-id="approach-keystone-spellblade-2" data-layout-id="approach-keystone-spellblade-2" data-x="3582.2295577108616" data-y="7012.513011234695" transform="translate(3582.2295577108616 7012.513011234695)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-glass-cannon-1" data-id="approach-keystone-glass-cannon-1" data-layout-id="approach-keystone-glass-cannon-1" data-x="1542.1182489949733" data-y="5973.493769454685" transform="translate(1542.1182489949733 5973.493769454685)">
+<title>Distant Insight — Travel toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Distant Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Travel toward a</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-approach-keystone-glass-cannon-2" data-id="approach-keystone-glass-cannon-2" data-layout-id="approach-keystone-glass-cannon-2" data-x="1394.2839281841004" data-y="6097.541493522433" transform="translate(1394.2839281841004 6097.541493522433)">
+<title>Focused Insight — Commit further toward a transformative skill.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Focused Insight</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">Commit further</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">toward a</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">transformative</text>
+<text class="node-desc" x="0" y="52" text-anchor="middle">skill.</text>
+</g>
+<g class="node basic " id="node-junction-0" data-id="junction-0" data-layout-id="junction-0" data-x="4021.9772501536027" data-y="5454.843876765827" transform="translate(4021.9772501536027 5454.843876765827)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-1" data-id="junction-1" data-layout-id="junction-1" data-x="2729.0796191037552" data-y="3291.610918555431" transform="translate(2729.0796191037552 3291.610918555431)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-2" data-id="junction-2" data-layout-id="junction-2" data-x="2726.4230411946046" data-y="3264.7" transform="translate(2726.4230411946046 3264.7)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-3" data-id="junction-3" data-layout-id="junction-3" data-x="5273.576958805395" data-y="3264.7000000000003" transform="translate(5273.576958805395 3264.7000000000003)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-4" data-id="junction-4" data-layout-id="junction-4" data-x="5248.943130742643" data-y="3253.5452046787414" transform="translate(5248.943130742643 3253.5452046787414)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-5" data-id="junction-5" data-layout-id="junction-5" data-x="5977.87702490543" data-y="3126.24" transform="translate(5977.87702490543 3126.24)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-6" data-id="junction-6" data-layout-id="junction-6" data-x="2905.9031064286846" data-y="5785.40386165672" transform="translate(2905.9031064286846 5785.40386165672)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-7" data-id="junction-7" data-layout-id="junction-7" data-x="2666.3762197347323" data-y="5651.103016163066" transform="translate(2666.3762197347323 5651.103016163066)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-8" data-id="junction-8" data-layout-id="junction-8" data-x="2519.741195691017" data-y="6553.26135652933" transform="translate(2519.741195691017 6553.26135652933)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-9" data-id="junction-9" data-layout-id="junction-9" data-x="1804.065236547352" data-y="4240.35475127297" transform="translate(1804.065236547352 4240.35475127297)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-10" data-id="junction-10" data-layout-id="junction-10" data-x="1760.9883045766207" data-y="4255.9470466990915" transform="translate(1760.9883045766207 4255.9470466990915)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-11" data-id="junction-11" data-layout-id="junction-11" data-x="1759.467985850093" data-y="4256.213102476234" transform="translate(1759.467985850093 4256.213102476234)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-12" data-id="junction-12" data-layout-id="junction-12" data-x="1142.2996746692781" data-y="4075.524756001959" transform="translate(1142.2996746692781 4075.524756001959)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-13" data-id="junction-13" data-layout-id="junction-13" data-x="4884.676756106375" data-y="1970.059866894921" transform="translate(4884.676756106375 1970.059866894921)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-14" data-id="junction-14" data-layout-id="junction-14" data-x="4900.327911490693" data-y="1926.2024544523433" transform="translate(4900.327911490693 1926.2024544523433)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-15" data-id="junction-15" data-layout-id="junction-15" data-x="5491.802266049503" data-y="1542.5507088606707" transform="translate(5491.802266049503 1542.5507088606707)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-16" data-id="junction-16" data-layout-id="junction-16" data-x="5521.902450890752" data-y="6027.02894423166" transform="translate(5521.902450890752 6027.02894423166)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-17" data-id="junction-17" data-layout-id="junction-17" data-x="3926.985862467363" data-y="6197.255558034938" transform="translate(3926.985862467363 6197.255558034938)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-18" data-id="junction-18" data-layout-id="junction-18" data-x="1760.1270127686007" data-y="4256.58621407411" transform="translate(1760.1270127686007 4256.58621407411)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-19" data-id="junction-19" data-layout-id="junction-19" data-x="854.6260348005933" data-y="4405.536009006987" transform="translate(854.6260348005933 4405.536009006987)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-20" data-id="junction-20" data-layout-id="junction-20" data-x="2167.754706861955" data-y="2774.8952655699304" transform="translate(2167.754706861955 2774.8952655699304)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-21" data-id="junction-21" data-layout-id="junction-21" data-x="4884.2232851162" data-y="1974.715209349591" transform="translate(4884.2232851162 1974.715209349591)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-22" data-id="junction-22" data-layout-id="junction-22" data-x="5501.452992255321" data-y="1318.5813977516668" transform="translate(5501.452992255321 1318.5813977516668)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
+</g>
+<g class="node basic " id="node-junction-23" data-id="junction-23" data-layout-id="junction-23" data-x="5566.656345000924" data-y="1433.683681105727" transform="translate(5566.656345000924 1433.683681105727)">
+<title>Crossroads — A travel junction connecting nearby regions.</title><ellipse cx="0" cy="0" rx="63" ry="33"/>
+<text class="node-title" x="0" y="-5" text-anchor="middle">Crossroads</text>
+<text class="node-desc" x="0" y="13" text-anchor="middle">A travel junction</text>
+<text class="node-desc" x="0" y="26" text-anchor="middle">connecting nearby</text>
+<text class="node-desc" x="0" y="39" text-anchor="middle">regions.</text>
 </g></g>
 <g class="toolbar" id="save" transform="translate(28 28)"><rect width="180" height="48" rx="5"/><text x="90" y="30" text-anchor="middle">Save SVG</text></g>
 <text x="230" y="58" fill="#b9a983" font-family="Courier New" font-size="13">Drag nodes freely. Connections follow automatically.</text>
