@@ -738,10 +738,11 @@ classSkillNodes=function(className){
  ['str','dex','int'].forEach(path=>setEitherSide(`${path}-ring-6`,`${path}-ring-2`,`${path}-ring-5`));
  OUTER_SKILL_CLUSTERS.forEach(([id])=>setEitherSide(`cluster-${id}-4`,`cluster-${id}-1`,`cluster-${id}-3`));
  WEAPON_SKILL_CLUSTERS.forEach(([id])=>setEitherSide(`weapon-${id}-6`,`weapon-${id}-2`,`weapon-${id}-5`));
- const placeBeyond=(nodeId,anchorId,gap=360)=>{const node=byId[nodeId],anchor=byId[anchorId];if(!node||!anchor)return;const dx=anchor.x-4000,dy=anchor.y-4000,length=Math.hypot(dx,dy)||1;node.requires=anchorId;node.requiresAny=null;node.x=anchor.x+dx/length*gap;node.y=anchor.y+dy/length*gap};
- placeBeyond('keystone-relentless-control','int-ring-6',380);
- placeBeyond('keystone-spellblade','cluster-mana-4',360);
- placeBeyond('keystone-glass-cannon','cluster-ward-4',380);
+ const placeBeyond=(nodeId,anchorId,gap=440)=>{const node=byId[nodeId],anchor=byId[anchorId];if(!node||!anchor)return;const dx=anchor.x-4000,dy=anchor.y-4000,length=Math.hypot(dx,dy)||1;node.requires=anchorId;node.requiresAny=null;node.x=anchor.x+dx/length*gap;node.y=anchor.y+dy/length*gap};
+ const separateKeystone=(nodeId,anchorId,name,effect)=>{const node=byId[nodeId],anchor=byId[anchorId];if(!node||!anchor)return;placeBeyond(nodeId,anchorId);const id=`lead-${nodeId}`,lead={id,layoutId:id,name,desc:Object.keys(effect)[0]==='dexPct'?'+1% DEX.':'+1% INT.',effect,path:Object.keys(effect)[0]==='dexPct'?'dex':'int',maxRank:1,basic:true,color:node.color,x:anchor.x+(node.x-anchor.x)*.5,y:anchor.y+(node.y-anchor.y)*.5,requires:anchorId};nodes.push(lead);byId[id]=lead;validIds.add(id);node.requires=id};
+ separateKeystone('keystone-relentless-control','int-ring-6','Controlled Focus',{intPct:.01});
+ separateKeystone('keystone-spellblade','dex-ring-0','Martial Precision',{dexPct:.01});
+ separateKeystone('keystone-glass-cannon','cluster-ward-4','Arcane Exposure',{intPct:.01});
  const statFor=node=>/dex|tempo|precision|bow|dagger|spear/i.test(node.id)?['DEX','dexPct']:/int|mana|ward|restoration|arcane/i.test(node.id)?['INT','intPct']:['STR','strPct'];
  nodes.forEach(node=>{if(Object.keys(node.effect||{}).length)return;const [label,key]=statFor(node);node.name=`${label} Training`;node.desc=`+1% ${label}.`;node.effect={[key]:.01};node.path=key.slice(0,3).toLowerCase()});
  const incoming=new Set(nodes.flatMap(skillRequirementLinks));
