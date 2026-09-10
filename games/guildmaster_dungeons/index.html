@@ -11,11 +11,12 @@
 <style>.inventoryToolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0;padding:10px;border:1px solid #5d452b;background:#100d09}.inventoryToolbar label{display:flex;align-items:center;gap:8px;color:var(--mut_record);font:11px var(--mono)}.inventoryToolbar select{padding:8px 10px;border:1px solid #76542d;background:#0b0907;color:var(--ink);font:11px var(--mono)}@media(max-width:700px){.inventoryToolbar{align-items:stretch;flex-direction:column}.inventoryToolbar label{justify-content:space-between}.inventoryToolbar select{flex:1}}</style>
 <style>.inventoryToolbar label{color:var(--muted)}</style>
 <style>.hero .inspectHint{display:none}.draftAttributeGroups{gap:9px}.draftAttributeGroup{padding:8px}.draftAttributeGroup>header{margin-bottom:7px;padding-bottom:5px}.draftAttributeGroup .draftClassGrid{grid-template-columns:repeat(2,minmax(210px,1fr));gap:7px}.draftCandidate{padding:6px}.selectionHero{min-height:76px;padding:7px;grid-template-columns:48px 1fr}.selectionHero .portrait{width:48px;height:48px}.selectionHero .stats{margin-top:4px}@media(max-width:700px){.draftAttributeGroup .draftClassGrid{grid-template-columns:1fr}}</style>
+<style>.mainChoiceField{min-height:calc(100dvh - 155px);display:grid;place-items:center;background-position:center;background-size:cover}.mainChoiceField:before{background:rgba(5,4,3,.48)}.mainChoiceWindow{position:relative;z-index:1;width:min(980px,95%);max-height:calc(100dvh - 195px);overflow:auto;padding:20px;background:rgba(15,11,7,.91);border:1px solid #79572e;box-shadow:0 12px 38px rgba(0,0,0,.7)}.unit.dodging .portrait{animation:dodgeFade .48s ease-out}.unit.dodging{animation:dodgeSlide .48s ease-out}@keyframes dodgeFade{35%{opacity:.25}100%{opacity:1}}@keyframes dodgeSlide{35%{transform:translateX(8px)}100%{transform:translateX(0)}}@media(max-width:700px){.mainChoiceField{min-height:calc(100dvh - 104px - env(safe-area-inset-bottom));padding:8px}.mainChoiceWindow{width:100%;max-height:calc(100dvh - 125px);padding:10px}}</style>
 </head>
 <body>
   <header class="sitebar"><a href="/">MR/ My Random Tools</a><span>Guildmaster universe</span></header>
   <main id="app"></main>
   <div id="toast" aria-live="polite"></div>
-<script src="game.js?build=137"></script>
+<script src="game.js?build=138"></script>
 </body>
 </html>
