@@ -966,4 +966,22 @@ finishTurn=function(actor){const battle=state.run?.battle;if(battle)state.run.he
 const renderBeforeInventorySets=render;
 render=function(){migrateItemSets();return renderBeforeInventorySets()};
 
+/* Encounter cadence and inventory-facing expedition screens. */
+REGION_ENCOUNTER_SEQUENCE.splice(12,1,'merchant');
+merchantEvent=function(){const run=state.run,priceMult=Math.pow(2,endlessModifierCount('inflation'));if(!run.merchantStock){const gear=Array.from({length:6},(_,index)=>{const item=makeCanonicalItem(rollShopRarity(index===0)),cost=Math.round(shopItemCost(item)*priceMult);return{kind:'gear',item,cost}}),consumables=Object.entries(CONSUMABLES).flatMap(([id,item])=>Array.from({length:3},()=>({kind:'consumable',id,cost:Math.round((item.cost+run.region*6)*priceMult)})));run.merchantStock=[...gear,...consumables]}const body=`<div class="choiceGrid traderStock">${run.merchantStock.map((stock,index)=>stock.kind==='gear'?`<button class="choice traderItem" ${run.gold<stock.cost?'disabled':''} onclick="buyMerchantStock(${index})"><span class="traderPrice">${stock.cost}g</span>${itemArt(stock.item)}<strong class="rarity-${stock.item.rarity}">${stock.item.name}</strong><div class="muted">Tier ${stock.item.tier} · ${stock.item.rarity}</div><div class="itemStats">${itemStatLines(stock.item).map(line=>`<span>${line}</span>`).join('')}</div></button>`:`<button class="choice traderItem consumableShopItem" ${run.gold<stock.cost?'disabled':''} onclick="buyMerchantStock(${index})"><span class="traderPrice">${stock.cost}g</span><span class="consumableIcon">${CONSUMABLES[stock.id].icon}</span><strong>${CONSUMABLES[stock.id].name}</strong><div class="muted">${CONSUMABLES[stock.id].desc}</div></button>`).join('')}</div><div class="actions"><button class="btn primary" onclick="leaveMerchant()">Leave Trader</button></div>`;showMainChoice('The Road Trader',body,`Two traders visit each region. Each carries three of every consumable. Current purse: ${run.gold}g.`,'TRADER')};
+
+renderRecruit=function(){const run=state.run;if(run.endless&&loneWolfActive(run)){run.region++;run.step=0;run.nodes=makeRegionMap();run.mode='map';delete run.recruitChoices;delete run.modifierChoices;delete run.lockedNodeType;save();return renderMap()}const count=run.rerolls?.recruit||0,next=REGIONS[(run.region+1)%REGIONS.length],body=`<div class="screenTitle"><div class="eyebrow">POST-BOSS RECRUITMENT</div><h2>A Survivor Joins the Road</h2><p class="muted">Choose one recruit before entering ${next.name}.</p>${count?`<button class="btn rerollButton" onclick="rerollRecruitment()">↻ Reroll All Candidates · ${count} left</button>`:''}</div>${groupedCandidateHtml(run.recruitChoices,'Recruit',(_hero,index)=>`takeRecruit(${index})`)}`;return `<div class="grid mainChoiceRun threeRailRun">${renderInventoryRail()}${renderSidebar()}<section class="panel combatField mainChoiceField recruitMainField" style="background-image:url('${ASSET}backgrounds/${next.bg}')"><div class="mainChoiceWindow">${body}</div></section></div>`};
+
+/* Derived resources must update immediately and display the amount actually regenerated. */
+const recalculateBeforeImmediateAether=recalculateAfterSkillChange;
+recalculateAfterSkillChange=function(hero,change){recalculateBeforeImmediateAether(hero,change);if(skillBonus(hero,'aetherConversion')||hero.aetherManaBonus){hero.maxArmor=null;hero.protectionBattleId=null;ensureProtection(hero)}};
+const heroSheetStatsBeforeEffectiveRegen=heroSheetStats;
+heroSheetStats=function(hero){const sheet=heroSheetStatsBeforeEffectiveRegen(hero);if(skillBonus(hero,'manaShield'))sheet.manaRegen*=.5;if(state.run&&hasRelic('sealedReservoir'))sheet.manaRegen=0;return sheet};
+
+/* Floating damage reports the full attack roll, while the HP trail remains capped to HP actually lost. */
+const applyLayeredDamageBeforeOverkill=applyLayeredDamage;
+applyLayeredDamage=function(target,amount,...args){target.pendingDisplayedDamage=Math.max(0,Math.round(amount));return applyLayeredDamageBeforeOverkill(target,amount,...args)};
+const recordDamageHitBeforeOverkill=recordDamageHit;
+recordDamageHit=function(target,damage,crit=false,hpDamage=target.pendingHpDamage??damage){const displayed=target.pendingDisplayedDamage??damage;delete target.pendingDisplayedDamage;return recordDamageHitBeforeOverkill(target,displayed,crit,hpDamage)};
+
 init();
