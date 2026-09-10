@@ -30,6 +30,7 @@ assert.ok(api.heroInitiative(state.run.heroes[1])>api.heroInitiative(state.run.h
 const armoredProfile=api.enemyProtectionValues({name:'Ironback',role:'Bruiser',level:30,maxHp:1000}),casterProfile=api.enemyProtectionValues({name:'Grave Wisp',role:'Caster',level:30,maxHp:1000});assert.ok(armoredProfile.armor>1000&&armoredProfile.magic<300,'Ironbacks strongly favor Armor over Magic Armor');assert.ok(casterProfile.magic>1000&&casterProfile.armor<100,'Grave Wisps strongly favor Magic Armor over Armor');
 assert.ok(api.heroSheetStats(state.run.heroes[1]).physicalDodge>0,'Dexterity grants physical dodge');
 assert.ok(api.heroSheetStats(state.run.heroes[0]).magicalDodge>0,'Intellect grants magical dodge');
+const starterMage=api.makeHero(1,'Mage');assert.equal(api.heroWeaponDamageType(starterMage),'magical','the Mage starter weapon deals magical damage');
 assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities');
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
 assert.equal(api.abilities.Rogue[1].name,'Interrupting Strike','Rogue trades Poisoned Blade for a dedicated interrupt');assert.equal(api.abilities.Rogue[1].cost,12,'the Rogue interrupt costs less Mana than Poisoned Blade');assert.ok(api.consumables.silenceBomb,'traders can stock an interrupt consumable');

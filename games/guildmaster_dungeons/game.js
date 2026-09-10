@@ -890,4 +890,17 @@ const protectionStatsBeforeHpRegen=protectionInspectStats;
 protectionInspectStats=function(unit,enemy=false){const rows=protectionStatsBeforeHpRegen(unit,enemy);if(!enemy&&!rows.some(([name])=>name==='HP Regen / Round')){const sheet=heroSheetStats(unit),manaIndex=rows.findIndex(([name])=>name==='Mana Regen / Round');rows.splice(Math.max(0,manaIndex+1),0,['HP Regen / Round',gameNumber(sheet.regen)])}return rows};
 const statusDetailsBeforeFixedThornsText=combatStatusDetails;
 combatStatusDetails=function(unit,enemy=false){return statusDetailsBeforeFixedThornsText(unit,enemy).replace(/Melee attackers take [^.]+of the damage they deal\./g,`Melee attackers take damage based on ${gameNumber((unit.maxArmor||unit.def||0)*(unit.thornsPct||0))} Armor-scaled Thorns.`)};
+function inventoryRailItem(item){const owner=equippedOwner(item),stats=itemStatLines(item);return `<button class="inventoryRailSlot rarityBorder-${item.rarity||'Common'}" onclick="inspectInventoryItem(${item.id})" aria-label="Inspect ${item.name}">${itemArt(item)}<span class="inventoryRailTooltip"><strong class="rarity-${item.rarity||'Common'}">${item.name}</strong><small>Tier ${item.tier||1} · ${item.rarity||'Common'} ${item.slot}</small>${stats.map(stat=>`<span>${stat}</span>`).join('')}${owner?`<em>Equipped by ${owner.name}</em>`:'<em>Unequipped</em>'}</span></button>`}
+function renderInventoryRail(){const run=state.run,items=run?.inventory||[];return `<aside class="panel inventoryRail"><h3>Inventory</h3><div class="inventoryRailCount">${items.length} items</div><div class="inventoryRailSlots">${items.map(inventoryRailItem).join('')||'<span class="inventoryRailEmpty">Empty</span>'}</div><button class="inventoryRailOpen" onclick="openRunInventory()" title="Open full inventory">⋯</button></aside>`}
+const renderCombatBeforeInventoryRail=renderCombat;
+renderCombat=function(){return renderCombatBeforeInventoryRail().replace('<div class="grid runCombatGrid">','<div class="grid runCombatGrid threeRailRun">'+renderInventoryRail())};
+const renderMainChoiceBeforeInventoryRail=renderMainChoice;
+renderMainChoice=function(){return renderMainChoiceBeforeInventoryRail().replace('<div class="grid mainChoiceRun">','<div class="grid mainChoiceRun threeRailRun">'+renderInventoryRail())};
+const renderRewardBeforeInventoryRail=renderReward;
+renderReward=function(){return renderRewardBeforeInventoryRail().replace('<div class="grid rewardRunGrid">','<div class="grid rewardRunGrid threeRailRun">'+renderInventoryRail())};
+function normalizeStarterWeaponDamage(hero){const weapon=hero?.gear?.Weapon;if(weapon&&String(weapon.name||'').startsWith('Guild-Issue ')&&['Mage','Priest'].includes(hero.class))weapon.damageType=ITEM_DATA.weapons?.[weapon.weaponTemplate]?.type||'arcane';return hero}
+const makeHeroBeforeStarterMagic=makeHero;
+makeHero=function(...args){return normalizeStarterWeaponDamage(makeHeroBeforeStarterMagic(...args))};
+const ensureHeroResourcesBeforeStarterMagic=ensureHeroResources;
+ensureHeroResources=function(hero){ensureHeroResourcesBeforeStarterMagic(hero);return normalizeStarterWeaponDamage(hero)};
 init();
