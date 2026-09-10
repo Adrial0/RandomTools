@@ -112,7 +112,7 @@
       "id": "assassin",
       "name": "Assassin",
       "passive": "Critical chance +18%. Execute: +25% damage to enemies below 30% HP.",
-      "active": "Backstab — interrupts casting and inflicts Bleeding. Cooldown: 11s.",
+      "active": "Backstab — inflicts Bleeding. Cooldown: 11s.",
       "critBonus": 0.18,
       "execute": 0.25,
       "activeType": "backstab",

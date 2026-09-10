@@ -6,6 +6,9 @@ const sharedItems=JSON.parse(fs.readFileSync(__dirname+'/../guildmaster/data/ite
 assert.equal(sharedItems.weapons['Oak Staff'].type,'arcane','the Apprentice Staff base weapon is magical');
 assert.match(html,/Guildmaster: Dungeons/);
 assert.match(js,/function beginDraft\(/,'a new expedition begins with a recruit draft');
+assert.match(js,/preVitalityNaturalMaxHp\(h,includeGear\)\*1\.3/,'maximum HP remains 30% higher throughout progression');
+assert.match(js,/Rogue:\{hp:4[^\n]*Ranger:\{hp:4[^\n]*Mage:\{hp:3[^\n]*Priest:\{hp:3/,'DEX and INT classes receive increased per-level HP growth');
+assert.match(js,/hero\.id===target\.id\?1:\.3/,'enemy Cleave deals full damage to its main target and 30% to other heroes');
 assert.match(js,/draftSelection\.filter\(Boolean\)\.length!==2/,'exactly two adventurers start a run');
 assert.match(js,/state\.draftSlots=\[classRoster\(1\),classRoster\(1\)\]/,'each party slot receives a separate candidate roster');
 assert.match(js,/flatMap\(cls=>Array\.from\(\{length:copies\}/,'class rosters support duplicate-class candidates');
@@ -146,7 +149,7 @@ assert.match(js,/Choose one of six upgrades across both class abilities/,'abilit
 assert.match(js,/ABILITY_AUGMENTS\[h\.class\]\.filter/,'ability shrine removes only upgrades already selected');
 assert.match(js,/All abilities cost 20% less Mana/,'the former cooldown relic now improves Mana efficiency');
 assert.match(js,/A Backstab kill refunds its Mana cost/,'the former Rogue cooldown reset now refunds Mana');
-assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Poisoned Blade[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
+assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Interrupting Strike[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
 assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
 assert.match(js,/function enemyIntent\(/,'enemy actions are previewed before their turns');
 assert.match(js,/function enemyIntentHtml\(e\)[\s\S]*base damage/,'enemy intent reveals attack strength without displaying its hidden target');
