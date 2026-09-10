@@ -245,7 +245,7 @@ const BUILD_KEYSTONES=[
  ['keystone-killing-spree','Killing Spree','Gain 10% damage for every enemy this character personally kills this battle; lose the stacks after battle.',{killingSpree:1},'sword',210,'#e06955'],
  ['keystone-attribute-echo','Attribute Echo','Add 30% of your main attribute as a flat bonus to each other attribute, but reduce your main attribute by 10%.',{attributeEcho:1},'mana',-6,'#f0c967'],
  ['keystone-spellblade','Spellblade Covenant','Weapon attacks deal 40% more damage, but damaging abilities deal 25% less damage.',{spellblade:1},'spear',66,'#7dc8b0'],
- ['keystone-glass-cannon','Glass Cannon','Deal 45% more damage while Armor and Magic Armor are empty, but both maximum protections are reduced by 25%.',{glassCannon:1,defPct:-.25,mdefPct:-.25},'vitality',162,'#efb067']
+ ['keystone-glass-cannon','Glass Cannon','Deal 45% more damage while Armor and Magic Armor are empty, but both maximum protections are reduced by 25%.',{glassCannon:1,defPct:-.25,mdefPct:-.25},'ward',36,'#9db8ff']
 ];
 Object.entries({precision:-100,affliction:-60,blood:180,tempo:-80,hammer:174,ward:40,restoration:60,bow:-66,armor:160,dagger:-136,axe:126,sword:105,mana:20,spear:-112,vitality:140}).forEach(([cluster,angle])=>BUILD_KEYSTONES.filter(entry=>entry[4]===cluster).forEach(entry=>entry[5]=angle));
 Object.entries({'keystone-relentless-control':220,'keystone-tempo-gambit':-92,'keystone-compressed-agony':-42,'keystone-crowd-hunter':128,'keystone-killing-spree':190,'keystone-spellblade':102}).forEach(([id,angle])=>{const keystone=BUILD_KEYSTONES.find(entry=>entry[0]===id);if(keystone)keystone[5]=angle});
@@ -738,6 +738,10 @@ classSkillNodes=function(className){
  ['str','dex','int'].forEach(path=>setEitherSide(`${path}-ring-6`,`${path}-ring-2`,`${path}-ring-5`));
  OUTER_SKILL_CLUSTERS.forEach(([id])=>setEitherSide(`cluster-${id}-4`,`cluster-${id}-1`,`cluster-${id}-3`));
  WEAPON_SKILL_CLUSTERS.forEach(([id])=>setEitherSide(`weapon-${id}-6`,`weapon-${id}-2`,`weapon-${id}-5`));
+ const placeBeyond=(nodeId,anchorId,gap=360)=>{const node=byId[nodeId],anchor=byId[anchorId];if(!node||!anchor)return;const dx=anchor.x-4000,dy=anchor.y-4000,length=Math.hypot(dx,dy)||1;node.requires=anchorId;node.requiresAny=null;node.x=anchor.x+dx/length*gap;node.y=anchor.y+dy/length*gap};
+ placeBeyond('keystone-relentless-control','int-ring-6',380);
+ placeBeyond('keystone-spellblade','cluster-mana-4',360);
+ placeBeyond('keystone-glass-cannon','cluster-ward-4',380);
  const statFor=node=>/dex|tempo|precision|bow|dagger|spear/i.test(node.id)?['DEX','dexPct']:/int|mana|ward|restoration|arcane/i.test(node.id)?['INT','intPct']:['STR','strPct'];
  nodes.forEach(node=>{if(Object.keys(node.effect||{}).length)return;const [label,key]=statFor(node);node.name=`${label} Training`;node.desc=`+1% ${label}.`;node.effect={[key]:.01};node.path=key.slice(0,3).toLowerCase()});
  const incoming=new Set(nodes.flatMap(skillRequirementLinks));
