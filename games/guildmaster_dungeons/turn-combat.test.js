@@ -2,14 +2,14 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const assert=require('node:assert/strict');
 
-const app={innerHTML:''};
+const app={innerHTML:''},toastTarget={append(){}};
 const storage=new Map();
 const subclassFixture=JSON.parse(fs.readFileSync(__dirname+'/../guildmaster/data/subclasses.json','utf8'));
 const context={
   console,
   performance:{now:()=>0},
   localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},
-  document:{querySelector:selector=>selector==='#app'?app:null,querySelectorAll:()=>[],body:{insertAdjacentHTML(){}}},
+  document:{querySelector:selector=>selector==='#app'?app:selector==='#toast'?toastTarget:null,querySelectorAll:()=>[],createElement:()=>({remove(){}}),body:{insertAdjacentHTML(){}}},
   requestAnimationFrame:()=>0,cancelAnimationFrame(){},setInterval:()=>0,clearInterval(){},
   setTimeout:()=>0,fetch:async()=>({ok:false}),Image:function(){},confirm:()=>true,subclassFixture
 };
@@ -19,7 +19,7 @@ source+=`;globalThis.turnTest={
   setup(){RACE_DATA={Human:{mult:{},flat:{}}};SUBCLASS_DATA=JSON.parse(JSON.stringify(subclassFixture));Object.values(SUBCLASS_DATA).flat().forEach(sub=>{Object.assign(sub,SUBCLASS_TURN_OVERRIDES[sub.id]||{});sub.passive=subclassPassiveText(sub);sub.active=subclassActiveText(sub)});state=fresh();const warrior=makeHero(1,'Warrior'),rogue=makeHero(1,'Rogue');state.run={region:0,step:0,encounters:0,gold:0,heroes:[warrior,rogue],inventory:[],consumables:{},perks:[],relics:[],mode:'map'};beginCombat('combat');return state},
   state:()=>state,
   chooseTurnAction,chooseTurnTarget,buildTurnOrder,resortRemainingTurnOrder,heroInitiative,unitCard,turnActionPanel,inspectEnemy,turnDamage,applyHealing,enemyIntent,activateRelic,combatStatusBadges,weaponStatusProfile,weaponProcChance,
-  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,protectionStatSheet,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription,enemyProtectionValues,heroWeaponDamageType,heroWeaponFamily,stunResistanceChance,classSkillNodes,availableSkillPoints,skillBonus,skillNodeUnlocked,plannedSkillNodeUnlocked,queueSkillNode,confirmSkillPoints,respecSkillTree,enemyUnit,enemyTurn,enemyDamage,applyEnemyControl,interruptEnemy,consumables:CONSUMABLES,pending:()=>PENDING_SKILL_NODES
+  abilities:TURN_ABILITIES,augments:ABILITY_AUGMENTS,subclasses:()=>SUBCLASS_DATA,subclassAbility,executeSubclassAbility,heroSheetStats,effectiveAtk,naturalMaxHp,makeHero,canEquip,applyLayeredDamage,ensureProtection,restoreProtection,protectionStatSheet,physicalDodgeFromDex,magicalDodgeFromInt,abilityPreviewDescription,enemyProtectionValues,heroWeaponDamageType,heroWeaponFamily,stunResistanceChance,classSkillNodes,availableSkillPoints,skillBonus,skillNodeUnlocked,plannedSkillNodeUnlocked,queueSkillNode,confirmSkillPoints,respecSkillTree,enemyUnit,enemyTurn,enemyDamage,applyEnemyControl,interruptEnemy,mergeInventoryItems,itemUpgradeButton,traderRerollCost,consumables:CONSUMABLES,pending:()=>PENDING_SKILL_NODES
 }`;
 vm.runInContext(source,context);
 
@@ -30,6 +30,8 @@ assert.ok(api.heroInitiative(state.run.heroes[1])>api.heroInitiative(state.run.h
 const armoredProfile=api.enemyProtectionValues({name:'Ironback',role:'Bruiser',level:30,maxHp:1000}),casterProfile=api.enemyProtectionValues({name:'Grave Wisp',role:'Caster',level:30,maxHp:1000});assert.ok(armoredProfile.armor>1000&&armoredProfile.magic<300,'Ironbacks strongly favor Armor over Magic Armor');assert.ok(casterProfile.magic>1000&&casterProfile.armor<100,'Grave Wisps strongly favor Magic Armor over Armor');
 assert.ok(api.heroSheetStats(state.run.heroes[1]).physicalDodge>0,'Dexterity grants physical dodge');
 assert.ok(api.heroSheetStats(state.run.heroes[0]).magicalDodge>0,'Intellect grants magical dodge');
+{const base={id:900001,name:'Test Signet',slot:'Accessory',sourceSlot:'Ring',rarity:'Common',tier:1,stat:'str',value:5,power:20,runes:[]},duplicate={...base,id:900002};state.run.inventory.push(base,duplicate);assert.match(api.itemUpgradeButton(base),/Upgrade to Uncommon/,'an identical same-rarity item enables upgrading');api.mergeInventoryItems(base.id,duplicate.id);assert.equal(base.rarity,'Uncommon','merging promotes the retained item by one rarity');assert.ok(base.value>5,'rarity promotion improves the item rather than changing only its label');assert.equal(state.run.inventory.some(item=>item.id===duplicate.id),false,'the duplicate is consumed by merging');state.run.inventory=state.run.inventory.filter(item=>item.id!==base.id)}
+state.run.traderPaidRerolls=0;assert.equal(api.traderRerollCost(),25,'the first paid Trader reroll costs 25 gold');state.run.traderPaidRerolls=3;assert.equal(api.traderRerollCost(),200,'paid Trader rerolls double in cost each time');delete state.run.traderPaidRerolls;
 const starterMage=api.makeHero(1,'Mage');assert.equal(api.heroWeaponDamageType(starterMage),'magical','the Mage starter weapon deals magical damage');
 assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities');
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
