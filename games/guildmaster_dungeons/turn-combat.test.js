@@ -74,7 +74,7 @@ casterIntent.forceBasicActions=0;casterIntent.intent=null;assert.equal(api.enemy
 
 api.chooseTurnAction('basic');
 assert.equal(battle.pendingAction,'basic','targeted actions pause for target selection');
-const target=battle.enemies[0],before=target.hp;target.dodge=0;
+const target=battle.enemies[0],before=target.hp;target.dodge=1;assert.equal(api.turnDamage(state.run.heroes[0],target,.1).missed,true,'enemy Dodge produces a miss');assert.match(api.unitCard(target,true),/DODGED/,'a dodged hero attack displays DODGED instead of a damage number');target.dodge=0;
 target.stunsTaken=0;
 assert.equal(api.stunResistanceChance(target),0,'ordinary enemies have no resistance before their first successful stun');
 target.stunsTaken=1;assert.equal(api.stunResistanceChance(target),.2,'each previous stun adds 20% resistance');target.stunsTaken=0;
