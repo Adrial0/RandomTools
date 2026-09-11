@@ -7,7 +7,11 @@ assert.equal(sharedItems.weapons['Oak Staff'].type,'arcane','the Apprentice Staf
 assert.match(html,/Guildmaster: Dungeons/);
 assert.match(js,/function beginDraft\(/,'a new expedition begins with a recruit draft');
 assert.match(js,/preVitalityNaturalMaxHp\(h,includeGear\)\*1\.3/,'maximum HP remains 30% higher throughout progression');
-assert.match(js,/Rogue:\{hp:4[^\n]*Ranger:\{hp:4[^\n]*Mage:\{hp:3[^\n]*Priest:\{hp:3/,'DEX and INT classes receive increased per-level HP growth');
+assert.match(js,/Warrior:\{hp:10[^\n]*Paladin:\{hp:10[^\n]*Rogue:\{hp:10[^\n]*Ranger:\{hp:10[^\n]*Mage:\{hp:10[^\n]*Priest:\{hp:10/,'every class receives +10 base HP growth per level');
+assert.match(js,/effect:\{maxHpAttack:\.01\}/,'the STR tree includes maximum-HP-to-Attack conversion');
+assert.match(js,/vitalForce=h\.maxHp\*skillBonus\(h,'maxHpAttack'\)[^\n]*\+vitalForce\)\*\(1\+perk\+gs\.damageBonus\)/,'Vital Force is added to Attack before damage multipliers');
+assert.match(js,/effect:\{maxManaRegen:\.01\}/,'the INT tree includes maximum-Mana regeneration');
+assert.match(js,/sheet\.manaRegen\+=hero\.maxMana\*skillBonus\(hero,'maxManaRegen'\)/,'maximum-Mana regeneration appears in effective Mana regeneration');
 assert.match(js,/hero\.id===target\.id\?1:\.3/,'enemy Cleave deals full damage to its main target and 30% to other heroes');
 assert.match(js,/draftSelection\.filter\(Boolean\)\.length!==2/,'exactly two adventurers start a run');
 assert.match(js,/state\.draftSlots=\[classRoster\(1\),classRoster\(1\)\]/,'each party slot receives a separate candidate roster');
@@ -221,7 +225,7 @@ assert.match(js,/const ENEMY_PROTECTION_BY_ROLE=/,'enemy roles define sharply di
 assert.match(js,/'The Gilded Raider':\{armor:1\.50,magic:\.28\}/,'the armored boss carries more Armor than maximum HP');
 assert.match(js,/levelScale=1\+Math\.min\(\.75/,'enemy protection scales substantially with level');
 assert.match(css,/\.turnBasedCombat \.statusBadge\{height:18px/,'combat status badges use a compact vertical footprint');
-assert.match(js,/Warrior:\{hp:5,str:3,def:2\}/,'Warriors trade excess Strength growth for frontline Armor growth');
+assert.match(js,/Warrior:\{hp:10,str:3,def:2\}/,'Warriors retain frontline Armor growth alongside the temporary +10 HP growth');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
 assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');
 assert.match(js,/function traitStats\(/,'character traits contribute their Guildmaster stats');
@@ -304,7 +308,7 @@ assert.match(js,/aether-reservoir[\s\S]*requires:'attribute-int-17'[\s\S]*aether
 assert.match(js,/function ringSkillNodes\(/,'attribute paths culminate in circular two-route clusters');
 assert.match(js,/requiresAny:index===6/,'either side of an attribute ring can unlock its combined notable');
 assert.match(js,/function skillNodeUnlocked\(/,'skill prerequisites support alternate routes');
-assert.match(js,/\['Ferocity','Party attack \+6%','attack',\.06\]/,'run boons use the reduced balance values');
+assert.match(js,/\['Ferocity','Party attack \+3%','attack',\.03\]/,'run boons use the reduced balance values');
 assert.match(js,/const current=PERKS\.find\(boon=>boon\[0\]===p\.name\)/,'saved run boons migrate to current balance values');
 assert.match(js,/str:\{sector:90/,'attribute rings are rotated counter-clockwise into their neighboring open spaces');
 assert.match(js,/ring-gateway/,'each ring uses a gateway node to keep entrance connections clear');
