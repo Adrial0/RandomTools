@@ -72,7 +72,11 @@ assert.match(js,/function gearSlotVisual\(/,'character cards render equipment ar
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/subclasses\.json'\)/,'the roguelike shares Guildmaster subclasses');
 assert.match(js,/const TRAINING=/,'guild progression provides permanent combat-stat training');
 assert.match(js,/function renderRunInventory\(/,'runs include a functional inventory');
-assert.match(js,/state\.gearTierUnlocked=Math\.max/,'boss victories unlock the next equipment tier');
+assert.match(js,/equipmentTierForRun=function\(\)\{return Math\.max\(1,\(state\.run\?\.region\|\|0\)\+1\)\}/,'new equipment scales from the region where it appears');
+assert.match(js,/item\.itemLevel=itemLevel;item\.tier=itemLevel/,'generated equipment stores a fixed item level instead of dynamically scaling later');
+assert.match(js,/const MASTERY_CAP=50/,'class Mastery is capped at level 50');
+assert.match(js,/run\.heroes\.forEach\(hero=>counts\[hero\.class\]=\(counts\[hero\.class\]\|\|0\)\+1\)/,'Mastery XP counts every party member, including duplicate classes');
+assert.match(js,/const ASSET='images\/'/,'art loads from the dungeon game local images folder');
 assert.match(js,/function applyRarityAffixes\(/,'drops use Guildmaster rarity affix rules');
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use Guildmaster exact named equipment recipes');
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');
