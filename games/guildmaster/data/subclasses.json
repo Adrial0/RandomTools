@@ -121,10 +121,10 @@
     {
       "id": "duelist",
       "name": "Duelist",
-      "passive": "Physical dodge +10% and Attack Speed +12%.",
-      "attackSpeedBonus": 0.12,
-      "active": "Flurry — adds a 140% follow-up hit. Cooldown: 14s.",
-      "physicalDodgeBonus": 0.1,
+      "passive": "Multi-Attack Chance +20% and Multi-Attack Damage +20%.",
+      "multiAttackChance": 0.2,
+      "multiAttackDamage": 0.2,
+      "active": "Flurry — a powerful focused series of strikes. Cooldown: 14s.",
       "activeType": "flurry",
       "image": "images/subclasses/duelist.png"
     },

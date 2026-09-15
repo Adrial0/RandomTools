@@ -177,6 +177,7 @@
       "base": 13,
       "counter": 0.08,
       "critChance": 0.04,
+      "multiAttackChance": 0.12,
       "icon": "🗡️",
       "image": "images/items/weapons/twin-blades.png"
     },
