@@ -77,6 +77,9 @@ assert.match(js,/item\.itemLevel=itemLevel;item\.tier=itemLevel/,'generated equi
 assert.match(js,/const MASTERY_CAP=50/,'class Mastery is capped at level 50');
 assert.match(js,/run\.heroes\.forEach\(hero=>counts\[hero\.class\]=\(counts\[hero\.class\]\|\|0\)\+1\)/,'Mastery XP counts every party member, including duplicate classes');
 assert.match(js,/const ASSET='images\/'/,'art loads from the dungeon game local images folder');
+assert.match(js,/Start a New Expedition/,'the guild screen leads with the renamed expedition action');
+assert.match(js,/function compactMasteryStats[\s\S]*\['HP',base\.hp\],[\s\S]*\['Attack',base\.atk\],[\s\S]*\['Mana',ability\.maxMana\]/,'compact class cards show only HP, Attack, and Mana');
+assert.match(js,/function openMasterySubclasses/,'base class inspection exposes its subclass choices');
 assert.match(js,/function applyRarityAffixes\(/,'drops use Guildmaster rarity affix rules');
 assert.match(js,/fetch\('\.\.\/guildmaster\/data\/recipes\.json'\)/,'drops use Guildmaster exact named equipment recipes');
 assert.match(js,/function makeRecipeItem\(/,'canonical recipe equipment is converted without dungeon-only names');

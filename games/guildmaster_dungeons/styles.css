@@ -165,3 +165,16 @@
 .masteryRewardSummary h3{margin-top:0}.masteryRewardSummary div{display:flex;justify-content:space-between;gap:15px;padding:5px 0;border-top:1px solid #38294b}
 @media(max-width:1000px){.masteryGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.masteryGrid{grid-template-columns:1fr}.masteryBaseStats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.guildExpeditionLaunch{display:flex;justify-content:center;padding:22px}
+.startExpeditionButton{width:min(620px,100%);min-height:68px;font-size:1.35rem;letter-spacing:.04em;box-shadow:0 0 24px rgba(201,145,42,.18)}
+.compactMasteryHall{padding:12px}
+.compactMasteryCard{appearance:none;color:inherit;font:inherit;text-align:left;cursor:pointer;min-width:0}
+.compactMasteryCard:hover,.compactMasteryCard:focus-visible{border-color:#c18a2d;background:linear-gradient(145deg,rgba(47,34,19,.98),rgba(19,15,11,.98));transform:translateY(-1px)}
+.compactMasteryCard header img{width:44px;height:44px}.compactMasteryCard h3{font-size:1.05rem}
+.compactMasteryStats{grid-template-columns:repeat(3,minmax(0,1fr))}.compactMasteryStats span{padding:5px 7px}.compactMasteryStats small{font-size:.7rem}.compactMasteryStats b{font-size:.95rem}
+.masteryXpText{font-size:.72rem}.subclassPreviewIntro{margin-bottom:14px}
+.subclassPreviewGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.subclassPreviewCard{padding:14px;border:1px solid #644b28;background:#130f0b}.subclassPreviewCard h3{margin-top:0;color:#efd28d}.subclassPreviewCard p{line-height:1.45}
+.subclassManaCost{display:inline-block;padding:4px 8px;border:1px solid #65528a;color:#d8baff;background:#1d1529}
+.masteryInspectActions{margin-top:18px}
+@media(max-width:800px){.subclassPreviewGrid{grid-template-columns:1fr}.startExpeditionButton{font-size:1.1rem}}
