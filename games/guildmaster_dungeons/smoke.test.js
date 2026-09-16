@@ -97,7 +97,7 @@ assert.match(js,/Array\.from\(\{length:6\},\(_,index\)=>\{const item=makeCanonic
 assert.match(js,/function shopRarityWeights\(featured=false,tier=equipmentTierForRun\(\)\)/,'shop rarity odds scale by region');
 assert.match(js,/function shopItemCost\(/,'shop prices scale by rarity and tier');
 assert.match(js,/function equipmentTierForRun\(\)[\s\S]*state\.run\?\.endless\?regionTier/,'endless equipment tiers continue increasing beyond the four-region catalogue');
-assert.match(js,/equipmentPrimaryValue[\s\S]*Math\.pow\(1\.25,endlessTiers\)/,'post-tier-four equipment retains its controlled endless scaling');
+assert.match(js,/equipmentPrimaryValue[\s\S]*Math\.pow\(1\.15,endlessTiers\)/,'post-tier-four equipment retains its flatter endless scaling');
 assert.match(js,/shopItemCost[\s\S]*Math\.pow\(1\.25,endlessTiers\)/,'post-tier-four trader prices retain their controlled endless scaling');
 assert.match(js,/function scalableWeaponRecipes\(tier\)[\s\S]*Object\.entries\(ITEM_DATA\.weapons\)/,'every standard weapon template remains available at tier four and beyond');
 assert.match(js,/endlessRegionMult=r\.endless\?Math\.pow\(1\.7,Math\.max\(0,r\.region-3\)\):1/,'enemy stats compound sharply after Endless region four');
