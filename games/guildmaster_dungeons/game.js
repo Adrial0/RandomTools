@@ -1258,6 +1258,25 @@ resolveBasicMultiAttack=function(hero,target,battle){hero.currentAction='basic';
 const unitCardBeforeMultiAttackNotice=unitCard;
 unitCard=function(unit,enemy=false){let html=unitCardBeforeMultiAttackNotice(unit,enemy),notice=!enemy&&unit.multiAttackNotice&&Date.now()-unit.multiAttackNotice.time<1800?unit.multiAttackNotice:null;if(!notice)return html;return html.replace('class="unit ',`class="unit multiAttackTriggered `).replace(/(<div class="unitName">)/,`<span class="multiAttackNotice" style="--multi-key:${notice.key}">MULTI-ATTACK ×${notice.hits}</span>$1`)};
 
+/* Resolve Multi-Attack as visible, separate strikes. Every hit gets its own
+   damage roll, status roll, sound, attacker motion, target reaction, and render. */
+const MULTI_ATTACK_HIT_DELAY=460;
+resolveBasicMultiAttack=function(hero,target,battle){
+ const battleId=battle.id,empowered=hero.patientBladeReady,chance=multiAttackChance(hero)*(hero.multiAttackDodgeBoost?2:1),followUps=rollMultiAttackFollowUps(chance),plannedHits=1+followUps;
+ delete hero.multiAttackDodgeBoost;hero.currentAction='basic';battle.pendingAction=null;battle.turnLocked=true;battle.multiAttackResolving=true;
+ if(followUps)hero.multiAttackNotice={hits:plannedHits,key:uid(),time:Date.now()};
+ let hitIndex=0,total=0,crits=0;
+ const finishSequence=()=>{if(!state.run?.battle||state.run.battle.id!==battleId)return;delete battle.multiAttackResolving;hero.patientBladeReady=false;if(hasRelic('duelistCoin'))hero.mana=Math.min(hero.maxMana,hero.mana+6);if(crits&&skillBonus(hero,'critMana'))hero.mana=Math.min(hero.maxMana,hero.mana+skillBonus(hero,'critMana')*crits);battle.log.unshift(`${followUps?'MULTI-ATTACK! ':''}${hero.name} attacks ${target.name} ${hitIndex} time${hitIndex===1?'':'s'} for ${total} total damage${crits?` with ${crits} critical hit${crits===1?'':'s'}`:''}${empowered?' with Patient Blade':''}.`);finishTurn(hero)};
+ const strike=()=>{if(!state.run?.battle||state.run.battle.id!==battleId)return;if(target.hp<=0||hitIndex>=plannedHits)return finishSequence();hero.attackPulse=uid();playSfx(heroAttackSfx(hero,'basic'));const hit=turnDamage(hero,target,hitIndex?multiAttackDamage(hero):(skillBonus(hero,'fracturedRhythm')?.5:1),heroWeaponDamageType(hero));tryWeaponStatus(hero,target);total+=hit.damage;crits+=hit.crit?1:0;hitIndex++;if(followUps)hero.multiAttackNotice={hits:plannedHits,key:uid(),time:Date.now()};save();render();setTimeout(hitIndex<plannedHits&&target.hp>0?strike:finishSequence,MULTI_ATTACK_HIT_DELAY)};
+ strike()
+};
+const turnActionPanelBeforeMultiAttackSequence=turnActionPanel;
+turnActionPanel=function(){return state.run?.battle?.multiAttackResolving?'<div class="turnPrompt resolvingMultiAttack"></div>':turnActionPanelBeforeMultiAttackSequence()};
+
+/* Item Threat is displayed as a percentage, so apply it multiplicatively to
+   the character's normal flat Threat sources. */
+heroThreat=function(hero){const sub=(SUBCLASS_DATA[hero.class]||[]).find(option=>option.id===hero.subclass),gear=gearStats(hero),flat=(CLASSES[hero.class].threat||1)+(sub?.threatBonus||0)+skillBonus(hero,'threat');return Math.max(.1,flat*(1+(gear.threatBonus||0))*(hero.loneWolf?2:1))};
+
 /* Compact guild roster with the expedition action kept first. */
 function compactMasteryStats(className){const base=CLASSES[className],ability=ABILITIES[className];return[['HP',base.hp],['Attack',base.atk],['Mana',ability.maxMana]].map(([label,value])=>`<span><small>${label}</small><b>${value}</b></span>`).join('')}
 renderMasteryHall=function(){return`<section class="panel masteryHall compactMasteryHall"><div class="masteryGrid">${MASTERY_CLASSES.map(className=>{const progress=masteryProgress(className),mastery=classMastery(className),percent=progress.level>=MASTERY_CAP?100:Math.round(progress.current/Math.max(1,progress.need)*100),unspent=Math.max(0,progress.level-Object.values(mastery.skillRanks||{}).reduce((sum,rank)=>sum+(rank||0),0));return`<button class="masteryCard compactMasteryCard" onclick="inspectHero(${masteryPreviewId(className)})"><header>${img('classes/'+CLASSES[className].icon)}<div><h3>${className}</h3><div class="masteryLevel">Mastery ${progress.level}/${MASTERY_CAP}${unspent?` · <b>${unspent} SP</b>`:''}</div></div></header><div class="masteryBaseStats compactMasteryStats">${compactMasteryStats(className)}</div><div class="masteryXpBar"><i style="width:${percent}%"></i></div><div class="muted masteryXpText">${progress.level>=MASTERY_CAP?'Mastery complete':`${progress.current} / ${progress.need} XP`}</div></button>`}).join('')}</div></section>`};

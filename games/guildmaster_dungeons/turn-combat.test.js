@@ -42,6 +42,7 @@ assert.ok(api.heroSheetStats(state.run.heroes[0]).magicalDodge>0,'Intellect gran
 {const owned={id:900010,name:'Marker Blade',slot:'Weapon',weaponTemplate:'Dagger',rarity:'Uncommon',tier:1,itemLevel:1},shopDifferent={...owned,id:900011,rarity:'Rare'},shopMatching={...owned,id:900012};state.run.inventory.push(owned);assert.match(api.traderOwnedMarker(shopDifferent),/ownedDifferentRarity[\s\S]*different rarity/,'a differently colored marker identifies the same item at another rarity');assert.match(api.traderOwnedMarker(shopMatching),/upgradeMatch[\s\S]*upgrade pair/,'the upgrade marker only appears for the same item at the same rarity');state.run.inventory.pop()}
 state.run.traderPaidRerolls=0;assert.equal(api.traderRerollCost(),25,'the first paid Trader reroll costs 25 gold in Region 1');state.run.region=1;assert.equal(api.traderRerollCost(),56,'Trader rerolls rise with the regional battle-gold curve');state.run.region=0;state.run.traderPaidRerolls=3;assert.equal(api.traderRerollCost(),200,'paid Trader rerolls double in cost each time');delete state.run.traderPaidRerolls;
 const starterMage=api.makeHero(1,'Mage');assert.equal(api.heroWeaponDamageType(starterMage),'magical','the Mage starter weapon deals magical damage');
+{const paladin=api.makeHero(1,'Paladin'),before=api.heroSheetStats(paladin).threat;paladin.gear.Accessory={id:900201,name:'Threat Test Banner',slot:'Accessory',rarity:'Rare',tier:1,itemLevel:1,threatBonus:.48,modifiers:[],itemModifierVersion:1,itemRarityAffixVersion:3};const after=api.heroSheetStats(paladin).threat;assert.ok(Math.abs(after/before-1.48)<.0001,'a displayed +48% item Threat multiplies total base Threat by 48% rather than adding 0.48 flat')}
 assert.equal(api.abilities.Warrior.length,2,'every class exposes two abilities');
 assert.equal(Object.values(api.abilities).every(list=>list.length===2),true,'all class ability lists contain two choices');
 assert.equal(api.abilities.Rogue[1].name,'Interrupting Strike','Rogue trades Poisoned Blade for a dedicated interrupt');assert.equal(api.abilities.Rogue[1].cost,12,'the Rogue interrupt costs less Mana than Poisoned Blade');assert.ok(api.consumables.silenceBomb,'traders can stock an interrupt consumable');
@@ -97,8 +98,7 @@ assert.match(api.unitCard(target,true),/targetable[\s\S]*chooseTurnTarget/,'the 
 assert.doesNotMatch(api.turnActionPanel(),/targetAction/,'the action panel does not duplicate enemy target buttons');
 api.chooseTurnTarget(target.id);
 assert.ok(target.hp<before,'the selected target takes damage');
-assert.ok(target.lastDamageHit?.amount>0,'a hit records its visible damage amount and HP-bar loss');
-assert.match(api.unitCard(target,true),/damageNumber[\s\S]*recentDamage/,'damaged combat cards render a floating number and trailing HP segment');
+assert.match(app.innerHTML,/damageNumber[\s\S]*recentDamage/,'each resolved hit renders a floating number and trailing HP segment');
 const wounded=state.run.heroes[0];wounded.hp-=20;api.applyHealing(state.run.heroes[1],wounded,12);
 assert.match(api.unitCard(wounded),/healingNumber[\s\S]*recentHealing/,'healing renders a green number and restored-HP highlight');
 assert.ok(target.role&&Number.isFinite(target.def)&&Number.isFinite(target.mdef),'enemies receive a tactical role and distinct defenses');
