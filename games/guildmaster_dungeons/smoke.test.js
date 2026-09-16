@@ -93,8 +93,8 @@ assert.match(js,/event\.target===this\)closeOverlay/,'clicking an overlay backdr
 assert.match(js,/function heroXpNeeded\(level\)/,'character XP uses Guildmaster level requirements');
 assert.match(js,/function levelBattleParty\(/,'each battle levels the entire party');
 assert.match(js,/const target=currentPartyLevel\(\)\+1/,'battle leveling synchronizes every party member');
-assert.match(js,/Array\.from\(\{length:6\},\(_,index\)=>\{const item=makeCanonicalItem\(rollShopRarity\(index===0\)\)/,'traders stock six canonical items with a guaranteed premium roll');
-assert.match(js,/function rollShopRarity\(guaranteed=false\)/,'shops use elevated rarity odds');
+assert.match(js,/Array\.from\(\{length:6\},\(_,index\)=>\{const item=makeCanonicalItem\(rollShopRarity\(index===0\)\)/,'traders stock six canonical items with one featured rarity roll');
+assert.match(js,/function shopRarityWeights\(featured=false,tier=equipmentTierForRun\(\)\)/,'shop rarity odds scale by region');
 assert.match(js,/function shopItemCost\(/,'shop prices scale by rarity and tier');
 assert.match(js,/function equipmentTierForRun\(\)[\s\S]*state\.run\?\.endless\?regionTier/,'endless equipment tiers continue increasing beyond the four-region catalogue');
 assert.match(js,/equipmentPrimaryValue[\s\S]*Math\.pow\(1\.25,endlessTiers\)/,'post-tier-four equipment retains its controlled endless scaling');
