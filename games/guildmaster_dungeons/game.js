@@ -1213,7 +1213,7 @@ function ensureRegionalItemBalance(item){if(!item||item.regionalItemBalanceVersi
 const applyRecipeMetaBeforeRegionalBalance=applyRecipeMeta;
 applyRecipeMeta=function(item,meta={}){if(meta.regionalSourceTier)return applyRegionalRecipeMeta(item,meta,meta.regionalSourceTier);return applyRecipeMetaBeforeRegionalBalance(item,meta)};
 makeCanonicalItem=function(forcedRarity=null){const itemLevel=equipmentTierForRun(),recipes=RECIPE_DATA.filter(recipe=>recipe[1]!=='Material'&&recipe[1]!=='Rune').sort(()=>Math.random()-.5);for(const recipe of recipes){const scaled=[...recipe],baseBlock=recipe[1]==='Armor'?(ITEM_DATA.armorProfiles?.[recipe[2]]?.block||0):0;scaled[4]=itemLevel;scaled[5]={...(recipe[5]||{}),regionalSourceTier:recipe[4]||1,regionalBaseBlock:baseBlock};try{const item=makeRecipeItem(scaled,forcedRarity||rollRarity(itemLevel));item.itemLevel=itemLevel;item.tier=itemLevel;if(partyCanEquip(item))return item}catch{}}for(let attempt=0;attempt<30;attempt++){const item=makeItem();item.itemLevel=itemLevel;item.tier=itemLevel;if(partyCanEquip(item))return item}const fallback=makeItem();fallback.itemLevel=fallback.tier=itemLevel;fallback.slot='Accessory';delete fallback.allowedClasses;return fallback};
-mergeIdentity=function(item){return[item?.slot,item?.weaponTemplate||item?.armorClass||'',item?.name,item?.itemLevel||item?.tier||1].join('|')};
+mergeIdentity=function(item){return[item?.slot,item?.weaponTemplate||item?.armorClass||'',item?.name].join('|')};
 const itemInspectBodyBeforeItemLevels=itemInspectBody;
 itemInspectBody=function(item,owner){return itemInspectBodyBeforeItemLevels(item,owner).replace(/Tier /g,'Item Level ')};
 const inventoryRailItemBeforeItemLevels=inventoryRailItem;
@@ -1224,6 +1224,39 @@ const headerBeforeItemLevels=header;
 header=function(){return headerBeforeItemLevels().replace(/<span class="chip">Gear Tier[\s\S]*?<\/span>/,'')};
 const showMainChoiceBeforeItemLevels=showMainChoice;
 showMainChoice=function(title,body,subtitle,eyebrow){return showMainChoiceBeforeItemLevels(title,String(body).replace(/Tier /g,'Item Level '),subtitle,eyebrow)};
+
+/* Region power stays internal. Identical items can merge across regions, and the
+   forged item always uses the stronger ingredient's core while retaining the
+   selected item's modifiers. */
+function hiddenItemLevel(item){return Math.max(1,item?.itemLevel||item?.tier||1)}
+mergeInventoryItems=function(itemId,ingredientId){
+ const base=ownedItemById(itemId),ingredient=state.run?.inventory?.find(item=>item.id===ingredientId);
+ if(!base||!ingredient||base.id===ingredient.id||base.rarity!==ingredient.rarity||mergeIdentity(base)!==mergeIdentity(ingredient))return;
+ const rarityIndex=MERGE_RARITIES.indexOf(base.rarity);if(rarityIndex<0||rarityIndex>=MERGE_RARITIES.length-1)return;
+ const oldRarity=base.rarity,newRarity=MERGE_RARITIES[rarityIndex+1],ratio=(ITEM_RARITY_MULTIPLIER[newRarity]||1)/(ITEM_RARITY_MULTIPLIER[oldRarity]||1),stronger=hiddenItemLevel(ingredient)>hiddenItemLevel(base)?ingredient:base;
+ const retained={id:base.id,inventoryPosition:base.inventoryPosition,modifiers:(base.modifiers||[]).map(modifier=>({...modifier,stats:{...(modifier.stats||{})}})),itemModifierVersion:base.itemModifierVersion};
+ if(stronger!==base){const core=JSON.parse(JSON.stringify(stronger));Object.keys(base).forEach(key=>delete base[key]);Object.assign(base,core,retained)}
+ const level=Math.max(hiddenItemLevel(base),hiddenItemLevel(ingredient));base.itemLevel=base.tier=level;
+ ['value','weaponPower','secondaryValue','tertiaryValue','thorns'].forEach(key=>{if(Number.isFinite(base[key]))base[key]=Math.max(1,Math.round(base[key]*ratio))});
+ base.rarity=newRarity;base.itemRarityAffixVersion=3;base.regionalItemBalanceVersion=0;ensureRegionalItemBalance(base);ensureItemSystem(base);
+ state.run.inventory=state.run.inventory.filter(item=>item.id!==ingredient.id);closeOverlay();save();render();toast(`${base.name} upgraded to ${newRarity}.`)
+};
+function stripVisibleItemLevel(html){return String(html).replace(/\b(?:Item Level|Item Lv\.|Tier)\s+\d+\s*(?:·\s*)?/g,'')}
+const itemInspectBodyBeforeHiddenLevels=itemInspectBody;
+itemInspectBody=function(item,owner){return stripVisibleItemLevel(itemInspectBodyBeforeHiddenLevels(item,owner))};
+const inventoryRailItemBeforeHiddenLevels=inventoryRailItem;
+inventoryRailItem=function(item){return stripVisibleItemLevel(inventoryRailItemBeforeHiddenLevels(item))};
+const rewardChoiceHtmlBeforeHiddenLevels=rewardChoiceHtml;
+rewardChoiceHtml=function(reward,index){return stripVisibleItemLevel(rewardChoiceHtmlBeforeHiddenLevels(reward,index))};
+const showMainChoiceBeforeHiddenLevels=showMainChoice;
+showMainChoice=function(title,body,subtitle,eyebrow){return showMainChoiceBeforeHiddenLevels(title,stripVisibleItemLevel(body),subtitle,eyebrow)};
+
+/* Multi-Attack rolls are explicit and testable; follow-ups also receive a
+   battlefield callout so simultaneous damage resolution cannot hide them. */
+function rollMultiAttackFollowUps(chance,random=Math.random,max=10){let hits=0,current=Math.max(0,chance);while(hits<max&&random()<Math.min(1,current)){hits++;current*=.5}return hits}
+resolveBasicMultiAttack=function(hero,target,battle){hero.currentAction='basic';hero.attackPulse=uid();playSfx(heroAttackSfx(hero,'basic'));const empowered=hero.patientBladeReady,firstMultiplier=skillBonus(hero,'fracturedRhythm')?.5:1,first=turnDamage(hero,target,firstMultiplier,heroWeaponDamageType(hero));tryWeaponStatus(hero,target);let total=first.damage,extraHits=0,crits=first.crit?1:0,chance=multiAttackChance(hero)*(hero.multiAttackDodgeBoost?2:1),rolledFollowUps=rollMultiAttackFollowUps(chance);delete hero.multiAttackDodgeBoost;while(target.hp>0&&extraHits<rolledFollowUps){const hit=turnDamage(hero,target,multiAttackDamage(hero),heroWeaponDamageType(hero));tryWeaponStatus(hero,target);total+=hit.damage;crits+=hit.crit?1:0;extraHits++}if(extraHits){hero.multiAttackNotice={hits:1+extraHits,key:uid(),time:Date.now()};hero.attackPulse=uid();playSfx('crit')}hero.patientBladeReady=false;if(hasRelic('duelistCoin'))hero.mana=Math.min(hero.maxMana,hero.mana+6);if(crits&&skillBonus(hero,'critMana'))hero.mana=Math.min(hero.maxMana,hero.mana+skillBonus(hero,'critMana')*crits);battle.log.unshift(`${extraHits?'MULTI-ATTACK! ':''}${hero.name} attacks ${target.name} ${1+extraHits} time${extraHits?'s':''} for ${total} total damage${crits?` with ${crits} critical hit${crits===1?'':'s'}`:''}${empowered?' with Patient Blade':''}.`);return finishTurn(hero)};
+const unitCardBeforeMultiAttackNotice=unitCard;
+unitCard=function(unit,enemy=false){let html=unitCardBeforeMultiAttackNotice(unit,enemy),notice=!enemy&&unit.multiAttackNotice&&Date.now()-unit.multiAttackNotice.time<1800?unit.multiAttackNotice:null;if(!notice)return html;return html.replace('class="unit ',`class="unit multiAttackTriggered `).replace(/(<div class="unitName">)/,`<span class="multiAttackNotice" style="--multi-key:${notice.key}">MULTI-ATTACK ×${notice.hits}</span>$1`)};
 
 /* Compact guild roster with the expedition action kept first. */
 function compactMasteryStats(className){const base=CLASSES[className],ability=ABILITIES[className];return[['HP',base.hp],['Attack',base.atk],['Mana',ability.maxMana]].map(([label,value])=>`<span><small>${label}</small><b>${value}</b></span>`).join('')}
