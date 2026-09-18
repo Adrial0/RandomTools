@@ -164,10 +164,10 @@ assert.match(js,/Paladin:\{hp:122,atk:13,initiative:7,speed:\.85,threat:2/,'Pala
 assert.match(js,/const TURN_ABILITIES=/,'every class has two turn-based abilities');
 assert.match(js,/function pendingTargetSide\(/,'targeted actions turn battlefield units into valid click targets');
 assert.match(js,/class=\"unit enemy[\s\S]*targetable/,'enemy cards visually expose direct targeting');
-assert.match(js,/Choose one of six upgrades across both class abilities/,'ability shrines offer upgrades for both abilities');
-assert.match(js,/ABILITY_AUGMENTS\[h\.class\]\.filter/,'ability shrine removes only upgrades already selected');
+assert.match(js,/Shrine of Transformation/,'ability shrines are presented as transformations');
+assert.match(js,/function availableAbilityTransforms/,'each ability can receive only one mutually exclusive transformation');
 assert.match(js,/All abilities cost 20% less Mana/,'the former cooldown relic now improves Mana efficiency');
-assert.match(js,/A Backstab kill refunds its Mana cost/,'the former Rogue cooldown reset now refunds Mana');
+assert.match(js,/Killing with Backstab refunds 50% of its Mana cost/,'Backstab can transform into a partial kill refund');
 assert.match(js,/Shield Bash[\s\S]*Radiant Smite[\s\S]*Interrupting Strike[\s\S]*Pinning Shot[\s\S]*Frost Nova[\s\S]*Sanctuary/,'all six classes receive a distinct second ability');
 assert.match(js,/function enemyTurn\(/,'enemy turns resolve automatically');
 assert.match(js,/function enemyIntent\(/,'enemy actions are previewed before their turns');
@@ -266,7 +266,7 @@ assert.match(js,/id:'noCamps'[\s\S]*?repeatable:false/,'the camp-removal modifie
 assert.match(js,/m\.repeatable!==false\|\|!chosen\.has\(m\.id\)/,'one-time Endless modifiers are removed from later choice pools');
 assert.match(js,/function loneWolfActive\([\s\S]*modifiers\|\|\[\]\)\.includes\('loneWolf'\)/,'Lone Wolf state survives older saves and permanently bypasses recruitment');
 assert.match(js,/if\(r\.endless&&loneWolfActive\(r\)\)\{r\.region\+\+;r\.step=0;[\s\S]*return renderMap\(\)\}/,'a stale Lone Wolf recruitment screen migrates directly into the next region');
-assert.match(js,/Guarded Cleave[\s\S]*restores 8% maximum Armor/,'Warrior Cleave sustains Armor instead of granting lifesteal');
+assert.match(js,/Defensive Sweep[\s\S]*restores 8% maximum Armor/,'Warrior Cleave can transform into an Armor-sustain specialization');
 assert.match(js,/function chooseLoneWolf\(/,'Lone Wolf forces the player to select the only continuing hero');
 assert.match(js,/elementalNames=\{pyromancer:'Flame Wave',frostmage:'Ice Nova'/,'elemental subclass abilities resolve to playable names instead of object strings');
 assert.match(js,/if\(b\.type==='boss'\)r\.heroes\.forEach\(h=>\{h\.hp=h\.maxHp;h\.mana=h\.maxMana\}\)/,'boss victories fully restore party Health and Mana');

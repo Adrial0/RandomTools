@@ -71,6 +71,8 @@ const reverseHero=api.makeHero(20,'Mage'),reverseNodes=api.classSkillNodes('Mage
 assert.doesNotMatch(api.abilityPreviewDescription(state.run.heroes[0],api.abilities.Warrior[0]),/% (?:of )?Attack/,'ability cards replace Attack percentages with current numerical damage');
 state.run.heroes[0].gear.Weapon={slot:'Weapon',damageType:'fire'};assert.equal(api.heroWeaponDamageType(state.run.heroes[0]),'magical','a magical Warrior weapon makes weapon-driven abilities magical');const magicTarget=state.run.battle.enemies[0];magicTarget.hp=magicTarget.maxHp;magicTarget.dodge=0;magicTarget.armor=magicTarget.maxArmor=9999;magicTarget.magicArmor=magicTarget.maxMagicArmor=25;const magicHit=api.turnDamage(state.run.heroes[0],magicTarget,.1,api.heroWeaponDamageType(state.run.heroes[0]));assert.ok(magicHit.magicArmorDamage>0&&magicHit.armorDamage===0,'an elemental weapon hit damages Magic Armor instead of physical Armor');state.run.heroes[0].gear.Weapon=null;
 assert.equal(Object.values(api.augments).every(list=>list.length===6),true,'each class has three shrine upgrades for each ability');
+assert.ok(Object.values(api.augments).flat().filter(def=>/but|no longer|resisted|below|enemy remains|against groups/i.test(def[2])).length>=20,'most class transformations carry an explicit condition or drawback');
+assert.match(api.abilities.Rogue[0].desc,/95%[\s\S]*triple damage[\s\S]*30% HP/,'Backstab is an execution ability rather than unconditional burst');
 const subclassData=api.subclasses(),subclasses=Object.values(subclassData).flat();
 assert.equal(subclasses.length,19,'all nineteen subclasses are loaded');
 assert.equal(subclasses.every(sub=>!/(attack speed|\d+s\b|cooldown)/i.test(`${sub.passive} ${sub.active}`)),true,'every subclass uses turn-based wording');
