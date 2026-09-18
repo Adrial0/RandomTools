@@ -1360,14 +1360,15 @@ Object.values(ARCHETYPE_ITEM_SETS).forEach(set=>set.effect=`1 piece: ${set.oneTe
 Object.assign(ITEM_SETS,ARCHETYPE_ITEM_SETS);
 const LEGACY_ITEM_SET_IDS=new Set(['emberwake','ironVow','nightHunt','phoenix']);
 const CANONICAL_SET_PIECES=()=>Object.entries(ITEM_SETS).flatMap(([setId,set])=>Object.entries(set.pieces||{}).map(([slot,name])=>({setId,slot,name})));
+function canonicalSetImagePath(set,slot){const name=set?.pieces?.[slot]||'default',folder=itemFolder(slot),slug=String(name).toLowerCase().replace(/’/g,"'").replace(/[^a-z0-9']+/g,'-').replace(/^-|-$/g,'');return `images/items/${folder}/${slug}.png`}
 function rebuildCanonicalSetItem(item,set){
  const level=hiddenItemLevel(item),rarity=item.rarity||'Common',slot=item.slot,stats=Object.fromEntries(Object.entries(set.stats?.[slot]||{}).map(([key,value])=>[key,archetypeStatValue(key,value,level,rarity)]));
  ITEM_STAT_KEYS.forEach(key=>delete item[key]);delete item.stat;delete item.value;delete item.secondaryStat;delete item.secondaryValue;delete item.tertiaryStat;delete item.tertiaryValue;delete item.weaponCritChance;delete item.allowedClasses;
  item.sourceSlot=slot;item.itemLevel=item.tier=level;item.setVersion=2;item.archetype=set.archetype;item.extraStats=stats;
- if(slot==='Weapon'){const template=set.templates.Weapon,weapon=ITEM_DATA.weapons?.[template]||{};Object.assign(item,{weaponTemplate:template,weaponType:ITEM_DATA.weaponTypeMap?.[template]||template,damageType:weapon.type||'physical',scale:weapon.scale||'str',scale2:weapon.scale2||null,weaponPower:equipmentPrimaryValue((weapon.base||5)+2,level,rarity),image:weapon.image||`images/items/weapons/${itemSlug(item.name)}.png`})}
- else if(slot==='Armor'){const template=set.templates.Armor,profile=ITEM_DATA.armorProfiles?.[template]||{};Object.assign(item,{armorClass:profile.armorClass||'Light',stat:profile.stat||'def',value:equipmentPrimaryValue((profile.base||4)+2,level,rarity),image:`images/items/armor/${itemSlug(item.name)}.png`});delete item.weaponTemplate;delete item.weaponType;delete item.weaponPower;delete item.scale;delete item.scale2;delete item.damageType}
- else{item.image=`images/items/accessories/${itemSlug(item.name)}.png`;delete item.weaponTemplate;delete item.weaponType;delete item.weaponPower;delete item.scale;delete item.scale2;delete item.damageType;delete item.armorClass}
- item.setBalanceVersion=5;return item
+ if(slot==='Weapon'){const template=set.templates.Weapon,weapon=ITEM_DATA.weapons?.[template]||{};Object.assign(item,{weaponTemplate:template,weaponType:ITEM_DATA.weaponTypeMap?.[template]||template,damageType:weapon.type||'physical',scale:weapon.scale||'str',scale2:weapon.scale2||null,weaponPower:equipmentPrimaryValue((weapon.base||5)+2,level,rarity),image:canonicalSetImagePath(set,slot)})}
+ else if(slot==='Armor'){const template=set.templates.Armor,profile=ITEM_DATA.armorProfiles?.[template]||{};Object.assign(item,{armorClass:profile.armorClass||'Light',stat:profile.stat||'def',value:equipmentPrimaryValue((profile.base||4)+2,level,rarity),image:canonicalSetImagePath(set,slot)});delete item.weaponTemplate;delete item.weaponType;delete item.weaponPower;delete item.scale;delete item.scale2;delete item.damageType}
+ else{item.image=canonicalSetImagePath(set,slot);delete item.weaponTemplate;delete item.weaponType;delete item.weaponPower;delete item.scale;delete item.scale2;delete item.damageType;delete item.armorClass}
+ item.setBalanceVersion=5;item.setImageVersion=1;return item
 }
 function normalizeAuthoredSetItem(item){
  if(!item)return item;
@@ -1377,6 +1378,7 @@ function normalizeAuthoredSetItem(item){
  const chosen=match||candidates[itemSetHash({name:item.name||item.id})%candidates.length];if(!chosen)return item;
  item.setId=chosen.setId;item.name=chosen.name;const set=ITEM_SETS[item.setId];
  if(set&&item.setBalanceVersion!==5)rebuildCanonicalSetItem(item,set);
+ if(set&&item.setImageVersion!==1){item.image=canonicalSetImagePath(set,item.slot);item.setImageVersion=1}
  return item
 }
 ensureItemSet=function(item){if(!item)return item;if(item.id==null)item.id=uid();return normalizeAuthoredSetItem(item)};
