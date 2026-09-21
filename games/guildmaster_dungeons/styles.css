@@ -187,7 +187,7 @@
 /* Keep combat identities visible while the compact status stack sits beside each portrait. */
 .turnBasedCombat .heroSide .unitName{display:block}
 .turnBasedCombat .unit{overflow:visible}
-.turnBasedCombat .unit .statusEffects{position:absolute;top:31px;left:calc(50% + 27px);transform:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;width:max-content;max-width:125px;min-height:0;gap:3px;margin:0;z-index:8}
+.turnBasedCombat .unit .statusEffects{position:absolute;top:31px;left:calc(50% + 40px);transform:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;width:max-content;max-width:125px;min-height:0;gap:3px;margin:0;z-index:8}
 .turnBasedCombat .unit .statusBadge,.turnBasedCombat .unit .statusBadge.control,.turnBasedCombat .unit .statusBadge.helpful,.turnBasedCombat .unit .statusBadge.empowered{width:auto;max-width:125px;height:auto;min-height:14px;white-space:nowrap}
 .turnBasedCombat .unit .statusBadge b{max-width:102px;overflow:hidden;text-overflow:ellipsis}
 .trapBrief{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin:0 0 14px;padding:11px;border:1px solid #674a25;background:rgba(13,10,7,.88);font:11px var(--mono)}
@@ -198,3 +198,4 @@
 /* Trader item details use the same readable dimensions as inventory tooltips. */
 @media(min-width:701px){.mainChoiceWindow:has(.traderStock){max-height:none;overflow:visible}.traderItemTooltip{top:auto;bottom:calc(100% + 8px);width:390px;padding:15px;font-size:12px;line-height:1.55}.traderItemTooltip strong{font-size:19px}.traderItemTooltip small{font-size:11px;line-height:1.5}}
 @media(max-width:700px){.turnBasedCombat .heroSide .unit .portrait{width:68px!important;height:68px!important}.traderItemTooltip{font-size:11px;line-height:1.5}.traderItemTooltip strong{font-size:17px}.traderItemTooltip small{font-size:10px}}
+@media(max-width:700px){.turnBasedCombat .unit .statusEffects{left:calc(50% + 35px)}}
