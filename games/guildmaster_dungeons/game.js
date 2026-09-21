@@ -1470,4 +1470,14 @@ endRun=function(won){const run=state.run,floor=run?.endless?currentFloorNumber(r
 const renderBeforeMasteryMigration=render;
 render=function(){ensureMasteryState();return renderBeforeMasteryMigration()};
 
+/* Equipped items use their own inspection window, so expose the same merge
+   action there instead of only offering it from inventory inspection. */
+inspectGear=function(heroId,slot){
+ const hero=findHero(heroId),item=hero?.gear?.[slot];
+ if(!hero)return;
+ if(!item)return showOverlay('Empty '+slot,`<p class="muted">${hero.name} has nothing equipped here. Drag a ${slot.toLowerCase()} from the inventory onto this slot.</p><div class="actions"><button class="btn" onclick="closeOverlay()">Close</button></div>`);
+ ensureItemSet(item);
+ showOverlay(item.name,`<div class="itemInspectExpanded"><div class="selectedItem">${itemArt(item)}<div><div class="name rarity-${item.rarity||'Common'}">${item.name}</div><div class="muted">${item.rarity||'Common'} ${slot}</div><div class="itemStats">${itemStatLines(item).map(stat=>`<span>${stat}</span>`).join('')}</div></div></div>${itemSetHtml(item,hero)}<div class="actions">${itemUpgradeButton(item)}<button class="btn" onclick="closeOverlay()">Close</button></div></div>`)
+};
+
 init();
