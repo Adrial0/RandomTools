@@ -294,7 +294,7 @@ RELICS.push(
  ['battleSmith','Field Anvil','Defend restores 35% of Armor and Magic Armor instead of 20%.'],
  ['manaConduit','Mana Conduit','Whenever an enemy damages a hero’s Magic Armor, that hero restores 3 Mana.'],
  ['spikedPlate','Spiked Carapace','Reflect 15% of enemy damage absorbed by Armor.'],
- ['adamantSoul','Adamant Soul','Maximum Armor and Magic Armor increase by 75%.','elite'],
+ ['adamantSoul','Adamant Soul','Maximum Armor and Magic Armor increase by 30%.','elite'],
  ['voidNeedle','Void Needle','All attacks gain 35% Pierce, but deal 15% less damage.','elite'],
  ['phaseMantle','Phase Mantle','Each hero automatically dodges the first enemy attack against them each battle.','elite'],
  ['shatterEngine','Shatter Engine','Armor Broken and Magic Armor Broken deal triple damage to protection instead of double.','elite'],
@@ -1262,8 +1262,9 @@ showMainChoice=function(title,body,subtitle,eyebrow){return showMainChoiceBefore
    selected item's modifiers. */
 function hiddenItemLevel(item){return Math.max(1,item?.itemLevel||item?.tier||1)}
 mergeInventoryItems=function(itemId,ingredientId){
- const base=ownedItemById(itemId),ingredient=state.run?.inventory?.find(item=>item.id===ingredientId);
+ const base=ownedItemById(itemId),ingredient=ownedItemById(ingredientId),baseOwner=base&&equippedOwner(base),ingredientOwner=ingredient&&equippedOwner(ingredient),snapshots=new Map();
  if(!base||!ingredient||base.id===ingredient.id||base.rarity!==ingredient.rarity||mergeIdentity(base)!==mergeIdentity(ingredient))return;
+ [baseOwner,ingredientOwner].filter(Boolean).forEach(hero=>snapshots.set(hero.id,equipmentResourceSnapshot(hero)));
  const rarityIndex=MERGE_RARITIES.indexOf(base.rarity);if(rarityIndex<0||rarityIndex>=MERGE_RARITIES.length-1)return;
  const oldRarity=base.rarity,newRarity=MERGE_RARITIES[rarityIndex+1],ratio=(ITEM_RARITY_MULTIPLIER[newRarity]||1)/(ITEM_RARITY_MULTIPLIER[oldRarity]||1),stronger=hiddenItemLevel(ingredient)>hiddenItemLevel(base)?ingredient:base;
  const retained={id:base.id,inventoryPosition:base.inventoryPosition,modifiers:(base.modifiers||[]).map(modifier=>({...modifier,stats:{...(modifier.stats||{})}})),itemModifierVersion:base.itemModifierVersion};
@@ -1271,7 +1272,7 @@ mergeInventoryItems=function(itemId,ingredientId){
  const level=Math.max(hiddenItemLevel(base),hiddenItemLevel(ingredient));base.itemLevel=base.tier=level;
  ['value','weaponPower','secondaryValue','tertiaryValue','thorns'].forEach(key=>{if(Number.isFinite(base[key]))base[key]=Math.max(1,Math.round(base[key]*ratio))});
  base.rarity=newRarity;base.itemRarityAffixVersion=3;base.regionalItemBalanceVersion=0;base.setBalanceVersion=0;ensureRegionalItemBalance(base);ensureItemSystem(base);if(typeof normalizeAuthoredSetItem==='function')normalizeAuthoredSetItem(base);
- state.run.inventory=state.run.inventory.filter(item=>item.id!==ingredient.id);closeOverlay();save();render();toast(`${base.name} upgraded to ${newRarity}.`)
+ state.run.inventory=state.run.inventory.filter(item=>item.id!==ingredient.id);if(ingredientOwner)Object.keys(ingredientOwner.gear||{}).forEach(slot=>{if(ingredientOwner.gear[slot]?.id===ingredient.id)ingredientOwner.gear[slot]=null});[baseOwner,ingredientOwner].filter(Boolean).forEach(hero=>syncEquipmentResources(hero,snapshots.get(hero.id)));closeOverlay();save();render();toast(`${base.name} upgraded to ${newRarity}.`)
 };
 function stripVisibleItemLevel(html){return String(html).replace(/\b(?:Item Level|Item Lv\.|Tier)\s+\d+\s*(?:·\s*)?/g,'')}
 const itemInspectBodyBeforeHiddenLevels=itemInspectBody;
@@ -1438,6 +1439,20 @@ const renderInventoryRailBeforeBulkSell=renderInventoryRail;
 renderInventoryRail=function(){const run=state.run,selected=(run?.bulkSellSelection||[]).map(id=>run.inventory.find(item=>item.id===id)).filter(Boolean),total=selected.reduce((sum,item)=>sum+itemSellPrice(item),0),controls=run?.bulkSellMode?`<div class="bulkSellControls"><button class="btn danger" ${selected.length?'':'disabled'} onclick="sellSelectedInventoryItems()">Sell ${selected.length} · ${total}g</button><button class="btn" onclick="toggleBulkSellMode()">Cancel</button></div>`:`<button class="btn bulkSellToggle" onclick="toggleBulkSellMode()">Sell Multiple</button>`;return renderInventoryRailBeforeBulkSell().replace('<h3>Inventory</h3>',`<h3>Inventory</h3>${controls}`)};
 const itemInspectBodyBeforeEconomyUpdate=itemInspectBody;
 itemInspectBody=function(item,owner){return itemInspectBodyBeforeEconomyUpdate(item,owner).replace(/Sell · \d+g/,`Sell · ${itemSellPrice(item)}g`)};
+
+/* Equipped gear participates in merging exactly like inventory gear. */
+mergeCandidates=function(item){return ownedCopies(item).filter(candidate=>candidate.rarity===item.rarity)};
+openItemUpgrade=function(itemId){const item=ownedItemById(itemId);if(!item)return;const candidates=mergeCandidates(item),next=MERGE_RARITIES[MERGE_RARITIES.indexOf(item.rarity)+1];showOverlay(`Upgrade ${item.name}`,`<div class="itemInspectExpanded"><p>Merge this item with one identical <b>${item.rarity}</b> item to create a <b class="rarity-${next}">${next}</b> version.</p><div class="choiceGrid">${candidates.map(candidate=>{const owner=equippedOwner(candidate);return `<button class="choice" onclick="mergeInventoryItems(${item.id},${candidate.id})">${itemArt(candidate)}<strong class="rarity-${candidate.rarity}">${candidate.name}</strong><div class="muted">${owner?`Equipped by ${owner.name}`:'In inventory'} · use this duplicate</div></button>`}).join('')||'<div class="emptyState">No identical owned item of the same rarity is available.</div>'}</div><div class="actions"><button class="btn" onclick="closeOverlay()">Cancel</button></div></div>`)};
+const gearSlotVisualBeforeUpgradeMarker=gearSlotVisual;
+gearSlotVisual=function(hero,slot,index){const item=hero.gear?.[slot],html=gearSlotVisualBeforeUpgradeMarker(hero,slot,index);return item&&mergeCandidates(item).length?html.replace('>',`><span class="itemCornerMarker upgradeReady" title="An identical ${item.rarity} item is available">!</span>`):html};
+
+/* Compact five-column Trader stock with inventory-style hover details. */
+function traderGearTooltip(item){ensureItemSet(item);const set=itemSetData(item),stats=itemStatLines(item);return `<span class="traderItemTooltip"><strong class="rarity-${item.rarity||'Common'}">${item.name}</strong><small>${item.rarity||'Common'} ${item.slot}</small>${stats.map(stat=>`<span>${stat}</span>`).join('')}<b style="color:${set.color}">${set.name} Set</b><small>${set.oneText||set.effect||''}</small><small>${set.fullText||''}</small></span>`}
+merchantEvent=function(){const run=state.run,priceMult=Math.pow(2,endlessModifierCount('inflation'));if(!run.merchantStock){const gear=Array.from({length:5},(_,index)=>{const item=makeCanonicalItem(rollShopRarity(index===0)),cost=Math.round(shopItemCost(item)*priceMult);return{kind:'gear',item,cost}}),consumables=Object.entries(CONSUMABLES).flatMap(([id,item])=>Array.from({length:3},()=>({kind:'consumable',id,cost:Math.round((item.cost+run.region*6)*priceMult)})));run.merchantStock=[...gear,...consumables]}const free=run.rerolls?.shop||0,cost=traderRerollCost(),controls=`<div class="actions traderTopActions"><button class="btn rerollButton" ${!free&&run.gold<cost?'disabled':''} onclick="rerollTraderStock()">↻ Reroll Stock · ${free?`Free (${free} left)`:cost+'g'}</button><button class="btn primary" onclick="leaveMerchant()">Leave Trader</button></div>`,stock=run.merchantStock.map((entry,index)=>{if(entry.kind!=='gear')return `<button class="choice traderItem consumableShopItem" ${run.gold<entry.cost?'disabled':''} onclick="buyMerchantStock(${index})"><span class="traderPrice">${entry.cost}g</span><span class="consumableIcon">${CONSUMABLES[entry.id].icon}</span><strong>${CONSUMABLES[entry.id].name}</strong><div class="muted">${CONSUMABLES[entry.id].desc}</div></button>`;return `<button class="traderItem traderGearItem rarityBorder-${entry.item.rarity||'Common'}" ${run.gold<entry.cost?'disabled':''} onclick="buyMerchantStock(${index})" aria-label="Buy ${entry.item.name} for ${entry.cost} gold">${traderOwnedMarker(entry.item)}<span class="traderPrice">${entry.cost}g</span>${itemArt(entry.item)}${traderGearTooltip(entry.item)}</button>`}).join('');showMainChoice('The Road Trader',`${controls}<div class="traderStock">${stock}</div>`,`Buy as many items as you can afford. Current purse: ${run.gold}g.`,'TRADER')};
+
+/* Adamant Soul now grants 30% instead of 75%, including Aether Conversion. */
+const ensureProtectionBeforeAdamantNerf=ensureProtection;
+ensureProtection=function(unit){const result=ensureProtectionBeforeAdamantNerf(unit),battleId=state.run?.battle?.id||'outside-battle';if(!unit?.class||!hasRelic('adamantSoul')||unit.adamantSoulBalanceBattleId===battleId)return result;const ratio=1.3/1.75,oldManaBonus=unit.aetherManaBonus||0;unit.maxArmor=Math.max(0,Math.round((unit.maxArmor||0)*ratio));unit.armor=Math.min(unit.maxArmor,Math.max(0,Math.round((unit.armor||0)*ratio)));if(skillBonus(unit,'aetherConversion')){const nextBonus=Math.max(0,Math.round(oldManaBonus*ratio));unit.maxMana=Math.max(0,unit.maxMana-oldManaBonus+nextBonus);unit.mana=Math.min(unit.mana,unit.maxMana);unit.aetherManaBonus=nextBonus}else{unit.maxMagicArmor=Math.max(0,Math.round((unit.maxMagicArmor||0)*ratio));unit.magicArmor=Math.min(unit.maxMagicArmor,Math.max(0,Math.round((unit.magicArmor||0)*ratio)))}unit.adamantSoulBalanceBattleId=battleId;return unit};
 
 function activeTauntTargets(){const heroes=livingHeroes(),taunters=heroes.filter(hero=>hero.tauntActive);return taunters.length?taunters:heroes}
 const enemyIntentBeforeDedicatedTaunt=enemyIntent;
