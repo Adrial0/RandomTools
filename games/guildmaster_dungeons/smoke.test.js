@@ -240,7 +240,9 @@ assert.match(js,/const ENEMY_PROTECTION_BY_ROLE=/,'enemy roles define sharply di
 assert.match(js,/'The Gilded Raider':\{armor:1\.50,magic:\.28\}/,'the armored boss carries more Armor than maximum HP');
 assert.match(js,/levelScale=1\+Math\.min\(\.75/,'enemy protection scales substantially with level');
 assert.match(css,/\.turnBasedCombat \.statusBadge\{height:18px/,'combat status badges use a compact vertical footprint');
-assert.match(js,/Warrior:\{hp:10,str:3,def:2\}/,'Warriors retain frontline Armor growth alongside the temporary +10 HP growth');
+assert.match(js,/Warrior:\{hp:10,str:3,defPct:\.02\}/,'Warriors gain percentage Armor per level without creating protection from zero');
+assert.match(js,/\['def','Armor Training','Armor','\+2%',75\]/,'permanent Armor Training is percentage-based');
+assert.match(js,/\['mdef','Warding','Magic Armor','\+2%',75\]/,'permanent Warding is percentage-based');
 assert.match(js,/function strengthHpBonus\(/,'Strength contributes to maximum HP');
 assert.match(js,/CHARACTER_RARITY_MULTIPLIER/,'character rarity scales core stats');
 assert.match(js,/function traitStats\(/,'character traits contribute their Guildmaster stats');
@@ -312,7 +314,7 @@ assert.match(js,/canvas\.style\.zoom=zoom/,'skill-tree zoom changes the complete
 assert.match(js,/pointers\.size>=2&&pinchStart/,'mobile skill trees support two-finger pinch zooming');
 assert.match(css,/\.skillTree>\.skillNode,[^\n]*translate:600px 600px/,'the expanded skill canvas provides generous padding around every outer node');
 assert.match(css,/\.skillTreeViewport::-webkit-scrollbar\{display:none\}/,'skill-tree scrollbars are hidden');
-assert.match(js,/skillMultiplier=1\+skillBonus\(h,`\$\{key\}Pct`\)/,'skill-tree attributes scale percentage-wise with character growth');
+assert.match(js,/skillMultiplier=1\+\(growth\[`\$\{key\}Pct`\]\|\|0\)\*levels\+\(trait\[`\$\{key\}Pct`\]\|\|0\)\+trainingPct\+skillBonus\(h,`\$\{key\}Pct`\)/,'level, trait, training, and skill-tree percentages share the core-stat multiplier');
 assert.match(js,/const anchors=\['attribute-str-14'[\s\S]*'int-ring-6'\]/,'class talents are distributed across twelve separate deep-tree anchors');
 assert.match(js,/distance=depth===2\?360:300/,'outer class talents are kept near the main tree without crowding their prerequisites');
 assert.match(js,/class="skillCore" style="--class-icon:/,'the circular skill-tree origin displays the current class icon');
