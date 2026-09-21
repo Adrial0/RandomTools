@@ -78,6 +78,7 @@ assert.match(js,/const MASTERY_CAP=50/,'class Mastery is capped at level 50');
 assert.match(js,/function masteryXpReward\(run,won\)\{return Math\.max\(0,run\.encounters\*2\+run\.region\*10\+\(won\?20:0\)\)\}/,'Mastery XP has no unearned flat or starting-region award');
 assert.match(js,/name==='heroHit'/,'enemy hits use a dedicated character-impact sound');
 assert.match(js,/result>0&&target\.hp>0\)playSfx\('heroHit'\)/,'successful nonlethal enemy hits trigger the impact sound');
+assert.match(js,/if\(followUp\)hero\.multiAttackNotice=\{hits:hitIndex/,'Multi-Attack callouts display the number of hits landed so far rather than the pre-rolled total');
 assert.match(js,/run\.heroes\.forEach\(hero=>counts\[hero\.class\]=\(counts\[hero\.class\]\|\|0\)\+1\)/,'Mastery XP counts every party member, including duplicate classes');
 assert.match(js,/const ASSET='images\/'/,'art loads from the dungeon game local images folder');
 assert.match(js,/Start a New Expedition/,'the guild screen leads with the renamed expedition action');
