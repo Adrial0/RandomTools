@@ -1470,6 +1470,27 @@ endRun=function(won){const run=state.run,floor=run?.endless?currentFloorNumber(r
 const renderBeforeMasteryMigration=render;
 render=function(){ensureMasteryState();return renderBeforeMasteryMigration()};
 
+/* Dungeon events are party-member stat checks instead of abstract story
+   choices. Strong specialists are safer, but every available hero may try. */
+const DUNGEON_TRAPS=[
+ {id:'crushingGate',title:'The Crushing Gate',stat:'str',label:'STR',text:'A stone gate begins to descend while its counterweight grinds inside the wall.',action:'Hold the gate',failure:'is caught beneath the failing mechanism'},
+ {id:'needleHall',title:'The Needle Hall',stat:'dex',label:'DEX',text:'Hair-thin tripwires cover the passage, each connected to hidden poisoned needles.',action:'Disarm the wires',failure:'triggers a concealed needle volley'},
+ {id:'runicSeal',title:'The Runic Seal',stat:'int',label:'INT',text:'An unstable ward seals the stairway and pulses whenever anyone approaches.',action:'Unravel the ward',failure:'is struck by the ward’s backlash'}
+];
+function trapSuccessChance(hero,trap){const stat=heroSheetStats(hero)[trap.stat]||0,difficulty=10+(state.run?.region||0)*3;return clamp(.45+(stat-difficulty)*.035,.15,.95)}
+storyEvent=function(){
+ const run=state.run,trap={...pick(DUNGEON_TRAPS)},itemReward=Math.random()<.5;
+ trap.reward=itemReward?'item':'gold';trap.gold=45+run.region*25;trap.item=itemReward?makeCanonicalItem():null;run.pendingTrap=trap;
+ const heroes=run.heroes.filter(hero=>hero.hp>0),rewardText=itemReward?'a random item':`${trap.gold} gold`,choices=heroes.map(hero=>{const stat=heroSheetStats(hero)[trap.stat]||0,chance=Math.round(trapSuccessChance(hero,trap)*100);return `<button class="choice trapHeroChoice" onclick="resolveTrap(${hero.id})">${img(hero.subclass?`subclasses/${hero.subclass}.png`:`classes/${CLASSES[hero.class].icon}`)}<strong>${hero.name}</strong><div class="muted">${hero.class} · ${trap.label} ${gameNumber(stat)}</div><div class="trapChance">${chance}% success</div><span class="choiceHint">${trap.action} →</span></button>`}).join('');
+ showMainChoice(trap.title,`<div class="trapBrief"><b>${trap.label} TRAP</b><span>Choose one party member to attempt it. Failure injures that character.</span><strong>Reward: ${rewardText}</strong></div><div class="choiceGrid trapPartyChoices">${choices}</div>`,trap.text,'TRAP')
+};
+function resolveTrap(heroId){
+ const run=state.run,trap=run?.pendingTrap,hero=findHero(heroId);if(!trap||!hero||hero.hp<=0)return;
+ const success=Math.random()<trapSuccessChance(hero,trap);
+ if(success){if(trap.reward==='item'){run.inventory=run.inventory||[];run.inventory.push(trap.item);toast(`${hero.name} clears the trap. ${trap.item.name} was recovered.`)}else{run.gold+=trap.gold;toast(`${hero.name} clears the trap. The party gains ${trap.gold} gold.`)}}else{const damage=Math.max(1,Math.round(hero.maxHp*.2));hero.hp=Math.max(1,hero.hp-damage);toast(`${hero.name} ${trap.failure} and loses ${damage} HP.`)}
+ delete run.pendingTrap;delete run.mainChoice;advanceNode()
+}
+
 /* Equipped items use their own inspection window, so expose the same merge
    action there instead of only offering it from inventory inspection. */
 inspectGear=function(heroId,slot){

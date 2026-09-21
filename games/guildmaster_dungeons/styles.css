@@ -184,8 +184,15 @@
 .masteryInspectActions{margin-top:18px}
 @media(max-width:800px){.subclassPreviewGrid{grid-template-columns:1fr}.startExpeditionButton{font-size:1.1rem}}
 
-/* Battlefield heroes prioritize their artwork; identity remains available by clicking them. */
-.turnBasedCombat .heroSide .unitName{display:none}
+/* Keep combat identities visible while the compact status stack sits beside each portrait. */
+.turnBasedCombat .heroSide .unitName{display:block}
+.turnBasedCombat .unit{overflow:visible}
+.turnBasedCombat .unit .statusEffects{position:absolute;top:31px;left:calc(50% + 27px);transform:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;width:max-content;max-width:125px;min-height:0;gap:3px;margin:0;z-index:8}
+.turnBasedCombat .unit .statusBadge,.turnBasedCombat .unit .statusBadge.control,.turnBasedCombat .unit .statusBadge.helpful,.turnBasedCombat .unit .statusBadge.empowered{width:auto;max-width:125px;height:auto;min-height:14px;white-space:nowrap}
+.turnBasedCombat .unit .statusBadge b{max-width:102px;overflow:hidden;text-overflow:ellipsis}
+.trapBrief{display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;margin:0 0 14px;padding:11px;border:1px solid #674a25;background:rgba(13,10,7,.88);font:11px var(--mono)}
+.trapBrief>b{color:var(--bad);letter-spacing:.1em}.trapBrief strong{color:var(--gold)}
+.trapPartyChoices{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}.trapHeroChoice{min-height:150px;padding-bottom:35px}.trapHeroChoice .portrait{float:right;width:62px;height:62px;border:0;background:transparent}.trapChance{display:inline-block;margin-top:10px;padding:4px 7px;border:1px solid #8a6532;color:#ffd67d;background:#100d09;font:bold 11px var(--mono)}
 .turnBasedCombat .heroSide .unit .portrait{width:90px!important;height:90px!important}
 
 /* Trader item details use the same readable dimensions as inventory tooltips. */
