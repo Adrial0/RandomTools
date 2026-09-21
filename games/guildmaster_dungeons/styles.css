@@ -183,3 +183,11 @@
 .subclassManaCost{display:inline-block;padding:4px 8px;border:1px solid #65528a;color:#d8baff;background:#1d1529}
 .masteryInspectActions{margin-top:18px}
 @media(max-width:800px){.subclassPreviewGrid{grid-template-columns:1fr}.startExpeditionButton{font-size:1.1rem}}
+
+/* Battlefield heroes prioritize their artwork; identity remains available by clicking them. */
+.turnBasedCombat .heroSide .unitName{display:none}
+.turnBasedCombat .heroSide .unit .portrait{width:90px!important;height:90px!important}
+
+/* Trader item details use the same readable dimensions as inventory tooltips. */
+@media(min-width:701px){.mainChoiceWindow:has(.traderStock){max-height:none;overflow:visible}.traderItemTooltip{top:auto;bottom:calc(100% + 8px);width:390px;padding:15px;font-size:12px;line-height:1.55}.traderItemTooltip strong{font-size:19px}.traderItemTooltip small{font-size:11px;line-height:1.5}}
+@media(max-width:700px){.turnBasedCombat .heroSide .unit .portrait{width:68px!important;height:68px!important}.traderItemTooltip{font-size:11px;line-height:1.5}.traderItemTooltip strong{font-size:17px}.traderItemTooltip small{font-size:10px}}
