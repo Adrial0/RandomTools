@@ -1478,12 +1478,13 @@ const DUNGEON_TRAPS=[
  {id:'needleHall',title:'The Needle Hall',stat:'dex',label:'DEX',text:'Hair-thin tripwires cover the passage, each connected to hidden poisoned needles.',action:'Disarm the wires',failure:'triggers a concealed needle volley'},
  {id:'runicSeal',title:'The Runic Seal',stat:'int',label:'INT',text:'An unstable ward seals the stairway and pulses whenever anyone approaches.',action:'Unravel the ward',failure:'is struck by the ward’s backlash'}
 ];
-function trapSuccessChance(hero,trap){const stat=heroSheetStats(hero)[trap.stat]||0,difficulty=10+(state.run?.region||0)*3;return clamp(.45+(stat-difficulty)*.035,.15,.95)}
+function trapDifficulty(run=state.run){return 20+(run?.region||0)*25}
+function trapSuccessChance(hero,trap){const stat=heroSheetStats(hero)[trap.stat]||0,dc=trapDifficulty();return clamp(.05+.9/(1+Math.exp((dc-stat)/12)),.05,.95)}
 storyEvent=function(){
  const run=state.run,trap={...pick(DUNGEON_TRAPS)},itemReward=Math.random()<.5;
  trap.reward=itemReward?'item':'gold';trap.gold=45+run.region*25;trap.item=itemReward?makeCanonicalItem():null;run.pendingTrap=trap;
  const heroes=run.heroes.filter(hero=>hero.hp>0),rewardText=itemReward?'a random item':`${trap.gold} gold`,choices=heroes.map(hero=>{const stat=heroSheetStats(hero)[trap.stat]||0,chance=Math.round(trapSuccessChance(hero,trap)*100);return `<button class="choice trapHeroChoice" onclick="resolveTrap(${hero.id})">${img(hero.subclass?`subclasses/${hero.subclass}.png`:`classes/${CLASSES[hero.class].icon}`)}<strong>${hero.name}</strong><div class="muted">${hero.class} · ${trap.label} ${gameNumber(stat)}</div><div class="trapChance">${chance}% success</div><span class="choiceHint">${trap.action} →</span></button>`}).join('');
- showMainChoice(trap.title,`<div class="trapBrief"><b>${trap.label} TRAP</b><span>Choose one party member to attempt it. Failure injures that character.</span><strong>Reward: ${rewardText}</strong></div><div class="choiceGrid trapPartyChoices">${choices}</div>`,trap.text,'TRAP')
+ showMainChoice(trap.title,`<div class="trapBrief"><b>${trap.label} TRAP · DC ${trapDifficulty(run)}</b><span>Choose one party member to attempt it. Failure injures that character.</span><strong>Reward: ${rewardText}</strong></div><div class="choiceGrid trapPartyChoices">${choices}</div>`,trap.text,'TRAP')
 };
 function resolveTrap(heroId){
  const run=state.run,trap=run?.pendingTrap,hero=findHero(heroId);if(!trap||!hero||hero.hp<=0)return;
