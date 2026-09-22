@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A browser playground for learning automated testing with Playwright.">
+  <title>Playwright Lab | My Random Tools</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-testid="playwright-lab">
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="My Random Tools home">
+        <span class="brand-mark" aria-hidden="true">W/</span>
+        <span>My Random Tools</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#form-lab">Forms</a>
+        <a href="#data-lab">Data</a>
+        <a href="#interaction-lab">Interactions</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Automation practice environment</p>
+          <h1 id="page-title">Playwright Lab</h1>
+          <p class="lead">A predictable collection of forms, async states, tables, dialogs, and interactions built for browser-test practice.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#form-lab">Start testing</a>
+            <button class="button quiet" id="reset-lab" type="button" data-testid="reset-lab">Reset lab data</button>
+          </div>
+        </div>
+        <div class="status-card" aria-label="Lab status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div><strong>Environment ready</strong><small>No account or API required</small></div>
+          <code>data-testid="playwright-lab"</code>
+        </div>
+      </section>
+
+      <section class="section" id="form-lab" aria-labelledby="form-title">
+        <div class="section-heading"><div><p class="eyebrow">01 / Forms</p><h2 id="form-title">Registration form</h2></div><p>Practice labels, validation, error messages, checkboxes, radios, selects, and successful submission.</p></div>
+        <div class="panel form-layout">
+          <form id="registration-form" novalidate data-testid="registration-form">
+            <div class="field-grid">
+              <div class="field">
+                <label for="full-name">Full name</label>
+                <input id="full-name" name="fullName" autocomplete="name" minlength="2" maxlength="50" required placeholder="Ada Lovelace">
+                <small class="hint">2–50 characters.</small><small class="error" id="full-name-error"></small>
+              </div>
+              <div class="field">
+                <label for="email">Email address</label>
+                <input id="email" name="email" type="email" autocomplete="email" required placeholder="ada@example.com">
+                <small class="hint">Must be a valid email address.</small><small class="error" id="email-error"></small>
+              </div>
+              <div class="field">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" minlength="8" required aria-describedby="password-rules">
+                <button class="input-action" type="button" id="toggle-password" aria-label="Show password">Show</button>
+                <small class="hint" id="password-rules">At least 8 characters, one uppercase letter, and one number.</small><small class="error" id="password-error"></small>
+              </div>
+              <div class="field">
+                <label for="confirm-password">Confirm password</label>
+                <input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" required>
+                <small class="error" id="confirm-password-error"></small>
+              </div>
+              <div class="field">
+                <label for="role">Preferred role</label>
+                <select id="role" name="role" required>
+                  <option value="">Choose a role</option><option>Developer</option><option>Tester</option><option>Designer</option><option>Product owner</option>
+                </select><small class="error" id="role-error"></small>
+              </div>
+              <div class="field">
+                <label for="experience">Automation experience: <output id="experience-output">2</output> years</label>
+                <input id="experience" name="experience" type="range" min="0" max="10" value="2">
+              </div>
+            </div>
+            <fieldset><legend>Notification preference</legend><label class="choice"><input type="radio" name="notification" value="email" checked> Email</label><label class="choice"><input type="radio" name="notification" value="sms"> SMS</label><label class="choice"><input type="radio" name="notification" value="none"> None</label></fieldset>
+            <label class="choice terms"><input id="terms" name="terms" type="checkbox" required> I accept the terms for this fictional test account.</label>
+            <small class="error" id="terms-error"></small>
+            <div class="form-actions"><button class="button primary" type="submit" data-testid="submit-registration">Create test account</button><button class="button quiet" type="reset">Clear form</button></div>
+          </form>
+          <aside class="result-card" aria-live="polite">
+            <span>Submission result</span><h3 id="form-result-title">Waiting for input</h3><p id="form-result">Submit a valid form to see a generated account summary.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="data-lab" aria-labelledby="data-title" data-testid="data-lab">
+        <div class="section-heading"><div><p class="eyebrow">02 / Data</p><h2 id="data-title">Searchable users</h2></div><p>Practice async loading, retry behavior, filtering, sorting, row assertions, and empty states.</p></div>
+        <div class="panel">
+          <div class="toolbar">
+            <label class="search"><span class="sr-only">Search users</span><input id="user-search" type="search" placeholder="Search by name or role…" data-testid="user-search"></label>
+            <label>Team <select id="team-filter"><option value="all">All teams</option><option>Platform</option><option>Quality</option><option>Product</option></select></label>
+            <button class="button quiet" id="load-users" type="button">Reload users</button>
+            <button class="button danger-quiet" id="simulate-error" type="button">Simulate error</button>
+          </div>
+          <div id="table-state" class="table-state" role="status" aria-live="polite"></div>
+          <div class="table-wrap">
+            <table>
+              <caption class="sr-only">Test users</caption>
+              <thead><tr><th><button type="button" data-sort="name">Name <span aria-hidden="true">↕</span></button></th><th><button type="button" data-sort="role">Role <span aria-hidden="true">↕</span></button></th><th><button type="button" data-sort="team">Team <span aria-hidden="true">↕</span></button></th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="user-rows"></tbody>
+            </table>
+          </div>
+          <div class="pagination"><button class="button quiet" id="previous-page" type="button">Previous</button><span id="page-status">Page 1 of 1</span><button class="button quiet" id="next-page" type="button">Next</button></div>
+        </div>
+      </section>
+
+      <section class="section" id="interaction-lab" aria-labelledby="interaction-title" data-testid="interaction-lab">
+        <div class="section-heading"><div><p class="eyebrow">03 / Interactions</p><h2 id="interaction-title">State and behavior</h2></div><p>Practice dialogs, tabs, delayed UI, counters, editable lists, keyboard interaction, and native drag and drop.</p></div>
+        <div class="lab-grid">
+          <article class="panel compact">
+            <p class="card-label">Dialog</p><h3>Confirmation flow</h3><p>Open a modal, enter exact confirmation text, and verify focus and button states.</p><button class="button primary" id="open-dialog" type="button">Open confirmation</button>
+          </article>
+          <article class="panel compact">
+            <p class="card-label">Delayed state</p><h3>Async operation</h3><p id="job-status" role="status">No job started.</p><progress id="job-progress" value="0" max="100">0%</progress><button class="button primary" id="start-job" type="button">Start 3-second job</button>
+          </article>
+          <article class="panel compact">
+            <p class="card-label">Counter</p><h3>Quantity selector</h3><div class="counter"><button type="button" id="decrease" aria-label="Decrease quantity">−</button><output id="quantity" aria-live="polite">1</output><button type="button" id="increase" aria-label="Increase quantity">+</button></div><p class="hint">Allowed range: 0–5.</p>
+          </article>
+        </div>
+
+        <div class="panel tabs-panel">
+          <div class="tab-list" role="tablist" aria-label="Project information">
+            <button role="tab" id="tab-overview" aria-controls="panel-overview" aria-selected="true">Overview</button>
+            <button role="tab" id="tab-activity" aria-controls="panel-activity" aria-selected="false" tabindex="-1">Activity</button>
+            <button role="tab" id="tab-settings" aria-controls="panel-settings" aria-selected="false" tabindex="-1">Settings</button>
+          </div>
+          <div role="tabpanel" id="panel-overview" aria-labelledby="tab-overview"><h3>Project overview</h3><p>This panel is visible by default.</p></div>
+          <div role="tabpanel" id="panel-activity" aria-labelledby="tab-activity" hidden><h3>Recent activity</h3><ul><li>Build completed</li><li>Three tests passed</li><li>Fixture updated</li></ul></div>
+          <div role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" hidden><h3>Project settings</h3><label class="choice"><input id="feature-flag" type="checkbox"> Enable experimental feature</label></div>
+        </div>
+
+        <div class="panel todo-panel">
+          <div><p class="card-label">Editable collection</p><h3>Test checklist</h3></div>
+          <form id="todo-form"><label class="sr-only" for="todo-input">New checklist item</label><input id="todo-input" maxlength="60" placeholder="Add a test case…" required><button class="button primary" type="submit">Add item</button></form>
+          <ul id="todo-list" aria-label="Test checklist"></ul>
+        </div>
+
+        <div class="panel upload-panel">
+          <div><p class="card-label">File input</p><h3>Upload fixture</h3><p>Files stay in the browser and are never uploaded.</p></div>
+          <label class="drop-zone" id="drop-zone" for="fixture-file"><strong>Choose or drop a file</strong><span>Accepted: .json, .txt · Maximum 100 KB</span><input id="fixture-file" type="file" accept=".json,.txt,text/plain,application/json"></label>
+          <div id="file-result" role="status">No file selected.</div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="accordion-title">
+        <div class="section-heading"><div><p class="eyebrow">04 / Content</p><h2 id="accordion-title">FAQ accordion</h2></div><p>Useful for visibility assertions and accessible-name locators.</p></div>
+        <div class="accordion panel">
+          <details><summary>Is this connected to a backend?</summary><p>No. Every interaction is deterministic and runs locally in the browser.</p></details>
+          <details><summary>Does the page include Playwright?</summary><p>No. The page is only a test target. Your Playwright project remains separate.</p></details>
+          <details><summary>Can lab data be reset?</summary><p>Yes. Use “Reset lab data” at the top of the page.</p></details>
+        </div>
+      </section>
+    </main>
+
+    <footer><span>My Random Tools / Playwright Lab</span><a href="/">Back to home</a></footer>
+  </div>
+
+  <dialog id="confirm-dialog" aria-labelledby="dialog-title" data-testid="confirm-dialog">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="Close dialog">×</button>
+      <p class="card-label">Protected action</p><h2 id="dialog-title">Confirm test action</h2>
+      <p>Type <strong>CONFIRM</strong> to enable the final button.</p>
+      <label for="confirmation-text">Confirmation text</label><input id="confirmation-text" autocomplete="off">
+      <div class="dialog-actions"><button class="button quiet" value="cancel">Cancel</button><button class="button danger" id="confirm-action" value="confirm" disabled>Confirm action</button></div>
+    </form>
+  </dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>
