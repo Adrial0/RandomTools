@@ -94,3 +94,17 @@ Select a fallen character to show the compact `Revival $ …` button beneath LP.
 
 
 Starter melee enemies have 12-pixel basic reach; early slashers have 22-pixel attack range plus 7-pixel hit tolerance. The character AT display includes all living priests whose circular auras contain that character, stacking additively, and updates as characters move. Melee weapon trails have been removed; physical weapon swing motion remains.
+## Enemy variety
+
+Grassland gradually introduces swarmlings, hoppers, and beetles alongside slimes and slashlings. Woodland adds thorn archers, ember toads, and moss shamans. Caverns mix the tougher creatures with spitters and summoners. The first stage remains a simple melee encounter. Bosses remain on final stages.
+
+| Enemy | Behavior |
+| --- | --- |
+| Swarmling | Fast packs of three, each with half base HP and short melee reach |
+| Iron Beetle | Slow melee tank with 180% base HP and stronger bites |
+| Hopper | Briefly crouches before leaping toward its target |
+| Thorn Archer | Fires ballistic arrows and retreats when approached |
+| Ember Toad | Slow creature that only attacks with a telegraphed single bomb |
+| Moss Shaman | Heals nearby wounded enemies for 20% of their maximum HP, up to three casts |
+
+Each type has a distinct silhouette and color. Hover an enemy on the battlefield to see its name, stats, and behavior in the left panel. Swarmling packs are part of the initial encounter; only summoners create reinforcements.
