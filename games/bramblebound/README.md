@@ -117,3 +117,12 @@ Each type has a distinct silhouette and color. Hover an enemy on the battlefield
 - **Rock Lobber:** winds up for 0.9 seconds and fires one heavy rock on a slow 2.2-second ballistic arc. Hits deal four times its normal attack damage. Rocks collide with terrain and characters, disappear on impact, and never explode.
 
 Spiders and rollers appear in Grassland after the opening stage. Bats and rock lobbers enter Woodland encounters and return in Cavern mixes. These are fixed encounter members, not timed reinforcements.
+## Gems and enemy-level XP
+
+Six colored gem families share the two permanent weapon sockets with runes. Ten tiers are defined; each tier multiplies the first-tier bonus. Ruby (red) gives +5 STR per tier, Emerald (green) +5 DEX, Sapphire (blue) +5 INT, Amethyst (purple) +2 to all three, Diamond (white) +1 flat defense, and Topaz (gold) +50 maximum LP. Attribute gems apply normal class-specific stat effects. Increasing maximum LP does not heal. Gems remain bound when weapons move or are saved.
+
+Gems join the existing 2% item-drop roll without increasing its chance: half of successful drops are weapons, half are eligible runes/gems. Gem drop tiers follow area progression. The rune trader sells unlocked gems for 100 gold per tier. Higher-tier gems require a matching character level to socket.
+
+Area enemy levels are 1, 3, 5, 7, and so on, shared by every stage in that area. Each character receives full combat XP up to five levels above the enemy. At six levels above, XP is 90%; each additional level subtracts another 10 percentage points. At fifteen or more levels above, the reward reaches the floor of 1 XP per kill. Wisdom bonuses apply before that minimum is enforced.
+
+AGI is attack delay in 30-fps frames: 30 is one second, 15 is half a second, and 20–30 rolls a delay between about 0.67 and 1 second. Lower is faster; character stat and haste bonuses are already included in the displayed AGI. Manual 2× game speed also doubles real-time attack frequency.

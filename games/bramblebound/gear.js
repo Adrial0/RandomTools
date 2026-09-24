@@ -36,6 +36,15 @@ const runes=[
  ['renewal','Renewal Rune','#ece9d1',{regen:1},'Recover 1 LP per second while alive in an area.']
 ];
 for(const [name,title,color,bonuses,description] of runes){const id='rune-'+name;items[id]={id,type:'rune',name:title,color,bonuses,description,level:1,tier:1,symbol:'◆'};}
+const gemFamilies=[
+ ['ruby','Ruby','#ff5353',{str:5},'STR'],
+ ['emerald','Emerald','#55ed79',{dex:5},'DEX'],
+ ['sapphire','Sapphire','#629dff',{int:5},'INT'],
+ ['amethyst','Amethyst','#d18dff',{str:2,dex:2,int:2},'all attributes'],
+ ['diamond','Diamond','#f0f3ff',{defense:1},'defense'],
+ ['topaz','Topaz','#ffc84f',{lp:50},'maximum LP']
+];
+for(let tier=1;tier<=10;tier++)for(const [family,name,color,base] of gemFamilies){const id='gem-'+family+'-'+tier,gemStats=Object.fromEntries(Object.entries(base).map(([k,v])=>[k,v*tier]));const description=Object.entries(gemStats).map(([k,v])=>'+'+v+' '+({str:'STR',dex:'DEX',int:'INT',defense:'defense',lp:'maximum LP'}[k])).join(', ');items[id]={id,type:'gem',name:name+' Gem '+tier,color,gemStats,description:description+'.',level:tier,tier,symbol:'♦'}}
 const descriptions=[
  ['+1 maximum AT, +4 LP','+1 minimum AT (capped at maximum), +4 LP','+1 MP per hit, +2 LP'],
  ['+1 minimum and maximum AT, +5 LP','Faster attacks (2% per point), +3 LP','+1 MP per hit, +2 LP'],
