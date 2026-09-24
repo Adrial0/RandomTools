@@ -108,3 +108,12 @@ Grassland gradually introduces swarmlings, hoppers, and beetles alongside slimes
 | Moss Shaman | Heals nearby wounded enemies for 20% of their maximum HP, up to three casts |
 
 Each type has a distinct silhouette and color. Hover an enemy on the battlefield to see its name, stats, and behavior in the left panel. Swarmling packs are part of the initial encounter; only summoners create reinforcements.
+## Physics-driven enemies
+
+- **Stilt Spider:** accelerates into a scuttle with six jointed legs. Feet stay planted until their stride stretches, then lift in staggered steps that follow the terrain.
+- **Boulder Roller:** builds up to a fast roll, rotates with distance traveled, and retains momentum when reversing direction.
+- **Crooked Bat:** flaps its wings and follows a damped, irregular flight path, dipping toward characters to bite.
+- **Hopper:** now moves through repeated crouch–jump–land cycles rather than walking between occasional jumps.
+- **Rock Lobber:** winds up for 0.9 seconds and fires one heavy rock on a slow 2.2-second ballistic arc. Hits deal four times its normal attack damage. Rocks collide with terrain and characters, disappear on impact, and never explode.
+
+Spiders and rollers appear in Grassland after the opening stage. Bats and rock lobbers enter Woodland encounters and return in Cavern mixes. These are fixed encounter members, not timed reinforcements.
