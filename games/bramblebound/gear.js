@@ -41,7 +41,7 @@ const descriptions=[
  ['+1 minimum and maximum AT, +5 LP','Faster attacks (2% per point), +3 LP','+1 MP per hit, +2 LP'],
  ['+2 RANGE, +3 LP','+0.5 minimum / +0.75 maximum AT, +3 LP','+1 MP per hit, +2 LP'],
  ['+2 RANGE, +2 LP','Faster attacks (2% per point), +2 LP','+1 MP per hit; +0.5 / +0.75 AT and +5% ability damage, +2 LP'],
- ['Nearby allies gain +1% AT, +3 LP','Nearby allies gain +0.2 defense, +3 LP','+1 MP per hit, +2 RANGE and +1 healing, +2 LP'],
+ ['Nearby allies gain +1% AT, +3 LP','Nearby allies gain +0.2 defense, +3 LP','+1 MP per aura pulse, +2 RANGE, +2 LP'],
  ['+1.5 maximum AT, +4 LP','+0.5 minimum AT and +1% critical chance (cap 40%), +3 LP','+1 MP per hit, +2 LP'],
  ['+2% weapon AT, +3 LP','Faster attacks (2% per point), +2 LP','+1 MP per hit and +3% ability damage, +2 LP'],
  ['+0.5 minimum and maximum AT, +3 LP','One extra special strike per 5 DEX, +3 LP','+1 MP per hit, +2 LP']

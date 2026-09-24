@@ -12,7 +12,7 @@ Choose four classes, including duplicates. Drag characters to reposition them; c
 | Boxer | +1 minimum and maximum AT | Attack delay divided by 1 + DEX × 0.02 | LP |
 | Archer | +2 range | +0.5 minimum / +0.75 maximum AT | LP |
 | Mage | +2 range | Attack delay divided by 1 + DEX × 0.02 | +0.5 minimum / +0.75 maximum AT; +5% ability damage |
-| Priest | +1% nearby party attack aura | +0.2 nearby party defense aura | +2 range; +1 basic healing |
+| Priest | +1% nearby party attack aura | +0.2 nearby party defense aura | +2 aura range |
 | Spearman | +1.5 maximum AT | +0.5 minimum AT; +1% critical chance, cap 40% | LP |
 | Gunner | +2% weapon damage | Attack delay divided by 1 + DEX × 0.02 | +3% ability damage |
 | Whipper | +0.5 minimum and maximum AT | Extra ability activation per 5 DEX | LP |
@@ -44,7 +44,7 @@ Runes work for every class. Two slots per hero; two identical runes are allowed.
 | Leech | Heal 8% of actual basic-hit damage, including killing hits, excluding overkill and ability damage |
 | Ward | Reduce elemental damage by 25%; spitter projectiles are poison, summoner projectiles are lightning; physical damage is unaffected |
 | Wisdom | +20% EXP for the wearer; fractional EXP is retained |
-| Haste | +15% attack rate, applied to basic attacks and basic healing |
+| Haste | +15% attack rate, applied to basic attacks and priest aura pulses |
 | Might | +15% minimum and maximum basic AT |
 | Reach | +15 attack/support range |
 | Vitality | +20% maximum LP |
@@ -75,3 +75,14 @@ Heroes use velocity-based movement with acceleration, coasting, gravity, terrain
 Run `node smoke-test.cjs`. It checks XP/SP, class scaling, 2 INT/10 MP, proc guards, killing hits, stale projectiles, inventory swaps and unequipping, wrong-class/level rejection, effects, fixed encounters, summoners, area exits, opening balance, save reload, and migration.
 
 Reference: [DAN-BALL's game controls and stat glossary](https://dan-ball.jp/en/javagame/ranger/), plus the user's supplied weapon table. Item effects and class mechanics are implemented locally in `gear.js` and `game.js`.
+
+
+## Combat balance update
+
+Level requirements are now `100 + 80 × level + 10 × level²` XP: level 2 takes 190 XP rather than 45. Existing levels and spent stats are preserved. Priests pulse basic damage to all enemies within their circular aura; each pulse charges MP once. Their normal attack no longer heals. Allies must be within that same radius to receive attack and defense buffs; elemental healing abilities remain available.
+
+Normal area HP follows 20, 40, 60, 80, 100, 130, 160, 190, 220, 250, 290, 330, 370, 410, 450, 500. Bosses have exactly ten times base area HP. Summoners have 125% base health; summoned minions have 55%. The current nine areas use the first nine entries.
+
+Weapon prices by family progression are 100, 250, 500, 750, 1000, then 1500 and increments of 500 through 10000, followed by increments of 1000. The family order is basic, iron, fire, lightning, ice, heavy, poison, impact, bloom, vampire, steel. Unlocks still depend on cleared areas. Rune prices remain 80.
+
+Weapon silhouettes and grips are drawn consistently in combat, portraits, and inventory. Player arrows have ballistic arcs; other player shots keep their launch direction. All player and enemy projectiles check terrain along their path, and bombs stop on terrain before exploding. Characters still fire at targets in range even when terrain obstructs the shot. Heroes and enemies hop onto ledges using gravity rather than snapping upward, including when approaching a wall while airborne.
