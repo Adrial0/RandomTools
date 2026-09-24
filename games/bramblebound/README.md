@@ -126,3 +126,10 @@ Gems join the existing 2% item-drop roll without increasing its chance: half of 
 Area enemy levels are 1, 3, 5, 7, and so on, shared by every stage in that area. Each character receives full combat XP up to five levels above the enemy. At six levels above, XP is 90%; each additional level subtracts another 10 percentage points. At fifteen or more levels above, the reward reaches the floor of 1 XP per kill. Wisdom bonuses apply before that minimum is enforced.
 
 AGI is attack delay in 30-fps frames: 30 is one second, 15 is half a second, and 20–30 rolls a delay between about 0.67 and 1 second. Lower is faster; character stat and haste bonuses are already included in the displayed AGI. Manual 2× game speed also doubles real-time attack frequency.
+## Control balance and extended world
+
+Freeze duration scales with the character's effective attack delay: `min(0.7, 0.7 × average AGI / 85)` seconds, with a 0.06-second minimum. A base ice spear freezes for about 0.26 seconds; haste and speed stats shorten it further. Frost Orb has a base 80–90 AGI. Ice now slows by 20% for one second after freezing. Stuns use the same scaling with a 0.6-second maximum. Boss freeze and stun durations are multiplied by 0.2; slow strength is multiplied by 0.3 (a 20% slow becomes 6%). Special-ability power is reduced to 65% of its former value, before rounding.
+
+Later bows include Twin Poison Bow (two arrows), Triple Poison Bow and Triple Ice Bow (three), and Volley Bow (four). Each arrow can deal damage, but the volley shares one MP-charge token. These weapons use normal progression-gated drops and shops.
+
+The world now has 18 areas: three each of Grassland, Woodland, Cavern, Desert, Mountains, and Snowfields. New regions have their own terrain palettes and scenery, still with 5–8 stages and a final boss per area. The map spans three screen widths: hover near either edge to pan, or use the arrow buttons/scrollbar. Undiscovered location nodes remain hidden, and older saves retain their progress.
