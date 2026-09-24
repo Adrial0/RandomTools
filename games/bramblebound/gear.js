@@ -15,7 +15,7 @@ const ranges=[30,14,125,105,95,45,155,65];
 const agi=[[20,30],[9,15],[28,36],[42,50],[35,43],[28,36],[10,16],[28,36]];
 const items={};
 for(let c=0;c<8;c++){
- const add=(suffix,name,min,max,tier,effect=null,range=ranges[c])=>{const id=`${c}-${suffix}`;items[id]={id,name,classId:c,min,max,agi:agi[c],range,tier,effect,level:tier>=4?3:tier>=2?2:1,color:effect?effects[effect].color:'#ddd'};};
+  const add=(suffix,name,min,max,tier,effect=null,range=ranges[c])=>{const id=`${c}-${suffix}`;items[id]={id,type:'weapon',name,classId:c,min,max,agi:agi[c],range,tier,effect,level:tier>=4?3:tier>=2?2:1,color:effect?effects[effect].color:'#ddd'};};
  add('basic',families[c],...base[c],0);
  add('iron',`Iron ${families[c]}`,base[c][0]+4,base[c][1]+5,1);
  add('heavy',c===0?'Long Sword':`Heavy ${families[c]}`,base[c][0]+9,base[c][1]+15,2,null,ranges[c]+(c===0?5:0));
@@ -25,6 +25,17 @@ for(let c=0;c<8;c++){
  }
  add('steel',`Steel ${families[c]}`,base[c][0]+20,base[c][1]+29,4);
 }
+const runes=[
+ ['leech','Leech Rune','#df758b',{lifesteal:.08},'Restore 8% of actual basic-attack damage as LP.'],
+ ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage. Physical hits are unaffected.'],
+ ['wisdom','Wisdom Rune','#b994ef',{xpBonus:.20},'This character earns 20% more combat EXP.'],
+ ['haste','Haste Rune','#7ee5c1',{haste:.15},'15% faster basic attacks and basic healing.'],
+ ['might','Might Rune','#ed9469',{damageBonus:.15},'Increase minimum and maximum basic AT by 15%.'],
+ ['reach','Reach Rune','#f1d97b',{rangeBonus:15},'Increase attack and support range by 15.'],
+ ['vitality','Vitality Rune','#9ce16b',{hpBonus:.20},'Increase maximum LP by 20%. Does not heal on equip.'],
+ ['renewal','Renewal Rune','#ece9d1',{regen:1},'Recover 1 LP per second while alive in an area.']
+];
+for(const [name,title,color,bonuses,description] of runes){const id='rune-'+name;items[id]={id,type:'rune',name:title,color,bonuses,description,level:1,tier:1,symbol:'◆'};}
 const descriptions=[
  ['+1 maximum AT, +4 LP','+1 minimum AT (capped at maximum), +4 LP','+1 MP per hit, +2 LP'],
  ['+1 minimum and maximum AT, +5 LP','Faster attacks (2% per point), +3 LP','+1 MP per hit, +2 LP'],
