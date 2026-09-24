@@ -54,9 +54,13 @@ Runes cannot go in weapon slots and weapons cannot go in rune slots. Swaps valid
 
 ## Areas, controls, and saves
 
-Nine areas load their complete encounters on entry. Only purple summoners spawn extra enemies (maximum three each). On clear, living characters walk off the right edge into the next area. Surviving heroes recover 25% maximum LP, and fallen heroes return with half LP. Defeat permits retrying with earned levels and equipment.
+The world map starts at Town, where healing and reviving are free and inventory items can be sold. Nine combat areas load their complete encounters on entry. Only purple summoners spawn extra enemies (maximum three each). Clear an area and walk off the right edge to unlock its next map locations. Grassland 3 branches to the Rune Trader, who buys items and sells runes for 80 gold each. Cleared areas can be revisited.
 
-SPACE pauses, 1–4 select characters, and 1x toggles double speed. Losing window focus releases held pointers but does not pause combat. Only Pause/Space pauses the simulation. Browsers may independently throttle or suspend hidden tabs. Saves use `bramblebound-v3` with schema version 4; v2 saves migrate levels, gold, XP, and old numeric equipment to named class weapons. Existing levels receive a budget of 2 × (level − 1) SP minus spent attributes, including the retroactive extra points. Reloading does not grant the top-up again. Equipped runes persist. v2 data remains untouched as a fallback. The game does not save encounter positions; reload restarts the saved area.
+Current LP persists between areas and through reloads. Level-ups and stat allocation increase maximum LP without healing. Fallen characters stay fallen until healed at Town. Each enemy independently has a **5% chance** to drop one ground HP potion, separate from the 2% equipment roll. A living character walking over it immediately consumes it and heals 30% of their maximum LP, capped at full health. Dragging a character above it does not collect it; land the intended character on the potion. Existing healing abilities and runes still work.
+
+Hover or focus an item or character to show its information in the left panel alongside the equipment grid. Moving away restores the selected character's stats. To sell, select an inventory item while visiting Town or the trader and use the displayed sell button.
+
+SPACE pauses, 1–4 select characters, and 1x toggles double speed. Losing window focus releases held pointers but does not pause combat. The world map suspends the encounter; Return to battle resumes it. Browsers may independently throttle or suspend hidden tabs. Saves use `bramblebound-v3` with schema version 5, persisting health, cleared locations, and gear. Older saves without health initialize it once. v2 saves migrate levels, gold, XP, and old numeric equipment to named class weapons. Existing levels receive a budget of 2 × (level − 1) SP minus spent attributes, including the retroactive extra points. Reloading does not grant the top-up again. v2 data remains untouched as a fallback. Encounter positions are not saved; reload opens Town on the map without automatically healing.
 
 ## Movement and attacks
 
