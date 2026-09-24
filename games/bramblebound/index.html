@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bramblebound</title><link rel="stylesheet" href="style.css"></head>
+<body><main id="app">
+<div class="battlefield"><canvas id="game" width="512" height="256" tabindex="0" aria-label="Battlefield. Drag a character to move them. After clearing enemies the party walks right to the next area."></canvas><div class="top"><span id="area">Grassland: 1</span><div><button id="pause">Pause</button><button id="speed">1x</button><button id="new">New party</button></div></div>
+<div id="setup" class="modal"><h1>BRAMBLEBOUND</h1><p>Choose your four characters.</p><div id="choices"></div><p id="class-info">Drag characters to move. They fight automatically.</p><button id="start">START</button></div>
+<div id="result" class="modal" hidden><h2 id="result-title"></h2><p id="result-text"></p><button id="retry">Retry area</button></div></div>
+<section class="panel"><div class="stats"><strong id="class-name">Swordsman</strong><div>LP <span id="lp">0/0</span></div><div>AT <span id="attack">0</span></div><div>RANGE <span id="range">0</span></div><div class="stat-gap">LV <span id="level">1</span></div><div>EXP <span id="xp">0/0</span></div><div class="xp-bar"><i id="xp-fill"></i></div><div>GOLD <span id="gold">0</span></div></div><div class="equipment"><div class="panel-label">PARTY <span>1–4 SELECT</span></div><div id="party"></div><div class="panel-label">WEAPON</div><div id="weapons"></div></div><div class="inventory"><div class="panel-label">ITEM <span id="item-hint">CLICK TO EQUIP</span></div><div id="items"></div></div></section>
+<div id="status" role="status">Choose classes, then start.</div><div class="bottom"><span>DRAG to move · SPACE pause</span><button id="fullscreen">Full Screen</button></div>
+</main><script src="game.js"></script></body></html>
