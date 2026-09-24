@@ -23,7 +23,7 @@ The in-game expandable class guide shows LP bonuses and exact effects for the se
 
 `gear.js` defines 88 class-specific weapons: starting, iron, heavy, steel, and seven elemental/support variants per class. Examples include Sword (1–5), Iron Sword (5–10), Fire/Thunder/Ice Swords (10–15), and Long Sword (10–20, 35 range). Physical weapons can exceed an elemental weapon's basic attack. Higher-tier items have level requirements. Every monster, including bosses and summoned minions, rolls once for a **2% total drop chance**. There are no guaranteed drops. A successful drop is 50% a weapon for a class present in the party and 50% a rune artifact (about 1% each per kill).
 
-Each hero has two **RUNE** slots directly below their weapon. Drag between **ITEM**, **WEAPON**, and **RUNE** slots to equip, unequip, swap, or rearrange. Empty slots remain valid drop targets. Invalid class/level swaps and drops outside slots leave items untouched. Touch dragging works as well. For keyboard or click-only use, select the source slot then the destination. Escape cancels selection. Hover/focus an item to inspect it. Dragging equipment temporarily holds the simulation so slots stay stable.
+Each hero has two **RUNE** slots directly below their weapon. Drag between **ITEM**, **WEAPON**, and **RUNE** slots to equip, unequip, swap, or rearrange. Empty slots remain valid drop targets. Invalid class/level swaps and drops outside slots leave items untouched. Touch dragging works as well. For keyboard or click-only use, select the source slot then the destination. Escape cancels selection. Hover/focus an item to inspect it. Combat continues while equipment is being dragged. Pointer capture belongs to the stable app container, so inventory refreshes do not interrupt a drag.
 
 Every successful basic attack adds INT to the equipped weapon's MP. **2 INT + a 10-MP weapon = ability on the fifth hit.** Missed/discarded projectiles, healing, damage over time, and bonus attacks do not charge. Multi-target attacks charge once. Killing hits charge. MP resets to zero on activation or equipment swap, with no overflow or multiple activations from a high-INT hit (apart from the Whipper's explicit extra activations). Projectiles from an old weapon cannot charge a replacement.
 
@@ -50,13 +50,17 @@ Runes work for every class. Two slots per hero; two identical runes are allowed.
 | Vitality | +20% maximum LP |
 | Renewal | Regenerate 1 LP per second while alive in an area |
 
-Runes cannot go in weapon slots and weapons cannot go in rune slots. Swaps validate both destinations before changing anything. Inventory slots hold either kind of item. Pausing also pauses regeneration. Existing inventory items remain intact when loading an older save.
+Runes cannot go in weapon slots and weapons cannot go in rune slots. Swaps validate both destinations before changing anything. Inventory slots hold either kind of item. Manual pausing also pauses regeneration. Existing inventory items remain intact when loading an older save.
 
 ## Areas, controls, and saves
 
 Nine areas load their complete encounters on entry. Only purple summoners spawn extra enemies (maximum three each). On clear, living characters walk off the right edge into the next area. Surviving heroes recover 25% maximum LP, and fallen heroes return with half LP. Defeat permits retrying with earned levels and equipment.
 
-SPACE pauses, 1–4 select characters, and 1x toggles double speed. Losing window focus pauses combat. Saves use `bramblebound-v3` with schema version 4; v2 saves migrate levels, gold, XP, and old numeric equipment to named class weapons. Existing levels receive a budget of 2 × (level − 1) SP minus spent attributes, including the retroactive extra points. Reloading does not grant the top-up again. Equipped runes persist. v2 data remains untouched as a fallback. The game does not save encounter positions; reload restarts the saved area.
+SPACE pauses, 1–4 select characters, and 1x toggles double speed. Losing window focus releases held pointers but does not pause combat. Only Pause/Space pauses the simulation. Browsers may independently throttle or suspend hidden tabs. Saves use `bramblebound-v3` with schema version 4; v2 saves migrate levels, gold, XP, and old numeric equipment to named class weapons. Existing levels receive a budget of 2 × (level − 1) SP minus spent attributes, including the retroactive extra points. Reloading does not grant the top-up again. Equipped runes persist. v2 data remains untouched as a fallback. The game does not save encounter positions; reload restarts the saved area.
+
+## Movement and attacks
+
+Heroes use velocity-based movement with acceleration, coasting, gravity, terrain-step hopping, and impact impulses. Damped springs drive body lean and weapon recoil; jointed legs bend and lift with the walking cycle, and dangle while airborne. Melee hits resolve after a 90 ms swing windup and recheck reach at impact. Successful strikes knock enemies back. Ranged attacks retain projectile travel time. This is a controlled body simulation with procedural spring animation, not a full independently colliding ragdoll for every limb. Simulation uses substeps of at most 1/120 second, with bounded catch-up after stalls.
 
 ## Validation
 

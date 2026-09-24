@@ -1,14 +1,14 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const noop=()=>{},context=new Proxy({},{get:()=>noop,set:()=>true});
 function harness(saved={}){
- const elements=new Map(),choices=[0,2,3,4].map(value=>({value:String(value)}));
+ const events={};const elements=new Map(),choices=[0,2,3,4].map(value=>({value:String(value)}));
  const element=()=>({style:{},classList:{add:noop,remove:noop},hidden:false,textContent:'',innerHTML:'',addEventListener:noop,setAttribute:noop,getContext:()=>context});
  const document={querySelector(s){if(!elements.has(s))elements.set(s,element());return elements.get(s)},querySelectorAll(s){return s==='#choices select'?choices:[]}};
  let seed=13;const math=Object.create(Math);math.random=()=>((seed=(seed*1664525+1013904223)>>>0)/4294967296);
- const storage={...saved};const sandbox={document,Math:math,window:{addEventListener:noop},localStorage:{getItem:k=>storage[k]||null,setItem:(k,v)=>storage[k]=v},requestAnimationFrame:noop,setTimeout:noop,console};
+ const storage={...saved};const sandbox={document,Math:math,window:{addEventListener:(name,fn)=>events[name]=fn},localStorage:{getItem:k=>storage[k]||null,setItem:(k,v)=>storage[k]=v},requestAnimationFrame:noop,setTimeout:noop,console};
  vm.runInNewContext(fs.readFileSync(__dirname+'/gear.js','utf8'),sandbox);
- const src=fs.readFileSync(__dirname+'/game.js','utf8').replace(/\}\)\(\);\s*$/,`globalThis.test={start,update,damage,xp,equip,enter,load,save,stats,allocate,select,moveItem,attackToken,basicHit,activate,tickEffects,enemy,shoot,rollDrop,get:()=>({heroes,enemies,area,state,inventory,fields,shots,loot}),setArea:n=>area=n,setItem:(i,id)=>inventory[i]=id,setParty:ids=>heroes=ids.map(hero),items:ITEMS,effects:EFFECTS};})();`);
- vm.runInNewContext(src,sandbox);return {t:sandbox.test,storage,choices,math};
+ const src=fs.readFileSync(__dirname+'/game.js','utf8').replace(/\}\)\(\);\s*$/,`globalThis.test={start,update,damage,xp,equip,enter,load,save,stats,allocate,select,moveItem,attackToken,basicHit,activate,tickEffects,enemy,shoot,rollDrop,stepBody,resolveStrike,frame,toggle,get:()=>({heroes,enemies,area,state,inventory,fields,shots,loot,paused,time}),setGearDrag:v=>gearDrag=v,setArea:n=>area=n,setItem:(i,id)=>inventory[i]=id,setParty:ids=>heroes=ids.map(hero),items:ITEMS,effects:EFFECTS};})();`);
+ vm.runInNewContext(src,sandbox);return {t:sandbox.test,storage,choices,math,events};
 }
 const {t,storage,choices}=harness();
 choices.forEach(c=>c.value='1');t.start();assert.ok(t.get().heroes.every(h=>h.classId===1));
@@ -50,6 +50,10 @@ isolated.activate(fighter,dummy,'fire');let field=isolated.get().fields[0];const
 fighter.attributes.int=2;isolated.stats(fighter);dummy.x=fighter.x+100;dummy.y=fighter.y;isolated.get().heroes.forEach(h=>h.cooldown=10);isolated.get().enemies.forEach(e=>e.cooldown=10);isolated.shoot(fighter,dummy,'arrow',1,isolated.attackToken(fighter));isolated.update(.01);assert.equal(fighter.mp,0);for(let i=0;i<80;i++)isolated.update(.01);assert.equal(fighter.mp,2);
 // Cancelling an attack because the victim was already dead yields no MP.
 const discarded=isolated.attackToken(fighter);dummy.hp=0;isolated.shoot(fighter,dummy,'arrow',1,discarded);isolated.update(.01);assert.equal(fighter.mp,2);
+// Continuous simulation while dragging equipment or changing focus; manual pause still works.
+const motion=harness();motion.t.start();motion.t.setGearDrag({from:{type:'bag',index:0},moved:false});motion.t.frame(16);assert.ok(motion.t.get().time>0,'Equipment dragging must not pause');motion.events.blur();assert.equal(motion.t.get().paused,false);const elapsed=motion.t.get().time;motion.t.frame(32);assert.ok(motion.t.get().time>elapsed);motion.t.toggle();motion.events.blur();motion.t.frame(48);assert.equal(motion.t.get().paused,true);assert.equal(motion.t.get().time,elapsed+.016);motion.t.toggle();
+const body=motion.t.get().heroes[0];body.drive=33;body.vx=0;const beforeX=body.x;motion.t.stepBody(body,1/60);assert.ok(body.vx>0&&body.vx<33);assert.ok(body.x>beforeX);const momentum=body.vx;motion.t.stepBody(body,1/60);assert.ok(body.vx>0&&body.vx<momentum,'Coasting decelerates instead of snapping');body.y=70;body.vy=0;for(let i=0;i<240;i++)motion.t.stepBody(body,1/120);assert.ok(body.y>=200&&body.y<=226);assert.ok(Number.isFinite(body.lean));
+const meleeTarget=motion.t.get().enemies[0];meleeTarget.x=body.x+10;meleeTarget.y=body.y;const health=meleeTarget.hp;body.strike={left:.09,target:meleeTarget,amount:3,token:motion.t.attackToken(body),range:30};motion.t.resolveStrike(body,.04);assert.equal(meleeTarget.hp,health,'Swing windup deals no immediate damage');motion.t.resolveStrike(body,.06);assert.equal(meleeTarget.hp,health-3);assert.ok(meleeTarget.kick>0);body.strike={left:.09,target:meleeTarget,amount:3,token:motion.t.attackToken(body),range:30};meleeTarget.x+=100;motion.t.resolveStrike(body,.1);assert.equal(meleeTarget.hp,health-3,'Out-of-range melee attack misses');
 // Exact drop boundary, no guaranteed final kill, and both item categories.
 const drops=harness();drops.t.start();drops.math.random=()=>.02;assert.equal(drops.t.rollDrop(),null);
 drops.t.get().enemies.forEach(e=>drops.t.damage(e,9999));assert.equal(drops.t.get().loot.length,0,'Last enemy has no guaranteed drop');
