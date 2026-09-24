@@ -64,6 +64,10 @@ SPACE pauses, 1–4 select characters, and 1x toggles double speed. Losing windo
 
 ## Movement and attacks
 
+Some enemies telegraph dangerous volleys for 0.95 seconds: seven straight bullets in a fan, five gravity-driven arrows, three timed bombs, or three homing missiles. Bosses cycle through all four. Special hits deal 3–4 times normal attack damage before defenses. Ordinary enemy damage is now 6 + 1.5 × area; bosses use 10 + 2 × area. Straight shots retain their launch direction, missiles turn at a limited rate and stop tracking after 2.1 seconds, and bombs explode after 1.5 seconds with a ground warning. Enemy projectiles collide with character bodies rather than guaranteeing a hit on their original target. Clear remaining projectiles before advancing.
+
+Dragging records movement speed in game coordinates. Releasing preserves horizontal and vertical momentum, with light air drag and gravity; holding still before release removes stale momentum. Walking feet advance while lifted and move backward relative to the body while planted, with both knees bending forward. The priest's left-panel readout shows total attack aura percentage, flat defense bonus, and aura range.
+
 Heroes use velocity-based movement with acceleration, coasting, gravity, terrain-step hopping, and impact impulses. Damped springs drive body lean and weapon recoil; jointed legs bend and lift with the walking cycle, and dangle while airborne. Melee hits resolve after a 90 ms swing windup and recheck reach at impact. Successful strikes knock enemies back. Ranged attacks retain projectile travel time. This is a controlled body simulation with procedural spring animation, not a full independently colliding ragdoll for every limb. Simulation uses substeps of at most 1/120 second, with bounded catch-up after stalls.
 
 ## Validation
