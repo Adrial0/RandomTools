@@ -2,7 +2,7 @@
 (() => {
 const effects={
  encore:{name:'Encore',mp:12,min:0,max:0,color:'#f0d580',description:'Release a second volley.'},
- sustain:{name:'Sustaining melody',mp:12,min:0,max:0,color:'#8bd9bd',description:'Next notes last 6s.'},
+ sustain:{name:'Sustaining melody',mp:12,min:0,max:0,color:'#8bd9bd',description:'Next notes last 2s.'},
  crescendo:{name:'Crescendo',mp:14,min:0,max:0,color:'#e7a46d',description:'Next notes have 50% stronger effects.'},
  restore:{name:'Restoring chord',mp:14,min:0,max:0,color:'#bce69c',description:'Next notes heal allies for 12 HP.'},
  fire:{name:'Flame burst',mp:10,min:1,max:3,count:10,time:1,color:'#ff763c',description:'10 embers over 1 second; nearby grounded enemies burn.'},
@@ -68,7 +68,7 @@ const descriptions=[
  ['+2 RANGE, +2 HP','Faster attacks (2% per point), +2 HP','+1 MP per hit; +0.5 / +0.75 AT and +5% ability damage, +2 HP'],
  ['Nearby allies gain +1% AT, +3 HP','Nearby allies gain +0.2 defense, +3 HP','+1 MP per aura pulse, +2 RANGE, +2 HP'],
  ['+1 minimum and maximum AT, +4 HP','Heal 0.5 HP per enemy struck, +3 HP','+1 MP per hit, +2 HP'],
- ['Notes: allies +1 AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 physical damage taken; +2 HP','+1 MP per hit, +2 HP'],
+ ['Notes: allies +1% AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 physical damage taken; +2 HP','+1 MP per hit, +2 HP'],
  ['+10% minion damage, +3 HP','+10% minion health, +3 HP','One additional base group per 10 INT, +2 HP']
 ];
 globalThis.BrambleGear={items,effects,descriptions};
