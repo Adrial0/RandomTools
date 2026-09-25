@@ -3,7 +3,8 @@
 const effects={
  fire:{name:'Flame burst',mp:10,min:1,max:3,count:10,time:1,color:'#ff763c',description:'10 embers over 1 second; nearby grounded enemies burn.'},
  lightning:{name:'Chain lightning',mp:10,min:1,max:7,count:3,time:0,color:'#fff36a',description:'Lightning jumps to up to 3 nearby enemies.'},
- ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freezes and slows nearby enemies.'},
+ ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freezes nearby enemies.'},
+ slow:{name:'Chill burst',mp:12,min:3,max:5,count:1,time:2,slow:.2,color:'#9db3e9',description:'Slow 20% for 2s.'},
  poison:{name:'Poison strike',mp:10,min:2,max:3,count:1,time:4,color:'#76ef66',description:'Poisons the struck enemy for 4 seconds; poison ticks every second.'},
  heal:{name:'Healing bloom',mp:12,min:12,max:18,count:1,time:0,color:'#6fffb6',description:'Restores health to every living party member.'},
  drain:{name:'Life drain',mp:14,min:9,max:14,count:1,time:0,color:'#e783e3',description:'Deals bonus damage and returns that damage as health.'},
@@ -19,9 +20,9 @@ for(let c=0;c<8;c++){
  add('basic',families[c],...base[c],0);
  add('iron',`Iron ${families[c]}`,base[c][0]+4,base[c][1]+5,1);
  add('heavy',c===0?'Long Sword':`Heavy ${families[c]}`,base[c][0]+9,base[c][1]+15,2,null,ranges[c]+(c===0?5:0));
- for(const [effect,prefix] of Object.entries({fire:'Fire',lightning:'Thunder',ice:'Ice',poison:'Poison',heal:'Bloom',drain:'Vampire',stun:'Impact'})){
+ for(const [effect,prefix] of Object.entries({fire:'Fire',lightning:'Thunder',ice:'Ice',poison:'Poison',heal:'Bloom',drain:'Vampire',stun:'Impact',slow:'Chill'})){
   const min=c===0?10:base[c][0]+6,max=c===0?15:base[c][1]+9;
-  add(effect,`${prefix} ${families[c]}`,min,max,effect==='fire'||effect==='poison'||effect==='ice'?1:effect==='lightning'||effect==='stun'?2:3,effect);
+  add(effect,`${prefix} ${families[c]}`,min,max,effect==='fire'||effect==='poison'||effect==='ice'?1:effect==='lightning'||effect==='stun'||effect==='slow'?2:3,effect);
  }
  add('steel',`Steel ${families[c]}`,base[c][0]+20,base[c][1]+29,4);
 }
