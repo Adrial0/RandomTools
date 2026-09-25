@@ -9,10 +9,10 @@ const effects={
  drain:{name:'Life drain',mp:14,min:9,max:14,count:1,time:0,color:'#e783e3',description:'Deals bonus damage and returns that damage as health.'},
  stun:{name:'Shockwave',mp:10,min:5,max:9,count:1,time:1.2,color:'#ffdca0',description:'Stuns nearby enemies.'}
 };
-const families=['Sword','Glove','Bow','Orb','Staff','Spear','Gun','Whip'];
+const families=['Sword','Daggers','Bow','Staff','Holy Symbol','Scythe','Lute','Grimoire'];
 const base=[[1,5],[2,4],[4,8],[6,10],[2,5],[4,9],[2,4],[3,6]];
-const ranges=[30,14,125,105,95,45,155,65];
-const agi=[[20,30],[9,15],[28,36],[42,50],[80,90],[28,36],[10,16],[28,36]];
+const ranges=[30,14,125,105,95,42,110,100];
+const agi=[[20,30],[9,15],[28,36],[42,50],[80,90],[40,50],[35,45],[50,60]];
 const items={};
 for(let c=0;c<8;c++){
   const add=(suffix,name,min,max,tier,effect=null,range=ranges[c])=>{const id=`${c}-${suffix}`;items[id]={id,type:'weapon',name,classId:c,min,max,agi:agi[c],range,tier,effect,level:tier>=4?3:tier>=2?2:1,color:effect?effects[effect].color:'#ddd'};};
@@ -27,6 +27,10 @@ for(let c=0;c<8;c++){
 }
 items['3-ice'].agi=[80,90];
 for(const [suffix,name,tier,arrows] of [['poison2','Twin Poison Bow',2,2],['poison3','Triple Poison Bow',4,3],['ice3','Triple Ice Bow',5,3],['steel4','Volley Bow',6,4]]){const source=suffix.startsWith('ice')?'2-ice':suffix.startsWith('steel')?'2-steel':'2-poison';const id='2-'+suffix;items[id]={...items[source],id,name,tier,level:tier,arrows,priceIndex:tier+5,min:items[source].min+tier,max:items[source].max+tier*2}}
+for(const w of Object.values(items)){
+ if(w.classId===7){const swarm=['poison','ice','stun'].includes(w.effect);w.summon={kind:swarm?'spirit':w.tier>=2?'golem':'skeleton',count:swarm?3:1,health:swarm?18:w.tier>=2?100:50,damage:swarm?.4:w.tier>=2?1.3:1,delay:w.tier>=2&&!swarm?7:4};w.name=(w.effect?effects[w.effect].name.split(' ')[0]+' ':'')+(swarm?'Spirit':w.tier>=2?'Golem':'Skeleton')+' Grimoire';}
+ if(w.classId===6){w.note=w.effect==='lightning'?'bounce':w.effect==='ice'||w.effect==='heal'?'cone':'line';w.name=w.name.replace('Lute',w.note==='bounce'?'Horn':w.note==='cone'?'Harp':'Lute');}
+}
 const runes=[
  ['leech','Leech Rune','#df758b',{lifesteal:.08},'8% lifesteal.'],
  ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage.'],
@@ -53,9 +57,9 @@ const descriptions=[
  ['+2 RANGE, +3 LP','+0.5 minimum / +0.75 maximum AT, +3 LP','+1 MP per hit, +2 LP'],
  ['+2 RANGE, +2 LP','Faster attacks (2% per point), +2 LP','+1 MP per hit; +0.5 / +0.75 AT and +5% ability damage, +2 LP'],
  ['Nearby allies gain +1% AT, +3 LP','Nearby allies gain +0.2 defense, +3 LP','+1 MP per aura pulse, +2 RANGE, +2 LP'],
- ['+1.5 maximum AT, +4 LP','+0.5 minimum AT and +1% critical chance (cap 40%), +3 LP','+1 MP per hit, +2 LP'],
- ['+2% weapon AT, +3 LP','Faster attacks (2% per point), +2 LP','+1 MP per hit and +3% ability damage, +2 LP'],
- ['+0.5 minimum and maximum AT, +3 LP','One extra special strike per 5 DEX, +3 LP','+1 MP per hit, +2 LP']
+ ['+1 minimum and maximum AT, +4 LP','Heal 0.5 LP per enemy struck, +3 LP','+1 MP per hit, +2 LP'],
+ ['+1 minimum and maximum AT, +3 LP','Notes grant +1% additional AT, +2 LP','+1 MP per hit, +2 LP'],
+ ['+10% minion damage, +3 LP','+10% minion health, +3 LP','One additional base group per 10 INT, +2 LP']
 ];
 globalThis.BrambleGear={items,effects,descriptions};
 })();
