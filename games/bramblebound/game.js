@@ -158,7 +158,7 @@ function start(){inventoryRunes=Array.from({length:15},()=>[null,null]);stage=0;
 function float(x,y,text,color='#fff'){numbers.push({x,y,text,color,life:1})}
 function xpGain(h,amount,mobLevel){const penalty=mobLevel==null?1:Math.max(0,1-Math.max(0,h.level-mobLevel-5)*.1);return mobLevel==null?amount*(1+h.runeBonus.xpBonus):Math.max(1,amount*penalty*(1+h.runeBonus.xpBonus))}
 function xp(amount,mobLevel=null){heroes.forEach(h=>{h.xp=Math.round((h.xp+xpGain(h,amount,mobLevel))*100)/100;while(h.xp>=needed(h.level)&&h.level<99){h.xp-=needed(h.level);h.level++;h.sp+=2;stats(h);float(h.x,h.y-34,'LEVEL UP +2 SP','#ffff66')}});save()}
-function damage(target,n,element='physical',showNumber=true){if(target.hp<=0)return;if(target.owner){target.hp=Math.max(0,target.hp-n);target.flash=.1;return}if(!target.type){if(element!=='physical')n*=1-target.runeBonus.resistance;n=Math.max(1,n-aura(target).defense-(target.defense||0))}target.hp=Math.max(0,target.hp-n);target.flash=.1;if(!target.type){target.vx=(target.vx||0)-18*(target.face||1);target.leanV=(target.leanV||0)-18*(target.face||1)}if(showNumber)float(target.x,target.y-22,Math.round(n));if(target.type&&target.hp===0){gold+=2+area;xp(target.type==='boss'?140:12+area*3,target.level);for(const item of rollDrops(target))loot.push({x:target.x,y:floor(target.x),item});if(Math.random()<.30)potions.push({x:target.x,y:floor(target.x)});save()}}
+function damage(target,n,element='physical',showNumber=true){if(target.hp<=0)return;if(target.owner){target.hp=Math.max(0,target.hp-n);target.flash=.1;return}if(!target.type){if(element!=='physical')n*=1-target.runeBonus.resistance;n=Math.max(1,n-aura(target).defense-(target.defense||0))}target.hp=Math.max(0,target.hp-n);target.flash=.1;if(!target.type){target.vx=(target.vx||0)-18*(target.face||1);target.leanV=(target.leanV||0)-18*(target.face||1)}if(showNumber)float(target.x,target.y-22,Math.round(n));if(target.type&&target.hp===0){gold+=2+area;xp(target.type==='boss'?140:12+area*3,target.level);for(const item of rollDrops(target))loot.push({x:target.x,y:floor(target.x),item});if(Math.random()<(target.type==='swarmling'?.15:.30))potions.push({x:target.x,y:floor(target.x)});save()}}
 function shoot(h,target,kind,amount,attack=null){if(kind==='note'){shootNote(h,target,amount,attack);return}if(kind==='enemy'){launchHazard(h,target,'bullet',0,amount);return}const dx=target.x-h.x,dy=target.y-12-(h.y-13),flight=Math.max(.35,Math.abs(dx)/180),angle=Math.atan2(dy,dx),v=kind==='bullet'?330:180;const count=kind==='arrow'?(ITEMS[attack?.weapon||h.weapon]?.arrows||1):1;for(let i=0;i<count;i++){const spread=(i-(count-1)/2)*.035;shots.push({x:h.x,y:h.y-13,target,kind,amount,attack,element:'physical',life:4,vx:kind==='arrow'?dx/flight+spread*45:Math.cos(angle)*v,vy:kind==='arrow'?dy/flight-.5*240*flight+spread*45:Math.sin(angle)*v,gravity:kind==='arrow'?240:0})}}
 
 const PATTERNS=['FAN','ARROWS','BOMBS','SEEKERS'];
@@ -310,7 +310,7 @@ function innCost(){return Math.ceil(heroes.reduce((sum,h)=>sum+Math.max(0,h.maxH
 function healTown(){if(state!=='service'||currentNode!=='town')return false;const cost=innCost();if(gold<cost){tell('The inn costs '+cost+' gold. Sell items at the shop to afford treatment.');return false}gold-=cost;heroes.forEach(h=>h.hp=h.maxHp);save();refresh();tell('The inn restored and revived your party for '+cost+' gold.');return true}
 function sellItem(){if(state!=='service'||!['town','trader'].includes(currentNode)||pickedSlot?.type!=='bag')return false;const i=pickedSlot.index,id=inventory[i];if(!id)return false;gold+=salePrice(id);inventory[i]=null;inventoryRunes[i]=[null,null];pickedSlot=null;save();build();renderServices();tell('Sold '+ITEMS[id].name+' with its socketed runes.');return true}
 function buyRune(id){const w=shopStock().find(w=>w.id===id),slot=inventory.indexOf(null);if(state!=='service'||!w||gold<buyPrice(w)||slot<0)return false;gold-=buyPrice(w);inventory[slot]=id;inventoryRunes[slot]=[null,null];save();build();renderServices();tell('Bought '+w.name+'.');return true}
-function pickPotions(){potions=potions.filter(p=>{const h=heroes.filter(h=>h.hp>0&&h!==drag&&Math.abs(h.x-p.x)<8&&Math.abs(h.y-p.y)<4).sort((a,b)=>Math.abs(a.x-p.x)-Math.abs(b.x-p.x))[0];if(!h)return true;const heal=Math.min(h.maxHp-h.hp,Math.ceil(h.maxHp*.2));h.hp+=heal;float(h.x,h.y-28,'+'+Math.ceil(heal),'#ff8b97');tell(classes[h.classId].name+' picked up a potion: +'+Math.ceil(heal)+' HP.');save();return false})}
+function pickPotions(){potions=potions.filter(p=>{const h=heroes.filter(h=>h.hp>0&&h.hp<h.maxHp&&h!==drag&&Math.abs(h.x-p.x)<8&&Math.abs(h.y-p.y)<4).sort((a,b)=>Math.abs(a.x-p.x)-Math.abs(b.x-p.x))[0];if(!h)return true;const heal=Math.min(h.maxHp-h.hp,Math.ceil(h.maxHp*.2));h.hp+=heal;float(h.x,h.y-28,'+'+Math.ceil(heal),'#ff8b97');tell(classes[h.classId].name+' picked up a potion: +'+Math.ceil(heal)+' HP.');save();return false})}
 function restoreInfo(){hoverHero=null;inspectingItem=false;$('#character-info').hidden=false;$('#hover-info').hidden=true}
 function inspectHero(i){hoverHero=i;inspectingItem=false;$('#character-info').hidden=false;$('#hover-info').hidden=true;refresh()}
 function revivalCost(h){return Math.max(Math.ceil(gold*.1),h.level*10)}
@@ -416,9 +416,10 @@ function shootNote(h,target,amount,attack){
  for(const spread of pattern==='cone'?[-.22,0,.22]:[0])shots.push({x:h.x,y:h.y-13,vx:Math.cos(angle+spread)*velocity,vy:Math.sin(angle+spread)*velocity,kind:'note',amount:amount*(pattern==='cone'?.65:1),attack,mod,life:distance/velocity,hitSet:new Set(),radius:pattern==='pulse'?15:0});
 }
 
+function meleeReach(h){return Math.max(8,h.range||ITEMS[h.weapon]?.range||14)}
 function swingSegments(h,t){
  const a=-1.7+Math.min(1,Math.max(0,t)/.28)*3.1,f=h.strike?.face||h.face||1,length=Math.max(12,(h.strike?.range||h.range)-6),base=[h.x+f*6,h.y-13],tip=[base[0]+f*Math.cos(a)*length,base[1]+Math.sin(a)*length];
- if(h.classId===5){const end=[tip[0]+f*Math.cos(a+1.4)*13,tip[1]+Math.sin(a+1.4)*13];return [[base,tip],[tip,end]]}
+ if(h.classId===5){const end=[tip[0]+f*Math.cos(a+1.4)*13*meleeReach(h)/42,tip[1]+Math.sin(a+1.4)*13*meleeReach(h)/42];return [[base,tip],[tip,end]]}
  return [[base,tip]];
 }
 function resolveStrike(h,dt){
@@ -446,19 +447,19 @@ function stick(c,h,mark){
  if([1,5,7].includes(h.classId))line(c,[[shoulder[0]-4,shoulder[1]-1],[shoulder[0]-4,shoulder[1]-8],[shoulder[0],shoulder[1]-11],[shoulder[0]+4,shoulder[1]-8],[shoulder[0]+4,shoulder[1]-1]],col);if(h.classId===3)line(c,[[shoulder[0]-6,shoulder[1]-6],[shoulder[0]+1,shoulder[1]-16],[shoulder[0]+5,shoulder[1]-6],[shoulder[0]-6,shoulder[1]-6]],col);
  const wobble=(Math.sin(time*5.3+h.id*2.7)+Math.sin(time*8.1+h.id))*.65*moving+Math.sin(time*4+h.id)*air*.7,arm=swing+wobble;
  const hand=[shoulder[0]+f*(6+Math.sin(arm)*5),shoulder[1]+5-Math.sin(arm)*5];
- if(h.classId===1){for(const pose of rogueHands(h,shoulder,moving,air)){line(c,[shoulder,knee(shoulder,pose.hand,-f),pose.hand],col);if(h.weapon)drawWeapon(c,1,pose.hand,f,pose.angle,ITEMS[h.weapon]?.color||'#ddd')}}else{line(c,[shoulder,knee(shoulder,hand,-f),hand],col);line(c,[shoulder,[shoulder[0]-f*(4+Math.sin(arm)*3),-13-bob],[shoulder[0]-f*(5+Math.sin(arm)*4),-9-bob+Math.cos(arm)*moving*3]],col);
- if(h.weapon){if(h.strike&&[0,5].includes(h.classId)){const segments=swingSegments(h,h.strike.elapsed||0);for(const points of segments)line(c,points.map(p=>[p[0]-h.x,p[1]-h.y]),ITEMS[h.weapon]?.color||'#ddd');line(c,[shoulder,[f*6,-13]],col)}else drawWeapon(c,h.classId,hand,f,arm,ITEMS[h.weapon]?.color||'#ddd',ITEMS[h.weapon]?.instrument);}
+ if(h.classId===1){for(const pose of rogueHands(h,shoulder,moving,air)){line(c,[shoulder,knee(shoulder,pose.hand,-f),pose.hand],col);if(h.weapon)drawWeapon(c,1,pose.hand,f,pose.angle,ITEMS[h.weapon]?.color||'#ddd','lute',meleeReach(h))}}else{line(c,[shoulder,knee(shoulder,hand,-f),hand],col);line(c,[shoulder,[shoulder[0]-f*(4+Math.sin(arm)*3),-13-bob],[shoulder[0]-f*(5+Math.sin(arm)*4),-9-bob+Math.cos(arm)*moving*3]],col);
+ if(h.weapon){if(h.strike&&[0,5].includes(h.classId)){const segments=swingSegments(h,h.strike.elapsed||0);for(const points of segments)line(c,points.map(p=>[p[0]-h.x,p[1]-h.y]),ITEMS[h.weapon]?.color||'#ddd');line(c,[shoulder,[f*6,-13]],col)}else drawWeapon(c,h.classId,hand,f,arm,ITEMS[h.weapon]?.color||'#ddd',ITEMS[h.weapon]?.instrument,meleeReach(h));}
  }
  if(mark&&h.hp>0){c.fillStyle='#fff';c.fillRect(-1,-35,3,2)}c.restore();
 }
 
-function drawWeapon(c,id,hand,f,arm,color,instrument='lute'){c.save();c.translate(hand[0],hand[1]);c.scale(f,1);c.strokeStyle=color;c.fillStyle=color;
- if(id===0){c.rotate(arm*.95);line(c,[[0,3],[0,-13],[2,-16],[3,-13],[2,3]],color);line(c,[[-4,-1],[5,-1]],'#c9a459');line(c,[[1,0],[1,5]],'#aa7848')}
- if(id===1){c.rotate(arm*.7);line(c,[[0,3],[0,-7],[2,-10],[3,-7],[2,3]],color)}
+function drawWeapon(c,id,hand,f,arm,color,instrument='lute',reach=({0:30,1:14,5:42}[id]||14)){c.save();c.translate(hand[0],hand[1]);c.scale(f,1);c.strokeStyle=color;c.fillStyle=color;
+ if(id===0){c.rotate(arm*.95);line(c,[[0,3],[0,-(reach-9)],[2,-(reach-6)],[3,-(reach-9)],[2,3]],color);line(c,[[-4,-1],[5,-1]],'#c9a459');line(c,[[1,0],[1,5]],'#aa7848')}
+ if(id===1){c.rotate(arm*.7);line(c,[[0,3],[0,-(reach-7)],[2,-(reach-4)],[3,-(reach-7)],[2,3]],color)}
  if(id===2){line(c,[[-5,-10],[-1,-6],[0,0],[-1,6],[-5,10]],color);line(c,[[-5,-10],[-6-Math.max(0,arm)*2,0],[-5,10]],'#a7a7a7');line(c,[[-4,0],[10,0],[7,-2]],'#eee')}
  if(id===3){line(c,[[0,12],[0,-7]],'#b18e60');c.strokeStyle=color;c.beginPath();c.arc(0,-10,4,0,Math.PI*2);c.stroke()}
  if(id===4){line(c,[[0,0],[0,-4]],'#c6a06a');line(c,[[-5,-8],[0,-13],[5,-8],[0,-3],[-5,-8]],color);line(c,[[0,-11],[0,-5]],'#fff');line(c,[[-3,-8],[3,-8]],'#fff')}
- if(id===5){c.rotate(arm*.7);line(c,[[0,10],[0,-26]],'#bd965e');line(c,[[0,-26],[9,-24],[16,-17],[7,-21],[0,-21]],color)}
+ if(id===5){c.rotate(arm*.7);line(c,[[0,10],[0,-(reach-6)]],'#bd965e');line(c,[[0,-(reach-6)],[9*reach/42,-(reach-8)],[16*reach/42,-(reach-15)],[7*reach/42,-(reach-11)],[0,-(reach-11)]],color)}
  if(id===6){
  if(instrument==='harp'){line(c,[[-6,5],[-6,-10],[7,-15],[4,5],[-6,5]],color);for(let x=-3;x<=3;x+=3)line(c,[[x,3],[x,-10-x*.4]],'#ddd')}
  else if(instrument==='horn'){line(c,[[0,0],[7,-2],[15,-9],[15,7],[7,2],[0,0]],color);line(c,[[15,-9],[15,7]],'#edc684')}

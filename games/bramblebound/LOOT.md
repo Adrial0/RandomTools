@@ -7,7 +7,7 @@ All rolls are independent and happen only when a monster dies. Skipping a stage 
 | Weapon | 5% | 2.5% | 10% |
 | Rune or gem, combined | 1% | 1% | 1% |
 | Soul | — | — | 10% |
-| HP potion | 30% | 30% | 30% |
+| HP potion | 30% | 15% | 30% |
 
 Each species has a fixed table containing one or two weapons, independent of party composition. A successful weapon roll selects equally from that table. Boss weapon percentages are combined across their table. Tables are defined by WEAPON_DROPS in game.js. All non-starter weapons are represented.
 
@@ -23,4 +23,4 @@ Soul tiers follow regions: Grassland 1, Woodland 2, Cavern 3, Desert 4, Mountain
 
 Fortune bonuses from living party members add together and multiply equipment drop chances. For example, one tier-one Fortune Soul changes a normal weapon roll from 5% to 5.25%. They do not affect HP potion or gold drops.
 
-HP potions heal the collecting character for 20% of maximum HP, rounded up and capped at maximum HP. They cannot revive dead characters. The displayed health stat is HP; the legacy internal lp field is retained for save compatibility.
+HP potions heal the collecting character for 20% of maximum HP, rounded up and capped at maximum HP. Full-health characters leave potions on the ground. Potions cannot revive dead characters. The displayed health stat is HP; the legacy internal lp field is retained for save compatibility.

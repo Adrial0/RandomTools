@@ -199,3 +199,7 @@ c.setItem(0,'soul-fortune-1');assert.ok(c.moveItem({type:'bag',index:0},{type:'r
 c.get().heroes[0].hp=0;assert.equal(c.dropMultiplier(),1);check.math.random=()=>0;const boss=c.enemy('boss',300);const both=c.rollDrops(boss);assert.deepEqual(Array.from(both,id=>c.items[id].type),['weapon','rune','soul']);c.setArea(17);const late=c.rollDrops(c.enemy('boss',300));assert.equal(c.items[late.find(id=>c.items[id].type==='soul')].tier,6);
 console.log('Fixed monster tables, all weapon coverage, independent boss rolls, Souls, save/socket support, and equipment drop bonuses pass.');
 }
+{
+const run=harness(),r=run.t;r.start();run.math.random=()=>.15;r.damage(r.enemy('swarmling',300),99999);assert.equal(r.get().potions.length,0);run.math.random=()=>.14999;r.damage(r.enemy('glowleech',300),99999);assert.equal(r.get().potions.length,1);run.math.random=()=>.29;r.damage(r.enemy('slime',300),99999);assert.equal(r.get().potions.length,2);
+r.get().potions.length=0;r.get().heroes.forEach(h=>{h.x=300;h.y=219;h.hp=h.maxHp});r.setPotion({x:300,y:219});r.pickPotions();assert.equal(r.get().potions.length,1,'Full-health party leaves potion untouched');const wounded=r.get().heroes[2];wounded.hp=1;r.pickPotions();assert.equal(r.get().potions.length,0);assert.equal(wounded.hp,1+Math.ceil(wounded.maxHp*.2),'Wounded hero can collect beside full-health allies');console.log('Swarm potion rate and full-health pickup exclusion pass.');
+}
