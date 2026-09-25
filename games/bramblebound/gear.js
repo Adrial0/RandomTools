@@ -3,11 +3,11 @@
 const effects={
  fire:{name:'Flame burst',mp:10,min:1,max:3,count:10,time:1,color:'#ff763c',description:'10 embers over 1 second; nearby grounded enemies burn.'},
  lightning:{name:'Chain lightning',mp:10,min:1,max:7,count:3,time:0,color:'#fff36a',description:'Lightning jumps to up to 3 nearby enemies.'},
- ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freeze scales with attack delay (up to 0.7s); then 20% slow for 1s. Bosses resist control.'},
+ ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freezes and slows nearby enemies.'},
  poison:{name:'Poison strike',mp:10,min:2,max:3,count:1,time:4,color:'#76ef66',description:'Poisons the struck enemy for 4 seconds; poison ticks every second.'},
  heal:{name:'Healing bloom',mp:12,min:12,max:18,count:1,time:0,color:'#6fffb6',description:'Restores health to every living party member.'},
  drain:{name:'Life drain',mp:14,min:9,max:14,count:1,time:0,color:'#e783e3',description:'Deals bonus damage and returns that damage as health.'},
- stun:{name:'Shockwave',mp:10,min:5,max:9,count:1,time:1.2,color:'#ffdca0',description:'Damages nearby enemies and briefly stuns them; duration scales with attack delay. Bosses resist control.'}
+ stun:{name:'Shockwave',mp:10,min:5,max:9,count:1,time:1.2,color:'#ffdca0',description:'Stuns nearby enemies.'}
 };
 const families=['Sword','Glove','Bow','Orb','Staff','Spear','Gun','Whip'];
 const base=[[1,5],[2,4],[4,8],[6,10],[2,5],[4,9],[2,4],[3,6]];
@@ -28,13 +28,13 @@ for(let c=0;c<8;c++){
 items['3-ice'].agi=[80,90];
 for(const [suffix,name,tier,arrows] of [['poison2','Twin Poison Bow',2,2],['poison3','Triple Poison Bow',4,3],['ice3','Triple Ice Bow',5,3],['steel4','Volley Bow',6,4]]){const source=suffix.startsWith('ice')?'2-ice':suffix.startsWith('steel')?'2-steel':'2-poison';const id='2-'+suffix;items[id]={...items[source],id,name,tier,level:tier,arrows,priceIndex:tier+5,min:items[source].min+tier,max:items[source].max+tier*2}}
 const runes=[
- ['leech','Leech Rune','#df758b',{lifesteal:.08},'Restore 8% of actual basic-attack damage as LP.'],
- ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage. Physical hits are unaffected.'],
+ ['leech','Leech Rune','#df758b',{lifesteal:.08},'8% lifesteal.'],
+ ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage.'],
  ['wisdom','Wisdom Rune','#b994ef',{xpBonus:.20},'This character earns 20% more combat EXP.'],
- ['haste','Haste Rune','#7ee5c1',{haste:.15},'15% faster basic attacks and basic healing.'],
+ ['haste','Haste Rune','#7ee5c1',{haste:.15},'15% faster attacks.'],
  ['might','Might Rune','#ed9469',{damageBonus:.15},'Increase minimum and maximum basic AT by 15%.'],
  ['reach','Reach Rune','#f1d97b',{rangeBonus:15},'Increase attack and support range by 15.'],
- ['vitality','Vitality Rune','#9ce16b',{hpBonus:.20},'Increase maximum LP by 20%. Does not heal on equip.'],
+ ['vitality','Vitality Rune','#9ce16b',{hpBonus:.20},'Increase maximum LP by 20%.'],
  ['renewal','Renewal Rune','#ece9d1',{regen:1},'Recover 1 LP per second while alive in an area.']
 ];
 for(const [name,title,color,bonuses,description] of runes){const id='rune-'+name;items[id]={id,type:'rune',name:title,color,bonuses,description,level:1,tier:1,symbol:'◆'};}

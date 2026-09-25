@@ -83,7 +83,7 @@ Level requirements are now `100 + 80 × level + 10 × level²` XP: level 2 takes
 
 Normal area HP follows 20, 40, 60, 80, 100, 130, 160, 190, 220, 250, 290, 330, 370, 410, 450, 500. Bosses have exactly ten times base area HP. Summoners have 125% base health; summoned minions have 55%. The current nine areas use the first nine entries.
 
-Weapon prices by tier are 100, 250, 500, 750, 1000, then 1500 and increments of 500 through 10000, followed by increments of 1000. All weapons in a given tier share its price. Unlocks still depend on cleared areas. Rune prices remain 80.
+Weapon prices follow their individual progression: 100, 250, 500, 750, 1000, then 1500 and increments of 500 through 10000, followed by increments of 1000. Weapons within the same displayed tier can have different prices. Unlocks still depend on cleared areas. Rune prices remain 80.
 
 Weapon silhouettes and grips are drawn consistently in combat, portraits, and inventory. Player arrows have ballistic arcs; other player shots keep their launch direction. All player and enemy projectiles check terrain along their path, and bombs stop on terrain before exploding. Characters still fire at targets in range even when terrain obstructs the shot. Heroes and enemies hop onto ledges using gravity rather than snapping upward, including when approaching a wall while airborne.
 
@@ -137,6 +137,6 @@ The world now has 18 areas: three each of Grassland, Woodland, Cavern, Desert, M
 
 ## Shop and fullscreen layout
 
-Weapon category tabs remain in the shop. Each page displays all unlocked weapons of one tier together; the bottom arrows change tiers. Displayed weapon tiers start at Tier 1, costing 100 gold, then 250, 500, 750, 1000, 1500, and increments of 500 thereafter (1000 increments above 10000). Rune and gem pricing is unchanged. Fullscreen centers the complete game at its normal width and scales down if necessary to keep the lower panel visible.
+Weapon category tabs remain in the shop. Each page displays all unlocked weapons of one displayed item tier together; the bottom arrows change tiers. Starter weapons and their early upgrades share Tier 1, with individual prices following the progression above. Rune and gem pricing is unchanged. Fullscreen centers the complete game at its normal width and scales down if necessary to keep the lower panel visible.
 
 Burn deals ten damage pulses during one simulation second. Poison ticks once per simulation second for four seconds. These timers are independent of the attack animation and run twice as fast in real time at 2× game speed.
