@@ -12,7 +12,7 @@ const effects={
 const families=['Sword','Glove','Bow','Orb','Staff','Spear','Gun','Whip'];
 const base=[[1,5],[2,4],[4,8],[6,10],[2,5],[4,9],[2,4],[3,6]];
 const ranges=[30,14,125,105,95,45,155,65];
-const agi=[[20,30],[9,15],[28,36],[42,50],[35,43],[28,36],[10,16],[28,36]];
+const agi=[[20,30],[9,15],[28,36],[42,50],[80,90],[28,36],[10,16],[28,36]];
 const items={};
 for(let c=0;c<8;c++){
   const add=(suffix,name,min,max,tier,effect=null,range=ranges[c])=>{const id=`${c}-${suffix}`;items[id]={id,type:'weapon',name,classId:c,min,max,agi:agi[c],range,tier,effect,level:tier>=4?3:tier>=2?2:1,color:effect?effects[effect].color:'#ddd'};};
