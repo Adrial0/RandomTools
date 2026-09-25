@@ -137,6 +137,8 @@ The world now has 18 areas: three each of Grassland, Woodland, Cavern, Desert, M
 
 ## Shop and fullscreen layout
 
-Weapon category tabs remain in the shop. Each page displays all unlocked weapons of one displayed item tier together; the bottom arrows change tiers. Starter weapons and their early upgrades share Tier 1, with individual prices following the progression above. Rune and gem pricing is unchanged. Fullscreen centers the complete game at its normal width and scales down if necessary to keep the lower panel visible.
+Weapon category tabs remain in the shop. Each page displays all unlocked weapons of one displayed item tier together; the bottom arrows change tiers. Starter weapons and their early upgrades share Tier 1, with individual prices following the progression above. Gems cost 500 gold per tier and runes cost 1,000 gold per tier. Fullscreen centers the complete game at its normal width and scales down if necessary to keep the lower panel visible.
+
+The main menu offers three independent local save slots. Existing saves appear in slot 1. Return through Settings → Main menu; New party replaces only the active slot after confirmation. Party portraits show a blue MP bar beneath their red HP bar. Rune families have distinct colored symbols. Boss exits appear two seconds after the boss dies (also at 2× speed); regular stage exits remain available throughout the fight.
 
 Burn deals ten damage pulses during one simulation second. Poison ticks once per simulation second for four seconds. These timers are independent of the attack animation and run twice as fast in real time at 2× game speed.
