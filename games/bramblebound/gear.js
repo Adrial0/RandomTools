@@ -63,7 +63,7 @@ const gemFamilies=[
 for(let tier=1;tier<=10;tier++)for(const [family,name,color,base] of gemFamilies){const id='gem-'+family+'-'+tier,gemStats=Object.fromEntries(Object.entries(base).map(([k,v])=>[k,v*tier]));const description=Object.entries(gemStats).map(([k,v])=>'+'+v+' '+({str:'STR',dex:'DEX',int:'INT',defense:'defense',lp:'maximum HP'}[k])).join(', ');items[id]={id,type:'gem',name:name+' Gem '+tier,color,gemStats,description:description+'.',level:tier,tier,symbol:'♦'}}
 const descriptions=[
  ['+1 maximum AT, +4 HP','+1 minimum AT (capped at maximum), +4 HP','+1 MP per hit, +2 HP'],
- ['+1 minimum and maximum AT, +5 HP','Faster attacks (2% per point), +3 HP','+1 MP per hit, +2 HP'],
+ ['+1 minimum and maximum AT, +5 HP','Diminishing-return dodge chance, +3 HP','+1% critical chance, +1 MP per hit, +2 HP'],
  ['+2 RANGE, +3 HP','+0.5 minimum / +0.75 maximum AT, +3 HP','+1 MP per hit, +2 HP'],
  ['+2 RANGE, +2 HP','Faster attacks (2% per point), +2 HP','+1 MP per hit; +0.5 / +0.75 AT and +5% ability damage, +2 HP'],
  ['Nearby allies gain +1% AT, +3 HP','Nearby allies gain +0.2 defense, +3 HP','+1 MP per aura pulse, +2 RANGE, +2 HP'],
