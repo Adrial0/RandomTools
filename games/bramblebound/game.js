@@ -410,12 +410,13 @@ function tickMinions(dt){
   const h=m.owner,w=ITEMS[h.weapon],spec=w.summon;
   if(m.hp<=0)continue;
   m.cooldown-=dt;
-  if(m.attack){tickMinionAttack(m,dt);continue}
+  if(m.attack){m.moving=0;tickMinionAttack(m,dt);continue}
   const target=enemies.filter(e=>e.hp>0&&Math.abs(e.x-h.x)<150).sort((a,b)=>Math.abs(a.x-m.x)-Math.abs(b.x-m.x))[0];
   const following=h===drag||!grounded(h)||Math.abs(m.x-h.x)>150||!target;
   const goal=following?h:target,dist=Math.abs(goal.x-m.x);
   m.face=Math.sign(goal.x-m.x)||m.face||1;
-  moveEnemy(m,dist>(following?18:m.range)?Math.sign(goal.x-m.x)*38*dt:0,dt);
+  const oldX=m.x;moveEnemy(m,dist>(following?18:m.range)?Math.sign(goal.x-m.x)*38*dt:0,dt);
+  m.moving=Math.min(1,Math.abs(m.x-oldX)/Math.max(.001,dt)/38);m.gait=(m.gait||0)+Math.abs(m.x-oldX)*(m.kind==='golem'?.18:.3);
   if(following||m.y<floor(m.x)-.5||dist>m.range||Math.abs(m.y-target.y)>35||m.cooldown>0)continue;
   m.cooldown=spec.attackInterval/(1+h.runeBonus.haste+songTotal(m,'haste'));
   m.attack={target,elapsed:0,impact:m.kind==='golem'?.22:.12,duration:m.kind==='golem'?.55:.38,face:m.face,hit:false};
@@ -438,22 +439,23 @@ function tickMinionAttack(m,dt){
 }
 function drawMinions(){
  for(const m of minions){if(m.hp<=0)continue;const x=m.x,y=m.y,c=ITEMS[m.weapon].color,a=m.attack,f=a?.face||m.face||1;
+  const gait=m.gait||0,walking=a?0:(m.moving||0),stride=Math.sin(gait)*4*walking,bob=Math.abs(Math.cos(gait))*walking*(m.kind==='golem'?1.2:1.8);
   const wind=a?Math.min(1,a.elapsed/a.impact):0,recover=a?Math.max(0,(a.elapsed-a.impact)/(a.duration-a.impact)):0;
   const swing=a?(a.elapsed<a.impact?-Math.sin(wind*Math.PI)*.5+wind:1-recover):0;
   ctx.strokeStyle=c;ctx.fillStyle=c;
   if(m.kind==='spirit'){
-   const sx=x+f*swing*4,sy=y-10-(a?Math.sin(wind*Math.PI)*2:0);
+   const sx=x+f*swing*4,sy=y-10+Math.sin(time*4+m.owner.id+m.life)*1.5-bob-(a?Math.sin(wind*Math.PI)*2:0);
    ctx.beginPath();ctx.ellipse(sx,sy,4+swing*2,4-swing,0,0,Math.PI*2);ctx.stroke();
    line(ctx,[[sx-4,sy+2],[sx-2-f*swing*3,sy+8],[sx+2,sy+5],[sx+4,sy+8]],c);
    if(a&&!a.hit){ctx.fillRect(sx+f*6,sy-1,2+wind*2,2+wind*2)}
   }else if(m.kind==='golem'){
-   const lean=f*swing*3;ctx.strokeRect(x-7+lean,y-18,14,12);ctx.strokeRect(x-4+lean,y-24+swing*2,8,6);
-   line(ctx,[[x-5,y-6],[x-6,y],[x-2,y]],c);line(ctx,[[x+5,y-6],[x+6,y],[x+2,y]],c);
-   const fist=[x+f*(9+swing*9),y-12-swing*1];line(ctx,[[x+lean+f*6,y-17],[x+f*10,y-18-swing*4],fist],c);ctx.strokeRect(fist[0]-3,fist[1]-3,6,6);
+   const lean=f*swing*3+stride*.2;ctx.strokeRect(x-7+lean,y-18-bob,14,12);ctx.strokeRect(x-4+lean,y-24-bob+swing*2,8,6);
+   for(const side of [-1,1]){const step=stride*side,lift=Math.max(0,Math.cos(gait+(side===1?Math.PI:0)))*3*walking;line(ctx,[[x+side*4,y-6-bob],[x+side*5+step*.5,y-3-lift],[x+side*5+step,y-lift],[x+side*5+step+f*3,y-lift]],c)}
+   const fist=[x+f*(9+swing*9)+stride*.5,y-12-swing*1-bob];line(ctx,[[x+lean+f*6,y-17],[x+f*10,y-18-swing*4],fist],c);ctx.strokeRect(fist[0]-3,fist[1]-3,6,6);
    line(ctx,[[x+lean-f*6,y-17],[x-f*10,y-10],[x-f*8,y-6]],c);
   }else{
-   const lean=f*swing*2;ctx.strokeRect(x-3+lean,y-20,6,5);line(ctx,[[x+lean,y-15],[x,y-6],[x-4,y],[x,y-6],[x+4,y]],c);
-   const hand=[x+f*(5+swing*6),y-11-swing*2];
+   const lean=f*swing*2+stride*.12;ctx.strokeRect(x-3+lean,y-20-bob,6,5);line(ctx,[[x+lean,y-15-bob],[x,y-6-bob]],c);for(const side of [-1,1]){const step=stride*side,lift=Math.max(0,Math.cos(gait+(side===1?Math.PI:0)))*3*walking;line(ctx,[[x,y-6-bob],[x+side*2+step*.5,y-3-lift],[x+side*3+step,y-lift]],c)}
+   const hand=[x+f*(5+swing*6)-stride*.55,y-11-swing*2-bob];
    line(ctx,[[x+lean,y-13],[x+f*3,y-8],hand],c);line(ctx,[[x+lean,y-13],[x-f*5,y-10],[x-f*3,y-6]],c);
    const angle=-1.4+swing*1.4;line(ctx,[hand,[hand[0]+f*Math.cos(angle)*8,hand[1]+Math.sin(angle)*8]],'#ddd');
    line(ctx,[[hand[0]-f,hand[1]-2],[hand[0]+f,hand[1]+2]],'#b99558');
@@ -492,11 +494,12 @@ function knee(a,b,bend){const dx=b[0]-a[0],dy=b[1]-a[1],length=Math.max(1,Math.h
 function stick(c,h,mark){
  c.save();c.translate(h.x,h.y);if(h.hp<=0){c.rotate(-Math.PI/2);c.globalAlpha=.4}
  const col=h.flash?'#fff':h.color,f=h.face||1,g=h.gait||0,moving=Math.min(1,Math.abs(h.vx||0)/25),air=Math.min(1,Math.max(Math.abs(h.vy||0)/100,(floor(h.x)-h.y)/35)),lean=h.lean||0,swing=h.swing||0;
- const bob=Math.abs(Math.sin(g))*1.8*moving-(h.crouch||0),hip=[lean*.25,-10-bob],shoulder=[lean,-18-bob];
+ const idle=h.hp>0&&!h.strike?(1-moving)*(1-air):0,breath=Math.sin(time*2+h.id*1.7)*.45*idle;
+ const bob=Math.abs(Math.sin(g))*1.8*moving-(h.crouch||0)+breath,hip=[lean*.25,-10-bob],shoulder=[lean,-18-bob];
  for(const side of [-1,1]){const phase=g+(side===1?Math.PI:0),foot=[side*2-Math.cos(phase)*5*moving*Math.sign(h.vx||f)-f*air*3,-Math.max(0,Math.sin(phase))*4*moving-air*3];line(c,[hip,knee(hip,foot,-f),foot],col)}
  line(c,[hip,shoulder],col);if(h.classId===0)line(c,[[shoulder[0]-5,shoulder[1]+1],[shoulder[0]+5,shoulder[1]+1]],'#a8adb5');c.strokeStyle=col;c.strokeRect(shoulder[0]-3,shoulder[1]-7,6,6);
  if([1,5,7].includes(h.classId))line(c,[[shoulder[0]-4,shoulder[1]-1],[shoulder[0]-4,shoulder[1]-8],[shoulder[0],shoulder[1]-11],[shoulder[0]+4,shoulder[1]-8],[shoulder[0]+4,shoulder[1]-1]],col);if(h.classId===3)line(c,[[shoulder[0]-6,shoulder[1]-6],[shoulder[0]+1,shoulder[1]-16],[shoulder[0]+5,shoulder[1]-6],[shoulder[0]-6,shoulder[1]-6]],col);
- const wobble=(Math.sin(time*5.3+h.id*2.7)+Math.sin(time*8.1+h.id))*.65*moving+Math.sin(time*4+h.id)*air*.7,arm=swing+wobble;
+ const wobble=(Math.sin(time*5.3+h.id*2.7)+Math.sin(time*8.1+h.id))*.65*moving+Math.sin(time*4+h.id)*air*.7,arm=swing+wobble+Math.sin(time*1.7+h.id*2.3)*.055*idle;
  const hand=[shoulder[0]+f*(6+Math.sin(arm)*5),shoulder[1]+5-Math.sin(arm)*5];
  if(h.classId===1){for(const pose of rogueHands(h,shoulder,moving,air)){line(c,[shoulder,knee(shoulder,pose.hand,-f),pose.hand],col);if(h.weapon)drawWeapon(c,1,pose.hand,f,pose.angle,ITEMS[h.weapon]?.color||'#ddd','lute',meleeReach(h))}}else{line(c,[shoulder,knee(shoulder,hand,-f),hand],col);line(c,[shoulder,[shoulder[0]-f*(4+Math.sin(arm)*3),-13-bob],[shoulder[0]-f*(5+Math.sin(arm)*4),-9-bob+Math.cos(arm)*moving*3]],col);
  if(h.weapon){if(h.strike&&[0,5].includes(h.classId)){const segments=swingSegments(h,h.strike.elapsed||0);for(const points of segments)line(c,points.map(p=>[p[0]-h.x,p[1]-h.y]),ITEMS[h.weapon]?.color||'#ddd');line(c,[shoulder,[f*6,-13]],col)}else drawWeapon(c,h.classId,hand,f,arm,ITEMS[h.weapon]?.color||'#ddd',ITEMS[h.weapon]?.instrument,meleeReach(h));}
