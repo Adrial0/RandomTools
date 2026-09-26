@@ -21,27 +21,33 @@ const ZONES=[
  {name:'Volcano',regions:['Ashland','Crater','Lava','Depths'],structure:'Forge',boss:'Molten Construct',shape:'construct',color:'#e5834e',palette:['#51403a','#ff843a','#956449']},
  {name:'Kingdom',regions:['Farmland','Sewers','City','Barracks'],structure:'Castle',boss:'Lich King',shape:'lich',color:'#b995dc',palette:['#514955','#948591','#736977']}
 ];
-const AREAS=[],WORLD=[],MAP_WIDTH=6144;
+const AREAS=[],WORLD=[],AREAS_PER_REGION=5,AREAS_PER_ZONE=21,MAP_WIDTH=3072;
 for(let z=0;z<ZONES.length;z++){
- const zone=ZONES[z],base=z*13,town=z?'town'+z:'town',trader=z?'trader'+z:'trader';
- WORLD.push({id:town,name:'Town',kind:'town',zone:z,x:z*1024+35,y:83,next:['a'+base]});
- for(let r=0;r<4;r++)for(let n=0;n<3;n++){
-  const a=base+r*3+n,node={id:'a'+a,name:zone.regions[r]+' '+(n+1),area:a,zone:z,region:z*4+r,local:n,major:false,x:z*1024+115+r*215+n*48,y:(r%2?[68,46,24]:[24,46,68])[n],next:['a'+(a+1)]};
-  if(r===0&&n===2)node.next.push(trader);
+ const zone=ZONES[z],base=z*AREAS_PER_ZONE,town=z?'town'+z:'town',trader=z?'trader'+z:'trader';
+ WORLD.push({id:town,name:'Town',kind:'town',zone:z,x:z*512+28,y:83,next:['a'+base]});
+ for(let r=0;r<4;r++)for(let n=0;n<AREAS_PER_REGION;n++){
+  const a=base+r*AREAS_PER_REGION+n,node={id:'a'+a,name:zone.regions[r]+' '+(n+1),area:a,zone:z,region:z*4+r,local:n,major:false,x:z*512+75+r*112+[0,16,-3,17,0][n],y:(r%2?[20,33,46,59,72]:[72,59,46,33,20])[n],next:['a'+(a+1)]};
+  if(r===0&&n===AREAS_PER_REGION-1)node.next.push(trader);
   AREAS.push(node);WORLD.push(node);
  }
- const a=base+12,node={id:'a'+a,name:zone.structure,area:a,zone:z,region:z*4+3,major:true,x:z*1024+970,y:52,next:z<5?['a'+(a+1),'town'+(z+1)]:[]};
- AREAS.push(node);WORLD.push(node,{id:trader,name:'Rune Trader',kind:'trader',zone:z,x:z*1024+300,y:86,next:[]});
+ const a=base+20,node={id:'a'+a,name:zone.structure,area:a,zone:z,region:z*4+3,major:true,x:z*512+483,y:59,next:z<5?['a'+(a+1),'town'+(z+1)]:[]};
+ AREAS.push(node);WORLD.push(node,{id:trader,name:'Rune Trader',kind:'trader',zone:z,x:z*512+132,y:19,next:[]});
 }
 const areaInfo=(index=area)=>AREAS[index]||AREAS[0];
 const serviceKind=(id=currentNode)=>WORLD.find(n=>n.id===id)?.kind;
 const townForArea=()=>areaInfo().zone?'town'+areaInfo().zone:'town';
 function migrateWorld(s){
- if(s.worldVersion===2)return s;
- const oldToNew=[0,1,2,3,4,5,9,10,11,16,17,18,42,43,44,45,46,47],mapIndex=n=>oldToNew[Math.max(0,Math.min(17,Number(n)||0))];
- const cleared=(s.completed||Array.from({length:s.area||0},(_,i)=>'a'+i)).filter(id=>/^a\d+$/.test(id)).map(id=>mapIndex(id.slice(1)));
+ if(s.worldVersion===3)return s;
+ if(s.worldVersion!==2){
+  const oldToNew=[0,1,2,3,4,5,9,10,11,16,17,18,42,43,44,45,46,47],mapIndex=n=>oldToNew[Math.max(0,Math.min(17,Number(n)||0))];
+  const cleared=(s.completed||Array.from({length:s.area||0},(_,i)=>'a'+i)).filter(id=>/^a\d+$/.test(id)).map(id=>mapIndex(id.slice(1)));
+  s={...s,worldVersion:2,area:mapIndex(s.area),completed:Array.from({length:Math.max(-1,...cleared)+1},(_,i)=>'a'+i),currentNode:/^a\d+$/.test(s.currentNode||'')?'a'+mapIndex(s.currentNode.slice(1)):s.currentNode};
+ }
+ const mapIndex=n=>{n=Math.max(0,Math.min(77,Number(n)||0));const z=Math.floor(n/13),local=n%13;return z*21+(local===12?20:Math.floor(local/3)*5+local%3)};
+ const cleared=(s.completed||[]).filter(id=>/^a\d+$/.test(id)).map(id=>mapIndex(id.slice(1)));
+ // Credit inserted areas behind completed progress; the first new area ahead remains playable.
  const completed=Array.from({length:Math.max(-1,...cleared)+1},(_,i)=>'a'+i);
- return {...s,worldVersion:2,area:mapIndex(s.area),completed,currentNode:/^a\d+$/.test(s.currentNode||'')?'a'+mapIndex(s.currentNode.slice(1)):s.currentNode};
+ return {...s,worldVersion:3,area:mapIndex(s.area),stage:Math.min(7,s.stage||0),completed,currentNode:/^a\d+$/.test(s.currentNode||'')?'a'+mapIndex(s.currentNode.slice(1)):s.currentNode};
 }
 let mapPan=0,sceneFade=null,settingsOpen=false,autoMoveEnabled=true,menuOpen=false,activeSlot=1,sessionSlot=0,bossExitWait=2;
 function saveKey(slot=activeSlot){return slot===1?KEY:KEY+'-slot-'+slot}
@@ -51,7 +57,7 @@ function tickSceneFade(dt){if(!sceneFade)return;const fade=sceneFade;fade.elapse
 
 let hazards=[],blasts=[],minions=[],rituals=[];
 let stage=0,inventoryRunes=Array.from({length:15},()=>[null,null]),shopClass=0,shopIndex=0;
-const stageCount=()=>areaInfo().major?1:8+(areaInfo().region+areaInfo().local)%4;
+const stageCount=()=>areaInfo().major?1:5+(areaInfo().region+areaInfo().local)%4;
 let completed=[],currentNode='town',mapReturn=null,potions=[],hoverHero=null,inspectingItem=false,saveTime=0;
 let heroes=[],enemies=[],shots=[],numbers=[],loot=[],inventory=Array(15).fill(null),area=0,gold=0,selected=0,state='setup',paused=false,speed=1,drag=null,time=0,last=0,uid=0,uiTime=0,fields=[],flashes=[],gearDrag=null,pickedSlot=null,suppressGearClick=false;
 const floor=x=>{if(serviceKind()||areaInfo().major)return 226;const a=(area+stage)%3;return a===0?(x<112?226:x<365?219:226):a===1?(x<180?226:x<310?207:226):(x<135?226:x<245?215:x<365?204:226)};
@@ -79,7 +85,7 @@ function stats(h){
 }
 function hero(classId,i){const h={id:++uid,classId,level:1,xp:0,weapon:classId+'-basic',runes:[null,null],attributes:{str:0,dex:0,int:0,lp:0},sp:0,mp:0,gearRevision:0,x:35+i*20,y:226,vy:0,cooldown:i*.15,hold:0,anim:0,face:1};stats(h);h.hp=h.maxHp;return h}
 function tell(text){$('#status').textContent=text}
-function save(){if(!heroes.length||menuOpen||state==='setup')return;try{localStorage.setItem(saveKey(),JSON.stringify({version:7,worldVersion:2,autoMoveEnabled,area,stage,gold,inventory,inventoryRunes,completed,currentNode,heroes:heroes.map(h=>({classId:h.classId,autoMove:h.autoMove!==false,level:h.level,xp:h.xp,hp:h.hp,weapon:h.weapon,runes:h.runes,attributes:h.attributes,sp:h.sp,mp:h.mp}))}))}catch{}}
+function save(){if(!heroes.length||menuOpen||state==='setup')return;try{localStorage.setItem(saveKey(),JSON.stringify({version:7,worldVersion:3,autoMoveEnabled,area,stage,gold,inventory,inventoryRunes,completed,currentNode,heroes:heroes.map(h=>({classId:h.classId,autoMove:h.autoMove!==false,level:h.level,xp:h.xp,hp:h.hp,weapon:h.weapon,runes:h.runes,attributes:h.attributes,sp:h.sp,mp:h.mp}))}))}catch{}}
 function load(){try{
  const raw=readSlot(activeSlot),s=raw&&migrateWorld(raw);if(!s||!Array.isArray(s.heroes)||s.heroes.length!==4)return false;
  if(!s.heroes.every(h=>Number.isInteger(h.classId)&&classes[h.classId]&&Number.isInteger(h.level)&&h.level>=1&&h.level<=99))return false;
@@ -210,8 +216,8 @@ for(const node of AREAS){
  if(node.major)ENEMY_TYPES[id]={base:'boss',name:zone.boss,shape:zone.shape,color:zone.color,hp:1,major:true,range:24,speed:10,damage:1.65,patterns:[['CHARGE','FAN'],['BOMBS','ARROWS'],['TIDES','FAN'],['FROST','ARROWS'],['ERUPTION','BOMBS'],['BONES','CURSE','SOULS']][node.zone],description:zone.boss+'.'};
  else{
   const source=ENEMY_TYPES[REGIONAL_POOLS[node.region][(node.local*2+2)%7]]||{};
-  ENEMY_TYPES[id]={base:'boss',name:ZONES[node.zone].regions[node.region%4]+' '+['Guardian','Warden','Overlord'][node.local],shape:source.shape||'maw',color:zone.color,hp:1,patterns:['FAN','ARROWS','BOMBS']};
-  if(node.local===2){SWARM_BOSSES[node.area]=5;Object.assign(ENEMY_TYPES[id],{swarmCount:5,patterns:['DART'],damage:.55,speed:20})}
+  ENEMY_TYPES[id]={base:'boss',name:ZONES[node.zone].regions[node.region%4]+' '+['Guardian','Warden','Keeper','Champion','Overlord'][node.local],shape:source.shape||'maw',color:zone.color,hp:1,patterns:['FAN','ARROWS','BOMBS']};
+  if(node.local===AREAS_PER_REGION-1){SWARM_BOSSES[node.area]=5;Object.assign(ENEMY_TYPES[id],{swarmCount:5,patterns:['DART'],damage:.55,speed:20})}
  }
 }
 function sceneEnemyTypes(){
@@ -226,9 +232,9 @@ function encounterType(i,count){const types=sceneEnemyTypes();if(types.length===
 function enemySummonType(e){const pool=sceneEnemyTypes().filter(id=>!id.startsWith('guardian')&&!REGION_SUMMONERS.includes(id));return pool[e.remaining%pool.length]}
 
 
-function areaHealth(index){const values=[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500];return values[index]??500+(index-15)*50}
-function enemy(species,x){const spec=ENEMY_TYPES[species],type=spec?.base||species,boss=type==='boss',tier=areaInfo().zone,hp=Math.round(areaHealth(area)*(boss?(spec?.major?30:spec?.swarmCount?12/spec.swarmCount:10):spec?spec.hp:type==='summoner'?1.25:1));return {id:++uid,type,species,major:!!spec?.major,swarmBoss:!!spec?.swarmCount,swarmCount:spec?.swarmCount||1,shape:spec?.shape,pattern:spec?.pattern,patterns:spec?.patterns,x,y:floor(x)-(type==='flyer'?45:0),vx:0,vy:0,rotation:0,feet:[],hp:hp,maxHp:hp,level:1+Math.floor(area/77*98),name:spec?.name||({slime:'Slime',slasher:'Slashling',spitter:'Spitter',summoner:'Summoner',boss:'Guardian'}[type]||type),speed:spec?.speed||(boss?13:17),heals:3,healCooldown:3,hopCooldown:1+(x%3),at:(boss?10+area*2:6+area*1.5)*(spec?.damage||1),range:spec?.range||(type==='spitter'||type==='summoner'?105:type==='slasher'?(area<3?22:48):(area<3?12:16)),cooldown:.5+(x%7)/10,summon:7,remaining:3,color:spec?.color||(boss?'#de6262':type==='summoner'?'#c478ed':type==='slasher'?'#f37c52':type==='spitter'?'#e6b94b':tier===1?'#7ca3ed':'#59df42'),seed:x,flash:0,specialCooldown:2+(x%5)*.4,patternIndex:0,warning:null}}
-function enter(){bossExitWait=2;currentNode='a'+area;$('#world').hidden=true;mapReturn=null;state='fight';paused=false;drag=null;shots=[];minions=[];hazards=[];blasts=[];rituals=[];numbers=[];loot=[];potions=[];enemies=[];fields=[];flashes=[];$('#setup').hidden=true;$('#result').hidden=true;heroes.forEach((h,i)=>{h.x=32+i*20;h.y=floor(h.x);h.vy=0;h.vx=0;h.drive=0;h.strike=null;h.nextNote=null;h.songs={};h.hold=0;h.firstSummon=true;h.summonProgress=0;h.hp=Math.min(h.maxHp,h.hp)});const count=areaInfo().major?1:6+areaInfo().local+areaInfo().zone*2;for(let i=0;i<count;i++){const type=encounterType(i,count),x=count===1?440:240+i*(309/(count-1));enemies.push(enemy(type,x));if(ENEMY_TYPES[type]?.swarmCount)for(let j=1;j<ENEMY_TYPES[type].swarmCount;j++)enemies.push(enemy(type,x-j*22));if((ENEMY_TYPES[type]?.base||type)==='swarmling')for(let j=1;j<=5;j++)enemies.push(enemy(type,Math.max(210,Math.min(564,x+(j-2)*7))))}tell('Drag to fight, or touch NEXT to skip ahead. Defeat the boss to unlock the next area.');save();build();}
+function areaHealth(index){index=Math.floor(index*77/(AREAS.length-1));const values=[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500];return values[index]??500+(index-15)*50}
+function enemy(species,x){const spec=ENEMY_TYPES[species],type=spec?.base||species,boss=type==='boss',tier=areaInfo().zone,hp=Math.round(areaHealth(area)*(boss?(spec?.major?30:spec?.swarmCount?12/spec.swarmCount:10):spec?spec.hp:type==='summoner'?1.25:1));return {id:++uid,type,species,major:!!spec?.major,swarmBoss:!!spec?.swarmCount,swarmCount:spec?.swarmCount||1,shape:spec?.shape,pattern:spec?.pattern,patterns:spec?.patterns,x,y:floor(x)-(type==='flyer'?45:0),vx:0,vy:0,rotation:0,feet:[],hp:hp,maxHp:hp,level:1+Math.floor(area/(AREAS.length-1)*98),name:spec?.name||({slime:'Slime',slasher:'Slashling',spitter:'Spitter',summoner:'Summoner',boss:'Guardian'}[type]||type),speed:spec?.speed||(boss?13:17),heals:3,healCooldown:3,hopCooldown:1+(x%3),at:(boss?10+area*2:6+area*1.5)*(spec?.damage||1),range:spec?.range||(type==='spitter'||type==='summoner'?105:type==='slasher'?(area<3?22:48):(area<3?12:16)),cooldown:.5+(x%7)/10,summon:7,remaining:3,color:spec?.color||(boss?'#de6262':type==='summoner'?'#c478ed':type==='slasher'?'#f37c52':type==='spitter'?'#e6b94b':tier===1?'#7ca3ed':'#59df42'),seed:x,flash:0,specialCooldown:2+(x%5)*.4,patternIndex:0,warning:null}}
+function enter(){bossExitWait=2;currentNode='a'+area;$('#world').hidden=true;mapReturn=null;state='fight';paused=false;drag=null;shots=[];minions=[];hazards=[];blasts=[];rituals=[];numbers=[];loot=[];potions=[];enemies=[];fields=[];flashes=[];$('#setup').hidden=true;$('#result').hidden=true;heroes.forEach((h,i)=>{h.x=32+i*20;h.y=floor(h.x);h.vy=0;h.vx=0;h.drive=0;h.strike=null;h.nextNote=null;h.songs={};h.hold=0;h.firstSummon=true;h.summonProgress=0;h.hp=Math.min(h.maxHp,h.hp)});const count=areaInfo().major?1:6+areaInfo().local%3+areaInfo().zone*2;for(let i=0;i<count;i++){const type=encounterType(i,count),x=count===1?440:240+i*(309/(count-1));enemies.push(enemy(type,x));if(ENEMY_TYPES[type]?.swarmCount)for(let j=1;j<ENEMY_TYPES[type].swarmCount;j++)enemies.push(enemy(type,x-j*22));if((ENEMY_TYPES[type]?.base||type)==='swarmling')for(let j=1;j<=5;j++)enemies.push(enemy(type,Math.max(210,Math.min(564,x+(j-2)*7))))}tell('Drag to fight, or touch NEXT to skip ahead. Defeat the boss to unlock the next area.');save();build();}
 function start(){setFrontScreen(null);menuOpen=false;sessionSlot=activeSlot;$('#main-menu').hidden=true;autoMoveEnabled=true;inventoryRunes=Array.from({length:15},()=>[null,null]);stage=0;heroes=[...document.querySelectorAll('#choices select')].map((el,i)=>hero(+el.value,i));area=0;gold=0;inventory=Array(15).fill(null);selected=0;completed=[];currentNode='town';state='town';$('#setup').hidden=true;enterService('town');}
 function float(x,y,text,color='#fff'){const side=Math.random()<.5?-1:1;numbers.push({x,y,text,color,life:1,vx:side*(9+Math.random()*7),vy:-30-Math.random()*7})}
 function tickNumbers(dt){for(const n of numbers){n.x+=(n.vx||0)*dt;n.y+=(n.vy||0)*dt+20*dt*dt;n.vy=(n.vy||0)+40*dt;n.life-=dt}numbers=numbers.filter(n=>n.life>0)}
@@ -329,7 +335,7 @@ const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
  for(let c=0;c<8;c++){
   const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.classId===c&&!w.id.endsWith('-basic')).sort((a,b)=>order.indexOf(a.id.split('-')[1])-order.indexOf(b.id.split('-')[1]));
   weapons.forEach((w,i)=>{
-   const position=Math.floor(i*72/weapons.length),zone=Math.floor(position/12),a=zone*13+position%12;
+   const position=Math.floor(i*120/weapons.length),zone=Math.floor(position/20),a=zone*21+position%20;
    WEAPON_AREAS[w.id]=a;WEAPON_STAGES[w.id]=2+(i+c)%3;w.tier=zone+1;w.level=zone+1;
    // Retain weapon identities while giving later-zone weapons appropriate base damage.
    const scale=1+zone*.65;w.min=Math.round(w.min*scale);w.max=Math.round(w.max*scale);
@@ -400,16 +406,24 @@ function panMap(dt){const chart=$('.map-chart');chart.scrollLeft=Math.max(0,Math
 function openMap(){mapPan=0;if(state==='setup')return;if(['fight','walk','service'].includes(state)){mapReturn=state;release()}state='map';$('#services').hidden=true;$('#service-controls').hidden=true;$('#world').hidden=false;$('#result').hidden=true;renderMap();const chart=$('.map-chart'),node=WORLD.find(n=>n.id===currentNode);chart.scrollLeft=Math.max(0,(node?.x||0)/MAP_WIDTH*(chart.scrollWidth||chart.clientWidth||0)-(chart.clientWidth||0)*.5);refresh();save()}
 function renderMap(){
  const unlocked=unlockedNodes(),icons={Fort:'♜',Pyramid:'△',Lighthouse:'♜',Citadel:'♜',Forge:'⚒',Castle:'♜'};
- $('#map-nodes').innerHTML=WORLD.filter(n=>unlocked.has(n.id)).map(n=>'<button class="map-node '+(n.major?'landmark ':'')+(completed.includes(n.id)?'cleared ':'')+(currentNode===n.id?'current':'')+'" data-node="'+n.id+'" style="left:'+n.x/MAP_WIDTH*100+'%;top:'+n.y+'%" aria-label="'+n.name+(completed.includes(n.id)?', cleared':', unlocked')+'"><span>'+(n.major?icons[n.name]:completed.includes(n.id)?'✓':'◆')+'</span><small>'+n.name+'</small></button>').join('');
+ $('#map-nodes').innerHTML=WORLD.filter(n=>unlocked.has(n.id)).map(n=>'<button class="map-node '+(n.major?'landmark ':'')+(n.kind?'service-node ':'')+(completed.includes(n.id)?'cleared ':'')+(currentNode===n.id?'current':'')+'" data-node="'+n.id+'" style="left:'+n.x/MAP_WIDTH*100+'%;top:'+n.y+'%" aria-label="'+n.name+(completed.includes(n.id)?', cleared':', unlocked')+'"><span>'+(n.major?icons[n.name]:n.kind?'◆':'▪')+'</span><small>'+(n.major||n.kind?n.name:n.local+1)+'</small><em>'+n.name+'</em></button>').join('');
  $('#map-art').innerHTML=ZONES.map((z,i)=>{
-  const x=i*1024;
-  let art='<path d="M'+(x+15)+' 170 L'+(x+30)+' 40 L'+(x+160)+' 13 L'+(x+420)+' 30 L'+(x+680)+' 10 L'+(x+990)+' 35 L'+(x+1010)+' 165 Z" fill="'+z.palette[0]+'22" stroke="'+z.color+'"/><text x="'+(x+480)+'" y="12" fill="'+z.color+'" text-anchor="middle" font-size="11">'+z.name.toUpperCase()+'</text>';
-  for(let r=0;r<4;r++)art+='<text x="'+(x+160+r*215)+'" y="34" fill="'+z.color+'" text-anchor="middle" font-size="8">'+z.regions[r]+'</text>';
-  if(i===0||i===2)art+='<path d="M'+(x+390)+' 32 Q'+(x+420)+' 90 '+(x+380)+' 110 T'+(x+430)+' 170" stroke="#356c93" stroke-width="12" fill="none"/>';
-  if(i===3||i===4)for(let k=0;k<5;k++)art+='<path d="M'+(x+60+k*180)+' 150 l60 -80 65 80" fill="'+(i===3?'#577786':'#522920')+'" stroke="'+z.color+'"/>';
-  if(i===5)for(let k=0;k<8;k++)art+='<path d="M'+(x+160+k*100)+' 157 v-23 h13 v-9 h14 v9 h13 v23" fill="#27232d" stroke="#62556c"/>';
-  return art;
- }).join('')+'<g id="map-lines">'+WORLD.filter(n=>unlocked.has(n.id)).flatMap(n=>n.next.filter(id=>unlocked.has(id)).map(id=>{const end=WORLD.find(v=>v.id===id);return '<line x1="'+n.x+'" y1="'+n.y*1.8+'" x2="'+end.x+'" y2="'+end.y*1.8+'" stroke="#aaa36b" stroke-dasharray="2 4"/>'})).join('')+'</g>';
+  const x=i*512,c=z.color;
+  let art='<g transform="translate('+x+' 0)"><path d="M12 155 20 128 15 106 29 78 25 52 47 35 73 31 85 18 115 23 135 16 163 25 190 19 211 30 239 24 269 32 299 20 330 25 353 15 379 22 411 18 435 31 470 25 497 44 491 79 502 98 490 121 494 149 470 161 437 155 411 168 380 162 351 171 322 158 292 165 260 154 230 164 199 158 165 170 138 161 111 169 85 159 60 169 34 163Z" fill="#050805" stroke="'+c+'" stroke-width=".7"/><text x="255" y="11" fill="'+c+'" text-anchor="middle" font-size="8">'+z.name.toUpperCase()+'</text>';
+  for(let r=0;r<4;r++)art+='<text x="'+(78+r*112)+'" y="177" fill="'+c+'" text-anchor="middle" font-size="6">'+z.regions[r]+'</text>';
+  const lake=i===0||i===2||i===3;
+  if(lake){art+='<path d="M232 71 248 60 270 66 281 82 274 104 253 111 236 98 229 82Z" fill="#071b2a" stroke="#357ba0" stroke-width=".7"/>';for(let k=0;k<22;k++){const px=239+(k*13)%33,py=72+Math.floor(k/4)*6;art+='<path d="M'+px+' '+py+'l2 -1 2 1 2 -1" fill="none" stroke="#295c86" stroke-width=".6"/>';}}
+  for(let k=0;k<70;k++){
+   const px=35+(k*71+i*17)%442,py=37+(k*29)%111;
+   if(lake&&px>225&&px<285&&py>58&&py<115)continue;
+   if(WORLD.some(n=>n.zone===i&&Math.abs(n.x-x-px)<14&&Math.abs(n.y*1.8-py)<10))continue;
+   if(i===0)art+='<path d="M'+px+' '+py+'l3 -6 3 6 -2 0 3 4 -8 0 3 -4Z" fill="none" stroke="#426c25" stroke-width=".6"/>';
+   else if(i===1||i===2)art+='<path d="M'+px+' '+py+'q5 -5 11 0m-8 3h7" fill="none" stroke="'+(i===1?'#88703a':'#367275')+'" stroke-width=".6"/>';
+   else if(i===3||i===4)art+='<path d="M'+px+' '+py+'l5 -10 6 10m-8 -5 2 1 2 -2" fill="none" stroke="'+(i===3?'#7c98a6':'#9a4932')+'" stroke-width=".7"/>';
+   else art+='<path d="M'+px+' '+py+'v-6h2v-3h3v3h2v6m-5 0v-3h2v3" fill="none" stroke="#6b5b7c" stroke-width=".6"/>';
+  }
+  return art+'</g>';
+ }).join('')+'<g id="map-lines">'+WORLD.filter(n=>unlocked.has(n.id)).flatMap(n=>n.next.filter(id=>unlocked.has(id)).map(id=>{const end=WORLD.find(v=>v.id===id);return '<line x1="'+n.x+'" y1="'+n.y*1.8+'" x2="'+end.x+'" y2="'+end.y*1.8+'" stroke="#b1b0a0" stroke-width=".7" stroke-dasharray="1 3"/>'})).join('')+'</g>';
  renderServices();
 }
 function enterService(id){currentNode=id;mapReturn=null;state='service';paused=false;drag=null;shots=[];minions=[];hazards=[];blasts=[];rituals=[];fields=[];flashes=[];numbers=[];loot=[];enemies=[];potions=[];shopIndex=0;$('#world').hidden=true;$('#result').hidden=true;$('#services').hidden=true;heroes.forEach((h,i)=>{h.x=130+i*20;h.y=226;h.vx=h.vy=h.drive=0;h.strike=null;h.nextNote=null;h.songs={}});$('#service-controls').hidden=false;$('#inn').hidden=serviceKind(id)!=='town';save();build();tell('Visit the shop, rest at the inn, or open the world map.')}

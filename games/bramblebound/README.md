@@ -2,7 +2,7 @@
 
 Standalone pixel-style Canvas party RPG. Open `index.html` in a browser or serve this folder with a static server. No dependencies or build step.
 
-The current world has six zones, 24 regions, 72 normal areas with 8–11 stages each, and six dedicated major boss arenas. See [WORLD.md](WORLD.md) for the authoritative route, zone tiers, weapon spacing, and save migration rules; it supersedes older progression notes below.
+The current world has six zones, 24 regions, 120 normal areas with 5–8 stages each, and six dedicated major boss arenas. See [WORLD.md](WORLD.md) for the authoritative route, zone tiers, weapon spacing, and save migration rules; it supersedes older progression notes below.
 
 ## Characters and progression
 

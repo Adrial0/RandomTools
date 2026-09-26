@@ -1,6 +1,6 @@
 # Enemy rosters
 
-Each region contains three areas and a seven-species roster. Scenes use at most three species, including bosses and reinforcements. Names below are generated from the current game definitions.
+Each region contains five areas and a seven-species roster. Scenes use at most three species, including bosses and reinforcements. Names below are generated from the current game definitions.
 
 | Zone | Region | Regular enemies |
 |---|---|---|
@@ -29,7 +29,7 @@ Each region contains three areas and a seven-species roster. Scenes use at most 
 | Kingdom | City | Bone Soldier, Ghost, Bell Knight, Skeleton Archer, Armored Guard, Siege Lobber, Death Priest |
 | Kingdom | Barracks | Royal Guard, Soul Wraith, Armor Golem, Bone Archer, Black Knight, Siege Cannon, Royal Mage |
 
-Normal area bosses are the region Guardian, Warden and Overlord; the third is a five-member pack. Regional Callers can summon only species already present in the scene.
+Normal area bosses are the region Guardian, Warden, Keeper, Champion and Overlord; the fifth is a five-member pack. Regional Callers can summon only species already present in the scene.
 
 | Arena | Single major boss |
 |---|---|
