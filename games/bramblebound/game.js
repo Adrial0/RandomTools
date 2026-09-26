@@ -55,7 +55,7 @@ function stats(h){
  case 4:h.range+=int*2;break;
  case 5:min+=str;max+=str;break;
  case 6:break;
- case 7:min*=1+str*.1;max*=1+str*.1;h.summonCount=(w?.summon?.count||1)*(1+Math.floor(int/10));break;
+ case 7:min*=1+str*.1;max*=1+str*.1;factor=1/(1+int*.02);break;
  }
  h.runeBonus={lifesteal:0,resistance:0,xpBonus:0,haste:0,damageBonus:0,rangeBonus:0,hpBonus:0,regen:0,dropBonus:0};
  for(const id of h.runes||[])for(const [name,value] of Object.entries(ITEMS[id]?.bonuses||{}))h.runeBonus[name]+=value;
@@ -327,11 +327,11 @@ function revive(){const h=heroes[selected];if(!h||h.hp>0||state==='setup')return
 function select(i){selected=i;build()}
 function manaPercent(h){const w=ITEMS[h.weapon];return h.classId!==7&&EFFECTS[w?.effect]?Math.min(100,h.mp/mpCost(w)*100):0}
 function itemSymbol(item){if(item.type==='rune'){const paths={ward:'M3 3H17V10L10 18 3 10ZM7 7H13V10L10 13 7 10Z',haste:'M3 3L9 10 3 17M10 3L16 10 10 17',might:'M3 17L13 7M8 3L17 12M10 2L18 10M2 13L7 18',reach:'M2 10H18M6 6L2 10 6 14M14 6L18 10 14 14',vitality:'M10 18L2 9V5L5 2 10 6 15 2 18 5V9Z',renewal:'M5 4Q17 0 17 11L14 8M15 16Q3 20 3 9L6 12'};return '<svg class="rune-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="'+paths[item.id.slice(5)]+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" stroke-linejoin="miter"/></svg>'}return socketItem(item.id)?item.symbol:classes[item.classId].symbol}
-function slotMarkup(type,i,id){const w=ITEMS[id],effect=EFFECTS[w?.effect],label=type==='bag'?'Inventory '+(i+1):'Character '+(i+1)+(type==='gear'?' weapon':' socket '+(type==='rune0'?1:2));return '<button class="slot weapon" data-slot="'+type+'" data-index="'+i+'" aria-label="'+label+': '+(w?w.name:'Empty')+'" style="color:'+(w?w.color:'#444')+'">'+(w?(w.type==='weapon'?'<canvas width="32" height="32" id="icon-'+type+'-'+i+'"></canvas>':itemSymbol(w)):'·')+'<small>'+(w?w.level:'')+'</small></button>'}
+function slotMarkup(type,i,id){const w=ITEMS[id],effect=EFFECTS[w?.effect],label=type==='bag'?'Inventory '+(i+1):'Character '+(i+1)+(type==='gear'?' weapon':' socket '+(type==='rune0'?1:2));return '<button class="slot weapon" data-slot="'+type+'" data-index="'+i+'" aria-label="'+label+': '+(w?w.name:'Empty')+'" style="color:'+(w?w.color:'#444')+'">'+(w?'<canvas width="32" height="32" id="icon-'+type+'-'+i+'"></canvas>':'·')+'<small>'+(w?w.level:'')+'</small></button>'}
 function build(){
  $('#party').innerHTML=heroes.map((h,i)=>'<button class="slot '+(selected===i?'selected':'')+'" data-hero="'+i+'" aria-label="Select character '+(i+1)+', '+classes[h.classId].name+'"><span class="life"><i style="width:'+h.hp/h.maxHp*100+'%"></i></span><span class="mana"><i style="width:'+manaPercent(h)+'%"></i></span><canvas width="32" height="36" id="portrait-'+i+'"></canvas><span class="num">'+(i+1)+'</span></button>').join('');
  $('#weapons').innerHTML=heroes.map((h,i)=>slotMarkup('gear',i,h.weapon)).join('');for(let r=0;r<2;r++)$('#runes-'+r).innerHTML=heroes.map((h,i)=>slotMarkup('rune'+r,i,h.runes[r])).join('');$('#items').innerHTML=inventory.map((id,i)=>slotMarkup('bag',i,id)).join('');
- for(const [type,ids] of [['gear',heroes.map(h=>h.weapon)],['bag',inventory]])ids.forEach((id,i)=>{const w=ITEMS[id];if(w?.type==='weapon'){const c=$('#icon-'+type+'-'+i).getContext('2d');c.clearRect(0,0,32,32);drawWeapon(c,w.classId,[13,21],1,0,w.color,w.instrument)}});
+ for(const [type,ids] of [['gear',heroes.map(h=>h.weapon)],['bag',inventory],['rune0',heroes.map(h=>h.runes[0])],['rune1',heroes.map(h=>h.runes[1])]])ids.forEach((id,i)=>{const w=ITEMS[id];if(w){const c=$('#icon-'+type+'-'+i).getContext('2d');c.clearRect(0,0,32,32);drawItemIcon(c,w)}});
  heroes.forEach((h,i)=>portrait($('#portrait-'+i).getContext('2d'),h.classId));restoreInfo();refresh();
 }
 function slotRunes(slot){return slot.type==='bag'?inventoryRunes[slot.index]:slot.type==='gear'?heroes[slot.index].runes:[]}
@@ -339,11 +339,11 @@ function inspect(id,runes=[]){
  inspectingItem=true;$('#character-info').hidden=true;$('#hover-info').hidden=false;
  const w=ITEMS[id],e=EFFECTS[w?.effect];$('#item-name').textContent=w?w.name:'Empty slot';
  if(socketItem(id)){$('#item-details').textContent='TYPE '+({gem:'Gem',rune:'Rune',soul:'Soul'}[w.type])+'\nCLASS All\nTIER '+w.tier;$('#item-effect').textContent=w.description;return}
- $('#item-details').textContent=w?'AT '+w.min+'–'+w.max+'\nAGI '+w.agi.join('–')+'\nRANGE '+w.range+'\nTYPE '+(w.effect||'Physical')+(w.summon?'\nSUMMONS '+w.summon.count+' '+w.summon.kind+'\nMINION HP '+w.summon.health:'\nMP '+mpCost(w))+'\nCLASS '+classes[w.classId].name+(w.arrows?'\nARROWS '+w.arrows:''):'Drag an item into this slot.';
+ $('#item-details').textContent=w?'AT '+w.min+'–'+w.max+'\nAGI '+w.agi.join('–')+'\nRANGE '+w.range+'\nTYPE '+(w.effect||'Physical')+(w.summon?'\nSUMMON '+w.summon.kind+' · 15s'+'\nMINION HP '+w.summon.health:'\nMP '+mpCost(w))+'\nCLASS '+classes[w.classId].name+(w.arrows?'\nARROWS '+w.arrows:''):'Drag an item into this slot.';
  $('#item-effect').textContent=e?effectText(w)+(w.classId===6?'':' Bonus AT '+e.min+'–'+e.max+'.')+(w.summon?' Every 5 minion attacks.':''):'';if(w?.classId===6)$('#item-effect').textContent=({line:'Piercing note.',cone:'Three-note fan.',pulse:'Broad pulse.',long:'Long piercing note.'}[w.note])+' '+$('#item-effect').textContent;if(w?.type==='weapon'&&runes.some(Boolean))$('#item-effect').textContent+='\n'+runes.filter(Boolean).map(id=>ITEMS[id].name).join(', ');
 }
 function refresh(){$('#world-button').hidden=state==='service';$('#inn').textContent='INN · Heal '+innCost()+' gold';const h=heroes[hoverHero??selected];if(!h)return;$('#gem-defense').hidden=!h.defense;$('#gem-defense').textContent='DEF +'+h.defense;$('#revive').hidden=h.hp>0||h!==heroes[selected];$('#revive').textContent='Revival $ '+revivalCost(h);$('#revive').disabled=gold<revivalCost(h);$('.stat-columns').hidden=h.hp<=0;$('#class-name').textContent=classes[h.classId].name;$('#lp').textContent=Math.ceil(h.hp)+'/'+h.maxHp;$('#attack').textContent=Math.max(1,Math.round((h.atMin+aura(h).flat)*aura(h).attack))+'–'+Math.max(1,Math.round((h.atMax+aura(h).flat)*aura(h).attack));$('#agi').textContent=effectiveAgi(h).join('–');$('#range').textContent=h.range;$('#level').textContent=h.level;$('#sp').textContent=h.sp;for(const [i,name] of ['str','dex','int'].entries()){$('#'+name).textContent=h[name];const btn=$('[data-stat="'+name+'"]');btn.disabled=h.sp<1;btn.title=STAT_HEHP[h.classId][i];btn.setAttribute('aria-label','Add '+name.toUpperCase()+': '+STAT_HEHP[h.classId][i]);}
- $('[data-stat="lp"]').hidden=h.sp<1||h.hp<=0;$('[data-stat="lp"]').disabled=h.sp<1||h.hp<=0;$('#priest-aura').hidden=![4,5,6,7].includes(h.classId);$('#priest-aura').textContent=h.classId===4?'AURA AT +'+h.str+'% · DEF +'+Number((h.dex*.2).toFixed(1))+'\nRANGE '+h.range+' · nearby allies':h.classId===5?'ON HIT +'+h.dex*.5+' HP':h.classId===6?'NOTES AT +'+h.str+'% · SPEED +'+h.dex+'%\nENEMY AT −'+h.str*.5+' · PHYS +'+h.dex*.25:h.classId===7?'SUMMONS '+h.summonCount+' · MINION HP '+Math.round((ITEMS[h.weapon]?.summon?.health||0)*(1+h.dex*.1)):'';
+ $('[data-stat="lp"]').hidden=h.sp<1||h.hp<=0;$('[data-stat="lp"]').disabled=h.sp<1||h.hp<=0;$('#priest-aura').hidden=![4,5,6,7].includes(h.classId);$('#priest-aura').textContent=h.classId===4?'AURA AT +'+h.str+'% · DEF +'+Number((h.dex*.2).toFixed(1))+'\nRANGE '+h.range+' · nearby allies':h.classId===5?'ON HIT +'+h.dex*.5+' HP':h.classId===6?'NOTES AT +'+h.str+'% · SPEED +'+h.dex+'%\nENEMY AT −'+h.str*.5+' · PHYS +'+h.dex*.25:h.classId===7?'SUMMON '+summonInterval(h).toFixed(2)+'s · MINION HP '+Math.round((ITEMS[h.weapon]?.summon?.health||0)*(1+h.dex*.1)):'';
  $('#stat-help').textContent='STR: '+STAT_HEHP[h.classId][0]+' | DEX: '+STAT_HEHP[h.classId][1]+' | INT: '+STAT_HEHP[h.classId][2];
  const w=ITEMS[h.weapon],e=EFFECTS[w?.effect];$('#mp').textContent=h.classId===7?'—':e?h.mp+'/'+mpCost(w):'—';$('#mp-fill').style.width=e&&h.classId!==7?h.mp/mpCost(w)*100+'%':'0%';$('#mp-hint').textContent=h.classId===7?(w?.summon?.kind||'No grimoire'):e?(h.int?Math.ceil((mpCost(w)-h.mp)/h.int)+' hits to '+e.name:'Spend a point in INT to charge '+e.name):w?'Physical weapon':'Unarmed';
  $('#xp').textContent=Math.floor(h.xp)+'/'+needed(h.level);$('#xp-fill').style.width=h.xp/needed(h.level)*100+'%';$('#gold').textContent=gold;$('#area').textContent=state==='map'?'World Map':state==='service'?(currentNode==='town'?'Town':'Rune Trader'):WORLD.find(n=>n.id==='a'+area).name+' : '+(stage+1)+'/'+stageCount()+(stage===stageCount()-1?' BOSS':'');$('#pause').textContent=paused?'Resume':'Pause';heroes.forEach((h,i)=>{const bar=$('[data-hero="'+i+'"] .life i');if(bar)bar.style.width=Math.max(0,h.hp/h.maxHp)*100+'%';const mpBar=$('[data-hero="'+i+'"] .mana i');if(mpBar)mpBar.style.width=manaPercent(h)+'%'});}
@@ -385,28 +385,29 @@ function rogueHands(h,shoulder,moving=0,air=0){
 function attackMotion(h){if(h.classId===1){h.daggerArms=h.daggerArms||[{angle:0,velocity:0},{angle:0,velocity:0}];h.attackHand=h.attackHand===0?1:0;const a=h.daggerArms[h.attackHand];a.angle=-.8;a.velocity=38;}h.anim=.38;h.swing=-.8;h.swingV=48;h.leanV+=(h.face||1)*25;h.vx=(h.vx||0)+(h.face||1)*(h.kind==='melee'?22:-9)}
 
 function combatAllies(){return [...heroes,...minions.filter(m=>m.owner.hp>0)]}
+function summonInterval(h){const w=ITEMS[h.weapon];return w?(w.agi[0]+w.agi[1])/60/(1+h.int*.02)/(1+h.runeBonus.haste)/(1+songTotal(h,'haste')):Infinity}
 function tickMinions(dt){
- minions=minions.filter(m=>heroes.includes(m.owner)&&m.owner.hp>0&&m.weapon===m.owner.weapon&&m.revision===m.owner.gearRevision);
+ for(const m of minions)m.life-=dt;
+ minions=minions.filter(m=>m.life>0&&m.hp>0&&heroes.includes(m.owner)&&m.owner.hp>0&&m.weapon===m.owner.weapon&&m.revision===m.owner.gearRevision);
  for(const h of heroes.filter(h=>h.classId===7)){
   const w=ITEMS[h.weapon],spec=w?.summon;if(h.hp<=0||!spec)continue;
-  let owned=minions.filter(m=>m.owner===h);
-  while(owned.length>h.summonCount){const m=owned.pop();minions.splice(minions.indexOf(m),1)}
-  for(const m of owned){const max=spec.health*(1+h.dex*.1);m.hp=Math.min(max,m.hp);m.maxHp=max;}
-  if(owned.length<h.summonCount&&grounded(h)){
-   h.summonTimer=(h.summonTimer||0)-dt;
-   if(h.summonTimer<=0){const maxHp=spec.health*(1+h.dex*.1);minions.push({owner:h,weapon:h.weapon,revision:h.gearRevision,x:h.x,y:h.y,hp:maxHp,maxHp,kind:spec.kind,vy:0,vx:0,cooldown:.5,respawn:0,range:spec.kind==='spirit'?65:15,hits:0});h.summonTimer=.3;}
+  for(const m of minions.filter(m=>m.owner===h)){const max=spec.health*(1+h.dex*.1);m.hp=Math.min(max,m.hp);m.maxHp=max}
+  if(h.summonRevision!==h.gearRevision){h.summonRevision=h.gearRevision;h.summonProgress=0}
+  h.summonProgress=Math.min(1,(h.summonProgress||0)+dt/summonInterval(h));
+  if(h.summonProgress>=1&&grounded(h)&&h!==drag){
+   const maxHp=spec.health*(1+h.dex*.1);minions.push({owner:h,weapon:h.weapon,revision:h.gearRevision,x:h.x,y:h.y,hp:maxHp,maxHp,kind:spec.kind,life:15,vy:0,vx:0,cooldown:.5,range:spec.kind==='spirit'?65:15,hits:0});h.summonProgress=0;
   }
  }
  for(const m of minions){
   const h=m.owner,w=ITEMS[h.weapon],spec=w.summon;
-  if(m.hp<=0){m.respawn+=dt;if(m.respawn>=spec.delay&&grounded(h)){m.hp=m.maxHp;m.x=h.x;m.y=h.y;m.respawn=0;}continue;}
+  if(m.hp<=0)continue;
   m.cooldown-=dt;
   const target=enemies.filter(e=>e.hp>0&&Math.abs(e.x-h.x)<150).sort((a,b)=>Math.abs(a.x-m.x)-Math.abs(b.x-m.x))[0];
   const following=h===drag||!grounded(h)||Math.abs(m.x-h.x)>150||!target;
   const goal=following?h:target,dist=Math.abs(goal.x-m.x);
   moveEnemy(m,dist>(following?18:m.range)?Math.sign(goal.x-m.x)*38*dt:0,dt);
   if(following||m.y<floor(m.x)-.5||dist>m.range||Math.abs(m.y-target.y)>35||m.cooldown>0)continue;
-  m.cooldown=(w.agi[0]+w.agi[1])/60/(1+h.runeBonus.haste+songTotal(m,'haste'));
+  m.cooldown=spec.attackInterval/(1+h.runeBonus.haste+songTotal(m,'haste'));
   const amount=Math.max(1,Math.round((roll(h.atMin,h.atMax)*spec.damage*(1+songTotal(m,'attack')))));
   if(m.kind==='spirit'){shoot(m,target,'magic',amount);shots[shots.length-1].summonOwner=h;shots[shots.length-1].summonRevision=m.revision;}else damage(target,amount+songTotal(target,'vulnerability'));
   m.hits++;if(w.effect&&m.hits%5===0)activate(h,target,w.effect);
@@ -479,6 +480,16 @@ function drawWeapon(c,id,hand,f,arm,color,instrument='lute',reach=({0:30,1:14,5:
  if(id===7){line(c,[[-7,-8],[0,-6],[7,-8],[7,2],[0,4],[-7,2],[-7,-8]],color);line(c,[[0,-6],[0,4]],'#b99558');line(c,[[-5,-4],[-2,-3]],'#eee');line(c,[[2,-3],[5,-4]],'#eee')}
  c.restore()}
 
+function drawItemIcon(c,w){
+ c.save();c.strokeStyle=w.color;c.fillStyle=w.color;c.lineWidth=1.5;
+ if(w.type==='weapon'){
+  if(w.classId===5){c.translate(10,23);c.scale(.55,.55);drawWeapon(c,5,[0,0],1,0,w.color)}
+  else if(w.classId===0){c.translate(15,23);c.scale(.85,.85);drawWeapon(c,0,[0,0],1,0,w.color)}
+  else drawWeapon(c,w.classId,w.classId===6?[12,19]:w.classId===7?[16,18]:[14,17],1,0,w.color,w.instrument);
+ }else if(w.type==='rune'){c.translate(5,5);c.scale(1.1,1.1);c.stroke(new Path2D(itemSymbol(w).match(/d="([^"]+)"/)[1]))}
+ else{line(c,[[16,5],[25,16],[16,27],[7,16],[16,5]],w.color);if(w.type==='gem'){c.beginPath();c.moveTo(16,7);c.lineTo(23,16);c.lineTo(16,25);c.lineTo(9,16);c.closePath();c.fill();line(c,[[16,7],[13,16],[16,25]],'#ffffff80')}else{line(c,[[16,10],[21,16],[16,22],[11,16],[16,10]],w.color);c.fillRect(15,14,2,4)}}
+ c.restore();
+}
 function portrait(c,classId){c.clearRect(0,0,32,36);const col=classes[classId].color;c.strokeStyle=col;c.strokeRect(13,4,6,6);line(c,[[16,11],[16,22],[11,31]],col);line(c,[[16,22],[21,31]],col);line(c,[[10,21],[12,15],[16,13],[21,17],[23,13]],col);drawWeapon(c,classId,[23,17],1,0,col);if(classId===1)drawWeapon(c,1,[10,21],1,-.3,col)}
 function serviceScenery(){const house=(x,label)=>{line(ctx,[[x,226],[x,181],[x+38,150],[x+76,181],[x+76,226]],'#b98539');line(ctx,[[x-5,183],[x+38,148],[x+81,183]],'#e5bb54');ctx.strokeStyle='#7a532b';ctx.strokeRect(x+28,201,20,25);ctx.fillStyle='#fff0ab';ctx.font='9px monospace';ctx.fillText(label,x+18,186)};house(12,currentNode==='town'?'SHOP':'RUNES');if(currentNode==='town')house(350,'INN');ctx.fillStyle='#bb9146';ctx.fillRect(538,207,34,9);ctx.fillRect(552,216,2,10);ctx.fillStyle='#000';ctx.font='7px monospace';ctx.fillText('MAP >',540,214)}
 function terrain(){ctx.fillStyle='#000';ctx.fillRect(0,0,576,256);const biome=state==='service'?0:Math.floor(area/3),cave=biome===2,palette=[['#c99449','#42ed28','#f1c270'],['#695d36','#7aa544','#95804b'],['#837568','#aaa6a0','#b1a092'],['#b88b42','#f1cf78','#e3b965'],['#555c67','#a6abb3','#808995'],['#849cad','#effaff','#bcd8e8']][biome]||['#849cad','#effaff','#bcd8e8'];for(let x=0;x<576;x++){const y=floor(x);ctx.fillStyle=palette[0];ctx.fillRect(x,y,1,256-y);ctx.fillStyle=palette[1];ctx.fillRect(x,y,1,1);ctx.fillStyle=palette[2];for(let py=y+3+(x%3);py<256;py+=4)if(x%3===0)ctx.fillRect(x,py,1,1)}if(biome>=3){for(let i=0;i<6;i++){const x=45+i*83,y=floor(x);if(biome===3){line(ctx,[[x,y],[x,y-25],[x-6,y-20],[x-6,y-13]],'#758344')}else{line(ctx,[[x-27,y],[x,y-65-(i%3)*15],[x+32,y]],biome===5?'#688597':'#414750');if(biome===5)line(ctx,[[x-6,y-51-(i%3)*15],[x,y-65-(i%3)*15],[x+7,y-50-(i%3)*15]],'#e2f3ff')}}}if(cave){ctx.fillStyle='#6c635b';for(let x=0;x<576;x+=8)ctx.fillRect(x,0,8,7+(x*7)%17)}if(['fight','walk'].includes(state)&&stageExitOpen()){ctx.fillStyle=stageExitOpen()?'#be8d46':'#74574a';ctx.fillRect(543,205,31,10);ctx.fillRect(548,215,2,11);ctx.fillStyle='#000';ctx.font='8px monospace';ctx.fillText('NEXT>',544,213)}}
@@ -539,7 +550,7 @@ function drawNumbers(){
  c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,w,h);c.setTransform(w/576,0,0,h/256,0,0);c.font='bold 7px monospace';c.textAlign='center';c.lineJoin='round';c.lineWidth=1.5;
  for(const n of numbers){c.globalAlpha=Math.min(1,n.life*5);c.strokeStyle='#000';c.strokeText(String(n.text),n.x,n.y);c.fillStyle=n.color;c.fillText(String(n.text),n.x,n.y)}c.globalAlpha=1;
 }
-function draw(){ctx.imageSmoothingEnabled=false;terrain();drawHazards();if(state==='service')serviceScenery();enemies.forEach(drawEnemy);drawMinions();fields.forEach(f=>{ctx.fillStyle=f.color;for(let i=0;i<10;i++)ctx.fillRect(f.x-25+i*5,f.y-2-(i%3)*2,2,2)});flashes.forEach(f=>line(ctx,[[f.x,f.y],[(f.x+f.tx)/2,f.ty-12],[f.tx,f.ty]],f.color));potions.forEach(p=>{ctx.fillStyle='#eeeeee';ctx.fillRect(p.x-1,p.y-9,3,3);ctx.fillStyle='#f44264';ctx.fillRect(p.x-3,p.y-6,7,5);ctx.fillStyle='#ff9aaf';ctx.fillRect(p.x-2,p.y-5,2,2)});loot.forEach(l=>{ctx.fillStyle=ITEMS[l.item].color;ctx.fillRect(Math.round(l.x),l.y-5,3,5)});heroes.forEach((h,i)=>{if(h.classId===4&&h.hp>0&&(i===selected||h.auraFlash>0)){ctx.strokeStyle=h.auraFlash>0?'#72d9ff':'#163440';ctx.beginPath();ctx.arc(h.x,h.y-13,h.range,0,Math.PI*2);ctx.stroke()}stick(ctx,h,i===selected)});shots.forEach(s=>{if(s.kind==='note'){if(s.radius)line(ctx,[[s.x-4,s.y-s.radius],[s.x+2,s.y],[s.x-4,s.y+s.radius]],'#f0d580');else line(ctx,[[s.x,s.y-5],[s.x,s.y+2],[s.x-3,s.y+3]],'#f0d580');return}ctx.fillStyle=s.kind==='heal'?'#60ff70':s.kind==='magic'?'#df81ff':s.kind==='enemy'?'#ed9552':'#eee';s.kind==='arrow'?line(ctx,[[s.x-s.vx/22,s.y-s.vy/22],[s.x,s.y]],'#eee'):ctx.fillRect(Math.round(s.x),Math.round(s.y),2,2)});ctx.font='7px monospace';ctx.textAlign='center';drawNumbers();ctx.textAlign='left';if(paused){ctx.fillStyle='#ffffff';ctx.font='12px monospace';ctx.fillText('PAUSED',233,90)}}
+function draw(){ctx.imageSmoothingEnabled=false;terrain();drawHazards();if(state==='service')serviceScenery();enemies.forEach(drawEnemy);drawMinions();fields.forEach(f=>{ctx.fillStyle=f.color;for(let i=0;i<10;i++)ctx.fillRect(f.x-25+i*5,f.y-2-(i%3)*2,2,2)});flashes.forEach(f=>line(ctx,[[f.x,f.y],[(f.x+f.tx)/2,f.ty-12],[f.tx,f.ty]],f.color));potions.forEach(p=>{ctx.fillStyle='#eeeeee';ctx.fillRect(p.x-1,p.y-9,3,3);ctx.fillStyle='#f44264';ctx.fillRect(p.x-3,p.y-6,7,5);ctx.fillStyle='#ff9aaf';ctx.fillRect(p.x-2,p.y-5,2,2)});loot.forEach(l=>{ctx.save();ctx.translate(l.x-10,l.y-20);ctx.scale(.625,.625);drawItemIcon(ctx,ITEMS[l.item]);ctx.restore()});heroes.forEach((h,i)=>{if(h.classId===4&&h.hp>0&&(i===selected||h.auraFlash>0)){ctx.strokeStyle=h.auraFlash>0?'#72d9ff':'#163440';ctx.beginPath();ctx.arc(h.x,h.y-13,h.range,0,Math.PI*2);ctx.stroke()}stick(ctx,h,i===selected)});shots.forEach(s=>{if(s.kind==='note'){if(s.radius)line(ctx,[[s.x-4,s.y-s.radius],[s.x+2,s.y],[s.x-4,s.y+s.radius]],'#f0d580');else line(ctx,[[s.x,s.y-5],[s.x,s.y+2],[s.x-3,s.y+3]],'#f0d580');return}ctx.fillStyle=s.kind==='heal'?'#60ff70':s.kind==='magic'?'#df81ff':s.kind==='enemy'?'#ed9552':'#eee';s.kind==='arrow'?line(ctx,[[s.x-s.vx/22,s.y-s.vy/22],[s.x,s.y]],'#eee'):ctx.fillRect(Math.round(s.x),Math.round(s.y),2,2)});ctx.font='7px monospace';ctx.textAlign='center';drawNumbers();ctx.textAlign='left';if(paused){ctx.fillStyle='#ffffff';ctx.font='12px monospace';ctx.fillText('PAUSED',233,90)}}
 
 function openMainMenu(){if(sceneFade)return;save();release();closeSettings();menuOpen=true;$('#main-menu').hidden=false;renderSaveSlots()}
 function renderSaveSlots(){$('#save-slots').innerHTML=[1,2,3].map(slot=>{const s=readSlot(slot),valid=Array.isArray(s?.heroes)&&s.heroes.length===4&&s.heroes.every(h=>classes[h.classId]);return '<button data-save-slot="'+slot+'"><strong>SAVE '+slot+'</strong><span>'+(valid?s.heroes.map(h=>classes[h.classId].name+' '+h.level).join(' · '):'New adventure')+'</span>'+(valid?'<small>'+Math.floor(s.gold||0)+' gold</small>':'')+'</button>'}).join('')}

@@ -33,7 +33,7 @@ for(let c=0;c<8;c++){
 items['3-ice'].agi=[80,90];
 for(const [suffix,name,tier,arrows] of [['poison2','Twin Poison Bow',2,2],['poison3','Triple Poison Bow',4,3],['ice3','Triple Ice Bow',5,3],['steel4','Volley Bow',6,4]]){const source=suffix.startsWith('ice')?'2-ice':suffix.startsWith('steel')?'2-steel':'2-poison';const id='2-'+suffix;items[id]={...items[source],id,name,tier,level:tier,arrows,priceIndex:tier+5,min:items[source].min+tier,max:items[source].max+tier*2}}
 for(const w of Object.values(items)){
- if(w.classId===7){const swarm=['poison','ice','stun'].includes(w.effect);w.summon={kind:swarm?'spirit':w.tier>=2?'golem':'skeleton',count:swarm?3:1,health:swarm?18:w.tier>=2?100:50,damage:swarm?.4:w.tier>=2?1.3:1,delay:w.tier>=2&&!swarm?7:4};w.name=(w.effect?effects[w.effect].name.split(' ')[0]+' ':'')+(swarm?'Spirit':w.tier>=2?'Golem':'Skeleton')+' Grimoire';}
+ if(w.classId===7){const swarm=['poison','ice','stun'].includes(w.effect);w.summon={kind:swarm?'spirit':w.tier>=2?'golem':'skeleton',health:swarm?18:w.tier>=2?100:50,damage:swarm?.4:w.tier>=2?1.3:1,attackInterval:swarm?1:w.tier>=2?2:1.5,lifetime:15};w.agi=swarm?[55,65]:w.tier>=2?[140,160]:[85,95];w.name=(w.effect?effects[w.effect].name.split(' ')[0]+' ':'')+(swarm?'Spirit':w.tier>=2?'Golem':'Skeleton')+' Grimoire';}
  if(w.classId===6){
  const designs={basic:['Lute','line',null],iron:['Flute','long',null],fire:['Encore Lute','line','encore'],ice:['Sustaining Harp','cone','sustain'],poison:['Crescendo Flute','long','crescendo'],heavy:['War Horn','pulse',null],lightning:['Encore Horn','pulse','encore'],stun:['Crescendo Horn','pulse','crescendo'],slow:['Sustaining Flute','long','sustain'],heal:['Restoring Harp','cone','restore'],drain:['Restoring Lute','line','restore'],steel:['Grand Lute','line',null]};
  const d=designs[w.id.split('-')[1]];[w.name,w.note,w.effect]=d;w.instrument={line:'lute',long:'flute',cone:'harp',pulse:'horn'}[w.note];w.range={line:110,long:140,cone:100,pulse:75}[w.note];w.agi=[55,65];w.color=w.effect?effects[w.effect].color:'#f0d580';
@@ -69,7 +69,7 @@ const descriptions=[
  ['Nearby allies gain +1% AT, +3 HP','Nearby allies gain +0.2 defense, +3 HP','+1 MP per aura pulse, +2 RANGE, +2 HP'],
  ['+1 minimum and maximum AT, +4 HP','Heal 0.5 HP per enemy struck, +3 HP','+1 MP per hit, +2 HP'],
  ['Notes: allies +1% AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 physical damage taken; +2 HP','+1 MP per hit, +2 HP'],
- ['+10% minion damage, +3 HP','+10% minion health, +3 HP','One additional base group per 10 INT, +2 HP']
+ ['+10% minion damage, +3 HP','+10% minion health, +3 HP','2% faster summoning, +2 HP']
 ];
 globalThis.BrambleGear={items,effects,descriptions};
 })();
