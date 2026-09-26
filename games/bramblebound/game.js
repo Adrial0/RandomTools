@@ -61,6 +61,11 @@ const stageCount=()=>areaInfo().major?1:5+(areaInfo().region+areaInfo().local)%4
 let completed=[],currentNode='town',mapReturn=null,potions=[],hoverHero=null,inspectingItem=false,saveTime=0;
 let heroes=[],enemies=[],shots=[],numbers=[],loot=[],inventory=Array(15).fill(null),area=0,gold=0,selected=0,state='setup',paused=false,speed=1,drag=null,time=0,last=0,uid=0,uiTime=0,fields=[],flashes=[],gearDrag=null,pickedSlot=null,suppressGearClick=false;
 const floor=x=>{if(serviceKind()||areaInfo().major)return 226;const a=(area+stage)%3;return a===0?(x<112?226:x<365?219:226):a===1?(x<180?226:x<310?207:226):(x<135?226:x<245?215:x<365?204:226)};
+function hasRoof(){const node=areaInfo();return currentNode[0]==='a'&&!node.major&&['Caverns','Tombs','Caves','Depths','Sewers'].includes(ZONES[node.zone].regions[node.region%4])}
+function roofHeight(x){return 7+((Math.floor(Math.max(0,Math.min(575,x))/8)*8*7)%17)}
+function ceiling(x){return hasRoof()?roofHeight(x):-Infinity}
+function roofLimit(x,height=32,radius=6){if(!hasRoof())return -Infinity;let roof=0;for(let px=Math.floor((x-radius)/8)*8;px<=x+radius;px+=8)roof=Math.max(roof,roofHeight(px));return roof+height+1}
+function collideRoof(body,height=32,radius=6){const limit=roofLimit(body.x,height,radius);if(body.y<limit){body.y=limit;body.vy=Math.max(0,body.vy||0)}}
 function needed(level){return 100+level*100+level*level*25}
 function mpCost(w){return w?.classId===3?0:(EFFECTS[w?.effect]?.mp||0)}
 function stats(h){
@@ -255,7 +260,7 @@ function launchHazard(e,target,kind,offset=0,amount=enemyDamage(e,3)){
 function physicalEnemy(e){return ['spider','roller','flyer','hopper'].includes(e.type)}
 function stepEnemyPhysics(e,target,dt){
  const direction=Math.sign(target.x-e.x),distance=Math.abs(target.x-e.x),slow=slowFactor(e),ground=e.y>=floor(e.x)-.5;
- if(e.type==='flyer'){const goalY=Math.max(45,Math.min(floor(target.x)-5,target.y-10+Math.sin(time*2.4+e.seed)*18)),goalX=target.x+Math.sin(time*3+e.seed)*14;e.vx+=((goalX-e.x)*2-e.vx*2.2)*dt;e.vy+=((goalY-e.y)*3-e.vy*2.5+Math.sin(time*19+e.seed)*90)*dt;e.vx=Math.max(-55,Math.min(55,e.vx));e.vy=Math.max(-65,Math.min(65,e.vy));e.x=Math.max(8,Math.min(569,e.x+e.vx*dt*slow));e.y=Math.max(25,Math.min(floor(e.x)-4,e.y+e.vy*dt*slow));return}
+ if(e.type==='flyer'){const goalY=Math.max(45,Math.min(floor(target.x)-5,target.y-10+Math.sin(time*2.4+e.seed)*18)),goalX=target.x+Math.sin(time*3+e.seed)*14;e.vx+=((goalX-e.x)*2-e.vx*2.2)*dt;e.vy+=((goalY-e.y)*3-e.vy*2.5+Math.sin(time*19+e.seed)*90)*dt;e.vx=Math.max(-55,Math.min(55,e.vx));e.vy=Math.max(-65,Math.min(65,e.vy));e.x=Math.max(8,Math.min(569,e.x+e.vx*dt*slow));e.y=Math.max(25,Math.min(floor(e.x)-4,e.y+e.vy*dt*slow));collideRoof(e);return}
  if(e.type==='hopper'){e.hopCooldown-=dt;e.crouching=ground&&e.hopCooldown<.4;if(ground&&e.hopCooldown<=0&&distance>e.range){e.vy=-155;e.vx=direction*65*slow;e.hopCooldown=1.1;e.crouching=false}if(ground&&e.vy>=0)e.vx*=Math.exp(-18*dt)}
  else{const desired=distance>e.range?direction*e.speed*slow:0;e.vx+=(desired-e.vx)*(1-Math.exp(-(e.type==='roller'?1.8:6)*dt))}
  const before=e.x;moveEnemy(e,(e.vx+(e.kick||0))*dt,dt);e.rotation+=(e.x-before)/9;
@@ -296,7 +301,7 @@ function tickHazards(dt){
  for(const p of hazards){p.age+=dt;p.life-=dt;const ax=p.x,ay=p.y;
  if(p.kind==='missile'&&p.age<.8&&p.target.hp>0){const angle=Math.atan2(p.vy,p.vx),goal=Math.atan2(p.target.y-13-p.y,p.target.x-p.x),delta=Math.atan2(Math.sin(goal-angle),Math.cos(goal-angle)),turn=Math.max(-1.5*dt,Math.min(1.5*dt,delta));p.vx=Math.cos(angle+turn)*90;p.vy=Math.sin(angle+turn)*90}
  p.vy+=(p.gravity||0)*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
- const wall=terrainHit(ax,ay,p.x,p.y);if(wall){p.x=wall.x;p.y=wall.y;if(p.kind!=='bomb'){p.life=0;continue}}
+ const wall=terrainHit(ax,ay,p.x,p.y);if(wall){p.x=wall.x;p.y=wall.y;if(p.kind!=='bomb'){p.life=0;continue}else if(wall.y===ceiling(wall.x)){p.y=wall.y+1;p.vy=Math.abs(p.vy)*.4}}
  if(p.kind==='bomb'){p.fuse-=dt;if(p.y>=floor(p.x)-3){p.y=floor(p.x)-3;p.vx=0;p.vy=0}if(p.fuse<=0){explode(p);continue}}
  else{const hit=combatAllies().filter(h=>h.hp>0&&segmentDistance(h.x,h.y-13,ax,ay,p.x,p.y)<(p.kind==='rock'?10:7)).sort((a,b)=>Math.hypot(a.x-ax,a.y-13-ay)-Math.hypot(b.x-ax,b.y-13-ay))[0];if(hit){damage(hit,p.amount,p.element,true,p.dodgeable);p.life=0}if(p.y>=floor(p.x))p.life=0}
  if(p.x<-30||p.x>606||p.y>280)p.life=0;
@@ -315,7 +320,7 @@ function drawHazards(){
  for(const b of blasts){ctx.strokeStyle='#ffbd68';ctx.beginPath();ctx.arc(b.x,b.y,b.radius*(1-b.life/.4),0,Math.PI*2);ctx.stroke()}
 }
 
-function terrainHit(ax,ay,bx,by){const steps=Math.max(1,Math.ceil(Math.hypot(bx-ax,by-ay)/2));for(let i=0;i<=steps;i++){const t=i/steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;if(y>=floor(x))return {x,y:floor(x),t}}return null}
+function terrainHit(ax,ay,bx,by){const steps=Math.max(1,Math.ceil(Math.hypot(bx-ax,by-ay)/2));for(let i=0;i<=steps;i++){const t=i/steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;if(y>=floor(x))return {x,y:floor(x),t};if(y<=ceiling(x))return {x,y:ceiling(x),t}}return null}
 function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp<=0||s.summonOwner.gearRevision!==s.summonRevision)){s.life=0;continue}s.life-=dt;const ax=s.x,ay=s.y;s.vy+=(s.gravity||0)*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;const wall=terrainHit(ax,ay,s.x,s.y),bx=wall?wall.x:s.x,by=wall?wall.y:s.y;
  if(s.kind==='note'){
   const owner=s.attack.owner;
@@ -406,11 +411,11 @@ function panMap(dt){const chart=$('.map-chart');chart.scrollLeft=Math.max(0,Math
 function openMap(){mapPan=0;if(state==='setup')return;if(['fight','walk','service'].includes(state)){mapReturn=state;release()}state='map';$('#services').hidden=true;$('#service-controls').hidden=true;$('#world').hidden=false;$('#result').hidden=true;renderMap();const chart=$('.map-chart'),node=WORLD.find(n=>n.id===currentNode);chart.scrollLeft=Math.max(0,(node?.x||0)/MAP_WIDTH*(chart.scrollWidth||chart.clientWidth||0)-(chart.clientWidth||0)*.5);refresh();save()}
 function renderMap(){
  const unlocked=unlockedNodes(),icons={Fort:'♜',Pyramid:'△',Lighthouse:'♜',Citadel:'♜',Forge:'⚒',Castle:'♜'};
- $('#map-nodes').innerHTML=WORLD.filter(n=>unlocked.has(n.id)).map(n=>'<button class="map-node '+(n.major?'landmark ':'')+(n.kind?'service-node ':'')+(completed.includes(n.id)?'cleared ':'')+(currentNode===n.id?'current':'')+'" data-node="'+n.id+'" style="left:'+n.x/MAP_WIDTH*100+'%;top:'+n.y+'%" aria-label="'+n.name+(completed.includes(n.id)?', cleared':', unlocked')+'"><span>'+(n.major?icons[n.name]:n.kind?'◆':'▪')+'</span><small>'+(n.major||n.kind?n.name:n.local+1)+'</small><em>'+n.name+'</em></button>').join('');
+ $('#map-nodes').innerHTML=WORLD.filter(n=>unlocked.has(n.id)).map(n=>'<button class="map-node '+(n.major?'landmark ':'')+(n.kind?'service-node ':'')+(completed.includes(n.id)?'cleared ':'')+(currentNode===n.id?'current':'')+'" data-node="'+n.id+'" style="left:'+n.x/MAP_WIDTH*100+'%;top:'+n.y+'%" aria-label="'+n.name+(completed.includes(n.id)?', cleared':', unlocked')+'"><span>'+(n.major?icons[n.name]:n.kind?'◆':'▪')+'</span>'+(n.major||n.kind?'<small>'+n.name+'</small>':'')+'<em>'+n.name+'</em></button>').join('');
  $('#map-art').innerHTML=ZONES.map((z,i)=>{
   const x=i*512,c=z.color;
-  let art='<g transform="translate('+x+' 0)"><path d="M12 155 20 128 15 106 29 78 25 52 47 35 73 31 85 18 115 23 135 16 163 25 190 19 211 30 239 24 269 32 299 20 330 25 353 15 379 22 411 18 435 31 470 25 497 44 491 79 502 98 490 121 494 149 470 161 437 155 411 168 380 162 351 171 322 158 292 165 260 154 230 164 199 158 165 170 138 161 111 169 85 159 60 169 34 163Z" fill="#050805" stroke="'+c+'" stroke-width=".7"/><text x="255" y="11" fill="'+c+'" text-anchor="middle" font-size="8">'+z.name.toUpperCase()+'</text>';
-  for(let r=0;r<4;r++)art+='<text x="'+(78+r*112)+'" y="177" fill="'+c+'" text-anchor="middle" font-size="6">'+z.regions[r]+'</text>';
+  const top='M0 45 22 39 47 35 73 31 85 18 115 23 135 16 163 25 190 19 211 30 239 24 269 32 299 20 330 25 353 15 379 22 411 18 435 31 470 25 494 38 512 45',bottom='M512 150 492 156 470 161 437 155 411 168 380 162 351 171 322 158 292 165 260 154 230 164 199 158 165 170 138 161 111 169 85 159 60 169 34 163 14 155 0 150';
+  let art='<g transform="translate('+x+' 0)"><path d="'+top+' L512 150 '+bottom.replace('M512 150','L512 150')+' Z" fill="#050805"/><path d="'+top+' '+bottom+(i===0?' M0 45 Q12 94 0 150':'')+(i===ZONES.length-1?' M512 45 Q500 94 512 150':'')+'" fill="none" stroke="'+c+'" stroke-width=".7"/><text x="255" y="11" fill="'+c+'" text-anchor="middle" font-size="8">'+z.name.toUpperCase()+'</text>';
   const lake=i===0||i===2||i===3;
   if(lake){art+='<path d="M232 71 248 60 270 66 281 82 274 104 253 111 236 98 229 82Z" fill="#071b2a" stroke="#357ba0" stroke-width=".7"/>';for(let k=0;k<22;k++){const px=239+(k*13)%33,py=72+Math.floor(k/4)*6;art+='<path d="M'+px+' '+py+'l2 -1 2 1 2 -1" fill="none" stroke="#295c86" stroke-width=".6"/>';}}
   for(let k=0;k<70;k++){
@@ -484,8 +489,8 @@ function update(dt){if(settingsOpen||menuOpen)return;time+=dt;for(const h of her
 function line(c,points,color){c.strokeStyle=color;c.lineWidth=1;c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(Math.round(x)+.5,Math.round(y)+.5):c.moveTo(Math.round(x)+.5,Math.round(y)+.5));c.stroke()}
 function grounded(h){return h!==drag&&h.y>=floor(h.x)-.5&&Math.abs(h.vy||0)<1}
 function springPose(h,dt){h.crouchV=(h.crouchV||0)+(-(h.crouch||0)*180-(h.crouchV||0)*17)*dt;h.crouch=Math.max(0,Math.min(7,(h.crouch||0)+h.crouchV*dt))}
-function stepHeld(h,dt){if(!h.dragTarget)return;const target=h.dragTarget,boost=Math.min(12,(h.cursorSpeed||0)/200),stiffness=110*(1+boost),damping=15*Math.sqrt(1+boost),limit=420+boost*180;h.cursorSpeed=(h.cursorSpeed||0)*Math.exp(-5*dt);h.vx=(h.vx||0)+((target.x-h.x)*stiffness-(h.vx||0)*damping)*dt;h.vy=(h.vy||0)+((target.y-h.y)*stiffness-(h.vy||0)*damping+100)*dt;h.vx=Math.max(-limit,Math.min(limit,h.vx));h.vy=Math.max(-limit-60,Math.min(limit+60,h.vy));h.x=Math.max(8,Math.min(567,h.x+h.vx*dt));h.y=Math.max(8,Math.min(floor(h.x),h.y+h.vy*dt));h.leanV=(h.leanV||0)+((h.vx*.06-(h.lean||0))*70-(h.leanV||0)*8)*dt;h.lean=(h.lean||0)+h.leanV*dt;h.swingV=(h.swingV||0)+(-h.swing*70-(h.swingV||0)*7-h.vx*.15)*dt;if(!Number.isFinite(h.swingV))h.swingV=0;h.swing=(h.swing||0)+h.swingV*dt;springPose(h,dt)}
-function moveEnemy(e,dx,dt){const nx=Math.max(8,Math.min(569,e.x+dx));e.vy=e.vy||0;if(floor(nx)<e.y-.5&&e.y>=floor(e.x)-.5){e.vy=-Math.sqrt(2*390*(e.y-floor(nx)+3))}else if(floor(nx)>=e.y-.5)e.x=nx;e.vy+=390*dt;e.y+=e.vy*dt;if(e.y>=floor(e.x)&&e.vy>=0){e.y=floor(e.x);e.vy=0}}
+function stepHeld(h,dt){if(!h.dragTarget)return;const target=h.dragTarget,boost=Math.min(12,(h.cursorSpeed||0)/200),stiffness=110*(1+boost),damping=15*Math.sqrt(1+boost),limit=420+boost*180;h.cursorSpeed=(h.cursorSpeed||0)*Math.exp(-5*dt);h.vx=(h.vx||0)+((target.x-h.x)*stiffness-(h.vx||0)*damping)*dt;h.vy=(h.vy||0)+((target.y-h.y)*stiffness-(h.vy||0)*damping+100)*dt;h.vx=Math.max(-limit,Math.min(limit,h.vx));h.vy=Math.max(-limit-60,Math.min(limit+60,h.vy));h.x=Math.max(8,Math.min(567,h.x+h.vx*dt));h.y=Math.max(8,Math.min(floor(h.x),h.y+h.vy*dt));collideRoof(h);h.leanV=(h.leanV||0)+((h.vx*.06-(h.lean||0))*70-(h.leanV||0)*8)*dt;h.lean=(h.lean||0)+h.leanV*dt;h.swingV=(h.swingV||0)+(-h.swing*70-(h.swingV||0)*7-h.vx*.15)*dt;if(!Number.isFinite(h.swingV))h.swingV=0;h.swing=(h.swing||0)+h.swingV*dt;springPose(h,dt)}
+function moveEnemy(e,dx,dt){const nx=Math.max(8,Math.min(569,e.x+dx));e.vy=e.vy||0;if(floor(nx)<e.y-.5&&e.y>=floor(e.x)-.5){e.vy=-Math.sqrt(2*390*(e.y-floor(nx)+3))}else if(floor(nx)>=e.y-.5)e.x=nx;e.vy+=390*dt;e.y+=e.vy*dt;if(e.y>=floor(e.x)&&e.vy>=0){e.y=floor(e.x);e.vy=0}collideRoof(e,e.type==='boss'?65:32)}
 function stepBody(h,dt){springPose(h,dt);
  h.vx=Number.isFinite(h.vx)?h.vx:0;h.drive=h.drive||0;h.lean=h.lean||0;h.leanV=h.leanV||0;h.swing=h.swing||0;h.swingV=h.swingV||0;h.gait=h.gait||0;
  const grounded=h.y>=floor(h.x)-.5,oldV=h.vx;
@@ -493,6 +498,7 @@ function stepBody(h,dt){springPose(h,dt);
  let nx=h.x+h.vx*dt;if(floor(nx)<h.y-.5){if(grounded)h.vy=-Math.sqrt(2*390*(h.y-floor(nx)+3));nx=h.x}
  h.x=Math.max(8,Math.min(568,nx));h.vy+=390*dt;h.y+=h.vy*dt;
  if(h.y>=floor(h.x)){if(h.vy>80){h.leanV+=Math.sign(h.vx||1)*h.vy*.012;h.crouch=Math.min(7,h.vy*.018);h.crouchV=15;h.swingV+=(h.face||1)*h.vy*.025}h.y=floor(h.x);h.vy=0}
+ collideRoof(h);
  const targetLean=h.vx*.035+(h.vx-oldV)*.045;
  h.leanV+=((targetLean-h.lean)*95-h.leanV*16)*dt;h.lean+=h.leanV*dt;
  h.swingV+=(-h.swing*115-h.swingV*9)*dt;h.swing+=h.swingV*dt;
@@ -656,7 +662,7 @@ function serviceScenery(){const house=(x,label)=>{line(ctx,[[x,226],[x,181],[x+3
 function terrain(){
  ctx.fillStyle='#000';ctx.fillRect(0,0,576,256);
  const node=areaInfo(),zone=ZONES[node.zone],region=zone.regions[node.region%4],palette=state==='service'?ZONES[0].palette:zone.palette;
- const cave=['Caverns','Tombs','Caves','Depths','Sewers'].includes(region);
+ const cave=hasRoof();
  ctx.strokeStyle=palette[2];ctx.globalAlpha=.35;
  for(let i=0;i<7;i++){
   const x=i*88+18,y=floor(x);
@@ -667,7 +673,7 @@ function terrain(){
  }
  ctx.globalAlpha=1;
  for(let x=0;x<576;x++){const y=floor(x);ctx.fillStyle=palette[0];ctx.fillRect(x,y,1,256-y);ctx.fillStyle=palette[1];ctx.fillRect(x,y,1,1);ctx.fillStyle=palette[2];for(let py=y+3+(x%3);py<256;py+=4)if(x%3===0)ctx.fillRect(x,py,1,1)}
- if(cave){ctx.fillStyle=palette[0];for(let x=0;x<576;x+=8)ctx.fillRect(x,0,8,7+(x*7)%17)}
+ if(cave){ctx.fillStyle=palette[0];for(let x=0;x<576;x+=8)ctx.fillRect(x,0,8,ceiling(x))}
  if(node.major&&state!=='service'){
   ctx.strokeStyle=zone.color;
   if(node.name==='Pyramid'){line(ctx,[[330,226],[443,60],[556,226],[330,226]],zone.color);line(ctx,[[443,60],[467,226]],zone.color);ctx.strokeRect(432,192,22,34);}
