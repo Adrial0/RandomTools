@@ -1,5 +1,9 @@
 # Current class roster
 
+Rogue: 110 base HP. STR adds minimum and maximum AT. DEX recharges an automatic dodge in `6 / (1 + DEX * 0.05)` seconds. Only a successful dodge starts the timer; incoming damage during recharge does not reset it. Direct enemy attacks and projectiles can be dodged, but boss specials bypass it without consuming readiness. INT grants 1% basic-attack critical chance per point (up to 100%) and normal MP gain; critical basic attacks deal double damage. The stat panel shows recharge time, readiness and critical chance.
+
+The final areas of each three-area region (indices 2, 5, 8, 11, 14 and 17) feature five smaller guardians. Each has 24% of the ordinary boss HP and 55% of its damage, normal-sized artwork and collision bounds, and a single telegraphed dart special. Boss control resistance remains. All five must die before the exit countdown starts. Boss XP is divided between them, with the boss equipment drop roll awarded on the last death. These encounters still contain at most three enemy species.
+
 Existing numeric class and equipment IDs stay stable for saved parties. Swordsman becomes Warrior, Boxer becomes Rogue, Archer becomes Ranger, Spearman becomes Reaper, Gunner becomes Bard, and Whipper becomes Summoner. Mage and Priest retain their names.
 
 Warrior swords and Reaper scythes use sampled blade segments over a swing. Rendering uses those same segments. Every contacted enemy can take one basic hit per swing; terrain clips contacts. Rogue dagger strikes remain single-target. Airborne or dragged characters cannot strike.

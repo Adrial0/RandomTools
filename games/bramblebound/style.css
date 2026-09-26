@@ -26,3 +26,4 @@ button,select{font:inherit;border:1px solid #80602f;border-radius:0;cursor:point
 #save-slots button:hover{background:#292d1d}#save-slots strong{color:#ebc079}#save-slots span{font-size:11px;line-height:1.6}#save-slots small{color:#bbb}
 .settings-modal{gap:5px;overflow:auto}.settings-modal h2{margin:3px}.settings-modal #auto-move-characters{grid-template-columns:repeat(2,1fr);gap:7px 20px}.settings-modal>button{padding:3px 18px}.settings-modal #new{margin-top:3px}#setup-back{margin-top:7px}
 #app .weapon canvas{width:auto;height:100%;max-width:100%;aspect-ratio:1;object-fit:contain;pointer-events:none}
+#dodge-meter{font-size:9px;margin-top:4px;color:#b9e8ff}.dodge-bar{height:3px;background:#51452f;margin-top:2px;width:90%}.dodge-bar i{display:block;height:100%;background:#b9e8ff}
