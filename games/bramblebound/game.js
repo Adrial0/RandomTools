@@ -402,22 +402,54 @@ function tickMinions(dt){
   const h=m.owner,w=ITEMS[h.weapon],spec=w.summon;
   if(m.hp<=0)continue;
   m.cooldown-=dt;
+  if(m.attack){tickMinionAttack(m,dt);continue}
   const target=enemies.filter(e=>e.hp>0&&Math.abs(e.x-h.x)<150).sort((a,b)=>Math.abs(a.x-m.x)-Math.abs(b.x-m.x))[0];
   const following=h===drag||!grounded(h)||Math.abs(m.x-h.x)>150||!target;
   const goal=following?h:target,dist=Math.abs(goal.x-m.x);
+  m.face=Math.sign(goal.x-m.x)||m.face||1;
   moveEnemy(m,dist>(following?18:m.range)?Math.sign(goal.x-m.x)*38*dt:0,dt);
   if(following||m.y<floor(m.x)-.5||dist>m.range||Math.abs(m.y-target.y)>35||m.cooldown>0)continue;
   m.cooldown=spec.attackInterval/(1+h.runeBonus.haste+songTotal(m,'haste'));
-  const amount=Math.max(1,Math.round((roll(h.atMin,h.atMax)*spec.damage*(1+songTotal(m,'attack')))));
-  if(m.kind==='spirit'){shoot(m,target,'magic',amount);shots[shots.length-1].summonOwner=h;shots[shots.length-1].summonRevision=m.revision;}else damage(target,amount+songTotal(target,'vulnerability'));
-  m.hits++;if(w.effect&&m.hits%5===0)activate(h,target,w.effect);
+  m.attack={target,elapsed:0,impact:m.kind==='golem'?.22:.12,duration:m.kind==='golem'?.55:.38,face:m.face,hit:false};
+
  }
 }
+function tickMinionAttack(m,dt){
+ const a=m.attack;if(!a)return;
+ if(m.owner===drag||!grounded(m.owner)||m.y<floor(m.x)-.5){m.attack=null;return}
+ a.elapsed+=dt;
+ if(!a.hit&&a.elapsed>=a.impact){
+  a.hit=true;const target=a.target,h=m.owner,w=ITEMS[m.weapon];
+  if(target.hp>0&&Math.abs(target.x-m.x)<=m.range+3&&Math.abs(target.y-m.y)<=25&&(target.x-m.x)*a.face>=-3){
+   const amount=Math.max(1,Math.round(roll(h.atMin,h.atMax)*w.summon.damage*(1+songTotal(m,'attack'))));
+   if(m.kind==='spirit'){shoot(m,target,'magic',amount);const s=shots[shots.length-1];s.summonOwner=h;s.summonRevision=m.revision}else damage(target,amount+songTotal(target,'vulnerability'));
+   m.hits++;if(w.effect&&m.hits%5===0)activate(h,target,w.effect);
+  }
+ }
+ if(a.elapsed>=a.duration)m.attack=null;
+}
 function drawMinions(){
- for(const m of minions){if(m.hp<=0)continue;const x=m.x,y=m.y,c=ITEMS[m.weapon].color;ctx.strokeStyle=c;ctx.fillStyle=c;
-  if(m.kind==='spirit'){ctx.beginPath();ctx.arc(x,y-10,4,0,Math.PI*2);ctx.stroke();line(ctx,[[x-4,y-8],[x-2,y-2],[x+2,y-5],[x+4,y-2]],c)}
-  else if(m.kind==='golem'){ctx.strokeRect(x-7,y-18,14,12);ctx.strokeRect(x-4,y-24,8,6);line(ctx,[[x-5,y-6],[x-6,y],[x-2,y]],c);line(ctx,[[x+5,y-6],[x+6,y],[x+2,y]],c)}
-  else{ctx.strokeRect(x-3,y-20,6,5);line(ctx,[[x,y-15],[x,y-6],[x-4,y],[x,y-6],[x+4,y]],c);line(ctx,[[x-5,y-11],[x+5,y-11]],c)}
+ for(const m of minions){if(m.hp<=0)continue;const x=m.x,y=m.y,c=ITEMS[m.weapon].color,a=m.attack,f=a?.face||m.face||1;
+  const wind=a?Math.min(1,a.elapsed/a.impact):0,recover=a?Math.max(0,(a.elapsed-a.impact)/(a.duration-a.impact)):0;
+  const swing=a?(a.elapsed<a.impact?-Math.sin(wind*Math.PI)*.5+wind:1-recover):0;
+  ctx.strokeStyle=c;ctx.fillStyle=c;
+  if(m.kind==='spirit'){
+   const sx=x+f*swing*4,sy=y-10-(a?Math.sin(wind*Math.PI)*2:0);
+   ctx.beginPath();ctx.ellipse(sx,sy,4+swing*2,4-swing,0,0,Math.PI*2);ctx.stroke();
+   line(ctx,[[sx-4,sy+2],[sx-2-f*swing*3,sy+8],[sx+2,sy+5],[sx+4,sy+8]],c);
+   if(a&&!a.hit){ctx.fillRect(sx+f*6,sy-1,2+wind*2,2+wind*2)}
+  }else if(m.kind==='golem'){
+   const lean=f*swing*3;ctx.strokeRect(x-7+lean,y-18,14,12);ctx.strokeRect(x-4+lean,y-24+swing*2,8,6);
+   line(ctx,[[x-5,y-6],[x-6,y],[x-2,y]],c);line(ctx,[[x+5,y-6],[x+6,y],[x+2,y]],c);
+   const fist=[x+f*(9+swing*9),y-12-swing*1];line(ctx,[[x+lean+f*6,y-17],[x+f*10,y-18-swing*4],fist],c);ctx.strokeRect(fist[0]-3,fist[1]-3,6,6);
+   line(ctx,[[x+lean-f*6,y-17],[x-f*10,y-10],[x-f*8,y-6]],c);
+  }else{
+   const lean=f*swing*2;ctx.strokeRect(x-3+lean,y-20,6,5);line(ctx,[[x+lean,y-15],[x,y-6],[x-4,y],[x,y-6],[x+4,y]],c);
+   const hand=[x+f*(5+swing*6),y-11-swing*2];
+   line(ctx,[[x+lean,y-13],[x+f*3,y-8],hand],c);line(ctx,[[x+lean,y-13],[x-f*5,y-10],[x-f*3,y-6]],c);
+   const angle=-1.4+swing*1.4;line(ctx,[hand,[hand[0]+f*Math.cos(angle)*8,hand[1]+Math.sin(angle)*8]],'#ddd');
+   line(ctx,[[hand[0]-f,hand[1]-2],[hand[0]+f,hand[1]+2]],'#b99558');
+  }
   ctx.fillStyle='#34503e';ctx.fillRect(x-6,y-29,12,2);ctx.fillStyle='#82cd98';ctx.fillRect(x-6,y-29,12*m.hp/m.maxHp,2);
  }
 }
