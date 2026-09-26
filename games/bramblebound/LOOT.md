@@ -9,7 +9,7 @@ All rolls are independent and happen only when a monster dies. Skipping a stage 
 | Soul | — | — | 10% |
 | HP potion | 30% | 15% | 30% |
 
-Each species has a fixed table containing one or two weapons, independent of party composition. A successful weapon roll selects equally from that table. Boss weapon percentages are combined across their table. Tables are defined by WEAPON_DROPS in game.js. All non-starter weapons are represented.
+Each species has an area-specific table containing zero, one, or two weapons, independent of party composition. Weapon sources are spread across the world and begin on stage 3–5 of their source area. Areas without a weapon source still drop socket items, potions and gold. A successful weapon roll selects equally from the eligible table. Boss weapon percentages are combined across their table. Tables are defined by WEAPON_DROPS in game.js. All non-starter weapons are represented.
 
 Souls occupy the same two weapon sockets as runes and gems. They bind to the weapon and are not sold by the Rune Trader. Existing Leech and Wisdom runes become tier-one Souls, including those already socketed in saved games.
 
@@ -19,7 +19,7 @@ Souls occupy the same two weapon sockets as runes and gems. They bind to the wea
 | Leech | 2% lifesteal | +1 percentage point | 7% lifesteal |
 | Fortune | +5% equipment drop rates | +2 percentage points | +15% equipment drop rates |
 
-Soul tiers follow regions: Grassland 1, Woodland 2, Cavern 3, Desert 4, Mountains 5, Snowfields 6. Each boss Soul roll chooses equally between the three families at that region's tier.
+All equipment drops use the exact zone tier: Lowlands 1, Desert 2, Coast 3, Mountains 4, Volcano 5, Kingdom 6. Each boss Soul roll chooses equally between the three families at that zone's tier. Rune and gem rolls also use that exact tier.
 
 Fortune bonuses from living party members add together and multiply equipment drop chances. For example, one tier-one Fortune Soul changes a normal weapon roll from 5% to 5.25%. They do not affect HP potion or gold drops.
 

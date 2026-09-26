@@ -2,6 +2,8 @@
 
 Standalone pixel-style Canvas party RPG. Open `index.html` in a browser or serve this folder with a static server. No dependencies or build step.
 
+The current world has six zones, 24 regions, 72 normal areas with 8–11 stages each, and six dedicated major boss arenas. See [WORLD.md](WORLD.md) for the authoritative route, zone tiers, weapon spacing, and save migration rules; it supersedes older progression notes below.
+
 ## Characters and progression
 
 Choose four classes, including duplicates. Drag characters to reposition them; combat is automatic. Kills award shared XP. Level-ups automatically grant **two unspent SP per character**. Select a portrait and use the STR, DEX, or INT + button to spend a point. Base STR/DEX are 4, base INT is 0. Level increases also provide 6 LP; spending points provides additional class-dependent LP.

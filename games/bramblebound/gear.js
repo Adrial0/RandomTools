@@ -47,8 +47,14 @@ const runes=[
  ['vitality','Vitality Rune','#9ce16b',{hpBonus:.20},'Increase maximum HP by 20%.'],
  ['renewal','Renewal Rune','#ece9d1',{regen:1},'Recover 1 HP per second while alive in an area.']
 ];
-for(const [name,title,color,bonuses,description] of runes){const id='rune-'+name;items[id]={id,type:'rune',name:title,color,bonuses,description,level:1,tier:1,symbol:'◆'};}
+for(const [name,title,color,bonuses,description] of runes){const id='rune-'+name;items[id]={id,type:'rune',family:name,name:title,color,bonuses,description,level:1,tier:1,symbol:'◆'};}
 
+for(let tier=2;tier<=6;tier++)for(const [family,title,color,base] of runes){
+ const id='rune-'+family+'-'+tier,bonuses={};
+ for(const [key,value] of Object.entries(base))bonuses[key]=Number((value*(1+(tier-1)*.3)).toFixed(3));
+ const key=Object.keys(bonuses)[0],value=bonuses[key],description=({resistance:Math.round(value*100)+'% elemental resistance.',haste:Math.round(value*100)+'% faster attacks.',damageBonus:Math.round(value*100)+'% bonus AT.',rangeBonus:'+'+value+' range.',hpBonus:Math.round(value*100)+'% maximum HP.',regen:'Recover '+value+' HP per second.'})[key];
+ items[id]={id,type:'rune',family,name:title+' '+tier,color,bonuses,description,level:tier,tier,symbol:'◆'};
+}
 const soulFamilies=[['leech','Leech Soul','#df758b','lifesteal',.02,.01,'lifesteal'],['wisdom','Wisdom Soul','#b994ef','xpBonus',.10,.05,'XP gain'],['fortune','Fortune Soul','#f1d47a','dropBonus',.05,.02,'equipment drop rate']];
 for(let tier=1;tier<=6;tier++)for(const [family,name,color,stat,base,step,label] of soulFamilies){const id=tier===1&&family!=='fortune'?'rune-'+family:'soul-'+family+'-'+tier,bonus=Number((base+(tier-1)*step).toFixed(2));items[id]={id,type:'soul',name:name+' '+tier,color,bonuses:{[stat]:bonus},description:'+'+Math.round(bonus*100)+'% '+label+'.',level:tier,tier,symbol:'◈'};}
 
