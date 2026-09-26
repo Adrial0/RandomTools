@@ -241,20 +241,28 @@ function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp
  if(wall)s.life=0}shots=shots.filter(s=>s.life>0)}
 
 
-const WEAPON_DROPS={};
+const WEAPON_DROPS={},WEAPON_AREAS={};
 {
  const order=['iron','fire','ice','poison','heavy','lightning','stun','slow','heal','drain','steel','poison2','poison3','ice3','steel4'];
- const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.tier>0).sort((a,b)=>a.tier-b.tier||order.indexOf(a.id.split('-')[1])-order.indexOf(b.id.split('-')[1])||a.classId-b.classId);
- const species=REGIONAL_POOLS.flatMap((pool,r)=>[...pool,...(r?[REGION_SUMMONERS[r]]:[]),...Array.from({length:3},(_,i)=>'guardian'+(r*3+i))]);
- species.forEach((id,i)=>{const at=Math.floor(i*weapons.length/species.length);WEAPON_DROPS[id]=[...new Set([weapons[at].id,weapons[Math.min(at+1,weapons.length-1)].id])];});
+ for(let c=0;c<classes.length;c++){
+  const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.classId===c&&w.tier>0).sort((a,b)=>a.level-b.level||order.indexOf(a.id.split('-')[1])-order.indexOf(b.id.split('-')[1]));
+  weapons.forEach((w,i)=>WEAPON_AREAS[w.id]=Math.floor(i*18/weapons.length));
+ }
+ for(let a=0;a<18;a++){
+  const r=Math.floor(a/3),pool=REGIONAL_POOLS[r],species=Array.from({length:5},(_,i)=>pool[((a%3)*2+i)%pool.length]);
+  if(a>=4)species.push(REGION_SUMMONERS[r]);species.push('guardian'+a);
+  const weapons=Object.keys(WEAPON_AREAS).filter(id=>WEAPON_AREAS[id]===a);
+  species.forEach((id,i)=>{WEAPON_DROPS[a+':'+id]=weapons.length?[weapons[i%weapons.length]]:[]});
+  weapons.forEach((id,i)=>{const table=WEAPON_DROPS[a+':'+species[i%species.length]];if(!table.includes(id))table.push(id)});
+ }
 }
 function dropMultiplier(){return 1+heroes.filter(h=>h.hp>0).reduce((n,h)=>n+(h.runeBonus.dropBonus||0),0)}
-function weaponDropTable(target){return WEAPON_DROPS[target.species]||WEAPON_DROPS[target.type]||WEAPON_DROPS[target.type==='boss'?'guardian'+area:REGIONAL_POOLS[Math.floor(area/3)][0]]}
+function weaponDropTable(target){const key=area+':';return WEAPON_DROPS[key+target.species]||WEAPON_DROPS[key+target.type]||WEAPON_DROPS[key+(target.type==='boss'?'guardian'+area:REGIONAL_POOLS[Math.floor(area/3)][((area%3)*2)%7])]}
 function regionTier(){return Math.max(1,Math.floor(area/3))}
 function rollDrops(target){
  const result=[],boost=dropMultiplier(),boss=target.type==='boss',rate=boss?.10:target.type==='swarmling'?.025:.05;
  const choose=pool=>pool[Math.floor(Math.random()*pool.length)];
- if(Math.random()<Math.min(1,rate*boost))result.push(choose(weaponDropTable(target)));
+ const weapons=weaponDropTable(target);if(Math.random()<Math.min(1,rate*boost)&&weapons.length)result.push(choose(weapons));
  if(Math.random()<Math.min(1,.01*boost)){const pool=Object.values(ITEMS).filter(w=>(w.type==='rune'||w.type==='gem')&&w.tier<=regionTier());result.push(choose(pool).id);}
  if(boss&&Math.random()<Math.min(1,.10*boost)){const tier=regionTier(),pool=Object.values(ITEMS).filter(w=>w.type==='soul'&&w.tier===tier);result.push(choose(pool).id);}
  return result;
@@ -309,7 +317,7 @@ function stageExitOpen(){return stage<stageCount()-1||bossExitWait<=0&&!enemies.
 function completeArea(){if(!stageExitOpen())return false;return changeScene(advanceStage)}
 function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell('Boss defeated. New routes discovered.');save()}
 function salePrice(id){const w=ITEMS[id];return w?(socketItem(id)?25*w.tier:6+w.tier*12):0}
-function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(currentNode==='trader')return [...Object.values(ITEMS).filter(w=>w.type==='rune').slice(0,Math.min(8,2+Math.max(0,highest))),...Object.values(ITEMS).filter(w=>w.type==='gem'&&w.tier<=Math.max(1,Math.floor(highest/2)))];const tier=highest<0?0:Math.max(0,Math.floor(highest/2));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.classId===shopClass&&w.tier<=tier)}
+function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(currentNode==='trader')return [...Object.values(ITEMS).filter(w=>w.type==='rune').slice(0,Math.min(8,2+Math.max(0,highest))),...Object.values(ITEMS).filter(w=>w.type==='gem'&&w.tier<=Math.max(1,Math.floor(highest/2)))];return Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.classId===shopClass&&(w.tier===0||completed.includes('a'+WEAPON_AREAS[w.id])))}
 function weaponPrice(index){const early=[100,250,500,750,1000];if(index<5)return early[index];const price=1500+(index-5)*500;return price<=10000?price:10000+(index-22)*1000}
 function buyPrice(w){if(w.type==='rune')return 1000*w.tier;if(w.type==='gem')return 500*w.tier;const order=['basic','iron','fire','ice','poison','heavy','lightning','stun','slow','heal','drain','steel','poison2','poison3','ice3','steel4'];const stock=Object.values(ITEMS).filter(v=>v.type==='weapon'&&v.classId===w.classId).sort((a,b)=>a.level-b.level||order.indexOf(a.id.split('-')[1])-order.indexOf(b.id.split('-')[1]));return weaponPrice(Math.max(0,stock.findIndex(v=>v.id===w.id)))}
 function shopPages(){const stock=shopStock();return [...new Set(stock.map(w=>w.level))].sort((a,b)=>a-b).map(tier=>({tier,items:stock.filter(w=>w.level===tier).sort((a,b)=>buyPrice(a)-buyPrice(b))}))}
