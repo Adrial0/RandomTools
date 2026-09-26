@@ -1,5 +1,7 @@
 # Current class roster
 
+Mage: no MP. Every elemental staff projectile activates its weapon effect on impact, with no additional basic hit. Plain staves fire a basic magic bolt. INT adds 1 minimum and maximum AT per point; STR increases range and DEX increases attack speed. Spell damage uses the cast's AT, including support bonuses. Fire distributes it over ten pulses and poison over four ticks; other effects use the spell AT per affected target. Terrain blocks spell projectiles. Mage MP bars and weapon MP readouts are hidden.
+
 Rogue: 110 base HP. STR adds minimum and maximum AT. DEX recharges an automatic dodge in `6 / (1 + DEX * 0.05)` seconds. Only a successful dodge starts the timer; incoming damage during recharge does not reset it. Direct enemy attacks and projectiles can be dodged, but boss specials bypass it without consuming readiness. INT grants 1% basic-attack critical chance per point (up to 100%) and normal MP gain; critical basic attacks deal double damage. The stat panel shows recharge time, readiness and critical chance.
 
 The final areas of each three-area region (indices 2, 5, 8, 11, 14 and 17) feature five smaller guardians. Each has 24% of the ordinary boss HP and 55% of its damage, normal-sized artwork and collision bounds, and a single telegraphed dart special. Boss control resistance remains. All five must die before the exit countdown starts. Boss XP is divided between them, with the boss equipment drop roll awarded on the last death. These encounters still contain at most three enemy species.

@@ -65,7 +65,7 @@ const descriptions=[
  ['+1 maximum AT, +4 HP','+1 minimum AT (capped at maximum), +4 HP','+1 MP per hit, +2 HP'],
  ['+1 minimum and maximum AT, +5 HP','Faster dodge recharge (5% per point), +3 HP','+1% critical chance, +1 MP per hit, +2 HP'],
  ['+2 RANGE, +3 HP','+0.5 minimum / +0.75 maximum AT, +3 HP','+1 MP per hit, +2 HP'],
- ['+2 RANGE, +2 HP','Faster attacks (2% per point), +2 HP','+1 MP per hit; +0.5 / +0.75 AT and +5% ability damage, +2 HP'],
+ ['+2 RANGE, +2 HP','Faster attacks (2% per point), +2 HP','+1 minimum and maximum AT, +2 HP'],
  ['Nearby allies gain +1% AT, +3 HP','Nearby allies gain +0.2 defense, +3 HP','+1 MP per aura pulse, +2 RANGE, +2 HP'],
  ['+1 minimum and maximum AT, +4 HP','Heal 0.5 HP per enemy struck, +3 HP','+1 MP per hit, +2 HP'],
  ['Notes: allies +1% AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 physical damage taken; +2 HP','+1 MP per hit, +2 HP'],
