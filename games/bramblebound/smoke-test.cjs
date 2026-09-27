@@ -174,7 +174,10 @@ const h=harness(),b=h.t;b.start();b.setParty([6,6,6,0]);b.enter();const [one,two
 for(const bard of [one,two,three]){bard.attributes.str=10;bard.attributes.dex=20;b.stats(bard);b.applySong(warrior,bard);b.applySong(foe,bard);}
 assert.equal(b.aura(warrior).attack,1.3);assert.ok(Math.abs(b.songTotal(warrior,'haste')-.6)<1e-9);assert.deepEqual(Array.from(b.effectiveAgi(warrior)),[13,19]);assert.equal(b.enemyDamage(foe),1);foe.at=50;assert.equal(b.enemyDamage(foe),35);
 b.applySong(warrior,one);assert.equal(b.aura(warrior).attack,1.3);foe.hp=100;b.basicHit(foe,5,b.attackToken(warrior));assert.equal(foe.hp,80);b.damage(foe,5,'fire',false);assert.equal(foe.hp,75);
-b.setTime(1.01);assert.equal(b.aura(warrior).flat,0);assert.equal(b.enemyDamage(foe),50);assert.deepEqual(Array.from(b.effectiveAgi(warrior)),[20,30]);
+b.setTime(1.5);assert.equal(b.aura(warrior).attack,1.3);assert.equal(b.enemyDamage(foe),35);
+b.applySong(warrior,one);b.applySong(foe,one);
+b.setTime(2.01);assert.equal(b.aura(warrior).attack,1.1);assert.equal(b.enemyDamage(foe),45);
+b.setTime(3.51);assert.equal(b.aura(warrior).attack,1);assert.equal(b.enemyDamage(foe),50);assert.deepEqual(Array.from(b.effectiveAgi(warrior)),[20,30]);
 for(const [id,pattern,count] of [['6-basic','line',1],['6-iron','long',1],['6-ice','cone',3],['6-heavy','pulse',1]]){b.get().shots.length=0;one.weapon=id;b.stats(one);b.shootNote(one,foe,5,b.attackToken(one));assert.equal(b.items[id].note,pattern);assert.equal(b.get().shots.length,count);assert.ok(b.get().shots[0].life*(pattern==='pulse'?110:160)>Math.min(one.range,Math.hypot(foe.x-one.x,foe.y-one.y)));assert.deepEqual(Array.from(one.agi),[55,65]);}
 one.weapon='6-fire';one.attributes.int=12;b.stats(one);one.mp=0;b.get().shots.length=0;b.basicHit(foe,1,b.attackToken(one));assert.equal(one.mp,0);assert.equal(b.get().shots.length,1);assert.ok(b.get().shots[0].attack.charged);
 b.activate(one,foe,'sustain');b.shootNote(one,foe,1,b.attackToken(one));assert.equal(b.get().shots.at(-1).mod.duration,2);assert.equal(one.nextNote,null);

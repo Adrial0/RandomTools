@@ -383,7 +383,7 @@ function roll(min,max){return Math.floor(min+Math.random()*(max-min+1))}
 function songTotal(target,key){return Object.values(target.songs||{}).reduce((sum,s)=>sum+(s.until>time?(s[key]||0):0),0)}
 function applySong(target,owner,mod={}){
  target.songs=target.songs||{};const power=mod.power||1;
- target.songs[owner.id]={until:time+(mod.duration||1),attack:owner.str*.01*power,haste:owner.dex*.01*power,weakness:owner.str*.5*power,vulnerability:owner.dex*.25*power};
+ target.songs[owner.id]={until:time+(mod.duration||2),attack:owner.str*.01*power,haste:owner.dex*.01*power,weakness:owner.str*.5*power,vulnerability:owner.dex*.25*power};
 }
 function enemyDamage(e,multiplier=1){return Math.max(1,e.at*multiplier-songTotal(e,'weakness'))}
 function effectiveAgi(h){return h.agi.map(n=>Math.max(1,Math.round(n/(1+songTotal(h,'haste')))))}
