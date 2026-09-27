@@ -377,3 +377,14 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(let tier=1;tier<=6;tier++)assert.equal(r.items[tier===1?'2-basic':'2-basic-t'+tier].arrows,tier);
  console.log('Full six-tier class catalogues, Lowlands shop, unique fire patterns, actual spell damage, stale-shot cancellation and bow arrow progression pass.');
 }
+
+{
+ const {t:r}=harness();r.start();r.setParty([1,0,0,0]);r.enter();r.get().enemies.length=0;
+ const h=r.get().heroes[0];h.x=100;h.y=226;h.cooldown=0;h.drive=0;
+ const foe=r.enemy('sporecap',130);foe.y=226;foe.hp=foe.maxHp=1000;foe.cooldown=100;r.get().enemies.push(foe);
+ r.update(.001);assert.ok(h.strike,'Rogue starts attacking at the near side of a wide body');assert.equal(h.drive,0);
+ const hp=foe.hp;r.resolveStrike(h,.1);assert.ok(foe.hp<hp,'Dagger reaches the body edge without reaching its center');
+ h.strike={left:0,target:foe,range:14,amount:10,token:r.attackToken(h)};foe.x=160;const movedHp=foe.hp;r.resolveStrike(h,.1);assert.equal(foe.hp,movedHp,'Moving out of dagger reach avoids the hit');
+ const second=r.enemy('sporecap',130);second.y=226;second.hp=1000;r.get().enemies.push(second);foe.x=130;h.strike={left:0,target:foe,range:14,amount:10,token:r.attackToken(h)};r.resolveStrike(h,.1);assert.equal(second.hp,1000,'Daggers remain single-target');
+ console.log('Rogue approaches and hits enemy body edges, respects escape distance, and remains single-target.');
+}
