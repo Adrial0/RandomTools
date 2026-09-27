@@ -59,3 +59,6 @@ button,select{font:inherit;border:1px solid #80602f;border-radius:0;cursor:point
 .map-node:hover em,.map-node:focus-visible em{display:block}
 .map-node.landmark span{font-size:23px}.map-node.landmark small{top:22px;font-size:8px}
 .map-node.service-node small{font-size:7px}
+
+/* Full tier catalogues stay together in the shop. */
+.shop-window{top:5px;left:2%;width:96%;max-height:calc(100% - 10px);padding:6px}.shop-window #trader-stock{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.shop-card{padding:4px;gap:3px;font-size:8px;line-height:1.25}.shop-window .service-actions{margin:3px 0}.shop-navigation{margin-top:4px;padding-top:4px}@media(max-width:540px){.shop-window #trader-stock{grid-template-columns:repeat(3,minmax(0,1fr))}}

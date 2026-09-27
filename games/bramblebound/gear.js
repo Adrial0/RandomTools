@@ -39,6 +39,38 @@ for(const w of Object.values(items)){
  const d=designs[w.id.split('-')[1]];[w.name,w.note,w.effect]=d;w.instrument={line:'lute',long:'flute',cone:'harp',pulse:'horn'}[w.note];w.range={line:110,long:140,cone:100,pulse:75}[w.note];w.agi=[55,65];w.color=w.effect?effects[w.effect].color:'#f0d580';
  }
 }
+// Every zone has a complete catalogue. Original IDs remain valid for saved gear.
+effects.cleave={name:'Cleave',mp:14,min:8,max:14,color:'#e4d5b8',description:'A physical sweep through nearby enemies.'};
+effects.pierce={name:'Piercing strike',mp:14,min:10,max:16,color:'#e3e7ee',description:'A piercing physical projectile.'};
+const weaponOrder=['basic','iron','fire','ice','poison','heavy','lightning','stun','slow','heal','drain','steel'];
+const tierNames=['','Desert','Coastal','Mountain','Volcanic','Royal'];
+const modes={fire:['eruption','bolt','fan','trail','chain'],ice:['bolt','ring','trail','fan','chain'],poison:['fan','trail','bolt','ring','chain'],lightning:['bolt','ring','fan','trail','burst'],stun:['ring','bolt','fan','trail','chain'],slow:['trail','fan','ring','bolt','chain'],drain:['chain','bolt','ring','fan','trail'],cleave:['ring','fan','trail','bolt','chain'],pierce:['fan','chain','trail','ring','burst']};
+const originals=weaponOrder.flatMap(suffix=>Array.from({length:8},(_,c)=>items[c+'-'+suffix]));
+for(const baseWeapon of originals){
+ const suffix=baseWeapon.id.split('-')[1];
+ for(let tier=1;tier<=6;tier++){
+  const id=tier===1?baseWeapon.id:baseWeapon.id+'-t'+tier,w=tier===1?baseWeapon:{...baseWeapon,id,name:tierNames[tier-1]+' '+baseWeapon.name};
+  w.tier=w.level=tier;w.catalogIndex=weaponOrder.indexOf(suffix);w.priceIndex=(tier-1)*12+w.catalogIndex;
+  w.min=Math.round(baseWeapon.min*(1+(tier-1)*.65));w.max=Math.round(baseWeapon.max*(1+(tier-1)*.65));
+  if(w.classId!==6&&suffix==='heavy')w.effect='cleave';
+  if(w.classId!==6&&suffix==='steel')w.effect='pierce';
+  if(w.classId===2)w.arrows=tier;
+  if(w.summon)w.summon={...baseWeapon.summon,health:Math.round(baseWeapon.summon.health*(1+(tier-1)*.5))};
+  if(w.classId===6){w.supportPower=1+(tier-1)*.3;}
+  else if(w.effect&&w.effect!=='heal'&&(tier>1||['cleave','pierce'].includes(w.effect))){
+   const mode=tier===1?(w.effect==='cleave'?'burst':'bolt'):modes[w.effect][(tier-2+[0,2,1,0,3,4,0,1][w.classId])%5];
+   w.ability={mode,count:mode==='fan'?3:mode==='trail'?3:mode==='chain'?4:1,radius:mode==='ring'?65:mode==='burst'?42:mode==='eruption'?28:18,power:1+(tier-1)*.35};
+   w.abilityDescription=({eruption:'Flame erupts beneath the target.',bolt:'Fires a '+w.effect+' projectile.',fan:'Fires three '+w.effect+' projectiles in a fan.',trail:'Creates three '+w.effect+' bursts along the ground.',chain:'Chains '+w.effect+' between four nearby enemies.',ring:'Releases a '+w.effect+' ring around the wielder.',burst:'Strikes nearby enemies with '+(['cleave','pierce'].includes(w.effect)?'physical':w.effect)+' damage.'})[mode];
+  }
+  if(w.effect==='heal'&&tier>1)w.abilityDescription=['','', 'Heals the most injured ally.', 'Heals allies near the target.', 'Heals the two most injured allies.', 'Heals allies near the most injured ally.', 'Heals allies in a wide circle.'][tier];
+  if(w.effect)w.color=effects[w.effect].color;
+  items[id]=w;
+ }
+}
+// Keep old multi-arrow bow IDs, including those already equipped in saves.
+for(const [id,tier] of [['2-poison2',2],['2-poison3',4],['2-ice3',5],['2-steel4',6]]){
+ const w=items[id];w.level=w.tier=tier;w.catalogIndex=12;w.priceIndex=(tier-1)*12+12;w.ability={mode:'bolt',count:1,radius:16,power:1+(tier-1)*.35};w.abilityDescription='Fires an extra elemental projectile.';
+}
 const runes=[
  ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage.'],
  ['haste','Haste Rune','#7ee5c1',{haste:.15},'15% faster attacks.'],

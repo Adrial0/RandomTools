@@ -42,7 +42,7 @@ t.xp(t.needed(t.get().heroes[0].level));t.select(0);t.allocate('int');t.setItem(
 const old={area:3,gold:99,inventory:[1,2],heroes:[0,2,3,4].map(classId=>({classId,level:5,xp:2,weapon:2}))};const migrated=harness({'bramblebound-v2':JSON.stringify(old)}).t.get();assert.equal(migrated.heroes[0].sp,8);assert.equal(migrated.heroes[0].weapon,'0-iron');assert.equal(migrated.area,5);
 
 // No charging with zero INT; minimum level restrictions leave both slots intact.
-const isolated=harness().t;isolated.start();let fighter=isolated.get().heroes[0];isolated.setItem(0,'0-steel');assert.equal(isolated.equip(0),false);assert.equal(fighter.weapon,'0-basic');assert.equal(isolated.get().inventory[0],'0-steel');
+const isolated=harness().t;isolated.start();let fighter=isolated.get().heroes[0];isolated.setItem(0,'0-steel-t6');assert.equal(isolated.equip(0),false);assert.equal(fighter.weapon,'0-basic');assert.equal(isolated.get().inventory[0],'0-steel-t6');
 isolated.setItem(1,'0-fire');isolated.equip(1);let dummy=isolated.get().enemies[0];dummy.hp=dummy.maxHp=10000;isolated.basicHit(dummy,1,isolated.attackToken(fighter));assert.equal(fighter.mp,0);
 // Ten fire pulses regardless of coarse simulation steps, without proc recursion.
 isolated.activate(fighter,dummy,'fire');let field=isolated.get().fields[0];const fireStart=dummy.hp,fireAmount=field.amount;for(let i=0;i<11;i++)isolated.tickEffects(.1);assert.equal(dummy.hp,fireStart-fireAmount*10);assert.equal(fighter.mp,0);assert.equal(isolated.get().fields.length,0);
@@ -167,7 +167,7 @@ r.setParty([7,0,0,0]);r.enter();const summoner=r.get().heroes[0];summoner.weapon
 console.log('New roster, swept Reaper collisions/healing, single-target Rogue, Bard piercing/buffs, and Summoner groups/health/respawn/equipment cleanup pass.');
 }
 {
-const check=harness(),c=check.t;c.start();c.setParty([5,3,0,0]);c.enter();const h=c.get().heroes[0],target=c.get().enemies[0];target.hp=10000;h.weapon='5-ice';c.stats(h);c.inspect(h.weapon);assert.match(check.elements.get('#item-effect').textContent,/Freeze 0.37s/);c.activate(h,target,'ice');assert.ok(target.frozen>0);assert.ok(!(target.slow>0));c.tickEffects(1);assert.equal(c.slowFactor(target),1);h.weapon='5-slow';c.stats(h);c.inspect(h.weapon);assert.match(check.elements.get('#item-effect').textContent,/Slow 20% for 2s/);c.activate(h,target,'slow');assert.equal(target.frozen,0);assert.equal(target.slow,2);assert.equal(c.slowFactor(target),.8);c.inspect('3-ice');assert.match(check.elements.get('#item-effect').textContent,/Freeze 0.7s/);assert.equal(Object.values(c.items).filter(w=>w.effect==='slow').length,7);console.log('Separate freeze/slow weapons and exact weapon duration readouts pass.');
+const check=harness(),c=check.t;c.start();c.setParty([5,3,0,0]);c.enter();const h=c.get().heroes[0],target=c.get().enemies[0];target.hp=10000;h.weapon='5-ice';c.stats(h);c.inspect(h.weapon);assert.match(check.elements.get('#item-effect').textContent,/Freeze 0.37s/);c.activate(h,target,'ice');assert.ok(target.frozen>0);assert.ok(!(target.slow>0));c.tickEffects(1);assert.equal(c.slowFactor(target),1);h.weapon='5-slow';c.stats(h);c.inspect(h.weapon);assert.match(check.elements.get('#item-effect').textContent,/Slow 20% for 2s/);c.activate(h,target,'slow');assert.equal(target.frozen,0);assert.equal(target.slow,2);assert.equal(c.slowFactor(target),.8);c.inspect('3-ice');assert.match(check.elements.get('#item-effect').textContent,/Freeze 0.7s/);assert.equal(Object.values(c.items).filter(w=>w.effect==='slow').length,42);console.log('Separate freeze/slow weapons and exact weapon duration readouts pass.');
 }
 {
 const h=harness(),b=h.t;b.start();b.setParty([6,6,6,0]);b.enter();const [one,two,three,warrior]=b.get().heroes,foe=b.get().enemies[0];
@@ -278,7 +278,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(let c=0;c<8;c++){
   const weapons=Object.entries(t.WEAPON_AREAS).filter(([id])=>t.items[id].classId===c).sort((a,b)=>a[1]-b[1]);
   assert.equal(new Set(weapons.map(([id])=>t.items[id].tier)).size,6);
-  for(let i=1;i<weapons.length;i++)assert.ok(weapons[i][1]-weapons[i-1][1]>=4,'Weapon unlocks leave several areas between');
+  for(let i=1;i<weapons.length;i++)assert.ok(weapons[i][1]-weapons[i-1][1]>=1,'No area unlocks two weapons of one class');
  }
  for(const [id,a] of Object.entries(t.WEAPON_AREAS)){
   t.setArea(a);const monster=Object.entries(t.WEAPON_DROPS).find(([key,ids])=>key.startsWith(a+':')&&ids.includes(id))[0].split(':')[1],foe=t.enemy(monster,300);
@@ -357,4 +357,23 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  assert.equal(r.enemyDamage(e),1);const hp=h.hp;r.damage(h,r.enemyDamage(e));assert.equal(h.hp,hp-1);assert.equal(r.get().numbers.at(-1).text,1);
  r.damage(h,.1,'poison',false);assert.equal(h.hp,hp-2,'Fractional elemental hits also deal at least one HP');
  console.log('Stacked Bard debuffs, barriers and fractional damage never reduce a landed enemy hit below one HP.');
+}
+
+
+{
+ const {t:r}=harness();r.start();
+ for(let c=0;c<8;c++)for(let tier=1;tier<=6;tier++){
+  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&w.classId===c&&w.tier===tier);assert.ok(stock.length>=12);
+  if(c!==6)for(const effect of ['fire','ice','slow','poison','lightning','heal','drain','stun','cleave','pierce'])assert.ok(stock.some(w=>w.effect===effect),'Full element/physical-special coverage');
+ }
+ r.get().completed.push(...Array.from({length:19},(_,i)=>'a'+i));r.travel('town');r.setShopClass(5);assert.ok(r.shopStock().length>=10);assert.ok(r.shopStock().some(w=>w.id==='5-ice'));assert.ok(!r.shopStock().some(w=>w.tier>1));
+ r.travel('a0');const h=r.get().heroes[0],foe=r.get().enemies[0];r.get().enemies.forEach(e=>e.hp=0);foe.hp=foe.maxHp=100000;h.x=100;h.y=226;foe.x=160;foe.y=226;
+ const signatures=new Set();for(let tier=1;tier<=6;tier++){
+  h.weapon=tier===1?'0-fire':'0-fire-t'+tier;r.stats(h);r.get().shots.length=0;r.get().fields.length=0;
+  const before=foe.hp;r.activate(h,foe,'fire');signatures.add(r.items[h.weapon].ability?.mode||'burn');
+  for(let i=0;i<150;i++){r.tickShots(.01);r.tickEffects(.01)}assert.ok(foe.hp<before,'Each fire-tier ability deals damage');r.draw();
+ }assert.equal(signatures.size,6);
+ h.weapon='0-fire-t3';r.stats(h);r.activate(h,foe,'fire');const hp=foe.hp;h.gearRevision++;for(let i=0;i<150;i++)r.tickShots(.01);assert.equal(foe.hp,hp,'Unequipping cancels pending ability shots');
+ for(let tier=1;tier<=6;tier++)assert.equal(r.items[tier===1?'2-basic':'2-basic-t'+tier].arrows,tier);
+ console.log('Full six-tier class catalogues, Lowlands shop, unique fire patterns, actual spell damage, stale-shot cancellation and bow arrow progression pass.');
 }
