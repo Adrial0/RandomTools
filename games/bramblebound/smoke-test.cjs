@@ -185,9 +185,9 @@ b.activate(one,foe,'crescendo');b.shootNote(one,foe,1,b.attackToken(one));assert
 b.get().shots.length=0;one.x=260;one.y=219;warrior.x=280;warrior.y=219;warrior.hp=20;foe.x=310;foe.y=219;one.weapon='6-heal';b.stats(one);b.activate(one,foe,'restore');b.shootNote(one,foe,1,b.attackToken(one));for(let i=0;i<40;i++)b.tickShots(.01);assert.equal(warrior.hp,32,'Harp heals ally once across all three notes');assert.equal(b.songTotal(warrior,'attack'),.1);
 b.setTime(10);warrior.barriers={};warrior.hp=warrior.maxHp;
 b.applyNoteSupport(warrior,one,{barrier:12});b.applyNoteSupport(warrior,one,{barrier:12});b.applyNoteSupport(warrior,two,{barrier:12});
-const beforeBarrier=warrior.hp;b.damage(warrior,20);assert.equal(warrior.hp,beforeBarrier,'Different bards stack barriers; repeated notes do not accumulate');
-b.damage(warrior,10);assert.equal(warrior.hp,beforeBarrier-6,'Only damage beyond the remaining barrier reaches HP');
-b.applyNoteSupport(warrior,one,{barrier:12});b.setTime(12.01);b.damage(warrior,5);assert.equal(warrior.hp,beforeBarrier-11,'Barriers expire after two seconds');
+const beforeBarrier=warrior.hp;b.damage(warrior,20);assert.equal(warrior.hp,beforeBarrier-1,'Stacked barriers still allow the minimum one damage');
+b.damage(warrior,10);assert.equal(warrior.hp,beforeBarrier-7,'Only damage beyond the remaining barrier reaches HP');
+b.applyNoteSupport(warrior,one,{barrier:12});b.setTime(12.01);b.damage(warrior,5);assert.equal(warrior.hp,beforeBarrier-12,'Barriers expire after two seconds');
 warrior.burn={time:4};warrior.poison={time:4};warrior.frozen=1;warrior.slow=2;warrior.slowAmount=.3;warrior.stun=1;
 b.applyNoteSupport(warrior,one,{cleanse:true});assert.equal(warrior.burn,null);assert.equal(warrior.poison,null);assert.equal(warrior.frozen,0);assert.equal(warrior.slow,0);assert.equal(warrior.slowAmount,0);assert.equal(warrior.stun,1);
 b.activate(one,foe,'guard');b.shootNote(one,foe,1,b.attackToken(one));assert.equal(b.get().shots.at(-1).mod.barrier,12);
@@ -349,4 +349,12 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  const saved={version:7,worldVersion:3,area:0,currentNode:'town',heroes:[{classId:0,level:10,xp:1800,hp:50,weapon:'0-basic',attributes:{}}]};
  saved.heroes=Array.from({length:4},()=>({...saved.heroes[0]}));const migrated=harness({'bramblebound-v3':JSON.stringify(saved)});assert.equal(migrated.t.get().heroes[0].xp,912,'Old saves retain XP bar percentage');migrated.t.save();assert.equal(harness(migrated.storage).t.get().heroes[0].xp,912,'New saves do not migrate XP twice');
  r.save();console.log('New leveling curve, level-based enemy XP, swarm/heavy/boss rewards and old-save XP progress migration pass.');
+}
+
+{
+ const {t:r}=harness();r.start();r.setParty([6,6,6,0]);r.enter();const [a,b,c,h]=r.get().heroes,e=r.get().enemies[0];
+ for(const bard of [a,b,c]){bard.attributes.str=100;r.stats(bard);r.applySong(e,bard);r.applyNoteSupport(h,bard,{barrier:12});}
+ assert.equal(r.enemyDamage(e),1);const hp=h.hp;r.damage(h,r.enemyDamage(e));assert.equal(h.hp,hp-1);assert.equal(r.get().numbers.at(-1).text,1);
+ r.damage(h,.1,'poison',false);assert.equal(h.hp,hp-2,'Fractional elemental hits also deal at least one HP');
+ console.log('Stacked Bard debuffs, barriers and fractional damage never reduce a landed enemy hit below one HP.');
 }
