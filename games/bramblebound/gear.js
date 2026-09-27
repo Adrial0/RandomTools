@@ -1,8 +1,8 @@
 // Item definitions and class scaling shared by the game and simulation tests.
 (() => {
 const effects={
- encore:{name:'Encore',mp:12,min:0,max:0,color:'#f0d580',description:'Release a second volley.'},
- sustain:{name:'Sustaining melody',mp:12,min:0,max:0,color:'#8bd9bd',description:'Next notes last 2s.'},
+ guard:{name:'Guarding melody',mp:12,min:0,max:0,color:'#8cc9fa',description:'Next notes grant allies a 12 HP barrier for 2s.'},
+ cleanse:{name:'Cleansing tune',mp:12,min:0,max:0,color:'#8bd9bd',description:'Next notes remove burn, poison, freeze and slow from allies.'},
  crescendo:{name:'Crescendo',mp:14,min:0,max:0,color:'#e7a46d',description:'Next notes have 50% stronger effects.'},
  restore:{name:'Restoring chord',mp:14,min:0,max:0,color:'#bce69c',description:'Next notes heal allies for 12 HP.'},
  fire:{name:'Flame burst',mp:10,min:1,max:3,count:10,time:1,color:'#ff763c',description:'10 embers over 1 second; nearby grounded enemies burn.'},
@@ -35,7 +35,7 @@ for(const [suffix,name,tier,arrows] of [['poison2','Twin Poison Bow',2,2],['pois
 for(const w of Object.values(items)){
  if(w.classId===7){const swarm=['poison','ice','stun'].includes(w.effect);w.summon={kind:swarm?'spirit':w.tier>=2?'golem':'skeleton',health:swarm?18:w.tier>=2?100:50,damage:swarm?.4:w.tier>=2?1.3:1,attackInterval:swarm?1:w.tier>=2?2:1.5,lifetime:15};w.agi=swarm?[85,95]:w.tier>=2?[290,310]:[145,155];w.name=(w.effect?effects[w.effect].name.split(' ')[0]+' ':'')+(swarm?'Spirit':w.tier>=2?'Golem':'Skeleton')+' Grimoire';}
  if(w.classId===6){
- const designs={basic:['Lute','line',null],iron:['Flute','long',null],fire:['Encore Lute','line','encore'],ice:['Sustaining Harp','cone','sustain'],poison:['Crescendo Flute','long','crescendo'],heavy:['War Horn','pulse',null],lightning:['Encore Horn','pulse','encore'],stun:['Crescendo Horn','pulse','crescendo'],slow:['Sustaining Flute','long','sustain'],heal:['Restoring Harp','cone','restore'],drain:['Restoring Lute','line','restore'],steel:['Grand Lute','line',null]};
+ const designs={basic:['Lute','line',null],iron:['Flute','long',null],fire:['Guarding Lute','line','guard'],ice:['Cleansing Harp','cone','cleanse'],poison:['Crescendo Flute','long','crescendo'],heavy:['War Horn','pulse',null],lightning:['Guarding Horn','pulse','guard'],stun:['Crescendo Horn','pulse','crescendo'],slow:['Cleansing Flute','long','cleanse'],heal:['Restoring Harp','cone','restore'],drain:['Restoring Lute','line','restore'],steel:['Grand Lute','line',null]};
  const d=designs[w.id.split('-')[1]];[w.name,w.note,w.effect]=d;w.instrument={line:'lute',long:'flute',cone:'harp',pulse:'horn'}[w.note];w.range={line:110,long:140,cone:100,pulse:75}[w.note];w.agi=[55,65];w.color=w.effect?effects[w.effect].color:'#f0d580';
  }
 }
