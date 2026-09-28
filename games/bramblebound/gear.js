@@ -51,7 +51,7 @@ for(const baseWeapon of originals){
  for(let tier=1;tier<=6;tier++){
   const id=tier===1?baseWeapon.id:baseWeapon.id+'-t'+tier,w=tier===1?baseWeapon:{...baseWeapon,id,name:tierNames[tier-1]+' '+baseWeapon.name};
   w.tier=w.level=tier;w.catalogIndex=weaponOrder.indexOf(suffix);w.priceIndex=(tier-1)*12+w.catalogIndex;
-  w.min=Math.round(baseWeapon.min*(1+(tier-1)*.65));w.max=Math.round(baseWeapon.max*(1+(tier-1)*.65));
+  w.min=Math.round(baseWeapon.min*1.65**(tier-1));w.max=Math.round(baseWeapon.max*1.65**(tier-1));
   if(w.classId!==6&&suffix==='heavy')w.effect='cleave';
   if(w.classId!==6&&suffix==='steel')w.effect='pierce';
   if(w.classId===2)w.arrows=tier;
@@ -78,7 +78,7 @@ for(let c=0;c<8;c++){
  let price=0;
  for(let tier=1;tier<=6;tier++){
   const special=specials[tier-1];
-  let selection=['basic','fire','ice','poison','lightning','iron',special];
+  let selection=tier===1?['basic','iron','fire','ice','poison','lightning',special]:['basic','fire','ice','poison','lightning','iron',special];
   if(c===3)selection=[...(tier%2?['basic']:[]),'fire','ice','poison','lightning',tier%2?'slow':'stun'];
   if(c===4)selection=['basic','ice','lightning','heal','drain','iron'];
   if(c===6)selection=['basic','fire','ice','poison','heal'];
@@ -86,10 +86,12 @@ for(let c=0;c<8;c++){
   const chosen=selection.map(suffix=>items[c+'-'+suffix+(tier===1?'':'-t'+tier)]);
   chosen.forEach((w,i)=>{w.retired=false;w.catalogIndex=i;w.priceIndex=price++;});
   if([0,1,2,5].includes(c)||c===4){
-   const physical=chosen.find(w=>w.id.split('-')[1]==='iron'),others=chosen.filter(w=>w!==physical);
+   const early=chosen.find(w=>w.id.split('-')[1]==='basic'),physical=chosen.find(w=>w.id.split('-')[1]==='iron');
    physical.effect=null;delete physical.ability;delete physical.abilityDescription;physical.color='#ddd';
-   physical.min=Math.ceil(Math.max(...others.map(w=>w.min))*1.25);physical.max=Math.ceil(Math.max(...others.map(w=>w.max))*1.25);
+   if(tier===1){physical.min=base[c][0]+4;physical.max=base[c][1]+5;}
+   else{const elemental=chosen.filter(w=>['fire','ice','poison','lightning'].includes(w.effect)),min=Math.max(...elemental.map(w=>w.min)),max=Math.max(...elemental.map(w=>w.max));early.min=Math.ceil(min*1.5);early.max=Math.ceil(max*1.5);physical.min=min*2;physical.max=max*2;for(const w of chosen.filter(w=>w.effect&&!elemental.includes(w))){w.min=Math.min(w.min,Math.ceil(min*1.2));w.max=Math.min(w.max,Math.ceil(max*1.2));}}
   }
+  if(c===3&&tier>1&&tier%2){const physical=chosen[0],elemental=chosen.filter(w=>['fire','ice','poison','lightning'].includes(w.effect));physical.min=Math.ceil(Math.max(...elemental.map(w=>w.min))*1.75);physical.max=Math.ceil(Math.max(...elemental.map(w=>w.max))*1.75);}
   if(c===7){const heavy=chosen.at(-1);heavy.effect=null;delete heavy.ability;delete heavy.abilityDescription;heavy.color='#ddd';}
  }
 }

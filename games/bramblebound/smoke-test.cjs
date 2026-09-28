@@ -110,7 +110,7 @@ tt.select(3);const priest=tt.get().heroes[3];priest.attributes.str=6;priest.attr
 
 const slowDrag=harness().t,fastDrag=harness().t;for(const d of [slowDrag,fastDrag]){d.start();const h=d.get().heroes[0];h.x=100;h.y=150;h.vx=h.vy=0;h.dragSample={x:100,y:150,t:0};d.setHeld(h)}slowDrag.moveHeld(160,100,1000);fastDrag.moveHeld(160,100,50);for(let i=0;i<8;i++){slowDrag.stepHeld(slowDrag.get().heroes[0],.01);fastDrag.stepHeld(fastDrag.get().heroes[0],.01)}assert.ok(fastDrag.get().heroes[0].x>slowDrag.get().heroes[0].x+8,'Fast cursor movement produces faster follow at equal distance');
 
-const mechanics=harness(),mt=mechanics.t;mt.start();assert.deepEqual(Array.from({length:16},(_,i)=>mt.areaHealth(Math.ceil(i*125/77))),[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500]);for(let i=0;i<9;i++){mt.setArea(i);assert.equal(mt.enemy('boss',300).maxHp,mt.areaHealth(i)*10)}assert.deepEqual(Array.from({length:13},(_,i)=>mt.weaponPrice(i)),[100,250,500,750,1000,1500,2000,2500,3000,3500,4000,4500,5000]);assert.equal(mt.weaponPrice(22),10000);assert.equal(mt.weaponPrice(23),11000);assert.equal(mt.buyPrice(mt.items['0-ice']),500);assert.equal(mt.needed(1),288);
+const mechanics=harness(),mt=mechanics.t;mt.start();assert.deepEqual(Array.from({length:16},(_,i)=>mt.areaHealth(Math.ceil(i*125/77))),[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500]);for(let i=0;i<9;i++){mt.setArea(i);assert.equal(mt.enemy('boss',300).maxHp,mt.areaHealth(i)*10)}assert.deepEqual(Array.from({length:13},(_,i)=>mt.weaponPrice(i)),[100,250,500,750,1000,1500,2000,2500,3000,3500,4000,4500,5000]);assert.equal(mt.weaponPrice(22),10000);assert.equal(mt.weaponPrice(23),11000);assert.equal(mt.buyPrice(mt.items['0-ice']),750);assert.equal(mt.needed(1),288);
 mt.setArea(1);mt.setStage(0);mt.enter();assert.ok(mt.terrainHit(160,215,200,215),'A terrain wall blocks a low shot');const wallTarget=mt.get().enemies[0];wallTarget.x=210;wallTarget.y=226;wallTarget.hp=100;const wallShooter=mt.get().heroes[0];wallShooter.x=160;wallShooter.y=226;mt.shoot(wallShooter,wallTarget,'bullet',40,mt.attackToken(wallShooter));mt.tickShots(.3);assert.equal(wallTarget.hp,100);assert.equal(mt.get().shots.length,0);
 const climber=mt.get().heroes[0];climber.x=179.9;climber.y=226;climber.vy=0;climber.vx=33;climber.drive=33;mt.stepBody(climber,.01);assert.ok(climber.y>220,'Hero does not snap 19 pixels up hill');for(let i=0;i<150;i++){climber.drive=33;mt.stepBody(climber,.01)}assert.ok(climber.x>180&&Math.abs(climber.y-207)<1,'Hero finishes stepping onto ledge');
 const ec=mt.enemy('slime',179.9);mt.moveEnemy(ec,.3,.01);assert.ok(ec.y>220);for(let i=0;i<150;i++)mt.moveEnemy(ec,.17,.01);assert.ok(ec.x>180&&Math.abs(ec.y-207)<1,'Enemy steps onto ledge');
@@ -394,7 +394,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(const c of [0,1,2,5])for(let tier=1;tier<=6;tier++){
   const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier),physical=stock.filter(w=>!w.effect);
   assert.equal(stock.length,7);assert.equal(physical.length,2);const late=physical.find(w=>w.id.split('-')[1]==='iron');
-  for(const w of stock.filter(w=>w!==late)){assert.ok(late.min>w.min);assert.ok(late.max>w.max)}assert.equal(late.ability,undefined);
+  if(tier>1)for(const w of stock.filter(w=>w!==late)){assert.ok(late.min>w.min);assert.ok(late.max>w.max)}assert.equal(late.ability,undefined);
  }
  for(const ids of Object.values(r.WEAPON_DROPS))assert.ok(ids.every(id=>!r.items[id].retired),'Retired gear never drops');
  r.get().completed.push(...r.AREAS.map(a=>a.id));r.travel('town');for(let c=0;c<8;c++){r.setShopClass(c);assert.ok(r.shopStock().every(w=>!w.retired));}
@@ -417,4 +417,12 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
   assert.ok(hits>=10,'Exercise sustained combat, not one isolated swing');
  }
  console.log('Sustained Rogue combat stays outside stationary and advancing large bosses without attack-driven creeping.');
+}
+
+{
+ const {t:r}=harness();assert.deepEqual([r.items['0-iron'].min,r.items['0-iron'].max],[5,10]);assert.equal(r.items['0-heavy'].effect,'cleave');
+ for(const c of [0,1,2,4,5])for(let tier=2;tier<=6;tier++){
+  const early=r.items[c+'-basic-t'+tier],late=r.items[c+'-iron-t'+tier],element=r.items[c+'-'+(c===4?'ice':'fire')+'-t'+tier],previous=r.items[c+'-iron'+(tier===2?'':'-t'+(tier-1))];
+  assert.ok(early.min>=element.min*1.5&&early.max>=element.max*1.5);assert.equal(late.min,element.min*2);assert.equal(late.max,element.max*2);assert.ok(early.min>previous.min&&early.max>previous.max);assert.equal(early.effect,null);assert.equal(late.effect,null);
+ }console.log('Starter Iron exception, Cleave Long Sword, 1.5–2x physical AT and upward tier transitions pass.');
 }

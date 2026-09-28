@@ -1,4 +1,4 @@
-# Iron & String
+# Stickfight
 
 Open `index.html` in a desktop browser. No build step or dependencies. Optional Google Fonts fall back to system fonts offline.
 
@@ -14,3 +14,4 @@ Ten rounds introduce greatswords, axes, spears, hammers, quicker duelists, and m
 The simulation uses a fixed 120 Hz step, Verlet joint particles, iterative distance constraints, active balance forces, gravity, and ground friction. Weapon angles use damped spring acceleration and inertia. Blade collisions transfer impulse, cause knockback, and deal damage based on speed and weapon mass. Blades can clash. Dead fighters lose their balance forces and collapse as ragdolls. This is a lightweight custom arcade physics solver, not a general-purpose rigid-body engine.
 
 Optional impact audio is synthesized locally; toggle Sound on. Losing browser focus pauses the fight.
+
