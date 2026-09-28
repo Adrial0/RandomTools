@@ -1,17 +1,19 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stickfight</title><link rel="stylesheet" href="style.css"></head>
-<body><main>
-<header><a class="brand" href="./">STICKFIGHT</a><div class="header-right"><button id="sound" aria-label="Toggle sound">Sound off</button><button id="pause">Pause · Esc</button></div></header>
-<section class="arena">
-<canvas id="game" width="1500" height="660" aria-label="Side-view stickman sword fighting arena"></canvas>
-<div class="hud"><div><span class="eyebrow">HEALTH</span><div class="health"><i id="health"></i></div><span id="hp">100 / 100</span></div><div class="round"><span class="eyebrow" id="round">ROUND 01 / 14</span><strong id="level-name">Swordsman</strong><span id="remaining">1 opponent</span></div></div>
-<div id="overlay" class="overlay"><div class="card"><p class="eyebrow" id="card-label"></p><h2 id="card-title">Stickfight</h2><p id="card-copy">A/D to move, W to jump, S to crouch.<br>Move the mouse to aim; move it closer or farther to retract or extend your arm.</p><button id="primary" class="primary">Play <span>→</span></button><p class="hint" id="card-hint">Block weapons and arrows. Move out of purple spell zones.</p></div></div>
-<div class="arena-bottom"><span id="feedback">Defeat the swordsman.</span></div>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stickfight — 3D</title><link rel="stylesheet" href="style3d.css"></head>
+<body>
+<main>
+<header><a href="./" class="brand">STICKFIGHT <span>3D</span></a><nav><a href="index-2d.html">2D version</a><button id="camera">Third person · V</button><button id="sound">Sound off</button><button id="fullscreen" title="Fullscreen">⛶</button><button id="pause">Pause · Esc</button></nav></header>
+<section id="arena" aria-label="3D stickman combat arena">
+<canvas id="view" aria-label="3D game. WASD moves, mouse looks, hold left mouse to control sword, space jumps."></canvas>
+<div class="hud"><div class="player-hud"><span>HEALTH</span><div class="health"><i id="health"></i></div><b id="hp">100</b></div><div class="round-hud"><span id="round">ROUND 01 / 14</span><strong id="round-name">Swordsman</strong><small id="enemies">1 enemy</small></div></div>
+<div id="aim"><i></i></div><div id="sword-cursor"></div><div id="hit-flash"></div>
+<div class="lower-hud"><div id="combat-mode">MOUSE LOOK <span>Hold LMB to swing</span></div><div class="reach">ARM REACH <div><i id="reach"></i></div></div><div id="notice">Block steel and arrows. Dodge purple zones.</div></div>
+<div id="damage-labels"></div><div id="enemy-direction" hidden>Enemy behind you ↓</div>
+<div id="overlay"><div class="menu"><div class="menu-label" id="menu-label">3D ARENA</div><h1 id="menu-title">Stickfight</h1><p id="menu-copy">Fight with your sword in a fully 3D arena.</p><div id="instructions"><div><kbd>W A S D</kbd><span>Move</span><kbd>Mouse</kbd><span>Look around</span></div><div><kbd>Hold LMB</kbd><span>Move mouse to swing</span><kbd>Wheel</kbd><span>Extend / retract arm</span></div><div><kbd>Space</kbd><span>Jump</span><kbd>Ctrl / C</kbd><span>Crouch</span></div><div><kbd>V</kbd><span>First / third person</span><kbd>R</kbd><span>Retry round</span></div></div><button id="start" class="primary">Play <span>→</span></button><p class="menu-note" id="menu-note">Click Play to capture the mouse. Esc pauses and releases it.</p></div></div>
+<div id="error" hidden role="alert"></div>
 </section>
-<section class="under"><div class="controls"><div><kbd>A</kbd><kbd>D</kbd><span>Move</span></div><div><kbd>W</kbd><span>Jump</span></div><div><kbd>S</kbd><span>Crouch</span></div><div><kbd>↗</kbd><span>Mouse to swing</span></div><div><kbd>R</kbd><span>Retry</span></div></div></section>
-<section class="journey"><h3>Levels</h3><div id="levels" class="levels"></div></section>
-</main><script src="game.js"></script></body></html>
-
-
-
+<section class="bottom"><div class="help"><span><kbd>WASD</kbd> Move</span><span><kbd>Mouse</kbd> Look</span><span><kbd>LMB + mouse</kbd> Sword</span><span><kbd>Space</kbd> Jump</span><span><kbd>V</kbd> Camera</span></div><div id="levels" aria-label="Choose unlocked round"></div></section>
+</main>
+<script src="vendor/three.min.js"></script><script src="physics3d.js"></script><script src="game3d.js"></script>
+</body></html>
