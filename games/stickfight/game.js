@@ -38,16 +38,16 @@ function livingStep(f){
  let move=0,jump=false,crouch=false,target;
  if(!f.enemy){move=(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0);jump=keys.has('KeyW');crouch=keys.has('KeyS');if(mouse.x!==f.lastMouse.x||mouse.y!==f.lastMouse.y){f.aim=Math.atan2(mouse.y-p[1].y,mouse.x-p[1].x);f.lastMouse={...mouse};}target=f.aim;}
  else{const dx=player.p[0].x-p[0].x,dist=Math.abs(dx),dir=Math.sign(dx)||1,reach=f.weapon.length+32;move=dist>reach*.85?dir:dist<reach*.5?-dir*.6:0;const cycle=(time*f.speed*.8+f.phase)%2.05;target=Math.atan2(player.p[1].y-p[1].y,dx)+dir*(cycle<1.2?-1.25:1.25);if(cycle<1.2)move*=.65;}
- f.attackInput=f.enemy||Math.abs(wrap(target-f.angle))>.025||move!==0||jump||crouch;const active=f.stun>0?.35:1,desired=move*(f.enemy?85*f.speed:145)*active*(crouch?.5:1);
+ f.attackInput=f.enemy||Math.abs(wrap(target-f.angle))>.025||move!==0||jump||crouch;const active=f.stun>0?.35:1,desired=move*(f.enemy?105*f.speed:205)*active*(crouch?.5:1);
  f.walk+=(desired-f.walk)*(1-Math.exp(-22*DT));
  if(Math.abs(f.walk)<.05)f.walk=0;
  f.grounded=f.root.y>=FLOOR-65-.01&&f.vy>=0;
- if(jump&&!f.jumpHeld&&f.grounded){f.vy=-340;f.grounded=false;}f.jumpHeld=jump;
- f.vx*=Math.exp(-(f.grounded?12:3)*DT);f.vy+=1050*DT;
+ if(jump&&!f.jumpHeld&&f.grounded){f.vy=-510;f.grounded=false;}f.jumpHeld=jump;
+ f.vx*=Math.exp(-(f.grounded?8:1.2)*DT);f.vy+=1050*DT;
  f.root.x=clamp(f.root.x+(f.walk+f.vx)*DT,65,W-65);f.root.y+=f.vy*DT;
  if(f.root.y>=FLOOR-65){f.root.y=FLOOR-65;f.vy=0;f.grounded=true;}
  f.stance+=((crouch?43:65)-f.stance)*(1-Math.exp(-22*DT));
- f.lean*=Math.exp(-12*DT);
+ f.lean*=Math.exp(-6*DT);
  // Supported torso and planted feet do not feed balancing corrections into gravity.
  const hip={x:f.root.x,y:f.root.y+65-f.stance},lean=f.walk*.00045+f.lean;
  const chest={x:hip.x+Math.sin(lean)*38,y:hip.y-Math.cos(lean)*38};
@@ -58,7 +58,7 @@ function livingStep(f){
   const delta=wrap(target-f.angle)*(1-Math.exp(-48*DT/GAME_SPEED));
   f.angular=clamp(delta/DT,-45,45);
  }
- f.angle+=f.angular*DT;
+ f.recoil=(f.recoil||0)*Math.exp(-10*DT);f.angular+=f.recoil;f.angle+=f.angular*DT;if(!f.enemy)f.aim+=f.recoil*DT;
  const hand={x:chest.x+Math.cos(f.angle)*44,y:chest.y+Math.sin(f.angle)*44};
  const offHand={x:hip.x-22,y:hip.y-5};
  const walkAmount=Math.min(1,Math.abs(f.walk)/100);f.gait+=Math.abs(f.walk)*DT*.065;
@@ -92,12 +92,11 @@ function bladeAt(f,t){
 function bladesTouch(a,b,radius){return intersects(a.base,a.tip,b.base,b.tip)||Math.min(closest(a.base,b.base,b.tip),closest(a.tip,b.base,b.tip),closest(b.base,a.base,a.tip),closest(b.tip,a.base,a.tip))<=radius;}
 function stopAtContact(f,t){
  f.angle=(f.oldAngle??f.angle)+wrap(f.angle-(f.oldAngle??f.angle))*t;
- for(const p of f.p){p.x=p.px+(p.x-p.px)*t;p.y=p.py+(p.y-p.py)*t;}
- if(f.root){f.root.x=f.p[0].x;f.root.y=f.p[0].y-65+f.stance;}
+ // Resolve weapon rotation only: never rewind locomotion, gravity or crouching.
  const chest=f.p[1];f.base={x:chest.x+Math.cos(f.angle)*44,y:chest.y+Math.sin(f.angle)*44};f.tip={x:f.base.x+Math.cos(f.angle)*f.weapon.length,y:f.base.y+Math.sin(f.angle)*f.weapon.length};
  Object.assign(f.p[6],f.base);Object.assign(f.p[5],jointBetween(chest,f.base,27,28,1));
- f.angular=0;f.blocked=true;f.trail=[{...f.tip}];
- if(f.enemy)f.guardRecovery=time+.18;
+ f.blocked=true;f.trail=[{...f.tip}];
+ if(f.enemy)f.guardRecovery=time+.08;
  else f.aim=f.angle; // No automatic counterattack or retry after a blocked swing.
 }
 function resolveBlock(a,b){
@@ -106,12 +105,33 @@ function resolveBlock(a,b){
  const travel=f=>Math.abs(wrap(f.angle-(f.oldAngle??f.angle)))*(44+f.weapon.length)+Math.hypot(f.p[1].x-(f.oldChest?.x??f.p[1].x),f.p[1].y-(f.oldChest?.y??f.p[1].y));
  const count=Math.max(1,Math.ceil((travel(a)+travel(b))/2));
  const initial=bladesTouch(bladeAt(a,0),bladeAt(b,0),radius);
- // Already-touching blades may separate freely, but cannot push farther through.
- if(initial&&!bladesTouch(bladeAt(a,1/count),bladeAt(b,1/count),radius))return false;
+ // Residual overlap is not a new impact. Let rotation and translation separate it
+ // without latching either sword or creating energy from repeated contact.
+ if(initial){
+  if(!bladesTouch(bladeAt(a,1),bladeAt(b,1),radius))return false;
+  a.blocked=b.blocked=true;return true;
+ }
  for(let i=initial?0:1;i<=count;i++){
   const t=i/count,aa=bladeAt(a,t),bb=bladeAt(b,t);
   if(!bladesTouch(aa,bb,radius))continue;
   const safe=Math.max(0,(i-1)/count);
+  // Transfer the incoming blade momentum into both bodies, including vertical recoil.
+  a.contacts??=new Map();
+  const previous=a.contacts.get(b)??-1;
+  if(!initial&&time-previous>.1){
+   const velocity=f=>({x:(f.tip.x-f.oldTip.x)/DT,y:(f.tip.y-f.oldTip.y)/DT});
+   const va=velocity(a),vb=velocity(b),mass=2*a.weapon.mass*b.weapon.mass/(a.weapon.mass+b.weapon.mass);
+   const rx=va.x-vb.x,ry=va.y-vb.y,speed=Math.hypot(rx,ry);
+   if(speed>35){
+    const scale=Math.min(.32*mass,480/(speed||1));
+    impulse(a,-rx*scale,-ry*scale);impulse(b,rx*scale,ry*scale);
+    a.recoil=clamp(-a.angular*.45,-15,15);b.recoil=clamp(-b.angular*.45,-15,15);
+    // A stationary guard also yields under the impact instead of becoming a fixed hinge.
+    if(Math.abs(a.angular)<.2)a.recoil=clamp((Math.cos(a.angle)*ry-Math.sin(a.angle)*rx)*.008,-8,8);
+    if(Math.abs(b.angular)<.2)b.recoil=clamp(-(Math.cos(b.angle)*ry-Math.sin(b.angle)*rx)*.008,-8,8);
+    a.contacts.set(b,time);
+   }
+  }
   stopAtContact(a,safe);stopAtContact(b,safe);
   if(time-(a.clash??-1)>.12&&time-(b.clash??-1)>.12){
    a.clash=b.clash=time;
@@ -166,6 +186,8 @@ function draw(){ctx.clearRect(0,0,W,H);ctx.save();
  for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*3);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3);}ctx.globalAlpha=1;ctx.font='bold 17px monospace';for(const t of texts){ctx.globalAlpha=Math.min(1,t.life*2);ctx.fillStyle='#f1e8c9';ctx.fillText(t.value,t.x,t.y);}ctx.globalAlpha=1;
  if(state==='playing'){ctx.strokeStyle='#d4ed8570';ctx.lineWidth=1;ctx.beginPath();ctx.arc(mouse.x,mouse.y,7,0,Math.PI*2);ctx.stroke();line({x:mouse.x-11,y:mouse.y},{x:mouse.x+11,y:mouse.y},'#d4ed8570',1);line({x:mouse.x,y:mouse.y-11},{x:mouse.x,y:mouse.y+11},'#d4ed8570',1);}ctx.restore();}
 let last=0,acc=0;function frame(ms){acc+=Math.min((ms-last)/1000,.05)*GAME_SPEED;last=ms;if(state==='playing'){while(acc>=DT){step();acc-=DT;if(state!=='playing'){acc=0;break;}}}else acc=0;draw();requestAnimationFrame(frame);}loadLevel(0,false);fighters.forEach(bodyStep);requestAnimationFrame(frame);
+
+
 
 
 
