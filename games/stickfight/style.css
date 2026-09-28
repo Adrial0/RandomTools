@@ -3,3 +3,5 @@
 
 /* Compact game layout. */
 header{height:78px;border-bottom:0}.arena{margin-top:8px}.journey{padding:20px 0}.eyebrow:empty{display:none}
+
+main{max-width:1640px}.levels{flex-wrap:wrap}.levels button{width:36px}.journey{gap:18px}
