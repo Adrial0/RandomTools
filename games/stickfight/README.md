@@ -16,3 +16,9 @@ The simulation uses a fixed 120 Hz step. Living fighters use a supported torso, 
 Optional impact audio is synthesized locally; toggle Sound on. Losing browser focus pauses the fight.
 
 
+
+## Attacking and blocking
+
+The player's sword changes direction only when the mouse moves. Holding the mouse still keeps the same guard angle, including during movement and knockback. No automatic thrusts or counterattacks are applied. Moving with WASD can carry your blade into an opponent; passive knockback cannot create a damaging player attack.
+
+Place your blade in an incoming weapon's path to block. Swept, thickness-aware blade contact stops the weapons before they pass through each other, with sparks and optional impact sound. Blocking works while holding a guard; there is no block button or automatic chance roll. After a blocked swing, move the mouse to choose your next swing or pull your blade away. Attacks that miss the guard can still hit your body.
