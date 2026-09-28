@@ -3,9 +3,9 @@
 const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d');
 const $=s=>document.querySelector(s),W=1500,H=660,FLOOR=552,DT=1/120,GAME_SPEED=.8;
 const weapons={sword:{name:'Arming sword',length:81,mass:1,width:5},long:{name:'Greatsword',length:119,mass:1.65,width:7},axe:{name:'Battle axe',length:76,mass:1.9,width:7},spear:{name:'War spear',length:145,mass:1.2,width:4},dagger:{name:'Short blade',length:55,mass:.65,width:4},hammer:{name:'War hammer',length:85,mass:2.1,width:7},archer:{name:'Bow',length:34,mass:.7,width:3},mage:{name:'Staff',length:58,mass:1,width:5}};
-const levels=[['Swordsman','Defeat the swordsman.',['sword'],.8],['Greatsword','Get inside the longer blade’s reach.',['long'],.85],['Axe','Attack after the axe swing.',['axe'],.9],['Duelist','A faster opponent with a short blade.',['dagger'],1.5],['Spear','Close the gap on the spear fighter.',['spear'],1],['Two opponents','Keep both enemies in front of you.',['sword','dagger'],1],['Hammer','Defeat the hammer fighter and swordsman.',['hammer','sword'],.95],['Fast opponents','Two faster enemies.',['dagger','long'],1.45],['Three opponents','Defeat all three enemies.',['axe','spear','sword'],1.1],['Champions','Three enemies with different weapons.',['long','hammer','dagger'],1.4],['Archer','Deflect arrows with your sword.',['archer'],1],['Spellcaster','Spells pass through swords. Dodge them.',['mage'],1],['Covering fire','Close in while blocking arrows.',['sword','archer'],1.15],['Final round','Deflect arrows, dodge spells, defeat all enemies.',['axe','archer','mage'],1.2]];
+const levels=[['Swordsman','Defeat the swordsman.',['sword'],.8],['Archer','Deflect arrows with your sword.',['archer'],.9],['Spellcaster','Move out of the marked circle before it erupts.',['mage'],.9],['Greatsword','Get inside the longer blade’s reach.',['long'],.9],['Covering fire','Block arrows while fighting the swordsman.',['sword','archer'],1],['Axe','Attack after the axe swing.',['axe'],1],['Duelist','A faster opponent with a short blade.',['dagger'],1.5],['Arcane guard','Dodge marked zones while fighting.',['sword','mage'],1],['Spear','Close the gap on the spear fighter.',['spear'],1.1],['Hammer','Defeat the hammer fighter and archer.',['hammer','archer'],1.05],['Fast opponents','Two faster enemies.',['dagger','long'],1.45],['Three opponents','Defeat all three enemies.',['axe','spear','sword'],1.1],['Crossfire','Deflect arrows and dodge marked zones.',['archer','mage'],1.2],['Final round','Deflect arrows, dodge marked zones, defeat all enemies.',['axe','archer','mage'],1.2]];
 let unlocked=0;try{unlocked=Math.max(0,Math.min(levels.length-1,Number(localStorage.getItem('iron-string-level'))||0));}catch{}
-let round=0,state='menu',fighters=[],player,projectiles=[],particles=[],texts=[],time=0,shake=0,clearTimer=0,sound=false,audio,pausedFrom='playing';
+let round=0,state='menu',fighters=[],player,projectiles=[],zones=[],particles=[],texts=[],time=0,shake=0,clearTimer=0,sound=false,audio,pausedFrom='playing';
 const keys=new Set(),mouse={x:650,y:330},clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function point(x,y,r=5){return{x,y,px:x,py:y,r};}
 function makeFighter(x,enemy,weapon='sword',speed=1,index=0){
@@ -13,7 +13,7 @@ function makeFighter(x,enemy,weapon='sword',speed=1,index=0){
  const links=[[0,1,38],[1,2,25],[1,3,26],[3,4,27],[1,5,27],[5,6,28],[0,7,32],[7,8,34],[0,9,32],[9,10,34]];
  return{p,links,enemy,weapon:weapons[weapon],kind:weapon,ranged:weapon==='archer'||weapon==='mage',extension:44,reachAim:44,speed,hp:enemy?80+round*4:100,maxHp:enemy?80+round*4:100,angle:enemy?Math.PI:-.4,aim:-.4,lastMouse:{...mouse},angular:0,tip:null,base:null,oldTip:null,oldBase:null,hits:new Map(),stun:0,flash:0,phase:index*1.7,grounded:true,dead:0,color:weapon==='mage'?'#bf9df7':weapon==='archer'?'#ebca7d':enemy?'#eb987a':'#d6f19a',trail:[]};
 }
-function loadLevel(n,play=true){round=n;time=0;clearTimer=0;particles=[];projectiles=[];texts=[];shake=0;fighters=[makeFighter(290,false)];player=fighters[0];levels[n][2].forEach((w,i)=>fighters.push(makeFighter(860+i*150,true,w,levels[n][3],i)));state=play?'playing':'menu';$('#overlay').classList.toggle('hidden',play);$('#round').textContent=`ROUND ${String(n+1).padStart(2,'0')} / ${levels.length}`;$('#level-name').textContent=levels[n][0];$('#feedback').textContent=levels[n][1];updateHUD();renderLevels();}
+function loadLevel(n,play=true){round=n;time=0;clearTimer=0;particles=[];projectiles=[];zones=[];texts=[];shake=0;fighters=[makeFighter(290,false)];player=fighters[0];levels[n][2].forEach((w,i)=>fighters.push(makeFighter(860+i*150,true,w,levels[n][3],i)));state=play?'playing':'menu';$('#overlay').classList.toggle('hidden',play);$('#round').textContent=`ROUND ${String(n+1).padStart(2,'0')} / ${levels.length}`;$('#level-name').textContent=levels[n][0];$('#feedback').textContent=levels[n][1];updateHUD();renderLevels();}
 function renderLevels(){const el=$('#levels');el.replaceChildren();levels.forEach((l,i)=>{const b=document.createElement('button');b.textContent=String(i+1).padStart(2,'0');b.title=l[0];b.disabled=i>unlocked;b.className=i===round?'current':i<unlocked?'done':'';b.onclick=()=>loadLevel(i);el.append(b);});}
 function updateHUD(){$('#health').style.width=Math.max(0,player.hp)+'%';$('#hp').textContent=Math.max(0,Math.ceil(player.hp))+' / 100';const alive=fighters.filter(f=>f.enemy&&f.hp>0).length;$('#remaining').textContent=alive+' opponent'+(alive===1?'':'s');}
 function overlay(label,title,copy,button){$('#card-label').textContent=label;$('#card-title').textContent=title;$('#card-copy').textContent=copy;$('#primary').innerHTML=button+' <span>→</span>';$('#card-hint').textContent=state==='paused'?'Esc to resume · R to restart':'Move the mouse to swing. No clicking needed.';$('#overlay').classList.remove('hidden');}
@@ -39,21 +39,42 @@ function rangedControl(f){
  let move=dist<(spell?330:370)?-dir*.8:dist>570?dir*.8:0;
  if((f.root?.x<85&&move<0)||(f.root?.x>W-85&&move>0))move=0;
  let target=Math.atan2(player.p[1].y-f.p[1].y,dx);
- if(ai.mode==='position'&&time>=ai.until){ai.mode='charge';ai.until=time+(spell?1.05:.7)/Math.sqrt(f.speed);ai.lockAt=ai.until-.25;}
+ if(ai.mode==='position'&&time>=ai.until){ai.mode='charge';ai.until=time+(spell?1.05:.7)/Math.sqrt(f.speed);ai.lockAt=ai.until-.25;if(spell)zones.push({x:clamp(player.p[0].x,65,W-65),radius:76,remaining:1.2,warning:1.2,active:false,life:.35,owner:f,damage:23,hit:false});}
  if(ai.mode==='charge'){
   move*=.2;
   if(time<ai.lockAt||ai.shotAngle===undefined){
-   const lead=clamp(dist/(spell?280:430),.1,.7)*.45;
+   const lead=clamp(dist/(spell?280:550),.1,.7)*.45;
    ai.shotAngle=Math.atan2(player.p[1].y+(player.vy||0)*lead-f.p[1].y-(spell?0:dist*.05),dx+(player.walk||0)*lead);
   }
   target=ai.shotAngle;
   if(time>=ai.until){
-   const speed=spell?290:440,x=f.p[1].x+Math.cos(target)*60,y=f.p[1].y+Math.sin(target)*60;
-   projectiles.push({x,y,vx:Math.cos(target)*speed,vy:Math.sin(target)*speed,type:spell?'spell':'arrow',owner:f,enemy:true,life:6,damage:spell?23:15});
+   const speed=550,x=f.p[1].x+Math.cos(target)*60,y=f.p[1].y+Math.sin(target)*60;
+   if(!spell)projectiles.push({x,y,vx:Math.cos(target)*speed,vy:Math.sin(target)*speed,type:'arrow',owner:f,enemy:true,life:6,damage:15});
    tone(spell?160:700,.1);ai.mode='position';ai.until=time+(spell?1.15:.8)+enemyRandom(ai)*.4;ai.shotAngle=undefined;
   }
  }
  return{move,target,jump:false,crouch:false};
+}
+function zoneStep(){
+ for(const z of zones){
+  if(!z.active){if(z.owner.hp<=0){z.life=0;continue;}z.remaining-=DT;if(z.remaining>0)continue;z.active=true;burst(z.x,FLOOR-15,'#c69aff',20);tone(100,.15);}
+  z.life-=DT;
+  // The marked footprint never follows the player. It is a brief vertical
+  // eruption: run outside its width rather than needing a precisely timed jump.
+  if(!z.hit&&player.hp>0&&Math.abs(player.p[0].x-z.x)<z.radius+8&&player.p[0].y>FLOOR-190){
+   z.hit=true;player.hp-=z.damage;player.flash=.18;player.stun=.12;impulse(player,Math.sign(player.p[0].x-z.x)*25,-25);texts.push({x:player.p[0].x,y:player.p[1].y-10,life:.8,value:z.damage});updateHUD();
+  }
+ }
+ zones=zones.filter(z=>z.life>0);
+}
+function drawZones(){
+ for(const z of zones){
+  const progress=clamp(1-z.remaining/z.warning,0,1);
+  ctx.fillStyle=z.active?'#ba80ff44':'#bb8cff18';ctx.fillRect(z.x-z.radius,FLOOR-185,z.radius*2,185);
+  ctx.strokeStyle=z.active?'#e4c5ff':'#bd8dff';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(z.x,FLOOR-3,z.radius,12,0,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle='#cba6ff';ctx.fillRect(z.x-z.radius,FLOOR+2,z.radius*2*progress,4);
+  if(z.active){for(let i=-2;i<=2;i++)line({x:z.x+i*24,y:FLOOR},{x:z.x+i*24+Math.sin(time*25+i)*9,y:FLOOR-180},'#c397ff99',5);}
+ }
 }
 function projectileBladeHit(shot,old,f){
  if(!f.base||f.ranged||f.hp<=0)return false;
@@ -69,7 +90,7 @@ function deflectArrow(shot,f){
  if(Math.abs(dot)<80){vx=-shot.vx;vy=-shot.vy;}
  vx+=-Math.sin(f.angle)*f.angular*6;vy+=Math.cos(f.angle)*f.angular*6;
  const speed=Math.hypot(vx,vy)||1,scale=clamp(speed,320,600)/speed;
- shot.vx=vx*scale;shot.vy=vy*scale;shot.owner=f;shot.enemy=f.enemy;shot.deflectUntil=time+.1;
+ shot.vx=vx*scale;shot.vy=vy*scale;shot.owner=f;shot.enemy=f.enemy;if(!f.enemy)shot.damage=25;shot.deflectUntil=time+.1;
  shot.x+=shot.vx*DT*2;shot.y+=shot.vy*DT*2;
  burst(shot.x,shot.y,'#f9e4ad',7);tone(650);$('#feedback').textContent='Arrow deflected';
 }
@@ -266,13 +287,13 @@ function combat(){
  if(att.ranged||!att.attackInput||att.blocked||!att.oldTip||time-(att.hits.get(def)??-1)<.38)continue;
  const velocity=Math.hypot(att.tip.x-att.oldTip.x,att.tip.y-att.oldTip.y)/DT;if(velocity<105)continue;
  let hit=null,head=false;for(let n=0;n<def.p.length;n++){const p=def.p[n];if(closest(p,att.base,att.tip)<p.r+att.weapon.width+3||closest(p,att.oldTip,att.tip)<p.r+att.weapon.width+3){hit=p;head=n===2;break;}}
- if(!hit)continue;att.hits.set(def,time);const damage=clamp(velocity*.024*att.weapon.mass,6,32)*(head?1.25:1)*(att.enemy?.72:1);def.hp-=damage;def.stun=.2;def.flash=.13;
+ if(!hit)continue;att.hits.set(def,time);const damage=clamp(velocity*.024*att.weapon.mass,6,32)*(head?1.25:1)*(att.enemy?.72:1.65);def.hp-=damage;def.stun=.2;def.flash=.13;
  const vx=(att.tip.x-att.oldTip.x)/DT,vy=(att.tip.y-att.oldTip.y)/DT;impulse(def,clamp(vx*.07,-75,75),clamp(vy*.05-15,-65,55));att.angular*=.65;shake=clamp(damage*.25,2,8);burst(hit.x,hit.y,def.color);texts.push({x:hit.x,y:hit.y-20,life:.8,value:Math.ceil(damage)});tone(def.hp<=0?100:220);
  if(def.hp<=0){impulse(def,Math.sign(vx)*90,-95);burst(hit.x,hit.y,def.color,24);$('#feedback').textContent=def.enemy?'Enemy defeated.':'Defeated.';}updateHUD();
  }
  }
 }
-function step(){time+=DT;fighters.forEach(bodyStep);if(state==='playing'){combat();projectileStep();}for(const p of particles){p.x+=p.vx*DT;p.y+=p.vy*DT;p.vy+=400*DT;p.life-=DT;}particles=particles.filter(p=>p.life>0);for(const t of texts){t.y-=35*DT;t.life-=DT;}texts=texts.filter(t=>t.life>0);shake*=.95;
+function step(){time+=DT;fighters.forEach(bodyStep);if(state==='playing'){combat();projectileStep();zoneStep();}for(const p of particles){p.x+=p.vx*DT;p.y+=p.vy*DT;p.vy+=400*DT;p.life-=DT;}particles=particles.filter(p=>p.life>0);for(const t of texts){t.y-=35*DT;t.life-=DT;}texts=texts.filter(t=>t.life>0);shake*=.95;
  if(state==='playing'){if(player.hp<=0){clearTimer+=DT;if(clearTimer>1.2){state='lost';overlay('','Defeated',levels[round][1]+' Try moving your mouse in a sweeping arc through your opponent.','Try again');}}else if(fighters.every(f=>!f.enemy||f.hp<=0)){clearTimer+=DT;if(clearTimer>1.3){unlocked=Math.max(unlocked,Math.min(levels.length-1,round+1));try{localStorage.setItem('iron-string-level',unlocked);}catch{}renderLevels();state=round===levels.length-1?'complete':'won';overlay(round===levels.length-1?'COMPLETE':'ROUND CLEARED',round===levels.length-1?'You win':'Round complete',round===levels.length-1?'All rounds completed.':`Up next: ${levels[round+1][0]}. ${levels[round+1][1]}`,round===levels.length-1?'Play again':'Next round');}}}
 }
 function line(a,b,color,width){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
@@ -302,10 +323,11 @@ function draw(){ctx.clearRect(0,0,W,H);ctx.save();
  const glow=ctx.createRadialGradient(600,120,5,600,300,590);glow.addColorStop(0,'#d3e6a40b');glow.addColorStop(1,'#d3e6a400');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
  ctx.fillStyle='#19211d';ctx.fillRect(0,FLOOR+8,W,H-FLOOR);line({x:0,y:FLOOR+9},{x:W,y:FLOOR+9},'#788465',2);for(let x=15;x<W;x+=40)line({x,y:FLOOR+17},{x:x-20,y:FLOOR+40},'#3b4734',1);
  fighters.filter(f=>f.hp<=0).forEach(drawFighter);fighters.filter(f=>f.hp>0).forEach(drawFighter);
- drawProjectiles();
+ drawZones();drawProjectiles();
  for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*3);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3);}ctx.globalAlpha=1;ctx.font='bold 17px monospace';for(const t of texts){ctx.globalAlpha=Math.min(1,t.life*2);ctx.fillStyle='#f1e8c9';ctx.fillText(t.value,t.x,t.y);}ctx.globalAlpha=1;
  if(state==='playing'){ctx.strokeStyle='#d4ed8570';ctx.lineWidth=1;ctx.beginPath();ctx.arc(mouse.x,mouse.y,7,0,Math.PI*2);ctx.stroke();line({x:mouse.x-11,y:mouse.y},{x:mouse.x+11,y:mouse.y},'#d4ed8570',1);line({x:mouse.x,y:mouse.y-11},{x:mouse.x,y:mouse.y+11},'#d4ed8570',1);}ctx.restore();}
 let last=0,acc=0;function frame(ms){acc+=Math.min((ms-last)/1000,.05)*GAME_SPEED;last=ms;if(state==='playing'){while(acc>=DT){step();acc-=DT;if(state!=='playing'){acc=0;break;}}}else acc=0;draw();requestAnimationFrame(frame);}loadLevel(0,false);fighters.forEach(bodyStep);requestAnimationFrame(frame);
+
 
 
 
