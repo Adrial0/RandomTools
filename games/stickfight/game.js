@@ -32,13 +32,58 @@ function jointBetween(a,b,l1,l2,bend){
  const along=clamp((l1*l1-l2*l2+d*d)/(2*d),-l1,l1),side=Math.sqrt(Math.max(0,l1*l1-along*along))*bend;
  return{x:a.x+dx/d*along-dy/d*side,y:a.y+dy/d*along+dx/d*side};
 }
+function enemyRandom(ai){ai.seed=(Math.imul(ai.seed,1664525)+1013904223)>>>0;return ai.seed/4294967296;}
+function enemyControl(f){
+ const ai=f.ai??={seed:(round+1)*1973+Math.round(f.phase*991)+23,mode:'approach',until:0,nextLook:0,ready:time+.3,seen:null,lastAttack:-1};
+ // Decisions use sampled visible motion, not keyboard or mouse input. The gap
+ // between observations gives the player a chance to feint or change direction.
+ if(time>=ai.nextLook||!ai.seen){
+  ai.seen={x:player.p[1].x,y:player.p[1].y,angle:player.angle,angular:player.angular,vx:(player.walk||0)+(player.vx||0),vy:player.vy||0};
+  ai.nextLook=time+clamp(.23/f.speed,.1,.28)+enemyRandom(ai)*.045;
+ }
+ const s=ai.seen,dx=s.x-f.p[1].x,dir=Math.sign(dx)||1,dist=Math.abs(dx),aim=Math.atan2(s.y-f.p[1].y,dx),reach=f.weapon.length+44;
+ const predicted=s.angle+clamp(s.angular*.12,-.65,.65),tip={x:s.x+Math.cos(predicted)*(44+player.weapon.length),y:s.y+Math.sin(predicted)*(44+player.weapon.length)};
+ const threat=Math.abs(s.angular)>2.4&&dist<player.weapon.length+f.weapon.length+65&&closest(f.p[1],{x:s.x,y:s.y},tip)<55;
+ let move=dist>reach*.85?dir:dist<reach*.48?-dir:0,target=aim-dir*.55,jump=false,crouch=false;
+ const change=(mode,duration)=>{ai.mode=mode;ai.until=time+duration;};
+ if((ai.mode==='approach'||ai.mode==='windup'||ai.mode==='recover')&&threat&&time>=ai.ready){
+  ai.guard=Math.atan2(tip.y-f.p[1].y,tip.x-f.p[1].x);
+  change(enemyRandom(ai)<.65?'parry':'evade',.2+enemyRandom(ai)*.15);ai.ready=time+.45/f.speed;
+ }
+ if((ai.mode==='parry'||ai.mode==='evade')&&time>=ai.until){change('approach',0);ai.counter=true;}
+ if(ai.mode==='recover'&&time>=ai.until)change('approach',0);
+ if(ai.mode==='feint'&&time>=ai.until){change('approach',0);ai.ready=time+.12;}
+ if(ai.mode==='windup'&&time>=ai.until){change('strike',(.2+f.weapon.mass*.09)/f.speed);}
+ if(ai.mode==='strike'&&time>=ai.until){change('recover',(.25+f.weapon.mass*.1+enemyRandom(ai)*.2)/f.speed);ai.ready=ai.until;}
+ if(ai.mode==='approach'&&time>=ai.ready&&dist<reach+65){
+  let type=Math.floor(enemyRandom(ai)*3);if(type===ai.lastAttack)type=(type+1)%3;
+  ai.lastAttack=type;
+  // Choose a different body height, then commit to the arc through that point.
+  const hitY=s.y+[-22,18,49][type],attackAim=Math.atan2(hitY-f.p[1].y,dx+s.vx*.1);
+  const sign=type===2?-dir:dir;
+  ai.start=attackAim-sign*(type===1?.7:1.1);ai.finish=attackAim+sign*(type===1?.65:1.0);ai.direction=dir;
+  if(!ai.counter&&enemyRandom(ai)<.16){change('feint',.18+enemyRandom(ai)*.12);}
+  else change('windup',(.18+f.weapon.mass*.09+enemyRandom(ai)*.18)*(ai.counter?.65:1)/f.speed);
+  ai.counter=false;
+ }
+ if(ai.mode==='windup'){target=ai.start;move=dist<reach*.7?-dir*.35:dir*.25;}
+ if(ai.mode==='strike'){target=ai.finish;move=ai.direction*(f.kind==='dagger'?1.3:.9);crouch=ai.lastAttack===2;}
+ if(ai.mode==='recover'){target=aim-dir*.55;move=dist<reach?-dir*.7:0;}
+ if(ai.mode==='feint'){target=ai.start;move=dir*.65;}
+ if(ai.mode==='parry'){target=ai.guard;move=-dir*.35;}
+ if(ai.mode==='evade'){target=ai.guard;move=-dir;const low=tip.y>f.p[0].y-10;jump=low&&dist<150;crouch=!low;}
+ // Pursue a retreating player; avoid lining up directly on a nearby teammate.
+ if(ai.mode==='approach'&&s.vx*dir>50)move=dir*1.15;
+ for(const other of fighters){if(other!==f&&other.enemy&&other.hp>0&&Math.abs(other.p[0].x-f.p[0].x)<48&&Math.abs(other.p[0].y-f.p[0].y)<60)move+=Math.sign(f.p[0].x-other.p[0].x||f.phase-.5)*.45;}
+ return{move:clamp(move,-1.3,1.3),target,jump,crouch};
+}
 function livingStep(f){
  const p=f.p;
  f.root??={x:p[0].x,y:FLOOR-65};f.vx??=0;f.vy??=0;f.walk??=0;f.gait??=0;f.stance??=65;f.lean??=0;
  let move=0,jump=false,crouch=false,target;
  if(!f.enemy){move=(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0);jump=keys.has('KeyW');crouch=keys.has('KeyS');if(mouse.x!==f.lastMouse.x||mouse.y!==f.lastMouse.y){f.aim=Math.atan2(mouse.y-p[1].y,mouse.x-p[1].x);f.lastMouse={...mouse};}target=f.aim;}
- else{const dx=player.p[0].x-p[0].x,dist=Math.abs(dx),dir=Math.sign(dx)||1,reach=f.weapon.length+32;move=dist>reach*.85?dir:dist<reach*.5?-dir*.6:0;const cycle=(time*f.speed*.8+f.phase)%2.05;target=Math.atan2(player.p[1].y-p[1].y,dx)+dir*(cycle<1.2?-1.25:1.25);if(cycle<1.2)move*=.65;}
- f.attackInput=f.enemy||Math.abs(wrap(target-f.angle))>.025||move!==0||jump||crouch;const active=f.stun>0?.35:1,desired=move*(f.enemy?105*f.speed:205)*active*(crouch?.5:1);
+ else{({move,jump,crouch,target}=enemyControl(f));}
+ f.attackInput=f.enemy||Math.abs(wrap(target-f.angle))>.025||move!==0||jump||crouch;const active=f.stun>0?.35:1,desired=move*(f.enemy?175*Math.sqrt(f.speed):205)*active*(crouch?.5:1);
  f.walk+=(desired-f.walk)*(1-Math.exp(-22*DT));
  if(Math.abs(f.walk)<.05)f.walk=0;
  f.grounded=f.root.y>=FLOOR-65-.01&&f.vy>=0;
@@ -52,7 +97,7 @@ function livingStep(f){
  const hip={x:f.root.x,y:f.root.y+65-f.stance},lean=f.walk*.00045+f.lean;
  const chest={x:hip.x+Math.sin(lean)*38,y:hip.y-Math.cos(lean)*38};
  const head={x:chest.x+Math.sin(lean)*25,y:chest.y-Math.cos(lean)*25};
- if(f.enemy&&time<(f.guardRecovery||0)){f.angular=0;}else if(f.enemy){f.angular+=wrap(target-f.angle)*60/f.weapon.mass*DT;f.angular*=Math.exp(-9*DT);f.angular=clamp(f.angular,-9,9);}
+ if(f.enemy&&time<(f.guardRecovery||0)){f.angular*=Math.exp(-12*DT);}else if(f.enemy){const urgency=f.ai?.mode==='strike'?150:f.ai?.mode==='parry'?190:90;f.angular+=wrap(target-f.angle)*urgency/f.weapon.mass*DT;f.angular*=Math.exp(-10*DT);f.angular=clamp(f.angular,-12*f.speed,12*f.speed);}
  else{
   // Mouse response uses real elapsed time, independent of the slower arena pace.
   const delta=wrap(target-f.angle)*(1-Math.exp(-48*DT/GAME_SPEED));

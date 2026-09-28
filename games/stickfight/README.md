@@ -23,3 +23,9 @@ The player's sword changes direction only when the mouse moves. Holding the mous
 
 Place your blade in an incoming weapon's path to block. Swept, thickness-aware blade contact deflects the weapons and transfers momentum to both fighters, with sparks and optional impact sound. Strong downward swings into a guard can kick the attacker upward. Contact never rewinds movement or gravity; residual overlap can separate freely without freezing the fighters. Blocking works while holding a guard; there is no block button or automatic chance roll. After a blocked swing, physical recoil moves the blade; mouse input chooses the next swing. Recoil does not trigger an automatic counterattack. Attacks that miss the guard can still hit your body.
 
+
+## Enemy behavior
+
+Enemies observe the player's position, velocity, and blade motion on a delayed cadence (roughly 0.1–0.3 simulation seconds, depending on difficulty). They chase retreats, maintain weapon range, back away when crowded, and try to parry or evade incoming swings. They may duck high attacks or jump away from low ones. Defensive recovery can lead to a quicker counterattack.
+
+Attack choices mix high, middle, and low cuts, forward lunges, and feints. Windup and recovery times vary with weapon weight and enemy speed. Attack directions are committed during the windup, leaving opportunities to dodge. Nearby enemies try to avoid occupying the same space. These are physical attempts using the same movement and weapon collisions as the player, not guaranteed blocks or invulnerability.
