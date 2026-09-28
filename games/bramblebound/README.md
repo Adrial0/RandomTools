@@ -144,3 +144,7 @@ Weapon category tabs remain in the shop. Each page displays all unlocked weapons
 The main menu offers three independent local save slots. Existing saves appear in slot 1. Return through Settings → Main menu; New party replaces only the active slot after confirmation. Party portraits show a blue MP bar beneath their red HP bar. Rune families have distinct colored symbols. Boss exits appear two seconds after the boss dies (also at 2× speed); regular stage exits remain available throughout the fight.
 
 Burn deals ten damage pulses during one simulation second. Poison ticks once per simulation second for four seconds. These timers are independent of the attack animation and run twice as fast in real time at 2× game speed.
+
+## Sound
+
+Web Audio synthesizes weapon-family sounds, per-item tonal variations, instrument notes, multishot bow releases, elemental spell sounds, summon arrivals, direct hits, deaths, boss clears and menu clicks. DoT ticks are silent; direct-hit audio is rate limited and polyphony is capped. Master, combat and menu volumes, mute and enemy-hit preferences persist in `bramblebound-audio-v1` across save slots. Audio unlocks on a player gesture and suspends when the page is hidden. Settings includes a sound-test button. Run `node audio-test.cjs` for audio scheduling/settings checks and `node smoke-test.cjs` for game-event integration.

@@ -62,3 +62,5 @@ button,select{font:inherit;border:1px solid #80602f;border-radius:0;cursor:point
 
 /* Full tier catalogues stay together in the shop. */
 .shop-window{top:5px;left:2%;width:96%;max-height:calc(100% - 10px);padding:6px}.shop-window #trader-stock{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.shop-card{padding:4px;gap:3px;font-size:8px;line-height:1.25}.shop-window .service-actions{margin:3px 0}.shop-navigation{margin-top:4px;padding-top:4px}@media(max-width:540px){.shop-window #trader-stock{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.sound-settings{display:grid;grid-template-columns:1fr 1fr;gap:5px 16px;border:1px solid #76613c;padding:7px}.sound-settings label{justify-content:space-between}.sound-settings input[type=range]{width:110px;accent-color:#dcb76d}.sound-settings legend{font-size:11px}.settings-modal{max-height:calc(100% - 12px)}@media(max-width:540px){.sound-settings{grid-template-columns:1fr}.sound-settings input[type=range]{width:140px}}
