@@ -36,3 +36,9 @@ Archers appear in round 2 and spellcasters in round 3; later rounds mix them wit
 
 The cursor targets the sword tip. Mouse distance sets shoulder-to-hand extension to 10–54 units; the sword itself remains rigid and keeps its full length. Within that reachable region the tip follows the cursor. Inside or outside it, reach clamps rather than stretching the arm. Arm joints retain lengths of 27 and 28 units. Moving the mouse closer or farther can now make deliberate thrusting or retracting motions, and those changes in reach participate in collision detection.
 
+
+## Larger formations
+
+Late rounds grow from four to eight enemies. Rounds 12–14 include two mages; rounds 13–14 field three archers and three melee fighters alongside them. Mages share a casting order with at least 1.65 simulation seconds between zone warnings, so they alternate instead of dropping both zones at once. Surviving mages continue casting when a partner dies. Archers have staggered initial draw times and spread out rather than stacking in one firing position.
+
+Melee fighters marked GUARD remain near assigned ranged allies. They intercept players who enter their defensive range, return when drawn too far away, and protect another ranged ally if their assigned ward dies. Once no ranged allies remain, guards pursue normally. Other melee fighters attack as before. The first guard appears in round 8; the final two rounds each have two guards and one attacking melee fighter.

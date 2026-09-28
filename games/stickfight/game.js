@@ -3,9 +3,9 @@
 const canvas=document.querySelector('#game'),ctx=canvas.getContext('2d');
 const $=s=>document.querySelector(s),W=1500,H=660,FLOOR=552,DT=1/120,GAME_SPEED=.8;
 const weapons={sword:{name:'Arming sword',length:81,mass:1,width:5},long:{name:'Greatsword',length:119,mass:1.65,width:7},axe:{name:'Battle axe',length:76,mass:1.9,width:7},spear:{name:'War spear',length:145,mass:1.2,width:4},dagger:{name:'Short blade',length:55,mass:.65,width:4},hammer:{name:'War hammer',length:85,mass:2.1,width:7},archer:{name:'Bow',length:34,mass:.7,width:3},mage:{name:'Staff',length:58,mass:1,width:5}};
-const levels=[['Swordsman','Defeat the swordsman.',['sword'],.8],['Archer','Deflect arrows with your sword.',['archer'],.9],['Spellcaster','Move out of the marked circle before it erupts.',['mage'],.9],['Greatsword','Get inside the longer blade’s reach.',['long'],.9],['Covering fire','Block arrows while fighting the swordsman.',['sword','archer'],1],['Axe','Attack after the axe swing.',['axe'],1],['Duelist','A faster opponent with a short blade.',['dagger'],1.5],['Arcane guard','Dodge marked zones while fighting.',['sword','mage'],1],['Spear','Close the gap on the spear fighter.',['spear'],1.1],['Hammer','Defeat the hammer fighter and archer.',['hammer','archer'],1.05],['Fast opponents','Two faster enemies.',['dagger','long'],1.45],['Three opponents','Defeat all three enemies.',['axe','spear','sword'],1.1],['Crossfire','Deflect arrows and dodge marked zones.',['archer','mage'],1.2],['Final round','Deflect arrows, dodge marked zones, defeat all enemies.',['axe','archer','mage'],1.2]];
+const levels=[['Swordsman','Defeat the swordsman.',['sword'],.8],['Archer','Deflect arrows with your sword.',['archer'],.9],['Spellcaster','Move out of the marked circle before it erupts.',['mage'],.9],['Greatsword','Get inside the longer blade’s reach.',['long'],.9],['Covering fire','Block arrows while fighting the swordsman.',['sword','archer'],1],['Axe','Attack after the axe swing.',['axe'],1],['Duelist','A faster opponent with a short blade.',['dagger'],1.5],['Arcane guard','The swordsman protects the mage.',['sword','mage'],1,[0]],['Spear guard','Get past the spear to reach the archers.',['spear','dagger','archer','archer'],1.05,[0]],['War band','One attacker, one guard, and ranged support.',['hammer','sword','archer','archer','mage'],1.05,[1]],['Raiding party','Fast attackers backed by a guarded caster.',['dagger','long','spear','archer','archer','mage'],1.25,[2]],['Twin casters','Two mages alternate their marked attacks.',['axe','sword','archer','archer','mage','mage'],1.1,[1]],['Crossfire','Break through the guards and ranged formation.',['spear','long','dagger','archer','archer','archer','mage','mage'],1.15,[0,1]],['Final round','Two casters, three archers, and three melee fighters.',['axe','hammer','spear','archer','archer','archer','mage','mage'],1.25,[1,2]]];
 let unlocked=0;try{unlocked=Math.max(0,Math.min(levels.length-1,Number(localStorage.getItem('iron-string-level'))||0));}catch{}
-let round=0,state='menu',fighters=[],player,projectiles=[],zones=[],particles=[],texts=[],time=0,shake=0,clearTimer=0,sound=false,audio,pausedFrom='playing';
+let round=0,state='menu',fighters=[],player,projectiles=[],zones=[],particles=[],texts=[],time=0,shake=0,clearTimer=0,mageTurn=0,nextMageCast=.8,sound=false,audio,pausedFrom='playing';
 const keys=new Set(),mouse={x:650,y:330},clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
 function point(x,y,r=5){return{x,y,px:x,py:y,r};}
 function makeFighter(x,enemy,weapon='sword',speed=1,index=0){
@@ -13,7 +13,7 @@ function makeFighter(x,enemy,weapon='sword',speed=1,index=0){
  const links=[[0,1,38],[1,2,25],[1,3,26],[3,4,27],[1,5,27],[5,6,28],[0,7,32],[7,8,34],[0,9,32],[9,10,34]];
  return{p,links,enemy,weapon:weapons[weapon],kind:weapon,ranged:weapon==='archer'||weapon==='mage',extension:44,reachAim:44,speed,hp:enemy?80+round*4:100,maxHp:enemy?80+round*4:100,angle:enemy?Math.PI:-.4,aim:-.4,lastMouse:{...mouse},angular:0,tip:null,base:null,oldTip:null,oldBase:null,hits:new Map(),stun:0,flash:0,phase:index*1.7,grounded:true,dead:0,color:weapon==='mage'?'#bf9df7':weapon==='archer'?'#ebca7d':enemy?'#eb987a':'#d6f19a',trail:[]};
 }
-function loadLevel(n,play=true){round=n;time=0;clearTimer=0;particles=[];projectiles=[];zones=[];texts=[];shake=0;fighters=[makeFighter(290,false)];player=fighters[0];levels[n][2].forEach((w,i)=>fighters.push(makeFighter(860+i*150,true,w,levels[n][3],i)));state=play?'playing':'menu';$('#overlay').classList.toggle('hidden',play);$('#round').textContent=`ROUND ${String(n+1).padStart(2,'0')} / ${levels.length}`;$('#level-name').textContent=levels[n][0];$('#feedback').textContent=levels[n][1];updateHUD();renderLevels();}
+function loadLevel(n,play=true){round=n;time=0;clearTimer=0;mageTurn=0;nextMageCast=.8;particles=[];projectiles=[];zones=[];texts=[];shake=0;fighters=[makeFighter(290,false)];player=fighters[0];levels[n][2].forEach((w,i)=>{const count=levels[n][2].length,x=count===1?860:680+i*(710/(count-1)),f=makeFighter(x,true,w,levels[n][3],i);f.role=(levels[n][4]||[]).includes(i)?"guard":"assault";f.slot=i;fighters.push(f);});state=play?'playing':'menu';$('#overlay').classList.toggle('hidden',play);$('#round').textContent=`ROUND ${String(n+1).padStart(2,'0')} / ${levels.length}`;$('#level-name').textContent=levels[n][0];$('#feedback').textContent=levels[n][1];updateHUD();renderLevels();}
 function renderLevels(){const el=$('#levels');el.replaceChildren();levels.forEach((l,i)=>{const b=document.createElement('button');b.textContent=String(i+1).padStart(2,'0');b.title=l[0];b.disabled=i>unlocked;b.className=i===round?'current':i<unlocked?'done':'';b.onclick=()=>loadLevel(i);el.append(b);});}
 function updateHUD(){$('#health').style.width=Math.max(0,player.hp)+'%';$('#hp').textContent=Math.max(0,Math.ceil(player.hp))+' / 100';const alive=fighters.filter(f=>f.enemy&&f.hp>0).length;$('#remaining').textContent=alive+' opponent'+(alive===1?'':'s');}
 function overlay(label,title,copy,button){$('#card-label').textContent=label;$('#card-title').textContent=title;$('#card-copy').textContent=copy;$('#primary').innerHTML=button+' <span>→</span>';$('#card-hint').textContent=state==='paused'?'Esc to resume · R to restart':'Move the mouse to swing. No clicking needed.';$('#overlay').classList.remove('hidden');}
@@ -33,13 +33,23 @@ function jointBetween(a,b,l1,l2,bend){
  return{x:a.x+dx/d*along-dy/d*side,y:a.y+dy/d*along+dx/d*side};
 }
 function enemyRandom(ai){ai.seed=(Math.imul(ai.seed,1664525)+1013904223)>>>0;return ai.seed/4294967296;}
+function guardPosition(f){
+ if(f.role!=='guard')return null;
+ const wards=fighters.filter(other=>other.enemy&&other.ranged&&other.hp>0);
+ if(!wards.length)return null;
+ if(!f.ward||f.ward.hp<=0){const guards=fighters.filter(other=>other.role==='guard'&&other.hp>0),index=Math.max(0,guards.indexOf(f));f.ward=wards[Math.round(index*(wards.length-1)/Math.max(1,guards.length-1))];}
+ const ward=f.ward;
+ const side=Math.sign(player.p[0].x-ward.p[0].x)||-1;
+ return{ward,x:clamp(ward.p[0].x+side*110,65,W-65)};
+}
 function rangedControl(f){
- const ai=f.ai??={seed:(round+1)*1973+Math.round(f.phase*991)+71,mode:'position',until:time+.8+f.phase*.15};
+ const ai=f.ai??={seed:(round+1)*1973+Math.round(f.phase*991)+71,mode:'position',until:time+.8+(f.kind==='mage'?0:f.phase*.12)};
  const dx=player.p[1].x-f.p[1].x,dir=Math.sign(dx)||1,dist=Math.abs(dx),spell=f.kind==='mage';
  let move=dist<(spell?330:370)?-dir*.8:dist>570?dir*.8:0;
  if((f.root?.x<85&&move<0)||(f.root?.x>W-85&&move>0))move=0;
  let target=Math.atan2(player.p[1].y-f.p[1].y,dx);
- if(ai.mode==='position'&&time>=ai.until){ai.mode='charge';ai.until=time+(spell?1.05:.7)/Math.sqrt(f.speed);ai.lockAt=ai.until-.25;if(spell)zones.push({x:clamp(player.p[0].x,65,W-65),radius:76,remaining:1.2,warning:1.2,active:false,life:.35,owner:f,damage:23,hit:false});}
+ const casters=fighters.filter(other=>other.hp>0&&other.kind==='mage');const castTurn=!spell||(time>=nextMageCast&&(casters.length===0||casters[mageTurn%casters.length]===f));
+ if(ai.mode==='position'&&time>=ai.until&&castTurn){ai.mode='charge';ai.until=time+(spell?1.05:.7)/Math.sqrt(f.speed);ai.lockAt=ai.until-.25;if(spell){mageTurn++;nextMageCast=time+1.65;zones.push({x:clamp(player.p[0].x,65,W-65),radius:76,remaining:1.2,warning:1.2,active:false,life:.35,owner:f,damage:23,hit:false});}}
  if(ai.mode==='charge'){
   move*=.2;
   if(time<ai.lockAt||ai.shotAngle===undefined){
@@ -53,7 +63,9 @@ function rangedControl(f){
    tone(spell?160:700,.1);ai.mode='position';ai.until=time+(spell?1.15:.8)+enemyRandom(ai)*.4;ai.shotAngle=undefined;
   }
  }
- return{move,target,jump:false,crouch:false};
+ // Keep separate firing positions instead of stacking all ranged fighters.
+ for(const other of fighters){if(other!==f&&other.enemy&&other.ranged&&other.hp>0&&Math.abs(other.p[0].x-f.p[0].x)<75)move+=Math.sign(f.p[0].x-other.p[0].x||f.phase-.5)*.6;}
+ return{move:clamp(move,-1,1),target,jump:false,crouch:false};
 }
 function zoneStep(){
  for(const z of zones){
@@ -128,6 +140,14 @@ function enemyControl(f){
   ai.nextLook=time+clamp(.23/f.speed,.1,.28)+enemyRandom(ai)*.045;
  }
  const s=ai.seen,dx=s.x-f.p[1].x,dir=Math.sign(dx)||1,dist=Math.abs(dx),aim=Math.atan2(s.y-f.p[1].y,dx),reach=f.weapon.length+44;
+ const guard=guardPosition(f);
+ // Guards intercept nearby threats but return to their ward when a player
+ // retreats. Once all ranged allies fall, they become normal attackers.
+ if(guard&&(Math.abs(f.p[0].x-guard.x)>190||dist>reach+85)){
+  ai.mode='guard';ai.ready=Math.max(ai.ready,time+.08);
+  return{move:clamp((guard.x-f.p[0].x)/70,-1,1),target:aim-dir*.6,jump:false,crouch:false};
+ }
+ if(ai.mode==='guard')ai.mode='approach';
  const predicted=s.angle+clamp(s.angular*.12,-.65,.65),tip={x:s.x+Math.cos(predicted)*(44+player.weapon.length),y:s.y+Math.sin(predicted)*(44+player.weapon.length)};
  const threat=Math.abs(s.angular)>2.4&&dist<player.weapon.length+f.weapon.length+65&&closest(f.p[1],{x:s.x,y:s.y},tip)<55;
  let move=dist>reach*.85?dir:dist<reach*.48?-dir:0,target=aim-dir*.55,jump=false,crouch=false;
@@ -314,6 +334,7 @@ function drawFighter(f){const p=f.p;ctx.globalAlpha=f.hp<=0?.55:1;const color=f.
  const guard={x:b.x+Math.cos(a)*15,y:b.y+Math.sin(a)*15};line({x:guard.x-Math.sin(a)*10,y:guard.y+Math.cos(a)*10},{x:guard.x+Math.sin(a)*10,y:guard.y-Math.cos(a)*10},'#a6b39a',4);
  ctx.save();ctx.translate(t.x,t.y);ctx.rotate(a);ctx.fillStyle='#cdd3c3';if(f.kind==='axe'){ctx.beginPath();ctx.moveTo(-22,-4);ctx.lineTo(-34,-23);ctx.quadraticCurveTo(6,-26,8,19);ctx.lineTo(-18,14);ctx.fill();}if(f.kind==='hammer'){ctx.fillRect(-21,-22,24,44);ctx.strokeStyle='#87937d';ctx.lineWidth=2;ctx.strokeRect(-21,-22,24,44);}if(f.kind==='spear'){ctx.beginPath();ctx.moveTo(7,0);ctx.lineTo(-20,-8);ctx.lineTo(-14,0);ctx.lineTo(-20,8);ctx.closePath();ctx.fill();}ctx.restore();}
  if(f.enemy&&f.hp>0){ctx.globalAlpha=.8;ctx.fillStyle='#475043';ctx.fillRect(p[2].x-24,p[2].y-32,48,3);ctx.fillStyle=f.color;ctx.fillRect(p[2].x-24,p[2].y-32,48*f.hp/f.maxHp,3);}ctx.globalAlpha=1;
+ if(f.hp>0&&f.role==='guard'&&fighters.some(other=>other.enemy&&other.ranged&&other.hp>0)){ctx.fillStyle='#a9c6df';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('GUARD',p[2].x,p[2].y-40);}
 }
 function draw(){ctx.clearRect(0,0,W,H);ctx.save();
  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#172421');grad.addColorStop(1,'#303b2e');ctx.fillStyle=grad;ctx.fillRect(-10,-10,W+20,H+20);
@@ -327,6 +348,7 @@ function draw(){ctx.clearRect(0,0,W,H);ctx.save();
  for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*3);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3);}ctx.globalAlpha=1;ctx.font='bold 17px monospace';for(const t of texts){ctx.globalAlpha=Math.min(1,t.life*2);ctx.fillStyle='#f1e8c9';ctx.fillText(t.value,t.x,t.y);}ctx.globalAlpha=1;
  if(state==='playing'){ctx.strokeStyle='#d4ed8570';ctx.lineWidth=1;ctx.beginPath();ctx.arc(mouse.x,mouse.y,7,0,Math.PI*2);ctx.stroke();line({x:mouse.x-11,y:mouse.y},{x:mouse.x+11,y:mouse.y},'#d4ed8570',1);line({x:mouse.x,y:mouse.y-11},{x:mouse.x,y:mouse.y+11},'#d4ed8570',1);}ctx.restore();}
 let last=0,acc=0;function frame(ms){acc+=Math.min((ms-last)/1000,.05)*GAME_SPEED;last=ms;if(state==='playing'){while(acc>=DT){step();acc-=DT;if(state!=='playing'){acc=0;break;}}}else acc=0;draw();requestAnimationFrame(frame);}loadLevel(0,false);fighters.forEach(bodyStep);requestAnimationFrame(frame);
+
 
 
 
