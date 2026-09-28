@@ -110,7 +110,7 @@ tt.select(3);const priest=tt.get().heroes[3];priest.attributes.str=6;priest.attr
 
 const slowDrag=harness().t,fastDrag=harness().t;for(const d of [slowDrag,fastDrag]){d.start();const h=d.get().heroes[0];h.x=100;h.y=150;h.vx=h.vy=0;h.dragSample={x:100,y:150,t:0};d.setHeld(h)}slowDrag.moveHeld(160,100,1000);fastDrag.moveHeld(160,100,50);for(let i=0;i<8;i++){slowDrag.stepHeld(slowDrag.get().heroes[0],.01);fastDrag.stepHeld(fastDrag.get().heroes[0],.01)}assert.ok(fastDrag.get().heroes[0].x>slowDrag.get().heroes[0].x+8,'Fast cursor movement produces faster follow at equal distance');
 
-const mechanics=harness(),mt=mechanics.t;mt.start();assert.deepEqual(Array.from({length:16},(_,i)=>mt.areaHealth(Math.ceil(i*125/77))),[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500]);for(let i=0;i<9;i++){mt.setArea(i);assert.equal(mt.enemy('boss',300).maxHp,mt.areaHealth(i)*10)}assert.deepEqual(Array.from({length:13},(_,i)=>mt.weaponPrice(i)),[100,250,500,750,1000,1500,2000,2500,3000,3500,4000,4500,5000]);assert.equal(mt.weaponPrice(22),10000);assert.equal(mt.weaponPrice(23),11000);assert.equal(mt.buyPrice(mt.items['0-ice']),750);assert.equal(mt.needed(1),288);
+const mechanics=harness(),mt=mechanics.t;mt.start();assert.deepEqual(Array.from({length:16},(_,i)=>mt.areaHealth(Math.ceil(i*125/77))),[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500]);for(let i=0;i<9;i++){mt.setArea(i);assert.equal(mt.enemy('boss',300).maxHp,mt.areaHealth(i)*10)}assert.deepEqual(Array.from({length:13},(_,i)=>mt.weaponPrice(i)),[100,250,500,750,1000,1500,2000,2500,3000,3500,4000,4500,5000]);assert.equal(mt.weaponPrice(22),10000);assert.equal(mt.weaponPrice(23),11000);assert.equal(mt.buyPrice(mt.items['0-ice']),500);assert.equal(mt.needed(1),288);
 mt.setArea(1);mt.setStage(0);mt.enter();assert.ok(mt.terrainHit(160,215,200,215),'A terrain wall blocks a low shot');const wallTarget=mt.get().enemies[0];wallTarget.x=210;wallTarget.y=226;wallTarget.hp=100;const wallShooter=mt.get().heroes[0];wallShooter.x=160;wallShooter.y=226;mt.shoot(wallShooter,wallTarget,'bullet',40,mt.attackToken(wallShooter));mt.tickShots(.3);assert.equal(wallTarget.hp,100);assert.equal(mt.get().shots.length,0);
 const climber=mt.get().heroes[0];climber.x=179.9;climber.y=226;climber.vy=0;climber.vx=33;climber.drive=33;mt.stepBody(climber,.01);assert.ok(climber.y>220,'Hero does not snap 19 pixels up hill');for(let i=0;i<150;i++){climber.drive=33;mt.stepBody(climber,.01)}assert.ok(climber.x>180&&Math.abs(climber.y-207)<1,'Hero finishes stepping onto ledge');
 const ec=mt.enemy('slime',179.9);mt.moveEnemy(ec,.3,.01);assert.ok(ec.y>220);for(let i=0;i<150;i++)mt.moveEnemy(ec,.17,.01);assert.ok(ec.x>180&&Math.abs(ec.y-207)<1,'Enemy steps onto ledge');
@@ -206,7 +206,7 @@ const r=harness().t;r.start();const h=r.get().heroes[0];const originalXP=h.xp,go
 r.setStage(r.stageCount()-1);r.enter();assert.equal(r.stageExitOpen(),false);r.completeArea();assert.equal(r.get().state,'fight');h.x=554;h.y=226;r.update(.001);assert.equal(r.get().state,'fight');assert.ok(!r.get().completed.includes('a0'));r.get().enemies.find(e=>e.type==='boss').hp=0;assert.ok(r.get().enemies.some(e=>e.hp>0));assert.equal(r.stageExitOpen(),false);r.tickBossExit(1.99);assert.equal(r.stageExitOpen(),false);r.tickBossExit(.01);assert.equal(r.stageExitOpen(),true);h.x=554;h.y=226;r.update(.001);assert.equal(r.get().state,'map');assert.ok(r.get().completed.includes('a0'));console.log('Regular stages can be skipped without rewards; live bosses block progression; surviving regular mobs do not block a defeated boss exit.');
 }
 {
-const check=harness(),c=check.t;c.start();c.setStage(7);const foe=c.enemy('slime',300),table=Array.from(c.weaponDropTable(foe));assert.ok(table.length>=1&&table.length<=2);c.setParty([7,7,7,7]);assert.deepEqual(Array.from(c.weaponDropTable(foe)),table);const covered=new Set();for(const items of Object.values(c.WEAPON_DROPS)){assert.ok(items.length<=2);items.forEach(id=>{assert.equal(c.items[id].type,'weapon');covered.add(id)})}assert.ok(Object.values(c.items).filter(w=>w.type==='weapon'&&!w.id.endsWith('-basic')).every(w=>covered.has(w.id)));
+const check=harness(),c=check.t;c.start();c.setStage(7);const foe=c.enemy('slime',300),table=Array.from(c.weaponDropTable(foe));assert.ok(table.length>=1&&table.length<=2);c.setParty([7,7,7,7]);assert.deepEqual(Array.from(c.weaponDropTable(foe)),table);const covered=new Set();for(const items of Object.values(c.WEAPON_DROPS)){assert.ok(items.length<=2);items.forEach(id=>{assert.equal(c.items[id].type,'weapon');covered.add(id)})}assert.ok(Object.values(c.items).filter(w=>w.type==='weapon'&&!w.retired&&!w.id.endsWith('-basic')).every(w=>covered.has(w.id)));
 assert.equal(c.items['rune-leech'].type,'soul');assert.equal(c.items['rune-leech'].bonuses.lifesteal,.02);assert.equal(c.items['rune-wisdom'].bonuses.xpBonus,.1);assert.equal(c.items['soul-fortune-1'].bonuses.dropBonus,.05);
 c.setItem(0,'soul-fortune-1');assert.ok(c.moveItem({type:'bag',index:0},{type:'rune0',index:0}));assert.equal(c.dropMultiplier(),1);c.save();assert.ok(c.load());assert.equal(c.get().heroes[0].runes[0],'soul-fortune-1');assert.equal(c.dropMultiplier(),1);c.inspect('soul-fortune-1');assert.match(check.elements.get('#item-details').textContent,/Soul/);assert.equal(c.moveItem({type:'rune0',index:0},{type:'bag',index:1}),false);
 c.get().heroes[0].hp=0;assert.equal(c.dropMultiplier(),1);check.math.random=()=>0;const boss=c.enemy('guardian0',300);const both=c.rollDrops(boss);assert.deepEqual(Array.from(both,id=>c.items[id].type),['weapon','rune','soul']);c.setArea(105);const late=c.rollDrops(c.enemy('boss',300));assert.equal(c.items[late.find(id=>c.items[id].type==='soul')].tier,6);
@@ -363,10 +363,10 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 {
  const {t:r}=harness();r.start();
  for(let c=0;c<8;c++)for(let tier=1;tier<=6;tier++){
-  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&w.classId===c&&w.tier===tier);assert.ok(stock.length>=12);
-  if(c!==6)for(const effect of ['fire','ice','slow','poison','lightning','heal','drain','stun','cleave','pierce'])assert.ok(stock.some(w=>w.effect===effect),'Full element/physical-special coverage');
+  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier);assert.equal(stock.length,c===3?(tier%2?6:5):c===4||c===7?6:c===6?5:7);
+  if([0,1,2,3,5].includes(c))for(const effect of ['fire','ice','poison','lightning'])assert.ok(stock.some(w=>w.effect===effect),'Full element/physical-special coverage');
  }
- r.get().completed.push(...Array.from({length:19},(_,i)=>'a'+i));r.travel('town');r.setShopClass(5);assert.ok(r.shopStock().length>=10);assert.ok(r.shopStock().some(w=>w.id==='5-ice'));assert.ok(!r.shopStock().some(w=>w.tier>1));
+ r.get().completed.push(...Array.from({length:19},(_,i)=>'a'+i));r.travel('town');r.setShopClass(5);assert.ok(r.shopStock().length>=6);assert.ok(r.shopStock().some(w=>w.id==='5-ice'));assert.ok(!r.shopStock().some(w=>w.tier>1));
  r.travel('a0');const h=r.get().heroes[0],foe=r.get().enemies[0];r.get().enemies.forEach(e=>e.hp=0);foe.hp=foe.maxHp=100000;h.x=100;h.y=226;foe.x=160;foe.y=226;
  const signatures=new Set();for(let tier=1;tier<=6;tier++){
   h.weapon=tier===1?'0-fire':'0-fire-t'+tier;r.stats(h);r.get().shots.length=0;r.get().fields.length=0;
@@ -375,7 +375,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  }assert.equal(signatures.size,6);
  h.weapon='0-fire-t3';r.stats(h);r.activate(h,foe,'fire');const hp=foe.hp;h.gearRevision++;for(let i=0;i<150;i++)r.tickShots(.01);assert.equal(foe.hp,hp,'Unequipping cancels pending ability shots');
  for(let tier=1;tier<=6;tier++)assert.equal(r.items[tier===1?'2-basic':'2-basic-t'+tier].arrows,tier);
- console.log('Full six-tier class catalogues, Lowlands shop, unique fire patterns, actual spell damage, stale-shot cancellation and bow arrow progression pass.');
+ console.log('Curated six-tier class catalogues, Lowlands shop, unique fire patterns, actual spell damage, stale-shot cancellation and bow arrow progression pass.');
 }
 
 {
@@ -387,4 +387,22 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  h.strike={left:0,target:foe,range:14,amount:10,token:r.attackToken(h)};foe.x=160;const movedHp=foe.hp;r.resolveStrike(h,.1);assert.equal(foe.hp,movedHp,'Moving out of dagger reach avoids the hit');
  const second=r.enemy('sporecap',130);second.y=226;second.hp=1000;r.get().enemies.push(second);foe.x=130;h.strike={left:0,target:foe,range:14,amount:10,token:r.attackToken(h)};r.resolveStrike(h,.1);assert.equal(second.hp,1000,'Daggers remain single-target');
  console.log('Rogue approaches and hits enemy body edges, respects escape distance, and remains single-target.');
+}
+
+{
+ const {t:r}=harness();r.start();
+ for(const c of [0,1,2,5])for(let tier=1;tier<=6;tier++){
+  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier),physical=stock.filter(w=>!w.effect);
+  assert.equal(stock.length,7);assert.equal(physical.length,2);const late=physical.find(w=>w.id.split('-')[1]==='iron');
+  for(const w of stock.filter(w=>w!==late)){assert.ok(late.min>w.min);assert.ok(late.max>w.max)}assert.equal(late.ability,undefined);
+ }
+ for(const ids of Object.values(r.WEAPON_DROPS))assert.ok(ids.every(id=>!r.items[id].retired),'Retired gear never drops');
+ r.get().completed.push(...r.AREAS.map(a=>a.id));r.travel('town');for(let c=0;c<8;c++){r.setShopClass(c);assert.ok(r.shopStock().every(w=>!w.retired));}
+ for(const c of [0,5]){
+  r.setParty([c,1,2,3]);r.enter();r.get().enemies.length=0;const h=r.get().heroes[0];h.x=100;h.y=226;h.cooldown=0;h.drive=0;
+  const foe=r.enemy('sporecap',100+h.range+14);foe.y=226;foe.hp=foe.maxHp=1000;foe.cooldown=100;r.get().enemies.push(foe);
+  r.update(.001);assert.ok(h.strike,'Melee starts at the body edge');assert.equal(h.drive,0);const before=foe.hp;
+  for(let i=0;i<40;i++)r.resolveStrike(h,.008);assert.ok(foe.hp<before,'Sword/scythe contacts the edge of a wide enemy');
+ }
+ console.log('Seven-option standard tiers, stronger ability-free physical weapons, curated class exceptions, retired drop/shop exclusion and Warrior/Reaper edge contact pass.');
 }

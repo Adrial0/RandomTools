@@ -71,6 +71,28 @@ for(const baseWeapon of originals){
 for(const [id,tier] of [['2-poison2',2],['2-poison3',4],['2-ice3',5],['2-steel4',6]]){
  const w=items[id];w.level=w.tier=tier;w.catalogIndex=12;w.priceIndex=(tier-1)*12+12;w.ability={mode:'bolt',count:1,radius:16,power:1+(tier-1)*.35};w.abilityDescription='Fires an extra elemental projectile.';
 }
+// Curated live stock; omitted IDs remain loadable for existing saves.
+for(const w of Object.values(items))if(w.type==='weapon')w.retired=true;
+const specials=['heavy','slow','drain','stun','heavy','steel'];
+for(let c=0;c<8;c++){
+ let price=0;
+ for(let tier=1;tier<=6;tier++){
+  const special=specials[tier-1];
+  let selection=['basic','fire','ice','poison','lightning','iron',special];
+  if(c===3)selection=[...(tier%2?['basic']:[]),'fire','ice','poison','lightning',tier%2?'slow':'stun'];
+  if(c===4)selection=['basic','ice','lightning','heal','drain','iron'];
+  if(c===6)selection=['basic','fire','ice','poison','heal'];
+  if(c===7)selection=['basic','fire','ice','poison','lightning','heavy'];
+  const chosen=selection.map(suffix=>items[c+'-'+suffix+(tier===1?'':'-t'+tier)]);
+  chosen.forEach((w,i)=>{w.retired=false;w.catalogIndex=i;w.priceIndex=price++;});
+  if([0,1,2,5].includes(c)||c===4){
+   const physical=chosen.find(w=>w.id.split('-')[1]==='iron'),others=chosen.filter(w=>w!==physical);
+   physical.effect=null;delete physical.ability;delete physical.abilityDescription;physical.color='#ddd';
+   physical.min=Math.ceil(Math.max(...others.map(w=>w.min))*1.25);physical.max=Math.ceil(Math.max(...others.map(w=>w.max))*1.25);
+  }
+  if(c===7){const heavy=chosen.at(-1);heavy.effect=null;delete heavy.ability;delete heavy.abilityDescription;heavy.color='#ddd';}
+ }
+}
 const runes=[
  ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage.'],
  ['haste','Haste Rune','#7ee5c1',{haste:.15},'15% faster attacks.'],

@@ -425,7 +425,7 @@ function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp
 const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
 {
  for(let c=0;c<8;c++)for(let tier=1;tier<=6;tier++){
-  const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.classId===c&&w.tier===tier&&w.id!==c+'-basic').sort((a,b)=>a.catalogIndex-b.catalogIndex||a.id.localeCompare(b.id));
+  const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier&&w.id!==c+'-basic').sort((a,b)=>a.catalogIndex-b.catalogIndex||a.id.localeCompare(b.id));
   weapons.forEach((w,i)=>{const local=Math.floor(i*19/Math.max(1,weapons.length-1)),a=(tier-1)*21+local;WEAPON_AREAS[w.id]=a;WEAPON_STAGES[w.id]=2+(i+c)%3;});
  }
  for(const node of AREAS){
@@ -568,7 +568,7 @@ function stageExitOpen(){return stage<stageCount()-1||bossExitWait<=0&&!enemies.
 function completeArea(){if(!stageExitOpen())return false;return changeScene(advanceStage)}
 function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell(area===AREAS.length-1?'The lich king is defeated. His rule is over.':areaInfo().major?'Zone cleared. A new land awaits.':'Boss defeated. New routes discovered.');save()}
 function salePrice(id){const w=ITEMS[id];return w?(socketItem(id)?25*w.tier:6+w.tier*12):0}
-function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&w.tier<=Math.max(1,...cleared.map(a=>a<0?1:areaInfo(a).zone+1)));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
+function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&w.tier<=Math.max(1,...cleared.map(a=>a<0?1:areaInfo(a).zone+1)));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
 function weaponPrice(index){const early=[100,250,500,750,1000];if(index<5)return early[index];const price=1500+(index-5)*500;return price<=10000?price:10000+(index-22)*1000}
 function buyPrice(w){if(w.type==='rune')return 1000*w.tier;if(w.type==='gem')return 500*w.tier;return weaponPrice(w.priceIndex||0)}
 function shopPages(){const stock=shopStock();return [...new Set(stock.map(w=>w.level))].sort((a,b)=>a-b).map(tier=>({tier,items:stock.filter(w=>w.level===tier).sort((a,b)=>buyPrice(a)-buyPrice(b))}))}
@@ -609,7 +609,7 @@ function refresh(){$('#world-button').hidden=state==='service';$('#inn').textCon
  $('#xp').textContent=Math.floor(h.xp)+'/'+needed(h.level);$('#xp-fill').style.width=h.xp/needed(h.level)*100+'%';$('#gold').textContent=gold;$('#area').textContent=state==='map'?'World Map':state==='service'?(serviceKind()==='town'?'Town':'Rune Trader'):WORLD.find(n=>n.id==='a'+area).name+' : '+(stage+1)+'/'+stageCount()+(stage===stageCount()-1?' BOSS':'');$('#pause').textContent=paused?'Resume':'Pause';heroes.forEach((h,i)=>{const bar=$('[data-hero="'+i+'"] .life i');if(bar)bar.style.width=Math.max(0,h.hp/h.maxHp)*100+'%';const mpBar=$('[data-hero="'+i+'"] .mana i');if(mpBar)mpBar.style.width=manaPercent(h)+'%'});}
 function update(dt){if(settingsOpen||menuOpen)return;time+=dt;for(const h of heroes)if(h.hp>0)h.dodgeLeft=Math.max(0,(h.dodgeLeft||0)-dt);if(drag)stepHeld(drag,dt);tickNumbers(dt);if(state==='service'){heroes.forEach(h=>tickRogueArms(h,dt));if(heroes.some(h=>h.hp>0&&h.x+6>=538&&h.x-6<=572&&h.y>=207&&h.y-27<=226)){changeScene(openMap);return}for(const h of heroes)if(h.hp>0&&h!==drag){h.drive=0;stepBody(h,dt)}uiTime+=dt;if(uiTime>.1){refresh();uiTime=0}return}if(state!=='fight'&&state!=='walk')return;tickEffects(dt);tickMinions(dt);
  for(const h of heroes){tickRogueArms(h,dt);h.auraFlash=Math.max(0,(h.auraFlash||0)-dt);h.flash=Math.max(0,(h.flash||0)-dt);h.anim=Math.max(0,h.anim-dt);resolveStrike(h,dt);if(h.hp<=0||h===drag)continue;stepBody(h,dt);h.hp=Math.min(h.maxHp,h.hp+h.runeBonus.regen*dt);h.cooldown-=dt;h.hold=Math.max(0,h.hold-dt);h.walk=false;if(!grounded(h)){h.strike=null;continue}if(state==='walk'){h.drive=0;continue}
- const target=enemies.filter(e=>e.hp>0).sort((a,b)=>h.classId===1?rogueDistance(h,a)-rogueDistance(h,b):Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y))[0];if(!target)continue;if(h.classId===7){h.face=target.x>=h.x?1:-1;h.drive=canAutoMove(h)&&Math.abs(target.x-h.x)>h.range&&h.hold<=0?h.face*33:0;h.walk=!!h.drive;continue}const d=h.classId===1?rogueDistance(h,target):Math.hypot(target.x-h.x,target.y-h.y);if(h.classId===1&&d<=h.range)h.drive=0;h.face=target.x>=h.x?1:-1;if(canAutoMove(h)&&d>h.range&&h.hold<=0){h.drive=h.face*33;h.walk=true}if(d<=h.range+3&&(h.kind==='aura'||Math.abs(h.y-target.y)<45)&&h.cooldown<=0){h.cooldown=roll(...effectiveAgi(h))/30;attackMotion(h);const token=attackToken(h),amount=basicAmount(h);if(h.kind==='aura'){for(const e of enemies)if(e.hp>0&&Math.hypot(e.x-h.x,e.y-h.y)<=h.range)basicHit(e,amount,token);h.auraFlash=.25}else if(h.kind==='melee')h.strike={left:.09,target,amount,token,range:h.range,elapsed:0,hits:new Set(),face:h.face};else shoot(h,target,h.kind==='heal'?'magic':h.kind,amount,token)}}
+ const target=enemies.filter(e=>e.hp>0).sort((a,b)=>h.kind==='melee'?meleeDistance(h,a)-meleeDistance(h,b):Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y))[0];if(!target)continue;if(h.classId===7){h.face=target.x>=h.x?1:-1;h.drive=canAutoMove(h)&&Math.abs(target.x-h.x)>h.range&&h.hold<=0?h.face*33:0;h.walk=!!h.drive;continue}const d=h.kind==='melee'?meleeDistance(h,target):Math.hypot(target.x-h.x,target.y-h.y);if(h.kind==='melee'&&d<=h.range)h.drive=0;h.face=target.x>=h.x?1:-1;if(canAutoMove(h)&&d>h.range&&h.hold<=0){h.drive=h.face*33;h.walk=true}if(d<=h.range+3&&(h.kind==='aura'||Math.abs(h.y-target.y)<45)&&h.cooldown<=0){h.cooldown=roll(...effectiveAgi(h))/30;attackMotion(h);const token=attackToken(h),amount=basicAmount(h);if(h.kind==='aura'){for(const e of enemies)if(e.hp>0&&Math.hypot(e.x-h.x,e.y-h.y)<=h.range)basicHit(e,amount,token);h.auraFlash=.25}else if(h.kind==='melee')h.strike={left:.09,target,amount,token,range:h.range,elapsed:0,hits:new Set(),face:h.face};else shoot(h,target,h.kind==='heal'?'magic':h.kind,amount,token)}}
  const additions=[];for(const e of enemies){if(e.hp<=0||e.frozen>0||e.stun>0)continue;tickSlash(e,dt);e.flash=Math.max(0,e.flash-dt);if(!physicalEnemy(e))moveEnemy(e,(e.kick||0)*dt,dt);e.kick=(e.kick||0)*Math.exp(-9*dt);e.cooldown-=dt;if(e.type==='summoner'){e.summon-=dt;if(e.summon<=0&&e.remaining>0){const m=enemy(enemySummonType(e),Math.max(130,e.x-20));m.minion=true;m.hp=m.maxHp*=.55;additions.push(m);e.remaining--;e.summon=8;}}const target=combatAllies().filter(h=>h.hp>0).sort((a,b)=>Math.abs(a.x-e.x)-Math.abs(b.x-e.x))[0];if(!target)continue;if(physicalEnemy(e))stepEnemyPhysics(e,target,dt);tickCatapult(e,target,dt);enemyTrait(e,target,dt);tickSpecial(e,target,dt);const d=Math.abs(target.x-e.x);if(e.attackProfile){if(d>e.range&&!physicalEnemy(e))moveEnemy(e,Math.sign(target.x-e.x)*e.speed*slowFactor(e)*dt,0);tickProfileAttack(e,target,dt);continue}if(e.type==='archer'&&d<65)moveEnemy(e,-Math.sign(target.x-e.x)*e.speed*dt,0);else if(d>e.range&&!physicalEnemy(e))moveEnemy(e,Math.sign(target.x-e.x)*e.speed*(slowFactor(e))*dt,0);else if(d<=e.range&&e.type!=='bomber'&&e.type!=='catapult'&&e.cooldown<=0&&Math.abs(target.y-e.y)<(e.range>50?50:18)){e.cooldown=e.type==='boss'?1.2:1.4;if(e.type==='slasher'){e.slash={left:.18,face:Math.sign(target.x-e.x)||1,hit:false,life:.32};e.cooldown=1.6}else if(e.type==='archer')launchHazard(e,target,'arrow',0,enemyDamage(e));else if(e.range>20)shoot(e,target,'enemy',enemyDamage(e));else damage(target,enemyDamage(e),'physical',true,true)}}enemies.push(...additions);
  tickShots(dt);tickBossExit(dt/speed);enemies=enemies.filter(e=>e.hp>0);tickHazards(dt);pickLoot();pickPotions();
  if(!sceneFade&&heroes.every(h=>h.hp<=0)){heroes.forEach(h=>h.hp=Math.max(1,Math.ceil(h.maxHp*.05)));enterService(townForArea());tell('Party defeated. Returned to town with 5% HP.');return}
@@ -730,8 +730,14 @@ function enemyBodyBounds(e){
  const [width,height]=shapes[e.shape]||base[e.type]||[7,14],scale=e.shape&&e.type==='boss'&&!e.swarmBoss?1.65:1;
  return {left:e.x-width*scale,right:e.x+width*scale,top:e.y-height*scale,bottom:e.y};
 }
-function rogueContact(h,e){const b=enemyBodyBounds(e);return {x:Math.max(b.left,Math.min(b.right,h.x)),y:Math.max(b.top,Math.min(b.bottom,h.y-13))}}
-function rogueDistance(h,e){const p=rogueContact(h,e);return Math.hypot(p.x-h.x,p.y-(h.y-13))}
+function meleeContact(h,e){const b=enemyBodyBounds(e);return {x:Math.max(b.left,Math.min(b.right,h.x)),y:Math.max(b.top,Math.min(b.bottom,h.y-13))}}
+function meleeDistance(h,e){const p=meleeContact(h,e);return Math.hypot(p.x-h.x,p.y-(h.y-13))}
+function bladeHitsEnemy(a,b,e){
+ const box=enemyBodyBounds(e),dx=b[0]-a[0],dy=b[1]-a[1];let lo=0,hi=1;
+ for(const [p,q] of [[-dx,a[0]-box.left],[dx,box.right-a[0]],[-dy,a[1]-box.top],[dy,box.bottom-a[1]]]){
+  if(Math.abs(p)<1e-9){if(q<0)return false;continue}const t=q/p;if(p<0)lo=Math.max(lo,t);else hi=Math.min(hi,t);if(lo>hi)return false;
+ }return true;
+}
 function meleeReach(h){return Math.max(8,h.range||ITEMS[h.weapon]?.range||14)}
 function swingSegments(h,t){
  const a=-1.7+Math.min(1,Math.max(0,t)/.28)*3.1,f=h.strike?.face||h.face||1,length=Math.max(12,(h.strike?.range||h.range)-6),base=[h.x+f*6,h.y-13],tip=[base[0]+f*Math.cos(a)*length,base[1]+Math.sin(a)*length];
@@ -741,13 +747,13 @@ function swingSegments(h,t){
 function resolveStrike(h,dt){
  const s=h.strike;if(!s)return;
  if(h.hp<=0||h===drag||!grounded(h)){h.strike=null;return}
- if(h.classId===1){s.left-=dt;if(s.left>0)return;h.strike=null;const e=s.target,p=rogueContact(h,e);if(e.hp>0&&rogueDistance(h,e)<=s.range+3&&!terrainHit(h.x,h.y-13,p.x,p.y)){basicHit(e,s.amount,s.token);e.kick=(e.kick||0)+(h.face||1)*35}return}
+ if(h.classId===1){s.left-=dt;if(s.left>0)return;h.strike=null;const e=s.target,p=meleeContact(h,e);if(e.hp>0&&meleeDistance(h,e)<=s.range+3&&!terrainHit(h.x,h.y-13,p.x,p.y)){basicHit(e,s.amount,s.token);e.kick=(e.kick||0)+(h.face||1)*35}return}
  if(h.classId!==0&&h.classId!==5){s.left-=dt;if(s.left>0)return;h.strike=null;const e=s.target;if(e.hp>0&&Math.abs(e.x-h.x)<=s.range+10&&Math.abs(e.y-h.y)<40){basicHit(e,s.amount,s.token);e.kick=(e.kick||0)+(h.face||1)*35}return}
  const before=s.elapsed||0;s.elapsed=before+dt;s.hits=s.hits||new Set();
  for(let t=before;t<=Math.min(.28,s.elapsed)+.00001;t+=Math.min(.008,dt||.008)){
   for(const [a,b] of swingSegments(h,t))for(const e of enemies){
-   if(e.hp<=0||s.hits.has(e)||segmentDistance(e.x,e.y-12,...a,...b)>(e.type==='boss'&&!e.swarmBoss?16:8))continue;
-   const wall=terrainHit(...a,...b);if(wall&&segmentDistance(e.x,e.y-12,...a,wall.x,wall.y)>(e.type==='boss'&&!e.swarmBoss?16:8))continue;
+   if(e.hp<=0||s.hits.has(e)||!bladeHitsEnemy(a,b,e))continue;
+   const wall=terrainHit(...a,...b);if(wall&&!bladeHitsEnemy(a,[wall.x,wall.y],e))continue;
    s.hits.add(e);basicHit(e,s.amount,s.token);e.kick=(e.kick||0)+(s.face||h.face||1)*35;
   }
  }
