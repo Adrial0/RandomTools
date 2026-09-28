@@ -275,7 +275,7 @@ function fireEnemyAttack(e,target,profile){
  const a=profile,face=Math.sign(target.x-e.x)||1;
  if(a.kind==='melee'){e.slash={left:a.windup||.35,life:(a.windup||.35)+.16,face,hit:false,profile:a};return}
  if(a.kind==='cloud'){
-  const startX=e.x+face*8,endX=e.x+face*a.range,wall=terrainHit(startX,e.y-12,endX,e.y-12);
+  const startX=e.x+face*8,endX=e.x+face*Math.min(a.range,Math.abs(target.x-e.x)),wall=terrainHit(startX,e.y-12,endX,e.y-12);
   hazards.push({kind:'cloud',x:wall?wall.x-face*(a.radius+1):endX,y:e.y-12,vx:0,vy:0,age:0,life:a.life||2,radius:a.radius||22,color:a.color,element:a.element||'poison',amount:enemyDamage(e,a.damage),hitTimes:{},dodgeable:false});return;
  }
  const count=a.count||1;
@@ -374,7 +374,7 @@ function tickHazards(dt){
  blasts.forEach(b=>b.life-=dt);blasts=blasts.filter(b=>b.life>0);
  for(const p of hazards){p.age+=dt;p.life-=dt;const ax=p.x,ay=p.y;
  if(p.kind==='cloud'){
-  for(const h of combatAllies())if(h.hp>0&&Math.hypot(h.x-p.x,h.y-13-p.y)<p.radius&&(!p.hitTimes[h.id]||p.age>=p.hitTimes[h.id])){const wall=terrainHit(p.x,p.y,h.x,h.y-13);if(!wall){damage(h,p.amount,p.element,false,false);h.poison={time:2,tick:1,amount:p.amount*.4};p.hitTimes[h.id]=p.age+.6;}}
+  for(const h of combatAllies())if(h.hp>0&&segmentDistance(p.x,p.y,h.x,h.y-24,h.x,h.y-3)<p.radius+4&&(!p.hitTimes[h.id]||p.age>=p.hitTimes[h.id])){const wall=terrainHit(p.x,p.y,h.x,h.y-13);if(!wall){damage(h,p.amount,p.element,false,false);h.poison={time:2,tick:h.poison?.tick??1,amount:Math.max(h.poison?.amount||0,p.amount*.4)};p.hitTimes[h.id]=p.age+.6;}}
   continue;
  }
  if(p.kind==='missile'&&p.age<(p.tracking??.8)&&p.target.hp>0){const angle=Math.atan2(p.vy,p.vx),goal=Math.atan2(p.target.y-13-p.y,p.target.x-p.x),delta=Math.atan2(Math.sin(goal-angle),Math.cos(goal-angle)),turn=Math.max(-1.5*dt,Math.min(1.5*dt,delta));p.vx=Math.cos(angle+turn)*(p.speed||90);p.vy=Math.sin(angle+turn)*(p.speed||90)}

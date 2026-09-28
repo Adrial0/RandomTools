@@ -443,3 +443,19 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  r.setArea(0);r.setStage(0);r.enter();run.math.random=()=>0;for(const mob of r.get().enemies)assert.ok(r.rollDrops(mob).some(id=>r.items[id].type==='weapon'),'Opening enemies can drop weapons immediately');
  console.log('Every live encounter has weapon loot; species tables stay fixed, tiers match, each weapon has at most two sources, and opening-stage rolls work.');
 }
+
+// Close-range Woodland spores must hit, and exposure must not postpone poison ticks.
+{
+ const {t:a}=harness();a.start();a.setArea(5);a.enter();
+ const h=a.get().heroes[0],caster=a.enemy('sporecap',400);h.x=410;h.y=caster.y;h.hp=h.maxHp=1000;
+ a.fireEnemyAttack(caster,h,caster.attackProfile);
+ assert.equal(a.get().hazards[0].x,h.x,'Cloud aims at close target instead of overshooting');
+ a.tickHazards(.01);assert.ok(h.hp<1000);assert.ok(h.poison);
+ a.tickEffects(.6);const remaining=h.poison.tick;a.tickHazards(.61);
+ assert.equal(h.poison.tick,remaining,'Exposure refresh preserves next poison tick');
+ const hp=h.hp;a.tickEffects(.41);assert.ok(h.hp<hp,'Poison ticks while standing in cloud');
+ h.defense=10000;h.runeBonus.resistance=.99;const before=h.hp;a.tickEffects(1);
+ assert.equal(h.hp,before-1,'Poison still deals minimum damage through defense');
+ assert.equal(a.get().numbers.length,0,'Cloud and poison do not create damage numbers');
+ console.log('Woodland close-range cloud contact, uninterrupted poison ticks, minimum damage and quiet DoTs pass.');
+}
