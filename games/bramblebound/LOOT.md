@@ -9,7 +9,7 @@ All rolls are independent and happen only when a monster dies. Skipping a stage 
 | Soul | — | — | 10% |
 | HP potion | 30% | 15% | 30% |
 
-Each species has an area-specific table containing zero, one, or two weapons, independent of party composition. Weapon sources are spread across the world and begin on stage 3–5 of their source area. Areas without a weapon source still drop socket items, potions and gold. A successful weapon roll selects equally from the eligible table. Boss weapon percentages are combined across their table. Tables are defined by WEAPON_DROPS in game.js. All non-starter weapons are represented.
+Every enemy species has a weapon drop, including enemies in opening stages. Its weapon stays the same wherever that species appears within the zone. Each weapon belongs to one enemy species, occasionally two; tables are independent of party composition. There is no stage-number restriction. Boss weapon percentages are combined across their table. Tables are defined by WEAPON_DROPS in game.js. All active non-starter weapons are represented.
 
 Souls occupy the same two weapon sockets as runes and gems. They bind to the weapon and are not sold by the Rune Trader. Existing Leech and Wisdom runes become tier-one Souls, including those already socketed in saved games.
 

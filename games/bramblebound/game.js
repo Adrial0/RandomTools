@@ -430,16 +430,27 @@ const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
   const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier&&w.id!==c+'-basic').sort((a,b)=>a.catalogIndex-b.catalogIndex||a.id.localeCompare(b.id));
   weapons.forEach((w,i)=>{const local=Math.floor(i*19/Math.max(1,weapons.length-1)),a=(tier-1)*21+local;WEAPON_AREAS[w.id]=a;WEAPON_STAGES[w.id]=2+(i+c)%3;});
  }
- for(const node of AREAS){
-  const a=node.area,pool=REGIONAL_POOLS[node.region],species=[...pool,REGION_SUMMONERS[node.region],'guardian'+a];
-  const weapons=Object.keys(WEAPON_AREAS).filter(id=>node.major?areaInfo(WEAPON_AREAS[id]).zone===node.zone:WEAPON_AREAS[id]===a);
-  if(node.major){WEAPON_DROPS[a+':guardian'+a]=weapons.slice(-2);continue}
-  species.forEach((id,i)=>WEAPON_DROPS[a+':'+id]=weapons.length?[weapons[i%weapons.length]]:[]);
-  weapons.forEach((id,i)=>{const table=WEAPON_DROPS[a+':'+species[i%species.length]];if(!table.includes(id))table.push(id)});
+ const savedArea=area,savedStage=stage;
+ for(let zone=0;zone<ZONES.length;zone++){
+  const sources=new Map();
+  for(const node of AREAS.filter(n=>n.zone===zone)){
+   area=node.area;
+   for(stage=0;stage<stageCount();stage++)for(const species of sceneEnemyTypes())if(!sources.has(species))sources.set(species,{area,stage});
+  }
+  const species=[...sources.keys()],weapons=Object.keys(WEAPON_AREAS).filter(id=>ITEMS[id].tier===zone+1).sort((a,b)=>WEAPON_AREAS[a]-WEAPON_AREAS[b]||ITEMS[a].catalogIndex-ITEMS[b].catalogIndex||ITEMS[a].classId-ITEMS[b].classId),tables=new Map(species.map(id=>[id,[]]));
+  const remaining=weapons.slice(),unlocks=new Map();
+  for(const mob of species){const a=sources.get(mob).area,used=unlocks.get(a)||new Set(),index=remaining.findIndex(id=>!used.has(ITEMS[id].classId));if(index<0)continue;const id=remaining.splice(index,1)[0];tables.get(mob).push(id);used.add(ITEMS[id].classId);unlocks.set(a,used);}
+  if(remaining.length)throw Error('Not enough distinct enemy sources for zone '+zone);
+  const repeated=new Set();
+  for(const mob of species)if(!tables.get(mob).length){const id=[...weapons].reverse().find(id=>!repeated.has(id));if(!id)throw Error('Not enough secondary drop sources');tables.get(mob).push(id);repeated.add(id);}
+  for(const weapon of weapons){const mob=species.find(id=>tables.get(id).includes(weapon));WEAPON_AREAS[weapon]=sources.get(mob).area;WEAPON_STAGES[weapon]=sources.get(mob).stage;}
+  for(const node of AREAS.filter(n=>n.zone===zone))for(const [id,table] of tables)WEAPON_DROPS[node.area+':'+id]=table.slice();
  }
+ area=savedArea;stage=savedStage;
 }
+
 function dropMultiplier(source=null){return 1+(source?.runeBonus?.dropBonus||0)+heroes.filter(h=>h.hp>0).reduce((n,h)=>n+(h.runeBonus.dropBonus||0),0)}
-function weaponDropTable(target){return (WEAPON_DROPS[area+':'+(target.species||target.type)]||WEAPON_DROPS[area+':'+(target.type==='boss'?'guardian'+area:target.type)]||[]).filter(id=>areaInfo().major||stage>=WEAPON_STAGES[id])}
+function weaponDropTable(target){return WEAPON_DROPS[area+':'+(target.species||target.type)]||WEAPON_DROPS[area+':'+(target.type==='boss'?'guardian'+area:target.type)]||[]}
 function regionTier(){return areaInfo().zone+1}
 function rollDrops(target,source=null){
  const result=[],boost=dropMultiplier(source),boss=target.type==='boss',rate=boss?.10:target.type==='swarmling'?.025:.05;

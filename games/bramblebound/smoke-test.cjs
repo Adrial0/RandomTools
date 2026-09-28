@@ -282,7 +282,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  }
  for(const [id,a] of Object.entries(t.WEAPON_AREAS)){
   t.setArea(a);const monster=Object.entries(t.WEAPON_DROPS).find(([key,ids])=>key.startsWith(a+':')&&ids.includes(id))[0].split(':')[1],foe=t.enemy(monster,300);
-  t.setStage(t.WEAPON_STAGES[id]-1);assert.ok(!t.weaponDropTable(foe).includes(id));
+  t.setStage(0);assert.ok(t.weaponDropTable(foe).includes(id),'No hidden stage lock on a species drop');
   t.setStage(t.WEAPON_STAGES[id]);assert.ok(t.weaponDropTable(foe).includes(id));
  }
  for(let tier=1;tier<=6;tier++)for(const kind of ['weapon','rune','gem','soul'])assert.ok(Object.values(t.items).some(w=>w.type===kind&&w.tier===tier));
@@ -433,4 +433,13 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  r.damage(e,10000);assert.equal(sounds.at(-1).event,'death');r.setStage(r.stageCount()-1);r.get().enemies.forEach(e=>e.hp=0);r.tickBossExit(.1);r.tickBossExit(.1);assert.equal(sounds.filter(s=>s.event==='clear').length,1);
  r.attackMotion(h);assert.equal(sounds.at(-1).event,'weapon');r.activate(h,e,'fire');assert.equal(sounds.at(-1).event,'spell');
  console.log('Game audio: quiet DoTs, direct hits, ally damage, death, once-only boss clear and weapon/spell hooks pass.');
+}
+
+{
+ const run=harness(),r=run.t;r.start();const sources=new Map(),speciesTables=new Map();
+ for(const node of r.AREAS){r.setArea(node.area);for(let st=0;st<r.stageCount();st++){r.setStage(st);r.enter();for(const mob of r.get().enemies){const table=Array.from(r.weaponDropTable(mob));assert.ok(table.length>=1&&table.length<=2,'Every encountered mob has a weapon: '+node.name+' '+mob.species);const key=node.zone+':'+mob.species;if(speciesTables.has(key))assert.deepEqual(table,speciesTables.get(key));else speciesTables.set(key,table);for(const id of table){assert.equal(r.items[id].tier,node.zone+1);if(!sources.has(id))sources.set(id,new Set());sources.get(id).add(key);}}}}
+ for(const [id,mobs] of sources)assert.ok(mobs.size<=2,id+' has more than two species sources');
+ for(const id of Object.keys(r.WEAPON_AREAS))assert.ok(sources.has(id),'Every weapon source is actually encountered');
+ r.setArea(0);r.setStage(0);r.enter();run.math.random=()=>0;for(const mob of r.get().enemies)assert.ok(r.rollDrops(mob).some(id=>r.items[id].type==='weapon'),'Opening enemies can drop weapons immediately');
+ console.log('Every live encounter has weapon loot; species tables stay fixed, tiers match, each weapon has at most two sources, and opening-stage rolls work.');
 }
