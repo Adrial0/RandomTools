@@ -23,38 +23,62 @@ $('#sound').onclick=()=>{sound=!sound;$('#sound').textContent=sound?'Sound on':'
 function tone(freq,duration=.08){if(!sound||!audio)return;const o=audio.createOscillator(),g=audio.createGain();o.type='triangle';o.frequency.setValueAtTime(freq,audio.currentTime);o.frequency.exponentialRampToValueAtTime(freq*.3,audio.currentTime+duration);g.gain.setValueAtTime(.08,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+duration);o.connect(g).connect(audio.destination);o.start();o.stop(audio.currentTime+duration);}
 window.addEventListener('keydown',e=>{if(['KeyW','KeyA','KeyS','KeyD','Space','Escape','KeyR'].includes(e.code)){if(e.target.tagName!=='BUTTON')e.preventDefault();if(!e.repeat){if(e.code==='Escape')pause();if(e.code==='KeyR'&&state!=='menu')loadLevel(round);}keys.add(e.code);}});window.addEventListener('keyup',e=>keys.delete(e.code));window.addEventListener('blur',()=>{keys.clear();if(state==='playing')pause();});
 canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();mouse.x=(e.clientX-r.left)*W/r.width;mouse.y=(e.clientY-r.top)*H/r.height;});
-function impulse(f,x,y){for(const p of f.p){p.px-=x*DT;p.py-=y*DT;}}
-function steer(p,x,y,strength){p.x+=(x-p.x)*strength;p.y+=(y-p.y)*strength;}
-function bodyStep(f){
- const p=f.p;f.stun=Math.max(0,f.stun-DT);f.flash=Math.max(0,f.flash-DT);if(f.hp<=0)f.dead+=DT;
- let centerTarget=p.reduce((sum,v)=>sum+v.x+(v.x-v.px)*.975,0)/p.length;
- f.grounded=p.some((v,i)=>i>=7&&v.y>=FLOOR-2);
- for(const v of p){const vx=(v.x-v.px)*.975,vy=(v.y-v.py)*.994;v.px=v.x;v.py=v.y;v.x+=vx;v.y+=vy+1050*DT*DT;}
- if(f.hp>0){
+function impulse(f,x,y){
+ if(f.hp>0){f.vx=(f.vx||0)+x;f.vy=(f.vy||0)+y;f.lean=clamp((f.lean||0)+x*.0015,-.4,.4);}
+ for(const p of f.p){p.px-=x*DT;p.py-=y*DT;}
+}
+function jointBetween(a,b,l1,l2,bend){
+ const dx=b.x-a.x,dy=b.y-a.y,d=Math.max(.001,Math.hypot(dx,dy));
+ const along=clamp((l1*l1-l2*l2+d*d)/(2*d),-l1,l1),side=Math.sqrt(Math.max(0,l1*l1-along*along))*bend;
+ return{x:a.x+dx/d*along-dy/d*side,y:a.y+dy/d*along+dx/d*side};
+}
+function livingStep(f){
+ const p=f.p;
+ f.root??={x:p[0].x,y:FLOOR-65};f.vx??=0;f.vy??=0;f.walk??=0;f.gait??=0;f.stance??=65;f.lean??=0;
  let move=0,jump=false,crouch=false,target;
  if(!f.enemy){move=(keys.has('KeyD')?1:0)-(keys.has('KeyA')?1:0);jump=keys.has('KeyW');crouch=keys.has('KeyS');target=Math.atan2(mouse.y-p[1].y,mouse.x-p[1].x);}
- else{const dx=player.p[0].x-p[0].x,dist=Math.abs(dx),dir=Math.sign(dx)||1,reach=f.weapon.length+32;move=dist>reach*.9?dir:dist<reach*.55?-dir*.6:0;const cycle=(time*f.speed*.8+f.phase)%2.05;const aim=Math.atan2(player.p[1].y-p[1].y,dx);target=aim+dir*(cycle<1.2?-1.6:1.6);if(cycle<1.2)move*=.65;}
- const active=f.stun>0?.2:1;
- // Apply controlled motion to both Verlet positions so it cannot accumulate velocity.
- const desired=move*(f.enemy?85*f.speed:145)*active*(crouch?.5:1);
- f.walk=(f.walk||0)+(desired-(f.walk||0))*(1-Math.exp(-16*DT));
- const displacement=f.walk*DT;
- for(const v of p){v.x+=displacement;v.px+=displacement;}
- centerTarget+=displacement;
- if(jump&&f.grounded&&(!f.jumpLock||time-f.jumpLock>.8)){impulse(f,move*20,-340);f.jumpLock=time;}
- const hipY=FLOOR-(crouch?43:65);if(f.grounded){steer(p[0],p[0].x,hipY,.12*active);}
- steer(p[1],p[0].x+move*10,p[0].y-(crouch?26:38),.13*active);steer(p[2],p[1].x+move*3,p[1].y-25,.15*active);
- const stride=Math.sin(time*(Math.abs(move)>.1?8:2)+f.phase)*Math.min(15,Math.abs(move)*18);
- if(f.grounded){steer(p[8],p[0].x-17+stride,FLOOR-Math.max(0,-stride)*.65,.14*active);steer(p[10],p[0].x+17-stride,FLOOR-Math.max(0,stride)*.65,.14*active);}
- f.angular+=wrap(target-f.angle)*60/f.weapon.mass*DT;f.angular*=Math.exp(-9*DT);f.angular=clamp(f.angular,-9,9);f.angle+=f.angular*DT;
- steer(p[6],p[1].x+Math.cos(f.angle)*42,p[1].y+Math.sin(f.angle)*42,.32*active);steer(p[4],p[0].x-move*13-14,p[0].y-2,.06);
- }else{f.angular*=.99;f.angle+=f.angular*DT;}
- for(let k=0;k<7;k++){
- for(const [a,b,len]of f.links){const dx=p[b].x-p[a].x,dy=p[b].y-p[a].y,d=Math.hypot(dx,dy)||1,err=(d-len)/d*.5;p[a].x+=dx*err;p[a].y+=dy*err;p[b].x-=dx*err;p[b].y-=dy*err;}
- for(const v of p){v.x=clamp(v.x,28,W-28);if(v.y>FLOOR-(v===p[2]?10:0)){v.y=FLOOR-(v===p[2]?10:0);v.px=v.x-(v.x-v.px)*.8;v.py=v.y+(v.y-v.py)*.08;}v.y=Math.max(100,v.y);}
+ else{const dx=player.p[0].x-p[0].x,dist=Math.abs(dx),dir=Math.sign(dx)||1,reach=f.weapon.length+32;move=dist>reach*.85?dir:dist<reach*.5?-dir*.6:0;const cycle=(time*f.speed*.8+f.phase)%2.05;target=Math.atan2(player.p[1].y-p[1].y,dx)+dir*(cycle<1.2?-1.25:1.25);if(cycle<1.2)move*=.65;}
+ const active=f.stun>0?.35:1,desired=move*(f.enemy?85*f.speed:145)*active*(crouch?.5:1);
+ f.walk+=(desired-f.walk)*(1-Math.exp(-22*DT));
+ if(Math.abs(f.walk)<.05)f.walk=0;
+ f.grounded=f.root.y>=FLOOR-65-.01&&f.vy>=0;
+ if(jump&&!f.jumpHeld&&f.grounded){f.vy=-340;f.grounded=false;}f.jumpHeld=jump;
+ f.vx*=Math.exp(-(f.grounded?12:3)*DT);f.vy+=1050*DT;
+ f.root.x=clamp(f.root.x+(f.walk+f.vx)*DT,65,W-65);f.root.y+=f.vy*DT;
+ if(f.root.y>=FLOOR-65){f.root.y=FLOOR-65;f.vy=0;f.grounded=true;}
+ f.stance+=((crouch?43:65)-f.stance)*(1-Math.exp(-22*DT));
+ f.lean*=Math.exp(-12*DT);
+ // Supported torso and planted feet do not feed balancing corrections into gravity.
+ const hip={x:f.root.x,y:f.root.y+65-f.stance},lean=f.walk*.00045+f.lean;
+ const chest={x:hip.x+Math.sin(lean)*38,y:hip.y-Math.cos(lean)*38};
+ const head={x:chest.x+Math.sin(lean)*25,y:chest.y-Math.cos(lean)*25};
+ if(f.enemy){f.angular+=wrap(target-f.angle)*60/f.weapon.mass*DT;f.angular*=Math.exp(-9*DT);f.angular=clamp(f.angular,-9,9);}
+ else{
+  // Mouse response uses real elapsed time, independent of the slower arena pace.
+  const delta=wrap(target-f.angle)*(1-Math.exp(-48*DT/GAME_SPEED));
+  f.angular=clamp(delta/DT,-45,45);
  }
- // Balancing limbs may change the pose, but must not propel the whole body sideways.
- if(f.hp>0){const shift=centerTarget-p.reduce((sum,v)=>sum+v.x,0)/p.length;for(const v of p)v.x=clamp(v.x+shift,28,W-28);}
+ f.angle+=f.angular*DT;
+ const hand={x:chest.x+Math.cos(f.angle)*44,y:chest.y+Math.sin(f.angle)*44};
+ const offHand={x:hip.x-22,y:hip.y-5};
+ const walkAmount=Math.min(1,Math.abs(f.walk)/100);f.gait+=Math.abs(f.walk)*DT*.065;
+ const stride=Math.sin(f.gait)*15*walkAmount,groundY=f.root.y+65;
+ const footA={x:hip.x-12+stride,y:groundY-(f.grounded?Math.max(0,Math.cos(f.gait))*8*walkAmount:6)};
+ const footB={x:hip.x+12-stride,y:groundY-(f.grounded?Math.max(0,-Math.cos(f.gait))*8*walkAmount:6)};
+ const pose=[hip,chest,head,jointBetween(chest,offHand,26,27,1),offHand,jointBetween(chest,hand,27,28,1),hand,jointBetween(hip,footA,32,34,-1),footA,jointBetween(hip,footB,32,34,-1),footB];
+ for(let i=0;i<p.length;i++){p[i].px=p[i].x;p[i].py=p[i].y;p[i].x=pose[i].x;p[i].y=pose[i].y;}
+}
+function bodyStep(f){
+ const p=f.p;f.stun=Math.max(0,f.stun-DT);f.flash=Math.max(0,f.flash-DT);
+ if(f.hp>0)livingStep(f);
+ else{
+  f.dead+=DT;f.angular*=.99;f.angle+=f.angular*DT;
+  for(const v of p){const vx=(v.x-v.px)*.975,vy=(v.y-v.py)*.98;v.px=v.x;v.py=v.y;v.x+=vx;v.y+=vy+1050*DT*DT;}
+  for(let k=0;k<7;k++){
+   for(const[a,b,len]of f.links){const dx=p[b].x-p[a].x,dy=p[b].y-p[a].y,d=Math.hypot(dx,dy)||1,err=(d-len)/d*.5;p[a].x+=dx*err;p[a].y+=dy*err;p[b].x-=dx*err;p[b].y-=dy*err;}
+   for(const v of p){v.x=clamp(v.x,28,W-28);const floor=FLOOR-(v===p[2]?10:0);if(v.y>floor){v.y=floor;v.px=v.x-(v.x-v.px)*.7;v.py=v.y;}v.y=Math.max(100,v.y);}
+  }
+ }
  f.oldTip=f.tip?{...f.tip}:null;f.oldBase=f.base?{...f.base}:null;f.base={x:p[6].x,y:p[6].y};f.tip={x:f.base.x+Math.cos(f.angle)*f.weapon.length,y:f.base.y+Math.sin(f.angle)*f.weapon.length};
  f.trail.push({...f.tip});if(f.trail.length>9)f.trail.shift();
 }
@@ -102,6 +126,8 @@ function draw(){ctx.clearRect(0,0,W,H);ctx.save();ctx.translate((Math.random()-.
  for(const p of particles){ctx.globalAlpha=Math.min(1,p.life*3);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3);}ctx.globalAlpha=1;ctx.font='bold 17px monospace';for(const t of texts){ctx.globalAlpha=Math.min(1,t.life*2);ctx.fillStyle='#f1e8c9';ctx.fillText(t.value,t.x,t.y);}ctx.globalAlpha=1;
  if(state==='playing'){ctx.strokeStyle='#d4ed8570';ctx.lineWidth=1;ctx.beginPath();ctx.arc(mouse.x,mouse.y,7,0,Math.PI*2);ctx.stroke();line({x:mouse.x-11,y:mouse.y},{x:mouse.x+11,y:mouse.y},'#d4ed8570',1);line({x:mouse.x,y:mouse.y-11},{x:mouse.x,y:mouse.y+11},'#d4ed8570',1);}ctx.restore();}
 let last=0,acc=0;function frame(ms){acc+=Math.min((ms-last)/1000,.05)*GAME_SPEED;last=ms;if(state==='playing'){while(acc>=DT){step();acc-=DT;if(state!=='playing'){acc=0;break;}}}else acc=0;draw();requestAnimationFrame(frame);}loadLevel(0,false);fighters.forEach(bodyStep);requestAnimationFrame(frame);
+
+
 
 
 
