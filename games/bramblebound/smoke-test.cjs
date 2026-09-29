@@ -67,7 +67,7 @@ for(const [type,low,high] of [['slime',4700,5300],['swarmling',2300,2700],['boss
 const run=harness(),rt=run.t;rt.start();const rh=rt.get().heroes[0];rt.setItem(0,'rune-leech');assert.ok(rt.moveItem({type:'bag',index:0},{type:'rune0',index:0}));rt.setItem(1,'rune-ward');assert.ok(rt.moveItem({type:'bag',index:1},{type:'rune1',index:0}));assert.equal(rh.runes.length,2);
 assert.equal(rt.moveItem({type:'rune0',index:0},{type:'gear',index:0}),false);assert.equal(rt.moveItem({type:'gear',index:0},{type:'rune1',index:0}),false);
 rh.hp=20;const target=rt.get().enemies[0];target.hp=5;rt.basicHit(target,100,rt.attackToken(rh));assert.equal(rh.hp,20.1,'Lifesteal uses actual damage, not overkill');
-rt.setParty([0,0,0,0]);const q=rt.get().heroes[0];q.runes=['rune-ward','rune-ward'];rt.stats(q);q.hp=100;rt.damage(q,20,'poison');assert.equal(q.hp,90);rt.damage(q,20);assert.equal(q.hp,70,'Ward does not reduce physical damage');
+rt.setParty([0,0,0,0]);const q=rt.get().heroes[0];q.runes=['rune-ward','rune-ward'];rt.stats(q);q.hp=100;rt.damage(q,20,'poison');assert.equal(q.hp,84);rt.damage(q,20);assert.equal(q.hp,64,'Ward does not reduce physical damage');
 q.runes=['rune-wisdom',null];rt.stats(q);rt.xp(10);assert.equal(q.xp,11);assert.equal(rt.get().heroes[1].xp,10);
 q.attributes.str=10;q.runes=[null,null];rt.stats(q);const baseAgi=q.agi[0],baseAt=q.atMax,baseRange=q.range,baseHp=q.maxHp;
 q.runes=['rune-haste','rune-might'];rt.stats(q);assert.ok(q.agi[0]<baseAgi);assert.ok(q.atMax>baseAt);
@@ -255,7 +255,7 @@ const h=t.get().heroes[0],baseHP=h.maxHp,baseRange=h.range,baseInterval=t.summon
 function socket(a,b){h.runes=[a,b];h.gearRevision++;t.stats(h);t.get().minions.length=0;h.firstSummon=true;t.tickMinions(1);return t.get().minions.find(m=>m.owner===h)}
 let m=socket('gem-topaz-1','rune-vitality');
 assert.equal(h.maxHp,baseHP);assert.equal(m.hp,m.maxHp);assert.equal(m.maxHp,Math.round((t.items[h.weapon].summon.health+50)*1.2));
-m=socket('rune-ward','gem-diamond-1');let hp=m.hp;t.damage(m,20,'fire');assert.equal(m.hp,hp-14);assert.equal(h.defense,0);assert.equal(h.runeBonus.resistance,0);
+m=socket('rune-ward','gem-diamond-1');let hp=m.hp;t.damage(m,20,'fire');assert.equal(m.hp,hp-18);assert.equal(h.defense,0);assert.equal(h.runeBonus.resistance,0);
 m=socket('rune-reach','rune-haste');assert.equal(h.range,baseRange);assert.equal(t.summonInterval(h),baseInterval);assert.equal(m.range,30);assert.equal(m.runeBonus.haste,.15);
 m=socket('rune-leech','rune-renewal');m.hp=5;const foe=t.get().enemies[0];foe.hp=100;t.damage(foe,10,'physical',true,false,m);assert.equal(m.hp,5.2);const ownerHP=h.hp;t.tickMinions(.1);assert.ok(m.hp>=5.3-1e-8);assert.equal(h.hp,ownerHP);
 m=socket('rune-wisdom','soul-fortune-1');assert.equal(t.dropMultiplier(),1);assert.equal(t.dropMultiplier(m),1.05);assert.equal(t.xpGain(h,100,1,m),110.00000000000001);assert.equal(t.xpGain(h,100,1),100);assert.equal(t.xpGain(t.get().heroes[1],100,1,m),100);
@@ -521,4 +521,16 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(let a=21;a<41;a++){r.setArea(a);for(const id of r.rollDrops(r.enemy('slime',300)))if(['rune','gem'].includes(r.items[id].type))assert.ok(r.items[id].sourceArea<=a);}
  assert.equal(r.items['rune-might'].description,'+15% AT.');assert.equal(r.items['rune-vitality'].description,'+20% maximum HP.');assert.equal(r.items['rune-renewal'].description,'+1 HP/s.');
  console.log('Exclusive boss weapons and abilities, unique soul pools, class restrictions, stat tradeoffs, terrain-piercing projectiles, and source-area socket shops pass.');
+}
+
+{
+ const run=harness(),r=run.t;r.start();r.setParty([4,0,6,7]);const [priest,ally,bard,summoner]=r.get().heroes;
+ for(const h of r.get().heroes){h.x=100;h.y=226;h.hp=1000;}priest.attributes.dex=50;r.stats(priest);priest.hp=1000;bard.str=10;bard.dex=20;
+ for(const h of [priest,ally]){const hp=h.hp;r.damage(h,20,'physical');assert.equal(h.hp,hp-10);r.damage(h,20,'fire');assert.equal(h.hp,hp-30);assert.ok(r.get().numbers.at(-1).vx<0);}
+ const foe=r.enemy('slime',300);foe.hp=1000;foe.at=20;r.applySong(foe,bard);assert.equal(r.enemyDamage(foe),15);for(const element of ['fire','poison','ice','lightning','magic'])assert.equal(r.enemyDamage(foe,1,element),20);
+ r.damage(foe,20);assert.equal(foe.hp,975,'DEX adds five physical damage');assert.ok(r.get().numbers.at(-1).vx>0);r.damage(foe,20,'fire');assert.equal(foe.hp,955,'No elemental vulnerability');
+ ally.runes=['rune-fire-ward-1',null];r.stats(ally);ally.hp=1000;r.damage(ally,100,'fire');assert.equal(ally.hp,925);r.damage(ally,100,'ice');assert.equal(ally.hp,825);
+ const pet={owner:summoner,x:100,y:226,hp:1000,maxHp:1000,defense:2,runeBonus:{}};r.damage(pet,20,'physical');assert.equal(pet.hp,992);r.damage(pet,20,'poison');assert.equal(pet.hp,972);assert.ok(r.get().numbers.at(-1).vx<0);
+ const mushroom=r.enemy('sporecap',300);mushroom.at=20;r.applySong(mushroom,bard);r.fireEnemyAttack(mushroom,ally,mushroom.attackProfile);assert.equal(r.get().hazards.at(-1).amount,9,'Poison cloud bypasses physical attack debuff');
+ console.log('Physical-only defense/weakness, priest self and summon aura, elemental wards, physical-only vulnerability and damage-number directions pass.');
 }

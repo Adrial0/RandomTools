@@ -51,3 +51,9 @@ Weapon and soul rolls remain independent at 10% each. Each listed item drops exc
 | Royal Specter | Royal Staff (Mage, tier 6) | Wide freezing pulse | +20% XP, +10% equipment drops |
 
 Rune and gem families have source areas distributed across their zone. Drops become eligible from that source area onward within the same zone; Rune Trader stock requires completing the source area. Entering a zone alone does not unlock its entire socket tier. Sources are stored on each item's sourceArea field.
+
+## Defense and elemental wards
+
+Priest aura defense (including self and allied summons), gem defense, and Bard attack reduction affect physical damage only. Bard DEX grants +0.25 physical damage taken per point to affected enemies; STR reduces their physical attack by 0.5 per point. Elemental attacks and poison/burn ticks ignore these physical modifiers.
+
+General Ward Rune resistance is 10%, 13%, 16%, 19%, 22%, 25%. Fire, Ice, Poison and Lightning Ward Runes each grant 25%, 30%, 35%, 40%, 45%, 50% resistance to their matching element. General and matching resistance add, capped at 75%. These wards follow the normal source-area shop unlock rules. Damage numbers move right for enemies and left for heroes and allied summons.

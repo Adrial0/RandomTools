@@ -96,7 +96,7 @@ for(let c=0;c<8;c++){
  }
 }
 const runes=[
- ['ward','Ward Rune','#8cc9fa',{resistance:.25},'Take 25% less elemental damage.'],
+ ['ward','Ward Rune','#8cc9fa',{resistance:.10},'Take 25% less elemental damage.'],
  ['haste','Haste Rune','#7ee5c1',{haste:.15},'15% faster attacks.'],
  ['might','Might Rune','#ed9469',{damageBonus:.15},'Increase minimum and maximum basic AT by 15%.'],
  ['reach','Reach Rune','#f1d97b',{rangeBonus:15},'Increase attack and support range by 15.'],
@@ -114,6 +114,10 @@ for(let tier=2;tier<=6;tier++)for(const [family,title,color,base] of runes){
 for(const [i,[chance,power]] of [[.25,10],[.5,10],[.5,15],[1,15],[.3,45]].entries()){
  const tier=i+1,id=tier===1?'rune-knockback':'rune-knockback-'+tier;
  items[id]={id,type:'rune',family:'knockback',name:'Knockback Rune'+(tier===1?'':' '+tier),color:'#deb57c',bonuses:{knockbackChance:chance,knockbackPower:power},description:Math.round(chance*100)+'% chance of knockback '+power+'.',level:tier,tier,symbol:'◆'};
+}
+for(const [element,color] of [['fire','#ff9359'],['ice','#91dbfa'],['poison','#9ccc63'],['lightning','#f9df67']])for(let tier=1;tier<=6;tier++){
+ const id='rune-'+element+'-ward-'+tier,value=.25+(tier-1)*.05;
+ items[id]={id,type:'rune',family:'ward',name:element[0].toUpperCase()+element.slice(1)+' Ward Rune '+tier,color,bonuses:{[element+'Resistance']:value},description:'+'+Math.round(value*100)+'% '+element+' resistance.',level:tier,tier,symbol:'◆'};
 }
 const soulFamilies=[['leech','Leech Soul','#df758b','lifesteal',.02,.01,'lifesteal'],['wisdom','Wisdom Soul','#b994ef','xpBonus',.10,.05,'XP gain'],['fortune','Fortune Soul','#f1d47a','dropBonus',.05,.02,'equipment drop rate']];
 for(let tier=1;tier<=6;tier++)for(const [family,name,color,stat,base,step,label] of soulFamilies){const id=tier===1&&family!=='fortune'?'rune-'+family:'soul-'+family+'-'+tier,bonus=Number((base+(tier-1)*step).toFixed(2));items[id]={id,type:'soul',name:name+' '+tier,color,bonuses:{[stat]:bonus},description:'+'+Math.round(bonus*100)+'% '+label+'.',level:tier,tier,symbol:'◈'};}
