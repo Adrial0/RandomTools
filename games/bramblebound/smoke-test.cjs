@@ -80,7 +80,7 @@ const upgraded=harness({'bramblebound-v3':JSON.stringify(legacy)});assert.equal(
 // Town starts the journey; paths unlock on completion, including the trader detour.
 const world=harness(),wt=world.t;wt.startTown();assert.equal(wt.get().state,'service');assert.equal(wt.get().currentNode,'town');assert.equal(wt.travel('a3'),false);assert.equal(wt.travel('trader'),false);
 const wh=wt.get().heroes[0];wh.hp=17;wt.xp(wt.needed(1));assert.equal(wh.hp,17,'Leveling never heals');wt.allocate('str');assert.equal(wh.hp,17,'Spending HP-increasing stats never heals');assert.ok(wt.travel('a0'));assert.equal(wh.hp,17);wt.clearRegion();assert.ok(wt.unlockedNodes().has('a1'));assert.ok(!wt.unlockedNodes().has('a2'));assert.ok(wt.travel('a1'));assert.equal(wh.hp,17);wt.clearRegion();wt.travel('a2');wt.clearRegion();assert.ok(wt.unlockedNodes().has('a3'));assert.ok(!wt.unlockedNodes().has('trader'));wt.travel('a3');wt.clearRegion();wt.travel('a4');wt.clearRegion();assert.ok(wt.unlockedNodes().has('trader'));assert.equal(wh.hp,17);
-wt.travel('trader');assert.equal(wt.healTown(),false);wt.setGold(1100);assert.ok(wt.buyRune('rune-ward'));assert.equal(wt.get().gold,100);assert.equal(wt.buyRune('rune-leech'),false);wt.setPicked({type:'bag',index:0});assert.ok(wt.sellItem());assert.equal(wt.get().inventory[0],null);assert.equal(wt.get().gold,125);assert.equal(wt.sellItem(),false);
+wt.travel('trader');assert.equal(wt.healTown(),false);wt.setGold(1100);assert.ok(wt.buyRune('rune-ward'));assert.equal(wt.get().gold,100);assert.equal(wt.buyRune('rune-leech'),false);wt.setPicked({type:'bag',index:0});assert.ok(wt.sellItem());assert.equal(wt.get().inventory[0],null);assert.equal(wt.get().gold,200);assert.equal(wt.sellItem(),false);
 wt.travel('town');assert.equal(wh.hp,17,'Visiting town alone does not heal');wt.get().heroes[1].hp=0;wt.healTown();assert.equal(wh.hp,wh.maxHp);assert.equal(wt.get().heroes[1].hp,wt.get().heroes[1].maxHp);
 wh.hp=19;wt.get().heroes[1].hp=0;wt.save();const healthReload=harness(world.storage).t;assert.equal(healthReload.get().heroes[0].hp,19);assert.equal(healthReload.get().heroes[1].hp,0);assert.ok(healthReload.unlockedNodes().has('trader'));
 // Five-percent potions are independent from item drops and heal only the grounded collector.
@@ -251,7 +251,7 @@ h.attributes.dex=0;r.stats(h);h.hp=100;r.damage(h,10,'physical',true,true);asser
 h.poison={time:1/30,tick:1/30,amount:10};r.tickEffects(1/30);assert.equal(h.hp,74,'Poison bypasses evasion');
 h.runeBonus.resistance=.25;r.damage(h,100,'fire');assert.equal(h.hp,14,'Evasion multiplies with resistance');
 h.level=2;h.attributes={str:1,dex:1,int:1,lp:1};r.stats(h);assert.equal(h.maxHp,115,'Rogue level and attribute HP');
-h.attributes.int=25;r.stats(h);assert.equal(h.crit,.25);
+h.attributes.int=25;r.stats(h);assert.equal(h.crit,.0025);h.attributes.str=100;r.stats(h);assert.equal(h.crit,.25);
 for(const a of Object.keys(r.SWARM_BOSSES)){r.setArea(+a);r.setStage(r.stageCount()-1);r.enter();const pack=r.get().enemies.filter(e=>e.type==='boss');assert.equal(pack.length,5);assert.ok(pack.every(e=>e.swarmBoss&&e.maxHp===Math.round(r.areaHealth(+a)*2.4)));pack.slice(0,4).forEach(e=>e.hp=0);r.tickBossExit(3);assert.equal(r.stageExitOpen(),false);pack[4].hp=0;r.tickBossExit(2);assert.equal(r.stageExitOpen(),true);r.draw()}console.log('Rogue evasion, lower HP, elemental resistance, DoT bypass and pack-boss progression pass.');}
 {const menu=harness(),r=menu.t;r.startTown();r.setGold(123);r.save();r.openMainMenu();r.beginPartySetup();assert.equal(menu.elements.get('#start').disabled,true);for(const id of [7,1,3,5])r.pickClass(id);assert.equal(menu.elements.get('#start').disabled,false);assert.deepEqual(menu.choices.map(c=>+c.value),[7,1,3,5]);assert.ok(menu.elements.get('#class-options').innerHTML.includes('Summoner'));r.openMainMenu();assert.equal(r.readSlot(1).gold,123,'Cancelled setup preserves the existing save');console.log('All-visible class selection, explicit four choices and cancelled setup preservation pass.');}
 {
@@ -582,4 +582,11 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  r.select(0);assert.match(run.elements.get('#priest-aura').textContent,/EVASION 20%/);
  rogue.hp=90;rogue.dodgeLeft=6;r.save();const loaded=harness(run.storage).t;assert.equal(loaded.get().heroes[0].evasion,.2);assert.equal(loaded.get().heroes[0].maxHp,90);
  console.log('Rogue boss AoE mitigation, burn bypass, evasion readout and save reload pass.');
+}
+
+{
+ const {t:r}=harness();r.start();r.setParty([1,0,0,0]);const h=r.get().heroes[0];h.attributes.int=100;r.stats(h);assert.equal(h.crit,0);h.attributes.str=100;r.stats(h);assert.equal(h.crit,.25);
+ h.weapon='1-fire';h.mp=0;r.stats(h);h.attributes.int=1;r.stats(h);const foe=r.get().enemies[0];foe.hp=10000;r.basicHit(foe,1,r.attackToken(h));assert.equal(h.mp,1);
+ r.startTown();for(const id of ['0-basic','0-fire','rune-ward','gem-ruby-1','rune-knockback-5']){r.setItem(0,id);r.setGold(0);r.setPicked({type:'bag',index:0});assert.ok(r.sellItem());assert.equal(r.get().gold,Math.floor(r.buyPrice(r.items[id])*.1));}
+ console.log('Rogue STR crit is separate from INT MP; weapon, rune and gem sales pay ten percent of buy price.');
 }

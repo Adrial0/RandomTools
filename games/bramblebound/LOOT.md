@@ -61,3 +61,5 @@ General Ward Rune resistance is 10%, 13%, 16%, 19%, 22%, 25%. Fire, Ice, Poison 
 ## Rogue evasion
 
 Rogue takes reduced direct damage of every type, including boss specials: reduction = 20% + 50% × DEX / (DEX + 50). Evasion applies before defense or elemental resistance. Poison, burn and recurring cloud damage bypass it. There is no chance roll or recharge. Base HP is 90, with +5 per level and +3/+4/+3 HP per STR/DEX/INT point; direct HP investment gives +10. Other classes are unchanged.
+
+Items sell for 10% of their calculated buy price, rounded down to whole gold. Rogue critical chance is 0.25 percentage points per STR (capped at 100%); INT only grants MP gain and its existing HP contribution.

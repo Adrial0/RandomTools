@@ -98,7 +98,7 @@ function stats(h){
  let min=w?w.min:1,max=w?w.max:2;h.range=w?w.range:12;let agi=w?w.agi:[25,35];let factor=1;h.crit=0;h.evasion=0;h.extra=0;h.abilityPower=1;h.healing=14+int;
  switch(h.classId){
  case 0:max+=str;min=Math.min(max,min+dex);break;
- case 1:min+=str;max+=str;h.evasion=.2+.5*dex/(dex+50);h.crit=Math.min(1,int*.01);break;
+ case 1:min+=str;max+=str;h.evasion=.2+.5*dex/(dex+50);h.crit=Math.min(1,str*.0025);break;
  case 2:h.range+=str*2;min+=dex*.5;max+=dex*.75;break;
  case 3:h.range+=str*2;factor=1/(1+dex*.02);min+=int;max+=int;h.mp=0;break;
  case 4:h.range+=int*2;break;
@@ -627,7 +627,7 @@ function tickBossExit(dt){if(stage===stageCount()-1&&!enemies.some(e=>e.type==='
 function stageExitOpen(){return stage<stageCount()-1||bossExitWait<=0&&!enemies.some(e=>e.type==='boss'&&e.hp>0)}
 function completeArea(){if(!stageExitOpen())return false;return changeScene(advanceStage)}
 function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell(area===125?'The lich king is defeated. His rule is over.':areaInfo().optional?'Optional route cleared.':areaInfo().major?'Zone cleared. A new land awaits.':'Boss defeated. New routes discovered.');save()}
-function salePrice(id){const w=ITEMS[id];return w?(socketItem(id)?25*w.tier:6+w.tier*12):0}
+function salePrice(id){const w=ITEMS[id];return w?Math.floor(buyPrice(w)*.1):0}
 function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&completed.includes('a'+w.sourceArea));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
 function weaponPrice(index){const early=[100,250,500,750,1000];if(index<5)return early[index];const price=1500+(index-5)*500;return price<=10000?price:10000+(index-22)*1000}
 function buyPrice(w){if(w.type==='rune')return 1000*w.tier;if(w.type==='gem')return 500*w.tier;return weaponPrice(w.priceIndex||0)}
