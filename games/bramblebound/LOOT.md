@@ -24,3 +24,15 @@ All equipment drops use the exact zone tier: Lowlands 1, Desert 2, Coast 3, Moun
 Fortune bonuses from living party members add together and multiply equipment drop chances. For example, one tier-one Fortune Soul changes a normal weapon roll from 5% to 5.25%. They do not affect HP potion or gold drops.
 
 HP potions heal the collecting character for 20% of maximum HP, rounded up and capped at maximum HP. Full-health characters leave potions on the ground. Potions cannot revive dead characters. The displayed health stat is HP; the legacy internal lp field is retained for save compatibility.
+
+## Knockback Rune
+
+| Tier | Chance per direct hit | Knockback |
+|---|---:|---:|
+| 1 | 25% | 10 |
+| 2 | 50% | 10 |
+| 3 | 50% | 15 |
+| 4 | 100% | 15 |
+| 5 | 30% | 45 |
+
+No automatic knockback is applied on damage or ordinary melee hits. Rune knockback is a horizontal impulse, reduced by body size for regular enemies; bosses receive 10% strength, and enemies marked immobile receive none. Repeated damage-over-time ticks do not trigger it. Summoner sockets apply the effect to summons. These five tiers join the existing rune loot pool and Rune Trader stock at their corresponding tiers and normal rune prices. No sixth tier is added.

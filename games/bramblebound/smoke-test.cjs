@@ -53,7 +53,7 @@ const discarded=isolated.attackToken(fighter);dummy.hp=0;isolated.shoot(fighter,
 // Continuous simulation while dragging equipment or changing focus; manual pause still works.
 const motion=harness();motion.t.start();motion.t.setGearDrag({from:{type:'bag',index:0},moved:false});motion.t.frame(16);assert.ok(motion.t.get().time>0,'Equipment dragging must not pause');motion.events.blur();assert.equal(motion.t.get().paused,false);const elapsed=motion.t.get().time;motion.t.frame(32);assert.ok(motion.t.get().time>elapsed);motion.t.toggle();motion.events.blur();motion.t.frame(48);assert.equal(motion.t.get().paused,true);assert.equal(motion.t.get().time,elapsed+.016);motion.t.toggle();
 const body=motion.t.get().heroes[0];body.drive=33;body.vx=0;const beforeX=body.x;motion.t.stepBody(body,1/60);assert.ok(body.vx>0&&body.vx<33);assert.ok(body.x>beforeX);const momentum=body.vx;motion.t.stepBody(body,1/60);assert.ok(body.vx>0&&body.vx<momentum,'Coasting decelerates instead of snapping');body.y=70;body.vy=0;for(let i=0;i<240;i++)motion.t.stepBody(body,1/120);assert.ok(body.y>=200&&body.y<=226);assert.ok(Number.isFinite(body.lean));
-body.classId=1;const meleeTarget=motion.t.get().enemies[0];meleeTarget.x=body.x+10;meleeTarget.y=body.y;const health=meleeTarget.hp;body.strike={left:.09,target:meleeTarget,amount:3,token:motion.t.attackToken(body),range:30};motion.t.resolveStrike(body,.04);assert.equal(meleeTarget.hp,health,'Swing windup deals no immediate damage');motion.t.resolveStrike(body,.06);assert.equal(meleeTarget.hp,health-3);assert.ok(meleeTarget.kick>0);body.strike={left:.09,target:meleeTarget,amount:3,token:motion.t.attackToken(body),range:30};meleeTarget.x+=100;motion.t.resolveStrike(body,.1);assert.equal(meleeTarget.hp,health-3,'Out-of-range melee attack misses');
+body.classId=1;const meleeTarget=motion.t.get().enemies[0];meleeTarget.x=body.x+10;meleeTarget.y=body.y;const health=meleeTarget.hp;body.strike={left:.09,target:meleeTarget,amount:3,token:motion.t.attackToken(body),range:30};motion.t.resolveStrike(body,.04);assert.equal(meleeTarget.hp,health,'Swing windup deals no immediate damage');motion.t.resolveStrike(body,.06);assert.equal(meleeTarget.hp,health-3);assert.equal(meleeTarget.kick||0,0);body.strike={left:.09,target:meleeTarget,amount:3,token:motion.t.attackToken(body),range:30};meleeTarget.x+=100;motion.t.resolveStrike(body,.1);assert.equal(meleeTarget.hp,health-3,'Out-of-range melee attack misses');
 // Exact drop boundary, no guaranteed final kill, and both item categories.
 
 const drops=harness();drops.t.start();drops.math.random=()=>.9;
@@ -228,7 +228,7 @@ r.get().numbers.length=0;r.float(100,100,12);const n=r.get().numbers[0];assert.o
 }
 const saves=harness(),sv=saves.t;sv.startTown();sv.setGold(777);sv.save();sv.openMainMenu();assert.equal(sv.get().menuOpen,true);const frozenTime=sv.get().time;sv.rawUpdate(1);assert.equal(sv.get().time,frozenTime);sv.chooseSaveSlot(2);sv.startTown();sv.setGold(222);sv.save();assert.equal(sv.readSlot(1).gold,777);assert.equal(sv.readSlot(2).gold,222);sv.openMainMenu();sv.chooseSaveSlot(1);assert.equal(sv.get().gold,777);sv.openMainMenu();sv.chooseSaveSlot(3);sv.openMainMenu();assert.equal(sv.readSlot(3),null);assert.equal(sv.readSlot(1).gold,777);
 assert.equal(sv.buyPrice(sv.items['gem-ruby-1']),500);assert.equal(sv.buyPrice(sv.items['gem-ruby-3']),1500);assert.equal(sv.buyPrice(sv.items['rune-ward']),1000);
-assert.equal(new Set(Object.values(sv.items).filter(i=>i.type==='rune').map(sv.itemSymbol)).size,6);
+assert.equal(new Set(Object.values(sv.items).filter(i=>i.type==='rune').map(sv.itemSymbol)).size,7);
 const mh=sv.get().heroes[0];mh.weapon='0-fire';mh.mp=5;assert.equal(sv.manaPercent(mh),50);
 console.log('Independent save slots, menu pause, socket prices, distinct rune icons and mana bars pass.');
 const tuning=harness(),tu=tuning.t;tu.start();assert.equal(tu.needed(10),1824);assert.equal(tu.needed(20),4796);
@@ -482,4 +482,20 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  }
  r.save();const loaded=harness(run.storage).t;assert.ok(loaded.get().completed.includes('a143'));assert.equal(loaded.get().area,131);
  console.log('Optional branches unlock independently, preserve progression scaling and saves, execute boss patterns, and apply selective damage resistance.');
+}
+
+{
+ const {t:r,math}=harness();r.start();math.random=()=>0;r.setParty([0,7,2,4]);const h=r.get().heroes[0];
+ const pairs=[[.25,10],[.5,10],[.5,15],[1,15],[.3,45]];
+ for(let i=0;i<5;i++){const w=r.items[i?'rune-knockback-'+(i+1):'rune-knockback'];assert.equal(w.bonuses.knockbackChance,pairs[i][0]);assert.equal(w.bonuses.knockbackPower,pairs[i][1]);}
+ h.runes=['rune-knockback',null];r.stats(h);h.x=100;
+ const small=r.enemy('slime',300),large=r.enemy('beetle',300),boss=r.enemy('boss',300),fixed=r.enemy('slime',300);fixed.immobile=true;
+ for(const e of [small,large,boss,fixed]){e.hp=1000;r.basicHit(e,1,r.attackToken(h));}
+ assert.equal(small.kick,90);assert.ok(large.kick<small.kick);assert.equal(boss.kick,9);assert.equal(fixed.kick||0,0);
+ const before=small.kick;r.damage(small,1,'poison',false,false,h);assert.equal(small.kick,before,'DoT cannot repeatedly trigger knockback');
+ math.random=()=>.3;r.basicHit(small,1,r.attackToken(h));assert.equal(small.kick,before,'Tier one can fail its proc roll');
+ const vx=h.vx||0;r.damage(h,1);assert.equal(h.vx||0,vx,'Incoming damage no longer pushes heroes');
+ const summoner=r.get().heroes[1];summoner.runes=['rune-knockback-4',null];r.stats(summoner);assert.equal(summoner.runeBonus.knockbackPower,0);assert.equal(summoner.summonBonuses.knockbackPower,15);
+ math.random=()=>0;const pet={x:100,hp:100,maxHp:100,owner:summoner,runeBonus:summoner.summonBonuses};r.damage(small,1,'physical',true,false,pet);assert.equal(small.kick,before+135,'Summon direct hits use socket knockback');
+ console.log('Knockback rune tiers, chance, size reduction, boss reduction, immobile immunity, quiet DoTs and summon inheritance pass.');
 }

@@ -111,6 +111,10 @@ for(let tier=2;tier<=6;tier++)for(const [family,title,color,base] of runes){
  const key=Object.keys(bonuses)[0],value=bonuses[key],description=({resistance:Math.round(value*100)+'% elemental resistance.',haste:Math.round(value*100)+'% faster attacks.',damageBonus:Math.round(value*100)+'% bonus AT.',rangeBonus:'+'+value+' range.',hpBonus:Math.round(value*100)+'% maximum HP.',regen:'Recover '+value+' HP per second.'})[key];
  items[id]={id,type:'rune',family,name:title+' '+tier,color,bonuses,description,level:tier,tier,symbol:'◆'};
 }
+for(const [i,[chance,power]] of [[.25,10],[.5,10],[.5,15],[1,15],[.3,45]].entries()){
+ const tier=i+1,id=tier===1?'rune-knockback':'rune-knockback-'+tier;
+ items[id]={id,type:'rune',family:'knockback',name:'Knockback Rune'+(tier===1?'':' '+tier),color:'#deb57c',bonuses:{knockbackChance:chance,knockbackPower:power},description:Math.round(chance*100)+'% chance of knockback '+power+'.',level:tier,tier,symbol:'◆'};
+}
 const soulFamilies=[['leech','Leech Soul','#df758b','lifesteal',.02,.01,'lifesteal'],['wisdom','Wisdom Soul','#b994ef','xpBonus',.10,.05,'XP gain'],['fortune','Fortune Soul','#f1d47a','dropBonus',.05,.02,'equipment drop rate']];
 for(let tier=1;tier<=6;tier++)for(const [family,name,color,stat,base,step,label] of soulFamilies){const id=tier===1&&family!=='fortune'?'rune-'+family:'soul-'+family+'-'+tier,bonus=Number((base+(tier-1)*step).toFixed(2));items[id]={id,type:'soul',name:name+' '+tier,color,bonuses:{[stat]:bonus},description:'+'+Math.round(bonus*100)+'% '+label+'.',level:tier,tier,symbol:'◈'};}
 
