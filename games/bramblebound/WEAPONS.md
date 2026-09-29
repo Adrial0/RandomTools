@@ -561,3 +561,17 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Royal Chain Golem Grimoire | 110–183 | Fires a lightning projectile. | City 4 | 22000 |
 | Royal Golem Grimoire | 147–257 | Physical attack | Barracks 1 | 23000 |
 
+
+## Optional boss loot
+
+Weapon and soul rolls remain independent at 10% each. Each listed item drops exclusively from its boss. Weapons become purchasable after clearing that boss; souls are not sold. Each soul has one version only.
+
+| Boss | Weapon | Ability | Soul |
+|---|---|---|---|
+| Stone Colossus | Quarry Blade (Warrior, tier 1) | Delayed ground slam and stun | +50% AT, −50% maximum HP; Warrior/Rogue/Reaper |
+| Crystal Scarab | Prism Staff (Mage, tier 2) | Three lightning shards | Projectiles pass through terrain; Ranger/Mage/Bard/Summoner |
+| Coral Beast | Coral Scythe (Reaper, tier 3) | Nearby life drain | +3 HP/s, −15% AT |
+| Storm Owl | Storm Bow (Ranger, tier 4) | Lightning chain | +25% attack speed, −20% maximum HP |
+| Ash Serpent | Ash Daggers (Rogue, tier 5) | Three fire eruptions | +25% AT, −15% elemental resistance |
+| Royal Specter | Royal Staff (Mage, tier 6) | Wide freezing pulse | +20% XP, +10% equipment drops |
+

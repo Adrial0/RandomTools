@@ -106,10 +106,10 @@ function stats(h){
  case 6:break;
  case 7:min*=1+str*.1;max*=1+str*.1;factor=1/(1+int*.02);break;
  }
- h.runeBonus={knockbackChance:0,knockbackPower:0,lifesteal:0,resistance:0,xpBonus:0,haste:0,damageBonus:0,rangeBonus:0,hpBonus:0,regen:0,dropBonus:0};
+ h.runeBonus={wallPierce:0,knockbackChance:0,knockbackPower:0,lifesteal:0,resistance:0,xpBonus:0,haste:0,damageBonus:0,rangeBonus:0,hpBonus:0,regen:0,dropBonus:0};
  for(const id of h.runes||[])for(const [name,value] of Object.entries(ITEMS[id]?.bonuses||{}))h.runeBonus[name]+=value;
  h.runeBonus.resistance=Math.min(.75,h.runeBonus.resistance);h.summonBonuses=h.classId===7?{...h.runeBonus}:null;if(h.classId===7)for(const key of Object.keys(h.runeBonus))h.runeBonus[key]=0;
- min*=1+h.runeBonus.damageBonus;max*=1+h.runeBonus.damageBonus;factor/=1+h.runeBonus.haste;h.range+=h.runeBonus.rangeBonus;h.maxHp=Math.floor(h.maxHp*(1+h.runeBonus.hpBonus));
+ min*=1+h.runeBonus.damageBonus;max*=1+h.runeBonus.damageBonus;factor/=1+h.runeBonus.haste;h.range+=h.runeBonus.rangeBonus;h.maxHp=Math.max(1,Math.floor(h.maxHp*(1+h.runeBonus.hpBonus)));
  h.atMin=Math.floor(Math.min(min,max));h.atMax=Math.floor(max);h.at=h.atMax;h.agi=agi.map(n=>Math.max(5,Math.round(n*factor)));h.cool=(h.agi[0]+h.agi[1])/60;h.color=c.color;h.kind=w?c.kind:'melee';
 }
 function hero(classId,i){const h={id:++uid,classId,level:1,xp:0,weapon:classId+'-basic',runes:[null,null],attributes:{str:0,dex:0,int:0,lp:0},sp:0,mp:0,gearRevision:0,x:35+i*20,y:226,vy:0,cooldown:i*.15,hold:0,anim:0,face:1};stats(h);h.hp=h.maxHp;return h}
@@ -437,7 +437,7 @@ function drawHazards(){
 }
 
 function terrainHit(ax,ay,bx,by){const steps=Math.max(1,Math.ceil(Math.hypot(bx-ax,by-ay)/2));for(let i=0;i<=steps;i++){const t=i/steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;if(y>=floor(x))return {x,y:floor(x),t};if(y<=ceiling(x))return {x,y:ceiling(x),t}}return null}
-function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp<=0||s.summonOwner.gearRevision!==s.summonRevision)){s.life=0;continue}s.life-=dt;const ax=s.x,ay=s.y;s.vy+=(s.gravity||0)*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;const wall=terrainHit(ax,ay,s.x,s.y),bx=wall?wall.x:s.x,by=wall?wall.y:s.y;
+function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp<=0||s.summonOwner.gearRevision!==s.summonRevision)){s.life=0;continue}s.life-=dt;const ax=s.x,ay=s.y;s.vy+=(s.gravity||0)*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;const wall=(s.attack?.owner?.runeBonus?.wallPierce||s.summonSource?.runeBonus?.wallPierce||s.spell?.source?.runeBonus?.wallPierce)?null:terrainHit(ax,ay,s.x,s.y),bx=wall?wall.x:s.x,by=wall?wall.y:s.y;
  if(s.kind==='spell'){if(s.spell.owner.hp<=0||s.spell.owner.gearRevision!==s.spell.revision){s.life=0;continue}const target=enemies.filter(e=>e.hp>0&&segmentDistance(e.x,e.y-12,ax,ay,bx,by)<8).sort((a,b)=>Math.hypot(a.x-ax,a.y-12-ay)-Math.hypot(b.x-ax,b.y-12-ay))[0];if(target){spellImpact(s.spell,target.x,target.y-12);s.life=0}if(wall)s.life=0;continue}
  if(s.kind==='note'){
   const owner=s.attack.owner;
@@ -454,7 +454,7 @@ function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp
 const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
 {
  for(let c=0;c<8;c++)for(let tier=1;tier<=6;tier++){
-  const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier&&w.id!==c+'-basic').sort((a,b)=>a.catalogIndex-b.catalogIndex||a.id.localeCompare(b.id));
+  const weapons=Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.exclusiveBoss==null&&w.classId===c&&w.tier===tier&&w.id!==c+'-basic').sort((a,b)=>a.catalogIndex-b.catalogIndex||a.id.localeCompare(b.id));
   weapons.forEach((w,i)=>{const local=Math.floor(i*19/Math.max(1,weapons.length-1)),a=(tier-1)*21+local;WEAPON_AREAS[w.id]=a;WEAPON_STAGES[w.id]=2+(i+c)%3;});
  }
  const savedArea=area,savedStage=stage;
@@ -479,10 +479,8 @@ const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
 for(const node of AREAS.filter(n=>n.optional)){
  for(const [key,table] of Object.entries(WEAPON_DROPS))if(key.startsWith(node.sourceArea+':'))WEAPON_DROPS[node.area+':'+key.split(':')[1]]=table.slice();
  if(node.major){
-  const candidates=Object.keys(WEAPON_AREAS).filter(id=>ITEMS[id].tier===node.zone+1);
-  const id=candidates.find(id=>new Set(Object.entries(WEAPON_DROPS).filter(([key,ids])=>ids.includes(id)).map(([key])=>key.split(':')[1])).size===1);
-  if(!id)throw Error('Missing optional boss loot');
-  WEAPON_DROPS[node.area+':guardian'+node.area]=[id];
+  const id='boss-weapon-'+node.zone;
+  WEAPON_DROPS[node.area+':guardian'+node.area]=[id];WEAPON_AREAS[id]=node.area;WEAPON_STAGES[id]=0;
  }
 }
 function dropMultiplier(source=null){return 1+(source?.owner?source.runeBonus?.dropBonus||0:0)+heroes.filter(h=>h.hp>0).reduce((n,h)=>n+(h.runeBonus.dropBonus||0),0)}
@@ -492,15 +490,15 @@ function rollDrops(target,source=null){
  const result=[],boost=dropMultiplier(source),boss=target.type==='boss',rate=boss?.10:target.type==='swarmling'?.025:.05;
  const choose=pool=>pool[Math.floor(Math.random()*pool.length)];
  const weapons=weaponDropTable(target);if(Math.random()<Math.min(1,rate*boost)&&weapons.length)result.push(choose(weapons));
- if(Math.random()<Math.min(1,.01*boost)){const pool=Object.values(ITEMS).filter(w=>(w.type==='rune'||w.type==='gem')&&w.tier===regionTier());result.push(choose(pool).id);}
- if(boss&&Math.random()<Math.min(1,.10*boost)){const tier=regionTier(),pool=Object.values(ITEMS).filter(w=>w.type==='soul'&&w.tier===tier);result.push(choose(pool).id);}
+ if(Math.random()<Math.min(1,.01*boost)){const pool=Object.values(ITEMS).filter(w=>(w.type==='rune'||w.type==='gem')&&w.tier===regionTier()&&w.sourceArea<=progressionArea());if(pool.length)result.push(choose(pool).id);}
+ if(boss&&Math.random()<Math.min(1,.10*boost)){const tier=regionTier(),pool=Object.values(ITEMS).filter(w=>w.type==='soul'&&w.tier===tier&&(areaInfo().optional&&areaInfo().major?w.exclusiveBoss===areaInfo().zone:w.exclusiveBoss==null));result.push(choose(pool).id);}
  return result;
 }
 
 function pickLoot(){let picked=false;loot=loot.filter(item=>{if(!heroes.some(h=>h.hp>0&&Math.abs(h.x-item.x)<12&&Math.abs(h.y-item.y)<8))return true;const i=inventory.indexOf(null);if(i<0)return true;inventory[i]=item.item;inventoryRunes[i]=[null,null];tell('Found '+ITEMS[item.item].name+'.');picked=true;return false});if(picked){save();build()}}
 function slotItem(slot){return slot.type==='bag'?inventory[slot.index]:slot.type==='gear'?heroes[slot.index]?.weapon:heroes[slot.index]?.runes[slot.type==='rune0'?0:1]}
 function validSlot(slot){return slot&&Number.isInteger(slot.index)&&(slot.type==='bag'?slot.index>=0&&slot.index<15:['gear','rune0','rune1'].includes(slot.type)&&slot.index>=0&&slot.index<4)}
-function accepts(slot,id){if(slot.type.startsWith('rune')&&!heroes[slot.index]?.weapon)return false;if(!id)return true;const item=ITEMS[id];if(!item)return false;if(slot.type==='bag')return true;const h=heroes[slot.index];return item.level<=h.level&&(slot.type==='gear'?item.type==='weapon'&&item.classId===h.classId:socketItem(id))}
+function accepts(slot,id){if(slot.type.startsWith('rune')&&!heroes[slot.index]?.weapon)return false;if(!id)return true;const item=ITEMS[id];if(!item)return false;if(slot.type==='bag')return true;const h=heroes[slot.index];return item.level<=h.level&&(slot.type==='gear'?item.type==='weapon'&&item.classId===h.classId:socketItem(id)&&(!item.allowedClasses||item.allowedClasses.includes(h.classId)))}
 function moveItem(from,to){if(!validSlot(from)||!validSlot(to)||from.type===to.type&&from.index===to.index)return false;const a=slotItem(from),b=to.type.startsWith('rune')?null:slotItem(to);if(from.type.startsWith('rune')){tell('Cannot move this item.');return false}if(!a)return false;if(!accepts(to,a)||!accepts(from,b)){tell('Cannot equip: weapon class or required level does not match.');return false}
  const sockets=slot=>slot.type==='bag'?inventoryRunes[slot.index]:slot.type==='gear'?heroes[slot.index].runes:[null,null];const fromRunes=[...sockets(from)],toRunes=[...sockets(to)];
  for(const [slot,id,runes] of [[from,b,toRunes],[to,a,fromRunes]]){if(slot.type==='bag'){inventory[slot.index]=id;inventoryRunes[slot.index]=runes}else{const h=heroes[slot.index];if(slot.type==='gear'){h.weapon=id;h.runes=runes;}else h.runes[slot.type==='rune0'?0:1]=id;h.mp=0;h.nextNote=null;h.gearRevision++}}
@@ -565,7 +563,7 @@ function applyWeaponEffect(target,p){
 }
 function spellImpact(p,x,y){
  if(p.owner.hp<=0||p.owner.gearRevision!==p.revision)return;
- for(const target of enemies)if(target.hp>0&&Math.hypot(target.x-x,target.y-12-y)<=p.radius&&!terrainHit(x,y,target.x,target.y-12))applyWeaponEffect(target,p);
+ for(const target of enemies)if(target.hp>0&&Math.hypot(target.x-x,target.y-12-y)<=p.radius&&(p.source?.runeBonus?.wallPierce||!terrainHit(x,y,target.x,target.y-12)))applyWeaponEffect(target,p);
  flashes.push({x:x-p.radius,y,tx:x+p.radius,ty:y,color:EFFECTS[p.kind].color,life:.3});
 }
 function activate(h,target,kind,spellAT=null,source=null){source=source||h;sfx('spell',{...(ITEMS[h.weapon]||{}),effect:kind});
@@ -617,7 +615,7 @@ function stageExitOpen(){return stage<stageCount()-1||bossExitWait<=0&&!enemies.
 function completeArea(){if(!stageExitOpen())return false;return changeScene(advanceStage)}
 function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell(area===125?'The lich king is defeated. His rule is over.':areaInfo().optional?'Optional route cleared.':areaInfo().major?'Zone cleared. A new land awaits.':'Boss defeated. New routes discovered.');save()}
 function salePrice(id){const w=ITEMS[id];return w?(socketItem(id)?25*w.tier:6+w.tier*12):0}
-function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&w.tier<=Math.max(1,...cleared.map(a=>a<0?1:areaInfo(a).zone+1)));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
+function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&completed.includes('a'+w.sourceArea));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
 function weaponPrice(index){const early=[100,250,500,750,1000];if(index<5)return early[index];const price=1500+(index-5)*500;return price<=10000?price:10000+(index-22)*1000}
 function buyPrice(w){if(w.type==='rune')return 1000*w.tier;if(w.type==='gem')return 500*w.tier;return weaponPrice(w.priceIndex||0)}
 function shopPages(){const stock=shopStock();return [...new Set(stock.map(w=>w.level))].sort((a,b)=>a-b).map(tier=>({tier,items:stock.filter(w=>w.level===tier).sort((a,b)=>buyPrice(a)-buyPrice(b))}))}
@@ -646,7 +644,7 @@ function slotRunes(slot){return slot.type==='bag'?inventoryRunes[slot.index]:slo
 function inspect(id,runes=[]){
  inspectingItem=true;$('#character-info').hidden=true;$('#hover-info').hidden=false;
  const w=ITEMS[id],e=EFFECTS[w?.effect];$('#item-name').textContent=w?w.name:'Empty slot';
- if(socketItem(id)){$('#item-details').textContent='TYPE '+({gem:'Gem',rune:'Rune',soul:'Soul'}[w.type])+'\nCLASS All\nTIER '+w.tier;$('#item-effect').textContent=w.description;return}
+ if(socketItem(id)){$('#item-details').textContent='TYPE '+({gem:'Gem',rune:'Rune',soul:'Soul'}[w.type])+'\nCLASS '+(w.allowedClasses?w.allowedClasses.map(c=>classes[c].name).join(', '):'All')+'\nTIER '+w.tier;$('#item-effect').textContent=w.description;return}
  $('#item-details').textContent=w?'AT '+w.min+'–'+w.max+'\nAGI '+w.agi.join('–')+'\nRANGE '+w.range+'\nTYPE '+(w.effect||'Physical')+(w.summon?'\nSUMMON '+w.summon.kind+' · 15s'+'\nMINION HP '+w.summon.health:w.classId===3?'':'\nMP '+mpCost(w))+'\nCLASS '+classes[w.classId].name+(w.arrows?'\nARROWS '+w.arrows:''):'Drag an item into this slot.';
  $('#item-effect').textContent=e?effectText(w)+([3,6].includes(w.classId)||w.ability?'':' Bonus AT '+e.min+'–'+e.max+'.')+(w.summon?' Every 5 minion attacks.':''):'';if(w?.classId===6)$('#item-effect').textContent=({line:'Piercing note.',cone:'Three-note fan.',pulse:'Broad pulse.',long:'Long piercing note.'}[w.note])+' '+$('#item-effect').textContent;if(w?.type==='weapon'&&runes.some(Boolean))$('#item-effect').textContent+='\n'+runes.filter(Boolean).map(id=>ITEMS[id].name).join(', ');
 }

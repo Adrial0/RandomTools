@@ -36,3 +36,18 @@ HP potions heal the collecting character for 20% of maximum HP, rounded up and c
 | 5 | 30% | 45 |
 
 No automatic knockback is applied on damage or ordinary melee hits. Rune knockback is a horizontal impulse, reduced by body size for regular enemies; bosses receive 10% strength, and enemies marked immobile receive none. Repeated damage-over-time ticks do not trigger it. Summoner sockets apply the effect to summons. These five tiers join the existing rune loot pool and Rune Trader stock at their corresponding tiers and normal rune prices. No sixth tier is added.
+
+## Optional boss loot
+
+Weapon and soul rolls remain independent at 10% each. Each listed item drops exclusively from its boss. Weapons become purchasable after clearing that boss; souls are not sold. Each soul has one version only.
+
+| Boss | Weapon | Ability | Soul |
+|---|---|---|---|
+| Stone Colossus | Quarry Blade (Warrior, tier 1) | Delayed ground slam and stun | +50% AT, −50% maximum HP; Warrior/Rogue/Reaper |
+| Crystal Scarab | Prism Staff (Mage, tier 2) | Three lightning shards | Projectiles pass through terrain; Ranger/Mage/Bard/Summoner |
+| Coral Beast | Coral Scythe (Reaper, tier 3) | Nearby life drain | +3 HP/s, −15% AT |
+| Storm Owl | Storm Bow (Ranger, tier 4) | Lightning chain | +25% attack speed, −20% maximum HP |
+| Ash Serpent | Ash Daggers (Rogue, tier 5) | Three fire eruptions | +25% AT, −15% elemental resistance |
+| Royal Specter | Royal Staff (Mage, tier 6) | Wide freezing pulse | +20% XP, +10% equipment drops |
+
+Rune and gem families have source areas distributed across their zone. Drops become eligible from that source area onward within the same zone; Rune Trader stock requires completing the source area. Entering a zone alone does not unlock its entire socket tier. Sources are stored on each item's sourceArea field.

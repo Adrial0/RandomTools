@@ -137,5 +137,39 @@ const descriptions=[
  ['Notes: allies +1% AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 physical damage taken; +2 HP','+1 MP per hit, +2 HP'],
  ['+10% minion damage, +3 HP','+10% minion health, +3 HP','2% faster summoning, +2 HP']
 ];
+
+const bossWeapons=[
+ ['0-heavy','Quarry Blade','stun','eruption',42,1.4,'Ground slam.'],
+ ['3-lightning-t2','Prism Staff','lightning','fan',22,1.3,'Three lightning shards.'],
+ ['5-drain-t3','Coral Scythe','drain','ring',65,1.1,'Drain nearby enemies.'],
+ ['2-lightning-t4','Storm Bow','lightning','chain',20,1.2,'Lightning chains between enemies.'],
+ ['1-fire-t5','Ash Daggers','fire','trail',28,1.3,'Three fire eruptions.'],
+ ['3-ice-t6','Royal Staff','ice','ring',90,1.4,'Wide freezing pulse.']
+];
+bossWeapons.forEach(([base,name,effect,mode,radius,power,description],z)=>{
+ const id='boss-weapon-'+z,original=items[base];items[id]={...original,id,name,tier:z+1,level:z+1,retired:false,exclusiveBoss:z,priceIndex:original.priceIndex,effect,color:effects[effect].color,ability:{mode,radius,power,count:5},abilityDescription:description};
+});
+const bossSouls=[
+ ['Colossus Soul',{damageBonus:.5,hpBonus:-.5},'+50% AT, −50% maximum HP.',[0,1,5]],
+ ['Prism Soul',{wallPierce:1},'Projectiles pass through terrain.',[2,3,6,7]],
+ ['Coral Soul',{regen:3,damageBonus:-.15},'+3 HP/s, −15% AT.'],
+ ['Storm Soul',{haste:.25,hpBonus:-.2},'+25% attack speed, −20% maximum HP.'],
+ ['Ash Soul',{damageBonus:.25,resistance:-.15},'+25% AT, −15% elemental resistance.'],
+ ['Royal Soul',{xpBonus:.2,dropBonus:.1},'+20% XP, +10% equipment drops.']
+];
+bossSouls.forEach(([name,bonuses,description,allowedClasses],z)=>{const id='boss-soul-'+z;items[id]={id,type:'soul',name,bonuses,description,allowedClasses,exclusiveBoss:z,tier:z+1,level:z+1,color:['#c6a47a','#b9d8ff','#83d4b5','#b6caff','#f49163','#d8a1ec'][z],symbol:'◈'};});
+for(const w of Object.values(items))if(w.type==='rune'){
+ const b=w.bonuses;
+ if(b.damageBonus)w.description='+'+Math.round(b.damageBonus*100)+'% AT.';
+ else if(b.hpBonus)w.description='+'+Math.round(b.hpBonus*100)+'% maximum HP.';
+ else if(b.rangeBonus)w.description='+'+b.rangeBonus+' range.';
+ else if(b.regen)w.description='+'+b.regen+' HP/s.';
+ else if(b.haste)w.description='+'+Math.round(b.haste*100)+'% attack speed.';
+ else if(b.resistance)w.description='+'+Math.round(b.resistance*100)+'% elemental resistance.';
+}
+for(let tier=1;tier<=6;tier++)for(const type of ['rune','gem']){
+ const stock=Object.values(items).filter(w=>w.type===type&&w.tier===tier);
+ stock.forEach((w,i)=>w.sourceArea=(tier-1)*21+Math.floor(i*18/Math.max(1,stock.length-1)));
+}
 globalThis.BrambleGear={items,effects,descriptions};
 })();

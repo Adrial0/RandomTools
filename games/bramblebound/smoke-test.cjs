@@ -363,7 +363,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 {
  const {t:r}=harness();r.start();
  for(let c=0;c<8;c++)for(let tier=1;tier<=6;tier++){
-  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier);assert.equal(stock.length,c===3?(tier%2?6:5):c===4||c===7?6:c===6?5:7);
+  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.exclusiveBoss==null&&w.classId===c&&w.tier===tier);assert.equal(stock.length,c===3?(tier%2?6:5):c===4||c===7?6:c===6?5:7);
   if([0,1,2,3,5].includes(c))for(const effect of ['fire','ice','poison','lightning'])assert.ok(stock.some(w=>w.effect===effect),'Full element/physical-special coverage');
  }
  r.get().completed.push(...Array.from({length:19},(_,i)=>'a'+i));r.travel('town');r.setShopClass(5);assert.ok(r.shopStock().length>=6);assert.ok(r.shopStock().some(w=>w.id==='5-ice'));assert.ok(!r.shopStock().some(w=>w.tier>1));
@@ -392,7 +392,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 {
  const {t:r}=harness();r.start();
  for(const c of [0,1,2,5])for(let tier=1;tier<=6;tier++){
-  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===c&&w.tier===tier),physical=stock.filter(w=>!w.effect);
+  const stock=Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.exclusiveBoss==null&&w.classId===c&&w.tier===tier),physical=stock.filter(w=>!w.effect);
   assert.equal(stock.length,7);assert.equal(physical.length,2);const late=physical.find(w=>w.id.split('-')[1]==='iron');
   if(tier>1)for(const w of stock.filter(w=>w!==late)){assert.ok(late.min>w.min);assert.ok(late.max>w.max)}assert.equal(late.ability,undefined);
  }
@@ -498,4 +498,27 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  const summoner=r.get().heroes[1];summoner.runes=['rune-knockback-4',null];r.stats(summoner);assert.equal(summoner.runeBonus.knockbackPower,0);assert.equal(summoner.summonBonuses.knockbackPower,15);
  math.random=()=>0;const pet={x:100,hp:100,maxHp:100,owner:summoner,runeBonus:summoner.summonBonuses};r.damage(small,1,'physical',true,false,pet);assert.equal(small.kick,before+135,'Summon direct hits use socket knockback');
  console.log('Knockback rune tiers, chance, size reduction, boss reduction, immobile immunity, quiet DoTs and summon inheritance pass.');
+}
+
+{
+ const run=harness(),r=run.t;r.start();run.math.random=()=>0;
+ for(let z=0;z<6;z++){
+  const a=128+3*z,id='boss-weapon-'+z,w=r.items[id],soul=r.items['boss-soul-'+z];assert.ok(w.ability&&w.effect);assert.equal(w.tier,z+1);
+  const sources=Object.entries(r.WEAPON_DROPS).filter(([,ids])=>ids.includes(id));assert.equal(sources.length,1);assert.equal(sources[0][0],a+':guardian'+a);
+  r.setArea(a);r.setStage(0);r.enter();assert.ok(r.rollDrops(r.get().enemies[0]).includes(soul.id));
+  r.setArea(z*21);assert.ok(!r.rollDrops(r.enemy('boss',300)).some(id=>r.items[id].exclusiveBoss!=null));
+  r.setParty([w.classId,w.classId,w.classId,w.classId]);r.enter();const h=r.get().heroes[0];h.weapon=id;h.level=99;r.stats(h);const target=r.get().enemies[0];target.hp=10000;target.x=h.x+20;target.y=h.y;
+  r.activate(h,target,w.effect);for(let i=0;i<100;i++){r.tickShots(.02);r.tickEffects(.02);}assert.ok(target.hp<10000,'Boss ability deals damage: '+w.name);
+ }
+ r.setParty([0,2,3,7]);const [warrior,ranger]=r.get().heroes;for(const h of r.get().heroes){h.level=99;r.stats(h);}const hp=warrior.maxHp,at=warrior.atMax;
+ r.setItem(0,'boss-soul-0');assert.equal(r.moveItem({type:'bag',index:0},{type:'rune0',index:1}),false);assert.ok(r.moveItem({type:'bag',index:0},{type:'rune0',index:0}));assert.equal(warrior.maxHp,Math.floor(hp*.5));assert.equal(warrior.atMax,Math.floor(at*1.5));
+ r.setItem(1,'boss-soul-1');assert.equal(r.moveItem({type:'bag',index:1},{type:'rune1',index:0}),false);assert.ok(r.moveItem({type:'bag',index:1},{type:'rune0',index:1}));
+ r.setArea(1);r.setStage(0);r.enter();r.get().enemies.length=0;
+ const addShot=()=>r.get().shots.push({x:175,y:220,vx:200,vy:0,life:2,kind:'arrow',amount:1,attack:r.attackToken(ranger)});
+ addShot();r.tickShots(.1);assert.equal(r.get().shots.length,1,'Prism shot crosses raised terrain');r.get().shots.length=0;ranger.runeBonus.wallPierce=0;addShot();r.tickShots(.1);assert.equal(r.get().shots.length,0,'Ordinary shot stops at terrain');
+ r.get().completed.push('a25');assert.ok(r.travel('trader1'));const early=r.shopStock().filter(w=>w.tier===2);assert.ok(early.length<Object.values(r.items).filter(w=>['rune','gem'].includes(w.type)&&w.tier===2).length);
+ const later=Object.values(r.items).find(w=>w.type==='rune'&&w.tier===2&&w.sourceArea>25);assert.ok(!r.shopStock().some(w=>w.id===later.id));r.get().completed.push('a'+later.sourceArea);assert.ok(r.shopStock().some(w=>w.id===later.id));
+ for(let a=21;a<41;a++){r.setArea(a);for(const id of r.rollDrops(r.enemy('slime',300)))if(['rune','gem'].includes(r.items[id].type))assert.ok(r.items[id].sourceArea<=a);}
+ assert.equal(r.items['rune-might'].description,'+15% AT.');assert.equal(r.items['rune-vitality'].description,'+20% maximum HP.');assert.equal(r.items['rune-renewal'].description,'+1 HP/s.');
+ console.log('Exclusive boss weapons and abilities, unique soul pools, class restrictions, stat tradeoffs, terrain-piercing projectiles, and source-area socket shops pass.');
 }

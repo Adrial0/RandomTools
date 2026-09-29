@@ -15,7 +15,7 @@ There are 120 normal areas and six major arenas. A major boss gates the next zon
 
 ## Items
 
-Weapons, runes, gems and souls drop at the exact tier of their zone. Starter weapons are tier one. Standard classes have seven weapons in each zone/tier: four elemental, two physical and one special. Mage has five or six, Priest and Summoner six, and Bard five. Retired weapons remain usable in existing saves but no longer appear in stock or drops. Sources are spread through the twenty normal areas of that zone, with at most one new weapon per class per area and some areas without an unlock. Existing item IDs remain valid; original weapons now belong to tier one. Later tiers change attack patterns as well as damage. See WEAPONS.md for the complete catalogue. Every enemy species, including major bosses and opening-stage enemies, has a weapon drop from its zone. Species retain the same weapon across areas, and each weapon has one or occasionally two species as sources. There is no stage-number restriction. Weapon shop stock unlocks only after completing the source area. Rune and gem shops offer tiers earned through completed areas, up to the current highest cleared zone.
+Weapons, runes, gems and souls drop at the exact tier of their zone. Starter weapons are tier one. Standard classes have seven weapons in each zone/tier: four elemental, two physical and one special. Mage has five or six, Priest and Summoner six, and Bard five. Retired weapons remain usable in existing saves but no longer appear in stock or drops. Sources are spread through the twenty normal areas of that zone, with at most one new weapon per class per area and some areas without an unlock. Existing item IDs remain valid; original weapons now belong to tier one. Later tiers change attack patterns as well as damage. See WEAPONS.md for the complete catalogue. Every enemy species, including major bosses and opening-stage enemies, has a weapon drop from its zone. Species retain the same weapon across areas, and each weapon has one or occasionally two species as sources. There is no stage-number restriction. Weapon shop stock unlocks only after completing the source area. Rune and gem shops unlock each item after its source area is cleared.
 
 All six rune families now have six tiers. Existing drop probabilities and price sequences are retained. Enemy levels rise from 1 to 99 across the full route.
 
@@ -32,7 +32,7 @@ The compact map update migrates schema-2 saves by region and area number, preser
 
 ## Optional routes
 
-Each zone branches from the third area of its second region into two side areas and a single-stage boss arena. These dead-end routes never unlock or gate the next zone. Existing area IDs and main-route scaling remain unchanged; optional encounters scale to their fork's part of the zone. All encounters retain zone-tier loot, and optional bosses provide a second source for an existing weapon.
+Each zone branches from the third area of its second region into two side areas and a single-stage boss arena. These dead-end routes never unlock or gate the next zone. Existing area IDs and main-route scaling remain unchanged; optional encounters scale to their fork's part of the zone. All encounters retain zone-tier loot, and optional bosses each have an exclusive ability weapon and a unique soul.
 
 | Zone | Route | Boss | Resistance |
 |---|---|---|---|
