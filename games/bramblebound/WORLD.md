@@ -29,3 +29,18 @@ Defeating the lich marks Castle cleared and displays the victory message. It doe
 
 World schema 3 remaps the old 18-area route to corresponding biomes. Previously cleared progression is credited through the mapped area so old saves do not become trapped behind newly inserted gates. Party, inventory, gold, equipment and sockets are preserved. The migration is recorded on the next save and does not repeat.
 The compact map update migrates schema-2 saves by region and area number, preserving completed progress and crediting inserted nodes behind it. Saved stage indices are clamped to the new area length. The expanded area count retains the previous world-wide enemy health and level endpoints.
+
+## Optional routes
+
+Each zone branches from the third area of its second region into two side areas and a single-stage boss arena. These dead-end routes never unlock or gate the next zone. Existing area IDs and main-route scaling remain unchanged; optional encounters scale to their fork's part of the zone. All encounters retain zone-tier loot, and optional bosses provide a second source for an existing weapon.
+
+| Zone | Route | Boss | Resistance |
+|---|---|---|---|
+| Lowlands | Quarry 1 → Quarry 2 → Quarry | Stone Colossus | 40% physical |
+| Desert | Vault 1 → Vault 2 → Vault | Crystal Scarab | 40% nonphysical |
+| Coast | Grotto 1 → Grotto 2 → Grotto | Coral Beast | 35% poison |
+| Mountains | Nest 1 → Nest 2 → Nest | Storm Owl | 35% lightning |
+| Volcano | Tunnel 1 → Tunnel 2 → Tunnel | Ash Serpent | 35% fire |
+| Kingdom | Crypt 1 → Crypt 2 → Crypt | Royal Specter | 35% ice |
+
+Ordinary mushroom creatures resist poison by 35%. Shell Cannon resists physical damage by 25%, and Ceiling Eye resists lightning by 30%. Resistances belong to individual species, never entire zones. Landed damage remains at least 1. Nonphysical resistance covers every damage type except physical; it does not multiply with a matching elemental resistance. Boss control resistance remains separate.

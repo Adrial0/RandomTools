@@ -145,7 +145,7 @@ gt.setParty([0,0,0,0]);gt.get().heroes[0].level=7;gt.get().heroes[1].level=16;gt
 
 const control=harness(),cc=control.t;cc.start();cc.setParty([5,3,2,0]);cc.enter();const spear=cc.get().heroes[0];spear.weapon='5-ice';cc.stats(spear);const normal=cc.get().enemies[0];normal.hp=10000;cc.activate(spear,normal,'ice');assert.ok(normal.frozen<.4);const bossControl=cc.enemy('boss',normal.x+2);cc.get().enemies.push(bossControl);cc.activate(spear,bossControl,'ice');assert.ok(Math.abs(bossControl.frozen-cc.controlDuration(spear,.7)*.2)<1e-9);assert.ok(!(bossControl.slow>0));cc.activate(spear,bossControl,'slow');assert.equal(bossControl.slowAmount,.06);assert.equal(cc.slowFactor(bossControl),.94);cc.activate(spear,bossControl,'stun');assert.ok(Math.abs(bossControl.stun-cc.controlDuration(spear,.6)*.2)<1e-9);const mage=cc.get().heroes[1];mage.weapon='3-ice';mage.attributes.dex=0;cc.stats(mage);assert.ok(cc.controlDuration(mage,.7)>.6);
 const bow=cc.get().heroes[2];bow.weapon='2-poison2';bow.attributes.int=2;cc.stats(bow);const volley=cc.attackToken(bow);cc.shoot(bow,normal,'arrow',1,volley);const arrows=cc.get().shots.filter(s=>s.attack===volley);assert.equal(arrows.length,2);arrows.forEach(s=>cc.basicHit(normal,1,s.attack));assert.equal(bow.mp,2,'Volley only charges once');assert.equal(cc.items['2-steel4'].arrows,4);
-assert.equal(cc.WORLD.filter(n=>!n.kind).length,126);for(let i=0;i<126;i++){cc.setArea(i);cc.setStage(cc.stageCount()-1);cc.defeatBossAndAdvance();if(i<125)assert.ok(cc.unlockedNodes().has('a'+(i+1)))}cc.setArea(17);cc.save();assert.equal(harness(control.storage).t.get().area,17);const chart=control.elements.get('.map-chart');chart.scrollWidth=1800;chart.clientWidth=600;chart.scrollLeft=0;cc.setPan(1);cc.panMap(1);assert.equal(chart.scrollLeft,240);cc.panMap(20);assert.equal(chart.scrollLeft,1200);cc.setPan(-1);cc.panMap(20);assert.equal(chart.scrollLeft,0);
+assert.equal(cc.WORLD.filter(n=>!n.kind).length,144);for(let i=0;i<126;i++){cc.setArea(i);cc.setStage(cc.stageCount()-1);cc.defeatBossAndAdvance();if(i<125)assert.ok(cc.unlockedNodes().has('a'+(i+1)))}cc.setArea(17);cc.save();assert.equal(harness(control.storage).t.get().area,17);const chart=control.elements.get('.map-chart');chart.scrollWidth=1800;chart.clientWidth=600;chart.scrollLeft=0;cc.setPan(1);cc.panMap(1);assert.equal(chart.scrollLeft,240);cc.panMap(20);assert.equal(chart.scrollLeft,1200);cc.setPan(-1);cc.panMap(20);assert.equal(chart.scrollLeft,0);
 
 
 const freezeBefore=cc.controlDuration(mage,.7);mage.attributes.dex=100;mage.runes=['rune-haste','rune-haste'];cc.stats(mage);assert.ok(mage.cool<1);assert.equal(cc.controlDuration(mage,.7),freezeBefore,'Freeze uses base AGI, ignoring DEX and haste');
@@ -266,12 +266,12 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 {
  const check=harness(),t=check.t;t.start();
  assert.deepEqual(Array.from(t.ZONES,z=>z.name),['Lowlands','Desert','Coast','Mountains','Volcano','Kingdom']);
- assert.equal(t.AREAS.filter(a=>!a.major).length,120);assert.equal(t.AREAS.filter(a=>a.major).length,6);
+ assert.equal(t.AREAS.filter(a=>!a.major&&!a.optional).length,120);assert.equal(t.AREAS.filter(a=>a.major&&!a.optional).length,6);
  assert.deepEqual(Array.from(t.ZONES[5].regions),['Farmland','Sewers','City','Barracks']);
  for(const a of t.AREAS){
   t.setArea(a.area);t.setStage(0);t.enter();
   assert.equal(t.regionTier(),a.zone+1);
-  if(a.major){assert.equal(t.stageCount(),1);assert.equal(t.get().enemies.length,1);const boss=t.get().enemies[0];assert.equal(boss.name,t.ZONES[a.zone].boss);assert.equal(boss.maxHp,Math.round(t.areaHealth(a.area)*30));assert.equal(t.stageExitOpen(),false)}
+  if(a.major){assert.equal(t.stageCount(),1);assert.equal(t.get().enemies.length,1);const boss=t.get().enemies[0];if(!a.optional)assert.equal(boss.name,t.ZONES[a.zone].boss);assert.equal(boss.maxHp,Math.round(t.areaHealth(a.area)*30));assert.equal(t.stageExitOpen(),false)}
   else assert.ok(t.stageCount()>=5&&t.stageCount()<=8);
   for(let i=0;i<80;i++){const loot=t.rollDrops(t.get().enemies[0]);for(const id of loot)assert.equal(t.items[id].tier,a.zone+1,'Every dropped item belongs to its zone')}
  }
@@ -300,7 +300,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 }
 {
  const t=harness().t;
- for(let z=0;z<6;z++)for(let r=0;r<4;r++)assert.equal(t.AREAS.filter(a=>!a.major&&a.zone===z&&a.region===z*4+r).length,5);
+ for(let z=0;z<6;z++)for(let r=0;r<4;r++)assert.equal(t.AREAS.filter(a=>!a.major&&!a.optional&&a.zone===z&&a.region===z*4+r).length,5);
  const party=[0,1,2,3].map(classId=>({classId,level:10,xp:50,hp:25,weapon:classId+'-basic',attributes:{str:2},runes:['gem-ruby-1',null]}));
  const oldSave={version:7,worldVersion:2,area:13,currentNode:'a13',stage:10,completed:Array.from({length:13},(_,i)=>'a'+i),gold:432,inventory:['0-fire'],heroes:party};
  const run=harness({'bramblebound-v3':JSON.stringify(oldSave)});assert.equal(run.t.get().area,21);assert.equal(run.t.get().currentNode,'a21');assert.ok(run.t.get().stage<run.t.stageCount());assert.equal(run.t.get().gold,432);assert.equal(run.t.get().inventory[0],'0-fire');assert.equal(run.t.get().heroes[0].runes[0],'gem-ruby-1');assert.ok(run.t.unlockedNodes().has('a21'));assert.ok(run.t.get().completed.includes('a20'));
@@ -458,4 +458,28 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  assert.equal(h.hp,before-1,'Poison still deals minimum damage through defense');
  assert.equal(a.get().numbers.length,0,'Cloud and poison do not create damage numbers');
  console.log('Woodland close-range cloud contact, uninterrupted poison ticks, minimum damage and quiet DoTs pass.');
+}
+
+{
+ const run=harness(),r=run.t;r.start();
+ for(let z=0;z<6;z++){
+  const branch=r.AREAS.filter(n=>n.optional&&n.zone===z),fork=r.AREAS[z*21+7];assert.equal(branch.length,3);
+  assert.ok(fork.next.includes('a'+(z*21+8)));assert.ok(fork.next.includes(branch[0].id));
+  r.get().completed.push(fork.id);assert.ok(r.unlockedNodes().has(branch[0].id));assert.ok(!r.unlockedNodes().has(branch[2].id));
+  for(const node of branch){
+   assert.ok(r.unlockedNodes().has(node.id));r.setArea(node.area);r.setStage(r.stageCount()-1);r.enter();
+   if(node.major){const boss=r.get().enemies[0];assert.equal(r.get().enemies.length,1);assert.ok(Object.keys(boss.resistances).length);
+    for(const pattern of boss.patterns){boss.warning={pattern,left:0,x:200,y:226};r.tickSpecial(boss,r.get().heroes[0],.01);r.tickHazards(.01);r.draw();}
+   }
+   r.get().enemies.forEach(e=>e.hp=0);r.tickBossExit(2);r.completeArea();assert.ok(r.get().completed.includes(node.id));
+  }
+  assert.equal(branch[2].next.length,0);assert.ok(!r.get().completed.includes('a'+(z*21+20)));
+  assert.equal(r.areaHealth(branch[2].area),r.areaHealth(z*21+10));
+ }
+ r.setArea(0);const mushroom=r.enemy('sporecap',300);mushroom.hp=1000;r.damage(mushroom,100,'poison',false);assert.equal(mushroom.hp,935);r.damage(mushroom,100,'fire',false);assert.equal(mushroom.hp,835);
+ for(const [a,blocked,normal] of [[128,'physical','fire'],[131,'fire','physical'],[131,'ice','physical'],[131,'poison','physical'],[131,'lightning','physical'],[131,'magic','physical']]){
+  r.setArea(a);const boss=r.enemy('guardian'+a,400);boss.hp=1000;r.damage(boss,100,blocked,false);assert.equal(boss.hp,940);r.damage(boss,100,normal,false);assert.equal(boss.hp,840);
+ }
+ r.save();const loaded=harness(run.storage).t;assert.ok(loaded.get().completed.includes('a143'));assert.equal(loaded.get().area,131);
+ console.log('Optional branches unlock independently, preserve progression scaling and saves, execute boss patterns, and apply selective damage resistance.');
 }

@@ -34,7 +34,23 @@ for(let z=0;z<ZONES.length;z++){
  const a=base+20,node={id:'a'+a,name:zone.structure,area:a,zone:z,region:z*4+3,major:true,x:z*512+483,y:59,next:z<5?['a'+(a+1),'town'+(z+1)]:[]};
  AREAS.push(node);WORLD.push(node,{id:trader,name:'Rune Trader',kind:'trader',zone:z,x:z*512+132,y:19,next:[]});
 }
+const OPTIONAL_BOSSES=[
+ {name:'Stone Colossus',place:'Quarry',shape:'golem',resistances:{physical:.4},patterns:['BOULDERS','PULSE']},
+ {name:'Crystal Scarab',place:'Vault',shape:'scarab',resistances:{magic:.4},patterns:['SHARDS','CHARGE']},
+ {name:'Coral Beast',place:'Grotto',shape:'crab',resistances:{poison:.35},patterns:['TIDES','SWEEP']},
+ {name:'Storm Owl',place:'Nest',shape:'bird',resistances:{lightning:.35},patterns:['ARROWS','FAN']},
+ {name:'Ash Serpent',place:'Tunnel',shape:'worm',resistances:{fire:.35},patterns:['ERUPTION','CHARGE']},
+ {name:'Royal Specter',place:'Crypt',shape:'lich',resistances:{ice:.35},patterns:['CURSE','SOULS']}
+];
+for(let z=0;z<ZONES.length;z++){
+ const fork=AREAS[z*21+7],first=AREAS.length;fork.next.push('a'+first);
+ for(let i=0;i<3;i++){
+  const a=AREAS.length,node={id:'a'+a,name:OPTIONAL_BOSSES[z].place+(i<2?' '+(i+1):''),area:a,zone:z,region:z*4+1,local:i,optional:true,major:i===2,progression:z*21+8+i,sourceArea:z*21+8+i,x:z*512+220+i*43,y:83+(i===1?5:0),next:i<2?['a'+(a+1)]:[]};
+  AREAS.push(node);WORLD.push(node);
+ }
+}
 const areaInfo=(index=area)=>AREAS[index]||AREAS[0];
+const progressionArea=(index=area)=>areaInfo(index).progression??index;
 const serviceKind=(id=currentNode)=>WORLD.find(n=>n.id===id)?.kind;
 const townForArea=()=>areaInfo().zone?'town'+areaInfo().zone:'town';
 function migrateWorld(s){
@@ -226,18 +242,22 @@ for(let r=0;r<24;r++){
 const SWARM_BOSSES={};
 for(const node of AREAS){
  const zone=ZONES[node.zone],id='guardian'+node.area;
- if(node.major)ENEMY_TYPES[id]={base:'boss',name:zone.boss,shape:zone.shape,color:zone.color,hp:1,major:true,range:24,speed:10,damage:1.65,patterns:[['CHARGE','FAN'],['BOMBS','ARROWS'],['TIDES','FAN'],['FROST','ARROWS'],['ERUPTION','BOMBS'],['BONES','CURSE','SOULS']][node.zone],description:zone.boss+'.'};
+ if(node.optional&&node.major)ENEMY_TYPES[id]={base:'boss',...OPTIONAL_BOSSES[node.zone],color:zone.color,hp:1,major:true,speed:12,damage:1.25};
+ else if(node.major)ENEMY_TYPES[id]={base:'boss',name:zone.boss,shape:zone.shape,color:zone.color,hp:1,major:true,range:24,speed:10,damage:1.65,patterns:[['CHARGE','FAN'],['BOMBS','ARROWS'],['TIDES','FAN'],['FROST','ARROWS'],['ERUPTION','BOMBS'],['BONES','CURSE','SOULS']][node.zone],description:zone.boss+'.'};
  else{
   const source=ENEMY_TYPES[REGIONAL_POOLS[node.region][(node.local*2+2)%7]]||{};
   ENEMY_TYPES[id]={base:'boss',name:ZONES[node.zone].regions[node.region%4]+' '+['Guardian','Warden','Keeper','Champion','Overlord'][node.local],shape:source.shape||'maw',color:zone.color,hp:1,patterns:['FAN','ARROWS','BOMBS']};
   if(node.local===AREAS_PER_REGION-1){SWARM_BOSSES[node.area]=5;Object.assign(ENEMY_TYPES[id],{swarmCount:5,patterns:['DART'],damage:.55,speed:20})}
  }
 }
+for(const [id,spec] of Object.entries(ENEMY_TYPES))if(spec.shape==='mushroom'&&spec.base!=='boss')spec.resistances={poison:.35};
+// A few distinct creatures resist damage; biomes do not grant blanket resistance.
+for(const [id,resistances] of Object.entries({shellcannon:{physical:.25},ceilingeye:{lightning:.3}}))if(ENEMY_TYPES[id])ENEMY_TYPES[id].resistances=resistances;
 function sceneEnemyTypes(){
  if(areaInfo().major)return ['guardian'+area];
  if(area===0&&stage===0)return ['slime','slasher'];
  const region=areaInfo().region,roster=REGIONAL_POOLS[region],offset=areaInfo().local*2,pool=Array.from({length:5},(_,i)=>roster[(offset+i)%roster.length]);
- const special=stage===stageCount()-1?'guardian'+area:area>=4?REGION_SUMMONERS[region]:null;
+ const special=stage===stageCount()-1?'guardian'+(areaInfo().optional?areaInfo().sourceArea:area):area>=4?REGION_SUMMONERS[region]:null;
  const types=Array.from({length:special?2:3},(_,i)=>pool[(stage+i)%pool.length]);
  if(special)types.push(special);return types;
 }
@@ -245,7 +265,7 @@ function encounterType(i,count){const types=sceneEnemyTypes();if(types.length===
 function enemySummonType(e){const pool=sceneEnemyTypes().filter(id=>!id.startsWith('guardian')&&!REGION_SUMMONERS.includes(id));return pool[e.remaining%pool.length]}
 
 
-function areaHealth(index){index=Math.floor(index*77/(AREAS.length-1));const values=[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500];return values[index]??500+(index-15)*50}
+function areaHealth(index){index=Math.floor(progressionArea(index)*77/125);const values=[20,40,60,80,100,130,160,190,220,250,290,330,370,410,450,500];return values[index]??500+(index-15)*50}
 // Attack profiles describe both collision geometry and the visible attack.
 function enemyAttackProfile(shape){
  const profiles={
@@ -294,14 +314,14 @@ function tickProfileAttack(e,target,dt){
  }
  return true;
 }
-function enemy(species,x){const spec=ENEMY_TYPES[species],type=spec?.base||species,attackProfile=enemyAttackProfile(spec?.shape),boss=type==='boss',tier=areaInfo().zone,hp=Math.round(areaHealth(area)*(boss?(spec?.major?30:spec?.swarmCount?12/spec.swarmCount:10):spec?spec.hp:type==='summoner'?1.25:1));return {id:++uid,type,species,attackProfile,major:!!spec?.major,swarmBoss:!!spec?.swarmCount,swarmCount:spec?.swarmCount||1,shape:spec?.shape,pattern:spec?.pattern,patterns:spec?.patterns,x,y:floor(x)-(type==='flyer'?45:0),vx:0,vy:0,rotation:0,feet:[],hp:hp,maxHp:hp,level:1+Math.floor(area/(AREAS.length-1)*98),name:spec?.name||({slime:'Slime',slasher:'Slashling',spitter:'Spitter',summoner:'Summoner',boss:'Guardian'}[type]||type),speed:spec?.speed||(boss?13:17),heals:3,healCooldown:3,hopCooldown:1+(x%3),at:(boss?10+area*2:6+area*1.5)*(spec?.damage||1),range:attackProfile?.range||spec?.range||(type==='spitter'||type==='summoner'?105:type==='slasher'?(area<3?22:48):(area<3?12:16)),cooldown:.5+(x%7)/10,summon:7,remaining:3,color:spec?.color||(boss?'#de6262':type==='summoner'?'#c478ed':type==='slasher'?'#f37c52':type==='spitter'?'#e6b94b':tier===1?'#7ca3ed':'#59df42'),seed:x,flash:0,specialCooldown:2+(x%5)*.4,patternIndex:0,warning:null}}
+function enemy(species,x){const spec=ENEMY_TYPES[species],type=spec?.base||species,attackProfile=enemyAttackProfile(spec?.shape),boss=type==='boss',tier=areaInfo().zone,hp=Math.round(areaHealth(area)*(boss?(spec?.major?30:spec?.swarmCount?12/spec.swarmCount:10):spec?spec.hp:type==='summoner'?1.25:1));return {id:++uid,type,species,resistances:spec?.resistances||{},attackProfile,major:!!spec?.major,swarmBoss:!!spec?.swarmCount,swarmCount:spec?.swarmCount||1,shape:spec?.shape,pattern:spec?.pattern,patterns:spec?.patterns,x,y:floor(x)-(type==='flyer'?45:0),vx:0,vy:0,rotation:0,feet:[],hp:hp,maxHp:hp,level:1+Math.floor(progressionArea()/125*98),name:spec?.name||({slime:'Slime',slasher:'Slashling',spitter:'Spitter',summoner:'Summoner',boss:'Guardian'}[type]||type),speed:spec?.speed||(boss?13:17),heals:3,healCooldown:3,hopCooldown:1+(x%3),at:(boss?10+progressionArea()*2:6+progressionArea()*1.5)*(spec?.damage||1),range:attackProfile?.range||spec?.range||(type==='spitter'||type==='summoner'?105:type==='slasher'?(area<3?22:48):(area<3?12:16)),cooldown:.5+(x%7)/10,summon:7,remaining:3,color:spec?.color||(boss?'#de6262':type==='summoner'?'#c478ed':type==='slasher'?'#f37c52':type==='spitter'?'#e6b94b':tier===1?'#7ca3ed':'#59df42'),seed:x,flash:0,specialCooldown:2+(x%5)*.4,patternIndex:0,warning:null}}
 function enter(){bossExitWait=2;currentNode='a'+area;$('#world').hidden=true;mapReturn=null;state='fight';paused=false;drag=null;shots=[];minions=[];hazards=[];blasts=[];rituals=[];numbers=[];loot=[];potions=[];enemies=[];fields=[];flashes=[];$('#setup').hidden=true;$('#result').hidden=true;heroes.forEach((h,i)=>{h.x=32+i*20;h.y=floor(h.x);h.vy=0;h.vx=0;h.drive=0;h.strike=null;h.nextNote=null;h.songs={};h.barriers={};h.poison=null;h.hold=0;h.firstSummon=true;h.summonProgress=0;h.hp=Math.min(h.maxHp,h.hp)});const count=areaInfo().major?1:6+areaInfo().local%3+areaInfo().zone*2;for(let i=0;i<count;i++){const type=encounterType(i,count),x=count===1?440:240+i*(309/(count-1));enemies.push(enemy(type,x));if(ENEMY_TYPES[type]?.swarmCount)for(let j=1;j<ENEMY_TYPES[type].swarmCount;j++)enemies.push(enemy(type,x-j*22));if((ENEMY_TYPES[type]?.base||type)==='swarmling')for(let j=1;j<=5;j++)enemies.push(enemy(type,Math.max(210,Math.min(564,x+(j-2)*7))))}tell('Drag to fight, or touch NEXT to skip ahead. Defeat the boss to unlock the next area.');save();build();}
 function start(){setFrontScreen(null);menuOpen=false;sessionSlot=activeSlot;$('#main-menu').hidden=true;autoMoveEnabled=true;inventoryRunes=Array.from({length:15},()=>[null,null]);stage=0;heroes=[...document.querySelectorAll('#choices select')].map((el,i)=>hero(+el.value,i));area=0;gold=0;inventory=Array(15).fill(null);selected=0;completed=[];currentNode='town';state='town';$('#setup').hidden=true;enterService('town');}
 function float(x,y,text,color='#fff'){const healing=String(text).startsWith('+'),value=Number(text);if(Number.isFinite(value)&&String(text).trim()!=='')text=healing?'+'+Math.round(value):Math.round(value);if(/^\+\d/.test(String(text)))color='#60ff70';const side=Math.random()<.5?-1:1;numbers.push({x,y,text,color,life:1,vx:side*(9+Math.random()*7),vy:-30-Math.random()*7})}
 function tickNumbers(dt){for(const n of numbers){n.x+=(n.vx||0)*dt;n.y+=(n.vy||0)*dt+20*dt*dt;n.vy=(n.vy||0)+40*dt;n.life-=dt}numbers=numbers.filter(n=>n.life>0)}
 function xpGain(h,amount,mobLevel,source=null){const penalty=mobLevel==null?1:Math.max(0,1-Math.max(0,h.level-mobLevel-5)*.1);return mobLevel==null?amount*(1+h.runeBonus.xpBonus+(source?.owner===h?source.runeBonus.xpBonus:0)):Math.max(1,amount*penalty*(1+h.runeBonus.xpBonus+(source?.owner===h?source.runeBonus.xpBonus:0)))}
 function xp(amount,mobLevel=null,source=null){heroes.forEach(h=>{h.xp=Math.round((h.xp+xpGain(h,amount,mobLevel,source))*100)/100;while(h.xp>=needed(h.level)&&h.level<99){h.xp-=needed(h.level);h.level++;h.sp+=2;stats(h);float(h.x,h.y-34,'LEVEL UP +2 SP','#ffff66')}});save()}
-function damage(target,n,element='physical',showNumber=true,dodgeable=false,source=null){if(target.hp<=0)return;const hpBefore=target.hp;if(dodgeable&&target.classId===1&&(target.dodgeLeft||0)<=0){target.dodgeLeft=target.dodgeCooldown;if(showNumber)float(target.x,target.y-22,'DODGE','#b9e8ff');return}if(target.owner){if(element!=='physical')n*=1-(target.runeBonus?.resistance||0);n=Math.max(1,n-(target.defense||0));n=Math.max(1,absorbBarrier(target,n));target.hp=Math.max(0,target.hp-n);target.flash=.1;if(target.hp===0)sfx('death',{ally:true});else if(showNumber)sfx('hurt');return}if(!target.type){if(element!=='physical')n*=1-target.runeBonus.resistance;n=Math.max(1,n-aura(target).defense-(target.defense||0))}if(!target.type)n=Math.max(1,absorbBarrier(target,n));const dealt=Math.min(target.hp,n);target.hp=Math.max(0,target.hp-n);if(target.hp===0&&hpBefore>0)sfx('death',{ally:!target.type});else if(showNumber)sfx(target.type?'enemyHit':'hurt');if(source?.owner&&source.hp>0)source.hp=Math.min(source.maxHp,source.hp+dealt*(source.runeBonus?.lifesteal||0));target.flash=.1;if(!target.type){target.vx=(target.vx||0)-18*(target.face||1);target.leanV=(target.leanV||0)-18*(target.face||1)}if(showNumber)float(target.x,target.y-22,Math.round(n),target.type?'#fff':'#ff4545');if(target.type&&target.hp===0){gold+=2+area;xp(enemyXp(target),target.level,source);for(const item of (target.swarmBoss&&enemies.some(e=>e!==target&&e.species===target.species&&e.hp>0)?[]:rollDrops(target,source)))loot.push({x:target.x,y:floor(target.x),item});if(Math.random()<(target.type==='swarmling'?.15:.30))potions.push({x:target.x,y:floor(target.x)});save()}}
+function damage(target,n,element='physical',showNumber=true,dodgeable=false,source=null){if(target.hp<=0)return;const hpBefore=target.hp;if(target.type&&!target.owner){const r=target.resistances||{};n=Math.max(1,n*(1-Math.max(r[element]||0,element==='physical'?0:r.magic||0)))}if(dodgeable&&target.classId===1&&(target.dodgeLeft||0)<=0){target.dodgeLeft=target.dodgeCooldown;if(showNumber)float(target.x,target.y-22,'DODGE','#b9e8ff');return}if(target.owner){if(element!=='physical')n*=1-(target.runeBonus?.resistance||0);n=Math.max(1,n-(target.defense||0));n=Math.max(1,absorbBarrier(target,n));target.hp=Math.max(0,target.hp-n);target.flash=.1;if(target.hp===0)sfx('death',{ally:true});else if(showNumber)sfx('hurt');return}if(!target.type){if(element!=='physical')n*=1-target.runeBonus.resistance;n=Math.max(1,n-aura(target).defense-(target.defense||0))}if(!target.type)n=Math.max(1,absorbBarrier(target,n));const dealt=Math.min(target.hp,n);target.hp=Math.max(0,target.hp-n);if(target.hp===0&&hpBefore>0)sfx('death',{ally:!target.type});else if(showNumber)sfx(target.type?'enemyHit':'hurt');if(source?.owner&&source.hp>0)source.hp=Math.min(source.maxHp,source.hp+dealt*(source.runeBonus?.lifesteal||0));target.flash=.1;if(!target.type){target.vx=(target.vx||0)-18*(target.face||1);target.leanV=(target.leanV||0)-18*(target.face||1)}if(showNumber)float(target.x,target.y-22,Math.round(n),target.type?'#fff':'#ff4545');if(target.type&&target.hp===0){gold+=2+progressionArea();xp(enemyXp(target),target.level,source);for(const item of (target.swarmBoss&&enemies.some(e=>e!==target&&e.species===target.species&&e.hp>0)?[]:rollDrops(target,source)))loot.push({x:target.x,y:floor(target.x),item});if(Math.random()<(target.type==='swarmling'?.15:.30))potions.push({x:target.x,y:floor(target.x)});save()}}
 function shoot(h,target,kind,amount,attack=null){if(kind!=='note'&&kind!=='enemy'&&(h.classId!==3||!ITEMS[h.weapon]?.effect))sfx('weapon',ITEMS[h.weapon]||{classId:h.classId});if(h.classId===3&&kind==='magic'&&ITEMS[h.weapon]?.ability){activate(h,target,ITEMS[h.weapon].effect,amount);return}if(kind==='note'){shootNote(h,target,amount,attack);return}if(kind==='enemy'){launchHazard(h,target,'bullet',0,amount);return}const dx=target.x-h.x,dy=target.y-12-(h.y-13),flight=Math.max(.35,Math.abs(dx)/180),angle=Math.atan2(dy,dx),v=kind==='bullet'?330:180;const count=kind==='arrow'?(ITEMS[attack?.weapon||h.weapon]?.arrows||1):1;for(let i=0;i<count;i++){const spread=(i-(count-1)/2)*.035;shots.push({x:h.x,y:h.y-13,target,kind,amount,attack,element:'physical',life:4,vx:kind==='arrow'?dx/flight+spread*45:Math.cos(angle)*v,vy:kind==='arrow'?dy/flight-.5*270*flight+spread*45:Math.sin(angle)*v,gravity:kind==='arrow'?270:0})}}
 
 const PATTERNS=['FAN','ARROWS','BOMBS','SEEKERS'];
@@ -420,7 +440,7 @@ function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp
   for(const e of hits){s.hitSet.add(e);s.attack.noteHits=s.attack.noteHits||new Set();if(!s.attack.noteHits.has(e)){s.attack.noteHits.add(e);applySong(e,owner,s.mod);basicHit(e,s.amount,s.attack)}
    if(s.bounces>0){const next=enemies.filter(v=>v.hp>0&&!s.hitSet.has(v)&&Math.hypot(v.x-s.x,v.y-10-s.y)<65).sort((a,b)=>Math.hypot(a.x-s.x,a.y-s.y)-Math.hypot(b.x-s.x,b.y-s.y))[0];if(next){const angle=Math.atan2(next.y-10-s.y,next.x-s.x);s.vx=Math.cos(angle)*160;s.vy=Math.sin(angle)*160;s.bounces--;}}
   }
- }else{const hit=enemies.filter(e=>e.hp>0&&segmentDistance(e.x,e.y-10,ax,ay,bx,by)<(e.type==='boss'&&!e.swarmBoss?16:7)).sort((a,b)=>Math.hypot(a.x-ax,a.y-10-ay)-Math.hypot(b.x-ax,b.y-10-ay))[0];if(hit){if(s.summonOwner&&s.physical)s.amount+=songTotal(hit,'vulnerability');if(s.attack?.owner.classId===3&&ITEMS[s.attack.weapon]?.effect){const h=s.attack.owner;if(h.hp>0&&h.gearRevision===s.attack.revision)activate(h,hit,ITEMS[s.attack.weapon].effect,s.amount)}else if(s.attack)basicHit(hit,s.amount,s.attack);else damage(hit,s.amount,'physical',true,false,s.summonSource||null);s.life=0}}
+ }else{const hit=enemies.filter(e=>e.hp>0&&segmentDistance(e.x,e.y-10,ax,ay,bx,by)<(e.type==='boss'&&!e.swarmBoss?16:7)).sort((a,b)=>Math.hypot(a.x-ax,a.y-10-ay)-Math.hypot(b.x-ax,b.y-10-ay))[0];if(hit){if(s.summonOwner&&s.physical)s.amount+=songTotal(hit,'vulnerability');if(s.attack?.owner.classId===3&&ITEMS[s.attack.weapon]?.effect){const h=s.attack.owner;if(h.hp>0&&h.gearRevision===s.attack.revision)activate(h,hit,ITEMS[s.attack.weapon].effect,s.amount)}else if(s.attack)basicHit(hit,s.amount,s.attack);else damage(hit,s.amount,s.kind==='magic'?'magic':'physical',true,false,s.summonSource||null);s.life=0}}
  if(wall)s.life=0}shots=shots.filter(s=>s.life>0)}
 
 
@@ -433,7 +453,7 @@ const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
  const savedArea=area,savedStage=stage;
  for(let zone=0;zone<ZONES.length;zone++){
   const sources=new Map();
-  for(const node of AREAS.filter(n=>n.zone===zone)){
+  for(const node of AREAS.filter(n=>n.zone===zone&&!n.optional)){
    area=node.area;
    for(stage=0;stage<stageCount();stage++)for(const species of sceneEnemyTypes())if(!sources.has(species))sources.set(species,{area,stage});
   }
@@ -444,11 +464,20 @@ const WEAPON_DROPS={},WEAPON_AREAS={},WEAPON_STAGES={};
   const repeated=new Set();
   for(const mob of species)if(!tables.get(mob).length){const id=[...weapons].reverse().find(id=>!repeated.has(id));if(!id)throw Error('Not enough secondary drop sources');tables.get(mob).push(id);repeated.add(id);}
   for(const weapon of weapons){const mob=species.find(id=>tables.get(id).includes(weapon));WEAPON_AREAS[weapon]=sources.get(mob).area;WEAPON_STAGES[weapon]=sources.get(mob).stage;}
-  for(const node of AREAS.filter(n=>n.zone===zone))for(const [id,table] of tables)WEAPON_DROPS[node.area+':'+id]=table.slice();
+  for(const node of AREAS.filter(n=>n.zone===zone&&!n.optional))for(const [id,table] of tables)WEAPON_DROPS[node.area+':'+id]=table.slice();
  }
  area=savedArea;stage=savedStage;
 }
 
+for(const node of AREAS.filter(n=>n.optional)){
+ for(const [key,table] of Object.entries(WEAPON_DROPS))if(key.startsWith(node.sourceArea+':'))WEAPON_DROPS[node.area+':'+key.split(':')[1]]=table.slice();
+ if(node.major){
+  const candidates=Object.keys(WEAPON_AREAS).filter(id=>ITEMS[id].tier===node.zone+1);
+  const id=candidates.find(id=>new Set(Object.entries(WEAPON_DROPS).filter(([key,ids])=>ids.includes(id)).map(([key])=>key.split(':')[1])).size===1);
+  if(!id)throw Error('Missing optional boss loot');
+  WEAPON_DROPS[node.area+':guardian'+node.area]=[id];
+ }
+}
 function dropMultiplier(source=null){return 1+(source?.runeBonus?.dropBonus||0)+heroes.filter(h=>h.hp>0).reduce((n,h)=>n+(h.runeBonus.dropBonus||0),0)}
 function weaponDropTable(target){return WEAPON_DROPS[area+':'+(target.species||target.type)]||WEAPON_DROPS[area+':'+(target.type==='boss'?'guardian'+area:target.type)]||[]}
 function regionTier(){return areaInfo().zone+1}
@@ -496,7 +525,7 @@ function effectiveAgi(h){return h.agi.map(n=>Math.max(1,Math.round(n/(1+songTota
 function aura(h){let attack=1+songTotal(h,'attack'),defense=0;for(const p of heroes)if(p.hp>0&&p.classId===4&&Math.hypot(p.x-h.x,p.y-h.y)<=p.range){attack+=p.str*.01;defense+=p.dex*.2}return {attack,defense,flat:0}}
 function basicAmount(h){return Math.max(1,Math.round((roll(h.atMin,h.atMax)+aura(h).flat)*aura(h).attack*(Math.random()<h.crit?2:1)))}
 function attackToken(h){return {owner:h,weapon:h.weapon,revision:h.gearRevision,charged:false}}
-function basicHit(target,amount,attack){if(target.hp<=0)return;const before=target.hp;damage(target,amount+(['melee','arrow'].includes(attack?.owner?.kind)?songTotal(target,'vulnerability'):0));const owner=attack?.owner;if(owner?.hp>0&&owner.gearRevision===attack.revision)owner.hp=Math.min(owner.maxHp,owner.hp+(before-target.hp)*owner.runeBonus.lifesteal+(owner.classId===5?owner.dex*.5:0));if(!attack||attack.charged||[3,7].includes(owner?.classId))return;attack.charged=true;const h=attack.owner,w=ITEMS[attack.weapon],effect=EFFECTS[w?.effect];if(!effect||h.hp<=0||h.weapon!==attack.weapon||h.gearRevision!==attack.revision)return;h.mp+=h.int;if(h.mp>=mpCost(w)){h.mp=0;activate(h,target,w.effect)}save()}
+function basicHit(target,amount,attack){if(target.hp<=0)return;const before=target.hp;damage(target,amount+(['melee','arrow'].includes(attack?.owner?.kind)?songTotal(target,'vulnerability'):0),['aura','note'].includes(attack?.owner?.kind)?'magic':'physical');const owner=attack?.owner;if(owner?.hp>0&&owner.gearRevision===attack.revision)owner.hp=Math.min(owner.maxHp,owner.hp+(before-target.hp)*owner.runeBonus.lifesteal+(owner.classId===5?owner.dex*.5:0));if(!attack||attack.charged||[3,7].includes(owner?.classId))return;attack.charged=true;const h=attack.owner,w=ITEMS[attack.weapon],effect=EFFECTS[w?.effect];if(!effect||h.hp<=0||h.weapon!==attack.weapon||h.gearRevision!==attack.revision)return;h.mp+=h.int;if(h.mp>=mpCost(w)){h.mp=0;activate(h,target,w.effect)}save()}
 function controlDuration(h,base){return Math.max(.06,Math.min(base,base*((ITEMS[h.weapon]?.agi||[25,35]).reduce((sum,n)=>sum+n,0)/2)/85))}
 function effectText(w){const e=EFFECTS[w?.effect];if(!e)return '';return w.abilityDescription?(w.abilityDescription+(w.effect==='ice'?' Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':'')):w.effect==='ice'?'Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':e.description}
 function slowFactor(e){return e.slow>0?1-(e.slowAmount??.4):1}
@@ -541,12 +570,12 @@ function activate(h,target,kind,spellAT=null,source=null){sfx('spell',{...(ITEMS
 if(ITEMS[h.weapon]?.ability){weaponSpell(h,target,kind,spellAT,source);return}if(['guard','cleanse','crescendo','restore'].includes(kind)){h.nextNote=kind==='guard'?{barrier:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))}:kind==='cleanse'?{cleanse:true,heal:Math.round(4*((ITEMS[h.weapon]?.supportPower||1)-1))}:kind==='crescendo'?{power:1.5+.1*((ITEMS[h.weapon]?.tier||1)-1)}:{heal:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))};return}const e=EFFECTS[kind],power=h.abilityPower*.65,amount=()=>Math.max(1,Math.round(spellAT===null?roll(e.min,e.max)*power:spellAT/(kind==='fire'?10:kind==='poison'?4:1)));flashes.push({x:h.x,y:h.y-18,tx:target.x,ty:target.y-10,color:e.color,life:.35,kind});
  const near=enemies.filter(v=>v.hp>0&&Math.abs(v.x-target.x)<45);
  if(kind==='fire'){fields.push({source,x:target.x,y:floor(target.x),life:1,elapsed:0,pulses:0,amount:amount(),color:e.color});}
- if(kind==='ice'){for(const v of near){damage(v,amount(),'physical',true,false,source);const duration=controlDuration(h,.7)*(v.type==='boss'?.2:1);v.frozen=Math.max(v.frozen||0,duration);}}
- if(kind==='slow'){for(const v of near){damage(v,amount());v.slow=Math.max(v.slow||0,e.time);v.slowAmount=e.slow*(v.type==='boss'?.3:1)}}
+ if(kind==='ice'){for(const v of near){damage(v,amount(),'ice',true,false,source);const duration=controlDuration(h,.7)*(v.type==='boss'?.2:1);v.frozen=Math.max(v.frozen||0,duration);}}
+ if(kind==='slow'){for(const v of near){damage(v,amount(),'ice',true,false,source);v.slow=Math.max(v.slow||0,e.time);v.slowAmount=e.slow*(v.type==='boss'?.3:1)}}
  if(kind==='poison'){if(target.hp>0){target.poison={source,time:4,tick:1,amount:amount()};}}
- if(kind==='lightning'){enemies.filter(v=>v.hp>0&&Math.abs(v.x-target.x)<130).sort((a,b)=>Math.abs(a.x-target.x)-Math.abs(b.x-target.x)).slice(0,3).forEach(v=>{damage(v,amount());flashes.push({x:target.x,y:target.y-15,tx:v.x,ty:v.y-12,color:e.color,life:.35,kind})})}
+ if(kind==='lightning'){enemies.filter(v=>v.hp>0&&Math.abs(v.x-target.x)<130).sort((a,b)=>Math.abs(a.x-target.x)-Math.abs(b.x-target.x)).slice(0,3).forEach(v=>{damage(v,amount(),'lightning',true,false,source);flashes.push({x:target.x,y:target.y-15,tx:v.x,ty:v.y-12,color:e.color,life:.35,kind})})}
  if(kind==='heal'){heroes.filter(v=>v.hp>0).forEach(v=>{const n=Math.min(v.maxHp-v.hp,amount());v.hp+=n;float(v.x,v.y-25,'+'+n,e.color)})}
- if(kind==='drain'&&target.hp>0){const n=Math.min(target.hp,amount());damage(target,n,'physical',true,false,source);h.hp=Math.min(h.maxHp,h.hp+n);float(h.x,h.y-25,'+'+n,e.color)}
+ if(kind==='drain'&&target.hp>0){const n=Math.min(target.hp,amount());damage(target,n,'magic',true,false,source);h.hp=Math.min(h.maxHp,h.hp+n);float(h.x,h.y-25,'+'+n,e.color)}
  if(kind==='stun'){near.forEach(v=>{damage(v,amount());v.stun=Math.max(v.stun||0,controlDuration(h,.6)*(v.type==='boss'?.2:1))})}}
 function tickEffects(dt){for(const h of combatAllies())if(h.hp>0&&h.poison){h.poison.time-=dt;h.poison.tick-=dt;if(h.poison.tick<=0){h.poison.tick+=1;damage(h,h.poison.amount,'poison',false,false)}if(h.poison.time<=0)h.poison=null;}flashes.forEach(f=>f.life-=dt);flashes=flashes.filter(f=>f.life>0);for(const f of fields){f.life-=dt;f.elapsed+=dt;if(f.spell){if(!f.pulses&&f.elapsed>=.3){f.pulses=1;spellImpact(f.spell,f.x,f.y)}continue}while(f.pulses<10&&f.pulses*.1<=f.elapsed){f.pulses++;enemies.filter(e=>e.hp>0&&Math.abs(e.x-f.x)<30&&Math.abs(e.y-f.y)<18).forEach(e=>damage(e,f.amount,'fire',false,false,f.source))}}fields=fields.filter(f=>f.life>0);for(const e of enemies){if(e.hp<=0)continue;e.frozen=Math.max(0,(e.frozen||0)-dt);e.slow=Math.max(0,(e.slow||0)-dt);e.stun=Math.max(0,(e.stun||0)-dt);if(e.poison){e.poison.time-=dt;e.poison.tick-=dt;if(e.poison.tick<=0){e.poison.tick+=1;damage(e,e.poison.amount,'poison',false,false,e.poison.source)}if(e.poison.time<=0)e.poison=null}}}
 function unlockedNodes(){const set=new Set(['town','a0']);for(const id of completed){set.add(id);for(const next of WORLD.find(n=>n.id===id)?.next||[])set.add(next)}return set}
@@ -554,7 +583,7 @@ function panMap(dt){const chart=$('.map-chart');chart.scrollLeft=Math.max(0,Math
 function openMap(){mapPan=0;if(state==='setup')return;if(['fight','walk','service'].includes(state)){mapReturn=state;release()}state='map';$('#services').hidden=true;$('#service-controls').hidden=true;$('#world').hidden=false;$('#result').hidden=true;renderMap();const chart=$('.map-chart'),node=WORLD.find(n=>n.id===currentNode);chart.scrollLeft=Math.max(0,(node?.x||0)/MAP_WIDTH*(chart.scrollWidth||chart.clientWidth||0)-(chart.clientWidth||0)*.5);refresh();save()}
 function renderMap(){
  const unlocked=unlockedNodes(),icons={Fort:'♜',Pyramid:'△',Lighthouse:'♜',Citadel:'♜',Forge:'⚒',Castle:'♜'};
- $('#map-nodes').innerHTML=WORLD.filter(n=>unlocked.has(n.id)).map(n=>'<button class="map-node '+(n.major?'landmark ':'')+(n.kind?'service-node ':'')+(completed.includes(n.id)?'cleared ':'')+'" data-node="'+n.id+'" style="left:'+n.x/MAP_WIDTH*100+'%;top:'+n.y+'%" aria-label="'+n.name+(completed.includes(n.id)?', cleared':', unlocked')+'"><span>'+(n.major?icons[n.name]:n.kind?'◆':'▪')+'</span>'+(n.major||n.kind?'<small>'+n.name+'</small>':'')+'<em>'+n.name+'</em></button>').join('');
+ $('#map-nodes').innerHTML=WORLD.filter(n=>unlocked.has(n.id)).map(n=>'<button class="map-node '+(n.major?'landmark ':'')+(n.kind?'service-node ':'')+(completed.includes(n.id)?'cleared ':'')+'" data-node="'+n.id+'" style="left:'+n.x/MAP_WIDTH*100+'%;top:'+n.y+'%" aria-label="'+n.name+(completed.includes(n.id)?', cleared':', unlocked')+'"><span>'+(n.major?(icons[n.name]||'♜'):n.kind?'◆':'▪')+'</span>'+(n.major||n.kind?'<small>'+n.name+'</small>':'')+'<em>'+n.name+'</em></button>').join('');
  $('#map-art').innerHTML=ZONES.map((z,i)=>{
   const x=i*512,c=z.color;
   const top='M0 45 22 39 47 35 73 31 85 18 115 23 135 16 163 25 190 19 211 30 239 24 269 32 299 20 330 25 353 15 379 22 411 18 435 31 470 25 494 38 512 45',bottom='M512 150 492 156 470 161 437 155 411 168 380 162 351 171 322 158 292 165 260 154 230 164 199 158 165 170 138 161 111 169 85 159 60 169 34 163 14 155 0 150';
@@ -579,7 +608,7 @@ function travel(id){const node=WORLD.find(n=>n.id===id);if(!node||!unlockedNodes
 function tickBossExit(dt){if(stage===stageCount()-1&&!enemies.some(e=>e.type==='boss'&&e.hp>0)){if(bossExitWait===2)sfx('clear');bossExitWait=Math.max(0,bossExitWait-dt);}if(bossExitWait<1e-9)bossExitWait=0}
 function stageExitOpen(){return stage<stageCount()-1||bossExitWait<=0&&!enemies.some(e=>e.type==='boss'&&e.hp>0)}
 function completeArea(){if(!stageExitOpen())return false;return changeScene(advanceStage)}
-function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell(area===AREAS.length-1?'The lich king is defeated. His rule is over.':areaInfo().major?'Zone cleared. A new land awaits.':'Boss defeated. New routes discovered.');save()}
+function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell(area===125?'The lich king is defeated. His rule is over.':areaInfo().optional?'Optional route cleared.':areaInfo().major?'Zone cleared. A new land awaits.':'Boss defeated. New routes discovered.');save()}
 function salePrice(id){const w=ITEMS[id];return w?(socketItem(id)?25*w.tier:6+w.tier*12):0}
 function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&w.tier<=Math.max(1,...cleared.map(a=>a<0?1:areaInfo(a).zone+1)));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
 function weaponPrice(index){const early=[100,250,500,750,1000];if(index<5)return early[index];const price=1500+(index-5)*500;return price<=10000?price:10000+(index-22)*1000}
