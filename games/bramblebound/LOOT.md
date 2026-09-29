@@ -54,6 +54,6 @@ Rune and gem families have source areas distributed across their zone. Drops bec
 
 ## Defense and elemental wards
 
-Priest aura defense (including self and allied summons), gem defense, and Bard attack reduction affect physical damage only. Bard DEX grants +0.25 physical damage taken per point to affected enemies; STR reduces their physical attack by 0.5 per point. Elemental attacks and poison/burn ticks ignore these physical modifiers.
+Priest aura defense (including self and allied summons), gem defense, and Bard attack reduction affect physical damage only. Bard STR reduces physical attack by 0.5 per point; elemental attacks ignore that reduction. Bard DEX grants +0.25 damage taken per point to every damage type. Direct hits receive the full bonus; fire pulses every 0.1 seconds receive 10% per pulse, while poison ticking 30 times per second receives 1/30 of the bonus per tick. Enemy resistance applies after this bonus.
 
 General Ward Rune resistance is 10%, 13%, 16%, 19%, 22%, 25%. Fire, Ice, Poison and Lightning Ward Runes each grant 25%, 30%, 35%, 40%, 45%, 50% resistance to their matching element. General and matching resistance add, capped at 75%. These wards follow the normal source-area shop unlock rules. Damage numbers move right for enemies and left for heroes and allied summons.

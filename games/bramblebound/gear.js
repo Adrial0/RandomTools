@@ -9,7 +9,7 @@ const effects={
  lightning:{name:'Chain lightning',mp:10,min:1,max:7,count:3,time:0,color:'#fff36a',description:'Lightning jumps to up to 3 nearby enemies.'},
  ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freezes nearby enemies.'},
  slow:{name:'Chill burst',mp:12,min:3,max:5,count:1,time:2,slow:.2,color:'#9db3e9',description:'Slow 20% for 2s.'},
- poison:{name:'Poison strike',mp:10,min:2,max:3,count:1,time:4,color:'#76ef66',description:'Poisons the struck enemy for 4 seconds; poison ticks every second.'},
+ poison:{name:'Poison strike',mp:10,min:2,max:3,count:1,time:4,color:'#76ef66',description:'Poison for 4s. Bonus AT per tick, 30 ticks/s.'},
  heal:{name:'Healing bloom',mp:12,min:12,max:18,count:1,time:0,color:'#6fffb6',description:'Restores health to every living party member.'},
  drain:{name:'Life drain',mp:14,min:9,max:14,count:1,time:0,color:'#e783e3',description:'Deals bonus damage and returns that damage as health.'},
  stun:{name:'Shockwave',mp:10,min:5,max:9,count:1,time:1.2,color:'#ffdca0',description:'Stuns nearby enemies.'}
@@ -138,7 +138,7 @@ const descriptions=[
  ['+2 RANGE, +2 HP','Faster attacks (2% per point), +2 HP','+1 minimum and maximum AT, +2 HP'],
  ['Nearby allies gain +1% AT, +3 HP','Nearby allies gain +0.2 defense, +3 HP','+1 MP per aura pulse, +2 RANGE, +2 HP'],
  ['+1 minimum and maximum AT, +4 HP','Heal 0.5 HP per enemy struck, +3 HP','+1 MP per hit, +2 HP'],
- ['Notes: allies +1% AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 physical damage taken; +2 HP','+1 MP per hit, +2 HP'],
+ ['Notes: allies +1% AT, enemies −0.5 AT; +3 HP','Notes: allies +1% attack speed, enemies +0.25 damage taken; +2 HP','+1 MP per hit, +2 HP'],
  ['+10% minion damage, +3 HP','+10% minion health, +3 HP','2% faster summoning, +2 HP']
 ];
 

@@ -162,7 +162,7 @@ r.setParty([5,0,1,6]);r.enter();const reaper=r.get().heroes[0];reaper.x=260;reap
 const foes=r.get().enemies;foes.forEach((e,i)=>{e.x=i<2?285:450;e.y=219;e.hp=100});reaper.strike={elapsed:0,left:.09,target:foes[0],amount:2,token:r.attackToken(reaper),range:reaper.range,face:1};for(let i=0;i<30;i++)r.resolveStrike(reaper,.01);
 assert.equal(foes[0].hp,98);assert.equal(foes[1].hp,98);assert.equal(foes[2].hp,100);assert.equal(reaper.hp,30,'Reaper heals once per enemy per swing');
 const rogue=r.get().heroes[2];rogue.x=275;rogue.y=219;rogue.strike={left:0,target:foes[0],amount:2,token:r.attackToken(rogue),range:14};r.resolveStrike(rogue,.01);assert.equal(foes[0].hp,96);assert.equal(foes[1].hp,98);
-const bard=r.get().heroes[3];bard.x=250;bard.y=219;bard.attributes.str=10;bard.attributes.dex=10;r.stats(bard);reaper.x=275;foes[0].x=300;foes[1].x=325;r.shootNote(bard,foes[0],2,r.attackToken(bard));for(let i=0;i<50;i++)r.tickShots(.01);assert.equal(r.songTotal(reaper,'attack'),.1);assert.equal(r.aura(reaper).attack,1.1);assert.equal(foes[0].hp,94);assert.equal(foes[1].hp,96);reaper.songs={};assert.equal(r.aura(reaper).flat,0);
+const bard=r.get().heroes[3];bard.x=250;bard.y=219;bard.attributes.str=10;bard.attributes.dex=10;r.stats(bard);reaper.x=275;foes[0].x=300;foes[1].x=325;r.shootNote(bard,foes[0],2,r.attackToken(bard));for(let i=0;i<50;i++)r.tickShots(.01);assert.equal(r.songTotal(reaper,'attack'),.1);assert.equal(r.aura(reaper).attack,1.1);assert.equal(foes[0].hp,91.5);assert.equal(foes[1].hp,93.5);reaper.songs={};assert.equal(r.aura(reaper).flat,0);
 r.setParty([7,0,0,0]);r.enter();const summoner=r.get().heroes[0];summoner.weapon='7-poison';summoner.attributes.int=20;summoner.attributes.dex=10;r.stats(summoner);assert.ok(Math.abs(r.summonInterval(summoner)-3/1.4)<1e-8);for(let i=0;i<510;i++)r.tickMinions(.01);assert.equal(r.get().minions.length,2);assert.equal(r.get().minions[0].maxHp,r.items['7-poison'].summon.health*2);const pet=r.get().minions[0],progress=summoner.summonProgress;r.damage(pet,100);r.tickMinions(.01);assert.ok(!r.get().minions.includes(pet));assert.ok(summoner.summonProgress>progress);const survivor=r.get().minions[0];survivor.life=.005;r.tickMinions(.01);assert.ok(!r.get().minions.includes(survivor));summoner.weapon='7-heavy';summoner.gearRevision++;r.stats(summoner);r.tickMinions(.4);assert.equal(r.get().minions.length,0);for(let i=0;i<730;i++)r.tickMinions(.01);assert.ok(r.get().minions.length>0);assert.ok(r.get().minions.every(m=>m.kind==='golem'));summoner.hp=0;r.tickMinions(.01);assert.equal(r.get().minions.length,0);r.draw();
 console.log('New roster, swept Reaper collisions/healing, single-target Rogue, Bard piercing/buffs, and Summoner groups/health/respawn/equipment cleanup pass.');
 }
@@ -173,7 +173,7 @@ const check=harness(),c=check.t;c.start();c.setParty([5,3,0,0]);c.enter();const 
 const h=harness(),b=h.t;b.start();b.setParty([6,6,6,0]);b.enter();const [one,two,three,warrior]=b.get().heroes,foe=b.get().enemies[0];
 for(const bard of [one,two,three]){bard.attributes.str=10;bard.attributes.dex=20;b.stats(bard);b.applySong(warrior,bard);b.applySong(foe,bard);}
 assert.equal(b.aura(warrior).attack,1.3);assert.ok(Math.abs(b.songTotal(warrior,'haste')-.6)<1e-9);assert.deepEqual(Array.from(b.effectiveAgi(warrior)),[13,19]);assert.equal(b.enemyDamage(foe),1);foe.at=50;assert.equal(b.enemyDamage(foe),35);
-b.applySong(warrior,one);assert.equal(b.aura(warrior).attack,1.3);foe.hp=100;b.basicHit(foe,5,b.attackToken(warrior));assert.equal(foe.hp,80);b.damage(foe,5,'fire',false);assert.equal(foe.hp,75);
+b.applySong(warrior,one);assert.equal(b.aura(warrior).attack,1.3);foe.hp=100;b.basicHit(foe,5,b.attackToken(warrior));assert.equal(foe.hp,80);b.damage(foe,5,'fire',false);assert.equal(foe.hp,60);
 b.setTime(1.5);assert.equal(b.aura(warrior).attack,1.3);assert.equal(b.enemyDamage(foe),35);
 b.applySong(warrior,one);b.applySong(foe,one);
 b.setTime(2.01);assert.equal(b.aura(warrior).attack,1.1);assert.equal(b.enemyDamage(foe),45);
@@ -238,7 +238,7 @@ tu.setArea(0);const heldBase={...hurt,x:100,y:100,vx:0,vy:0,dragTarget:{x:400,y:
 console.log('Steeper XP curve, fast drag response, red incoming damage and regional socket-drop caps pass.');
 const icons=harness().t;for(const w of Object.values(icons.items))icons.drawItemIcon(context,w);
 console.log('Timed individual summons, INT casting speed, death-independent cycle, expiry, weapon cleanup and shared item drawing pass.');
-{const test=harness(),r=test.t;r.start();r.setParty([3,0,0,0]);const mage=r.get().heroes[0],target=r.get().enemies[0];r.get().enemies.forEach(e=>e.hp=0);target.hp=10000;target.x=80;target.y=226;mage.x=60;mage.y=226;mage.weapon='3-fire';r.stats(mage);const base=mage.atMin;mage.attributes.int=10;mage.mp=8;r.stats(mage);assert.equal(mage.atMin,base+10);assert.equal(mage.mp,0);assert.equal(r.manaPercent(mage),0);for(let i=0;i<2;i++){r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12)}assert.equal(r.get().fields.length,2,'Each mage spell activates its weapon effect');assert.equal(r.get().fields[0].amount,3,'Fire spreads spell AT over ten pulses');assert.equal(mage.mp,0);mage.weapon='3-ice';r.stats(mage);const before=target.hp;r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12);assert.equal(target.hp,before-30);assert.ok(target.frozen>0);r.inspect('3-ice');assert.ok(!test.elements.get('#item-details').textContent.includes('MP'));r.select(0);assert.equal(test.elements.get('.mp-bar').hidden,true);console.log('Mage casts every attack, INT AT scaling, zero MP and effect damage pass.');}
+{const test=harness(),r=test.t;r.start();r.setParty([3,0,0,0]);const mage=r.get().heroes[0],target=r.get().enemies[0];r.get().enemies.forEach(e=>e.hp=0);target.hp=10000;target.x=80;target.y=226;mage.x=60;mage.y=226;mage.weapon='3-fire';r.stats(mage);const base=mage.atMin;mage.attributes.int=10;mage.mp=8;r.stats(mage);assert.equal(mage.atMin,base+10);assert.equal(mage.mp,0);assert.equal(r.manaPercent(mage),0);for(let i=0;i<2;i++){r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12)}assert.equal(r.get().fields.length,2,'Each mage spell activates its weapon effect');assert.ok(r.get().fields[0].amount>=31&&r.get().fields[0].amount<=33,'Each fire pulse adds bonus AT');assert.equal(mage.mp,0);mage.weapon='3-ice';r.stats(mage);const before=target.hp;r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12);assert.ok(before-target.hp>=33&&before-target.hp<=35);assert.ok(target.frozen>0);r.inspect('3-ice');assert.ok(!test.elements.get('#item-details').textContent.includes('MP'));r.select(0);assert.equal(test.elements.get('.mp-bar').hidden,true);console.log('Mage casts every attack, INT AT scaling, zero MP and effect damage pass.');}
 {const opening=harness().t;opening.start();opening.setParty([7,0,0,0]);const h=opening.get().heroes[0];h.weapon='7-heavy';opening.stats(h);opening.enter();for(let i=0;i<99;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,0);opening.tickMinions(.02);assert.equal(opening.get().minions.length,1);assert.equal(h.firstSummon,false);for(let i=0;i<900;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,1);for(let i=0;i<101;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,2);h.gearRevision++;opening.tickMinions(.01);assert.equal(h.firstSummon,false);assert.equal(opening.get().minions.length,0);opening.enter();for(let i=0;i<101;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,1);console.log('One-second opening cast, normal later casts and reset only on scene entry pass.');}
 {const summonMotionTest=harness().t;summonMotionTest.start();summonMotionTest.setParty([7,0,0,0]);summonMotionTest.enter();assert.equal(summonMotionTest.summonInterval(summonMotionTest.get().heroes[0]),5);for(let i=0;i<510;i++)summonMotionTest.tickMinions(.01);const fighter=summonMotionTest.get().minions[0],enemyTarget=summonMotionTest.get().enemies[0];summonMotionTest.get().enemies.forEach(e=>e.hp=0);enemyTarget.hp=enemyTarget.maxHp=1000;enemyTarget.x=fighter.x+10;enemyTarget.y=fighter.y;fighter.cooldown=0;summonMotionTest.tickMinions(.01);assert.ok(fighter.attack);assert.equal(enemyTarget.hp,1000,'Wind-up does not deal immediate damage');summonMotionTest.draw();summonMotionTest.tickMinions(.13);assert.ok(enemyTarget.hp<1000,'Melee contact deals damage');const afterHit=enemyTarget.hp;summonMotionTest.tickMinions(.05);assert.equal(enemyTarget.hp,afterHit,'Recovery does not hit twice');summonMotionTest.tickMinions(.3);fighter.cooldown=0;summonMotionTest.tickMinions(.01);assert.ok(fighter.attack);enemyTarget.x+=100;summonMotionTest.tickMinions(.13);assert.equal(enemyTarget.hp,afterHit,'An enemy leaving reach during wind-up avoids the hit');summonMotionTest.draw();console.log('Summon attack wind-up, contact timing, single-hit recovery and dodging pass.');
 }
@@ -455,7 +455,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  assert.equal(h.poison.tick,remaining,'Exposure refresh preserves next poison tick');
  const hp=h.hp;a.tickEffects(.41);assert.ok(h.hp<hp,'Poison ticks while standing in cloud');
  h.defense=10000;h.runeBonus.resistance=.99;const before=h.hp;a.tickEffects(1);
- assert.equal(h.hp,before-1,'Poison still deals minimum damage through defense');
+ assert.ok(h.hp<before,'Poison ignores defense and applies elemental resistance');
  assert.equal(a.get().numbers.length,0,'Cloud and poison do not create damage numbers');
  console.log('Woodland close-range cloud contact, uninterrupted poison ticks, minimum damage and quiet DoTs pass.');
 }
@@ -528,9 +528,36 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(const h of r.get().heroes){h.x=100;h.y=226;h.hp=1000;}priest.attributes.dex=50;r.stats(priest);priest.hp=1000;bard.str=10;bard.dex=20;
  for(const h of [priest,ally]){const hp=h.hp;r.damage(h,20,'physical');assert.equal(h.hp,hp-10);r.damage(h,20,'fire');assert.equal(h.hp,hp-30);assert.ok(r.get().numbers.at(-1).vx<0);}
  const foe=r.enemy('slime',300);foe.hp=1000;foe.at=20;r.applySong(foe,bard);assert.equal(r.enemyDamage(foe),15);for(const element of ['fire','poison','ice','lightning','magic'])assert.equal(r.enemyDamage(foe,1,element),20);
- r.damage(foe,20);assert.equal(foe.hp,975,'DEX adds five physical damage');assert.ok(r.get().numbers.at(-1).vx>0);r.damage(foe,20,'fire');assert.equal(foe.hp,955,'No elemental vulnerability');
+ r.damage(foe,20);assert.equal(foe.hp,975,'DEX adds five physical damage');assert.ok(r.get().numbers.at(-1).vx>0);r.damage(foe,20,'fire');assert.equal(foe.hp,950,'Elemental hits also gain vulnerability');
  ally.runes=['rune-fire-ward-1',null];r.stats(ally);ally.hp=1000;r.damage(ally,100,'fire');assert.equal(ally.hp,925);r.damage(ally,100,'ice');assert.equal(ally.hp,825);
  const pet={owner:summoner,x:100,y:226,hp:1000,maxHp:1000,defense:2,runeBonus:{}};r.damage(pet,20,'physical');assert.equal(pet.hp,992);r.damage(pet,20,'poison');assert.equal(pet.hp,972);assert.ok(r.get().numbers.at(-1).vx<0);
  const mushroom=r.enemy('sporecap',300);mushroom.at=20;r.applySong(mushroom,bard);r.fireEnemyAttack(mushroom,ally,mushroom.attackProfile);assert.equal(r.get().hazards.at(-1).amount,9,'Poison cloud bypasses physical attack debuff');
  console.log('Physical-only defense/weakness, priest self and summon aura, elemental wards, physical-only vulnerability and damage-number directions pass.');
+}
+
+{
+ const {t:r}=harness();r.start();const h=r.get().heroes[0],foe=r.get().enemies[0];foe.hp=10000;foe.songs={bard:{until:100,vulnerability:5}};
+ for(const element of ['physical','fire','ice','lightning','poison','magic']){const hp=foe.hp;r.damage(foe,10,element);assert.equal(hp-foe.hp,15);}
+ foe.x=h.x;foe.y=h.y;r.get().fields.push({x:foe.x,y:foe.y,life:1,elapsed:0,pulses:0,amount:10,source:h});const hp=foe.hp;for(let i=0;i<10;i++)r.tickEffects(.1);assert.equal(hp-foe.hp,105,'Ten fire ticks share one five-damage bonus');
+ foe.poison={time:2,tick:1/30,amount:10,source:h};const before=foe.hp;r.tickEffects(1);assert.ok(Math.abs(before-foe.hp-305)<1e-6);
+ r.setTime(101);const expired=foe.hp;r.damage(foe,10,'ice');assert.equal(expired-foe.hp,10);
+ console.log('All damage types gain Bard vulnerability; fast fire ticks share the bonus per second and expired notes stop boosting damage.');
+}
+
+{
+ const run=harness(),r=run.t;r.start();run.math.random=()=>0;const h=r.get().heroes[0],target=r.get().enemies[0];target.hp=100000;target.x=h.x+10;target.y=h.y;h.atMin=h.atMax=100;
+ h.weapon='0-ice';r.activate(h,target,'ice');assert.equal(target.hp,99897,'Ice adds 3 bonus AT to 100 character AT');
+ h.weapon='0-fire';r.activate(h,target,'fire');assert.equal(r.get().fields.at(-1).amount,101,'Each flame uses AT plus bonus');r.get().fields.length=0;
+ h.weapon='0-fire-t2';r.activate(h,target,'fire');const field=r.get().fields.at(-1);assert.equal(field.spell.amount,101,'Tier multiplier applies to bonus, not character AT');
+ h.weapon='3-lightning';r.activate(h,target,'lightning',200);assert.equal(target.hp,99696,'Provided mage AT receives bonus once');
+ console.log('Weapon abilities add bonus AT to character AT, including fire pulses and mage casts.');
+}
+
+{
+ function poisoned(){const run=harness(),r=run.t;r.start();run.math.random=()=>0;const h=r.get().heroes[0],e=r.get().enemies[0];h.weapon='0-poison';h.atMin=h.atMax=1000;e.hp=10000;r.activate(h,e,'poison');assert.equal(e.poison.amount,2,'Poison uses bonus AT, never character AT');return {r,h,e};}
+ const a=poisoned();a.r.tickEffects(4);assert.equal(a.e.hp,9760,'120 poison ticks over four seconds');assert.equal(a.e.poison,null);
+ const b=poisoned();for(let i=0;i<240;i++)b.r.tickEffects(1/60);assert.equal(b.e.hp,a.e.hp,'Render rate does not change poison damage');
+ const c=poisoned();for(let i=0;i<60;i++){c.r.activate(c.h,c.e,'poison');c.r.tickEffects(1/60);}assert.equal(c.e.hp,9940,'Refreshing every frame never postpones damage ticks');
+ const d=poisoned();d.h.hp=10000;d.h.poison={time:2,tick:1/30,amount:3};d.r.tickEffects(1);assert.equal(d.h.hp,9910,'Enemy poison also ticks 30 times per second');
+ console.log('Poison uses ability bonus AT at fixed 30 Hz for enemies and heroes, survives refreshes, and stops exactly at expiry.');
 }

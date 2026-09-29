@@ -11,7 +11,7 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Sword | 1–5 | Physical attack | Starter | 100 |
 | Fire Sword | 10–15 | 10 embers over 1 second; nearby grounded enemies burn. | Grassland 2 | 500 |
 | Ice Sword | 10–15 | Freezes nearby enemies. | Woodland 1 | 750 |
-| Poison Sword | 10–15 | Poisons the struck enemy for 4 seconds; poison ticks every second. | Woodland 3 | 1000 |
+| Poison Sword | 10–15 | Poisons the struck enemy for 4 seconds; poison ticks 30 times per second. | Woodland 3 | 1000 |
 | Thunder Sword | 10–15 | Lightning jumps to up to 3 nearby enemies. | Marsh 1 | 1500 |
 | Iron Sword | 5–10 | Physical attack | Grassland 1 | 250 |
 | Long Sword | 10–20 | Strikes nearby enemies with physical damage. | Caverns 1 | 2000 |
@@ -85,7 +85,7 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Daggers | 2–4 | Physical attack | Starter | 100 |
 | Fire Daggers | 8–13 | 10 embers over 1 second; nearby grounded enemies burn. | Grassland 3 | 500 |
 | Ice Daggers | 8–13 | Freezes nearby enemies. | Woodland 1 | 750 |
-| Poison Daggers | 8–13 | Poisons the struck enemy for 4 seconds; poison ticks every second. | Woodland 4 | 1000 |
+| Poison Daggers | 8–13 | Poisons the struck enemy for 4 seconds; poison ticks 30 times per second. | Woodland 4 | 1000 |
 | Thunder Daggers | 8–13 | Lightning jumps to up to 3 nearby enemies. | Marsh 1 | 1500 |
 | Iron Daggers | 6–9 | Physical attack | Grassland 1 | 250 |
 | Heavy Daggers | 11–19 | Strikes nearby enemies with physical damage. | Caverns 1 | 2000 |
@@ -159,7 +159,7 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Bow | 4–8 | Physical attack 1 arrows. | Starter | 100 |
 | Fire Bow | 10–17 | 10 embers over 1 second; nearby grounded enemies burn. 1 arrows. | Grassland 4 | 500 |
 | Ice Bow | 10–17 | Freezes nearby enemies. 1 arrows. | Woodland 1 | 750 |
-| Poison Bow | 10–17 | Poisons the struck enemy for 4 seconds; poison ticks every second. 1 arrows. | Woodland 5 | 1000 |
+| Poison Bow | 10–17 | Poisons the struck enemy for 4 seconds; poison ticks 30 times per second. 1 arrows. | Woodland 5 | 1000 |
 | Thunder Bow | 10–17 | Lightning jumps to up to 3 nearby enemies. 1 arrows. | Marsh 2 | 1500 |
 | Iron Bow | 8–13 | Physical attack 1 arrows. | Grassland 1 | 250 |
 | Heavy Bow | 13–23 | Strikes nearby enemies with physical damage. 1 arrows. | Caverns 1 | 2000 |
@@ -233,7 +233,7 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Staff | 6–10 | Physical attack | Starter | 100 |
 | Fire Staff | 12–19 | 10 embers over 1 second; nearby grounded enemies burn. | Grassland 1 | 250 |
 | Ice Staff | 12–19 | Freezes nearby enemies. | Grassland 5 | 500 |
-| Poison Staff | 12–19 | Poisons the struck enemy for 4 seconds; poison ticks every second. | Woodland 2 | 750 |
+| Poison Staff | 12–19 | Poisons the struck enemy for 4 seconds; poison ticks 30 times per second. | Woodland 2 | 750 |
 | Thunder Staff | 12–19 | Lightning jumps to up to 3 nearby enemies. | Marsh 1 | 1000 |
 | Chill Staff | 12–19 | Slow 20% for 2s. | Marsh 3 | 1500 |
 
@@ -366,7 +366,7 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Scythe | 4–9 | Physical attack | Starter | 100 |
 | Fire Scythe | 10–18 | 10 embers over 1 second; nearby grounded enemies burn. | Grassland 5 | 500 |
 | Ice Scythe | 10–18 | Freezes nearby enemies. | Woodland 1 | 750 |
-| Poison Scythe | 10–18 | Poisons the struck enemy for 4 seconds; poison ticks every second. | Marsh 1 | 1000 |
+| Poison Scythe | 10–18 | Poisons the struck enemy for 4 seconds; poison ticks 30 times per second. | Marsh 1 | 1000 |
 | Thunder Scythe | 10–18 | Lightning jumps to up to 3 nearby enemies. | Marsh 2 | 1500 |
 | Iron Scythe | 8–14 | Physical attack | Grassland 1 | 250 |
 | Heavy Scythe | 13–24 | Strikes nearby enemies with physical damage. | Caverns 1 | 2000 |
@@ -502,7 +502,7 @@ Warrior, Rogue, Ranger and Reaper receive seven weapons per tier: fire, ice, poi
 | Skeleton Grimoire | 3–6 | Physical attack | Starter | 100 |
 | Flame Skeleton Grimoire | 9–15 | 10 embers over 1 second; nearby grounded enemies burn. | Grassland 2 | 250 |
 | Frost Spirit Grimoire | 9–15 | Freezes nearby enemies. | Woodland 1 | 500 |
-| Poison Spirit Grimoire | 9–15 | Poisons the struck enemy for 4 seconds; poison ticks every second. | Woodland 2 | 750 |
+| Poison Spirit Grimoire | 9–15 | Poisons the struck enemy for 4 seconds; poison ticks 30 times per second. | Woodland 2 | 750 |
 | Chain Golem Grimoire | 9–15 | Lightning jumps to up to 3 nearby enemies. | Marsh 1 | 1000 |
 | Golem Grimoire | 12–21 | Physical attack | Marsh 5 | 1500 |
 
@@ -575,3 +575,9 @@ Weapon and soul rolls remain independent at 10% each. Each listed item drops exc
 | Ash Serpent | Ash Daggers (Rogue, tier 5) | Three fire eruptions | +25% AT, −15% elemental resistance |
 | Royal Specter | Royal Staff (Mage, tier 6) | Wide freezing pulse | +20% XP, +10% equipment drops |
 
+
+## Ability damage
+
+Offensive weapon abilities use character AT plus the effect's bonus AT. Later-tier ability power scales the bonus portion; each projectile, pulse or target receives the resulting hit amount. Mage casts use their supplied AT once, then add bonus AT. Healing and Bard support retain their own values.
+
+Poison is the exception: only its bonus AT is dealt per tick, without character AT. Poison ticks at a fixed 30 Hz independent of rendering, on heroes and enemies alike. Refreshing poison preserves the next tick and does not stack separate instances. Fire remains ten pulses per second. Bard vulnerability contributes 1/30 per poison tick and 1/10 per fire pulse, with no floating DoT numbers.
