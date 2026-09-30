@@ -102,7 +102,7 @@ ch.x=200;ch.y=226;projectile=ct.launchHazard(shooter,ch,'bullet',0,30);const hit
 projectile=ct.launchHazard(shooter,ch,'arrow');const vy=projectile.vy;ct.tickHazards(.1);assert.ok(projectile.vy>vy,'Arrows fall under gravity');
 projectile=ct.launchHazard(shooter,ch,'missile');const heading=Math.atan2(projectile.vy,projectile.vx);ch.y=40;ct.tickHazards(.1);const change=Math.abs(Math.atan2(Math.sin(Math.atan2(projectile.vy,projectile.vx)-heading),Math.cos(Math.atan2(projectile.vy,projectile.vx)-heading)));assert.ok(change>0&&change<=.150001,'Homing turn is limited so missiles can be outmaneuvered');
 const bombs=harness(),btwo=bombs.t;btwo.start();const bh=btwo.get().heroes[0];btwo.get().heroes.forEach((h,i)=>{h.x=20+i*15;h.y=226});const bomb=btwo.launchHazard(btwo.enemy('boss',300),bh,'bomb',0,40);bomb.x=bh.x;bomb.y=bh.y-3;bomb.vx=bomb.vy=0;bomb.fuse=.2;const beforeBomb=bh.hp;btwo.tickHazards(.1);assert.equal(bh.hp,beforeBomb);btwo.tickHazards(.11);assert.equal(bh.hp,beforeBomb-40,'Bomb only damages when its fuse expires');assert.ok(btwo.get().blasts.length);
-const pattern=btwo.enemy('boss',350);pattern.specialCooldown=0;btwo.tickSpecial(pattern,bh,.01);assert.ok(pattern.warning);const countBefore=btwo.get().hazards.length;btwo.tickSpecial(pattern,bh,.5);assert.equal(btwo.get().hazards.length,countBefore);btwo.tickSpecial(pattern,bh,.5);assert.equal(btwo.get().hazards.length,countBefore+7,'Telegraph precedes seven-shot fan');
+const pattern=btwo.enemy('boss',350);pattern.specialCooldown=0;const countBefore=btwo.get().hazards.length;btwo.tickSpecial(pattern,bh,.01);assert.equal(pattern.warning,null);assert.equal(btwo.get().hazards.length,countBefore+7,'Projectile fan fires without warning');
 const thrower=harness(),tt=thrower.t;tt.start();const th=tt.get().heroes[0];th.x=100;th.y=160;th.vx=th.vy=0;tt.setHeld(th);tt.moveHeld(160,100,200);assert.equal(th.x,100,'Pointer movement sets target without teleporting body');for(let i=0;i<10;i++)tt.stepHeld(th,.01);assert.ok(th.x>100&&th.x<160&&th.y<160&&th.y>100,'Body lags behind dragged target');const releaseX=th.x,releaseY=th.y,throwVX=th.vx,throwVY=th.vy;tt.release({timeStamp:200});assert.equal(th.vx,throwVX);assert.equal(th.vy,throwVY);tt.stepBody(th,.05);assert.ok(th.x>releaseX&&th.y<releaseY,'Release carries spring momentum');for(let i=0;i<200;i++)tt.stepBody(th,.01);th.y=100;th.vy=300;for(let i=0;i<80&&th.vy!==0;i++)tt.stepBody(th,.01);assert.ok(th.crouch>0,'Landing compresses the body');
 const air=harness(),at=air.t;at.start();const ah=at.get().heroes[0],ae=at.get().enemies[0];ah.x=ae.x-10;ah.y=100;ah.vy=0;ah.cooldown=0;const enemyHealth=ae.hp;at.update(.01);assert.equal(ah.strike,null);assert.ok(!at.get().shots.some(s=>s.attack?.owner===ah));ah.strike={left:0,target:ae,amount:50,token:at.attackToken(ah),range:100};at.resolveStrike(ah,.01);assert.equal(ae.hp,enemyHealth,'Airborne pending melee hit is cancelled');
 const inn=harness(),it=inn.t;it.startTown();const ih=it.get().heroes[0];ih.hp-=21;assert.equal(it.innCost(),3);it.setGold(2);assert.equal(it.healTown(),false);assert.equal(ih.hp,ih.maxHp-21);assert.equal(it.get().gold,2);it.setGold(10);assert.ok(it.healTown());assert.equal(it.get().gold,7);assert.equal(ih.hp,ih.maxHp);assert.equal(it.innCost(),0);it.healTown();assert.equal(it.get().gold,7);
@@ -630,4 +630,30 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(const id of ['3-fire','3-poison','3-ice','3-lightning']){h.weapon=id;r.stats(h);r.shoot(h,target,'magic',20,r.attackToken(h));r.draw();}
  assert.equal(r.items['3-poison-t2'].ability.radius,0,'Poison stays focused');
  console.log('Mage frost nova hits within its visible radius, late AoE grows gradually, distinct projectile renderers run, and poison stays focused.');
+}
+
+{
+ const {t:r}=harness();r.start();const h=r.get().heroes[0];h.x=20;h.y=226;const boss=r.enemy('boss',550);boss.at=100;boss.specialCooldown=0;boss.patterns=['BOMBS'];r.tickSpecial(boss,h,.01);assert.equal(boss.warning,null,'Boss fires across arena without warning');assert.equal(r.get().hazards.at(-1).amount,300,'Bomb reduced from 400 to 300');assert.equal(boss.specialCooldown,2.3);assert.equal(r.enemyDamage(boss),100,'Basic attack damage unchanged');
+ const caster=r.enemy('sporecap',100);caster.at=100;caster.y=226;caster.cooldown=0;h.x=110;r.tickProfileAttack(caster,h,.01);assert.equal(caster.cast.left,.55);assert.ok(Math.abs(caster.cooldown-2.85)<1e-9);r.tickProfileAttack(caster,h,.56);assert.equal(r.get().hazards.at(-1).amount,36);assert.ok(r.get().hazards.at(-1).poisonAmount<=2,'Poison tick damage stays separately tuned');
+ console.log('Faster weaker specials, arena-wide boss triggering, faster ranged casts and unchanged basic attacks pass.');
+}
+
+{
+ const {t:r}=harness();r.start();const h=r.get().heroes[0];h.x=100;h.y=200;
+ const recipes=new Set(),patterns=new Set();
+ for(const [id,spec] of Object.entries(r.ENEMY_TYPES).filter(([id,s])=>id.startsWith('guardian')&&s.base==='boss')){
+  const boss=r.enemy(id,400);boss.y=200;assert.ok(boss.specialMoves?.length>=2,id+' has rotating specials');recipes.add(JSON.stringify(boss.specialMoves));
+  for(let i=0;i<boss.specialMoves.length;i++){
+   r.get().hazards.length=0;r.get().rituals.length=0;boss.specialBurst=null;boss.patternIndex=i;boss.specialCooldown=0;boss.warning=null;
+   const pattern=boss.specialMoves[i].pattern;patterns.add(pattern);r.tickSpecial(boss,h,.01);
+   if(pattern==='SPORES'){assert.ok(boss.warning);r.tickSpecial(boss,h,.8);}else assert.equal(boss.warning,null,pattern+' has no projectile prewarning');
+   if(['CHARGE','CURSE','FROST'].includes(pattern))assert.ok(r.get().rituals.every(p=>p.left>0),'Instant strikes retain ground warnings');
+   if(['SWEEP','PULSE'].includes(pattern))assert.ok(boss.slash.left>0,'Melee keeps windup');
+   if(pattern==='STREAM'){const n=r.get().hazards.length;for(let j=0;j<7;j++)r.tickSpecial(boss,h,.29);assert.ok(r.get().hazards.length>n,'Stream fires staggered shots');assert.equal(boss.specialBurst,null);}
+   for(const p of r.get().hazards){assert.ok(Number.isFinite(p.vx)&&Number.isFinite(p.vy)&&Number.isFinite(p.amount),id+' valid projectile');if(p.kind==='missile'){assert.ok(p.life<=1.5);assert.ok(p.tracking<1);}}
+   r.draw();
+  }
+ }
+ assert.ok(patterns.size>=15);assert.ok(recipes.size>=40,'Broad variety across guardian recipes');
+ console.log('All guardian rotations execute; varied recipes, staggered streams, limited seekers, immediate projectiles and warned instant strikes pass.');
 }

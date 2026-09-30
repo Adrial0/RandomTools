@@ -44,3 +44,7 @@ Each zone branches from the third area of its second region into two side areas 
 | Kingdom | Crypt 1 → Crypt 2 → Crypt | Royal Specter | 35% ice |
 
 Ordinary mushroom creatures resist poison by 35%. Shell Cannon resists physical damage by 25%, and Ceiling Eye resists lightning by 30%. Resistances belong to individual species, never entire zones. Landed damage remains at least 1. Nonphysical resistance covers every damage type except physical; it does not multiply with a matching elemental resistance. Boss control resistance remains separate.
+
+Enemy pressure tuning: special attacks deal 75% previous damage. Major/ordinary/swarm boss special cooldowns are 1.9/2.3/3.3 seconds with a 0.75-second warning; ground eruptions warn for another 0.9 seconds. Boss specials can start across the arena. Non-melee profile attacks deal 80% damage with 75% cooldown and a 0.55-second cast. Basic melee damage and independently tuned poison ticks are unchanged.
+
+Boss specials now rotate through body-themed recipes with varied counts, arcs, speeds, sizes and short homing windows. New recipes include gapped rings, rotating crosses, staggered aimed streams and slow heavy orbs. Projectile specials fire without targeting warnings; melee windups, instant clouds and ground-strike markers remain. Bomb landing markers are removed.

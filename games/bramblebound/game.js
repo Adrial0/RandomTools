@@ -293,7 +293,7 @@ function enemyAttackProfile(shape){
 }
 function fireEnemyAttack(e,target,profile){
  const a=profile,face=Math.sign(target.x-e.x)||1;
- if(a.kind==='melee'){e.slash={left:a.windup||.35,life:(a.windup||.35)+.16,face,hit:false,profile:a};return}
+ if(a.kind==='melee'){e.slash={left:a.windup||.35,life:(a.windup||.35)+.16,face,hit:false,profile:a,special:!!e.emittingSpecial};return}
  if(a.kind==='cloud'){
   const startX=e.x+face*8,endX=e.x+face*Math.min(a.range,Math.abs(target.x-e.x)),wall=terrainHit(startX,e.y-12,endX,e.y-12);
   hazards.push({kind:'cloud',x:wall?wall.x-face*(a.radius+1):endX,y:e.y-12,vx:0,vy:0,age:0,life:a.life||2,radius:a.radius||22,color:a.color,element:a.element||'poison',amount:enemyDamage(e,a.damage,a.element||'poison'),poisonAmount:roll(...(ENEMY_TYPES[e.species]?.poisonDamage||[1,2])),hitTimes:{},dodgeable:false});return;
@@ -308,13 +308,41 @@ function fireEnemyAttack(e,target,profile){
 }
 function tickProfileAttack(e,target,dt){
  const a=e.attackProfile;if(!a)return false;
- if(e.cast){e.cast.left-=dt;if(e.cast.left<=0){fireEnemyAttack(e,e.cast.target,a);e.cast=null;}return true}
+ if(e.cast){e.cast.left-=dt;if(e.cast.left<=0){e.emittingProfile=a.kind!=='melee';fireEnemyAttack(e,e.cast.target,a);e.emittingProfile=false;e.cast=null;}return true}
  if(e.cooldown<=0&&Math.hypot(target.x-e.x,target.y-e.y)<=e.range+3){
-  e.cooldown=a.cooldown;e.cast={left:a.kind==='melee'?0:.65,target:a.kind==='missile'?target:{x:target.x,y:target.y,hp:1}};
+  e.cooldown=a.cooldown*(a.kind==='melee'?1:.75);e.cast={left:a.kind==='melee'?0:.55,target:a.kind==='missile'?target:{x:target.x,y:target.y,hp:1}};
  }
  return true;
 }
-function enemy(species,x){const spec=ENEMY_TYPES[species],type=spec?.base||species,attackProfile=enemyAttackProfile(spec?.shape),boss=type==='boss',tier=areaInfo().zone,hp=Math.round(areaHealth(area)*(boss?(spec?.major?30:spec?.swarmCount?12/spec.swarmCount:10):spec?spec.hp:type==='summoner'?1.25:1));return {id:++uid,type,species,resistances:spec?.resistances||{},attackProfile,major:!!spec?.major,swarmBoss:!!spec?.swarmCount,swarmCount:spec?.swarmCount||1,shape:spec?.shape,pattern:spec?.pattern,patterns:spec?.patterns,x,y:floor(x)-(type==='flyer'?45:0),vx:0,vy:0,rotation:0,feet:[],hp:hp,maxHp:hp,level:1+Math.floor(progressionArea()/125*98),name:spec?.name||({slime:'Slime',slasher:'Slashling',spitter:'Spitter',summoner:'Summoner',boss:'Guardian'}[type]||type),speed:spec?.speed||(boss?13:17),heals:3,healCooldown:3,hopCooldown:1+(x%3),at:(boss?10+progressionArea()*2:6+progressionArea()*1.5)*(spec?.damage||1),range:attackProfile?.range||spec?.range||(type==='spitter'||type==='summoner'?105:type==='slasher'?(area<3?22:48):(area<3?12:16)),cooldown:.5+(x%7)/10,summon:7,remaining:3,color:spec?.color||(boss?'#de6262':type==='summoner'?'#c478ed':type==='slasher'?'#f37c52':type==='spitter'?'#e6b94b':tier===1?'#7ca3ed':'#59df42'),seed:x,flash:0,specialCooldown:2+(x%5)*.4,patternIndex:0,warning:null}}
+// Each guardian keeps its own attack recipe; repeats vary mechanically as well as visually.
+function bossSpecialMoves(spec,species){
+ if(spec?.base!=='boss')return null;
+ const seed=[...species].reduce((n,c)=>n*31+c.charCodeAt(0),0)>>>0,v=seed%5;
+ const families={mushroom:['SPORES','ORBS'],plant:['SWEEP','STREAM'],mantis:['SWEEP','CROSS'],scorpion:['SWEEP','STREAM'],crab:['SWEEP','TIDES'],maw:['SWEEP','ORBS'],ram:['CHARGE','BOULDERS'],knight:['SWEEP','CROSS'],cactus:['RING','STREAM'],crystal:['SHARDS','RING'],eye:['SEEKERS','ORBS'],jelly:['TIDES','SEEKERS'],bird:['ARROWS','STREAM'],snail:['BOULDERS','ORBS'],golem:['BOULDERS','PULSE'],obelisk:['FROST','SHARDS'],urn:['BOMBS','ORBS'],construct:['ERUPTION','BOULDERS'],bell:['PULSE','RING'],puppet:['CROSS','FROST'],lich:['BONES','CURSE','SOULS']};
+ const patterns=spec.swarmCount?['DART',v%2?'ORBS':'STREAM']:spec.major?[...spec.patterns,(families[spec.shape]||['RING'])[v%2]]:(families[spec.shape]||[['ORBS','RING'],['BOULDERS','CROSS'],['STREAM','SEEKERS'],['SHARDS','TIDES'],['ARROWS','ORBS']][v]);
+ return patterns.filter(Boolean).map((pattern,i)=>({pattern,variant:(v+i)%5,element:({mushroom:'poison',crystal:'ice',jelly:'ice',obelisk:'ice',urn:'fire',construct:'fire',eye:'magic',lich:'magic'})[spec.shape]||'physical',color:spec.color}));
+}
+function fireBossVolley(e,target,move){
+ const v=move.variant,kind=move.pattern,element=move.element,color=move.color;
+ const profile={kind:'bullet',count:3+v,spread:.12+v*.04,speed:75+v*8,size:3,damage:1.3,element,color,life:4};
+ if(kind==='ORBS')Object.assign(profile,{count:1+v%3,size:7+v,speed:48+v*5,spread:.4,damage:1.8});
+ if(kind==='STREAM')Object.assign(profile,{count:1+v%2,size:2,speed:100+v*5,spread:.13,damage:.8});
+ if(kind==='SEEKERS')Object.assign(profile,{kind:'missile',count:1+v%3,speed:55+v*5,tracking:.35+v*.12,life:1.5,spread:.5,size:4,damage:1.5});
+ if(kind==='ARROWS'||kind==='BOULDERS'||kind==='ERUPTION')Object.assign(profile,{kind:kind==='ARROWS'?'arrow':'rock',count:kind==='ERUPTION'?6+v:1+v,flight:1.7+v*.2,spread:.25+v*.07,size:kind==='BOULDERS'?8-v:3,damage:kind==='BOULDERS'?2.2:1,aoe:kind==='ERUPTION'?12:0,element:kind==='ERUPTION'?'fire':element});
+ if(kind==='SHARDS')Object.assign(profile,{count:5+v,spread:.12+v*.025,speed:80+v*6,element:'ice',color:'#a9deff'});
+ if(kind==='TIDES')Object.assign(profile,{count:2+v%3,size:7,speed:55+v*5,spread:.3,element:'ice',color:'#80d7eb'});
+ if(kind==='RING'||kind==='CROSS'){
+  const count=kind==='RING'?10+v*2:4,base=Math.atan2(target.y-13-(e.y-16),target.x-e.x);
+  for(let i=0;i<count;i++){
+   // Leave a gap in each ring; crosses rotate between casts.
+   if(kind==='RING'&&i===v)continue;
+   const angle=base+i*Math.PI*2/count+(e.patternIndex%3)*.18,p=launchHazard(e,target,'bullet',0,enemyDamage(e,1.2,element));
+   Object.assign(p,{vx:Math.cos(angle)*(60+v*7),vy:Math.sin(angle)*(60+v*7),size:3+v%2,color,element,life:4});
+  }return;
+ }
+ fireEnemyAttack(e,target,profile);
+}
+function enemy(species,x){const spec=ENEMY_TYPES[species],type=spec?.base||species,attackProfile=enemyAttackProfile(spec?.shape),boss=type==='boss',tier=areaInfo().zone,hp=Math.round(areaHealth(area)*(boss?(spec?.major?30:spec?.swarmCount?12/spec.swarmCount:10):spec?spec.hp:type==='summoner'?1.25:1));return {id:++uid,type,species,specialMoves:bossSpecialMoves(spec,species),resistances:spec?.resistances||{},attackProfile,major:!!spec?.major,swarmBoss:!!spec?.swarmCount,swarmCount:spec?.swarmCount||1,shape:spec?.shape,pattern:spec?.pattern,patterns:spec?.patterns,x,y:floor(x)-(type==='flyer'?45:0),vx:0,vy:0,rotation:0,feet:[],hp:hp,maxHp:hp,level:1+Math.floor(progressionArea()/125*98),name:spec?.name||({slime:'Slime',slasher:'Slashling',spitter:'Spitter',summoner:'Summoner',boss:'Guardian'}[type]||type),speed:spec?.speed||(boss?13:17),heals:3,healCooldown:3,hopCooldown:1+(x%3),at:(boss?10+progressionArea()*2:6+progressionArea()*1.5)*(spec?.damage||1),range:attackProfile?.range||spec?.range||(type==='spitter'||type==='summoner'?105:type==='slasher'?(area<3?22:48):(area<3?12:16)),cooldown:.5+(x%7)/10,summon:7,remaining:3,color:spec?.color||(boss?'#de6262':type==='summoner'?'#c478ed':type==='slasher'?'#f37c52':type==='spitter'?'#e6b94b':tier===1?'#7ca3ed':'#59df42'),seed:x,flash:0,specialCooldown:1.2+(x%5)*.25,patternIndex:0,warning:null}}
 function enter(){bossExitWait=2;currentNode='a'+area;$('#world').hidden=true;mapReturn=null;state='fight';paused=false;drag=null;shots=[];minions=[];hazards=[];blasts=[];rituals=[];numbers=[];loot=[];potions=[];enemies=[];fields=[];flashes=[];$('#setup').hidden=true;$('#result').hidden=true;heroes.forEach((h,i)=>{h.x=32+i*20;h.y=floor(h.x);h.vy=0;h.vx=0;h.drive=0;h.strike=null;h.nextNote=null;h.songs={};h.barriers={};h.poison=null;h.hold=0;h.firstSummon=true;h.summonProgress=0;h.hp=Math.min(h.maxHp,h.hp)});const count=areaInfo().major?1:6+areaInfo().local%3+areaInfo().zone*2;for(let i=0;i<count;i++){const type=encounterType(i,count),x=count===1?440:240+i*(309/(count-1));enemies.push(enemy(type,x));if(ENEMY_TYPES[type]?.swarmCount)for(let j=1;j<ENEMY_TYPES[type].swarmCount;j++)enemies.push(enemy(type,x-j*22));if((ENEMY_TYPES[type]?.base||type)==='swarmling')for(let j=1;j<=5;j++)enemies.push(enemy(type,Math.max(210,Math.min(564,x+(j-2)*7))))}tell('Drag to fight, or touch NEXT to skip ahead. Defeat the boss to unlock the next area.');save();build();}
 function start(){setFrontScreen(null);menuOpen=false;sessionSlot=activeSlot;$('#main-menu').hidden=true;autoMoveEnabled=true;inventoryRunes=Array.from({length:15},()=>[null,null]);stage=0;heroes=[...document.querySelectorAll('#choices select')].map((el,i)=>hero(+el.value,i));area=0;gold=0;inventory=Array(15).fill(null);selected=0;completed=[];currentNode='town';state='town';$('#setup').hidden=true;enterService('town');}
 function float(x,y,text,color='#fff',direction=0){const healing=String(text).startsWith('+'),value=Number(text);if(Number.isFinite(value)&&String(text).trim()!=='')text=healing?'+'+Math.round(value):Math.round(value);if(/^\+\d/.test(String(text)))color='#60ff70';const side=direction||(Math.random()<.5?-1:1);numbers.push({x,y,text,color,life:1,vx:side*(9+Math.random()*7),vy:-30-Math.random()*7})}
@@ -365,33 +393,38 @@ function enemyMeleePaths(a){
  if(a.shape==='fork')return [-h,0,h].map(offset=>[[3,0],[r*.6,offset],[r,offset]]);
  return [[[7,-h],[r,0],[7,h]]];
 }
-function tickSlash(e,dt){const slash=e.slash;if(!slash)return;slash.left-=dt;slash.life-=dt;if(slash.left<=0&&!slash.hit){slash.hit=true;const a=slash.profile;for(const h of combatAllies())if(h.hp>0){const dx=(h.x-e.x)*slash.face,dy=Math.abs(h.y-e.y),reach=a?.range||e.range+7,height=a?.height||(area<3?16:23);const hit=a?.shape==='pulse'?(dx/reach)**2+((h.y-e.y)/height)**2<1:a?enemyMeleePaths(a).some(path=>path.some((p,i)=>i>0&&segmentDistance(dx,h.y-e.y,...path[i-1],...p)<7)):dx>=-4&&dx<=reach&&dy<height;if(hit)damage(h,enemyDamage(e,a?.damage||1.8,a?.element||'physical'),a?.element||'physical',true,e.type!=='boss')}}if(slash.life<=0)e.slash=null}
+function tickSlash(e,dt){const slash=e.slash;if(!slash)return;slash.left-=dt;slash.life-=dt;if(slash.left<=0&&!slash.hit){slash.hit=true;const a=slash.profile;for(const h of combatAllies())if(h.hp>0){const dx=(h.x-e.x)*slash.face,dy=Math.abs(h.y-e.y),reach=a?.range||e.range+7,height=a?.height||(area<3?16:23);const hit=a?.shape==='pulse'?(dx/reach)**2+((h.y-e.y)/height)**2<1:a?enemyMeleePaths(a).some(path=>path.some((p,i)=>i>0&&segmentDistance(dx,h.y-e.y,...path[i-1],...p)<7)):dx>=-4&&dx<=reach&&dy<height;if(hit)damage(h,enemyDamage(slash.special?{...e,emittingSpecial:true}:e,a?.damage||1.8,a?.element||'physical'),a?.element||'physical',true,e.type!=='boss')}}if(slash.life<=0)e.slash=null}
 
-function specialPattern(e){if(e.attackProfile&&e.type!=='boss')return null;if(e.type==='boss'&&!e.swarmBoss&&!e.major&&e.attackProfile)return ({cloud:'SPORES',rock:'BOULDERS',melee:e.shape==='bell'?'PULSE':'SWEEP',missile:'SEEKERS',bullet:'SHARDS',arrow:'ARROWS'})[e.attackProfile.kind];if(e.patterns)return e.patterns[e.patternIndex%e.patterns.length];if(e.pattern)return e.pattern;if(e.type==='bomber')return 'BOMBS';if(ENEMY_TYPES[e.type])return null;if(e.type==='slasher')return null;if(e.type==='boss')return PATTERNS[e.patternIndex%4];if(e.type==='summoner')return 'SEEKERS';if(e.type==='spitter')return PATTERNS[(area+stage)%4];return stage>0&&e.seed>400?PATTERNS[stage%4]:null}
+function specialPattern(e){if(e.attackProfile&&e.type!=='boss')return null;if(e.specialMoves)return e.specialMoves[e.patternIndex%e.specialMoves.length].pattern;if(e.patterns)return e.patterns[e.patternIndex%e.patterns.length];if(e.pattern)return e.pattern;if(e.type==='bomber')return 'BOMBS';if(ENEMY_TYPES[e.type])return null;if(e.type==='slasher')return null;if(e.type==='boss')return PATTERNS[e.patternIndex%4];if(e.type==='summoner')return 'SEEKERS';if(e.type==='spitter')return PATTERNS[(area+stage)%4];return stage>0&&e.seed>400?PATTERNS[stage%4]:null}
 function tickSpecial(e,target,dt){
+ if(e.specialBurst){e.specialBurst.left-=dt;if(e.specialBurst.left<=0){e.emittingSpecial=true;fireBossVolley(e,target,e.specialBurst.move);e.emittingSpecial=false;if(--e.specialBurst.remaining<=0)e.specialBurst=null;else e.specialBurst.left+=.28;}}
  const pattern=specialPattern(e);if(!pattern)return;
- if(e.warning){e.warning.left-=dt;if(e.warning.left<=0){const w=e.warning;e.warning=null;e.patternIndex++;e.specialCooldown=e.major?3.2:e.swarmBoss?5.5:e.type==='boss'?3.8:5.5;e.emittingSpecial=true;
+ if(e.warning){e.warning.left-=dt;if(e.warning.left<=0){const w=e.warning,move=e.specialMoves?.[e.patternIndex%e.specialMoves.length];e.warning=null;e.patternIndex++;e.specialCooldown=e.major?1.9:e.swarmBoss?3.3:e.type==='boss'?2.3:3.3;e.emittingSpecial=true;
  const aim={x:w.x,y:w.y,hp:1};
+ const volley=move&&['ORBS','STREAM','RING','CROSS','SEEKERS','ARROWS','BOULDERS','SHARDS','TIDES','ERUPTION'].includes(w.pattern);
+ if(volley){fireBossVolley(e,w.pattern==='SEEKERS'?target:aim,move);if(w.pattern==='STREAM')e.specialBurst={move,left:.28,remaining:2+move.variant};}
+ if(!volley){
  if(w.pattern==='SPORES')for(const offset of [-25,0,25])fireEnemyAttack({...e,y:e.y+offset},aim,{kind:'cloud',range:55,radius:18,damage:.6,life:2.5,element:'poison',color:'#a7cb68'});
  if(w.pattern==='SHARDS')fireEnemyAttack(e,aim,{kind:'bullet',count:9,spread:.16,speed:85,size:3,damage:1.2,element:'ice',color:'#a9deff'});
  if(w.pattern==='BOULDERS')fireEnemyAttack(e,aim,{...e.attackProfile,kind:'rock',count:5,spread:.3,flight:2.6,damage:1.5});
- if(w.pattern==='SWEEP')fireEnemyAttack(e,aim,{...e.attackProfile,range:Math.min(65,e.attackProfile.range*1.5),height:e.attackProfile.height*1.3,windup:.5,damage:2});
+ if(w.pattern==='SWEEP')fireEnemyAttack(e,aim,{...e.attackProfile,kind:'melee',range:Math.min(65,(e.attackProfile?.range||35)*1.5),height:(e.attackProfile?.height||20)*1.3,windup:.5,damage:2});
  if(w.pattern==='PULSE')fireEnemyAttack(e,aim,{kind:'melee',shape:'pulse',range:65,height:60,windup:.5,damage:2,color:e.color});
  if(w.pattern==='ERUPTION')fireEnemyAttack(e,aim,{kind:'rock',count:10,spread:.18,flight:2.8,size:3,aoe:12,damage:.8,element:'fire',color:'#ff9862'});
  if(w.pattern==='TIDES')fireEnemyAttack(e,aim,{kind:'bullet',count:5,spread:.25,speed:70,size:7,damage:1.2,element:'ice',color:'#80d7eb'});
 if(w.pattern==='DART')launchHazard(e,aim,'bullet',0,enemyDamage(e,2));if(w.pattern==='FAN')for(let i=-3;i<=3;i++)launchHazard(e,aim,'bullet',i*.20);
  if(w.pattern==='ARROWS')for(let i=-2;i<=2;i++)launchHazard(e,aim,'arrow',i*.25);
- if(w.pattern==='BOMBS')launchHazard(e,aim,'bomb',0,enemyDamage(e,4,'fire'));
+ if(w.pattern==='BOMBS'){const p=launchHazard(e,aim,'bomb',0,enemyDamage(e,4,'fire')),v=move?.variant||0,flight=1.8+v*.18;p.vx=(aim.x-e.x)/flight;p.vy=(aim.y-13-p.y)/flight-.5*p.gravity*flight;p.fuse=flight+.55;p.aoe=24+v*3;p.color=move?.color||'#ff794c';}
  if(w.pattern==='SEEKERS')for(let i=-1;i<=1;i++)launchHazard(e,target,'missile',i*.6,enemyDamage(e,3.5,'lightning'));
 
- if(['CHARGE','TIDES','FROST','ERUPTION','CURSE'].includes(w.pattern)){
-  const spots=w.pattern==='CURSE'?heroes.filter(h=>h.hp>0).map(h=>h.x):w.pattern==='CHARGE'?[w.x]:[w.x-65,w.x,w.x+65];
-  for(const x of spots)rituals.push({x:Math.max(12,Math.min(560,x)),left:1.2,life:.3,radius:w.pattern==='CHARGE'?65:24,element:({CHARGE:'physical',FROST:'ice',ERUPTION:'fire'})[w.pattern]||'magic',amount:enemyDamage(e,2.5,({CHARGE:'physical',FROST:'ice',ERUPTION:'fire'})[w.pattern]||'magic'),color:w.pattern==='FROST'?'#8de5ff':w.pattern==='CURSE'?'#bd83ff':w.pattern==='ERUPTION'?'#ff8c43':'#f0c274',ground:w.pattern!=='CURSE'});
  }
- if(w.pattern==='BONES')for(let i=0;i<3;i++){const p=launchHazard(e,{x:e.x-200,y:e.y},'bullet',0,enemyDamage(e,2));p.x=e.x+i*35;p.y=floor(p.x)-6;p.vx=-95;p.vy=0;p.life=6;}
+ if(['CHARGE','FROST','CURSE'].includes(w.pattern)){
+  const spots=w.pattern==='CURSE'?heroes.filter(h=>h.hp>0).map(h=>h.x):w.pattern==='CHARGE'?[w.x]:[w.x-65,w.x,w.x+65];
+  for(const x of spots)rituals.push({x:Math.max(12,Math.min(560,x)),left:.9,life:.3,radius:w.pattern==='CHARGE'?65:24,element:({CHARGE:'physical',FROST:'ice',ERUPTION:'fire'})[w.pattern]||'magic',amount:enemyDamage(e,2.5,({CHARGE:'physical',FROST:'ice',ERUPTION:'fire'})[w.pattern]||'magic'),color:w.pattern==='FROST'?'#8de5ff':w.pattern==='CURSE'?'#bd83ff':w.pattern==='ERUPTION'?'#ff8c43':'#f0c274',ground:w.pattern!=='CURSE'});
+ }
+ if(w.pattern==='BONES')for(let i=0;i<3;i++){const face=Math.sign(aim.x-e.x)||-1,p=launchHazard(e,aim,'bullet',0,enemyDamage(e,2));p.x=e.x-i*face*18;p.y=floor(p.x)-6;p.vx=face*80;p.vy=0;p.life=6;}
  if(w.pattern==='SOULS')for(let i=-4;i<=4;i++){const p=launchHazard(e,aim,'bullet',i*.22,enemyDamage(e,2,'magic'));p.element='magic';p.vx*=.65;p.vy*=.65;p.life=6;}
  e.emittingSpecial=false;}return}
- e.specialCooldown-=dt;if(e.specialCooldown<=0&&Math.abs(e.x-target.x)<400){e.warning={pattern,left:.95,x:target.x,y:target.y};}
+ e.specialCooldown-=dt;if(e.specialCooldown<=0&&Math.abs(e.x-target.x)<(e.type==='boss'?600:400)){e.warning={pattern,left:pattern==='SPORES'?.75:0,x:target.x,y:target.y};if(!e.warning.left)tickSpecial(e,target,0);}
 }
 function segmentDistance(px,py,ax,ay,bx,by){const dx=bx-ax,dy=by-ay,t=Math.max(0,Math.min(1,((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy||1)));return Math.hypot(px-ax-t*dx,py-ay-t*dy)}
 function explode(p){const radius=p.aoe||36;blasts.push({x:p.x,y:p.y,life:.35,radius,color:p.color});for(const h of combatAllies())if(h.hp>0&&Math.hypot(h.x-p.x,h.y-12-p.y)<radius+6)damage(h,p.amount,p.element,true,p.dodgeable);p.life=0}
@@ -425,13 +458,13 @@ function drawHazards(){
   else if(a?.shape==='fork'){for(const offset of [-height,0,height])L([[3,0],[reach*.6,offset],[reach,offset]])}
   else L([[7,-height],[reach,0],[7,height]]);
  }
- for(const e of enemies)if(e.cast){const a=e.attackProfile;ctx.strokeStyle=a.color||e.color;ctx.beginPath();ctx.arc(e.x,e.y-16,8+(1-e.cast.left/.65)*7,0,Math.PI*2);ctx.stroke();if(a.kind==='rock'){ctx.beginPath();ctx.ellipse(e.cast.target.x,e.cast.target.y-1,a.aoe||a.size+4,3,0,0,Math.PI*2);ctx.stroke()}}
+ for(const e of enemies)if(e.cast&&e.attackProfile.kind==='cloud'){const a=e.attackProfile;ctx.strokeStyle=a.color||e.color;ctx.beginPath();ctx.arc(e.x,e.y-16,8+(1-e.cast.left/.55)*7,0,Math.PI*2);ctx.stroke();if(a.kind==='rock'){ctx.beginPath();ctx.ellipse(e.cast.target.x,e.cast.target.y-1,a.aoe||a.size+4,3,0,0,Math.PI*2);ctx.stroke()}}
 
  for(const e of enemies)if(e.warning){ctx.strokeStyle='#ffcf6c';ctx.beginPath();ctx.arc(e.x,e.y-17,12+(1-e.warning.left)*7,0,Math.PI*2);ctx.stroke();if(e.warning.pattern!=='SEEKERS')line(ctx,[[e.x,e.y-16],[e.warning.x,e.warning.y-13]],'#75522b')}
  for(const p of hazards){const color=p.color||(p.kind==='rock'?'#c4b39a':p.kind==='bomb'?'#ff794c':p.kind==='missile'?'#e994ff':p.kind==='arrow'?'#ffe59a':'#ff6464');ctx.fillStyle=color;
  if(p.kind==='cloud'){ctx.globalAlpha=.22*Math.min(1,p.life*3);for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(p.x+Math.cos(i*1.7+p.age)*p.radius*.4,p.y+Math.sin(i*1.7+p.age)*p.radius*.4,p.radius*.65,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;continue}
  if(p.kind==='rock'){ctx.strokeStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,p.size||5,0,Math.PI*2);ctx.fill();ctx.stroke();line(ctx,[[p.x-2,p.y-3],[p.x+2,p.y],[p.x-1,p.y+3]],'#807364')}
- else if(p.kind==='bomb'){ctx.strokeStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.stroke();ctx.fillRect(p.x-1,p.y-7,2,2);if(p.fuse<.65){ctx.strokeStyle='#aa4935';ctx.beginPath();ctx.ellipse(p.x,floor(p.x)-2,36,4,0,0,Math.PI*2);ctx.stroke()}}
+ else if(p.kind==='bomb'){ctx.strokeStyle=color;ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.stroke();ctx.fillRect(p.x-1,p.y-7,2,2);}
  else if(p.kind==='arrow'||p.kind==='missile'){const a=Math.atan2(p.vy,p.vx);line(ctx,[[p.x-Math.cos(a)*9,p.y-Math.sin(a)*9],[p.x,p.y]],color);ctx.fillRect(p.x-1,p.y-1,3,3)}
  else{const size=p.size||2;ctx.fillRect(Math.round(p.x)-size,Math.round(p.y)-size,size*2,size*2)}}
  for(const b of blasts){ctx.strokeStyle=b.color||'#ffbd68';ctx.beginPath();const r=b.radius*(1-b.life/.4);ctx.arc(b.x,b.y,r,0,Math.PI*2);ctx.stroke();if(b.kind==='ice')for(let i=0;i<8;i++){const a=i*Math.PI/4;line(ctx,[[b.x+Math.cos(a)*r*.7,b.y+Math.sin(a)*r*.7],[b.x+Math.cos(a)*r,b.y+Math.sin(a)*r]],b.color)}}
@@ -525,7 +558,7 @@ function applySong(target,owner,mod={}){
  target.songs=target.songs||{};const power=mod.power||1;
  target.songs[owner.id]={until:time+(mod.duration||2),attack:owner.str*.01*power,haste:owner.dex*.01*power,weakness:owner.str*.5*power,vulnerability:owner.dex*.25*power};
 }
-function enemyDamage(e,multiplier=1,element='physical'){return Math.max(1,e.at*multiplier-(element==='physical'?songTotal(e,'weakness'):0))}
+function enemyDamage(e,multiplier=1,element='physical'){return Math.max(1,e.at*multiplier*(e.emittingSpecial?.75:e.emittingProfile?.8:1)-(element==='physical'?songTotal(e,'weakness'):0))}
 function effectiveAgi(h){return h.agi.map(n=>Math.max(1,Math.round(n/(1+songTotal(h,'haste')))))}
 
 function aura(h){let attack=1+songTotal(h,'attack'),defense=0;for(const p of heroes)if(p.hp>0&&p.classId===4&&Math.hypot(p.x-h.x,p.y-h.y)<=p.range){attack+=p.str*.01;defense+=p.dex*.2}return {attack,defense,flat:0}}
