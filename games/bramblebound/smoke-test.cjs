@@ -657,3 +657,16 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  assert.ok(patterns.size>=15);assert.ok(recipes.size>=40,'Broad variety across guardian recipes');
  console.log('All guardian rotations execute; varied recipes, staggered streams, limited seekers, immediate projectiles and warned instant strikes pass.');
 }
+
+{
+ const {t:r}=harness();r.start();r.setParty([2,0,0,0]);const h=r.get().heroes[0];h.x=50;h.y=226;h.attributes.int=100;
+ const bow=Object.values(r.items).find(w=>w.classId===2&&!w.retired&&w.effect==='fire'&&w.ability?.mode==='fan');h.weapon=bow.id;r.stats(h);
+ const target=r.enemy('slime',180);target.y=226;target.hp=10000;r.get().enemies.length=0;r.get().enemies.push(target);
+ r.shoot(h,target,'arrow',1,r.attackToken(h));assert.ok(r.get().shots.every(p=>p.kind==='arrow'),'No spell before arrow hit');
+ for(let i=0;i<100&&!r.get().shots.some(p=>p.kind==='spell');i++)r.tickShots(.01);
+ const sparks=r.get().shots.filter(p=>p.kind==='spell');assert.equal(sparks.length,5);assert.ok(sparks.every(p=>Math.abs(p.x-target.x)<4&&p.small&&p.gravity===220),'Small fireballs scatter from impact');
+ r.get().enemies.length=0;for(let i=0;i<220;i++)r.tickShots(.01);assert.ok(r.get().fields.length>0,'Bouncing sparks leave fire on landing');
+ r.get().fields.length=0;h.weapon='2-fire';r.stats(h);r.activate(h,target,'fire');assert.equal(r.get().fields[0].x,target.x,'Original ground fire stays at target');
+ h.classId=3;h.weapon='3-fire-t3';r.stats(h);r.get().shots.length=0;r.activate(h,target,'fire');assert.ok(r.get().shots.every(p=>p.x===h.x),'Mage still casts from the mage');
+ console.log('Bow abilities wait for arrow impact, scatter five small bouncing fireballs, retain ground flames and preserve mage casting.');
+}

@@ -471,8 +471,8 @@ function drawHazards(){
 }
 
 function terrainHit(ax,ay,bx,by){const steps=Math.max(1,Math.ceil(Math.hypot(bx-ax,by-ay)/2));for(let i=0;i<=steps;i++){const t=i/steps,x=ax+(bx-ax)*t,y=ay+(by-ay)*t;if(y>=floor(x))return {x,y:floor(x),t};if(y<=ceiling(x))return {x,y:ceiling(x),t}}return null}
-function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp<=0||s.summonOwner.gearRevision!==s.summonRevision)){s.life=0;continue}s.life-=dt;const ax=s.x,ay=s.y;s.vy+=(s.gravity||0)*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;const wall=(s.attack?.owner?.runeBonus?.wallPierce||s.summonSource?.runeBonus?.wallPierce||s.spell?.source?.runeBonus?.wallPierce)?null:terrainHit(ax,ay,s.x,s.y),bx=wall?wall.x:s.x,by=wall?wall.y:s.y;
- if(s.kind==='spell'){if(s.spell.owner.hp<=0||s.spell.owner.gearRevision!==s.spell.revision){s.life=0;continue}const targets=enemies.filter(e=>e.hp>0&&!s.hitSet?.has(e)&&segmentDistance(e.x,e.y-12,ax,ay,bx,by)<8).sort((a,b)=>Math.hypot(a.x-ax,a.y-12-ay)-Math.hypot(b.x-ax,b.y-12-ay));for(const target of targets){if(s.piercing){s.hitSet.add(target);applyWeaponEffect(target,s.spell);}else{spellImpact(s.spell,target.x,target.y-12);s.life=0;break;}}if(wall)s.life=0;continue}
+function tickShots(dt){for(const s of shots){if(s.summonOwner&&(s.summonOwner.hp<=0||s.summonOwner.gearRevision!==s.summonRevision)){s.life=0;continue}s.life-=dt;s.age=(s.age||0)+dt;if(s.originTarget&&s.age>=s.ignoreOriginUntil){s.hitSet.delete(s.originTarget);s.originTarget=null;}const ax=s.x,ay=s.y;s.vy+=(s.gravity||0)*dt;s.x+=s.vx*dt;s.y+=s.vy*dt;const wall=(s.attack?.owner?.runeBonus?.wallPierce||s.summonSource?.runeBonus?.wallPierce||s.spell?.source?.runeBonus?.wallPierce)?null:terrainHit(ax,ay,s.x,s.y),bx=wall?wall.x:s.x,by=wall?wall.y:s.y;
+ if(s.kind==='spell'){if(s.spell.owner.hp<=0||s.spell.owner.gearRevision!==s.spell.revision){s.life=0;continue}const targets=enemies.filter(e=>e.hp>0&&!s.hitSet?.has(e)&&segmentDistance(e.x,e.y-12,ax,ay,bx,by)<8).sort((a,b)=>Math.hypot(a.x-ax,a.y-12-ay)-Math.hypot(b.x-ax,b.y-12-ay));for(const target of targets){if(s.piercing){s.hitSet.add(target);applyWeaponEffect(target,s.spell);}else{spellImpact(s.spell,target.x,target.y-12);s.life=0;break;}}if(wall&&s.life>0){if(s.small&&wall.y===floor(wall.x)){s.x=wall.x;s.y=wall.y-1;if(s.bounces>0){s.bounces--;s.vy=-Math.abs(s.vy)*.6;}else{spellImpact(s.spell,s.x,s.y-7);s.life=0;}}else s.life=0;}continue}
  if(s.kind==='note'){
   const owner=s.attack.owner;
   if(owner.hp<=0||owner.gearRevision!==s.attack.revision){s.life=0;continue}
@@ -574,13 +574,13 @@ function abilityDamage(h,kind,spellAT=null,source=null){
  return Math.max(1,Math.round(base+roll(e.min,e.max)*(h.abilityPower||1)*(w?.ability?.power||1)));
 }
 function weaponSpell(h,target,kind,spellAT,source){
- const w=ITEMS[h.weapon],a=w.ability,e=EFFECTS[kind],origin=source||h;
+ const w=ITEMS[h.weapon],a=w.ability,e=EFFECTS[kind],bow=h.classId===2,origin=bow?target:source||h;
  const total=kind==='fire'?roll(w.burnMin||4,w.burnMax||6):kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1)*a.power)):abilityDamage(h,kind,spellAT,source);
  const payload={kind,amount:total,source,owner:h,weapon:w.id,revision:h.gearRevision,poisonDuration:w.poisonDuration,radius:a.radius,freeze:controlDuration(h,.7),stun:controlDuration(h,.6)};
  const impact=(x,y,radius=a.radius)=>spellImpact({...payload,radius},x,y);
  if(kind==='lightning'&&a.mode==='repeat'){fields.push({repeat:true,source,owner:h,revision:h.gearRevision,target,elapsed:0,pulses:0,count:a.count,life:1,spell:{...payload,amount:Math.max(1,Math.round(total*.4))}});return}
  if(kind==='lightning'&&a.mode==='fork'){
-  const face=Math.sign(target.x-origin.x)||1,chosen=[target,...enemies.filter(v=>v!==target&&v.hp>0&&(v.x-target.x)*face>=0&&Math.hypot(v.x-target.x,v.y-target.y)<=130&&!terrainHit(target.x,target.y-12,v.x,v.y-12)).sort((a,b)=>Math.abs(a.x-target.x)-Math.abs(b.x-target.x)).slice(0,2)];
+  const face=Math.sign(target.x-(bow?h.x:origin.x))||1,chosen=[target,...enemies.filter(v=>v!==target&&v.hp>0&&(v.x-target.x)*face>=0&&Math.hypot(v.x-target.x,v.y-target.y)<=130&&!terrainHit(target.x,target.y-12,v.x,v.y-12)).sort((a,b)=>Math.abs(a.x-target.x)-Math.abs(b.x-target.x)).slice(0,2)];
   if(!source?.runeBonus?.wallPierce&&terrainHit(origin.x,origin.y-12,target.x,target.y-12))return;
   for(const v of chosen){applyWeaponEffect(v,payload);flashes.push({x:v===target?origin.x:target.x,y:v===target?origin.y-12:target.y-12,tx:v.x,ty:v.y-12,color:e.color,life:.25});}return;
  }
@@ -593,7 +593,16 @@ function weaponSpell(h,target,kind,spellAT,source){
  }
  if(a.mode==='eruption'||a.mode==='trail'){
   const count=a.mode==='trail'?(a.count||3):1;
-  for(let i=0;i<count;i++){const x=a.mode==='trail'?origin.x+(target.x-origin.x)*(i+1)/count:target.x;fields.push({x,y:floor(x)-8,life:1.2,elapsed:0,pulses:0,spell:{...payload,amount:total,radius:a.radius},color:e.color});}return;
+  for(let i=0;i<count;i++){const x=a.mode==='trail'?(bow?target.x+(i-(count-1)/2)*24:origin.x+(target.x-origin.x)*(i+1)/count):target.x;fields.push({x,y:floor(x)-8,life:1.2,elapsed:0,pulses:0,spell:{...payload,amount:total,radius:a.radius},color:e.color});}return;
+ }
+ if(bow){
+  if(kind==='poison'&&a.mode==='bolt'){if(target.hp>0)applyWeaponEffect(target,payload);return;}
+  if(kind!=='fire'&&target.hp>0)applyWeaponEffect(target,payload);
+  const count=a.mode==='fan'?(kind==='fire'?5:a.count||3):1,face=Math.sign(target.x-h.x)||h.face||1;
+  for(let i=0;i<count;i++){
+   const spread=i-(count-1)/2,fire=kind==='fire';
+   shots.push({x:target.x,y:target.y-13,vx:fire?(count===1?face*70:spread*42):face*145,vy:fire?-95-Math.abs(spread)*8:spread*35,gravity:fire?220:0,life:fire?2.5:2,age:0,originTarget:target,ignoreOriginUntil:fire?.2:Infinity,bounces:fire?1:0,small:fire,kind:'spell',piercing:a.mode==='piercing',hitSet:new Set([target]),color:e.color,spell:{...payload,amount:total}});
+  }return;
  }
  const count=a.mode==='fan'?(a.count||3):1;
  for(let i=0;i<count;i++){const angle=Math.atan2(target.y-12-(origin.y-13),target.x-origin.x)+(i-(count-1)/2)*.22;shots.push({x:origin.x,y:origin.y-13,vx:Math.cos(angle)*145,vy:Math.sin(angle)*145,life:3,kind:'spell',piercing:a.mode==='piercing',hitSet:new Set(),color:e.color,spell:{...payload,amount:total}});}
@@ -621,7 +630,7 @@ function activate(h,target,kind,spellAT=null,source=null){source=source||h;sfx('
   const chosen=tier===2?weakest.slice(0,1):tier===4?weakest.slice(0,2):allies.filter(v=>Math.hypot(v.x-center.x,v.y-center.y)<(tier===6?160:75));
   for(const v of chosen){const amount=Math.round((tier===2?28:tier===4?20:14)*(1+(tier-1)*.3));v.hp=Math.min(v.maxHp,v.hp+amount);flashes.push({x:origin.x,y:origin.y-12,tx:v.x,ty:v.y-12,color:EFFECTS.heal.color,life:.35});}return;
  }
-if(ITEMS[h.weapon]?.ability){weaponSpell(h,target,kind,spellAT,source);return}if(['guard','cleanse','crescendo','restore'].includes(kind)){h.nextNote=kind==='guard'?{barrier:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))}:kind==='cleanse'?{cleanse:true,heal:Math.round(4*((ITEMS[h.weapon]?.supportPower||1)-1))}:kind==='crescendo'?{power:1.5+.1*((ITEMS[h.weapon]?.tier||1)-1)}:{heal:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))};return}const e=EFFECTS[kind],power=h.abilityPower*.65,amount=()=>kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1))):kind==='heal'?Math.max(1,Math.round(roll(e.min,e.max)*power)):abilityDamage(h,kind,spellAT,source);flashes.push({x:h.x,y:h.y-18,tx:target.x,ty:target.y-10,color:e.color,life:.35,kind});
+if(ITEMS[h.weapon]?.ability){weaponSpell(h,target,kind,spellAT,source);return}if(['guard','cleanse','crescendo','restore'].includes(kind)){h.nextNote=kind==='guard'?{barrier:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))}:kind==='cleanse'?{cleanse:true,heal:Math.round(4*((ITEMS[h.weapon]?.supportPower||1)-1))}:kind==='crescendo'?{power:1.5+.1*((ITEMS[h.weapon]?.tier||1)-1)}:{heal:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))};return}const e=EFFECTS[kind],power=h.abilityPower*.65,amount=()=>kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1))):kind==='heal'?Math.max(1,Math.round(roll(e.min,e.max)*power)):abilityDamage(h,kind,spellAT,source);flashes.push({x:h.classId===2?target.x:h.x,y:h.classId===2?target.y-18:h.y-18,tx:target.x,ty:target.y-10,color:e.color,life:.35,kind});
  const radius=ITEMS[h.weapon]?.spellRadius||45;const near=enemies.filter(v=>v.hp>0&&(h.classId===3?Math.hypot(v.x-target.x,v.y-target.y)<=radius&&!terrainHit(target.x,target.y-12,v.x,v.y-12):Math.abs(v.x-target.x)<45));if(h.classId===3&&['ice','slow','stun'].includes(kind))blasts.push({x:target.x,y:target.y-12,radius,life:.4,color:e.color,kind});
  if(kind==='fire'){spawnFlame({source,owner:h,weapon:h.weapon,revision:h.gearRevision,radius:ITEMS[h.weapon]?.spellRadius||30},target.x,floor(target.x)-8);}
  if(kind==='ice'){for(const v of near){damage(v,amount(),'ice',true,false,source);const duration=controlDuration(h,.7)*(v.type==='boss'?.2:1);v.frozen=Math.max(v.frozen||0,duration);}}
@@ -1030,7 +1039,7 @@ function drawNumbers(){
 }
 function drawSpellProjectile(s){
  const kind=s.spell?.kind||ITEMS[s.attack?.weapon]?.effect||'magic',color=EFFECTS[kind]?.color||'#d3c5ff',angle=Math.atan2(s.vy,s.vx);
- ctx.save();ctx.translate(s.x,s.y);ctx.rotate(angle);ctx.strokeStyle=color;ctx.fillStyle=color;
+ ctx.save();ctx.translate(s.x,s.y);ctx.rotate(angle);if(s.small)ctx.scale(.6,.6);ctx.strokeStyle=color;ctx.fillStyle=color;
  if(kind==='ice'||kind==='slow'){ctx.beginPath();ctx.moveTo(8,0);ctx.lineTo(-4,-4);ctx.lineTo(-1,0);ctx.lineTo(-4,4);ctx.closePath();ctx.fill();line(ctx,[[-9,0],[-3,0]],'#d7f8ff');}
  else if(kind==='lightning')line(ctx,[[-11,0],[-4,-3],[-1,2],[7,-2],[12,0]],color);
  else if(kind==='poison'){line(ctx,[[-9,0],[5,0],[1,-3],[5,0],[1,3]],color);}

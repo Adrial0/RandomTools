@@ -194,5 +194,9 @@ for(const w of Object.values(items))if(w.type==='weapon'&&w.classId===3){
  if(['ice','slow','stun','fire'].includes(w.effect)){w.spellRadius=w.effect==='fire'?32+(w.tier-1)*7:52+(w.tier-1)*6;if(w.ability)w.ability.radius=w.spellRadius;}
  if(w.effect==='ice'&&w.tier===1)w.abilityDescription='Ice shard bursts into a frost nova.';
 }
+for(const w of Object.values(items))if(w.type==='weapon'&&w.classId===2&&w.effect==='fire'&&w.ability){
+ const text={bolt:'A small fireball bounces from the hit.',fan:'Five small fireballs bounce from the hit.',trail:'Flames spread around the hit.',ring:'Flames burst around the hit.',eruption:'Flame erupts beneath the target.'}[w.ability.mode];
+ if(text)w.abilityDescription=text+' '+w.burnMin+'–'+w.burnMax+' AT · Burn 5% · 2s.';
+}
 globalThis.BrambleGear={items,effects,descriptions};
 })();
