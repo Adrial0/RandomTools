@@ -622,3 +622,12 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  r.ENEMY_TYPES.sporecap.poisonDamage=[3,3];r.fireEnemyAttack(e,h,e.attackProfile);assert.equal(r.get().hazards[0].poisonAmount,3,'Per-species poison tuning');
  console.log('Early enemy poison is 1–2 per tick (30–60 DPS), independent of AT and tunable per species.');
 }
+
+{
+ const run=harness(),r=run.t;r.start();r.setParty([3,0,0,0]);const h=r.get().heroes[0];h.weapon='3-ice';r.stats(h);h.x=50;h.y=200;r.get().enemies.length=0;
+ for(const x of [100,150,160]){const e=r.enemy('slime',x);e.y=200;e.hp=1000;r.get().enemies.push(e);}const [target,inside,outside]=r.get().enemies;r.activate(h,target,'ice');assert.ok(inside.hp<1000);assert.equal(outside.hp,1000);assert.equal(r.get().blasts[0].radius,52);assert.ok(target.frozen>0);r.draw();
+ assert.equal(r.items['3-ice-t6'].spellRadius,82);assert.equal(r.items['3-fire-t6'].spellRadius,67);
+ for(const id of ['3-fire','3-poison','3-ice','3-lightning']){h.weapon=id;r.stats(h);r.shoot(h,target,'magic',20,r.attackToken(h));r.draw();}
+ assert.equal(r.items['3-poison-t2'].ability.radius,0,'Poison stays focused');
+ console.log('Mage frost nova hits within its visible radius, late AoE grows gradually, distinct projectile renderers run, and poison stays focused.');
+}

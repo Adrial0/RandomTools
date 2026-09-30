@@ -190,5 +190,9 @@ for(let tier=1;tier<=6;tier++)for(const type of ['rune','gem']){
  stock.forEach((w,i)=>w.sourceArea=(tier-1)*21+Math.floor(i*18/Math.max(1,stock.length-1)));
 }
 for(const w of Object.values(items))if(w.type==='weapon'&&w.effect==='poison')w.poisonDuration=Math.min(1,Math.max(.3,Math.floor(((w.agi[0]+w.agi[1])/2)/32*10)/10));
+for(const w of Object.values(items))if(w.type==='weapon'&&w.classId===3){
+ if(['ice','slow','stun','fire'].includes(w.effect)){w.spellRadius=w.effect==='fire'?32+(w.tier-1)*7:52+(w.tier-1)*6;if(w.ability)w.ability.radius=w.spellRadius;}
+ if(w.effect==='ice'&&w.tier===1)w.abilityDescription='Ice shard bursts into a frost nova.';
+}
 globalThis.BrambleGear={items,effects,descriptions};
 })();
