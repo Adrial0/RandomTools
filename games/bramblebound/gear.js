@@ -5,7 +5,7 @@ const effects={
  cleanse:{name:'Cleansing tune',mp:12,min:0,max:0,color:'#8bd9bd',description:'Next notes remove burn, poison, freeze and slow from allies.'},
  crescendo:{name:'Crescendo',mp:14,min:0,max:0,color:'#e7a46d',description:'Next notes have 50% stronger effects.'},
  restore:{name:'Restoring chord',mp:14,min:0,max:0,color:'#bce69c',description:'Next notes heal allies for 12 HP.'},
- fire:{name:'Flame burst',mp:10,min:1,max:3,count:10,time:1,color:'#ff763c',description:'10 embers over 1 second; nearby grounded enemies burn.'},
+ fire:{name:'Flame burst',mp:10,min:1,max:3,count:10,time:1,color:'#ff763c',description:'Lingering flames. Each flame rolls burn independently.'},
  lightning:{name:'Chain lightning',mp:10,min:1,max:7,count:3,time:0,color:'#fff36a',description:'Lightning jumps to up to 3 nearby enemies.'},
  ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freezes nearby enemies.'},
  slow:{name:'Chill burst',mp:12,min:3,max:5,count:1,time:2,slow:.2,color:'#9db3e9',description:'Slow 20% for 2s.'},
@@ -153,6 +153,20 @@ const bossWeapons=[
 bossWeapons.forEach(([base,name,effect,mode,radius,power,description],z)=>{
  const id='boss-weapon-'+z,original=items[base];items[id]={...original,id,name,tier:z+1,level:z+1,retired:false,exclusiveBoss:z,priceIndex:original.priceIndex,effect,color:effects[effect].color,ability:{mode,radius,power,count:5},abilityDescription:description};
 });
+// Element identities: lingering fire, focused poison and precise lightning.
+for(const w of Object.values(items).filter(w=>w.type==='weapon'&&!w.retired)){
+ if(w.effect==='fire'){
+  w.burnChance=.05;w.burnMin=Math.round(4*(1+(w.tier-1)*.35));w.burnMax=Math.round(6*(1+(w.tier-1)*.35));w.flameDuration=2;
+  if(w.ability?.mode==='chain')w.ability={...w.ability,mode:'fan',count:3};
+  w.abilityDescription=(w.ability?({eruption:'Flame erupts beneath the target.',bolt:'Fireball leaves a flame.',fan:'Three fireballs leave flames.',trail:'Three flames along the ground.',ring:'Flames surround the wielder.',burst:'Flame burst.'}[w.ability.mode]||'Leaves flames.'):'Leaves a flame beneath the target.')+' '+w.burnMin+'–'+w.burnMax+' AT · Burn 5% · 2s.';
+ }
+ if(w.effect==='poison'&&w.ability){w.ability={...w.ability,mode:w.tier%3===0?'fan':'bolt',count:w.tier%3===0?3:1,radius:0};w.abilityDescription=w.ability.mode==='fan'?'Three poison darts.':'Single poison dart.';}
+ if(w.effect==='lightning'){
+  const mode=w.exclusiveBoss!=null?(w.classId===2?'chain':'fork'):['chain','fork','piercing','chain','fork','repeat'][(w.tier-1+w.classId%3)%6];
+  w.ability={mode,count:mode==='repeat'?4:3,radius:0,power:w.ability?.power||1};
+  w.abilityDescription={chain:'Lightning jumps to three enemies.',fork:'Lightning splits toward two enemies behind the target.',piercing:'A narrow piercing lightning bolt.',repeat:'Four weaker lightning strikes on one enemy.'}[mode];
+ }
+}
 const bossSouls=[
  ['Colossus Soul',{damageBonus:.5,hpBonus:-.5},'+50% AT, −50% maximum HP.',[0,1,5]],
  ['Prism Soul',{wallPierce:1},'Projectiles pass through terrain.',[2,3,6,7]],

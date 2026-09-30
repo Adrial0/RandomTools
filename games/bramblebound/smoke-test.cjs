@@ -45,7 +45,7 @@ const old={area:3,gold:99,inventory:[1,2],heroes:[0,2,3,4].map(classId=>({classI
 const isolated=harness().t;isolated.start();let fighter=isolated.get().heroes[0];isolated.setItem(0,'0-steel-t6');assert.equal(isolated.equip(0),false);assert.equal(fighter.weapon,'0-basic');assert.equal(isolated.get().inventory[0],'0-steel-t6');
 isolated.setItem(1,'0-fire');isolated.equip(1);let dummy=isolated.get().enemies[0];dummy.hp=dummy.maxHp=10000;isolated.basicHit(dummy,1,isolated.attackToken(fighter));assert.equal(fighter.mp,0);
 // Ten fire pulses regardless of coarse simulation steps, without proc recursion.
-isolated.activate(fighter,dummy,'fire');let field=isolated.get().fields[0];const fireStart=dummy.hp,fireAmount=field.amount;for(let i=0;i<11;i++)isolated.tickEffects(.1);assert.equal(dummy.hp,fireStart-fireAmount*10);assert.equal(fighter.mp,0);assert.equal(isolated.get().fields.length,0);
+isolated.activate(fighter,dummy,'fire');let field=isolated.get().fields[0];const fireStart=dummy.hp;field.chance=1;field.min=field.max=4;for(let i=0;i<21;i++)isolated.tickEffects(.1);assert.equal(dummy.hp,fireStart-240);assert.equal(fighter.mp,0);assert.equal(isolated.get().fields.length,0);
 // A launched projectile earns nothing until it actually lands.
 fighter.attributes.int=2;isolated.stats(fighter);dummy.x=fighter.x+100;dummy.y=fighter.y;isolated.get().heroes.forEach(h=>h.cooldown=10);isolated.get().enemies.forEach(e=>e.cooldown=10);isolated.shoot(fighter,dummy,'arrow',1,isolated.attackToken(fighter));isolated.update(.01);assert.equal(fighter.mp,0);for(let i=0;i<80;i++)isolated.tickShots(.01);assert.equal(fighter.mp,2);
 // Cancelling an attack because the victim was already dead yields no MP.
@@ -238,7 +238,7 @@ tu.setArea(0);const heldBase={...hurt,x:100,y:100,vx:0,vy:0,dragTarget:{x:400,y:
 console.log('Steeper XP curve, fast drag response, red incoming damage and regional socket-drop caps pass.');
 const icons=harness().t;for(const w of Object.values(icons.items))icons.drawItemIcon(context,w);
 console.log('Timed individual summons, INT casting speed, death-independent cycle, expiry, weapon cleanup and shared item drawing pass.');
-{const test=harness(),r=test.t;r.start();r.setParty([3,0,0,0]);const mage=r.get().heroes[0],target=r.get().enemies[0];r.get().enemies.forEach(e=>e.hp=0);target.hp=10000;target.x=80;target.y=226;mage.x=60;mage.y=226;mage.weapon='3-fire';r.stats(mage);const base=mage.atMin;mage.attributes.int=10;mage.mp=8;r.stats(mage);assert.equal(mage.atMin,base+10);assert.equal(mage.mp,0);assert.equal(r.manaPercent(mage),0);for(let i=0;i<2;i++){r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12)}assert.equal(r.get().fields.length,2,'Each mage spell activates its weapon effect');assert.ok(r.get().fields[0].amount>=31&&r.get().fields[0].amount<=33,'Each fire pulse adds bonus AT');assert.equal(mage.mp,0);mage.weapon='3-ice';r.stats(mage);const before=target.hp;r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12);assert.ok(before-target.hp>=33&&before-target.hp<=35);assert.ok(target.frozen>0);r.inspect('3-ice');assert.ok(!test.elements.get('#item-details').textContent.includes('MP'));r.select(0);assert.equal(test.elements.get('.mp-bar').hidden,true);console.log('Mage casts every attack, INT AT scaling, zero MP and effect damage pass.');}
+{const test=harness(),r=test.t;r.start();r.setParty([3,0,0,0]);const mage=r.get().heroes[0],target=r.get().enemies[0];r.get().enemies.forEach(e=>e.hp=0);target.hp=10000;target.x=80;target.y=226;mage.x=60;mage.y=226;mage.weapon='3-fire';r.stats(mage);const base=mage.atMin;mage.attributes.int=10;mage.mp=8;r.stats(mage);assert.equal(mage.atMin,base+10);assert.equal(mage.mp,0);assert.equal(r.manaPercent(mage),0);for(let i=0;i<2;i++){r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12)}assert.equal(r.get().fields.length,2,'Each mage spell activates its weapon effect');assert.equal(r.get().fields[0].min,4);assert.equal(r.get().fields[0].max,6);assert.equal(r.get().fields[0].chance,.05);assert.equal(mage.mp,0);mage.weapon='3-ice';r.stats(mage);const before=target.hp;r.shoot(mage,target,'magic',30,r.attackToken(mage));r.tickShots(.12);assert.ok(before-target.hp>=33&&before-target.hp<=35);assert.ok(target.frozen>0);r.inspect('3-ice');assert.ok(!test.elements.get('#item-details').textContent.includes('MP'));r.select(0);assert.equal(test.elements.get('.mp-bar').hidden,true);console.log('Mage casts every attack, INT AT scaling, zero MP and effect damage pass.');}
 {const opening=harness().t;opening.start();opening.setParty([7,0,0,0]);const h=opening.get().heroes[0];h.weapon='7-heavy';opening.stats(h);opening.enter();for(let i=0;i<99;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,0);opening.tickMinions(.02);assert.equal(opening.get().minions.length,1);assert.equal(h.firstSummon,false);for(let i=0;i<900;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,1);for(let i=0;i<101;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,2);h.gearRevision++;opening.tickMinions(.01);assert.equal(h.firstSummon,false);assert.equal(opening.get().minions.length,0);opening.enter();for(let i=0;i<101;i++)opening.tickMinions(.01);assert.equal(opening.get().minions.length,1);console.log('One-second opening cast, normal later casts and reset only on scene entry pass.');}
 {const summonMotionTest=harness().t;summonMotionTest.start();summonMotionTest.setParty([7,0,0,0]);summonMotionTest.enter();assert.equal(summonMotionTest.summonInterval(summonMotionTest.get().heroes[0]),5);for(let i=0;i<510;i++)summonMotionTest.tickMinions(.01);const fighter=summonMotionTest.get().minions[0],enemyTarget=summonMotionTest.get().enemies[0];summonMotionTest.get().enemies.forEach(e=>e.hp=0);enemyTarget.hp=enemyTarget.maxHp=1000;enemyTarget.x=fighter.x+10;enemyTarget.y=fighter.y;fighter.cooldown=0;summonMotionTest.tickMinions(.01);assert.ok(fighter.attack);assert.equal(enemyTarget.hp,1000,'Wind-up does not deal immediate damage');summonMotionTest.draw();summonMotionTest.tickMinions(.13);assert.ok(enemyTarget.hp<1000,'Melee contact deals damage');const afterHit=enemyTarget.hp;summonMotionTest.tickMinions(.05);assert.equal(enemyTarget.hp,afterHit,'Recovery does not hit twice');summonMotionTest.tickMinions(.3);fighter.cooldown=0;summonMotionTest.tickMinions(.01);assert.ok(fighter.attack);enemyTarget.x+=100;summonMotionTest.tickMinions(.13);assert.equal(enemyTarget.hp,afterHit,'An enemy leaving reach during wind-up avoids the hit');summonMotionTest.draw();console.log('Summon attack wind-up, contact timing, single-hit recovery and dodging pass.');
 }
@@ -377,7 +377,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
   h.weapon=tier===1?'0-fire':'0-fire-t'+tier;r.stats(h);r.get().shots.length=0;r.get().fields.length=0;
   const before=foe.hp;r.activate(h,foe,'fire');signatures.add(r.items[h.weapon].ability?.mode||'burn');
   for(let i=0;i<150;i++){r.tickShots(.01);r.tickEffects(.01)}assert.ok(foe.hp<before,'Each fire-tier ability deals damage');r.draw();
- }assert.equal(signatures.size,6);
+ }assert.equal(signatures.size,5);
  h.weapon='0-fire-t3';r.stats(h);r.activate(h,foe,'fire');const hp=foe.hp;h.gearRevision++;for(let i=0;i<150;i++)r.tickShots(.01);assert.equal(foe.hp,hp,'Unequipping cancels pending ability shots');
  for(let tier=1;tier<=6;tier++)assert.equal(r.items[tier===1?'2-basic':'2-basic-t'+tier].arrows,tier);
  console.log('Curated six-tier class catalogues, Lowlands shop, unique fire patterns, actual spell damage, stale-shot cancellation and bow arrow progression pass.');
@@ -552,8 +552,8 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 {
  const run=harness(),r=run.t;r.start();run.math.random=()=>0;const h=r.get().heroes[0],target=r.get().enemies[0];target.hp=100000;target.x=h.x+10;target.y=h.y;h.atMin=h.atMax=100;
  h.weapon='0-ice';r.activate(h,target,'ice');assert.equal(target.hp,99897,'Ice adds 3 bonus AT to 100 character AT');
- h.weapon='0-fire';r.activate(h,target,'fire');assert.equal(r.get().fields.at(-1).amount,101,'Each flame uses AT plus bonus');r.get().fields.length=0;
- h.weapon='0-fire-t2';r.activate(h,target,'fire');const field=r.get().fields.at(-1);assert.equal(field.spell.amount,101,'Tier multiplier applies to bonus, not character AT');
+ h.weapon='0-fire';r.activate(h,target,'fire');assert.equal(r.get().fields.at(-1).min,4,'Flames use bonus AT alone');r.get().fields.length=0;
+ h.weapon='0-fire-t2';r.activate(h,target,'fire');const field=r.get().fields.at(-1);assert.equal(field.spell.kind,'fire');r.tickEffects(.31);assert.ok(r.get().fields.some(f=>f.burn&&f.min===5));
  h.weapon='3-lightning';r.activate(h,target,'lightning',200);assert.equal(target.hp,99696,'Provided mage AT receives bonus once');
  console.log('Weapon abilities add bonus AT to character AT, including fire pulses and mage casts.');
 }
@@ -589,4 +589,20 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  h.weapon='1-fire';h.mp=0;r.stats(h);h.attributes.int=1;r.stats(h);const foe=r.get().enemies[0];foe.hp=10000;r.basicHit(foe,1,r.attackToken(h));assert.equal(h.mp,1);
  r.startTown();for(const id of ['0-basic','0-fire','rune-ward','gem-ruby-1','rune-knockback-5']){r.setItem(0,id);r.setGold(0);r.setPicked({type:'bag',index:0});assert.ok(r.sellItem());assert.equal(r.get().gold,Math.floor(r.buyPrice(r.items[id])*.1));}
  console.log('Rogue STR crit is separate from INT MP; weapon, rune and gem sales pay ten percent of buy price.');
+}
+
+{
+ const run=harness(),r=run.t;r.start();run.math.random=()=>0;
+ function setup(w){r.setParty([w.classId,0,0,0]);r.setArea(0);r.setStage(0);r.enter();const h=r.get().heroes[0];h.weapon=w.id;h.level=99;r.stats(h);h.x=50;h.y=200;r.get().enemies.length=0;for(const x of [90,130,170,210]){const e=r.enemy('slime',x);e.y=200;e.hp=10000;r.get().enemies.push(e);}return h;}
+ for(const mode of ['chain','fork','piercing','repeat']){
+  const w=Object.values(r.items).find(w=>w.type==='weapon'&&!w.retired&&w.effect==='lightning'&&w.ability.mode===mode);assert.ok(w);const h=setup(w),foes=r.get().enemies;r.activate(h,foes[0],'lightning');
+  for(let i=0;i<150;i++){r.tickShots(.01);r.tickEffects(.01);}
+  assert.equal(foes.filter(e=>e.hp<10000).length,mode==='repeat'?1:mode==='piercing'?4:3,mode+' target pattern');assert.ok(foes.every(e=>!e.stun),'Lightning never stuns');
+ }
+ const bow=r.items['2-poison-t2'],h=setup(bow),foes=r.get().enemies;foes[1].x=foes[0].x;r.activate(h,foes[0],'poison');for(let i=0;i<60;i++)r.tickShots(.01);assert.equal(foes.filter(e=>e.poison).length,1,'Poison dart has no splash');
+ for(const w of Object.values(r.items).filter(w=>w.type==='weapon'&&!w.retired&&w.effect==='poison'&&w.ability)){assert.ok(['bolt','fan'].includes(w.ability.mode));assert.equal(w.ability.radius,0);}
+ const fire=r.items['2-fire'],caster=setup(fire),target=r.get().enemies[0];target.x=90;target.y=200;r.activate(caster,target,'fire');r.activate(caster,target,'fire');const flames=r.get().fields;for(const f of flames){f.x=90;f.y=188;f.min=f.max=5;f.chance=1;}r.tickEffects(1);assert.equal(target.hp,9700,'Two flames roll independently 30 times each');assert.equal(r.get().numbers.length,0,'Burn damage stays silent');
+ r.tickEffects(1);assert.equal(target.hp,9400);assert.equal(r.get().fields.length,0,'Flames expire after two seconds');
+ r.activate(caster,target,'fire');const before=target.hp;run.math.random=()=>.06;r.tickEffects(2);assert.equal(target.hp,before,'Burn chance can fail');
+ console.log('Focused poison, lightning chain/fork/piercing/repeat, no stun, independent fixed-rate flame rolls and expiry pass.');
 }
