@@ -533,7 +533,7 @@ function basicAmount(h){return Math.max(1,Math.round((roll(h.atMin,h.atMax)+aura
 function attackToken(h){return {owner:h,weapon:h.weapon,revision:h.gearRevision,charged:false}}
 function basicHit(target,amount,attack){if(target.hp<=0)return;const before=target.hp;damage(target,amount,['aura','note'].includes(attack?.owner?.kind)?'magic':'physical',true,false,attack?.owner);const owner=attack?.owner;if(owner?.hp>0&&owner.gearRevision===attack.revision)owner.hp=Math.min(owner.maxHp,owner.hp+(before-target.hp)*owner.runeBonus.lifesteal+(owner.classId===5?owner.dex*.5:0));if(!attack||attack.charged||[3,7].includes(owner?.classId))return;attack.charged=true;const h=attack.owner,w=ITEMS[attack.weapon],effect=EFFECTS[w?.effect];if(!effect||h.hp<=0||h.weapon!==attack.weapon||h.gearRevision!==attack.revision)return;h.mp+=h.int;if(h.mp>=mpCost(w)){h.mp=0;activate(h,target,w.effect)}save()}
 function controlDuration(h,base){return Math.max(.06,Math.min(base,base*((ITEMS[h.weapon]?.agi||[25,35]).reduce((sum,n)=>sum+n,0)/2)/85))}
-function effectText(w){const e=EFFECTS[w?.effect];if(!e)return '';return w.abilityDescription?(w.abilityDescription+(w.effect==='ice'?' Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':'')):w.effect==='ice'?'Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':e.description}
+function effectText(w){const e=EFFECTS[w?.effect];if(!e)return '';if(w.effect==='poison')return (w.abilityDescription?w.abilityDescription+' ':'')+'Poison '+w.poisonDuration+'s. Bonus AT per tick, 30 ticks/s.';return w.abilityDescription?(w.abilityDescription+(w.effect==='ice'?' Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':'')):w.effect==='ice'?'Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':e.description}
 function slowFactor(e){return e.slow>0?1-(e.slowAmount??.4):1}
 function abilityDamage(h,kind,spellAT=null,source=null){
  const e=EFFECTS[kind],w=ITEMS[h.weapon],origin=source||h;
@@ -543,7 +543,7 @@ function abilityDamage(h,kind,spellAT=null,source=null){
 function weaponSpell(h,target,kind,spellAT,source){
  const w=ITEMS[h.weapon],a=w.ability,e=EFFECTS[kind],origin=source||h;
  const total=kind==='fire'?roll(w.burnMin||4,w.burnMax||6):kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1)*a.power)):abilityDamage(h,kind,spellAT,source);
- const payload={kind,amount:total,source,owner:h,weapon:w.id,revision:h.gearRevision,radius:a.radius,freeze:controlDuration(h,.7),stun:controlDuration(h,.6)};
+ const payload={kind,amount:total,source,owner:h,weapon:w.id,revision:h.gearRevision,poisonDuration:w.poisonDuration,radius:a.radius,freeze:controlDuration(h,.7),stun:controlDuration(h,.6)};
  const impact=(x,y,radius=a.radius)=>spellImpact({...payload,radius},x,y);
  if(kind==='lightning'&&a.mode==='repeat'){fields.push({repeat:true,source,owner:h,revision:h.gearRevision,target,elapsed:0,pulses:0,count:a.count,life:1,spell:{...payload,amount:Math.max(1,Math.round(total*.4))}});return}
  if(kind==='lightning'&&a.mode==='fork'){
@@ -567,7 +567,7 @@ function weaponSpell(h,target,kind,spellAT,source){
 }
 function applyWeaponEffect(target,p){
  const kind=p.kind,physical=['cleave','pierce','stun'].includes(kind),element=physical?'physical':kind==='slow'?'ice':kind==='drain'?'magic':kind;
- if(kind==='poison'){applyPoison(target,p.amount,4,p.source);return}
+ if(kind==='poison'){applyPoison(target,p.amount,p.poisonDuration||ITEMS[p.weapon]?.poisonDuration||1,p.source);return}
  const before=target.hp;damage(target,p.amount,element,true,false,p.source);
  if(kind==='ice')target.frozen=Math.max(target.frozen||0,p.freeze*(target.type==='boss'?.2:1));
  if(kind==='slow'){target.slow=Math.max(target.slow||0,2);target.slowAmount=.2*(target.type==='boss'?.3:1)}
@@ -593,7 +593,7 @@ if(ITEMS[h.weapon]?.ability){weaponSpell(h,target,kind,spellAT,source);return}if
  if(kind==='fire'){spawnFlame({source,owner:h,weapon:h.weapon,revision:h.gearRevision,radius:30},target.x,floor(target.x)-8);}
  if(kind==='ice'){for(const v of near){damage(v,amount(),'ice',true,false,source);const duration=controlDuration(h,.7)*(v.type==='boss'?.2:1);v.frozen=Math.max(v.frozen||0,duration);}}
  if(kind==='slow'){for(const v of near){damage(v,amount(),'ice',true,false,source);v.slow=Math.max(v.slow||0,e.time);v.slowAmount=e.slow*(v.type==='boss'?.3:1)}}
- if(kind==='poison'){if(target.hp>0){applyPoison(target,amount(),4,source);}}
+ if(kind==='poison'){if(target.hp>0){applyPoison(target,amount(),ITEMS[h.weapon]?.poisonDuration||1,source);}}
  if(kind==='lightning'){enemies.filter(v=>v.hp>0&&Math.abs(v.x-target.x)<130).sort((a,b)=>Math.abs(a.x-target.x)-Math.abs(b.x-target.x)).slice(0,3).forEach(v=>{damage(v,amount(),'lightning',true,false,source);flashes.push({x:target.x,y:target.y-15,tx:v.x,ty:v.y-12,color:e.color,life:.35,kind})})}
  if(kind==='heal'){heroes.filter(v=>v.hp>0).forEach(v=>{const n=Math.min(v.maxHp-v.hp,amount());v.hp+=n;float(v.x,v.y-25,'+'+n,e.color)})}
  if(kind==='drain'&&target.hp>0){const n=Math.min(target.hp,amount());damage(target,n,'magic',true,false,source);h.hp=Math.min(h.maxHp,h.hp+n);float(h.x,h.y-25,'+'+n,e.color)}

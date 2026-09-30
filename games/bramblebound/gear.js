@@ -9,7 +9,7 @@ const effects={
  lightning:{name:'Chain lightning',mp:10,min:1,max:7,count:3,time:0,color:'#fff36a',description:'Lightning jumps to up to 3 nearby enemies.'},
  ice:{name:'Frost burst',mp:12,min:3,max:5,count:1,time:2,color:'#79cfff',description:'Freezes nearby enemies.'},
  slow:{name:'Chill burst',mp:12,min:3,max:5,count:1,time:2,slow:.2,color:'#9db3e9',description:'Slow 20% for 2s.'},
- poison:{name:'Poison strike',mp:10,min:2,max:3,count:1,time:4,color:'#76ef66',description:'Poison for 4s. Bonus AT per tick, 30 ticks/s.'},
+ poison:{name:'Poison strike',mp:10,min:2,max:3,count:1,time:4,color:'#76ef66',description:'Bonus AT per tick, 30 ticks/s.'},
  heal:{name:'Healing bloom',mp:12,min:12,max:18,count:1,time:0,color:'#6fffb6',description:'Restores health to every living party member.'},
  drain:{name:'Life drain',mp:14,min:9,max:14,count:1,time:0,color:'#e783e3',description:'Deals bonus damage and returns that damage as health.'},
  stun:{name:'Shockwave',mp:10,min:5,max:9,count:1,time:1.2,color:'#ffdca0',description:'Stuns nearby enemies.'}
@@ -189,5 +189,6 @@ for(let tier=1;tier<=6;tier++)for(const type of ['rune','gem']){
  const stock=Object.values(items).filter(w=>w.type===type&&w.tier===tier);
  stock.forEach((w,i)=>w.sourceArea=(tier-1)*21+Math.floor(i*18/Math.max(1,stock.length-1)));
 }
+for(const w of Object.values(items))if(w.type==='weapon'&&w.effect==='poison')w.poisonDuration=Math.min(1,Math.max(.3,Math.floor(((w.agi[0]+w.agi[1])/2)/32*10)/10));
 globalThis.BrambleGear={items,effects,descriptions};
 })();

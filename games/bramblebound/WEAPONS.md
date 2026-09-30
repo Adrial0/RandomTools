@@ -585,3 +585,5 @@ Poison is the exception: only its bonus AT is dealt per tick, without character 
 ## Element patterns
 
 Fire uses overlapping lingering flames, with bonus AT scaling by tier and a 5% burn chance on each of 30 checks per second. Each flame lasts two seconds. Poison is single-target or separate darts (three darts on tiers 3 and 6); it has no splash, rings or ground bursts. Lightning uses chains, forks behind the initial target, piercing bolts and four delayed weaker strikes on one target. Lightning does not stun.
+
+Weapon poison duration is based on unmodified weapon AGI, capped at one second: Rogue daggers 0.3s, Warrior swords 0.7s, Ranger bows 1s, Mage/Reaper/Summoner weapons 1s. Haste and attribute bonuses do not change duration. Enemy mushroom poison remains two seconds. Refreshes still preserve the next 30 Hz tick.

@@ -560,7 +560,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 
 {
  function poisoned(){const run=harness(),r=run.t;r.start();run.math.random=()=>0;const h=r.get().heroes[0],e=r.get().enemies[0];h.weapon='0-poison';h.atMin=h.atMax=1000;e.hp=10000;r.activate(h,e,'poison');assert.equal(e.poison.amount,2,'Poison uses bonus AT, never character AT');return {r,h,e};}
- const a=poisoned();a.r.tickEffects(4);assert.equal(a.e.hp,9760,'120 poison ticks over four seconds');assert.equal(a.e.poison,null);
+ const a=poisoned();a.r.tickEffects(4);assert.equal(a.e.hp,9958,'Warrior poison expires after 21 ticks in 0.7 seconds');assert.equal(a.e.poison,null);
  const b=poisoned();for(let i=0;i<240;i++)b.r.tickEffects(1/60);assert.equal(b.e.hp,a.e.hp,'Render rate does not change poison damage');
  const c=poisoned();for(let i=0;i<60;i++){c.r.activate(c.h,c.e,'poison');c.r.tickEffects(1/60);}assert.equal(c.e.hp,9940,'Refreshing every frame never postpones damage ticks');
  const d=poisoned();d.h.hp=10000;d.h.poison={time:2,tick:1/30,amount:3};d.r.tickEffects(1);assert.equal(d.h.hp,9910,'Enemy poison also ticks 30 times per second');
@@ -605,4 +605,13 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  r.tickEffects(1);assert.equal(target.hp,9400);assert.equal(r.get().fields.length,0,'Flames expire after two seconds');
  r.activate(caster,target,'fire');const before=target.hp;run.math.random=()=>.06;r.tickEffects(2);assert.equal(target.hp,before,'Burn chance can fail');
  console.log('Focused poison, lightning chain/fork/piercing/repeat, no stun, independent fixed-rate flame rolls and expiry pass.');
+}
+
+{
+ const {t:r}=harness();r.start();for(const [c,duration] of [[0,.7],[1,.3],[2,1],[3,1],[5,1],[7,1]]){
+  r.setParty([c,0,0,0]);r.enter();const h=r.get().heroes[0],e=r.get().enemies[0];h.weapon=c+'-poison';r.stats(h);e.hp=10000;r.activate(h,e,'poison');assert.equal(e.poison.time,duration);r.tickEffects(duration);assert.equal(e.poison,null);
+  h.attributes.dex=100;h.runes=['rune-haste',null];r.stats(h);r.activate(h,e,'poison');assert.equal(e.poison.time,duration,'Base weapon speed determines poison duration');
+ }
+ for(const w of Object.values(r.items).filter(w=>w.type==='weapon'&&w.effect==='poison')){assert.ok(w.poisonDuration<=1);if(w.classId===1)assert.equal(w.poisonDuration,.3);if(w.classId===2)assert.equal(w.poisonDuration,1);}
+ console.log('Short poison durations across classes and tiers, fixed under haste, expire without lingering ticks.');
 }
