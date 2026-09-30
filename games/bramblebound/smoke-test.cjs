@@ -615,3 +615,10 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  for(const w of Object.values(r.items).filter(w=>w.type==='weapon'&&w.effect==='poison')){assert.ok(w.poisonDuration<=1);if(w.classId===1)assert.equal(w.poisonDuration,.3);if(w.classId===2)assert.equal(w.poisonDuration,1);}
  console.log('Short poison durations across classes and tiers, fixed under haste, expire without lingering ticks.');
 }
+
+{
+ const run=harness(),r=run.t;r.start();r.setArea(5);r.enter();const h=r.get().heroes[0],e=r.enemy('sporecap',400);h.x=410;h.y=e.y;h.hp=10000;e.at=10000;
+ for(const [random,expected] of [[0,1],[.999,2]]){run.math.random=()=>random;h.poison=null;r.get().hazards.length=0;r.fireEnemyAttack(e,h,e.attackProfile);const cloud=r.get().hazards[0];assert.equal(cloud.poisonAmount,expected,'Poison independent of enemy AT');cloud.amount=0;r.tickHazards(.01);const hp=h.hp;r.get().hazards.length=0;r.tickEffects(1);assert.equal(hp-h.hp,expected*30);}
+ r.ENEMY_TYPES.sporecap.poisonDamage=[3,3];r.fireEnemyAttack(e,h,e.attackProfile);assert.equal(r.get().hazards[0].poisonAmount,3,'Per-species poison tuning');
+ console.log('Early enemy poison is 1–2 per tick (30–60 DPS), independent of AT and tunable per species.');
+}

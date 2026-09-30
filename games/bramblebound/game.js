@@ -250,7 +250,7 @@ for(const node of AREAS){
   if(node.local===AREAS_PER_REGION-1){SWARM_BOSSES[node.area]=5;Object.assign(ENEMY_TYPES[id],{swarmCount:5,patterns:['DART'],damage:.55,speed:20})}
  }
 }
-for(const [id,spec] of Object.entries(ENEMY_TYPES))if(spec.shape==='mushroom'&&spec.base!=='boss')spec.resistances={poison:.35};
+for(const [id,spec] of Object.entries(ENEMY_TYPES))if(spec.shape==='mushroom'){spec.poisonDamage=spec.poisonDamage||[1,2];if(spec.base!=='boss')spec.resistances={poison:.35};}
 // A few distinct creatures resist damage; biomes do not grant blanket resistance.
 for(const [id,resistances] of Object.entries({shellcannon:{physical:.25},ceilingeye:{lightning:.3}}))if(ENEMY_TYPES[id])ENEMY_TYPES[id].resistances=resistances;
 function sceneEnemyTypes(){
@@ -296,7 +296,7 @@ function fireEnemyAttack(e,target,profile){
  if(a.kind==='melee'){e.slash={left:a.windup||.35,life:(a.windup||.35)+.16,face,hit:false,profile:a};return}
  if(a.kind==='cloud'){
   const startX=e.x+face*8,endX=e.x+face*Math.min(a.range,Math.abs(target.x-e.x)),wall=terrainHit(startX,e.y-12,endX,e.y-12);
-  hazards.push({kind:'cloud',x:wall?wall.x-face*(a.radius+1):endX,y:e.y-12,vx:0,vy:0,age:0,life:a.life||2,radius:a.radius||22,color:a.color,element:a.element||'poison',amount:enemyDamage(e,a.damage,a.element||'poison'),hitTimes:{},dodgeable:false});return;
+  hazards.push({kind:'cloud',x:wall?wall.x-face*(a.radius+1):endX,y:e.y-12,vx:0,vy:0,age:0,life:a.life||2,radius:a.radius||22,color:a.color,element:a.element||'poison',amount:enemyDamage(e,a.damage,a.element||'poison'),poisonAmount:roll(...(ENEMY_TYPES[e.species]?.poisonDamage||[1,2])),hitTimes:{},dodgeable:false});return;
  }
  const count=a.count||1;
  for(let i=0;i<count;i++){
@@ -402,7 +402,7 @@ function tickHazards(dt){
  blasts.forEach(b=>b.life-=dt);blasts=blasts.filter(b=>b.life>0);
  for(const p of hazards){p.age+=dt;p.life-=dt;const ax=p.x,ay=p.y;
  if(p.kind==='cloud'){
-  for(const h of combatAllies())if(h.hp>0&&segmentDistance(p.x,p.y,h.x,h.y-24,h.x,h.y-3)<p.radius+4&&(!p.hitTimes[h.id]||p.age>=p.hitTimes[h.id])){const wall=terrainHit(p.x,p.y,h.x,h.y-13);if(!wall){damage(h,p.amount,p.element,false,false,null,1,true);applyPoison(h,p.amount,2);p.hitTimes[h.id]=p.age+.6;}}
+  for(const h of combatAllies())if(h.hp>0&&segmentDistance(p.x,p.y,h.x,h.y-24,h.x,h.y-3)<p.radius+4&&(!p.hitTimes[h.id]||p.age>=p.hitTimes[h.id])){const wall=terrainHit(p.x,p.y,h.x,h.y-13);if(!wall){damage(h,p.amount,p.element,false,false,null,1,true);applyPoison(h,p.poisonAmount,2);p.hitTimes[h.id]=p.age+.6;}}
   continue;
  }
  if(p.kind==='missile'&&p.age<(p.tracking??.8)&&p.target.hp>0){const angle=Math.atan2(p.vy,p.vx),goal=Math.atan2(p.target.y-13-p.y,p.target.x-p.x),delta=Math.atan2(Math.sin(goal-angle),Math.cos(goal-angle)),turn=Math.max(-1.5*dt,Math.min(1.5*dt,delta));p.vx=Math.cos(angle+turn)*(p.speed||90);p.vy=Math.sin(angle+turn)*(p.speed||90)}
