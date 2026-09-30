@@ -185,7 +185,16 @@ for(const w of Object.values(items))if(w.type==='rune'){
  else if(b.haste)w.description='+'+Math.round(b.haste*100)+'% attack speed.';
  else if(b.resistance)w.description='+'+Math.round(b.resistance*100)+'% elemental resistance.';
 }
-for(let tier=1;tier<=6;tier++)for(const type of ['rune','gem']){
+const enchantDamage={poison:[[0,1],[1,1],[1,2],[2,2],[2,3],[3,3],[3,4]],fire:[[1,2],[3,4],[5,6],[6,9],[8,12],[10,15],[15,20]],ice:[[3,5],[6,10],[9,15],[12,20],[15,25],[18,30],[21,35]],lightning:[[0,4],[0,9],[0,15],[0,22],[0,30],[0,39],[0,49]]};
+for(let tier=1;tier<=6;tier++){
+ const add=(family,name,color,bonuses,description)=>{const id='enchantment-'+family+'-'+tier;items[id]={id,type:'enchantment',family,name:name+' Enchantment '+tier,color,bonuses,description,tier,level:tier,symbol:'▱'};};
+ for(const [element,values] of Object.entries(enchantDamage)){const [min,max]=values[tier-1];add(element,element[0].toUpperCase()+element.slice(1),effects[element].color,{[element+'Min']:min,[element+'Max']:max},'+'+min+'–'+max+' '+element+' damage.');}
+ add('poison-time','Lingering Poison',effects.poison.color,{poisonTime:tier},'+'+tier+'s poison duration.');
+ add('fire-time','Lingering Fire',effects.fire.color,{fireTime:Number((.2+tier*.2).toFixed(1))},'+'+Number((.2+tier*.2).toFixed(1))+'s fire duration.');
+ add('cold','Cold',effects.slow.color,{coldEffect:tier*.05},'+'+tier*5+'% slow.');
+ add('freeze','Freezing',effects.ice.color,{freezeTime:tier*.1},'+'+Number((tier*.1).toFixed(1))+'s freeze duration.');
+}
+for(let tier=1;tier<=6;tier++)for(const type of ['rune','gem','enchantment']){
  const stock=Object.values(items).filter(w=>w.type===type&&w.tier===tier);
  stock.forEach((w,i)=>w.sourceArea=(tier-1)*21+Math.floor(i*18/Math.max(1,stock.length-1)));
 }

@@ -13,7 +13,7 @@ const classes=[
 ];
 const {items:ITEMS,effects:EFFECTS,descriptions:STAT_HEHP}=BrambleGear;
 const sfx=(event,data)=>globalThis.BrambleAudio?.play(event,data);
-const socketItem=id=>['rune','gem','soul'].includes(ITEMS[id]?.type);
+const socketItem=id=>['rune','gem','soul','enchantment'].includes(ITEMS[id]?.type);
 const ZONES=[
  {name:'Lowlands',regions:['Grassland','Woodland','Marsh','Caverns'],structure:'Fort',boss:'Armored Knight',shape:'knight',color:'#92b65a',palette:['#746c3c','#74bd44','#aaa36a']},
  {name:'Desert',regions:['Canyon','Dunes','Oasis','Tombs'],structure:'Pyramid',boss:'Giant Scorpion',shape:'scorpion',color:'#deb965',palette:['#b88b42','#f1cf78','#e3b965']},
@@ -48,6 +48,14 @@ for(let z=0;z<ZONES.length;z++){
   const a=AREAS.length,node={id:'a'+a,name:OPTIONAL_BOSSES[z].place+(i<2?' '+(i+1):''),area:a,zone:z,region:z*4+1,local:i,optional:true,major:i===2,progression:z*21+8+i,sourceArea:z*21+8+i,x:z*512+220+i*43,y:83+(i===1?5:0),next:i<2?['a'+(a+1)]:[]};
   AREAS.push(node);WORLD.push(node);
  }
+}
+const MAP_ROUTE=[[60,140],[83,127],[103,109],[87,91],[64,76],[90,56],[122,47],[145,57],[164,78],[160,102],[182,122],[213,133],[249,136],[287,124],[317,109],[321,85],[301,60],[335,44],[374,54],[410,75]];
+for(let z=0;z<ZONES.length;z++){
+ for(let i=0;i<20;i++){const node=AREAS[z*21+i],[x,y]=MAP_ROUTE[i];node.x=z*512+x+Math.sin(z*1.7+i*.8)*5;node.y=(y+Math.sin(z*2+i*.7)*5)/1.8;}
+ const boss=AREAS[z*21+20];boss.x=z*512+474;boss.y=(100+Math.sin(z)*9)/1.8;
+ const trader=WORLD.find(n=>n.kind==='trader'&&n.zone===z);trader.x=z*512+38;trader.y=53/1.8;
+ for(let i=0;i<3;i++){const node=AREAS[126+z*3+i];node.x=z*512+[180,197,229][i];node.y=[66,45,33][i]/1.8;}
+ const id=z?'enchanter'+z:'enchanter';WORLD.push({id,name:'Enchanter',kind:'enchanter',zone:z,x:z*512+265,y:155/1.8,next:[]});AREAS[z*21+12].next.push(id);
 }
 const areaInfo=(index=area)=>AREAS[index]||AREAS[0];
 const progressionArea=(index=area)=>areaInfo(index).progression??index;
@@ -107,7 +115,7 @@ function stats(h){
  case 7:min*=1+str*.1;max*=1+str*.1;factor=1/(1+int*.02);break;
  }
  h.runeBonus={fireResistance:0,iceResistance:0,poisonResistance:0,lightningResistance:0,wallPierce:0,knockbackChance:0,knockbackPower:0,lifesteal:0,resistance:0,xpBonus:0,haste:0,damageBonus:0,rangeBonus:0,hpBonus:0,regen:0,dropBonus:0};
- for(const id of h.runes||[])for(const [name,value] of Object.entries(ITEMS[id]?.bonuses||{}))h.runeBonus[name]+=value;
+ for(const id of h.runes||[])for(const [name,value] of Object.entries(ITEMS[id]?.bonuses||{}))h.runeBonus[name]=(h.runeBonus[name]||0)+value;
  h.runeBonus.resistance=Math.min(.75,h.runeBonus.resistance);h.summonBonuses=h.classId===7?{...h.runeBonus}:null;if(h.classId===7)for(const key of Object.keys(h.runeBonus))h.runeBonus[key]=0;
  min*=1+h.runeBonus.damageBonus;max*=1+h.runeBonus.damageBonus;factor/=1+h.runeBonus.haste;h.range+=h.runeBonus.rangeBonus;h.maxHp=Math.max(1,Math.floor(h.maxHp*(1+h.runeBonus.hpBonus)));
  h.atMin=Math.floor(Math.min(min,max));h.atMax=Math.floor(max);h.at=h.atMax;h.agi=agi.map(n=>Math.max(5,Math.round(n*factor)));h.cool=(h.agi[0]+h.agi[1])/60;h.color=c.color;h.kind=w?c.kind:'melee';
@@ -524,7 +532,7 @@ function rollDrops(target,source=null){
  const result=[],boost=dropMultiplier(source),boss=target.type==='boss',rate=boss?.10:target.type==='swarmling'?.025:.05;
  const choose=pool=>pool[Math.floor(Math.random()*pool.length)];
  const weapons=weaponDropTable(target);if(Math.random()<Math.min(1,rate*boost)&&weapons.length)result.push(choose(weapons));
- if(Math.random()<Math.min(1,.01*boost)){const pool=Object.values(ITEMS).filter(w=>(w.type==='rune'||w.type==='gem')&&w.tier===regionTier()&&w.sourceArea<=progressionArea());if(pool.length)result.push(choose(pool).id);}
+ if(Math.random()<Math.min(1,.01*boost)){const pool=Object.values(ITEMS).filter(w=>(['rune','gem','enchantment'].includes(w.type))&&w.tier===regionTier()&&w.sourceArea<=progressionArea());if(pool.length)result.push(choose(pool).id);}
  if(boss&&Math.random()<Math.min(1,.10*boost)){const tier=regionTier(),pool=Object.values(ITEMS).filter(w=>w.type==='soul'&&w.tier===tier&&(areaInfo().optional&&areaInfo().major?w.exclusiveBoss===areaInfo().zone:w.exclusiveBoss==null));result.push(choose(pool).id);}
  return result;
 }
@@ -566,17 +574,31 @@ function basicAmount(h){return Math.max(1,Math.round((roll(h.atMin,h.atMax)+aura
 function attackToken(h){return {owner:h,weapon:h.weapon,revision:h.gearRevision,charged:false}}
 function basicHit(target,amount,attack){if(target.hp<=0)return;const before=target.hp;damage(target,amount,['aura','note'].includes(attack?.owner?.kind)?'magic':'physical',true,false,attack?.owner);const owner=attack?.owner;if(owner?.hp>0&&owner.gearRevision===attack.revision)owner.hp=Math.min(owner.maxHp,owner.hp+(before-target.hp)*owner.runeBonus.lifesteal+(owner.classId===5?owner.dex*.5:0));if(!attack||attack.charged||[3,7].includes(owner?.classId))return;attack.charged=true;const h=attack.owner,w=ITEMS[attack.weapon],effect=EFFECTS[w?.effect];if(!effect||h.hp<=0||h.weapon!==attack.weapon||h.gearRevision!==attack.revision)return;h.mp+=h.int;if(h.mp>=mpCost(w)){h.mp=0;activate(h,target,w.effect)}save()}
 function controlDuration(h,base){return Math.max(.06,Math.min(base,base*((ITEMS[h.weapon]?.agi||[25,35]).reduce((sum,n)=>sum+n,0)/2)/85))}
-function effectText(w){const e=EFFECTS[w?.effect];if(!e)return '';if(w.effect==='poison')return (w.abilityDescription?w.abilityDescription+' ':'')+'Poison '+w.poisonDuration+'s. Bonus AT per tick, 30 ticks/s.';return w.abilityDescription?(w.abilityDescription+(w.effect==='ice'?' Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':'')):w.effect==='ice'?'Freeze '+Number(controlDuration({weapon:w.id},.7).toFixed(2))+'s.':e.description}
+function effectText(w,runes=[]){
+ const e=EFFECTS[w?.effect];if(!e)return '';
+ const b={};for(const id of runes)for(const [key,value] of Object.entries(ITEMS[id]?.bonuses||{}))b[key]=(b[key]||0)+value;
+ const n=v=>Number(v.toFixed(2)),kind=w.effect,description=w.abilityDescription||e.description,min=Math.round(e.min*(w.ability?.power||1)),max=Math.round(e.max*(w.ability?.power||1));
+ if(kind==='poison')return 'Poison '+n(w.poisonDuration+(b.poisonTime||0))+'s. Bonus AT '+(min+(b.poisonMin||0))+'–'+(max+(b.poisonMax||0))+'.';
+ if(kind==='fire')return description.replace(/[\d]+–[\d]+ AT/,((w.burnMin||4)+(b.fireMin||0))+'–'+((w.burnMax||6)+(b.fireMax||0))+' AT').replace(/2s\./,n((w.flameDuration||2)+(b.fireTime||0))+'s.');
+ if(kind==='slow')return 'Slow '+n(Math.min(100,20+(b.coldEffect||0)*100))+'% for 2s.';
+ if(kind==='ice')return (w.abilityDescription?w.abilityDescription+' ':'')+'Freeze '+n(controlDuration({weapon:w.id},.7)+(b.freezeTime||0))+'s. Bonus AT '+(min+(b.iceMin||0))+'–'+(max+(b.iceMax||0))+'.';
+ if(kind==='lightning')return description+' Bonus AT '+(min+(b.lightningMin||0))+'–'+(max+(b.lightningMax||0))+'.';
+ return description;
+}
 function slowFactor(e){return e.slow>0?1-(e.slowAmount??.4):1}
+function enchantBonus(h,source=null){return source?.runeBonus||h.summonBonuses||h.runeBonus||{}}
+function enchantRoll(h,kind,source=null){if(kind==='slow')kind='ice';const b=enchantBonus(h,source),min=b[kind+'Min']||0,max=b[kind+'Max']||0;return min||max?roll(min,max):0}
+function poisonDuration(h,source=null){return (ITEMS[h.weapon]?.poisonDuration||1)+(enchantBonus(h,source).poisonTime||0)}
+function freezeDuration(h,source=null){return controlDuration(h,.7)+(enchantBonus(h,source).freezeTime||0)}
 function abilityDamage(h,kind,spellAT=null,source=null){
  const e=EFFECTS[kind],w=ITEMS[h.weapon],origin=source||h;
  const base=spellAT??roll(h.atMin,h.atMax)*aura(origin).attack;
- return Math.max(1,Math.round(base+roll(e.min,e.max)*(h.abilityPower||1)*(w?.ability?.power||1)));
+ return Math.max(1,Math.round(base+roll(e.min,e.max)*(h.abilityPower||1)*(w?.ability?.power||1)+enchantRoll(h,kind,source)));
 }
 function weaponSpell(h,target,kind,spellAT,source){
  const w=ITEMS[h.weapon],a=w.ability,e=EFFECTS[kind],bow=h.classId===2,origin=bow?target:source||h;
- const total=kind==='fire'?roll(w.burnMin||4,w.burnMax||6):kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1)*a.power)):abilityDamage(h,kind,spellAT,source);
- const payload={kind,amount:total,source,owner:h,weapon:w.id,revision:h.gearRevision,poisonDuration:w.poisonDuration,radius:a.radius,freeze:controlDuration(h,.7),stun:controlDuration(h,.6)};
+ const total=kind==='fire'?roll(w.burnMin||4,w.burnMax||6):kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1)*a.power+enchantRoll(h,kind,source))):abilityDamage(h,kind,spellAT,source);
+ const payload={kind,amount:total,source,owner:h,weapon:w.id,revision:h.gearRevision,poisonDuration:poisonDuration(h,source),slowAmount:Math.min(1,.2+(enchantBonus(h,source).coldEffect||0)),radius:a.radius,freeze:freezeDuration(h,source),stun:controlDuration(h,.6)};
  const impact=(x,y,radius=a.radius)=>spellImpact({...payload,radius},x,y);
  if(kind==='lightning'&&a.mode==='repeat'){fields.push({repeat:true,source,owner:h,revision:h.gearRevision,target,elapsed:0,pulses:0,count:a.count,life:1,spell:{...payload,amount:Math.max(1,Math.round(total*.4))}});return}
  if(kind==='lightning'&&a.mode==='fork'){
@@ -612,11 +634,11 @@ function applyWeaponEffect(target,p){
  if(kind==='poison'){applyPoison(target,p.amount,p.poisonDuration||ITEMS[p.weapon]?.poisonDuration||1,p.source);return}
  const before=target.hp;damage(target,p.amount,element,true,false,p.source);
  if(kind==='ice')target.frozen=Math.max(target.frozen||0,p.freeze*(target.type==='boss'?.2:1));
- if(kind==='slow'){target.slow=Math.max(target.slow||0,2);target.slowAmount=.2*(target.type==='boss'?.3:1)}
+ if(kind==='slow'){target.slow=Math.max(target.slow||0,2);target.slowAmount=(p.slowAmount??.2)*(target.type==='boss'?.3:1)}
  if(kind==='stun')target.stun=Math.max(target.stun||0,p.stun*(target.type==='boss'?.2:1));
  if(kind==='drain'){const recipient=p.source||p.owner;if(recipient.hp>0)recipient.hp=Math.min(recipient.maxHp,recipient.hp+before-target.hp)}
 }
-function spawnFlame(p,x,y){const w=ITEMS[p.weapon];fields.push({burn:true,source:p.source,owner:p.owner,revision:p.revision,x,y,life:w.flameDuration||2,duration:w.flameDuration||2,elapsed:0,pulses:0,radius:Math.max(25,p.radius||0),min:w.burnMin||4,max:w.burnMax||6,chance:w.burnChance||.05,color:EFFECTS.fire.color});}
+function spawnFlame(p,x,y){const w=ITEMS[p.weapon],b=enchantBonus(p.owner,p.source),duration=(w.flameDuration||2)+(b.fireTime||0);fields.push({burn:true,source:p.source,owner:p.owner,revision:p.revision,x,y,life:duration,duration,elapsed:0,pulses:0,radius:Math.max(25,p.radius||0),min:(w.burnMin||4)+(b.fireMin||0),max:(w.burnMax||6)+(b.fireMax||0),chance:w.burnChance||.05,color:EFFECTS.fire.color});}
 function spellImpact(p,x,y){
  if(p.owner.hp<=0||p.owner.gearRevision!==p.revision)return;
  if(p.kind==='fire'){spawnFlame(p,x,y);return}if(p.owner.classId===3&&['ice','slow','stun'].includes(p.kind))blasts.push({x,y,radius:p.radius,life:.4,color:EFFECTS[p.kind].color,kind:p.kind});
@@ -630,12 +652,12 @@ function activate(h,target,kind,spellAT=null,source=null){source=source||h;sfx('
   const chosen=tier===2?weakest.slice(0,1):tier===4?weakest.slice(0,2):allies.filter(v=>Math.hypot(v.x-center.x,v.y-center.y)<(tier===6?160:75));
   for(const v of chosen){const amount=Math.round((tier===2?28:tier===4?20:14)*(1+(tier-1)*.3));v.hp=Math.min(v.maxHp,v.hp+amount);flashes.push({x:origin.x,y:origin.y-12,tx:v.x,ty:v.y-12,color:EFFECTS.heal.color,life:.35});}return;
  }
-if(ITEMS[h.weapon]?.ability){weaponSpell(h,target,kind,spellAT,source);return}if(['guard','cleanse','crescendo','restore'].includes(kind)){h.nextNote=kind==='guard'?{barrier:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))}:kind==='cleanse'?{cleanse:true,heal:Math.round(4*((ITEMS[h.weapon]?.supportPower||1)-1))}:kind==='crescendo'?{power:1.5+.1*((ITEMS[h.weapon]?.tier||1)-1)}:{heal:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))};return}const e=EFFECTS[kind],power=h.abilityPower*.65,amount=()=>kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1))):kind==='heal'?Math.max(1,Math.round(roll(e.min,e.max)*power)):abilityDamage(h,kind,spellAT,source);flashes.push({x:h.classId===2?target.x:h.x,y:h.classId===2?target.y-18:h.y-18,tx:target.x,ty:target.y-10,color:e.color,life:.35,kind});
+if(ITEMS[h.weapon]?.ability){weaponSpell(h,target,kind,spellAT,source);return}if(['guard','cleanse','crescendo','restore'].includes(kind)){h.nextNote=kind==='guard'?{barrier:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))}:kind==='cleanse'?{cleanse:true,heal:Math.round(4*((ITEMS[h.weapon]?.supportPower||1)-1))}:kind==='crescendo'?{power:1.5+.1*((ITEMS[h.weapon]?.tier||1)-1)}:{heal:Math.round(12*(ITEMS[h.weapon]?.supportPower||1))};return}const e=EFFECTS[kind],power=h.abilityPower*.65,amount=()=>kind==='poison'?Math.max(1,Math.round(roll(e.min,e.max)*(h.abilityPower||1)+enchantRoll(h,kind,source))):kind==='heal'?Math.max(1,Math.round(roll(e.min,e.max)*power)):abilityDamage(h,kind,spellAT,source);flashes.push({x:h.classId===2?target.x:h.x,y:h.classId===2?target.y-18:h.y-18,tx:target.x,ty:target.y-10,color:e.color,life:.35,kind});
  const radius=ITEMS[h.weapon]?.spellRadius||45;const near=enemies.filter(v=>v.hp>0&&(h.classId===3?Math.hypot(v.x-target.x,v.y-target.y)<=radius&&!terrainHit(target.x,target.y-12,v.x,v.y-12):Math.abs(v.x-target.x)<45));if(h.classId===3&&['ice','slow','stun'].includes(kind))blasts.push({x:target.x,y:target.y-12,radius,life:.4,color:e.color,kind});
  if(kind==='fire'){spawnFlame({source,owner:h,weapon:h.weapon,revision:h.gearRevision,radius:ITEMS[h.weapon]?.spellRadius||30},target.x,floor(target.x)-8);}
- if(kind==='ice'){for(const v of near){damage(v,amount(),'ice',true,false,source);const duration=controlDuration(h,.7)*(v.type==='boss'?.2:1);v.frozen=Math.max(v.frozen||0,duration);}}
- if(kind==='slow'){for(const v of near){damage(v,amount(),'ice',true,false,source);v.slow=Math.max(v.slow||0,e.time);v.slowAmount=e.slow*(v.type==='boss'?.3:1)}}
- if(kind==='poison'){if(target.hp>0){applyPoison(target,amount(),ITEMS[h.weapon]?.poisonDuration||1,source);}}
+ if(kind==='ice'){for(const v of near){damage(v,amount(),'ice',true,false,source);const duration=freezeDuration(h,source)*(v.type==='boss'?.2:1);v.frozen=Math.max(v.frozen||0,duration);}}
+ if(kind==='slow'){for(const v of near){damage(v,amount(),'ice',true,false,source);v.slow=Math.max(v.slow||0,e.time);v.slowAmount=Math.min(1,e.slow+(enchantBonus(h,source).coldEffect||0))*(v.type==='boss'?.3:1)}}
+ if(kind==='poison'){if(target.hp>0){applyPoison(target,amount(),poisonDuration(h,source),source);}}
  if(kind==='lightning'){enemies.filter(v=>v.hp>0&&Math.abs(v.x-target.x)<130).sort((a,b)=>Math.abs(a.x-target.x)-Math.abs(b.x-target.x)).slice(0,3).forEach(v=>{damage(v,amount(),'lightning',true,false,source);flashes.push({x:target.x,y:target.y-15,tx:v.x,ty:v.y-12,color:e.color,life:.35,kind})})}
  if(kind==='heal'){heroes.filter(v=>v.hp>0).forEach(v=>{const n=Math.min(v.maxHp-v.hp,amount());v.hp+=n;float(v.x,v.y-25,'+'+n,e.color)})}
  if(kind==='drain'&&target.hp>0){const n=Math.min(target.hp,amount());damage(target,n,'magic',true,false,source);h.hp=Math.min(h.maxHp,h.hp+n);float(h.x,h.y-25,'+'+n,e.color)}
@@ -683,11 +705,11 @@ function stageExitOpen(){return stage<stageCount()-1||bossExitWait<=0&&!enemies.
 function completeArea(){if(!stageExitOpen())return false;return changeScene(advanceStage)}
 function advanceStage(){if(stage<stageCount()-1){stage++;enter();return}const id='a'+area;if(!completed.includes(id))completed.push(id);mapReturn=null;state='map';openMap();tell(area===125?'The lich king is defeated. His rule is over.':areaInfo().optional?'Optional route cleared.':areaInfo().major?'Zone cleared. A new land awaits.':'Boss defeated. New routes discovered.');save()}
 function salePrice(id){const w=ITEMS[id];return w?Math.floor(buyPrice(w)*.1):0}
-function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&completed.includes('a'+w.sourceArea));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
+function shopStock(){const cleared=completed.map(id=>WORLD.find(n=>n.id===id)?.area??-1),highest=Math.max(-1,...cleared);if(serviceKind()==='enchanter')return Object.values(ITEMS).filter(w=>w.type==='enchantment'&&completed.includes('a'+w.sourceArea));if(serviceKind()==='trader')return Object.values(ITEMS).filter(w=>['rune','gem'].includes(w.type)&&completed.includes('a'+w.sourceArea));return Object.values(ITEMS).filter(w=>w.type==='weapon'&&!w.retired&&w.classId===shopClass&&(w.id.endsWith('-basic')||completed.includes('a'+WEAPON_AREAS[w.id])))}
 function weaponPrice(index){const early=[100,250,500,750,1000];if(index<5)return early[index];const price=1500+(index-5)*500;return price<=10000?price:10000+(index-22)*1000}
-function buyPrice(w){if(w.type==='rune')return 1000*w.tier;if(w.type==='gem')return 500*w.tier;return weaponPrice(w.priceIndex||0)}
+function buyPrice(w){if(w.type==='rune'||w.type==='enchantment')return 1000*w.tier;if(w.type==='gem')return 500*w.tier;return weaponPrice(w.priceIndex||0)}
 function shopPages(){const stock=shopStock();return [...new Set(stock.map(w=>w.level))].sort((a,b)=>a-b).map(tier=>({tier,items:stock.filter(w=>w.level===tier).sort((a,b)=>buyPrice(a)-buyPrice(b))}))}
-function renderServices(){if(state!=='service'){$('#services').hidden=true;return}const pages=shopPages();shopIndex=Math.max(0,Math.min(shopIndex,pages.length-1));const page=pages[shopIndex];$('#service-title').textContent=serviceKind()==='town'?'TOWN SHOP':'RUNE TRADER';$('#service-description').textContent='';$('#town-heal').hidden=true;const id=pickedSlot?.type==='bag'?slotItem(pickedSlot):null;$('#sell-item').disabled=!id;$('#sell-item').textContent=id?'Sell '+ITEMS[id].name+' — '+salePrice(id)+' gold':'Select inventory item to sell';$('#shop-classes').hidden=serviceKind()!=='town';$('#shop-classes').innerHTML=classes.map((c,i)=>'<button data-shop-class="'+i+'" class="'+(shopClass===i?'active':'')+'" aria-label="Shop '+c.name+'">'+c.symbol+'</button>').join('');$('#trader-stock').innerHTML=(page?.items||[]).map(w=>'<div class="shop-card"><strong>'+w.name+'</strong><div>'+(socketItem(w.id)?w.description:'AT '+w.min+'–'+w.max+' · AGI '+w.agi.join('–')+'<br>RANGE '+w.range+' · '+(w.effect||'Physical')+(w.arrows?' · '+w.arrows+' arrows':'')+(w.abilityDescription||['ice','slow'].includes(w.effect)||w.classId===6?'<br>'+({line:'Piercing note',cone:'Three-note fan',pulse:'Broad pulse',long:'Long piercing note'}[w.note]||effectText(w)):''))+'</div><button data-buy="'+w.id+'" '+(gold<buyPrice(w)||!inventory.includes(null)?'disabled':'')+'>BUY · '+buyPrice(w)+' gold</button></div>').join('');$('#shop-page').textContent=page?'Tier '+page.tier+' · '+(shopIndex+1)+' / '+pages.length:'No stock';$('#shop-prev').disabled=shopIndex<=0;$('#shop-next').disabled=shopIndex>=pages.length-1}
+function renderServices(){if(state!=='service'){$('#services').hidden=true;return}const pages=shopPages();shopIndex=Math.max(0,Math.min(shopIndex,pages.length-1));const page=pages[shopIndex];$('#service-title').textContent=serviceKind()==='town'?'TOWN SHOP':serviceKind()==='enchanter'?'ENCHANTER':'RUNE TRADER';$('#service-description').textContent='';$('#town-heal').hidden=true;const id=pickedSlot?.type==='bag'?slotItem(pickedSlot):null;$('#sell-item').disabled=!id;$('#sell-item').textContent=id?'Sell '+ITEMS[id].name+' — '+salePrice(id)+' gold':'Select inventory item to sell';$('#shop-classes').hidden=serviceKind()!=='town';$('#shop-classes').innerHTML=classes.map((c,i)=>'<button data-shop-class="'+i+'" class="'+(shopClass===i?'active':'')+'" aria-label="Shop '+c.name+'">'+c.symbol+'</button>').join('');$('#trader-stock').innerHTML=(page?.items||[]).map(w=>'<div class="shop-card"><strong>'+w.name+'</strong><div>'+(socketItem(w.id)?w.description:'AT '+w.min+'–'+w.max+' · AGI '+w.agi.join('–')+'<br>RANGE '+w.range+' · '+(w.effect||'Physical')+(w.arrows?' · '+w.arrows+' arrows':'')+(w.abilityDescription||['ice','slow'].includes(w.effect)||w.classId===6?'<br>'+({line:'Piercing note',cone:'Three-note fan',pulse:'Broad pulse',long:'Long piercing note'}[w.note]||effectText(w)):''))+'</div><button data-buy="'+w.id+'" '+(gold<buyPrice(w)||!inventory.includes(null)?'disabled':'')+'>BUY · '+buyPrice(w)+' gold</button></div>').join('');$('#shop-page').textContent=page?'Tier '+page.tier+' · '+(shopIndex+1)+' / '+pages.length:'No stock';$('#shop-prev').disabled=shopIndex<=0;$('#shop-next').disabled=shopIndex>=pages.length-1}
 
 function innCost(){return Math.ceil(heroes.reduce((sum,h)=>sum+Math.max(0,h.maxHp-h.hp),0)/10)}
 function healTown(){if(state!=='service'||serviceKind()!=='town')return false;const cost=innCost();if(gold<cost){tell('The inn costs '+cost+' gold. Sell items at the shop to afford treatment.');return false}gold-=cost;heroes.forEach(h=>h.hp=h.maxHp);save();refresh();tell('The inn restored and revived your party for '+cost+' gold.');return true}
@@ -712,16 +734,16 @@ function slotRunes(slot){return slot.type==='bag'?inventoryRunes[slot.index]:slo
 function inspect(id,runes=[]){
  inspectingItem=true;$('#character-info').hidden=true;$('#hover-info').hidden=false;
  const w=ITEMS[id],e=EFFECTS[w?.effect];$('#item-name').textContent=w?w.name:'Empty slot';
- if(socketItem(id)){$('#item-details').textContent='TYPE '+({gem:'Gem',rune:'Rune',soul:'Soul'}[w.type])+'\nCLASS '+(w.allowedClasses?w.allowedClasses.map(c=>classes[c].name).join(', '):'All')+'\nTIER '+w.tier;$('#item-effect').textContent=w.description;return}
+ if(socketItem(id)){$('#item-details').textContent='TYPE '+({gem:'Gem',rune:'Rune',soul:'Soul',enchantment:'Enchantment'}[w.type])+'\nCLASS '+(w.allowedClasses?w.allowedClasses.map(c=>classes[c].name).join(', '):'All')+'\nTIER '+w.tier;$('#item-effect').textContent=w.description;return}
  $('#item-details').textContent=w?'AT '+w.min+'–'+w.max+'\nAGI '+w.agi.join('–')+'\nRANGE '+w.range+'\nTYPE '+(w.effect||'Physical')+(w.summon?'\nSUMMON '+w.summon.kind+' · 15s'+'\nMINION HP '+w.summon.health:w.classId===3?'':'\nMP '+mpCost(w))+'\nCLASS '+classes[w.classId].name+(w.arrows?'\nARROWS '+w.arrows:''):'Drag an item into this slot.';
- $('#item-effect').textContent=e?effectText(w)+([3,6].includes(w.classId)||w.ability||w.effect==='fire'?'':' Bonus AT '+e.min+'–'+e.max+'.')+(w.summon?' Every 5 minion attacks.':''):'';if(w?.classId===6)$('#item-effect').textContent=({line:'Piercing note.',cone:'Three-note fan.',pulse:'Broad pulse.',long:'Long piercing note.'}[w.note])+' '+$('#item-effect').textContent;if(w?.type==='weapon'&&runes.some(Boolean))$('#item-effect').textContent+='\n'+runes.filter(Boolean).map(id=>ITEMS[id].name).join(', ');
+ $('#item-effect').textContent=e?effectText(w,runes)+([3,6].includes(w.classId)||w.ability||['fire','ice','poison','lightning'].includes(w.effect)?'':' Bonus AT '+e.min+'–'+e.max+'.')+(w.summon?' Every 5 minion attacks.':''):'';if(w?.classId===6)$('#item-effect').textContent=({line:'Piercing note.',cone:'Three-note fan.',pulse:'Broad pulse.',long:'Long piercing note.'}[w.note])+' '+$('#item-effect').textContent;if(w?.type==='weapon'&&runes.some(Boolean))$('#item-effect').textContent+='\n'+runes.filter(Boolean).map(id=>ITEMS[id].name).join(', ');
 }
 function refresh(){$('#world-button').hidden=state==='service';$('#inn').textContent='INN · Heal '+innCost()+' gold';const h=heroes[hoverHero??selected];if(!h)return;$('#gem-defense').hidden=!h.defense;$('#gem-defense').textContent='DEF +'+h.defense;$('#revive').hidden=h.hp>0||h!==heroes[selected];$('#revive').textContent='Revival $ '+revivalCost(h);$('#revive').disabled=gold<revivalCost(h);$('.stat-columns').hidden=h.hp<=0;$('#class-name').textContent=classes[h.classId].name;$('#lp').textContent=Math.ceil(h.hp)+'/'+h.maxHp;$('#attack').textContent=Math.max(1,Math.round((h.atMin+aura(h).flat)*aura(h).attack))+'–'+Math.max(1,Math.round((h.atMax+aura(h).flat)*aura(h).attack));$('#agi').textContent=effectiveAgi(h).join('–');$('#range').textContent=h.range;$('#level').textContent=h.level;$('#sp').textContent=h.sp;for(const [i,name] of ['str','dex','int'].entries()){$('#'+name).textContent=h[name];const btn=$('[data-stat="'+name+'"]');btn.disabled=h.sp<1;btn.title=STAT_HEHP[h.classId][i];btn.setAttribute('aria-label','Add '+name.toUpperCase()+': '+STAT_HEHP[h.classId][i]);}
  $('[data-stat="lp"]').hidden=h.sp<1||h.hp<=0;$('[data-stat="lp"]').disabled=h.sp<1||h.hp<=0;$('#priest-aura').hidden=![1,4,5,6,7].includes(h.classId);$('#priest-aura').textContent=h.classId===1?'EVASION '+Math.round(h.evasion*100)+'% · CRIT '+Math.round(h.crit*100)+'%':h.classId===4?'AURA AT +'+h.str+'% · DEF +'+Number((h.dex*.2).toFixed(1))+'\nRANGE '+h.range+' · nearby allies':h.classId===5?'ON HIT +'+h.dex*.5+' HP':h.classId===6?'NOTES AT +'+h.str+'% · SPEED +'+h.dex+'%\nENEMY AT −'+h.str*.5+' · DAMAGE +'+h.dex*.25:h.classId===7?'SUMMON '+summonInterval(h).toFixed(2)+'s · MINION HP '+summonHealth(h):'';
  $('#stat-help').textContent='STR: '+STAT_HEHP[h.classId][0]+' | DEX: '+STAT_HEHP[h.classId][1]+' | INT: '+STAT_HEHP[h.classId][2];
  $('[data-stat="lp"]').setAttribute('aria-label','Add 10 maximum HP');
  const w=ITEMS[h.weapon],e=EFFECTS[w?.effect];$('.mp-line').hidden=$('.mp-bar').hidden=h.classId===3;$('#mp-hint').hidden=h.classId===3;$('#mp').textContent=[3,7].includes(h.classId)?'—':e?h.mp+'/'+mpCost(w):'—';$('#mp-fill').style.width=e&&![3,7].includes(h.classId)?h.mp/mpCost(w)*100+'%':'0%';$('#mp-hint').textContent=h.classId===7?(w?.summon?.kind||'No grimoire'):e?(h.int?Math.ceil((mpCost(w)-h.mp)/h.int)+' hits to '+e.name:'Spend a point in INT to charge '+e.name):w?'Physical weapon':'Unarmed';
- $('#xp').textContent=Math.floor(h.xp)+'/'+needed(h.level);$('#xp-fill').style.width=h.xp/needed(h.level)*100+'%';$('#gold').textContent=gold;$('#area').textContent=state==='map'?'World Map':state==='service'?(serviceKind()==='town'?'Town':'Rune Trader'):WORLD.find(n=>n.id==='a'+area).name+' : '+(stage+1)+'/'+stageCount()+(stage===stageCount()-1?' BOSS':'');$('#pause').textContent=paused?'Resume':'Pause';heroes.forEach((h,i)=>{const bar=$('[data-hero="'+i+'"] .life i');if(bar)bar.style.width=Math.max(0,h.hp/h.maxHp)*100+'%';const mpBar=$('[data-hero="'+i+'"] .mana i');if(mpBar)mpBar.style.width=manaPercent(h)+'%'});}
+ $('#xp').textContent=Math.floor(h.xp)+'/'+needed(h.level);$('#xp-fill').style.width=h.xp/needed(h.level)*100+'%';$('#gold').textContent=gold;$('#area').textContent=state==='map'?'World Map':state==='service'?(serviceKind()==='town'?'Town':serviceKind()==='enchanter'?'Enchanter':'Rune Trader'):WORLD.find(n=>n.id==='a'+area).name+' : '+(stage+1)+'/'+stageCount()+(stage===stageCount()-1?' BOSS':'');$('#pause').textContent=paused?'Resume':'Pause';heroes.forEach((h,i)=>{const bar=$('[data-hero="'+i+'"] .life i');if(bar)bar.style.width=Math.max(0,h.hp/h.maxHp)*100+'%';const mpBar=$('[data-hero="'+i+'"] .mana i');if(mpBar)mpBar.style.width=manaPercent(h)+'%'});}
 function update(dt){if(settingsOpen||menuOpen)return;time+=dt;if(drag)stepHeld(drag,dt);tickNumbers(dt);if(state==='service'){heroes.forEach(h=>tickRogueArms(h,dt));if(heroes.some(h=>h.hp>0&&h.x+6>=538&&h.x-6<=572&&h.y>=207&&h.y-27<=226)){changeScene(openMap);return}for(const h of heroes)if(h.hp>0&&h!==drag){h.drive=0;stepBody(h,dt)}uiTime+=dt;if(uiTime>.1){refresh();uiTime=0}return}if(state!=='fight'&&state!=='walk')return;tickEffects(dt);tickMinions(dt);
  for(const h of heroes){tickRogueArms(h,dt);h.auraFlash=Math.max(0,(h.auraFlash||0)-dt);h.flash=Math.max(0,(h.flash||0)-dt);h.anim=Math.max(0,h.anim-dt);resolveStrike(h,dt);if(h.hp<=0||h===drag)continue;stepBody(h,dt);h.hp=Math.min(h.maxHp,h.hp+h.runeBonus.regen*dt);h.cooldown-=dt;h.hold=Math.max(0,h.hold-dt);h.walk=false;if(!grounded(h)){h.strike=null;continue}if(state==='walk'){h.drive=0;continue}
  const target=enemies.filter(e=>e.hp>0).sort((a,b)=>h.kind==='melee'?meleeDistance(h,a)-meleeDistance(h,b):Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y))[0];if(!target)continue;if(h.classId===7){h.face=target.x>=h.x?1:-1;h.drive=canAutoMove(h)&&Math.abs(target.x-h.x)>h.range&&h.hold<=0?h.face*33:0;h.walk=!!h.drive;continue}const d=h.kind==='melee'?meleeDistance(h,target):Math.hypot(target.x-h.x,target.y-h.y);if(h.kind==='melee'&&d<=h.range){h.drive=0;if((h.vx||0)*Math.sign(target.x-h.x)>0)h.vx=0;}h.face=target.x>=h.x?1:-1;if(canAutoMove(h)&&d>h.range&&h.hold<=0){h.drive=h.face*33;h.walk=true}if(d<=h.range+3&&(h.kind==='aura'||Math.abs(h.y-target.y)<45)&&h.cooldown<=0){h.cooldown=roll(...effectiveAgi(h))/30;attackMotion(h);const token=attackToken(h),amount=basicAmount(h);if(h.kind==='aura'){for(const e of enemies)if(e.hp>0&&Math.hypot(e.x-h.x,e.y-h.y)<=h.range)basicHit(e,amount,token);h.auraFlash=.25}else if(h.kind==='melee')h.strike={left:.09,target,amount,token,range:h.range,elapsed:0,hits:new Set(),face:h.face};else shoot(h,target,h.kind==='heal'?'magic':h.kind,amount,token)}}
@@ -914,12 +936,13 @@ function drawItemIcon(c,w){
   if(w.classId===5){c.translate(10,23);c.scale(.55,.55);drawWeapon(c,5,[0,0],1,0,w.color)}
   else if(w.classId===0){c.translate(15,23);c.scale(.85,.85);drawWeapon(c,0,[0,0],1,0,w.color)}
   else drawWeapon(c,w.classId,w.classId===6?[12,19]:w.classId===7?[16,18]:[14,17],1,0,w.color,w.instrument);
- }else if(w.type==='rune'){c.translate(5,5);c.scale(1.1,1.1);c.stroke(new Path2D(itemSymbol(w).match(/d="([^"]+)"/)[1]))}
+ }else if(w.type==='enchantment'){c.fillStyle='#d9cba4';c.fillRect(8,6,16,21);line(c,[[8,9],[24,9],[24,26],[8,26],[8,9]],'#8c7758');line(c,[[12,17],[16,12],[20,17],[16,22],[12,17]],w.color);c.fillStyle=w.color;c.fillRect(15,15,3,4);if(w.family.includes('time')||w.family==='freeze')line(c,[[12,11],[20,23],[12,23],[20,11]],w.color);}
+ else if(w.type==='rune'){c.translate(5,5);c.scale(1.1,1.1);c.stroke(new Path2D(itemSymbol(w).match(/d="([^"]+)"/)[1]))}
  else{line(c,[[16,5],[25,16],[16,27],[7,16],[16,5]],w.color);if(w.type==='gem'){c.beginPath();c.moveTo(16,7);c.lineTo(23,16);c.lineTo(16,25);c.lineTo(9,16);c.closePath();c.fill();line(c,[[16,7],[13,16],[16,25]],'#ffffff80')}else{line(c,[[16,10],[21,16],[16,22],[11,16],[16,10]],w.color);c.fillRect(15,14,2,4)}}
  c.restore();
 }
 function portrait(c,classId){c.clearRect(0,0,32,36);const col=classes[classId].color;c.strokeStyle=col;c.strokeRect(13,4,6,6);line(c,[[16,11],[16,22],[11,31]],col);line(c,[[16,22],[21,31]],col);line(c,[[10,21],[12,15],[16,13],[21,17],[23,13]],col);drawWeapon(c,classId,[23,17],1,0,col);if(classId===1)drawWeapon(c,1,[10,21],1,-.3,col)}
-function serviceScenery(){const house=(x,label)=>{line(ctx,[[x,226],[x,181],[x+38,150],[x+76,181],[x+76,226]],'#b98539');line(ctx,[[x-5,183],[x+38,148],[x+81,183]],'#e5bb54');ctx.strokeStyle='#7a532b';ctx.strokeRect(x+28,201,20,25);ctx.fillStyle='#fff0ab';ctx.font='9px monospace';ctx.fillText(label,x+18,186)};house(12,serviceKind()==='town'?'SHOP':'RUNES');if(serviceKind()==='town')house(350,'INN');ctx.fillStyle='#bb9146';ctx.fillRect(538,207,34,9);ctx.fillRect(552,216,2,10);ctx.fillStyle='#000';ctx.font='7px monospace';ctx.fillText('MAP >',540,214)}
+function serviceScenery(){const house=(x,label)=>{line(ctx,[[x,226],[x,181],[x+38,150],[x+76,181],[x+76,226]],'#b98539');line(ctx,[[x-5,183],[x+38,148],[x+81,183]],'#e5bb54');ctx.strokeStyle='#7a532b';ctx.strokeRect(x+28,201,20,25);ctx.fillStyle='#fff0ab';ctx.font='9px monospace';ctx.fillText(label,x+18,186)};house(12,serviceKind()==='town'?'SHOP':serviceKind()==='enchanter'?'ENCHANTS':'RUNES');if(serviceKind()==='town')house(350,'INN');ctx.fillStyle='#bb9146';ctx.fillRect(538,207,34,9);ctx.fillRect(552,216,2,10);ctx.fillStyle='#000';ctx.font='7px monospace';ctx.fillText('MAP >',540,214)}
 function terrain(){
  ctx.fillStyle='#000';ctx.fillRect(0,0,576,256);
  const node=areaInfo(),zone=ZONES[node.zone],region=zone.regions[node.region%4],palette=state==='service'?ZONES[0].palette:zone.palette;
@@ -1051,7 +1074,7 @@ function draw(){ctx.imageSmoothingEnabled=false;terrain();drawHazards();if(state
 function openMainMenu(){if(sceneFade)return;save();release();closeSettings();menuOpen=true;$('#main-menu').hidden=false;setFrontScreen('menu');$('#menu-actions').hidden=false;$('#save-picker').hidden=true;drawMenuGround('menu-ground');}
 function renderSaveSlots(){$('#save-slots').innerHTML=[1,2,3].map(slot=>{const s=readSlot(slot),valid=Array.isArray(s?.heroes)&&s.heroes.length===4&&s.heroes.every(h=>classes[h.classId]);return '<button data-save-slot="'+slot+'" '+(savePickerMode==='load'&&!valid?'disabled':'')+'><strong>SAVE '+slot+'</strong><span>'+(valid?s.heroes.map(h=>classes[h.classId].name+' '+h.level).join(' · '):'New adventure')+'</span>'+(valid?'<small>'+Math.floor(s.gold||0)+' gold</small>':'')+'</button>'}).join('')}
 function chooseSaveSlot(slot){if(![1,2,3].includes(slot))return;activeSlot=slot;setFrontScreen(null);menuOpen=false;$('#main-menu').hidden=true;if(sessionSlot===slot&&state!=='setup')return;
- if(load()){sessionSlot=slot;selected=0;$('#setup').hidden=true;if(serviceKind()==='town'||serviceKind()==='trader')enterService(currentNode);else enter();return}
+ if(load()){sessionSlot=slot;selected=0;$('#setup').hidden=true;if(!!serviceKind())enterService(currentNode);else enter();return}
  beginPartySetup()
 }
 $('#menu-button').onclick=openMainMenu;$('#setup-back').onclick=openMainMenu;
