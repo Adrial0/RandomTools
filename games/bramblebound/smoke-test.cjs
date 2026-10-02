@@ -733,7 +733,7 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
 
 {
  const run=harness(),r=run.t;r.startTown();const h=r.get().heroes[0];h.attributes={str:4,dex:3,int:2,lp:1};h.sp=2;h.level=6;r.stats(h);r.setGold(999);assert.equal(r.respec(),false);r.setGold(10000);assert.ok(r.respec());assert.equal(h.sp,12);assert.equal(Object.values(h.attributes).reduce((a,b)=>a+b,0),0);assert.equal(r.get().gold,9000);assert.equal(r.respecCost(),2000);assert.equal(r.respec(),false);r.allocate('dex');assert.ok(r.respec());assert.equal(r.get().gold,7000);r.save();assert.equal(harness(run.storage).t.respecCost(),3000);r.openMap();assert.equal(r.respec(),false);
- r.setArea(3);r.enter();const e=r.enemy('guardian3',400);e.patternIndex=1;e.specialCooldown=0;r.tickSpecial(e,h,.01);assert.ok(r.get().hazards.every(p=>Math.abs(p.amount-17.28)<1e-9));assert.equal(r.volleyDamageScale(8),.65);assert.equal(r.volleyDamageScale(12),.55);assert.equal(r.volleyDamageScale(1),1);
+ r.setArea(3);r.enter();const e=r.enemy('guardian3',400);e.patternIndex=1;e.specialCooldown=0;r.tickSpecial(e,h,.01);assert.ok(r.get().hazards.every(p=>Math.abs(p.amount-21.6)<1e-9));assert.equal(r.volleyDamageScale(8),.65);assert.equal(r.volleyDamageScale(12),.55);assert.equal(r.volleyDamageScale(1),1);
  const mushroom=r.enemy('sporecap',100);h.x=110;h.y=mushroom.y;h.hp=10000;r.get().hazards.length=0;r.fireEnemyAttack(mushroom,h,mushroom.attackProfile);r.tickHazards(.01);assert.equal(h.poison.time,1);r.get().hazards.length=0;r.tickEffects(1);assert.equal(h.poison,null);
  console.log('Respec refunds all attributes, charges escalating saved prices, and is town-only; dense volleys nerfed and enemy poison expires after one second.');
 }
@@ -743,4 +743,11 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  const canvas=run.elements.get('#game');canvas.getBoundingClientRect=()=>({left:0,top:0,width:576,height:256});canvas.setPointerCapture=()=>{};
  run.events['#game:pointerdown']({clientX:101,clientY:213,pointerId:1,timeStamp:0});assert.ok(alive.dragTarget);assert.equal(dead.dragTarget,undefined);
  console.log('Dragging selects the living character behind an overlapping corpse.');
+}
+
+{
+ const {t:r}=harness();r.start();r.setArea(4);r.enter();const e=r.enemy('guardian4',400),h=r.get().heroes[0];
+ for(const [index,damage] of [[0,11.88],[1,4.752]]){r.get().hazards.length=0;e.patternIndex=index;e.specialCooldown=0;e.warning=null;r.tickSpecial(e,h,.01);assert.ok(r.get().hazards.length);assert.ok(r.get().hazards.every(p=>Math.abs(p.amount-damage)<1e-9));}
+ r.setArea(3);const previous=r.enemy('guardian3',400);previous.patternIndex=1;previous.specialCooldown=0;r.get().hazards.length=0;r.tickSpecial(previous,h,.01);assert.ok(r.get().hazards.every(p=>Math.abs(p.amount-21.6)<1e-9));
+ console.log('Grassland 4 damage restored; Grassland 5 swarm darts and streams deal 20% less than original damage.');
 }
