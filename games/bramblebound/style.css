@@ -68,3 +68,5 @@ button,select{font:inherit;border:1px solid #80602f;border-radius:0;cursor:point
 .slot.drop-no{position:relative;outline:none!important;cursor:not-allowed}.slot.drop-no canvas,.slot.drop-no small{opacity:.22}.slot.drop-no::after{content:"";position:absolute;inset:4px;pointer-events:none;background:linear-gradient(45deg,transparent 47%,#a99572 48%,#a99572 52%,transparent 53%),linear-gradient(-45deg,transparent 47%,#a99572 48%,#a99572 52%,transparent 53%)}
 
 .service-actions #sell-item,.service-actions #buyback{font-size:12px;padding:9px 14px;min-height:34px}.service-actions #sell-item[aria-pressed="true"]{background:#713c29;border-color:#ffbd70}.inventory.sell-mode{outline:3px solid #e98948;background:#653b25;padding:4px}.inventory.sell-mode .panel-label{color:#ffdc8a}.inventory.sell-mode .slot{cursor:crosshair}.inventory.sell-mode .slot:hover{outline:2px solid #ffbd70;background:#59341e}
+
+#service-controls #respec{position:absolute;right:12%;bottom:32px;pointer-events:auto;padding:5px 9px}#respec[hidden]{display:none}
