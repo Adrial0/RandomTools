@@ -316,7 +316,7 @@ function fireEnemyAttack(e,target,profile){
  }
  const count=a.count||1;
  for(let i=0;i<count;i++){
-  const offset=(i-(count-1)/2)*(a.spread||0),p=launchHazard(e,target,a.kind,offset,enemyDamage(e,(a.damage||1)*(e.type==='boss'?bossProjectileScale(e,a.volleyCount||count):1),a.element||'physical'));
+  const offset=(i-(count-1)/2)*(a.spread||0),p=launchHazard(e,target,a.kind,offset,enemyDamage(e,(a.damage||1)*(a.kind==='missile'?volleyDamageScale(a.volleyCount||count):e.type==='boss'?bossProjectileScale(e,a.volleyCount||count):1),a.element||'physical'));
   Object.assign(p,{size:a.size||3,color:a.color||e.color,element:a.element||'physical',aoe:a.aoe||0,life:a.life||5,tracking:a.tracking??.8,speed:a.speed||90});
   if(a.kind==='rock'||a.kind==='arrow'){const flight=(a.flight||2)+(i%2)*.12;p.vx=(target.x-e.x)/flight+offset*70;p.gravity=a.kind==='arrow'?180:110;p.vy=(target.y-13-p.y)/flight-.5*p.gravity*flight;}
   else{const angle=Math.atan2(p.vy,p.vx);p.vx=Math.cos(angle)*(a.speed||110);p.vy=Math.sin(angle)*(a.speed||110)}
@@ -430,7 +430,7 @@ function tickSpecial(e,target,dt){
 if(w.pattern==='DART')launchHazard(e,aim,'bullet',0,enemyDamage(e,2*(e.type==='boss'?bossProjectileScale(e,1):1)));if(w.pattern==='FAN')for(let i=-3;i<=3;i++)launchHazard(e,aim,'bullet',i*.20,enemyDamage(e,3*(e.type==='boss'?.65:1)));
  if(w.pattern==='ARROWS')for(let i=-2;i<=2;i++)launchHazard(e,aim,'arrow',i*.25,enemyDamage(e,3*(e.type==='boss'?.8:1)));
  if(w.pattern==='BOMBS'){const p=launchHazard(e,aim,'bomb',0,enemyDamage(e,4,'fire')),v=move?.variant||0,flight=1.8+v*.18;p.vx=(aim.x-e.x)/flight;p.vy=(aim.y-13-p.y)/flight-.5*p.gravity*flight;p.fuse=flight+.55;p.aoe=24+v*3;p.color=move?.color||'#ff794c';}
- if(w.pattern==='SEEKERS')for(let i=-1;i<=1;i++)launchHazard(e,target,'missile',i*.6,enemyDamage(e,3.5,'lightning'));
+ if(w.pattern==='SEEKERS')fireEnemyAttack(e,target,{kind:'missile',count:3,spread:.6,speed:90,life:1.6,tracking:.8,damage:1.5,element:'lightning',color:'#e994ff'});
 
  }
  if(['CHARGE','FROST','CURSE'].includes(w.pattern)){

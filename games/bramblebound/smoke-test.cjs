@@ -751,3 +751,16 @@ console.log('Socket replacement consumes the old item; summoner socket health, d
  r.setArea(3);const previous=r.enemy('guardian3',400);previous.patternIndex=1;previous.specialCooldown=0;r.get().hazards.length=0;r.tickSpecial(previous,h,.01);assert.ok(r.get().hazards.every(p=>Math.abs(p.amount-21.6)<1e-9));
  console.log('Grassland 4 damage restored; Grassland 5 swarm darts and streams deal 20% less than original damage.');
 }
+
+{
+ const {t:r}=harness();r.start();r.setArea(45);r.enter();const h=r.get().heroes[0];let checked=0;
+ for(const [id,spec] of Object.entries(r.ENEMY_TYPES)){
+  const e=r.enemy(id,400);
+  if(spec.pattern!=='SEEKERS'||e.attackProfile||e.type==='boss')continue;
+  r.get().hazards.length=0;e.specialCooldown=0;r.tickSpecial(e,h,.01);const shots=r.get().hazards;assert.equal(shots.length,3,id);assert.ok(shots.every(p=>p.kind==='missile'&&Math.abs(p.amount-Math.max(1,e.at*1.5*.8*.75))<1e-9),id+' uses shared homing damage');checked++;
+  if(id==='region8enemy1')assert.ok(Math.abs(shots[0].amount-59.535)<1e-9,'Beach Gull reduced from 173.64');
+ }
+ assert.ok(checked>1,'Audit all legacy homing species');
+ for(const type of ['flyer','boss']){const e=r.enemy(type,400);e.at=100;e.emittingSpecial=true;for(const count of [1,2,3,6,10]){r.get().hazards.length=0;r.fireEnemyAttack(e,h,{kind:'missile',count,damage:1.5,element:'magic',life:1.6});assert.equal(r.get().hazards.length,count);assert.ok(r.get().hazards.every(p=>Math.abs(p.amount-112.5*r.volleyDamageScale(count))<1e-9));}}
+ console.log('All legacy homing enemies and both regular/boss missile profiles use shared count-based damage; Beach Gull is 59.535 per missile.');
+}
