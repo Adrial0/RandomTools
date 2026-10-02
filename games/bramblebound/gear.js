@@ -207,5 +207,6 @@ for(const w of Object.values(items))if(w.type==='weapon'&&w.classId===2&&w.effec
  const text={bolt:'A small fireball bounces from the hit.',fan:'Five small fireballs bounce from the hit.',trail:'Flames spread around the hit.',ring:'Flames burst around the hit.',eruption:'Flame erupts beneath the target.'}[w.ability.mode];
  if(text)w.abilityDescription=text+' '+w.burnMin+'–'+w.burnMax+' AT · Burn 5% · 2s.';
 }
+for(const item of Object.values(items))if(['rune','gem','soul','enchantment'].includes(item.type))item.socketFamily=item.type+':'+item.name.replace(/\s+\d+$/, '');
 globalThis.BrambleGear={items,effects,descriptions};
 })();
