@@ -1,45 +1,51 @@
-name: Playwright tests
-run-name: Playwright · ${{ inputs.source_sha || github.sha }}
+name: Start Playwright after Cloudflare Pages
 
 on:
-  workflow_dispatch:
-    inputs:
-      source_sha:
-        description: RandomTools commit that Cloudflare published (empty for manual run)
-        required: false
-        type: string
+  check_run:
+    types: [completed]
 
 permissions:
   contents: read
 
-concurrency:
-  group: playwright-${{ github.workflow }}-${{ inputs.source_sha || github.run_id }}
-  cancel-in-progress: false
-
 jobs:
-  test:
-    name: Playwright Chromium
+  dispatch:
+    if: >-
+      github.event.check_run.app.id == 85455 &&
+      github.event.check_run.name == 'Cloudflare Pages' &&
+      github.event.check_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '22'
-          cache: npm
-      - name: Install dependencies
-        run: npm ci
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-      # Tests currently visit the deployed myrandomtools.com website.
-      - name: Run tests
-        run: npm test -- --project=chromium --workers=1
-      - name: Upload test report
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v5
-        with:
-          name: playwright-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 14
+      # No checkout or execution of code from RandomTools is needed.
+      - name: Check that Cloudflare built the current main commit
+        id: main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHECK_SHA: ${{ github.event.check_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          main_sha=$(gh api repos/Adrial0/RandomTools/commits/main --jq .sha)
+          if [[ "$CHECK_SHA" == "$main_sha" ]]; then
+            echo 'matches=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'Skipped: this check is not for the latest main commit.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Start tests in the private test repository
+        if: steps.main.outputs.matches == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.PLAYWRIGHT_DISPATCH_TOKEN }}
+          SOURCE_SHA: ${{ github.event.check_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$GH_TOKEN" ]]; then
+            echo 'Missing Actions secret PLAYWRIGHT_DISPATCH_TOKEN.' >&2
+            exit 1
+          fi
+          gh workflow run playwright.yml \
+            --repo Adrial0/playwright-test \
+            --ref main \
+            -f source_sha="$SOURCE_SHA"
+          echo 'Test run requested. This job does not report whether tests passed.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Results: https://github.com/Adrial0/playwright-test/actions/workflows/playwright.yml' >> "$GITHUB_STEP_SUMMARY"
