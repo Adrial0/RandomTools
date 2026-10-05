@@ -34,7 +34,7 @@
     const card=game.definition(id), p=game.profile(id);
     const partner=null;
     const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
-    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price} gold to buy, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.price}g</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats">⚔ ${p.attack} &nbsp; ♥ ${p.health}${p.armor?` &nbsp; ◈ ${p.armor}`:''}</span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
+    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price} gold to buy, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.price}g</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
   function mergeDetails(id) {
     const card=game.definition(id),baseId=card.baseId||id;
@@ -47,9 +47,9 @@
     return `<section class="recipe-details"><h4>Created from</h4>${origins?`<ul>${origins}</ul>`:'<p class="small">Base card · no ingredients.</p>'}<h4>Merge with → result</h4>${upgrades.length?`<ul>${upgrades.join('')}</ul>`:'<p class="small">No further merge recipes.</p>'}</section>`;
   }
   function inspect(id,unit) {
-    if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p><p class="small">Numbers on units show their activation order.</p>';return;}
+    if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p>';return;}
     const card=game.definition(id),p=game.profile(id);
-    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1} · Shop ${p.price} gold${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
+    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">${unit?unit.attack:p.attack} damage · ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1} · Shop ${p.price} gold${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
     $('inspector').querySelector('.stat-line').insertAdjacentHTML('afterend',mergeDetails(id));
   }
   function render() {
@@ -59,13 +59,12 @@
     $('resources').innerHTML=`<div class="resource">LIVES<strong class="lives">${s.lives} / 3</strong></div><div class="resource">GOLD<strong class="mana">${s.gold}</strong></div><div class="resource">INCOME<strong>+${game.income()}</strong></div>`;
     $('enemy-hp').textContent=s.enemyHP+' / '+s.enemyMaxHP;$('player-hp').textContent=s.playerHP+' / '+s.playerMaxHP;
     $('enemy-health').style.width=100*s.enemyHP/s.enemyMaxHP+'%';$('player-health').style.width=100*s.playerHP/s.playerMaxHP+'%';
-    const ordering={};for(const team of ['player','enemy'])s.units.filter(u=>u.team===team&&!u.hostId).sort((a,b)=>team==='player'?a.row-b.row||a.col-b.col:b.row-a.row||b.col-a.col).forEach((u,i)=>ordering[u.uid]=i+1);
     let tiles='';
     for(let row=0;row<6;row++)for(let col=0;col<6;col++) {
       const unit=s.units.find(u=>u.row===row&&u.col===col&&!u.hostId);
-      const deployable=!busy&&s.phase==='planning'&&!s.pendingChoice&&selected!==null&&row>=(s.hand[selected]==='agent'?1:3)&&!unit;
+      const deployable=!busy&&s.phase==='planning'&&!s.pendingChoice&&drag?.active&&row>=(s.hand[drag.source.index]==='agent'?1:3)&&!unit;
       const label=unit?`${unit.team} ${game.definition(unit.cardId).name}, ${unit.hp} health, ${unit.attack} attack`:`Row ${row+1}, column ${col+1}${row===0?' enemy base':row===5?' your base':''}${deployable?', deploy here':''}`;
-      tiles+=`<button class="tile ${row<3?'enemy-home':'player-home'} ${row===0?'base-enemy':row===5?'base-player':''} ${unit?'occupied '+unit.team:''} ${deployable?'deployable':''}" data-row="${row}" data-col="${col}" aria-label="${escape(label)}">${unit?`<span class="order">${ordering[unit.uid]}</span><span class="conditions">${unit.burn?'♨':''}${unit.poison?'●':''}${unit.freeze?'❄':''}${unit.stealth?'◌':''}</span>${portrait(unit.cardId,"unit")}<span class="unit-damage" aria-label="${unit.attack} damage">⚔ ${unit.attack}</span><span class="unit-health" aria-label="${unit.hp} health">♥ ${unit.hp}</span>`:`<span class="tile-id">${row===0?'BASE ↓':row===5?'BASE ↑':String.fromCharCode(65+col)+(row+1)}</span>`}</button>`;
+      tiles+=`<button class="tile ${row<3?'enemy-home':'player-home'} ${row===0?'base-enemy':row===5?'base-player':''} ${unit?'occupied '+unit.team:''} ${deployable?'deployable':''}" data-row="${row}" data-col="${col}" aria-label="${escape(label)}">${unit?`<span class="conditions">${unit.burn?'♨':''}${unit.poison?'●':''}${unit.freeze?'❄':''}${unit.stealth?'◌':''}</span>${portrait(unit.cardId,"unit")}<span class="unit-damage" aria-label="${unit.attack} damage">${unit.attack}</span><span class="unit-health" aria-label="${unit.hp} health">${unit.hp}</span>`:''}</button>`;
     }
     $('board').innerHTML=tiles;
     const phases={'planning':'Your turn','player-action':'Your army acts','enemy-action':'Enemy turn','battle-lost':'Battle lost','camp':'Victory','won':'Expedition complete','lost':'No lives left'};
@@ -97,11 +96,10 @@
     dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><p>Your next battle starts at full base health with an empty hand. All cards reset; gold and artifacts remain.</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<80||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 80 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
   }
   function revealMobileDetails() {if(matchMedia('(max-width:720px)').matches&&!$('overlay').open)dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">${selected!==null?'Back to board · place card':'Back to battle'}</button>`);}
-  $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy||Date.now()<suppressClickUntil)return;const i=Number(button.dataset.card);selected=selected===i?null:i;inspected=null;render();if(selected!==null)revealMobileDetails();});
+  $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy||Date.now()<suppressClickUntil)return;const i=Number(button.dataset.card);selected=null;inspected={id:game.state.hand[i]};render();revealMobileDetails();});
   $('board').addEventListener('click',event=>{
-    const tile=event.target.closest('[data-row]');if(!tile||busy)return;const row=Number(tile.dataset.row),col=Number(tile.dataset.col),unit=game.unitAt(row,col);
+    const tile=event.target.closest('[data-row]');if(!tile||busy||Date.now()<suppressClickUntil)return;const row=Number(tile.dataset.row),col=Number(tile.dataset.col),unit=game.unitAt(row,col);
     if(unit){inspected={id:unit.cardId,uid:unit.uid};render();revealMobileDetails();return;}
-    if(selected!==null){if(game.deploy(selected,row,col)){selected=null;inspected=null;save();render();showPhase();}else notify('Deploy on an empty friendly tile. Agents can deploy farther forward.');}
   });
   $('shop').addEventListener('click',event=>{const button=event.target.closest('[data-shop]');if(!button||busy)return;const id=game.state.shop[Number(button.dataset.shop)];if(game.buyCard(Number(button.dataset.shop))){selected=null;inspected={id};save();render();revealMobileDetails();}});
   $('reroll-shop').addEventListener('click',()=>{if(busy)return;if(game.rerollShop()){save();render();}});
@@ -114,6 +112,7 @@
     const hand=element?.closest('#hand [data-card]');return hand?{zone:'hand',index:Number(hand.dataset.card)}:null;
   }
   function cleanupDrag() {
+    document.querySelectorAll('.board-drop-hover').forEach(el=>el.classList.remove('board-drop-hover'));
     if(drag?.frame)cancelAnimationFrame(drag.frame);
     drag?.ring?.remove();drag?.ghost?.remove();
     document.querySelectorAll('.drag-source,.drop-valid,.drop-invalid,.drop-hover').forEach(el=>el.classList.remove('drag-source','drop-valid','drop-invalid','drop-hover'));
@@ -128,6 +127,8 @@
     if(index!==drag.targetIndex){drag.targetIndex=index;drag.holdStart=performance.now();document.querySelectorAll('.drop-hover').forEach(el=>el.classList.remove('drop-hover'));if(recipe)element.classList.add('drop-hover');}
     drag.ring.hidden=!recipe;drag.ring.style.left=drag.x+14+'px';drag.ring.style.top=drag.y-52+'px';
     if(recipe)drag.ring.querySelector('small').textContent=game.definition(recipe.result).name;
+    document.querySelectorAll('.board-drop-hover').forEach(el=>el.classList.remove('board-drop-hover'));
+    const tile=document.elementFromPoint(drag.x,drag.y)?.closest('#board .tile.drop-valid');if(tile)tile.classList.add('board-drop-hover');
   }
   function updateMergeHold() {
     if(!drag?.active)return;updateMergeTarget();
@@ -148,6 +149,7 @@
       document.body.setPointerCapture(event.pointerId);drag.active=true;
       const box=drag.element.getBoundingClientRect();drag.ghost=drag.element.cloneNode(true);drag.ghost.className='card drag-ghost';drag.ghost.style.width=box.width+'px';drag.ghost.style.height=box.height+'px';document.body.append(drag.ghost);drag.element.classList.add('drag-source');
       const id=game.state.hand[drag.source.index];
+      document.querySelectorAll('#board .tile').forEach(tile=>{const row=Number(tile.dataset.row),col=Number(tile.dataset.col);if(row>=(id==='agent'?1:3)&&!game.unitAt(row,col))tile.classList.add('drop-valid');});
       document.querySelectorAll('#hand [data-card]').forEach(el=>{const ref=reference(el);if(ref.index!==drag.source.index)el.classList.add(game.recipesFor(id,game.state.hand[ref.index]).length?'drop-valid':'drop-invalid');});
       drag.ring=document.createElement('div');drag.ring.className='merge-progress';drag.ring.setAttribute('role','progressbar');drag.ring.setAttribute('aria-label','Hold to merge');drag.ring.setAttribute('aria-valuemin','0');drag.ring.setAttribute('aria-valuemax','100');drag.ring.innerHTML='<span>+</span><small></small>';document.body.append(drag.ring);
       drag.frame=requestAnimationFrame(updateMergeHold);
@@ -159,9 +161,11 @@
     drag.x=event.clientX;drag.y=event.clientY;updateMergeTarget();
     const source=drag.source,active=drag.active,target=reference(document.elementFromPoint(event.clientX,event.clientY));
     const ready=active&&target&&target.index===drag.targetIndex&&performance.now()-drag.holdStart>=MERGE_HOLD_MS;
+    const tile=document.elementFromPoint(event.clientX,event.clientY)?.closest('#board .tile');
     cleanupDrag();if(!active)return;suppressClickUntil=Date.now()+400;selected=null;inspected=null;
     if(ready)game.mergeCards(source,target);
-    save();render();
+    else if(tile)game.deploy(source.index,Number(tile.dataset.row),Number(tile.dataset.col));
+    save();render();showPhase();
   });
   document.addEventListener('pointercancel',()=>{cleanupDrag();render();});
   window.addEventListener('blur',()=>{if(drag){suppressClickUntil=Date.now()+400;cleanupDrag();}});
@@ -195,4 +199,3 @@
   // Small read-only-facing entry point for local development and smoke verification.
   window.cardbattler={game,render};
 })();
-

@@ -139,5 +139,12 @@
     ],
     "reinforcementEveryRound": true,
     "extraReinforcementOnEvenRoundsFromEncounter": 3
+  },
+  "deploymentInteraction": {
+    "mode": "drag-hand-card-to-empty-legal-tile",
+    "clickOnlyInspects": true,
+    "deploymentRequiresHold": false,
+    "invalidDropPreservesCard": true,
+    "mouseAndTouch": true
   }
 }

@@ -10,9 +10,9 @@ The compact layout keeps the battlefield, shop, resources, turn controls, and ha
 
 Encounter name, lives, gold, and income share a status bar above the battlefield. The left panel contains card details and merge recipes, independent of run status. The full card catalog is available through Cards in the header.
 
-Selecting a card shows its ingredient recipes and its possible merge partners and results, with color markers. All alternative recipes are listed. Blob's self-merge and upgraded forms are included. On phones, selecting a card opens these details; closing them preserves the selected card for deployment. The catalog and shop inspections show recipes too.
+Selecting a card shows its ingredient recipes and its possible merge partners and results, with color markers. All alternative recipes are listed. Blob's self-merge and upgraded forms are included. On phones, selecting a card opens these details; closing them returns to the battlefield; drag from the hand to deploy. The catalog and shop inspections show recipes too.
 
-- Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
+- Drag a hand card onto an empty tile in your bottom three rows to deploy. The bottom row is also your base row and can hold defenders. Clicking a hand card or battlefield unit only opens its details; it never places a card.
 - Buy cards from the six-card shop to add them to your hand, then deploy for free. There are no automatic draws. Start with 60 gold; earn 10 gold each completed round, plus 1 per surviving unsilenced Miner or Businessman. Base cards cost 10 gold, two-color cards 30, and four-color cards 50. The shop refreshes free each round; manual reroll costs 10 gold. Purchases require fewer than 10 cards in hand.
 - Drag a hand card over a compatible hand card and hold for 0.9 seconds. A circular indicator fills and shows a checkmark when ready. Release on that same card to merge; completing the hold alone never merges. Leaving the target or switching cards restarts the timer. Early release, release elsewhere, Escape, interrupted pointers, or losing window focus cancel without changing cards.
 - Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge, except Blob with another Blob. A recipe is otherwise required; compatible hand cards are highlighted while dragging a hand card.
@@ -77,7 +77,7 @@ Source: `cards (4).xlsx`. Entries include sheet and cell references where applic
 
 Place images in `assets/characters/` using the lowercase card ID as the filename, such as `robot.png`, `space-monk.png`, or `ai-girlfriend.png`. PNG, WebP, JPG, and JPEG are tried automatically in that order. `assets/characters/image-filenames.json` lists all cards and summons. Upgraded Blobs reuse `blob.png`. Square portraits work best; images fill the battlefield tile and crop from the center. Reload after adding images; no build is needed. Missing portraits show a silhouette.
 
-The card inspector reserves a portrait area and includes stats, purchase price, colors, abilities, keyword explanations, pending design notes, and all merge recipes. Card details in the header opens the full details in a larger dialog. Hover or select a battlefield unit to inspect it. Battlefield units show the portrait, damage at bottom-left, and HP at bottom-right, with activation order and status markers. Unit names and unit HP bars are removed. The hand is centered when its cards fit and scrolls horizontally when necessary.
+The card inspector reserves a portrait area and includes stats, purchase price, colors, abilities, keyword explanations, pending design notes, and all merge recipes. Card details in the header opens the full details in a larger dialog. Hover or select a battlefield unit to inspect it. Battlefield units show the portrait, damage at bottom-left, and HP at bottom-right, with status markers. Unit names, activation numbers, damage/HP icons, unit HP bars, and empty-tile labels are removed. Damage and HP are colored numbers. The hand is centered when its cards fit and scrolls horizontally when necessary.
 
 ## Editing cards
 
