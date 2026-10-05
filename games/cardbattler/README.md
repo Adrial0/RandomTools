@@ -8,6 +8,8 @@ Open `index.html` in a browser, or serve this folder with the existing static we
 
 The compact layout keeps the battlefield, shop, resources, turn controls, merge row, and hand within the viewport. The battle log opens from the header. Desktop card descriptions appear in the inspector; on phones, select a card or unit and use Card details. Long hands scroll horizontally, and full descriptions and the catalog remain available without expanding the page.
 
+Encounter name, lives, gold, and income share a status bar above the battlefield. The left panel contains card details and merge recipes, independent of run status. The full card catalog is available through Cards in the header.
+
 Selecting a card shows its ingredient recipes and its possible merge partners and results, with color markers. All alternative recipes are listed. Blob's self-merge and upgraded forms are included. On phones, selecting a card opens these details; closing them preserves the selected card for deployment. The catalog and shop inspections show recipes too.
 
 - Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
