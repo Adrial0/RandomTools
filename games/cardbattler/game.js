@@ -18,7 +18,7 @@
   try {const stored=localStorage.getItem(SAVE);if(!stored||!game.restore(JSON.parse(stored)))game.newRun();}catch{game.newRun();saveAvailable=false;}
   function cardMarkup(id,index,extra='') {
     const card=game.definition(id), p=game.profile(id);
-    const partner=index!==null?game.state.merge.find(Boolean):null;
+    const partner=null;
     const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
     return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price} gold to buy, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.price}g</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats">⚔ ${p.attack} &nbsp; ♥ ${p.health}${p.armor?` &nbsp; ◈ ${p.armor}`:''}</span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
@@ -60,9 +60,6 @@
     $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent='Deployment is free · '+s.deck.length+' cards owned';
     $('hand').innerHTML=s.hand.length?s.hand.map((id,i)=>cardMarkup(id,i,selected===i?'selected':'')).join(''):'<div class="empty-hand">Buy cards from the shop to fill your hand.</div>';
     $('hand').querySelectorAll('button').forEach(b=>b.disabled=busy||s.phase!=='planning');
-    $('merge-slots').innerHTML=s.merge.map((id,i)=>id?cardMarkup(id,null,'stored-card').replace(`data-choice="${escape(id)}"`,`data-slot="${i}"`):`<button class="merge-slot empty-slot" data-slot="${i}" aria-label="Empty merge slot ${i+1}"><span aria-hidden="true">+</span>Drop a card</button>`).join('');
-    $('merge-slots').querySelectorAll('button').forEach(button=>button.disabled=busy||s.phase!=='planning');
-    $('merge-preview').textContent='Drag a card onto another to combine. Shared colors cannot merge, except Blob with Blob.';
     $('shop').innerHTML=(s.shop||[]).map((id,index)=>id?cardMarkup(id,null,'shop-card').replace(`data-choice="${escape(id)}"`,`data-shop="${index}"`):'<div class="sold-card">Sold</div>').join('');
     $('shop').querySelectorAll('[data-shop]').forEach(button=>{const id=s.shop[Number(button.dataset.shop)];button.disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.hand.length>=10||s.gold<game.profile(id).price;});
     $('reroll-shop').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.gold<10;
@@ -77,13 +74,13 @@
   function showPhase() {
     const s=game.state;
     if(s.pendingChoice)dialog(`<p class="eyebrow">LOREKEEPER</p><h2>Teach your row</h2><p>Choose a keyword for all current allies in the Lorekeeper's row.</p><div class="dialog-actions">${['armor','ranged','rush','ignite','retaliate','venom'].map(keyword=>`<button data-teach="${keyword}">${keyword}</button>`).join('')}</div>`);
-    else if(s.phase==='battle-lost')dialog(`<p class="eyebrow">BATTLE LOST</p><h2>${s.lives} ${s.lives===1?'life':'lives'} remaining</h2><p>Your base fell. Retry this battle with full base health, an empty hand and merge row, and a fresh shop. No cards carry over.</p><button class="primary" data-action="continue">Retry battle →</button>`);
+    else if(s.phase==='battle-lost')dialog(`<p class="eyebrow">BATTLE LOST</p><h2>${s.lives} ${s.lives===1?'life':'lives'} remaining</h2><p>Your base fell. Retry this battle with full base health, an empty hand, and a fresh shop. No cards carry over.</p><button class="primary" data-action="continue">Retry battle →</button>`);
     else if(s.phase==='camp')showCamp();
     else if(['won','lost'].includes(s.phase))dialog(`<p class="eyebrow">${s.phase==='won'?'EXPEDITION COMPLETE':'EXPEDITION ENDED'}</p><h2>${s.phase==='won'?'You held the line.':'All three lives are gone.'}</h2><p>${s.phase==='won'?'All five strongholds defeated with '+s.lives+' lives remaining.':'Reached battle '+(s.encounter+1)+' of 5.'}</p><div class="dialog-actions"><button class="primary" data-action="restart">Start a new run</button><button class="secondary" data-action="close">Inspect battlefield</button></div>`);
   }
   function showCamp() {
     const s=game.state;
-    dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><p>Your next battle starts at full base health with an empty hand and merge row. All cards reset; gold and artifacts remain.</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<80||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 80 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
+    dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><p>Your next battle starts at full base health with an empty hand. All cards reset; gold and artifacts remain.</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<80||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 80 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
   }
   function revealMobileDetails() {if(matchMedia('(max-width:720px)').matches&&!$('overlay').open)dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">${selected!==null?'Back to board · place card':'Back to battle'}</button>`);}
   $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy||Date.now()<suppressClickUntil)return;const i=Number(button.dataset.card);selected=selected===i?null:i;inspected=null;render();if(selected!==null)revealMobileDetails();});
@@ -97,59 +94,64 @@
   document.addEventListener('pointerover',event=>{
     if(busy||drag||event.pointerType==='touch')return;const shop=event.target.closest('[data-shop]'),ref=reference(event.target);const id=shop?game.state.shop[Number(shop.dataset.shop)]:ref?game.state[ref.zone][ref.index]:null;if(id)inspect(id);
   });
-  $('merge-slots').addEventListener('click',event=>{
-    const button=event.target.closest('[data-slot]');if(!button||busy||Date.now()<suppressClickUntil)return;
-    const slot=Number(button.dataset.slot),previous=game.state.merge[slot];
-    if(selected!==null){if(game.state.merge[slot]){if(!game.mergeCards({zone:'hand',index:selected},{zone:'merge',index:slot})){notify('These cards cannot combine: use different colors and a matching recipe.');return;}}else game.store(selected,slot);}
-    else if(game.state.merge[slot]&&!game.retrieve(slot)){notify('Your hand is full.');return;}
-    selected=null;inspected=game.state.merge[slot]||previous?{id:game.state.merge[slot]||previous}:null;save();render();if(previous)revealMobileDetails();
-  });
+  const MERGE_HOLD_MS=900;
   function reference(element) {
-    const hand=element?.closest('#hand [data-card]');if(hand)return {zone:'hand',index:Number(hand.dataset.card)};
-    const slot=element?.closest('#merge-slots [data-slot]');if(slot)return {zone:'merge',index:Number(slot.dataset.slot)};
-    return null;
+    const hand=element?.closest('#hand [data-card]');return hand?{zone:'hand',index:Number(hand.dataset.card)}:null;
   }
   function cleanupDrag() {
-    drag?.ghost?.remove();document.querySelectorAll('.drag-source,.drop-valid,.drop-invalid,.drop-hover').forEach(element=>element.classList.remove('drag-source','drop-valid','drop-invalid','drop-hover'));
+    if(drag?.frame)cancelAnimationFrame(drag.frame);
+    drag?.ring?.remove();drag?.ghost?.remove();
+    document.querySelectorAll('.drag-source,.drop-valid,.drop-invalid,.drop-hover').forEach(el=>el.classList.remove('drag-source','drop-valid','drop-invalid','drop-hover'));
     if(drag&&document.body.hasPointerCapture(drag.pointerId))document.body.releasePointerCapture(drag.pointerId);
     drag=null;
   }
+  function updateMergeTarget() {
+    if(!drag?.active)return;
+    const element=document.elementFromPoint(drag.x,drag.y)?.closest('#hand [data-card]'),ref=reference(element);
+    const recipe=ref&&ref.index!==drag.source.index?game.recipesFor(game.state.hand[drag.source.index],game.state.hand[ref.index])[0]:null;
+    const index=recipe?ref.index:null;
+    if(index!==drag.targetIndex){drag.targetIndex=index;drag.holdStart=performance.now();document.querySelectorAll('.drop-hover').forEach(el=>el.classList.remove('drop-hover'));if(recipe)element.classList.add('drop-hover');}
+    drag.ring.hidden=!recipe;drag.ring.style.left=drag.x+14+'px';drag.ring.style.top=drag.y-52+'px';
+    if(recipe)drag.ring.querySelector('small').textContent=game.definition(recipe.result).name;
+  }
+  function updateMergeHold() {
+    if(!drag?.active)return;updateMergeTarget();
+    const progress=drag.targetIndex==null?0:Math.min(1,(performance.now()-drag.holdStart)/MERGE_HOLD_MS);
+    drag.ring.style.setProperty('--progress',progress);drag.ring.setAttribute('aria-valuenow',String(Math.round(progress*100)));drag.ring.classList.toggle('ready',progress===1);drag.ring.querySelector('span').textContent=progress===1?'✓':'+';
+    drag.frame=requestAnimationFrame(updateMergeHold);
+  }
   document.addEventListener('pointerdown',event=>{
-    if(busy||game.state.phase!=='planning'||event.button!==0||$('overlay').open||drag)return;
-    const source=reference(event.target);if(!source||!game.state[source.zone][source.index])return;
-    drag={source,pointerId:event.pointerId,x:event.clientX,y:event.clientY,element:event.target.closest('button'),active:false};
+    if(busy||game.state.phase!=='planning'||game.state.pendingChoice||event.button!==0||$('overlay').open||drag)return;
+    const source=reference(event.target);if(!source||!game.state.hand[source.index])return;
+    drag={source,pointerId:event.pointerId,x:event.clientX,y:event.clientY,element:event.target.closest('button'),active:false,targetIndex:null};
   });
   document.addEventListener('pointermove',event=>{
     if(!drag||event.pointerId!==drag.pointerId)return;
     if(!drag.active&&Math.hypot(event.clientX-drag.x,event.clientY-drag.y)<8)return;
     event.preventDefault();
     if(!drag.active){
-      document.body.setPointerCapture(event.pointerId);
-      drag.active=true;const box=drag.element.getBoundingClientRect();drag.ghost=drag.element.cloneNode(true);drag.ghost.className='card drag-ghost';drag.ghost.style.width=box.width+'px';drag.ghost.style.height=box.height+'px';document.body.append(drag.ghost);drag.element.classList.add('drag-source');
-      const id=game.state[drag.source.zone][drag.source.index];
-      document.querySelectorAll('#hand [data-card],#merge-slots [data-slot]').forEach(element=>{const ref=reference(element);if(ref.zone===drag.source.zone&&ref.index===drag.source.index)return;const target=game.state[ref.zone][ref.index];element.classList.add(!target||game.recipesFor(id,target).length?'drop-valid':'drop-invalid');});
+      document.body.setPointerCapture(event.pointerId);drag.active=true;
+      const box=drag.element.getBoundingClientRect();drag.ghost=drag.element.cloneNode(true);drag.ghost.className='card drag-ghost';drag.ghost.style.width=box.width+'px';drag.ghost.style.height=box.height+'px';document.body.append(drag.ghost);drag.element.classList.add('drag-source');
+      const id=game.state.hand[drag.source.index];
+      document.querySelectorAll('#hand [data-card]').forEach(el=>{const ref=reference(el);if(ref.index!==drag.source.index)el.classList.add(game.recipesFor(id,game.state.hand[ref.index]).length?'drop-valid':'drop-invalid');});
+      drag.ring=document.createElement('div');drag.ring.className='merge-progress';drag.ring.setAttribute('role','progressbar');drag.ring.setAttribute('aria-label','Hold to merge');drag.ring.setAttribute('aria-valuemin','0');drag.ring.setAttribute('aria-valuemax','100');drag.ring.innerHTML='<span>+</span><small></small>';document.body.append(drag.ring);
+      drag.frame=requestAnimationFrame(updateMergeHold);
     }
-    drag.ghost.style.left=event.clientX+14+'px';drag.ghost.style.top=event.clientY-35+'px';
-    if(event.clientY<60)window.scrollBy(0,-18);else if(event.clientY>window.innerHeight-60)window.scrollBy(0,18);
-    document.querySelectorAll('.drop-hover').forEach(element=>element.classList.remove('drop-hover'));
-    const element=document.elementFromPoint(event.clientX,event.clientY)?.closest('#hand [data-card],#merge-slots [data-slot]');
-    if(element){element.classList.add('drop-hover');const ref=reference(element),a=game.state[drag.source.zone][drag.source.index],b=game.state[ref.zone][ref.index];if(b){const recipe=game.recipesFor(a,b)[0];$('merge-preview').textContent=recipe?'Release to combine into '+game.definition(recipe.result).name:game.sharedColors(a,b).length?'Cannot combine cards with shared colors.':'No recipe for this pair.';}else $('merge-preview').textContent='Release to place in this slot.';}
+    drag.x=event.clientX;drag.y=event.clientY;drag.ghost.style.left=event.clientX+14+'px';drag.ghost.style.top=event.clientY-35+'px';updateMergeTarget();
   },{passive:false});
   document.addEventListener('pointerup',event=>{
     if(!drag||event.pointerId!==drag.pointerId)return;
-    const source=drag.source,active=drag.active,target=reference(document.elementFromPoint(event.clientX,event.clientY));cleanupDrag();
-    if(!active)return;
-    suppressClickUntil=Date.now()+400;selected=null;inspected=null;
-    if(target&&!(target.zone===source.zone&&target.index===source.index)){
-      const targetId=game.state[target.zone][target.index];
-      const success=targetId?game.mergeCards(source,target):target.zone==='merge'&&game.moveMergeCard(source,target.index);
-      if(!success)game.log('No combination: cards need different colors and a matching recipe.');
-    }
+    drag.x=event.clientX;drag.y=event.clientY;updateMergeTarget();
+    const source=drag.source,active=drag.active,target=reference(document.elementFromPoint(event.clientX,event.clientY));
+    const ready=active&&target&&target.index===drag.targetIndex&&performance.now()-drag.holdStart>=MERGE_HOLD_MS;
+    cleanupDrag();if(!active)return;suppressClickUntil=Date.now()+400;selected=null;inspected=null;
+    if(ready)game.mergeCards(source,target);
     save();render();
   });
   document.addEventListener('pointercancel',()=>{cleanupDrag();render();});
+  window.addEventListener('blur',()=>{if(drag){suppressClickUntil=Date.now()+400;cleanupDrag();}});
   $('end-turn').addEventListener('click',async()=>{
-    if(busy)return;busy=true;selected=null;inspected=null;
+    if(busy)return;cleanupDrag();busy=true;selected=null;inspected=null;
     const frames=game.endTurn();save();
     const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     try {for(const frame of frames){visual=frame.state;render();await new Promise(resolve=>setTimeout(resolve,reduced?0:Math.max(50,Math.min(180,4500/frames.length))));}}

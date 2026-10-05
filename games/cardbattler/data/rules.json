@@ -43,11 +43,18 @@
     "rush": "May move and then attack on the same turn."
   },
   "merging": {
-    "separateSlotRow": true,
-    "slotCount": 6,
+    "separateSlotRow": false,
+    "slotCount": 0,
     "sharedColorsAllowed": false,
-    "sharedColorExceptions": ["Blob self-merging, including upgraded Blobs"],
-    "resultColors": "Union of the two ingredient color lists."
+    "sharedColorExceptions": [
+      "Blob self-merging, including upgraded Blobs"
+    ],
+    "resultColors": "Union of the two ingredient color lists.",
+    "interaction": "drag-hold-release",
+    "prototypeHoldDurationMs": 900,
+    "requiresReleaseOnSameTarget": true,
+    "resetsHoldWhenLeavingTarget": true,
+    "oldStoredCardsReturnToHand": true
   },
   "undecided": {
     "openingHandSize": null,
@@ -98,7 +105,14 @@
     "gameOverAtLives": 0,
     "baseHealthResetsEachBattle": true,
     "cardsCarryBetweenBattles": false,
-    "resetCardZones": ["hand", "merge", "deck", "draw", "discard", "units"],
+    "resetCardZones": [
+      "hand",
+      "merge",
+      "deck",
+      "draw",
+      "discard",
+      "units"
+    ],
     "prototype": {
       "retrySameEncounterAfterDefeat": true,
       "goldCarriesBetweenBattles": true,
@@ -109,4 +123,3 @@
     }
   }
 }
-

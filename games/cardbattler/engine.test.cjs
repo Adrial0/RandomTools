@@ -5,6 +5,9 @@ const path = require('node:path');
 const {Game} = require('./engine.js');
 const data = {cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
 function fresh(){const g=new Game(data,{random:()=>.3});g.newRun();g.state.deck=['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'];g.state.units=[];g.state.log=[];return g;}
+test('retired merge-row saves return stored cards to the hand exactly once',()=>{
+ const g=fresh();delete g.state.mergeInteractionRevision;g.state.hand=['robot'];g.state.merge=['blob:3','mage',null,null,null,null];g.state.deck=['robot','blob:3','mage'];const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.deepEqual(loaded.state.hand,['robot','blob:3','mage']);assert.ok(loaded.state.merge.every(id=>id===null));assert.deepEqual(loaded.state.deck,g.state.deck);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.hand,loaded.state.hand);
+});
 test('gold scaling migrates saved balances once and charges scaled shop and artifact prices',()=>{
  const g=fresh();g.state.economyRevision=2;g.state.gold=17;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.gold,170);assert.equal(loaded.state.economyRevision,3);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.equal(again.state.gold,170);assert.equal(again.profile('robot').price,10);assert.equal(again.profile('cleric').price,30);assert.equal(again.profile('posthuman').price,50);assert.ok(again.rerollShop());assert.equal(again.state.gold,160);again.state.phase='camp';assert.ok(again.buyCamp('war-banner'));assert.equal(again.state.gold,80);
 });

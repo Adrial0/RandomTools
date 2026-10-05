@@ -126,7 +126,7 @@
       return {...stats,price:tier===1?10:tier===2?30:50,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:60,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:60,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -480,6 +480,7 @@
       if((this.state.economyRevision||1)<2){this.state.economyRevision=2;this.state.gold=Math.max(6,this.state.gold);this.state.deck=[...this.state.hand,...this.state.merge.filter(Boolean),...this.state.units.filter(u=>u.team==='player'&&this.isCard(u.cardId)).map(u=>u.cardId)];this.state.draw=[];this.state.discard=[];this.state.pendingChoice=null;this.refreshShop();}
       if(this.state.economyRevision<3){this.state.gold*=10;this.state.economyRevision=3;}
       this.state.shop=this.state.shop||[];this.state.nextEnemyCard=this.state.nextEnemyCard||this.pick(this.enemyPool());
+      if((this.state.mergeInteractionRevision||1)<2){this.state.hand.push(...this.state.merge.filter(Boolean));this.state.merge=Array(6).fill(null);this.state.mergeInteractionRevision=2;}
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;
     }

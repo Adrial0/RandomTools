@@ -6,7 +6,7 @@ Working directory for the roguelike cardbattler. The game does not have a final 
 
 Open `index.html` in a browser, or serve this folder with the existing static website. No installation, network access, or build step is needed to play. The game lives at `/games/cardbattler/` when hosted.
 
-The compact layout keeps the battlefield, shop, resources, turn controls, merge row, and hand within the viewport. The battle log opens from the header. Desktop card descriptions appear in the inspector; on phones, select a card or unit and use Card details. Long hands scroll horizontally, and full descriptions and the catalog remain available without expanding the page.
+The compact layout keeps the battlefield, shop, resources, turn controls, and hand within the viewport. The battle log opens from the header. Desktop card descriptions appear in the inspector; on phones, select a card or unit and use Card details. Long hands scroll horizontally, and full descriptions and the catalog remain available without expanding the page.
 
 Encounter name, lives, gold, and income share a status bar above the battlefield. The left panel contains card details and merge recipes, independent of run status. The full card catalog is available through Cards in the header.
 
@@ -14,12 +14,12 @@ Selecting a card shows its ingredient recipes and its possible merge partners an
 
 - Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
 - Buy cards from the six-card shop to add them to your hand, then deploy for free. There are no automatic draws. Start with 60 gold; earn 10 gold each completed round, plus 1 per surviving unsilenced Miner or Businessman. Base cards cost 10 gold, two-color cards 30, and four-color cards 50. The shop refreshes free each round; manual reroll costs 10 gold. Purchases require fewer than 10 cards in hand.
-- The six-slot merge row sits below combat. Drag hand cards into empty slots, or drop a card directly onto another compatible card in the hand or row to merge instantly. The result stays at the destination and replaces its ingredients permanently in the deck. Click a stored card to return it to your hand. For click/keyboard use, select a hand card and click an empty slot to store it or an occupied slot to merge.
-- Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge, except Blob with another Blob. A recipe is otherwise required; compatible hand cards are highlighted when a workbench slot is filled.
-- Dragging highlights valid destinations. Invalid drops and canceled drags preserve both cards. Mouse and touch use the same pointer interaction. Existing two-slot saves expand to six slots while preserving stored cards.
+- Drag a hand card over a compatible hand card and hold for 0.9 seconds. A circular indicator fills and shows a checkmark when ready. Release on that same card to merge; completing the hold alone never merges. Leaving the target or switching cards restarts the timer. Early release, release elsewhere, Escape, interrupted pointers, or losing window focus cancel without changing cards.
+- Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge, except Blob with another Blob. A recipe is otherwise required; compatible hand cards are highlighted while dragging a hand card.
+- Dragging highlights compatible hand cards. Mouse and touch use the same hold-and-release gesture. The merge row is removed; cards in old saved storage slots return to your hand once without changing ownership.
 - End turn to activate your army, then the enemy army. Units move or attack; Rush can move and attack. Activation is front to back and left to right from each side's perspective.
 - Win five encounters by destroying their bases. Start the run with three lives; losing a battle costs one life. At zero lives the run ends. Losing retries the same encounter, while winning advances to the next.
-- Every new battle resets your base to full health and clears all cards: deployed units, hand, merge row, and ownership ledger. Buy a fresh army from a refreshed shop. Gold and artifacts carry forward, with at least sixty gold available at the start of each attempt. There are no card rewards or base repairs between battles; the prototype War Banner remains available after a victory.
+- Every new battle resets your base to full health and clears all cards: deployed units, hand, and ownership ledger. Buy a fresh army from a refreshed shop. Gold and artifacts carry forward, with at least sixty gold available at the start of each attempt. There are no card rewards or base repairs between battles; the prototype War Banner remains available after a victory.
 - Progress saves automatically in local storage. New Run replaces the saved expedition after confirmation.
 
 All 80 cards are playable, with all 72 distinct merge recipes available. The roster is derived directly from the card data, so future cards are not blocked by a separate allowlist. Shop tiers unlock as each battle and the run progress. Robot + Thief produces Hacker, whose attacks steal a random keyword from surviving targets.
@@ -93,5 +93,5 @@ Rows and columns are zero-based. Row 0 is the enemy base and row 5 is the player
 
 During the player's action phase, units activate by ascending row and then ascending column. Enemies use descending row and descending column, mirroring that order. Determine the activation list before units act so movement does not cause duplicate activations.
 
-The current prototype uses a shop, a ten-card purchase limit for the hand, free deployment and merging, and six storage slots. Numerical balance values remain adjustable.
+The current prototype uses a shop, a ten-card purchase limit for the hand, free deployment and merging, and no separate merge storage. Numerical balance values remain adjustable.
 
