@@ -33,6 +33,19 @@ test('recipe merges permanently replace ingredients and do not duplicate draw ca
 test('invalid merge keeps cards and deck intact',()=>{
  const g=fresh();g.state.hand=['robot','robot'];g.store(0,0);g.store(0,1);const deck=[...g.state.deck];assert.equal(g.merge(),false);assert.deepEqual(g.state.deck,deck);assert.deepEqual(g.state.merge,['robot','robot']);assert.equal(g.retrieve(0),true);
 });
+test('Robot and Thief merge into Hacker in either slot order',()=>{
+ for(const pair of [['robot','thief'],['thief','robot']]) {
+  const g=fresh();g.state.hand=[...pair];g.store(0,0);g.store(0,1);
+  assert.ok(g.mergeOptions().some(r=>r.result==='hacker'));assert.ok(g.merge('hacker'));
+  assert.deepEqual(g.state.hand,['hacker']);assert.ok(g.state.deck.includes('hacker'));
+ }
+});
+test('Hacker steals a surviving target keyword and transfers armor',()=>{
+ const g=fresh();const hacker=g.spawn('hacker','player',3,0),target=g.spawn('cyborg','enemy',2,0);
+ assert.equal(target.armor,1);g.action(hacker);assert.ok(hacker.keywords.includes('armor'));
+ assert.equal(hacker.armor,1);assert.equal(target.armor,0);assert.ok(!target.keywords.includes('armor'));
+ g.action(hacker);assert.equal(hacker.armor,1);
+});
 test('Warlord applies 20% attack aura to neighbors, not itself',()=>{
  const g=fresh();const warlord=g.spawn('warlord','player',3,3),ally=g.spawn('caveman','player',4,4);ally.attack=10;warlord.attack=10;assert.equal(g.effectiveAttack(ally),12);assert.equal(g.effectiveAttack(warlord),10);ally.col=5;assert.equal(g.effectiveAttack(ally),10);
 });
@@ -59,4 +72,34 @@ test('final battle victory and defeat terminate the run',()=>{
 });
 test('saved runs round trip and overlapping or unknown units are rejected',()=>{
  const g=fresh();g.spawn('robot','player',5,0);const h=new Game(data);assert.ok(h.restore(JSON.parse(JSON.stringify(g.state))));assert.equal(h.state.units[0].cardId,'robot');const invalid=JSON.parse(JSON.stringify(g.state));invalid.units.push({...invalid.units[0],uid:999});assert.equal(h.restore(invalid),false);
+});
+test('all 80 source cards are playable, deployable, and safe to activate',()=>{
+ const g=fresh();assert.equal(g.playable().length,80);
+ for(const card of data.cards){const h=fresh();h.state.hand=[card.id];h.state.mana=3;assert.ok(h.deploy(0,3,2),card.name);const unit=h.unitAt(3,2);h.spawn('caveman','enemy',2,2);assert.doesNotThrow(()=>h.action(unit),card.name);assert.ok(h.profile(card.id).health>0);}
+});
+test('all 72 recipes merge in both slot orders and preserve the result in the deck',()=>{
+ const g=fresh();assert.equal(g.recipes.length,72);
+ for(const recipe of data.recipes)for(const ingredients of [recipe.ingredients,[...recipe.ingredients].reverse()]) {
+  const h=fresh();h.state.deck=[...ingredients];h.state.hand=[...ingredients];h.store(0,0);h.store(0,1);
+  assert.ok(h.merge(recipe.result),recipe.id);assert.deepEqual(h.state.deck,[recipe.result]);assert.deepEqual(h.state.hand,[recipe.result]);
+ }
+});
+test('saved runs accept formerly excluded cards and mark unfinished effects honestly',()=>{
+ const g=fresh();g.state.deck=['symbiote','buddhist','shipwright','posthuman'];g.state.hand=['symbiote'];g.deploy(0,5,0);const h=new Game(data);assert.ok(h.restore(g.state));
+ assert.ok(g.profile('symbiote').pendingAbility);assert.ok(g.profile('space-monk').pendingKeywords.includes('pull'));assert.equal(g.profile('posthuman').pendingAbility,false);
+ for(const card of data.cards.filter(c=>c.id!=='posthuman')){assert.ok(g.profile('posthuman').health>g.profile(card.id).health);assert.ok(g.profile('posthuman').attack>g.profile(card.id).attack);}
+});
+test('every recipe combines disjoint colors and the result inherits their union',()=>{
+ const g=fresh();for(const card of data.cards)assert.equal(g.profile(card.id).colors.length,card.tier===1?1:card.tier===2?2:4,card.id);
+ for(const recipe of data.recipes){const [a,b]=recipe.ingredients;assert.deepEqual(g.sharedColors(a,b),[],recipe.id);assert.deepEqual(new Set(g.profile(recipe.result).colors),new Set([...g.profile(a).colors,...g.profile(b).colors]));}
+ assert.deepEqual(g.profile('artificer').colors,['blue','red']);assert.deepEqual(g.sharedColors('robot','artificer'),['blue']);assert.deepEqual(g.sharedColors('robot','robot'),['blue']);
+});
+test('shared colors block merges even if an overlapping recipe is supplied',()=>{
+ const g=fresh();g.recipes.push({ingredients:['robot','artificer'],result:'mech'});g.state.merge=['robot','artificer'];assert.deepEqual(g.mergeOptions(),[]);assert.equal(g.merge(),false);
+});
+test('health is lower and old saved units migrate once without restarting the run',()=>{
+ const g=fresh();assert.equal(g.profile('robot').health,8);assert.equal(g.profile('caveman').health,11);assert.equal(g.profile('mech').health,17);assert.equal(g.profile('posthuman').health,30);
+ const unit=g.spawn('robot','player',5,0);unit.maxHP=11;unit.hp=6;delete g.state.balanceRevision;
+ const h=new Game(data);assert.ok(h.restore(g.state));assert.equal(h.state.units[0].maxHP,8);assert.equal(h.state.units[0].hp,5);assert.equal(h.state.balanceRevision,2);
+ const j=new Game(data);assert.ok(j.restore(h.state));assert.equal(j.state.units[0].maxHP,8);
 });

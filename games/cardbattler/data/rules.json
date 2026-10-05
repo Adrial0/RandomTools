@@ -44,7 +44,9 @@
   },
   "merging": {
     "separateSlotRow": true,
-    "slotCount": null
+    "slotCount": null,
+    "sharedColorsAllowed": false,
+    "resultColors": "Union of the two ingredient color lists."
   },
   "undecided": {
     "openingHandSize": null,

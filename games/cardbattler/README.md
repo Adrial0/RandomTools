@@ -9,17 +9,20 @@ Open `index.html` in a browser, or serve this folder with the existing static we
 - Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
 - Deploy as many cards as your 3 mana allows. Start with 5 cards; draw 2 each subsequent turn. The hand limit is 10.
 - Select a hand card and then a workbench slot. Two compatible cards can be merged for free. The result replaces its ingredients permanently in the run's deck. Click an occupied slot to return that card to your hand.
+- Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge. A recipe is also required; compatible hand cards are highlighted when a workbench slot is filled.
 - End turn to activate your army, then the enemy army. Units move or attack; Rush can move and attack. Activation is front to back and left to right from each side's perspective.
 - Win five encounters by destroying their bases. Base health persists between encounters. Choose a card reward, repair your base at camp, or buy a prototype War Banner artifact.
 - Progress saves automatically in local storage. New Run replaces the saved expedition after confirmation.
 
-The playable roster contains 32 cards. All 80 original designs remain in the JSON files. The engine explicitly limits rewards and combinations to the supported roster.
+All 80 cards are playable, with all 72 distinct merge recipes available. The roster is derived directly from the card data, so future cards are not blocked by a separate allowlist. Rewards remain tier-gated as the run progresses. Robot + Thief produces Hacker, whose attacks steal a random keyword from surviving targets.
+
+Base colors: Robot blue, Mage red, Caveman green, Thief yellow, Raider orange, Engineer purple, Acolyte white, and Alien pink. Merged cards inherit all ingredient colors; their color stripe shows two or four components. Colors and the palette are stored in `cards.json`. Unit health is reduced by approximately 25% from the initial prototype. Existing saved battlefield units are migrated once to this balance revision.
 
 ### Temporary balance and behavior
 
 `engine.js` owns prototype stats, costs, enemy encounters, and ability implementations. These do not overwrite card design data. Several unresolved abilities have simple temporary implementations, described by the in-game inspector: Acolyte heals, Mechanic grants armor, Leader grants a small aura, and mage variants use splash attacks. Inquisitor's provisional Cursed bonus is 50%; burn deals 2 damage over two activations; mental attacks are currently the arcane caster attacks. Warlord auras stack additively. Ranged attacks stop at the first occupied tile in their column; bases must be attacked from the adjacent row. Summons wait until their side's next activation snapshot. Enemy reinforcements arrive every other turn.
 
-Symbiote, Buddhist, boats, mining, Charm, and other unfinished systems are stored as designs but are not playable yet. The prototype uses deterministic rules within combat except card draws, rewards, enemy deployments, and Scientist debuffs. Balancing and full-card implementation remain future work.
+Symbiote, Buddhist, boats, mining, Charm, and other unfinished systems are stored as designs; their cards can be deployed using provisional stats and implemented keywords while these abilities await implementation. The inspector and catalog identify pending effects and show planned ability descriptions. Posthuman intentionally has no ability and receives the highest base health and attack. The prototype uses deterministic rules within combat except card draws, rewards, enemy deployments, Scientist debuffs, and Hacker keyword selection. Balancing and full-card implementation remain future work.
 
 ### Development
 

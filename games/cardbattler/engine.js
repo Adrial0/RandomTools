@@ -7,12 +7,13 @@
   const copy = value => JSON.parse(JSON.stringify(value));
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const symbols = {robot:'▣',alien:'♧',mage:'✦',engineer:'⚒',thief:'♠',raider:'⚔',caveman:'◆',acolyte:'✝',pyro:'♨',mech:'▣',warlord:'♛',necromancer:'☠',cleric:'✝',templar:'♜',inquisitor:'✠',mindguard:'◉',witch:'✧',battlemage:'✦',viking:'⚔',shaman:'❋',sentinel:'▥',mechanic:'⚙',artificer:'⚒',enforcer:'♜',cyborg:'▣',psychic:'◉',warlock:'✧',mutant:'♧',leader:'♛',heretic:'☠',pirate:'⚑',scientist:'⚗',blob:'●'};
-  const supported = new Set(['robot','alien','mage','engineer','thief','raider','caveman','acolyte','artificer','mechanic','enforcer','cyborg','sentinel','psychic','warlock','shaman','templar','cleric','mutant','leader','heretic','pirate','scientist','viking','witch','battlemage','pyro','mech','warlord','necromancer','mindguard','inquisitor']);
+  const implementedKeywords = new Set(['armor','ranged','stationary','rush','retaliate','weaken','silence','lifesteal','ignite','venom','fury','flank','exploit']);
   const abilityTexts = {
     mage:'Arcane splash: deals mental damage to its target and the tiles on either side.',
     acolyte:'Support: heals the most injured adjacent ally for 2 before acting.',
     cleric:'Healing: restores 4 health to the most injured adjacent ally before acting.',
     mechanic:'Repair: grants an adjacent ally 1 armor before acting (up to +2).',
+    hacker:'On a successful hit, steals one random keyword it does not already have from a surviving target.',
     artificer:'Arcane splash: hits its target and the tiles on either side.',
     psychic:'Mental attack. Weakens its target for its next activation.',
     shaman:'Arcane splash: hits its target and the tiles on either side.',
@@ -36,7 +37,7 @@
       this.data = data;
       this.random = options.random || Math.random;
       this.cards = new Map(data.cards.map(c => [c.id, c]));
-      this.recipes = data.recipes.filter(r => supported.has(r.result) && r.ingredients.every(id => supported.has(id)));
+      this.recipes = data.recipes.filter(r => this.cards.has(r.result) && r.ingredients.every(id => this.cards.has(id)));
       this.state = null;
       this.frames = [];
     }
@@ -47,7 +48,7 @@
       if (id === 'mech-pilot') return {id,name:'Mech Pilot',theme:'Sci fi',subgroup:'Tech',tier:1,keywords:[{id:'ranged',value:2}]};
       return this.cards.get(id);
     }
-    playable() { return this.data.cards.filter(c => supported.has(c.id)); }
+    playable() { return [...this.cards.values()]; }
     profile(id) {
       const card = this.definition(id);
       if (!card) throw new Error('Unknown card: '+id);
@@ -56,7 +57,7 @@
       const keywords = (card.keywords || []).filter(k=>k.status!=='tentative').map(k=>k.id);
       const armored = (card.keywords || []).find(k=>k.id==='armor');
       stats.armor = armored ? armored.value || 1 : 0;
-      if (keywords.includes('ranged')) stats.range=3;
+      if (keywords.includes('ranged')) stats.range=(card.keywords || []).some(k=>k.id==='ranged'&&k.value==='unlimited')?6:3;
       if (['mage','artificer','psychic','warlock','shaman','scientist','witch','battlemage'].includes(id)) { stats.range=2; stats.health-=3; }
       if (['caveman','enforcer','templar','cyborg','sentinel'].includes(id)) stats.health+=4;
       if (id==='raider'||id==='viking') {stats.attack++;stats.health-=2;}
@@ -65,10 +66,16 @@
       if (id==='skeleton') Object.assign(stats,{health:3,attack:2,cost:0});
       if (id==='mech-pilot') Object.assign(stats,{health:7,attack:3,range:2,cost:0});
       if (id==='mech') {stats.health=22;stats.attack=5;stats.range=3;}
-      return {...stats,keywords,description:abilityTexts[id] || 'Relies on its stats and keywords in this prototype.',symbol:symbols[id] || '◇'};
+      if (id==='posthuman') Object.assign(stats,{health:40,attack:9});
+      stats.health=Math.max(2,Math.round(stats.health*.75));
+      const handledByAbility={spawn:['mech','necromancer'],bomb:['mech'],mindshield:['mindguard']};
+      const pendingKeywords=keywords.filter(keyword=>!implementedKeywords.has(keyword)&&!(handledByAbility[keyword]||[]).includes(id));
+      const pendingAbility=!abilityTexts[id]&&card.abilityStatus!=='intentionally-none'&&Boolean(card.ability||card.designNotes&&card.designNotes!=='pure stats');
+      const description=abilityTexts[id] || (id==='posthuman'?'No unique ability. Has the highest base stats in the roster.':pendingAbility?'Uses stats and implemented keywords for now. Its unique ability is not implemented yet.':'Uses its stats and implemented keywords. No unique ability is assigned yet.');
+      return {...stats,colors:card.colors||[],keywords,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:24,enemyMaxHP:24,mana:3,gold:0,
+      this.state = {version:1,balanceRevision:2, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:24,enemyMaxHP:24,mana:3,gold:0,
         deck:['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'],draw:[],discard:[],hand:[],merge:[null,null],units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null};
       this.beginEncounter();
       return this.state;
@@ -112,7 +119,12 @@
       s.merge[slot]=s.hand.splice(handIndex,1)[0];s.selected=null;return true;
     }
     retrieve(slot) {const s=this.state;if(s.phase!=='planning'||!s.merge[slot]||s.hand.length>=10) return false;s.hand.push(s.merge[slot]);s.merge[slot]=null;return true;}
-    mergeOptions() {const [a,b]=this.state.merge;if(!a||!b)return [];return this.recipes.filter(r=>(r.ingredients[0]===a&&r.ingredients[1]===b)||(r.ingredients[0]===b&&r.ingredients[1]===a));}
+    sharedColors(a,b) {return this.profile(a).colors.filter(color=>this.profile(b).colors.includes(color));}
+    recipesFor(a,b) {
+      if(!a||!b||this.sharedColors(a,b).length)return [];
+      return this.recipes.filter(r=>(r.ingredients[0]===a&&r.ingredients[1]===b)||(r.ingredients[0]===b&&r.ingredients[1]===a));
+    }
+    mergeOptions() {return this.recipesFor(...this.state.merge);}
     merge(result) {
       const s=this.state;const recipe=this.mergeOptions().find(r=>!result||r.result===result);if(s.phase!=='planning'||!recipe||s.hand.length>=10)return false;
       const ingredientIds=[...s.merge];const deck=[...s.deck];
@@ -179,7 +191,6 @@
       const aoe=!unit.silence&&['mage','artificer','shaman','warlock','battlemage','pyro'].includes(unit.cardId);
       const mental=!unit.silence&&['mage','artificer','shaman','warlock','psychic'].includes(unit.cardId);
       const targets=aoe?[target,...[-1,1].map(offset=>this.unitAt(target.row,target.col+offset)).filter(other=>other&&other.team!==unit.team)]:[target];
-      const retaliate=!target.silence&&target.keywords.includes('retaliate');
       this.log(this.definition(unit.cardId).name+' attacks '+this.definition(target.cardId).name+'.',true);
       for(const other of targets) {
         if(!this.alive(other)||!this.alive(unit))continue;
@@ -192,10 +203,23 @@
             if(unit.keywords.includes('weaken')||unit.cardId==='heretic')other.weaken=2;
             if(unit.keywords.includes('silence'))other.silence=2;
             if(unit.cardId==='scientist')other[this.pick(['burn','freeze','weaken'])]=2;
+            if(unit.cardId==='hacker')this.stealKeyword(unit,other);
           }
         }
       }
-      if(retaliate&&this.alive(target)&&this.alive(unit))this.damage(unit,this.effectiveAttack(target,unit),target);
+      if(this.alive(target)&&!target.silence&&target.keywords.includes('retaliate')&&this.alive(unit))this.damage(unit,this.effectiveAttack(target,unit),target);
+    }
+    stealKeyword(unit,target) {
+      const options=target.keywords.filter(keyword=>!unit.keywords.includes(keyword));
+      if(!options.length)return;
+      const keyword=this.pick(options);
+      target.keywords=target.keywords.filter(value=>value!==keyword);unit.keywords.push(keyword);
+      if(keyword==='armor') {
+        const amount=Math.max(0,target.armor-target.bonusArmor);
+        target.armor-=amount;unit.armor+=amount;
+      }
+      if(keyword==='ranged'){unit.range=Math.max(unit.range,target.range);target.range=this.profile(target.cardId).keywords.includes('ranged')?1:target.range;}
+      this.log('Hacker steals '+keyword+' from '+this.definition(target.cardId).name+'.',true);
     }
     action(unit) {
       if(!this.alive(unit))return;
@@ -270,10 +294,15 @@
     }
     continueRun() {if(this.state.phase!=='camp')return false;this.state.encounter++;this.beginEncounter();return true;}
     restore(value) {
-      if(!value||value.version!==1||!['planning','reward','camp','won','lost'].includes(value.phase)||!Number.isInteger(value.encounter)||value.encounter<0||value.encounter>4||!Array.isArray(value.deck)||!value.deck.every(id=>supported.has(id))||!Array.isArray(value.units))return false;
+      if(!value||value.version!==1||!['planning','reward','camp','won','lost'].includes(value.phase)||!Number.isInteger(value.encounter)||value.encounter<0||value.encounter>4||!Array.isArray(value.deck)||!value.deck.every(id=>this.cards.has(id))||!Array.isArray(value.units))return false;
       const seen=new Set();for(const u of value.units){const key=u.row+','+u.col;if(!this.definition(u.cardId)||seen.has(key)||u.row<0||u.row>5||u.col<0||u.col>5||!['player','enemy'].includes(u.team))return false;seen.add(key);}
-      this.state=copy(value);this.state.selected=null;return true;
+      this.state=copy(value);this.state.selected=null;
+      if((this.state.balanceRevision||1)<2) {
+        for(const unit of this.state.units){unit.maxHP=Math.max(2,Math.round(unit.maxHP*.75));unit.hp=Math.max(1,Math.min(unit.maxHP,Math.round(unit.hp*.75)));}
+        this.state.balanceRevision=2;
+      }
+      return true;
     }
   }
-  return {Game,supported,symbols};
+  return {Game,symbols};
 });

@@ -123,7 +123,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "pink",
+        "green",
+        "red",
+        "orange"
+      ]
     },
     {
       "id": "alien",
@@ -145,7 +151,10 @@
         "sheet": "keywords",
         "range": "Q3:W3"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "pink"
+      ]
     },
     {
       "id": "blob",
@@ -196,6 +205,10 @@
             "range": "P23:U23"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "green"
       ]
     },
     {
@@ -258,6 +271,12 @@
             "range": "J23:M23"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "orange",
+        "red",
+        "green"
       ]
     },
     {
@@ -320,6 +339,10 @@
             "range": "D14:G14"
           }
         }
+      ],
+      "colors": [
+        "red",
+        "orange"
       ]
     },
     {
@@ -371,6 +394,10 @@
             "range": "P5:U5"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "red"
       ]
     },
     {
@@ -422,6 +449,12 @@
             "range": "J41:M41"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "white",
+        "red",
+        "yellow"
       ]
     },
     {
@@ -444,7 +477,10 @@
         "sheet": "keywords",
         "range": "Q9:W9"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "red"
+      ]
     },
     {
       "id": "ceo",
@@ -506,6 +542,12 @@
             "range": "J38:M38"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "green",
+        "purple",
+        "orange"
       ]
     },
     {
@@ -568,6 +610,12 @@
             "range": "J26:M26"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "orange",
+        "purple",
+        "white"
       ]
     },
     {
@@ -619,6 +667,10 @@
             "range": "D18:G18"
           }
         }
+      ],
+      "colors": [
+        "purple",
+        "orange"
       ]
     },
     {
@@ -670,6 +722,12 @@
             "range": "J50:M50"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "white",
+        "purple",
+        "orange"
       ]
     },
     {
@@ -732,6 +790,12 @@
             "range": "J45:M45"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "green",
+        "red",
+        "yellow"
       ]
     },
     {
@@ -794,6 +858,10 @@
             "range": "D15:G15"
           }
         }
+      ],
+      "colors": [
+        "red",
+        "yellow"
       ]
     },
     {
@@ -856,6 +924,12 @@
             "range": "X43:AC43"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "yellow",
+        "red",
+        "white"
       ]
     },
     {
@@ -918,6 +992,12 @@
             "range": "J31:M31"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "yellow",
+        "red",
+        "green"
       ]
     },
     {
@@ -990,6 +1070,12 @@
             "range": "X11:AC11"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "red",
+        "orange",
+        "white"
       ]
     },
     {
@@ -1041,6 +1127,10 @@
             "range": "D23:G23"
           }
         }
+      ],
+      "colors": [
+        "orange",
+        "white"
       ]
     },
     {
@@ -1113,6 +1203,12 @@
             "range": "X26:AC26"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "purple",
+        "orange",
+        "green"
       ]
     },
     {
@@ -1175,6 +1271,12 @@
             "range": "X27:AC27"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "purple",
+        "orange",
+        "white"
       ]
     },
     {
@@ -1226,6 +1328,12 @@
             "range": "X25:AC25"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "red",
+        "orange",
+        "green"
       ]
     },
     {
@@ -1277,6 +1385,10 @@
             "range": "D22:G22"
           }
         }
+      ],
+      "colors": [
+        "orange",
+        "green"
       ]
     },
     {
@@ -1328,6 +1440,12 @@
             "range": "X48:AC48"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "orange",
+        "purple",
+        "green"
       ]
     },
     {
@@ -1390,6 +1508,10 @@
             "range": "D25:G25"
           }
         }
+      ],
+      "colors": [
+        "yellow",
+        "white"
       ]
     },
     {
@@ -1482,7 +1604,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "orange",
+        "red",
+        "white"
+      ]
     },
     {
       "id": "acolyte",
@@ -1504,7 +1632,10 @@
         "sheet": "keywords",
         "range": "Q27:W27"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "white"
+      ]
     },
     {
       "id": "cleric",
@@ -1555,6 +1686,10 @@
             "range": "D17:G17"
           }
         }
+      ],
+      "colors": [
+        "red",
+        "white"
       ]
     },
     {
@@ -1606,6 +1741,12 @@
             "range": "J28:M28"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "orange",
+        "red",
+        "white"
       ]
     },
     {
@@ -1657,6 +1798,12 @@
             "range": "J13:M13"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "red",
+        "yellow",
+        "white"
       ]
     },
     {
@@ -1708,6 +1855,10 @@
             "range": "D13:G13"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "white"
       ]
     },
     {
@@ -1837,7 +1988,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "white",
+        "purple",
+        "yellow"
+      ]
     },
     {
       "id": "cannibal",
@@ -1899,6 +2056,12 @@
             "range": "J47:M47"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "green",
+        "purple",
+        "yellow"
       ]
     },
     {
@@ -1950,6 +2113,12 @@
             "range": "J51:M51"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "white",
+        "purple",
+        "yellow"
       ]
     },
     {
@@ -1972,7 +2141,10 @@
         "sheet": "keywords",
         "range": "Q35:W35"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "yellow"
+      ]
     },
     {
       "id": "scavenger",
@@ -2023,6 +2195,10 @@
             "range": "P25:U25"
           }
         }
+      ],
+      "colors": [
+        "purple",
+        "yellow"
       ]
     },
     {
@@ -2074,6 +2250,12 @@
             "range": "J42:M42"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "white",
+        "purple",
+        "orange"
       ]
     },
     {
@@ -2136,6 +2318,10 @@
             "range": "P11:U11"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "green"
       ]
     },
     {
@@ -2198,6 +2384,12 @@
             "range": "X37:AC37"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "yellow",
+        "red",
+        "white"
       ]
     },
     {
@@ -2293,7 +2485,13 @@
           "type": "user-design",
           "date": "2026-10-05"
         }
-      }
+      },
+      "colors": [
+        "blue",
+        "green",
+        "purple",
+        "yellow"
+      ]
     },
     {
       "id": "hacker",
@@ -2355,6 +2553,10 @@
             "range": "P12:U12"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "yellow"
       ]
     },
     {
@@ -2417,6 +2619,12 @@
             "range": "X28:AC28"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "yellow",
+        "purple",
+        "green"
       ]
     },
     {
@@ -2479,6 +2687,10 @@
             "range": "P22:U22"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "white"
       ]
     },
     {
@@ -2501,7 +2713,10 @@
         "sheet": "keywords",
         "range": "Q44:W44"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "blue"
+      ]
     },
     {
       "id": "technomancer",
@@ -2552,6 +2767,12 @@
             "range": "X42:AC42"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "green",
+        "red",
+        "yellow"
       ]
     },
     {
@@ -2614,6 +2835,10 @@
             "range": "D20:G20"
           }
         }
+      ],
+      "colors": [
+        "purple",
+        "green"
       ]
     },
     {
@@ -2676,6 +2901,10 @@
             "range": "P13:U13"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "purple"
       ]
     },
     {
@@ -2748,6 +2977,10 @@
             "range": "P24:U24"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "yellow"
       ]
     },
     {
@@ -2810,6 +3043,12 @@
             "range": "J33:M33"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "yellow",
+        "purple",
+        "green"
       ]
     },
     {
@@ -2916,7 +3155,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "red",
+        "orange",
+        "white"
+      ]
     },
     {
       "id": "mindguard",
@@ -3024,7 +3269,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "white",
+        "red",
+        "orange"
+      ]
     },
     {
       "id": "specialist",
@@ -3086,6 +3337,12 @@
             "range": "X18:AC18"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "purple",
+        "yellow",
+        "white"
       ]
     },
     {
@@ -3196,7 +3453,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "red",
+        "yellow",
+        "white"
+      ]
     },
     {
       "id": "viking",
@@ -3268,6 +3531,10 @@
             "range": "D24:G24"
           }
         }
+      ],
+      "colors": [
+        "yellow",
+        "green"
       ]
     },
     {
@@ -3301,7 +3568,10 @@
         "sheet": "keywords",
         "range": "Q55:W55"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "orange"
+      ]
     },
     {
       "id": "mech",
@@ -3462,7 +3732,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "purple",
+        "yellow",
+        "white"
+      ]
     },
     {
       "id": "buddhist",
@@ -3579,7 +3855,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "pink",
+        "white",
+        "red",
+        "yellow"
+      ]
     },
     {
       "id": "drug-dealer",
@@ -3678,7 +3960,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "pink",
+        "green",
+        "purple",
+        "orange"
+      ]
     },
     {
       "id": "shipwright",
@@ -3778,7 +4066,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "purple",
+        "yellow",
+        "green"
+      ]
     },
     {
       "id": "warlord",
@@ -3873,7 +4167,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "pink",
+        "yellow",
+        "purple",
+        "white"
+      ]
     },
     {
       "id": "miner",
@@ -3976,7 +4276,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "pink",
+        "orange",
+        "purple",
+        "green"
+      ]
     },
     {
       "id": "alchemist",
@@ -4097,7 +4403,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "pink",
+        "purple",
+        "orange",
+        "white"
+      ]
     },
     {
       "id": "bioengineer",
@@ -4159,6 +4471,12 @@
             "range": "J16:M16"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "purple",
+        "yellow",
+        "green"
       ]
     },
     {
@@ -4267,7 +4585,13 @@
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"
-      }
+      },
+      "colors": [
+        "blue",
+        "green",
+        "red",
+        "orange"
+      ]
     },
     {
       "id": "architect",
@@ -4318,6 +4642,12 @@
             "range": "J22:M22"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "yellow",
+        "purple",
+        "white"
       ]
     },
     {
@@ -4369,6 +4699,12 @@
             "range": "X20:AC20"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "purple",
+        "orange",
+        "green"
       ]
     },
     {
@@ -4391,7 +4727,10 @@
         "sheet": "keywords",
         "range": "Q67:W67"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "green"
+      ]
     },
     {
       "id": "conqueror",
@@ -4442,6 +4781,12 @@
             "range": "X31:AC31"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "orange",
+        "purple",
+        "white"
       ]
     },
     {
@@ -4493,6 +4838,12 @@
             "range": "X36:AC36"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "yellow",
+        "red",
+        "green"
       ]
     },
     {
@@ -4544,6 +4895,10 @@
             "range": "P10:U10"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "orange"
       ]
     },
     {
@@ -4566,7 +4921,10 @@
         "sheet": "keywords",
         "range": "Q71:W71"
       },
-      "sourceVariants": []
+      "sourceVariants": [],
+      "colors": [
+        "purple"
+      ]
     },
     {
       "id": "explorer",
@@ -4617,6 +4975,10 @@
             "range": "P19:U19"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "orange"
       ]
     },
     {
@@ -4668,6 +5030,10 @@
             "range": "D21:G21"
           }
         }
+      ],
+      "colors": [
+        "purple",
+        "white"
       ]
     },
     {
@@ -4719,6 +5085,12 @@
             "range": "X32:AC32"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "red",
+        "yellow",
+        "green"
       ]
     },
     {
@@ -4770,6 +5142,12 @@
             "range": "X30:AC30"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "red",
+        "orange",
+        "green"
       ]
     },
     {
@@ -4821,6 +5199,10 @@
             "range": "P9:U9"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "purple"
       ]
     },
     {
@@ -4872,6 +5254,10 @@
             "range": "P18:U18"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "red"
       ]
     },
     {
@@ -4923,6 +5309,12 @@
             "range": "X33:AC33"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "orange",
+        "red",
+        "green"
       ]
     },
     {
@@ -4974,6 +5366,12 @@
             "range": "X34:AC34"
           }
         }
+      ],
+      "colors": [
+        "blue",
+        "red",
+        "yellow",
+        "green"
       ]
     },
     {
@@ -5025,6 +5423,12 @@
             "range": "J48:M48"
           }
         }
+      ],
+      "colors": [
+        "pink",
+        "white",
+        "red",
+        "orange"
       ]
     },
     {
@@ -5076,7 +5480,53 @@
             "range": "P20:U20"
           }
         }
+      ],
+      "colors": [
+        "red",
+        "green"
       ]
+    }
+  ],
+  "colorPalette": [
+    {
+      "id": "blue",
+      "name": "Blue",
+      "hex": "#69a9f5"
+    },
+    {
+      "id": "red",
+      "name": "Red",
+      "hex": "#ef7b78"
+    },
+    {
+      "id": "green",
+      "name": "Green",
+      "hex": "#80c787"
+    },
+    {
+      "id": "yellow",
+      "name": "Yellow",
+      "hex": "#edd673"
+    },
+    {
+      "id": "orange",
+      "name": "Orange",
+      "hex": "#edaa64"
+    },
+    {
+      "id": "purple",
+      "name": "Purple",
+      "hex": "#b69aeb"
+    },
+    {
+      "id": "white",
+      "name": "White",
+      "hex": "#e5e8df"
+    },
+    {
+      "id": "pink",
+      "name": "Pink",
+      "hex": "#e69ac5"
     }
   ]
 }

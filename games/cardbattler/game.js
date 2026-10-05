@@ -8,16 +8,23 @@
   const encounterNames=['The first crossing','Iron & incantations','The old guard','A gathering darkness','The last stronghold'];
   const encounterNotes=['A small force holds the road. Find your first combinations.','Machines and mages reinforce the enemy line.','Armored defenders and furious fighters stand in your way.','Curses and healers test your formation.','Break through the mech and its supporting army.'];
   const uiState=()=>visual||game.state;
+  const palette=new Map(window.CARDBATTLER_DATA.colorPalette.map(color=>[color.id,color]));
+  function colorStrip(id) {
+    const colors=game.profile(id).colors;
+    return `<span class="color-strip" role="img" aria-label="${escape(colors.join(' + '))}" title="${escape(colors.join(' + '))}">${colors.map(color=>`<span class="color-segment" style="background:${palette.get(color).hex}"></span>`).join('')}</span>`;
+  }
   function save() {try {localStorage.setItem(SAVE,JSON.stringify(game.state));$('save-status').textContent='Progress saved locally';}catch{$('save-status').textContent='Saving unavailable';saveAvailable=false;}}
   try {const stored=localStorage.getItem(SAVE);if(!stored||!game.restore(JSON.parse(stored)))game.newRun();}catch{game.newRun();saveAvailable=false;}
   function cardMarkup(id,index,extra='') {
     const card=game.definition(id), p=game.profile(id);
-    return `<button class="card ${extra}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} aria-label="${escape(card.name)}, ${p.cost} mana, ${p.attack} attack, ${p.health} health"><span class="cost">${p.cost}</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)} · T${card.tier||1}</span><span class="card-stats">⚔ ${p.attack} &nbsp; ♥ ${p.health}${p.armor?` &nbsp; ◈ ${p.armor}`:''}</span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span></button>`;
+    const partner=index!==null?game.state.merge.find(Boolean):null;
+    const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
+    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.cost} mana, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.cost}</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="card-stats">⚔ ${p.attack} &nbsp; ♥ ${p.health}${p.armor?` &nbsp; ◈ ${p.armor}`:''}</span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
   function inspect(id,unit) {
     if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p><p class="small">Numbers on units show their activation order.</p>';return;}
     const card=game.definition(id),p=game.profile(id);
-    $('inspector').innerHTML=`<h3>${p.symbol} ${escape(card.name)}</h3><span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move 1</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag">${escape(k)}</span>`).join('')}<p class="small">Prototype stats and costs. Some effects use temporary designs.</p>`;
+    $('inspector').innerHTML=`<h3>${p.symbol} ${escape(card.name)}</h3><span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move 1</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Prototype stats and costs. Some effects use temporary designs.</p>`;
   }
   function render() {
     const s=uiState();
@@ -41,9 +48,10 @@
     $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent=s.draw.length+' to draw · '+s.discard.length+' discarded · '+s.deck.length+' in deck';
     $('hand').innerHTML=s.hand.length?s.hand.map((id,i)=>cardMarkup(id,i,selected===i?'selected':'')).join(''):'<div class="empty-hand">Your hand is empty. End your turn to draw more cards.</div>';
     $('hand').querySelectorAll('button').forEach(b=>b.disabled=busy||s.phase!=='planning');
-    $('merge-slots').innerHTML=s.merge.map((id,i)=>`<button class="merge-slot" data-slot="${i}" ${busy||s.phase!=='planning'?'disabled':''}><span aria-hidden="true">${id?game.profile(id).symbol:'+'}</span>${id?escape(game.definition(id).name):'Slot '+(i+1)}</button>`).join('');
+    $('merge-slots').innerHTML=s.merge.map((id,i)=>`<button class="merge-slot" data-slot="${i}" ${busy||s.phase!=='planning'?'disabled':''}>${id?colorStrip(id):''}<span aria-hidden="true">${id?game.profile(id).symbol:'+'}</span>${id?escape(game.definition(id).name):'Slot '+(i+1)}</button>`).join('');
     const options=game.mergeOptions();
-    $('merge-preview').innerHTML=options.length?'→ '+options.map(r=>escape(game.definition(r.result).name)).join(' or '):s.merge.every(Boolean)?'No supported combination for this pair. Click a slot to return its card.':'Select a hand card, then place it into a slot.';
+    const shared=s.merge.every(Boolean)?game.sharedColors(...s.merge):[];
+    $('merge-preview').innerHTML=options.length?'→ '+options.map(r=>colorStrip(r.result)+escape(game.definition(r.result).name)).join(' or '):shared.length?'Cannot combine: shared '+escape(shared.join(', '))+' color.':s.merge.every(Boolean)?'No recipe for this pair. Click a slot to return its card.':'No shared colors + a matching recipe = a combination.';
     $('merge-button').disabled=busy||s.phase!=='planning'||!options.length||s.hand.length>=10;
     $('journal').innerHTML=s.log.slice(0,14).map(line=>`<li>${escape(line)}</li>`).join('');
     if(inspected){const u=s.units.find(u=>u.uid===inspected.uid);inspect(inspected.id,u);}else inspect(selected!==null?s.hand[selected]:null);
@@ -76,7 +84,7 @@
     finally {visual=null;busy=false;render();showPhase();}
   });
   $('new-run').addEventListener('click',()=>{if(busy)return;dialog('<h2>Start a new expedition?</h2><p>This replaces your current saved run.</p><div class="dialog-actions"><button class="primary" data-action="restart">Start new run</button><button data-action="close">Keep playing</button></div>');});
-  $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">PROTOTYPE ROSTER</p><h2>${game.playable().length} playable cards</h2><p>The full 80-card design stays in the data files. This roster uses supported keywords and a smaller set of abilities. Hover or focus a card to read its current behavior.</p><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
+  $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">FULL ROSTER</p><h2>${game.playable().length} playable cards</h2><p>Every card is available for deployment, rewards, and recipe-based merging. Unfinished cards use provisional stats and implemented keywords while their abilities are being designed. Hover or focus a card to read its current behavior.</p><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
   $('overlay-content').addEventListener('click',event=>{
     const action=event.target.closest('[data-action]')?.dataset.action;
     if(action==='close')$('overlay').close();
@@ -87,7 +95,7 @@
     if(choice&&game.state.phase==='reward'){game.chooseReward(choice);save();render();showCamp();}
     else if(choice&&$('overlay-content').querySelector('h2')?.textContent==='Choose your combination'){game.merge(choice);selected=null;$('overlay').close();save();render();}
   });
-  function showChoice(event) {const id=event.target.closest('[data-choice]')?.dataset.choice;const detail=$('choice-detail');if(id&&detail)detail.innerHTML=`<strong>${escape(game.definition(id).name)}</strong><p>${escape(game.profile(id).description)}</p>`;}
+  function showChoice(event) {const id=event.target.closest('[data-choice]')?.dataset.choice;const detail=$('choice-detail');if(id&&detail){const p=game.profile(id),card=game.definition(id);detail.innerHTML=`<strong>${escape(card.name)}</strong><p>${escape(p.description)}</p>${p.pendingKeywords.length?`<p class="small">Keywords pending implementation: ${escape(p.pendingKeywords.join(', '))}</p>`:''}${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}`;}}
   $('overlay-content').addEventListener('mouseover',showChoice);$('overlay-content').addEventListener('focusin',showChoice);
   $('overlay').addEventListener('cancel',event=>{if(['reward','camp'].includes(game.state.phase))event.preventDefault();});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('overlay').open){selected=null;inspected=null;render();}});
