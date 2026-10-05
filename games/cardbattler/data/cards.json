@@ -125,11 +125,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "pink",
-        "green",
         "red",
-        "orange"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "blob--psychic"
+      }
     },
     {
       "id": "alien",
@@ -153,8 +157,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "pink"
-      ]
+        "red"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A3",
+        "fontColor": "#CC0000"
+      }
     },
     {
       "id": "blob",
@@ -207,9 +217,13 @@
         }
       ],
       "colors": [
-        "pink",
-        "green"
-      ]
+        "red",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "alien--caveman"
+      }
     },
     {
       "id": "witch-hunter",
@@ -273,11 +287,15 @@
         }
       ],
       "colors": [
-        "blue",
-        "orange",
         "red",
-        "green"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "enforcer--shaman"
+      }
     },
     {
       "id": "psychic",
@@ -341,9 +359,13 @@
         }
       ],
       "colors": [
-        "red",
-        "orange"
-      ]
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mage--raider"
+      }
     },
     {
       "id": "artificer",
@@ -396,9 +418,13 @@
         }
       ],
       "colors": [
-        "blue",
-        "red"
-      ]
+        "red",
+        "blue"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "robot--mage"
+      }
     },
     {
       "id": "battlemage",
@@ -451,11 +477,15 @@
         }
       ],
       "colors": [
-        "blue",
-        "white",
         "red",
-        "yellow"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "sentinel--warlock"
+      }
     },
     {
       "id": "mage",
@@ -479,8 +509,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "red"
-      ]
+        "blue"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A4",
+        "fontColor": "#073763"
+      }
     },
     {
       "id": "ceo",
@@ -544,11 +580,15 @@
         }
       ],
       "colors": [
+        "red",
+        "yellow",
         "blue",
-        "green",
-        "purple",
-        "orange"
-      ]
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "cyborg--businessman"
+      }
     },
     {
       "id": "family-man",
@@ -612,11 +652,15 @@
         }
       ],
       "colors": [
+        "red",
+        "green",
         "blue",
-        "orange",
-        "purple",
-        "white"
-      ]
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "enforcer--leader"
+      }
     },
     {
       "id": "businessman",
@@ -669,9 +713,13 @@
         }
       ],
       "colors": [
-        "purple",
-        "orange"
-      ]
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "engineer--raider"
+      }
     },
     {
       "id": "crypto-dude",
@@ -724,11 +772,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "white",
-        "purple",
-        "orange"
-      ]
+        "red",
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "prophet--businessman"
+      }
     },
     {
       "id": "corruptor",
@@ -792,11 +844,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "green",
         "red",
-        "yellow"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "blob--warlock"
+      }
     },
     {
       "id": "warlock",
@@ -860,9 +916,13 @@
         }
       ],
       "colors": [
-        "red",
-        "yellow"
-      ]
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mage--thief"
+      }
     },
     {
       "id": "abomination",
@@ -926,11 +986,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "yellow",
         "red",
-        "white"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mutant--cleric"
+      }
     },
     {
       "id": "necromancer",
@@ -994,11 +1058,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "yellow",
         "red",
-        "green"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mutant--shaman"
+      }
     },
     {
       "id": "witch",
@@ -1072,11 +1140,15 @@
         }
       ],
       "colors": [
-        "pink",
         "red",
-        "orange",
-        "white"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "oracle--heretic"
+      }
     },
     {
       "id": "heretic",
@@ -1129,9 +1201,13 @@
         }
       ],
       "colors": [
-        "orange",
-        "white"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "raider--acolyte"
+      }
     },
     {
       "id": "cannoneer",
@@ -1205,11 +1281,15 @@
         }
       ],
       "colors": [
+        "red",
         "blue",
-        "purple",
-        "orange",
-        "green"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mechanic--pirate"
+      }
     },
     {
       "id": "cowboy",
@@ -1273,11 +1353,15 @@
         }
       ],
       "colors": [
+        "red",
         "blue",
-        "purple",
-        "orange",
-        "white"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mechanic--heretic"
+      }
     },
     {
       "id": "arms-dealer",
@@ -1330,11 +1414,15 @@
         }
       ],
       "colors": [
-        "blue",
         "red",
-        "orange",
-        "green"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "artificer--pirate"
+      }
     },
     {
       "id": "pirate",
@@ -1387,9 +1475,13 @@
         }
       ],
       "colors": [
-        "orange",
-        "green"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "raider--caveman"
+      }
     },
     {
       "id": "sheriff",
@@ -1442,11 +1534,15 @@
         }
       ],
       "colors": [
+        "red",
+        "green",
         "blue",
-        "orange",
-        "purple",
-        "green"
-      ]
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "enforcer--dwarf"
+      }
     },
     {
       "id": "templar",
@@ -1510,9 +1606,13 @@
         }
       ],
       "colors": [
-        "yellow",
-        "white"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "thief--acolyte"
+      }
     },
     {
       "id": "inquisitor",
@@ -1606,11 +1706,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "blue",
-        "orange",
         "red",
-        "white"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "enforcer--cleric"
+      }
     },
     {
       "id": "acolyte",
@@ -1634,8 +1738,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "white"
-      ]
+        "yellow"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A9",
+        "fontColor": "#BF9000"
+      }
     },
     {
       "id": "cleric",
@@ -1688,9 +1798,13 @@
         }
       ],
       "colors": [
-        "red",
-        "white"
-      ]
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mage--acolyte"
+      }
     },
     {
       "id": "missionary",
@@ -1743,11 +1857,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "orange",
         "red",
-        "white"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "explorer--cleric"
+      }
     },
     {
       "id": "pope",
@@ -1800,11 +1918,15 @@
         }
       ],
       "colors": [
-        "pink",
         "red",
-        "yellow",
-        "white"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "oracle--templar"
+      }
     },
     {
       "id": "prophet",
@@ -1857,9 +1979,13 @@
         }
       ],
       "colors": [
-        "pink",
-        "white"
-      ]
+        "red",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "alien--acolyte"
+      }
     },
     {
       "id": "prepper",
@@ -1990,11 +2116,15 @@
         "date": "2026-10-05"
       },
       "colors": [
+        "red",
+        "yellow",
         "blue",
-        "white",
-        "purple",
-        "yellow"
-      ]
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "sentinel--scavenger"
+      }
     },
     {
       "id": "cannibal",
@@ -2058,11 +2188,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "green",
-        "purple",
-        "yellow"
-      ]
+        "red",
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "blob--scavenger"
+      }
     },
     {
       "id": "hermit",
@@ -2115,11 +2249,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "white",
-        "purple",
-        "yellow"
-      ]
+        "red",
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "prophet--scavenger"
+      }
     },
     {
       "id": "thief",
@@ -2143,8 +2281,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "yellow"
-      ]
+        "green"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A6",
+        "fontColor": "#38761D"
+      }
     },
     {
       "id": "scavenger",
@@ -2197,9 +2341,13 @@
         }
       ],
       "colors": [
-        "purple",
-        "yellow"
-      ]
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "engineer--thief"
+      }
     },
     {
       "id": "agent",
@@ -2252,11 +2400,15 @@
         }
       ],
       "colors": [
+        "red",
+        "yellow",
         "blue",
-        "white",
-        "purple",
-        "orange"
-      ]
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "sentinel--businessman"
+      }
     },
     {
       "id": "cyborg",
@@ -2320,9 +2472,13 @@
         }
       ],
       "colors": [
-        "blue",
-        "green"
-      ]
+        "red",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "robot--caveman"
+      }
     },
     {
       "id": "machine-priest",
@@ -2386,11 +2542,15 @@
         }
       ],
       "colors": [
-        "blue",
-        "yellow",
         "red",
-        "white"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "hacker--cleric"
+      }
     },
     {
       "id": "posthuman",
@@ -2487,11 +2647,15 @@
         }
       },
       "colors": [
+        "red",
+        "yellow",
         "blue",
-        "green",
-        "purple",
-        "yellow"
-      ]
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "cyborg--scavenger"
+      }
     },
     {
       "id": "hacker",
@@ -2555,9 +2719,13 @@
         }
       ],
       "colors": [
-        "blue",
-        "yellow"
-      ]
+        "red",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "robot--thief"
+      }
     },
     {
       "id": "data-miner",
@@ -2621,11 +2789,15 @@
         }
       ],
       "colors": [
+        "red",
+        "green",
         "blue",
-        "yellow",
-        "purple",
-        "green"
-      ]
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "hacker--dwarf"
+      }
     },
     {
       "id": "sentinel",
@@ -2689,9 +2861,13 @@
         }
       ],
       "colors": [
-        "blue",
-        "white"
-      ]
+        "red",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "robot--acolyte"
+      }
     },
     {
       "id": "robot",
@@ -2715,8 +2891,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "blue"
-      ]
+        "red"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A2",
+        "fontColor": "#CC0000"
+      }
     },
     {
       "id": "technomancer",
@@ -2769,11 +2951,15 @@
         }
       ],
       "colors": [
-        "blue",
-        "green",
         "red",
-        "yellow"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "cyborg--warlock"
+      }
     },
     {
       "id": "dwarf",
@@ -2837,9 +3023,13 @@
         }
       ],
       "colors": [
-        "purple",
-        "green"
-      ]
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "engineer--caveman"
+      }
     },
     {
       "id": "scientist",
@@ -2903,9 +3093,13 @@
         }
       ],
       "colors": [
-        "pink",
-        "purple"
-      ]
+        "red",
+        "blue"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "alien--engineer"
+      }
     },
     {
       "id": "mutant",
@@ -2979,9 +3173,13 @@
         }
       ],
       "colors": [
-        "pink",
-        "yellow"
-      ]
+        "red",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "alien--thief"
+      }
     },
     {
       "id": "goblin",
@@ -3045,11 +3243,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "yellow",
-        "purple",
-        "green"
-      ]
+        "red",
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mutant--dwarf"
+      }
     },
     {
       "id": "pyro",
@@ -3157,11 +3359,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "blue",
         "red",
-        "orange",
-        "white"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "artificer--heretic"
+      }
     },
     {
       "id": "mindguard",
@@ -3271,11 +3477,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "blue",
-        "white",
         "red",
-        "orange"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "sentinel--psychic"
+      }
     },
     {
       "id": "specialist",
@@ -3339,11 +3549,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "purple",
-        "yellow",
-        "white"
-      ]
+        "red",
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "scientist--templar"
+      }
     },
     {
       "id": "space-monk",
@@ -3455,11 +3669,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "blue",
         "red",
-        "yellow",
-        "white"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "artificer--templar"
+      }
     },
     {
       "id": "viking",
@@ -3533,9 +3751,13 @@
         }
       ],
       "colors": [
-        "yellow",
-        "green"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "thief--caveman"
+      }
     },
     {
       "id": "raider",
@@ -3570,8 +3792,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "orange"
-      ]
+        "green"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A7",
+        "fontColor": "#38761D"
+      }
     },
     {
       "id": "mech",
@@ -3734,11 +3962,15 @@
         "date": "2026-10-05"
       },
       "colors": [
+        "red",
         "blue",
-        "purple",
-        "yellow",
-        "white"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mechanic--templar"
+      }
     },
     {
       "id": "buddhist",
@@ -3857,11 +4089,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "pink",
-        "white",
         "red",
-        "yellow"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "prophet--warlock"
+      }
     },
     {
       "id": "drug-dealer",
@@ -3962,11 +4198,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "pink",
-        "green",
-        "purple",
-        "orange"
-      ]
+        "red",
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "blob--businessman"
+      }
     },
     {
       "id": "shipwright",
@@ -4068,11 +4308,15 @@
         "date": "2026-10-05"
       },
       "colors": [
+        "red",
         "blue",
-        "purple",
-        "yellow",
-        "green"
-      ]
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mechanic--viking"
+      }
     },
     {
       "id": "warlord",
@@ -4169,11 +4413,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "pink",
-        "yellow",
-        "purple",
-        "white"
-      ]
+        "red",
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mutant--leader"
+      }
     },
     {
       "id": "miner",
@@ -4278,11 +4526,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "pink",
-        "orange",
-        "purple",
-        "green"
-      ]
+        "red",
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "explorer--dwarf"
+      }
     },
     {
       "id": "alchemist",
@@ -4405,11 +4657,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "pink",
-        "purple",
-        "orange",
-        "white"
-      ]
+        "red",
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "scientist--heretic"
+      }
     },
     {
       "id": "bioengineer",
@@ -4473,11 +4729,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "purple",
-        "yellow",
-        "green"
-      ]
+        "red",
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "scientist--viking"
+      }
     },
     {
       "id": "ai-girlfriend",
@@ -4587,11 +4847,15 @@
         "date": "2026-10-05"
       },
       "colors": [
-        "blue",
-        "green",
         "red",
-        "orange"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "cyborg--psychic"
+      }
     },
     {
       "id": "architect",
@@ -4644,11 +4908,15 @@
         }
       ],
       "colors": [
+        "red",
+        "green",
         "blue",
-        "yellow",
-        "purple",
-        "white"
-      ]
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "hacker--leader"
+      }
     },
     {
       "id": "brewer",
@@ -4701,11 +4969,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "purple",
-        "orange",
-        "green"
-      ]
+        "red",
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "scientist--pirate"
+      }
     },
     {
       "id": "caveman",
@@ -4729,8 +5001,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "green"
-      ]
+        "yellow"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A8",
+        "fontColor": "#BF9000"
+      }
     },
     {
       "id": "conqueror",
@@ -4783,11 +5061,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "orange",
-        "purple",
-        "white"
-      ]
+        "red",
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "explorer--leader"
+      }
     },
     {
       "id": "dreamweaver",
@@ -4840,11 +5122,15 @@
         }
       ],
       "colors": [
-        "blue",
-        "yellow",
         "red",
-        "green"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "hacker--shaman"
+      }
     },
     {
       "id": "enforcer",
@@ -4897,9 +5183,13 @@
         }
       ],
       "colors": [
-        "blue",
-        "orange"
-      ]
+        "red",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "robot--raider"
+      }
     },
     {
       "id": "engineer",
@@ -4923,8 +5213,14 @@
       },
       "sourceVariants": [],
       "colors": [
-        "purple"
-      ]
+        "blue"
+      ],
+      "colorSource": {
+        "workbook": "cards (4).xlsx",
+        "sheet": "Main",
+        "cell": "A5",
+        "fontColor": "#073763"
+      }
     },
     {
       "id": "explorer",
@@ -4977,9 +5273,13 @@
         }
       ],
       "colors": [
-        "pink",
-        "orange"
-      ]
+        "red",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "alien--raider"
+      }
     },
     {
       "id": "leader",
@@ -5032,9 +5332,13 @@
         }
       ],
       "colors": [
-        "purple",
-        "white"
-      ]
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "engineer--acolyte"
+      }
     },
     {
       "id": "lorekeeper",
@@ -5087,11 +5391,15 @@
         }
       ],
       "colors": [
-        "pink",
         "red",
-        "yellow",
-        "green"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "oracle--viking"
+      }
     },
     {
       "id": "mapmaker",
@@ -5144,11 +5452,15 @@
         }
       ],
       "colors": [
-        "pink",
         "red",
-        "orange",
-        "green"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "oracle--pirate"
+      }
     },
     {
       "id": "mechanic",
@@ -5201,9 +5513,13 @@
         }
       ],
       "colors": [
-        "blue",
-        "purple"
-      ]
+        "red",
+        "blue"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "robot--engineer"
+      }
     },
     {
       "id": "oracle",
@@ -5256,9 +5572,13 @@
         }
       ],
       "colors": [
-        "pink",
-        "red"
-      ]
+        "red",
+        "blue"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "alien--mage"
+      }
     },
     {
       "id": "pathfinder",
@@ -5311,11 +5631,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "orange",
         "red",
-        "green"
-      ]
+        "green",
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "explorer--shaman"
+      }
     },
     {
       "id": "runesmith",
@@ -5368,11 +5692,15 @@
         }
       ],
       "colors": [
-        "blue",
         "red",
-        "yellow",
-        "green"
-      ]
+        "blue",
+        "green",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "artificer--viking"
+      }
     },
     {
       "id": "seer",
@@ -5425,11 +5753,15 @@
         }
       ],
       "colors": [
-        "pink",
-        "white",
         "red",
-        "orange"
-      ]
+        "yellow",
+        "blue",
+        "green"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "prophet--psychic"
+      }
     },
     {
       "id": "shaman",
@@ -5482,51 +5814,35 @@
         }
       ],
       "colors": [
-        "red",
-        "green"
-      ]
+        "blue",
+        "yellow"
+      ],
+      "colorSource": {
+        "type": "merge-ingredients",
+        "recipeId": "mage--caveman"
+      }
     }
   ],
   "colorPalette": [
     {
-      "id": "blue",
-      "name": "Blue",
-      "hex": "#69a9f5"
-    },
-    {
       "id": "red",
       "name": "Red",
-      "hex": "#ef7b78"
+      "hex": "#CC0000"
+    },
+    {
+      "id": "blue",
+      "name": "Blue",
+      "hex": "#073763"
     },
     {
       "id": "green",
       "name": "Green",
-      "hex": "#80c787"
+      "hex": "#38761D"
     },
     {
       "id": "yellow",
       "name": "Yellow",
-      "hex": "#edd673"
-    },
-    {
-      "id": "orange",
-      "name": "Orange",
-      "hex": "#edaa64"
-    },
-    {
-      "id": "purple",
-      "name": "Purple",
-      "hex": "#b69aeb"
-    },
-    {
-      "id": "white",
-      "name": "White",
-      "hex": "#e5e8df"
-    },
-    {
-      "id": "pink",
-      "name": "Pink",
-      "hex": "#e69ac5"
+      "hex": "#BF9000"
     }
   ]
 }

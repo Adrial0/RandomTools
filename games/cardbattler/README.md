@@ -17,7 +17,7 @@ Open `index.html` in a browser, or serve this folder with the existing static we
 
 All 80 cards are playable, with all 72 distinct merge recipes available. The roster is derived directly from the card data, so future cards are not blocked by a separate allowlist. Rewards remain tier-gated as the run progresses. Robot + Thief produces Hacker, whose attacks steal a random keyword from surviving targets.
 
-Base colors: Robot blue, Mage red, Caveman green, Thief yellow, Raider orange, Engineer purple, Acolyte white, and Alien pink. Merged cards inherit all ingredient colors; their color stripe shows two or four components. Colors and the palette are stored in `cards.json`. Unit health is reduced by approximately 25% from the initial prototype. Existing saved battlefield units are migrated once to this balance revision.
+The four base colors come from font formatting in `cards (4).xlsx`, `Main!A2:A9`: Robot and Alien are red (#CC0000), Mage and Engineer blue (#073763), Thief and Raider green (#38761D), and Caveman and Acolyte yellow (#BF9000). Merged cards inherit ingredient colors; their stripe shows two or four components. Cleric is blue + yellow. Colors, the original palette, and source references are stored in `cards.json`. Unit health is reduced by approximately 25% from the initial prototype. Existing saved battlefield units are migrated once to this balance revision.
 
 ### Temporary balance and behavior
 

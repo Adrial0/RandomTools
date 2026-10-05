@@ -92,7 +92,10 @@ test('saved runs accept formerly excluded cards and mark unfinished effects hone
 test('every recipe combines disjoint colors and the result inherits their union',()=>{
  const g=fresh();for(const card of data.cards)assert.equal(g.profile(card.id).colors.length,card.tier===1?1:card.tier===2?2:4,card.id);
  for(const recipe of data.recipes){const [a,b]=recipe.ingredients;assert.deepEqual(g.sharedColors(a,b),[],recipe.id);assert.deepEqual(new Set(g.profile(recipe.result).colors),new Set([...g.profile(a).colors,...g.profile(b).colors]));}
- assert.deepEqual(g.profile('artificer').colors,['blue','red']);assert.deepEqual(g.sharedColors('robot','artificer'),['blue']);assert.deepEqual(g.sharedColors('robot','robot'),['blue']);
+ assert.deepEqual(g.profile('artificer').colors,['red','blue']);assert.deepEqual(g.sharedColors('robot','artificer'),['red']);assert.deepEqual(g.sharedColors('robot','robot'),['red']);
+ assert.deepEqual(g.profile('cleric').colors,['blue','yellow']);
+ assert.deepEqual(g.profile('robot').colors,g.profile('alien').colors);assert.deepEqual(g.profile('mage').colors,g.profile('engineer').colors);assert.deepEqual(g.profile('thief').colors,g.profile('raider').colors);assert.deepEqual(g.profile('caveman').colors,g.profile('acolyte').colors);
+ assert.deepEqual(g.sharedColors('cleric','shaman'),['blue','yellow']);
 });
 test('shared colors block merges even if an overlapping recipe is supplied',()=>{
  const g=fresh();g.recipes.push({ingredients:['robot','artificer'],result:'mech'});g.state.merge=['robot','artificer'];assert.deepEqual(g.mergeOptions(),[]);assert.equal(g.merge(),false);
