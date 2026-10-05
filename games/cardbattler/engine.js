@@ -126,7 +126,7 @@
       return {...stats,price:tier===1?10:tier===2?30:50,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:60,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:60,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -148,9 +148,9 @@
     beginEncounter() {
       const s=this.state;
       s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(60,s.gold);
-      s.phase='planning';s.turn=1;s.mana=0;s.units=[];s.draw=[];s.discard=[];s.selected=null;s.pendingChoice=null;s.enemyMaxHP=32+s.encounter*9;s.enemyHP=s.enemyMaxHP;
-      const opening=[['caveman','raider'],['robot','mage','raider'],['templar','viking','mage'],['cyborg','witch','cleric'],['mech','warlord','necromancer']][s.encounter];
-      opening.forEach((id,i)=>this.spawnEnemy(id,i%2,[1,4,2][i]));
+      s.phase='planning';s.turn=1;s.mana=0;s.units=[];s.draw=[];s.discard=[];s.selected=null;s.pendingChoice=null;s.enemyMaxHP=48+s.encounter*12;s.enemyHP=s.enemyMaxHP;
+      const opening=[['caveman','raider','robot','mage'],['robot','mage','raider','viking','cleric'],['templar','viking','mage','warlord','raider'],['cyborg','witch','cleric','warlord','viking','mage'],['mech','warlord','necromancer','templar','witch','raider']][s.encounter];
+      opening.forEach((id,i)=>this.spawnEnemy(id,i<3?1:0,[0,2,4,5,1,3][i]));
       s.nextEnemyCard=this.pick(this.enemyPool());this.refreshShop();this.log('Battle '+(s.encounter+1)+': buy cards with gold, then deploy for free.');
     }
     income() {return 10+this.state.units.filter(u=>u.team==='player'&&u.hp>0&&!u.silence&&['miner','businessman'].includes(u.cardId)).length;}
@@ -167,7 +167,7 @@
     }
     rerollShop() {const s=this.state;if(s.phase!=='planning'||s.pendingChoice||s.gold<10)return false;s.gold-=10;this.refreshShop();return true;}
     enemyPool() {return [['caveman','raider','alien'],['robot','mage','raider'],['templar','viking','psychic'],['cyborg','witch','cleric'],['mech','warlord','necromancer','mage']][this.state.encounter];}
-    spawnEnemy(id,row,col) {const u=this.spawn(id,'enemy',row,col);if(u){u.maxHP=Math.ceil(u.maxHP*(1.25+this.state.encounter*.05));u.hp=u.maxHP;u.attack+=1+Math.floor(this.state.encounter/2);}return u;}
+    spawnEnemy(id,row,col) {const u=this.spawn(id,'enemy',row,col);if(u){u.maxHP=Math.ceil(u.maxHP*(1.65+this.state.encounter*.1));u.hp=u.maxHP;u.attack+=2+Math.floor(this.state.encounter/2);}return u;}
     deploy(handIndex,row,col) {
       const s=this.state;
       const id=s.hand[handIndex];if(!id)return false;
@@ -429,9 +429,8 @@
     }
     enemyDeploy() {
       const s=this.state;const pools=[['caveman','raider','alien'],['robot','mage','raider'],['templar','viking','psychic'],['cyborg','witch','cleric'],['mech','warlord','necromancer','mage']];
-      // A reinforcement every other turn leaves room for deck-building rather than a constant flood.
-      if(s.turn%2===0)return;
-      const count=s.encounter>=3&&s.turn%5===0?2:1;
+      // Constant pressure, with extra waves in the later encounters.
+      const count=s.encounter>=2&&s.turn%2===0?2:1;
       for(let i=0;i<count;i++) {
         const spaces=[];for(let row=0;row<3;row++)for(let col=0;col<6;col++)if(!this.unitAt(row,col))spaces.push({row,col});
         if(!spaces.length)return;
@@ -480,6 +479,11 @@
       if((this.state.economyRevision||1)<2){this.state.economyRevision=2;this.state.gold=Math.max(6,this.state.gold);this.state.deck=[...this.state.hand,...this.state.merge.filter(Boolean),...this.state.units.filter(u=>u.team==='player'&&this.isCard(u.cardId)).map(u=>u.cardId)];this.state.draw=[];this.state.discard=[];this.state.pendingChoice=null;this.refreshShop();}
       if(this.state.economyRevision<3){this.state.gold*=10;this.state.economyRevision=3;}
       this.state.shop=this.state.shop||[];this.state.nextEnemyCard=this.state.nextEnemyCard||this.pick(this.enemyPool());
+      if((this.state.enemyDifficultyRevision||1)<2){
+        const ratio=(1.65+this.state.encounter*.1)/(1.25+this.state.encounter*.05);
+        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='enemy'||!this.isCard(unit.cardId))continue;const previous=unit.maxHP;unit.maxHP=Math.ceil(previous*ratio);unit.hp=Math.min(unit.maxHP,Math.max(1,Math.round(unit.hp*unit.maxHP/previous)));unit.attack+=1;}
+        const previous=this.state.enemyMaxHP;this.state.enemyMaxHP=48+this.state.encounter*12;this.state.enemyHP=Math.round(this.state.enemyHP*this.state.enemyMaxHP/previous);this.state.enemyDifficultyRevision=2;
+      }
       if((this.state.mergeInteractionRevision||1)<2){this.state.hand.push(...this.state.merge.filter(Boolean));this.state.merge=Array(6).fill(null);this.state.mergeInteractionRevision=2;}
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;

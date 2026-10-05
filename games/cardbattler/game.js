@@ -16,6 +16,20 @@
   }
   function save() {try {localStorage.setItem(SAVE,JSON.stringify(game.state));$('save-status').textContent='Progress saved locally';}catch{$('save-status').textContent='Saving unavailable';saveAvailable=false;}}
   try {const stored=localStorage.getItem(SAVE);if(!stored||!game.restore(JSON.parse(stored)))game.newRun();}catch{game.newRun();saveAvailable=false;}
+  const imageSources=new Map();
+  const imageExtensions=['png','webp','jpg','jpeg'];
+  function portrait(id,kind='detail') {
+    const card=game.definition(id),base=card.baseId||id,key=encodeURIComponent(base),source=imageSources.get(base);
+    const path=source===undefined?'assets/characters/'+key+'.png':source;
+    return `<span class="portrait portrait-${kind}" role="img" aria-label="${escape(card.name)}"><span class="portrait-placeholder" aria-hidden="true"><svg viewBox="0 0 80 100"><circle cx="40" cy="29" r="16"/><path d="M10 95v-18a30 30 0 0 1 60 0v18z"/></svg></span>${path?`<img src="${escape(path)}" data-portrait="${escape(base)}" data-image-index="0" alt="" draggable="false">`:''}</span>`;
+  }
+  document.addEventListener('error',event=>{
+    const img=event.target;if(!img.matches?.('img[data-portrait]'))return;
+    const base=img.dataset.portrait,next=Number(img.dataset.imageIndex)+1;
+    if(next<imageExtensions.length){img.dataset.imageIndex=String(next);img.src='assets/characters/'+encodeURIComponent(base)+'.'+imageExtensions[next];}
+    else{imageSources.set(base,null);img.remove();}
+  },true);
+  document.addEventListener('load',event=>{const img=event.target;if(img.matches?.('img[data-portrait]'))imageSources.set(img.dataset.portrait,img.getAttribute('src'));},true);
   function cardMarkup(id,index,extra='') {
     const card=game.definition(id), p=game.profile(id);
     const partner=null;
@@ -35,7 +49,7 @@
   function inspect(id,unit) {
     if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p><p class="small">Numbers on units show their activation order.</p>';return;}
     const card=game.definition(id),p=game.profile(id);
-    $('inspector').innerHTML=`<h3>${p.symbol} ${escape(card.name)}</h3><span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move 1${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
+    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1} · Shop ${p.price} gold${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
     $('inspector').querySelector('.stat-line').insertAdjacentHTML('afterend',mergeDetails(id));
   }
   function render() {
@@ -51,7 +65,7 @@
       const unit=s.units.find(u=>u.row===row&&u.col===col&&!u.hostId);
       const deployable=!busy&&s.phase==='planning'&&!s.pendingChoice&&selected!==null&&row>=(s.hand[selected]==='agent'?1:3)&&!unit;
       const label=unit?`${unit.team} ${game.definition(unit.cardId).name}, ${unit.hp} health, ${unit.attack} attack`:`Row ${row+1}, column ${col+1}${row===0?' enemy base':row===5?' your base':''}${deployable?', deploy here':''}`;
-      tiles+=`<button class="tile ${row<3?'enemy-home':'player-home'} ${row===0?'base-enemy':row===5?'base-player':''} ${unit?'occupied '+unit.team:''} ${deployable?'deployable':''}" data-row="${row}" data-col="${col}" aria-label="${escape(label)}">${unit?`<span class="order">${ordering[unit.uid]}</span><span class="conditions">${unit.burn?'♨':''}${unit.poison?'●':''}${unit.freeze?'❄':''}${unit.stealth?'◌':''}</span><span class="symbol" aria-hidden="true">${game.profile(unit.cardId).symbol}</span><span class="unit-name">${escape(game.definition(unit.cardId).name)}</span><span class="unit-stats">${unit.attack} / ${unit.hp}</span><span class="hp-mini"><i style="width:${Math.max(0,100*unit.hp/unit.maxHP)}%"></i></span>`:`<span class="tile-id">${row===0?'BASE ↓':row===5?'BASE ↑':String.fromCharCode(65+col)+(row+1)}</span>`}</button>`;
+      tiles+=`<button class="tile ${row<3?'enemy-home':'player-home'} ${row===0?'base-enemy':row===5?'base-player':''} ${unit?'occupied '+unit.team:''} ${deployable?'deployable':''}" data-row="${row}" data-col="${col}" aria-label="${escape(label)}">${unit?`<span class="order">${ordering[unit.uid]}</span><span class="conditions">${unit.burn?'♨':''}${unit.poison?'●':''}${unit.freeze?'❄':''}${unit.stealth?'◌':''}</span>${portrait(unit.cardId,"unit")}<span class="unit-damage" aria-label="${unit.attack} damage">⚔ ${unit.attack}</span><span class="unit-health" aria-label="${unit.hp} health">♥ ${unit.hp}</span>`:`<span class="tile-id">${row===0?'BASE ↓':row===5?'BASE ↑':String.fromCharCode(65+col)+(row+1)}</span>`}</button>`;
     }
     $('board').innerHTML=tiles;
     const phases={'planning':'Your turn','player-action':'Your army acts','enemy-action':'Enemy turn','battle-lost':'Battle lost','camp':'Victory','won':'Expedition complete','lost':'No lives left'};
@@ -92,6 +106,7 @@
   $('shop').addEventListener('click',event=>{const button=event.target.closest('[data-shop]');if(!button||busy)return;const id=game.state.shop[Number(button.dataset.shop)];if(game.buyCard(Number(button.dataset.shop))){selected=null;inspected={id};save();render();revealMobileDetails();}});
   $('reroll-shop').addEventListener('click',()=>{if(busy)return;if(game.rerollShop()){save();render();}});
   document.addEventListener('pointerover',event=>{
+    const tile=event.target.closest('#board [data-row]');if(tile&&!busy&&!drag&&event.pointerType!=='touch'){const unit=uiState().units.find(u=>u.row===Number(tile.dataset.row)&&u.col===Number(tile.dataset.col)&&!u.hostId);if(unit)inspect(unit.cardId,unit);return;}
     if(busy||drag||event.pointerType==='touch')return;const shop=event.target.closest('[data-shop]'),ref=reference(event.target);const id=shop?game.state.shop[Number(shop.dataset.shop)]:ref?game.state[ref.zone][ref.index]:null;if(id)inspect(id);
   });
   const MERGE_HOLD_MS=900;

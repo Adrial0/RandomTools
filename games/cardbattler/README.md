@@ -28,7 +28,7 @@ The four base colors come from font formatting in `cards (4).xlsx`, `Main!A2:A9`
 
 ### Temporary balance and behavior
 
-`engine.js` owns prototype stats, shop prices, enemy encounters, and ability implementations. The inspector, card tooltips, and catalog describe the exact current behavior. Enemy units have 25% extra health in battle one, increasing by 5 percentage points each battle, and +1 attack, rising to +3 by battle five. Enemy bases have 32 health plus 9 per later battle. Reinforcements arrive every other turn, with extra waves in later battles.
+`engine.js` owns prototype stats, shop prices, enemy encounters, and ability implementations. The inspector, card tooltips, and catalog describe the exact current behavior. Enemy units have 65% extra health in battle one, increasing by 10 percentage points each battle, and +2 attack, rising to +4 by battle five. Enemy bases have 48 health plus 12 per later battle. Opening formations contain four to six units across different lanes. Reinforcements arrive every round, with two on even rounds from battle three onward. Existing saves migrate once while preserving proportional enemy damage.
 
 Implemented mechanics include Symbiote attachment, Charm, Karma reincarnation, family/cultist/addict summons, Faith healing and buffs, keyword copying and stealing, bounties, potions, pulling, ranged immunity, income, control-based damage, and Lorekeeper's deployment choice. Unspecified values use explicit prototype amounts: Symbiote grants +2 attack/+1 armor; Sheriff bounties pay 2 gold; Buddhist Karma changes by 1 with tier thresholds 1 and 4; Drug Dealer summons every third activation. Karma classifies Faith/Holy as good and Outlaw/Cursed as bad, with good taking precedence. Other moral classifications remain undecided. Arcane caster attacks use a team spell pool of 3 mana per action phase, plus 1 per living Mage; this never limits deployment or purchases.
 
@@ -72,6 +72,12 @@ All files in `data/` are UTF-8 JSON and have `schemaVersion: 1`.
 | `implemented-abilities.json` | Generated current gameplay descriptions, keyword explanations, and prototype stats for all 80 cards |
 
 Source: `cards (4).xlsx`. Entries include sheet and cell references where applicable. The workbook was read without modification.
+
+## Character images
+
+Place images in `assets/characters/` using the lowercase card ID as the filename, such as `robot.png`, `space-monk.png`, or `ai-girlfriend.png`. PNG, WebP, JPG, and JPEG are tried automatically in that order. `assets/characters/image-filenames.json` lists all cards and summons. Upgraded Blobs reuse `blob.png`. Square portraits work best; images fill the battlefield tile and crop from the center. Reload after adding images; no build is needed. Missing portraits show a silhouette.
+
+The card inspector reserves a portrait area and includes stats, purchase price, colors, abilities, keyword explanations, pending design notes, and all merge recipes. Card details in the header opens the full details in a larger dialog. Hover or select a battlefield unit to inspect it. Battlefield units show the portrait, damage at bottom-left, and HP at bottom-right, with activation order and status markers. Unit names and unit HP bars are removed. The hand is centered when its cards fit and scrolls horizontally when necessary.
 
 ## Editing cards
 

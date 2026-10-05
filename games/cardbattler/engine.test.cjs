@@ -152,6 +152,12 @@ test('round income is 10 plus each surviving unsilenced Miner and Businessman',(
 test('stronger enemy stats do not change player stats',()=>{
  const g=fresh();const player=g.spawn('robot','player',5,0),enemy=g.spawnEnemy('robot',0,0);assert.ok(enemy.hp>player.hp);assert.ok(enemy.attack>player.attack);assert.equal(player.maxHP,8);
 });
+test('harder encounters cover more lanes and reinforce every round, with extra later waves',()=>{
+ const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(g.state.enemyMaxHP,48);assert.equal(g.state.units.length,4);assert.equal(new Set(g.state.units.map(u=>u.col)).size,4);g.state.units=[];g.state.turn=2;g.enemyDeploy();assert.equal(g.state.units.length,1);g.state.encounter=2;g.state.units=[];g.enemyDeploy();assert.equal(g.state.units.length,2);const enemy=g.state.units[0],profile=g.profile(enemy.cardId);assert.equal(enemy.maxHP,Math.ceil(profile.health*1.85));assert.equal(enemy.attack,profile.attack+3);
+});
+test('saved enemy difficulty upgrades once and preserves proportional base damage',()=>{
+ const g=fresh();delete g.state.enemyDifficultyRevision;g.state.enemyMaxHP=32;g.state.enemyHP=16;const enemy=g.spawn('robot','enemy',1,0);enemy.maxHP=10;enemy.hp=5;enemy.attack=4;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.enemyMaxHP,48);assert.equal(loaded.state.enemyHP,24);assert.equal(loaded.state.units[0].maxHP,14);assert.equal(loaded.state.units[0].hp,7);assert.equal(loaded.state.units[0].attack,5);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.equal(again.state.units[0].attack,5);
+});
 test('Agent deploys forward for free but cannot hit a base on its deployment turn',()=>{
  const g=fresh();g.state.hand=['agent'];assert.ok(g.deploy(0,1,0));const agent=g.unitAt(1,0),hp=g.state.enemyHP;g.action(agent);assert.equal(g.state.enemyHP,hp);g.state.turn++;g.action(agent);assert.ok(g.state.enemyHP<hp);
 });

@@ -121,5 +121,23 @@
       "cardRewardsBetweenBattles": false,
       "baseRepairBetweenBattles": false
     }
+  },
+  "enemyDifficulty": {
+    "prototype": true,
+    "healthMultiplierFirstEncounter": 1.65,
+    "healthMultiplierGainPerEncounter": 0.1,
+    "attackBonusFirstEncounter": 2,
+    "additionalAttackBonusEveryTwoEncounters": 1,
+    "baseHealthFirstEncounter": 48,
+    "baseHealthGainPerEncounter": 12,
+    "openingUnitCounts": [
+      4,
+      5,
+      5,
+      6,
+      6
+    ],
+    "reinforcementEveryRound": true,
+    "extraReinforcementOnEvenRoundsFromEncounter": 3
   }
 }
