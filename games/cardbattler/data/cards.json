@@ -181,6 +181,13 @@
       "ability": null,
       "keywords": [],
       "designNotes": "can merge with itself to get stats, exstra stat increse on merge maybe",
+      "abilityStatus": "specified",
+      "userConfirmedRules": {
+        "selfMerge": true,
+        "sharedColorException": true,
+        "upgradedBlobCanSelfMerge": true,
+        "source": "User confirmed Blob self-merging on 2026-10-05. Numerical growth remains prototype balance."
+      },
       "status": "draft",
       "source": {
         "sheet": "keywords",
@@ -674,9 +681,21 @@
         "movement": 1,
         "cost": null
       },
-      "ability": null,
+      "ability": {
+        "id": "businessman-income",
+        "name": "Business income",
+        "description": "Generates 1 additional gold each round while alive. Each copy stacks.",
+        "mechanics": {
+          "goldPerRound": 1,
+          "requiresAlive": true,
+          "stacksPerUnit": true
+        },
+        "source": {
+          "type": "user-design"
+        }
+      },
       "keywords": [],
-      "designNotes": "makes money!!! slow and steady income pasive?",
+      "designNotes": "Generates 1 additional gold each round while alive. Each copy stacks.",
       "status": "draft",
       "source": {
         "sheet": "keywords",
@@ -719,7 +738,15 @@
       "colorSource": {
         "type": "merge-ingredients",
         "recipeId": "engineer--raider"
-      }
+      },
+      "designHistory": [
+        {
+          "ability": null,
+          "designNotes": "makes money!!! slow and steady income pasive?"
+        }
+      ],
+      "abilityStatus": "specified",
+      "openQuestions": []
     },
     {
       "id": "crypto-dude",
@@ -4436,17 +4463,16 @@
         "cost": null
       },
       "ability": {
-        "id": "miner-ability",
+        "id": "miner-income",
         "name": "Mining",
-        "description": "May mine gold that could be used to buy items during a battle. This is tentative.",
+        "description": "Generates 1 additional gold each round while alive. Each copy stacks.",
         "mechanics": {
-          "proposedResource": "gold",
-          "proposedUse": "mid-battle item purchases",
-          "proposalStatus": "tentative"
+          "goldPerRound": 1,
+          "requiresAlive": true,
+          "stacksPerUnit": true
         },
         "source": {
-          "type": "user-design",
-          "date": "2026-10-05"
+          "type": "user-design"
         }
       },
       "keywords": [
@@ -4461,7 +4487,7 @@
           }
         }
       ],
-      "designNotes": "May mine gold that could be used to buy items during a battle. This is tentative.",
+      "designNotes": "Generates 1 additional gold each round while alive. Each copy stacks.",
       "status": "draft",
       "source": {
         "sheet": "keywords",
@@ -4513,14 +4539,27 @@
               }
             }
           ]
+        },
+        {
+          "ability": {
+            "id": "miner-ability",
+            "name": "Mining",
+            "description": "May mine gold that could be used to buy items during a battle. This is tentative.",
+            "mechanics": {
+              "proposedResource": "gold",
+              "proposedUse": "mid-battle item purchases",
+              "proposalStatus": "tentative"
+            },
+            "source": {
+              "type": "user-design",
+              "date": "2026-10-05"
+            }
+          },
+          "designNotes": "May mine gold that could be used to buy items during a battle. This is tentative."
         }
       ],
-      "abilityStatus": "partial",
-      "openQuestions": [
-        "Confirm gold mining and mid-battle purchases.",
-        "Mining trigger and gold amount?",
-        "Is it stationary?"
-      ],
+      "abilityStatus": "specified",
+      "openQuestions": [],
       "lastUpdatedFrom": {
         "type": "user-design",
         "date": "2026-10-05"

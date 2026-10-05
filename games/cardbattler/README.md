@@ -7,12 +7,13 @@ Working directory for the roguelike cardbattler. The game does not have a final 
 Open `index.html` in a browser, or serve this folder with the existing static website. No installation, network access, or build step is needed to play. The game lives at `/games/cardbattler/` when hosted.
 
 - Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
-- Deploy as many cards as your 3 mana allows. Start with 5 cards; draw 2 each subsequent turn. The hand limit is 10.
+- Buy cards from the six-card shop to add them to your hand, then deploy for free. There are no automatic draws. Start with 6 gold; earn 1 gold each completed round, plus 1 per surviving unsilenced Miner or Businessman. Base cards cost 1 gold, two-color cards 3, and four-color cards 5. The shop refreshes free each round; manual reroll costs 1 gold. Purchases require fewer than 10 cards in hand.
 - The six-slot merge row sits below combat. Drag hand cards into empty slots, or drop a card directly onto another compatible card in the hand or row to merge instantly. The result stays at the destination and replaces its ingredients permanently in the deck. Click a stored card to return it to your hand. For click/keyboard use, select a hand card and click an empty slot to store it or an occupied slot to merge.
-- Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge. A recipe is also required; compatible hand cards are highlighted when a workbench slot is filled.
+- Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge, except Blob with another Blob. A recipe is otherwise required; compatible hand cards are highlighted when a workbench slot is filled.
 - Dragging highlights valid destinations. Invalid drops and canceled drags preserve both cards. Mouse and touch use the same pointer interaction. Existing two-slot saves expand to six slots while preserving stored cards.
 - End turn to activate your army, then the enemy army. Units move or attack; Rush can move and attack. Activation is front to back and left to right from each side's perspective.
 - Win five encounters by destroying their bases. Base health persists between encounters. Choose a card reward, repair your base at camp, or buy a prototype War Banner artifact.
+- Surviving purchased units return to your hand between battles; destroyed units are lost. Stored merge cards and unplayed hand cards carry forward. Returned survivors may temporarily exceed the purchase hand limit; no cards are deleted to enforce that limit.
 - Progress saves automatically in local storage. New Run replaces the saved expedition after confirmation.
 
 All 80 cards are playable, with all 72 distinct merge recipes available. The roster is derived directly from the card data, so future cards are not blocked by a separate allowlist. Rewards remain tier-gated as the run progresses. Robot + Thief produces Hacker, whose attacks steal a random keyword from surviving targets.
@@ -21,9 +22,13 @@ The four base colors come from font formatting in `cards (4).xlsx`, `Main!A2:A9`
 
 ### Temporary balance and behavior
 
-`engine.js` owns prototype stats, costs, enemy encounters, and ability implementations. These do not overwrite card design data. Several unresolved abilities have simple temporary implementations, described by the in-game inspector: Acolyte heals, Mechanic grants armor, Leader grants a small aura, and mage variants use splash attacks. Inquisitor's provisional Cursed bonus is 50%; burn deals 2 damage over two activations; mental attacks are currently the arcane caster attacks. Warlord auras stack additively. Ranged attacks stop at the first occupied tile in their column; bases must be attacked from the adjacent row. Summons wait until their side's next activation snapshot. Enemy reinforcements arrive every other turn.
+`engine.js` owns prototype stats, shop prices, enemy encounters, and ability implementations. The inspector, card tooltips, and catalog describe the exact current behavior. Enemy units have 25% extra health in battle one, increasing by 5 percentage points each battle, and +1 attack, rising to +3 by battle five. Enemy bases have 32 health plus 9 per later battle. Reinforcements arrive every other turn, with extra waves in later battles.
 
-Symbiote, Buddhist, boats, mining, Charm, and other unfinished systems are stored as designs; their cards can be deployed using provisional stats and implemented keywords while these abilities await implementation. The inspector and catalog identify pending effects and show planned ability descriptions. Posthuman intentionally has no ability and receives the highest base health and attack. The prototype uses deterministic rules within combat except card draws, rewards, enemy deployments, Scientist debuffs, and Hacker keyword selection. Balancing and full-card implementation remain future work.
+Implemented mechanics include Symbiote attachment, Charm, Karma reincarnation, family/cultist/addict summons, Faith healing and buffs, keyword copying and stealing, bounties, potions, pulling, ranged immunity, income, control-based damage, and Lorekeeper's deployment choice. Unspecified values use explicit prototype amounts: Symbiote grants +2 attack/+1 armor; Sheriff bounties pay 2 gold; Buddhist Karma changes by 1 with tier thresholds 1 and 4; Drug Dealer summons every third activation. Karma classifies Faith/Holy as good and Outlaw/Cursed as bad, with good taking precedence. Other moral classifications remain undecided. Arcane caster attacks use a team spell pool of 3 mana per action phase, plus 1 per living Mage; this never limits deployment or purchases.
+
+Inquisitor's provisional Cursed bonus is 50%; Burn deals 2 damage for 2 activations. Warlord auras stack additively. Ranged attacks stop at the first occupied tile in their column; bases must be attacked from the adjacent row. Summons wait until the next activation snapshot. Charm lasts for the controlled unit's next activation. Silence lasts until its source dies. Acolyte's healing and Leader's 10% row aura remain provisional interpretations of their rough notes. Arms Dealer uses the gun-user buff option; gun summoning is not designed.
+
+Vague designs remain pending, including boat transport, drunkenness, and cards with flavor-only notes. Blob can merge with itself as an approved exception to the shared-color restriction; upgraded Blobs can absorb more Blobs. Its prototype stats scale with absorbed Blobs, with a 10% bonus over their combined base stats. Posthuman intentionally has no ability and receives the highest base health and attack. All 80 cards stay playable using their current stats and keywords. The generated `data/implemented-abilities.json` records descriptions, keyword effects, pending fields, and prototype stats for every card.
 
 ### Development
 
@@ -58,6 +63,7 @@ All files in `data/` are UTF-8 JSON and have `schemaVersion: 1`.
 | `references.json` | Original character references and proposed names from Main |
 | `rules.json` | Board layout and turn behavior agreed during design; undecided rules remain null |
 | `source-workbook.json` | Original nonempty cells from all four sheets, including uncategorized notes |
+| `implemented-abilities.json` | Generated current gameplay descriptions, keyword explanations, and prototype stats for all 80 cards |
 
 Source: `cards (4).xlsx`. Entries include sheet and cell references where applicable. The workbook was read without modification.
 
@@ -81,4 +87,4 @@ Rows and columns are zero-based. Row 0 is the enemy base and row 5 is the player
 
 During the player's action phase, units activate by ascending row and then ascending column. Enemies use descending row and descending column, mirroring that order. Determine the activation list before units act so movement does not cause duplicate activations.
 
-Hand sizes, draw rates, resources, merge costs, and other unconfirmed rules are intentionally left unset.
+The current prototype uses a shop, a ten-card purchase limit for the hand, free deployment and merging, and six storage slots. Numerical balance values remain adjustable.

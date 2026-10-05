@@ -1,0 +1,1412 @@
+{
+  "schemaVersion": 1,
+  "generatedFrom": [
+    "engine.js",
+    "cards.json"
+  ],
+  "cards": [
+    {
+      "id": "symbiote",
+      "name": "Symbiote",
+      "description": "Each activation tries to attach to an ally: front, behind, left, right. An attached Symbiote grants its host +2 attack and +1 armor. It detaches on host death and can attach again. Unattached: 5 health, 1 attack. Host bonuses are prototype values.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 5,
+        "attack": 1,
+        "armor": 1,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "alien",
+      "name": "Alien",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 8,
+        "attack": 3,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "blob",
+      "name": "Blob",
+      "description": "Can merge with another Blob despite shared colors. Grows in proportion to absorbed Blobs, with a 10% bonus over their combined base health and attack. This exception also works with already merged Blobs.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "witch-hunter",
+      "name": "Witch Hunter",
+      "description": "Deals 50% bonus damage against Fantasy units. Prototype bonus.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "exploit",
+          "description": "Deals 30% more damage to afflicted targets.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "psychic",
+      "name": "Psychic",
+      "description": "Mental attack. Weakens its target for its next activation.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "weaken",
+          "description": "Reduces target damage by 30% for its next activation.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 9,
+        "attack": 4,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "artificer",
+      "name": "Artificer",
+      "description": "Arcane splash: hits its target and the tiles on either side.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 9,
+        "attack": 4,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "battlemage",
+      "name": "Battlemage",
+      "description": "Flame splash: hits its target and the tiles on either side, applying burn.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 12,
+        "attack": 5,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "mage",
+      "name": "Mage",
+      "description": "Arcane splash hits its target and the tiles on either side. Each living Mage supplies 1 mana; arcane attacks spend 1 mana to cast their splash, otherwise they attack a single target.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 6,
+        "attack": 3,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "ceo",
+      "name": "CEO",
+      "description": "Each activation, earns 1 gold per other living friendly Corporate unit. Prototype rate.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "exploit",
+          "description": "Deals 30% more damage to afflicted targets.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "family-man",
+      "name": "Family Man",
+      "description": "On its first activation, summons a Wife and Child into nearby empty tiles. Wife heals an adjacent ally for 1; Child has Rush. Prototype summon stats.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "spawn",
+          "description": "Summons units according to the card’s ability.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "businessman",
+      "name": "Businessman",
+      "description": "Generates +1 gold each round while alive and not silenced. Each Businessman stacks.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "crypto-dude",
+      "name": "Crypto Dude",
+      "description": "Each activation, flips a coin: gain 1 gold or lose 1 gold, without going below zero. Prototype amounts.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "corruptor",
+      "name": "Corruptor",
+      "description": "Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Prototype thresholds; Cultists have 3 health / 1 attack, Demons 12 health / 5 attack.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "exploit",
+          "description": "Deals 30% more damage to afflicted targets.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "warlock",
+      "name": "Warlock",
+      "description": "Arcane splash. Exploit deals 30% more damage to afflicted targets.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "exploit",
+          "description": "Deals 30% more damage to afflicted targets.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 9,
+        "attack": 4,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "abomination",
+      "name": "Abomination",
+      "description": "On hit, applies Fear: the target retreats one tile instead of acting on its next activation if space is free.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "fear",
+          "description": "Target retreats one tile instead of acting on its next activation if space is free.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "necromancer",
+      "name": "Necromancer",
+      "description": "Enemy deaths caused by its team leave a 1 health / 1 attack allied skeleton on eligible empty tiles.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "spawn",
+          "description": "Summons units according to the card’s ability.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "witch",
+      "name": "Witch",
+      "description": "Attacks weaken their target by 30% and silence its keywords and abilities until the Witch dies.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "weaken",
+          "description": "Reduces target damage by 30% for its next activation.",
+          "pending": false
+        },
+        {
+          "id": "silence",
+          "description": "Disables target abilities and keywords until the source dies.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 12,
+        "attack": 5,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "heretic",
+      "name": "Heretic",
+      "description": "On hit, removes 2 Faith from its target.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "cannoneer",
+      "name": "Cannoneer",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [
+        {
+          "id": "ranged",
+          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "pending": false
+        },
+        {
+          "id": "overkill",
+          "description": "Excess damage continues through enemies behind the target in its column.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 6,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "cowboy",
+      "name": "Cowboy",
+      "description": "Ranged attacks within 3 tiles. Rush allows it to move and fire in the same activation.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "rush",
+          "description": "Can move and then attack in the same activation.",
+          "pending": false
+        },
+        {
+          "id": "ranged",
+          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 3,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "arms-dealer",
+      "name": "Arms Dealer",
+      "description": "Friendly Gunslingers in the eight surrounding tiles deal 20% more damage. Uses the gun-user buff idea; gun summoning is unfinished.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "pirate",
+      "name": "Pirate",
+      "description": "After a kill, applies Fear to neighboring enemies: they retreat one tile on their next activation if space is free.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "sheriff",
+      "name": "Sheriff",
+      "description": "Marks the lowest-health visible enemy with a bounty. When its team kills that target, gains 2 gold. One active bounty per Sheriff. Prototype reward.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "templar",
+      "name": "Templar",
+      "description": "Has 2 armor, extra health, and starts with 5 Faith. No additional unique ability.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 4,
+        "armor": 2,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "inquisitor",
+      "name": "Inquisitor",
+      "description": "Bonus damage against Cursed. Double damage against burning units.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "acolyte",
+      "name": "Acolyte",
+      "description": "Support: heals the most injured adjacent ally for 2 before acting.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 8,
+        "attack": 2,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "cleric",
+      "name": "Cleric",
+      "description": "Spends up to 4 of its own Faith to heal the most injured adjacent ally before acting. Starts with 3 Faith.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 2,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "missionary",
+      "name": "Missionary",
+      "description": "Each activation, gives 1 Faith to all allies in the eight surrounding tiles.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "pope",
+      "name": "Pope",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "prophet",
+      "name": "Prophet",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "prepper",
+      "name": "Prepper",
+      "description": "Cannot move. Attacks the first enemy in its column within 3 tiles. Has 2 armor.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        },
+        {
+          "id": "stationary",
+          "description": "Cannot move forward.",
+          "pending": false
+        },
+        {
+          "id": "ranged",
+          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 2,
+        "range": 3,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "cannibal",
+      "name": "Cannibal",
+      "description": "Once per battle, eats the weakest adjacent friendly unit and gains its current health, maximum health, and attack. Eating consumes its action.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "lifesteal",
+          "description": "Heals for damage dealt, up to maximum health.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "hermit",
+      "name": "Hermit",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "thief",
+      "name": "Thief",
+      "description": "Stealth: untargetable until its first attack.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 7,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "scavenger",
+      "name": "Scavenger",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "agent",
+      "name": "Agent",
+      "description": "Can deploy on any empty tile except the opposing base row. Cannot damage the enemy base on the turn it is deployed.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "cyborg",
+      "name": "Cyborg",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 4,
+        "armor": 1,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "machine-priest",
+      "name": "Machine-priest",
+      "description": "Spends 1 Faith to give an adjacent Tech ally 1 armor before acting, up to 2 extra armor per ally. Starts with 3 Faith.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 2,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "posthuman",
+      "name": "Posthuman",
+      "description": "No unique ability. Has the highest base stats in the roster.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 30,
+        "attack": 9,
+        "armor": 3,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "hacker",
+      "name": "Hacker",
+      "description": "On a successful hit, steals one random keyword it does not already have from a surviving target.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "flank",
+          "description": "Deals 30% more damage when a friendly unit is adjacent to the target.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "data-miner",
+      "name": "Data Miner",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [
+        {
+          "id": "flank",
+          "description": "Deals 30% more damage when a friendly unit is adjacent to the target.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "sentinel",
+      "name": "Sentinel",
+      "description": "Retaliate: after surviving an attack, immediately attacks the attacker.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "retaliate",
+          "description": "Returns an attack after surviving an enemy attack.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "robot",
+      "name": "Robot",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 8,
+        "attack": 3,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "technomancer",
+      "name": "Technomancer",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "dwarf",
+      "name": "Dwarf",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 1,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "scientist",
+      "name": "Scientist",
+      "description": "Experiment: attacks randomly burn, freeze, or weaken the target.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "exploit",
+          "description": "Deals 30% more damage to afflicted targets.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 9,
+        "attack": 4,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "mutant",
+      "name": "Mutant",
+      "description": "Venom poisons targets for 20% of maximum health for 2 activations. Flank deals 30% more damage when a friendly unit is adjacent to its target.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "flank",
+          "description": "Deals 30% more damage when a friendly unit is adjacent to the target.",
+          "pending": false
+        },
+        {
+          "id": "venom",
+          "description": "Applies Poison: 20% maximum health damage on each of the next 2 activations.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "goblin",
+      "name": "Goblin",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [
+        {
+          "id": "flank",
+          "description": "Deals 30% more damage when a friendly unit is adjacent to the target.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "pyro",
+      "name": "Pyro",
+      "description": "Burns the unit ahead and units to the left and right of that target.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "ignite",
+          "description": "Applies Burn: 2 damage on each of the next 2 activations.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "mindguard",
+      "name": "Mindguard",
+      "description": "Immune to mental attacks; shares immunity with the 8 neighboring allies.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "mindshield",
+          "description": "Immunity to mental attacks; Mindguard shares it with its 8 neighboring allies.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "specialist",
+      "name": "Specialist",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [
+        {
+          "id": "mirror",
+          "description": "Copies a keyword it lacks from an adjacent ally before acting.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "space-monk",
+      "name": "Space monk",
+      "description": "Immune to single-target ranged attacks. Melee and AoE can hit it. Pulls the first enemy in its column one tile closer, if the destination is empty, before attacking. Pull range: 3.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "pull",
+          "description": "Pulls a target one tile closer before attacking if the destination is empty.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 3,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "viking",
+      "name": "Viking",
+      "description": "Rush allows movement and an attack together. Each kill grants +1 attack, +1 maximum health, and +1 health through Fury.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "rush",
+          "description": "Can move and then attack in the same activation.",
+          "pending": false
+        },
+        {
+          "id": "fury",
+          "description": "A kill grants +1 attack, +1 maximum health, and +1 health.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 10,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "raider",
+      "name": "Raider",
+      "description": "Rush allows movement and an attack together. No additional unique ability.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "rush",
+          "description": "Can move and then attack in the same activation.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 7,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "mech",
+      "name": "Mech",
+      "description": "Ranged. On death, explodes into all 8 neighboring tiles, hitting both sides, then ejects a pilot.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "spawn",
+          "description": "Summons units according to the card’s ability.",
+          "pending": false
+        },
+        {
+          "id": "bomb",
+          "description": "Mech explodes for 5 damage into all 8 neighboring tiles, including friendlies.",
+          "pending": false
+        },
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        },
+        {
+          "id": "ranged",
+          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 17,
+        "attack": 5,
+        "armor": 1,
+        "range": 3,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "buddhist",
+      "name": "Buddhist",
+      "description": "While alive, gains 1 Karma when an Outlaw or Cursed unit dies and loses 1 when a Faith or Holy unit dies. On death reincarnates into a random unit: tier 1 at Karma ≤0, tier 2 at 1–3, tier 3 at 4+. Stats change 5% per Karma, capped at ±30%. Unclassified characters are neutral.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "spawn",
+          "description": "Summons units according to the card’s ability.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "drug-dealer",
+      "name": "Drug Dealer",
+      "description": "Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 4 health, 2 attack, and Rush. Prototype timing and stats.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "spawn",
+          "description": "Summons units according to the card’s ability.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "shipwright",
+      "name": "Shipwright",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [
+        {
+          "id": "spawn",
+          "description": "Summons units according to the card’s ability.",
+          "pending": true
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "warlord",
+      "name": "Warlord",
+      "description": "Allies in the 8 neighboring tiles deal 20% more damage.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "miner",
+      "name": "Miner",
+      "description": "Generates +1 gold each round while alive and not silenced. Each Miner stacks.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "alchemist",
+      "name": "Alchemist",
+      "description": "Ranged attacks always apply Venom and randomly apply Freeze, Sunder, Rend, or Silence. Sunder removes 1 armor; Rend bleeds for 20% of attack for 2 activations; Freeze skips 1 activation; Silence lasts until the Alchemist dies.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "ranged",
+          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "pending": false
+        },
+        {
+          "id": "venom",
+          "description": "Applies Poison: 20% maximum health damage on each of the next 2 activations.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 3,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "bioengineer",
+      "name": "Bioengineer",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "venom",
+          "description": "Applies Poison: 20% maximum health damage on each of the next 2 activations.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "ai-girlfriend",
+      "name": "AI Girlfriend",
+      "description": "Once per battle, charms the first target in range instead of attacking. It fights for her side for its next activation, then returns to its original side and deals 30% less damage for its next activation.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "weaken",
+          "description": "Reduces target damage by 30% for its next activation.",
+          "pending": false
+        }
+      ],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 3,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "architect",
+      "name": "Architect",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "brewer",
+      "name": "Brewer",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "caveman",
+      "name": "Caveman",
+      "description": "No ability or keywords. Relies on its higher health.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 3,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "conqueror",
+      "name": "Conqueror",
+      "description": "Deals 5% more damage per tile occupied by its team. Prototype bonus.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "dreamweaver",
+      "name": "Dreamweaver",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "enforcer",
+      "name": "Enforcer",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "engineer",
+      "name": "Engineer",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 8,
+        "attack": 3,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 1
+      }
+    },
+    {
+      "id": "explorer",
+      "name": "Explorer",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "leader",
+      "name": "Leader",
+      "description": "Command: allies in its row deal 10% more damage. Prototype value.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 2,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "lorekeeper",
+      "name": "Lorekeeper",
+      "description": "On deployment, choose Armor, Ranged, Rush, Ignite, Retaliate, or Venom. All current allies in its row learn that keyword for the battle.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "mapmaker",
+      "name": "Mapmaker",
+      "description": "Reveals the next enemy reinforcement card while alive and not silenced.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "mechanic",
+      "name": "Mechanic",
+      "description": "Repair: grants an adjacent ally 1 armor before acting (up to +2).",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 2,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "oracle",
+      "name": "Oracle",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 11,
+        "attack": 4,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 3
+      }
+    },
+    {
+      "id": "pathfinder",
+      "name": "Pathfinder",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "runesmith",
+      "name": "Runesmith",
+      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "seer",
+      "name": "Seer",
+      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "abilityPending": true,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 14,
+        "attack": 5,
+        "armor": 0,
+        "range": 1,
+        "goldPrice": 5
+      }
+    },
+    {
+      "id": "shaman",
+      "name": "Shaman",
+      "description": "Arcane splash: hits its target and the tiles on either side.",
+      "abilityPending": false,
+      "keywords": [],
+      "prototypeStats": {
+        "health": 9,
+        "attack": 4,
+        "armor": 0,
+        "range": 2,
+        "goldPrice": 3
+      }
+    }
+  ]
+}

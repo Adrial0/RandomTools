@@ -20,38 +20,44 @@
     const card=game.definition(id), p=game.profile(id);
     const partner=index!==null?game.state.merge.find(Boolean):null;
     const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
-    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.cost} mana, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.cost}</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="card-stats">⚔ ${p.attack} &nbsp; ♥ ${p.health}${p.armor?` &nbsp; ◈ ${p.armor}`:''}</span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
+    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price} gold to buy, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.price}g</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats">⚔ ${p.attack} &nbsp; ♥ ${p.health}${p.armor?` &nbsp; ◈ ${p.armor}`:''}</span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
   function inspect(id,unit) {
     if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p><p class="small">Numbers on units show their activation order.</p>';return;}
     const card=game.definition(id),p=game.profile(id);
-    $('inspector').innerHTML=`<h3>${p.symbol} ${escape(card.name)}</h3><span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move 1</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Prototype stats and costs. Some effects use temporary designs.</p>`;
+    $('inspector').innerHTML=`<h3>${p.symbol} ${escape(card.name)}</h3><span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">⚔ ${unit?unit.attack:p.attack} attack · ♥ ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move 1${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
   }
   function render() {
     const s=uiState();
     $('run-bar').innerHTML=encounterNames.map((name,i)=>`<div class="run-node ${i===s.encounter?'current':i<s.encounter?'done':''}">${i<s.encounter?'✓':String(i+1).padStart(2,'0')} &nbsp; ${escape(name)}</div>`).join('');
     $('encounter-title').textContent=encounterNames[s.encounter];$('encounter-note').textContent=encounterNotes[s.encounter];
-    $('resources').innerHTML=`<div class="resource">MANA<strong class="mana">${s.mana} <span class="small">/ 3</span></strong></div><div class="resource">GOLD<strong>${s.gold}</strong></div>`;
+    $('resources').innerHTML=`<div class="resource">GOLD<strong class="mana">${s.gold}</strong></div><div class="resource">ROUND INCOME<strong>+${game.income()} <span class="small">gold</span></strong></div>`;
     $('enemy-hp').textContent=s.enemyHP+' / '+s.enemyMaxHP;$('player-hp').textContent=s.playerHP+' / '+s.playerMaxHP;
     $('enemy-health').style.width=100*s.enemyHP/s.enemyMaxHP+'%';$('player-health').style.width=100*s.playerHP/s.playerMaxHP+'%';
-    const ordering={};for(const team of ['player','enemy'])s.units.filter(u=>u.team===team).sort((a,b)=>team==='player'?a.row-b.row||a.col-b.col:b.row-a.row||b.col-a.col).forEach((u,i)=>ordering[u.uid]=i+1);
+    const ordering={};for(const team of ['player','enemy'])s.units.filter(u=>u.team===team&&!u.hostId).sort((a,b)=>team==='player'?a.row-b.row||a.col-b.col:b.row-a.row||b.col-a.col).forEach((u,i)=>ordering[u.uid]=i+1);
     let tiles='';
     for(let row=0;row<6;row++)for(let col=0;col<6;col++) {
-      const unit=s.units.find(u=>u.row===row&&u.col===col);
-      const deployable=!busy&&s.phase==='planning'&&selected!==null&&row>=3&&!unit&&game.profile(s.hand[selected]).cost<=s.mana;
+      const unit=s.units.find(u=>u.row===row&&u.col===col&&!u.hostId);
+      const deployable=!busy&&s.phase==='planning'&&!s.pendingChoice&&selected!==null&&row>=(s.hand[selected]==='agent'?1:3)&&!unit;
       const label=unit?`${unit.team} ${game.definition(unit.cardId).name}, ${unit.hp} health, ${unit.attack} attack`:`Row ${row+1}, column ${col+1}${row===0?' enemy base':row===5?' your base':''}${deployable?', deploy here':''}`;
       tiles+=`<button class="tile ${row<3?'enemy-home':'player-home'} ${row===0?'base-enemy':row===5?'base-player':''} ${unit?'occupied '+unit.team:''} ${deployable?'deployable':''}" data-row="${row}" data-col="${col}" aria-label="${escape(label)}">${unit?`<span class="order">${ordering[unit.uid]}</span><span class="conditions">${unit.burn?'♨':''}${unit.poison?'●':''}${unit.freeze?'❄':''}${unit.stealth?'◌':''}</span><span class="symbol" aria-hidden="true">${game.profile(unit.cardId).symbol}</span><span class="unit-name">${escape(game.definition(unit.cardId).name)}</span><span class="unit-stats">${unit.attack} / ${unit.hp}</span><span class="hp-mini"><i style="width:${Math.max(0,100*unit.hp/unit.maxHP)}%"></i></span>`:`<span class="tile-id">${row===0?'BASE ↓':row===5?'BASE ↑':String.fromCharCode(65+col)+(row+1)}</span>`}</button>`;
     }
     $('board').innerHTML=tiles;
     const phases={'planning':'Your turn','player-action':'Your army acts','enemy-action':'Enemy turn','reward':'Victory','camp':'At camp','won':'Expedition complete','lost':'Base destroyed'};
     $('phase').textContent=phases[s.phase];$('turn-note').textContent='Battle '+(s.encounter+1)+' · Turn '+s.turn+(busy?' · resolving':'');
-    $('end-turn').disabled=busy||s.phase!=='planning';
-    $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent=s.draw.length+' to draw · '+s.discard.length+' discarded · '+s.deck.length+' in deck';
-    $('hand').innerHTML=s.hand.length?s.hand.map((id,i)=>cardMarkup(id,i,selected===i?'selected':'')).join(''):'<div class="empty-hand">Your hand is empty. End your turn to draw more cards.</div>';
+    $('end-turn').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice);
+    $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent='Deployment is free · '+s.deck.length+' cards owned';
+    $('hand').innerHTML=s.hand.length?s.hand.map((id,i)=>cardMarkup(id,i,selected===i?'selected':'')).join(''):'<div class="empty-hand">Buy cards from the shop to fill your hand.</div>';
     $('hand').querySelectorAll('button').forEach(b=>b.disabled=busy||s.phase!=='planning');
     $('merge-slots').innerHTML=s.merge.map((id,i)=>id?cardMarkup(id,null,'stored-card').replace(`data-choice="${escape(id)}"`,`data-slot="${i}"`):`<button class="merge-slot empty-slot" data-slot="${i}" aria-label="Empty merge slot ${i+1}"><span aria-hidden="true">+</span>Drop a card</button>`).join('');
     $('merge-slots').querySelectorAll('button').forEach(button=>button.disabled=busy||s.phase!=='planning');
-    $('merge-preview').textContent='Drag a card onto another to combine. Shared colors cannot merge.';
+    $('merge-preview').textContent='Drag a card onto another to combine. Shared colors cannot merge, except Blob with Blob.';
+    $('shop').innerHTML=(s.shop||[]).map((id,index)=>id?cardMarkup(id,null,'shop-card').replace(`data-choice="${escape(id)}"`,`data-shop="${index}"`):'<div class="sold-card">Sold</div>').join('');
+    $('shop').querySelectorAll('[data-shop]').forEach(button=>{const id=s.shop[Number(button.dataset.shop)];button.disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.hand.length>=10||s.gold<game.profile(id).price;});
+    $('reroll-shop').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.gold<1;
+    $('shop-note').textContent='Refreshes each round';
+    const mapmaker=s.units.some(u=>u.team==='player'&&u.cardId==='mapmaker'&&!u.silence);
+    $('forecast').textContent=mapmaker&&s.nextEnemyCard?'Mapmaker reveals the next reinforcement: '+game.definition(s.nextEnemyCard).name+'.':'Buy a card to add it to your hand. Deployment is free.';
     $('journal').innerHTML=s.log.slice(0,14).map(line=>`<li>${escape(line)}</li>`).join('');
     if(inspected){const u=s.units.find(u=>u.uid===inspected.uid);inspect(inspected.id,u);}else inspect(selected!==null?s.hand[selected]:null);
   }
@@ -59,7 +65,8 @@
   function dialog(html) {$('overlay-content').innerHTML=html;if(!$('overlay').open)$('overlay').showModal();}
   function showPhase() {
     const s=game.state;
-    if(s.phase==='reward')dialog(`<p class="eyebrow">BATTLE WON</p><h2>A new addition</h2><p>Choose one card to add permanently to your deck. Your base health carries into the next battle.</p><div class="choices">${s.rewards.map(id=>cardMarkup(id,null)).join('')}</div><p class="small">Inspect each card by hovering or focusing it.</p><div id="choice-detail"></div>`);
+    if(s.pendingChoice)dialog(`<p class="eyebrow">LOREKEEPER</p><h2>Teach your row</h2><p>Choose a keyword for all current allies in the Lorekeeper's row.</p><div class="dialog-actions">${['armor','ranged','rush','ignite','retaliate','venom'].map(keyword=>`<button data-teach="${keyword}">${keyword}</button>`).join('')}</div>`);
+    else if(s.phase==='reward')dialog(`<p class="eyebrow">BATTLE WON</p><h2>A new addition</h2><p>Choose one free card for your hand. Surviving purchased units return to your hand for the next battle.</p><div class="choices">${s.rewards.map(id=>cardMarkup(id,null)).join('')}</div><p class="small">Inspect each card by hovering or focusing it.</p><div id="choice-detail"></div>`);
     else if(s.phase==='camp')showCamp();
     else if(['won','lost'].includes(s.phase))dialog(`<p class="eyebrow">${s.phase==='won'?'EXPEDITION COMPLETE':'EXPEDITION ENDED'}</p><h2>${s.phase==='won'?'You held the line.':'Your base has fallen.'}</h2><p>${s.phase==='won'?'All five strongholds defeated.':'Reached battle '+(s.encounter+1)+' of 5.'} Your final deck contained ${s.deck.length} cards.</p><div class="dialog-actions"><button class="primary" data-action="restart">Start a new run</button><button class="secondary" data-action="close">Inspect battlefield</button></div>`);
   }
@@ -71,7 +78,12 @@
   $('board').addEventListener('click',event=>{
     const tile=event.target.closest('[data-row]');if(!tile||busy)return;const row=Number(tile.dataset.row),col=Number(tile.dataset.col),unit=game.unitAt(row,col);
     if(unit){inspected={id:unit.cardId,uid:unit.uid};render();return;}
-    if(selected!==null){if(game.deploy(selected,row,col)){selected=null;inspected=null;save();render();}else notify('Deploy on an empty tile in your bottom three rows, with enough mana.');}
+    if(selected!==null){if(game.deploy(selected,row,col)){selected=null;inspected=null;save();render();showPhase();}else notify('Deploy on an empty friendly tile. Agents can deploy farther forward.');}
+  });
+  $('shop').addEventListener('click',event=>{const button=event.target.closest('[data-shop]');if(!button||busy)return;const id=game.state.shop[Number(button.dataset.shop)];if(game.buyCard(Number(button.dataset.shop))){selected=null;inspected={id};save();render();}});
+  $('reroll-shop').addEventListener('click',()=>{if(busy)return;if(game.rerollShop()){save();render();}});
+  document.addEventListener('pointerover',event=>{
+    if(busy||drag||event.pointerType==='touch')return;const shop=event.target.closest('[data-shop]'),ref=reference(event.target);const id=shop?game.state.shop[Number(shop.dataset.shop)]:ref?game.state[ref.zone][ref.index]:null;if(id)inspect(id);
   });
   $('merge-slots').addEventListener('click',event=>{
     const button=event.target.closest('[data-slot]');if(!button||busy||Date.now()<suppressClickUntil)return;
@@ -139,13 +151,14 @@
     if(action==='restart'){game.newRun();selected=null;inspected=null;$('overlay').close();save();render();}
     if(action==='continue'){game.continueRun();$('overlay').close();save();render();}
     const buy=event.target.closest('[data-buy]')?.dataset.buy;if(buy){game.buyCamp(buy);save();render();showCamp();}
+    const teach=event.target.closest('[data-teach]')?.dataset.teach;if(teach&&game.chooseLorekeeper(teach)){$('overlay').close();save();render();}
     const choice=event.target.closest('[data-choice]')?.dataset.choice;
     if(choice&&game.state.phase==='reward'){game.chooseReward(choice);save();render();showCamp();}
     else if(choice&&$('overlay-content').querySelector('h2')?.textContent==='Choose your combination'){game.merge(choice);selected=null;$('overlay').close();save();render();}
   });
   function showChoice(event) {const id=event.target.closest('[data-choice]')?.dataset.choice;const detail=$('choice-detail');if(id&&detail){const p=game.profile(id),card=game.definition(id);detail.innerHTML=`<strong>${escape(card.name)}</strong><p>${escape(p.description)}</p>${p.pendingKeywords.length?`<p class="small">Keywords pending implementation: ${escape(p.pendingKeywords.join(', '))}</p>`:''}${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}`;}}
   $('overlay-content').addEventListener('mouseover',showChoice);$('overlay-content').addEventListener('focusin',showChoice);
-  $('overlay').addEventListener('cancel',event=>{if(['reward','camp'].includes(game.state.phase))event.preventDefault();});
+  $('overlay').addEventListener('cancel',event=>{if(['reward','camp'].includes(game.state.phase)||game.state.pendingChoice)event.preventDefault();});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('overlay').open){if(drag?.active)suppressClickUntil=Date.now()+400;cleanupDrag();selected=null;inspected=null;render();}});
   render();if(saveAvailable)save();showPhase();
   // Small read-only-facing entry point for local development and smoke verification.

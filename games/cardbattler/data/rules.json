@@ -44,8 +44,9 @@
   },
   "merging": {
     "separateSlotRow": true,
-    "slotCount": null,
+    "slotCount": 6,
     "sharedColorsAllowed": false,
+    "sharedColorExceptions": ["Blob self-merging, including upgraded Blobs"],
     "resultColors": "Union of the two ingredient color lists."
   },
   "undecided": {
@@ -68,6 +69,27 @@
         "type": "user-design",
         "date": "2026-10-05"
       }
+    }
+  },
+  "economy": {
+    "system": "gold-shop",
+    "baseGoldPerRound": 1,
+    "additionalGoldPerLivingMiner": 1,
+    "additionalGoldPerLivingBusinessman": 1,
+    "automaticCardDraws": false,
+    "deploymentCost": 0,
+    "prototype": {
+      "startingGold": 6,
+      "shopSlots": 6,
+      "pricesByColorCount": {
+        "1": 1,
+        "2": 3,
+        "4": 5
+      },
+      "rerollGoldCost": 1,
+      "refreshEachRound": true,
+      "handPurchaseLimit": 10,
+      "survivingPurchasedUnitsReturnBetweenBattles": true
     }
   }
 }
