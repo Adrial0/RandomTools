@@ -5,6 +5,7 @@
   const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const SAVE = 'myrandomtools-cardbattler-v1';
   let selected=null, inspected=null, busy=false, visual=null, saveAvailable=true;
+  let drag=null, suppressClickUntil=0;
   const encounterNames=['The first crossing','Iron & incantations','The old guard','A gathering darkness','The last stronghold'];
   const encounterNotes=['A small force holds the road. Find your first combinations.','Machines and mages reinforce the enemy line.','Armored defenders and furious fighters stand in your way.','Curses and healers test your formation.','Break through the mech and its supporting army.'];
   const uiState=()=>visual||game.state;
@@ -48,11 +49,9 @@
     $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent=s.draw.length+' to draw · '+s.discard.length+' discarded · '+s.deck.length+' in deck';
     $('hand').innerHTML=s.hand.length?s.hand.map((id,i)=>cardMarkup(id,i,selected===i?'selected':'')).join(''):'<div class="empty-hand">Your hand is empty. End your turn to draw more cards.</div>';
     $('hand').querySelectorAll('button').forEach(b=>b.disabled=busy||s.phase!=='planning');
-    $('merge-slots').innerHTML=s.merge.map((id,i)=>`<button class="merge-slot" data-slot="${i}" ${busy||s.phase!=='planning'?'disabled':''}>${id?colorStrip(id):''}<span aria-hidden="true">${id?game.profile(id).symbol:'+'}</span>${id?escape(game.definition(id).name):'Slot '+(i+1)}</button>`).join('');
-    const options=game.mergeOptions();
-    const shared=s.merge.every(Boolean)?game.sharedColors(...s.merge):[];
-    $('merge-preview').innerHTML=options.length?'→ '+options.map(r=>colorStrip(r.result)+escape(game.definition(r.result).name)).join(' or '):shared.length?'Cannot combine: shared '+escape(shared.join(', '))+' color.':s.merge.every(Boolean)?'No recipe for this pair. Click a slot to return its card.':'No shared colors + a matching recipe = a combination.';
-    $('merge-button').disabled=busy||s.phase!=='planning'||!options.length||s.hand.length>=10;
+    $('merge-slots').innerHTML=s.merge.map((id,i)=>id?cardMarkup(id,null,'stored-card').replace(`data-choice="${escape(id)}"`,`data-slot="${i}"`):`<button class="merge-slot empty-slot" data-slot="${i}" aria-label="Empty merge slot ${i+1}"><span aria-hidden="true">+</span>Drop a card</button>`).join('');
+    $('merge-slots').querySelectorAll('button').forEach(button=>button.disabled=busy||s.phase!=='planning');
+    $('merge-preview').textContent='Drag a card onto another to combine. Shared colors cannot merge.';
     $('journal').innerHTML=s.log.slice(0,14).map(line=>`<li>${escape(line)}</li>`).join('');
     if(inspected){const u=s.units.find(u=>u.uid===inspected.uid);inspect(inspected.id,u);}else inspect(selected!==null?s.hand[selected]:null);
   }
@@ -68,14 +67,63 @@
     const s=game.state;
     dialog(`<p class="eyebrow">REST BETWEEN BATTLES</p><h2>Make camp</h2><p>Base health ${s.playerHP}/${s.playerMaxHP} · ${s.gold} gold</p><div class="dialog-actions"><button data-buy="heal" ${s.gold<4||s.playerHP===s.playerMaxHP?'disabled':''}>Repair base +10 ♥ · 4 gold</button><button data-buy="war-banner" ${s.gold<8||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 8 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><p class="small">War banner is a temporary prototype artifact. Repair can be purchased more than once.</p><button class="primary" data-action="continue">Next battle →</button>`);
   }
-  $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy)return;const i=Number(button.dataset.card);selected=selected===i?null:i;inspected=null;render();});
+  $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy||Date.now()<suppressClickUntil)return;const i=Number(button.dataset.card);selected=selected===i?null:i;inspected=null;render();});
   $('board').addEventListener('click',event=>{
     const tile=event.target.closest('[data-row]');if(!tile||busy)return;const row=Number(tile.dataset.row),col=Number(tile.dataset.col),unit=game.unitAt(row,col);
     if(unit){inspected={id:unit.cardId,uid:unit.uid};render();return;}
     if(selected!==null){if(game.deploy(selected,row,col)){selected=null;inspected=null;save();render();}else notify('Deploy on an empty tile in your bottom three rows, with enough mana.');}
   });
-  $('merge-slots').addEventListener('click',event=>{const button=event.target.closest('[data-slot]');if(!button||busy)return;const slot=Number(button.dataset.slot);if(game.state.merge[slot]){if(!game.retrieve(slot))notify('Your hand is full.');}else if(selected!==null)game.store(selected,slot);selected=null;inspected=null;save();render();});
-  $('merge-button').addEventListener('click',()=>{const options=game.mergeOptions();if(options.length>1)dialog(`<h2>Choose your combination</h2><div class="choices">${options.map(r=>cardMarkup(r.result,null)).join('')}</div><button data-action="close">Back</button>`);else{game.merge();selected=null;save();render();}});
+  $('merge-slots').addEventListener('click',event=>{
+    const button=event.target.closest('[data-slot]');if(!button||busy||Date.now()<suppressClickUntil)return;
+    const slot=Number(button.dataset.slot);
+    if(selected!==null){if(game.state.merge[slot]){if(!game.mergeCards({zone:'hand',index:selected},{zone:'merge',index:slot})){notify('These cards cannot combine: use different colors and a matching recipe.');return;}}else game.store(selected,slot);}
+    else if(game.state.merge[slot]&&!game.retrieve(slot)){notify('Your hand is full.');return;}
+    selected=null;inspected=null;save();render();
+  });
+  function reference(element) {
+    const hand=element?.closest('#hand [data-card]');if(hand)return {zone:'hand',index:Number(hand.dataset.card)};
+    const slot=element?.closest('#merge-slots [data-slot]');if(slot)return {zone:'merge',index:Number(slot.dataset.slot)};
+    return null;
+  }
+  function cleanupDrag() {
+    drag?.ghost?.remove();document.querySelectorAll('.drag-source,.drop-valid,.drop-invalid,.drop-hover').forEach(element=>element.classList.remove('drag-source','drop-valid','drop-invalid','drop-hover'));
+    if(drag&&document.body.hasPointerCapture(drag.pointerId))document.body.releasePointerCapture(drag.pointerId);
+    drag=null;
+  }
+  document.addEventListener('pointerdown',event=>{
+    if(busy||game.state.phase!=='planning'||event.button!==0||$('overlay').open||drag)return;
+    const source=reference(event.target);if(!source||!game.state[source.zone][source.index])return;
+    drag={source,pointerId:event.pointerId,x:event.clientX,y:event.clientY,element:event.target.closest('button'),active:false};
+  });
+  document.addEventListener('pointermove',event=>{
+    if(!drag||event.pointerId!==drag.pointerId)return;
+    if(!drag.active&&Math.hypot(event.clientX-drag.x,event.clientY-drag.y)<8)return;
+    event.preventDefault();
+    if(!drag.active){
+      document.body.setPointerCapture(event.pointerId);
+      drag.active=true;const box=drag.element.getBoundingClientRect();drag.ghost=drag.element.cloneNode(true);drag.ghost.className='card drag-ghost';drag.ghost.style.width=box.width+'px';drag.ghost.style.height=box.height+'px';document.body.append(drag.ghost);drag.element.classList.add('drag-source');
+      const id=game.state[drag.source.zone][drag.source.index];
+      document.querySelectorAll('#hand [data-card],#merge-slots [data-slot]').forEach(element=>{const ref=reference(element);if(ref.zone===drag.source.zone&&ref.index===drag.source.index)return;const target=game.state[ref.zone][ref.index];element.classList.add(!target||game.recipesFor(id,target).length?'drop-valid':'drop-invalid');});
+    }
+    drag.ghost.style.left=event.clientX+14+'px';drag.ghost.style.top=event.clientY-35+'px';
+    if(event.clientY<60)window.scrollBy(0,-18);else if(event.clientY>window.innerHeight-60)window.scrollBy(0,18);
+    document.querySelectorAll('.drop-hover').forEach(element=>element.classList.remove('drop-hover'));
+    const element=document.elementFromPoint(event.clientX,event.clientY)?.closest('#hand [data-card],#merge-slots [data-slot]');
+    if(element){element.classList.add('drop-hover');const ref=reference(element),a=game.state[drag.source.zone][drag.source.index],b=game.state[ref.zone][ref.index];if(b){const recipe=game.recipesFor(a,b)[0];$('merge-preview').textContent=recipe?'Release to combine into '+game.definition(recipe.result).name:game.sharedColors(a,b).length?'Cannot combine cards with shared colors.':'No recipe for this pair.';}else $('merge-preview').textContent='Release to place in this slot.';}
+  },{passive:false});
+  document.addEventListener('pointerup',event=>{
+    if(!drag||event.pointerId!==drag.pointerId)return;
+    const source=drag.source,active=drag.active,target=reference(document.elementFromPoint(event.clientX,event.clientY));cleanupDrag();
+    if(!active)return;
+    suppressClickUntil=Date.now()+400;selected=null;inspected=null;
+    if(target&&!(target.zone===source.zone&&target.index===source.index)){
+      const targetId=game.state[target.zone][target.index];
+      const success=targetId?game.mergeCards(source,target):target.zone==='merge'&&game.moveMergeCard(source,target.index);
+      if(!success)game.log('No combination: cards need different colors and a matching recipe.');
+    }
+    save();render();
+  });
+  document.addEventListener('pointercancel',()=>{cleanupDrag();render();});
   $('end-turn').addEventListener('click',async()=>{
     if(busy)return;busy=true;selected=null;inspected=null;
     const frames=game.endTurn();save();
@@ -98,7 +146,7 @@
   function showChoice(event) {const id=event.target.closest('[data-choice]')?.dataset.choice;const detail=$('choice-detail');if(id&&detail){const p=game.profile(id),card=game.definition(id);detail.innerHTML=`<strong>${escape(card.name)}</strong><p>${escape(p.description)}</p>${p.pendingKeywords.length?`<p class="small">Keywords pending implementation: ${escape(p.pendingKeywords.join(', '))}</p>`:''}${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}`;}}
   $('overlay-content').addEventListener('mouseover',showChoice);$('overlay-content').addEventListener('focusin',showChoice);
   $('overlay').addEventListener('cancel',event=>{if(['reward','camp'].includes(game.state.phase))event.preventDefault();});
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('overlay').open){selected=null;inspected=null;render();}});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('overlay').open){if(drag?.active)suppressClickUntil=Date.now()+400;cleanupDrag();selected=null;inspected=null;render();}});
   render();if(saveAvailable)save();showPhase();
   // Small read-only-facing entry point for local development and smoke verification.
   window.cardbattler={game,render};

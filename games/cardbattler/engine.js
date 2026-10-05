@@ -76,7 +76,7 @@
     }
     newRun() {
       this.state = {version:1,balanceRevision:2, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:24,enemyMaxHP:24,mana:3,gold:0,
-        deck:['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'],draw:[],discard:[],hand:[],merge:[null,null],units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null};
+        deck:['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null};
       this.beginEncounter();
       return this.state;
     }
@@ -94,7 +94,7 @@
     alive(unit) { return this.state.units.includes(unit)&&unit.hp>0; }
     neighbors(unit,team) { return this.state.units.filter(u=>u.uid!==unit.uid&&u.hp>0&&(!team||u.team===team)&&Math.max(Math.abs(u.row-unit.row),Math.abs(u.col-unit.col))===1); }
     beginEncounter() {
-      const s=this.state;s.phase='planning';s.turn=1;s.mana=3;s.units=[];s.hand=[];s.merge=[null,null];s.draw=this.shuffle(s.deck);s.discard=[];s.selected=null;s.enemyMaxHP=24+s.encounter*7;s.enemyHP=s.enemyMaxHP;
+      const s=this.state;s.phase='planning';s.turn=1;s.mana=3;s.units=[];s.hand=[];s.merge=Array(6).fill(null);s.draw=this.shuffle(s.deck);s.discard=[];s.selected=null;s.enemyMaxHP=24+s.encounter*7;s.enemyHP=s.enemyMaxHP;
       const opening=[['caveman','raider'],['robot','mage','raider'],['templar','viking','mage'],['cyborg','witch','cleric'],['mech','warlord','necromancer']][s.encounter];
       opening.forEach((id,i)=>this.spawn(id,'enemy',i%2, [1,4,2][i]));
       this.drawCards(5);this.log('Battle '+(s.encounter+1)+': deploy your opening hand.');
@@ -115,7 +115,7 @@
       s.mana-=this.profile(id).cost;s.hand.splice(handIndex,1);s.discard.push(id);this.spawn(id,'player',row,col);s.selected=null;this.log(this.definition(id).name+' deployed.');return true;
     }
     store(handIndex,slot) {
-      const s=this.state;if(s.phase!=='planning'||![0,1].includes(slot)||s.merge[slot]||!s.hand[handIndex]) return false;
+      const s=this.state;if(s.phase!=='planning'||!Number.isInteger(slot)||slot<0||slot>=s.merge.length||s.merge[slot]||!s.hand[handIndex]) return false;
       s.merge[slot]=s.hand.splice(handIndex,1)[0];s.selected=null;return true;
     }
     retrieve(slot) {const s=this.state;if(s.phase!=='planning'||!s.merge[slot]||s.hand.length>=10) return false;s.hand.push(s.merge[slot]);s.merge[slot]=null;return true;}
@@ -127,9 +127,26 @@
     mergeOptions() {return this.recipesFor(...this.state.merge);}
     merge(result) {
       const s=this.state;const recipe=this.mergeOptions().find(r=>!result||r.result===result);if(s.phase!=='planning'||!recipe||s.hand.length>=10)return false;
-      const ingredientIds=[...s.merge];const deck=[...s.deck];
+      const ingredientIds=s.merge.slice(0,2);const deck=[...s.deck];
       for(const id of ingredientIds){const index=deck.indexOf(id);if(index<0)return false;deck.splice(index,1);}
-      deck.push(recipe.result);s.deck=deck;s.merge=[null,null];s.hand.push(recipe.result);this.log('Combined into '+this.definition(recipe.result).name+'. Your deck is permanently upgraded.');return true;
+      deck.push(recipe.result);s.deck=deck;s.merge[0]=null;s.merge[1]=null;s.hand.push(recipe.result);this.log('Combined into '+this.definition(recipe.result).name+'. Your deck is permanently upgraded.');return true;
+    }
+    mergeCards(source,target) {
+      const s=this.state;
+      const valid=ref=>ref&&['hand','merge'].includes(ref.zone)&&Number.isInteger(ref.index)&&ref.index>=0&&ref.index<s[ref.zone].length;
+      if(s.phase!=='planning'||!valid(source)||!valid(target)||source.zone===target.zone&&source.index===target.index)return false;
+      const a=s[source.zone][source.index],b=s[target.zone][target.index];if(!a||!b)return false;
+      const recipe=this.recipesFor(a,b)[0];if(!recipe)return false;
+      const deck=[...s.deck];for(const id of [a,b]){const index=deck.indexOf(id);if(index<0)return false;deck.splice(index,1);}deck.push(recipe.result);
+      const hand=s.hand.flatMap((id,index)=>source.zone==='hand'&&source.index===index?[]:[target.zone==='hand'&&target.index===index?recipe.result:id]);
+      const row=s.merge.map((id,index)=>source.zone==='merge'&&source.index===index?null:target.zone==='merge'&&target.index===index?recipe.result:id);
+      s.deck=deck;s.hand=hand;s.merge=row;s.selected=null;this.log('Combined into '+this.definition(recipe.result).name+'. Your deck is permanently upgraded.');return true;
+    }
+    moveMergeCard(source,targetIndex) {
+      const s=this.state;if(s.phase!=='planning'||!Number.isInteger(targetIndex)||targetIndex<0||targetIndex>=s.merge.length||s.merge[targetIndex])return false;
+      if(source.zone==='hand')return this.store(source.index,targetIndex);
+      if(source.zone!=='merge'||!Number.isInteger(source.index)||source.index<0||source.index>=s.merge.length||!s.merge[source.index])return false;
+      s.merge[targetIndex]=s.merge[source.index];s.merge[source.index]=null;return true;
     }
     effectiveAttack(unit,target) {
       let multiplier=unit.weaken?0.7:1;
@@ -297,6 +314,7 @@
       if(!value||value.version!==1||!['planning','reward','camp','won','lost'].includes(value.phase)||!Number.isInteger(value.encounter)||value.encounter<0||value.encounter>4||!Array.isArray(value.deck)||!value.deck.every(id=>this.cards.has(id))||!Array.isArray(value.units))return false;
       const seen=new Set();for(const u of value.units){const key=u.row+','+u.col;if(!this.definition(u.cardId)||seen.has(key)||u.row<0||u.row>5||u.col<0||u.col>5||!['player','enemy'].includes(u.team))return false;seen.add(key);}
       this.state=copy(value);this.state.selected=null;
+      this.state.merge=Array.from({length:6},(_,index)=>(this.state.merge||[])[index]||null);
       if((this.state.balanceRevision||1)<2) {
         for(const unit of this.state.units){unit.maxHP=Math.max(2,Math.round(unit.maxHP*.75));unit.hp=Math.max(1,Math.min(unit.maxHP,Math.round(unit.hp*.75)));}
         this.state.balanceRevision=2;

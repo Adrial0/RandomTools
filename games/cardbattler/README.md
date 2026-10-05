@@ -8,8 +8,9 @@ Open `index.html` in a browser, or serve this folder with the existing static we
 
 - Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
 - Deploy as many cards as your 3 mana allows. Start with 5 cards; draw 2 each subsequent turn. The hand limit is 10.
-- Select a hand card and then a workbench slot. Two compatible cards can be merged for free. The result replaces its ingredients permanently in the run's deck. Click an occupied slot to return that card to your hand.
+- The six-slot merge row sits below combat. Drag hand cards into empty slots, or drop a card directly onto another compatible card in the hand or row to merge instantly. The result stays at the destination and replaces its ingredients permanently in the deck. Click a stored card to return it to your hand. For click/keyboard use, select a hand card and click an empty slot to store it or an occupied slot to merge.
 - Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge. A recipe is also required; compatible hand cards are highlighted when a workbench slot is filled.
+- Dragging highlights valid destinations. Invalid drops and canceled drags preserve both cards. Mouse and touch use the same pointer interaction. Existing two-slot saves expand to six slots while preserving stored cards.
 - End turn to activate your army, then the enemy army. Units move or attack; Rush can move and attack. Activation is front to back and left to right from each side's perspective.
 - Win five encounters by destroying their bases. Base health persists between encounters. Choose a card reward, repair your base at camp, or buy a prototype War Banner artifact.
 - Progress saves automatically in local storage. New Run replaces the saved expedition after confirmation.
