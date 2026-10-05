@@ -35,7 +35,7 @@
     const card=game.definition(id), p=game.profile(id);
     const partner=null;
     const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
-    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price===null?'enemy unit':p.price+' gold to buy'}, ${p.attack} attack, ${p.health} health">${colorStrip(id)}${p.price===null?'':`<span class="cost">${p.price}g</span>`}<span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
+    return `<button class="card ${extra} ${compatibility} ${index!==null?'hand-card':''}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price===null?'enemy unit':p.price+' gold to buy'}, ${p.attack} attack, ${p.health} health">${colorStrip(id)}${index!==null?portrait(id,'hand'):''}${p.price===null?'':`<span class="cost">${p.price}g</span>`}<span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
   function mergeDetails(id) {
     const card=game.definition(id),baseId=card.baseId||id;
@@ -149,7 +149,7 @@
     event.preventDefault();
     if(!drag.active){
       document.body.setPointerCapture(event.pointerId);drag.active=true;
-      const box=drag.element.getBoundingClientRect();drag.ghost=drag.element.cloneNode(true);drag.ghost.className='card drag-ghost';drag.ghost.style.width=box.width+'px';drag.ghost.style.height=box.height+'px';document.body.append(drag.ghost);drag.element.classList.add('drag-source');
+      const box=drag.element.getBoundingClientRect();drag.ghost=drag.element.cloneNode(true);drag.ghost.className='card hand-card drag-ghost';drag.ghost.style.width=box.width+'px';drag.ghost.style.height=box.height+'px';document.body.append(drag.ghost);drag.element.classList.add('drag-source');
       const id=game.state.hand[drag.source.index];
       document.querySelectorAll('#board .tile').forEach(tile=>{const row=Number(tile.dataset.row),col=Number(tile.dataset.col);if(row>=(id==='agent'?1:3)&&!game.unitAt(row,col))tile.classList.add('drop-valid');});
       document.querySelectorAll('#hand [data-card]').forEach(el=>{const ref=reference(el);if(ref.index!==drag.source.index)el.classList.add(game.recipesFor(id,game.state.hand[ref.index]).length?'drop-valid':'drop-invalid');});
