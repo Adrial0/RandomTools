@@ -1,0 +1,5202 @@
+{
+  "schemaVersion": 1,
+  "sourceWorkbook": "cards (4).xlsx",
+  "sheets": {
+    "Main": [
+      {
+        "cell": "A1",
+        "value": "Tier 1"
+      },
+      {
+        "cell": "D1",
+        "value": "Tier 2"
+      },
+      {
+        "cell": "J1",
+        "value": "Tier 3"
+      },
+      {
+        "cell": "P1",
+        "value": "Tier 1"
+      },
+      {
+        "cell": "Q1",
+        "value": "Tier 1."
+      },
+      {
+        "cell": "R1",
+        "value": "Tier 2"
+      },
+      {
+        "cell": "S1",
+        "value": "Theme"
+      },
+      {
+        "cell": "T1",
+        "value": "Keywords"
+      },
+      {
+        "cell": "U1",
+        "value": "Description"
+      },
+      {
+        "cell": "X1",
+        "value": "Tier 2"
+      },
+      {
+        "cell": "Y1",
+        "value": "Tier 2."
+      },
+      {
+        "cell": "Z1",
+        "value": "Tier 3"
+      },
+      {
+        "cell": "AA1",
+        "value": "Theme"
+      },
+      {
+        "cell": "AB1",
+        "value": "Keywords"
+      },
+      {
+        "cell": "AC1",
+        "value": "Description"
+      },
+      {
+        "cell": "AF1",
+        "value": "."
+      },
+      {
+        "cell": "AG1",
+        "value": "Theme"
+      },
+      {
+        "cell": "AH1",
+        "value": "Keywords"
+      },
+      {
+        "cell": "AI1",
+        "value": "Description"
+      },
+      {
+        "cell": "AJ1",
+        "value": "noncopyright"
+      },
+      {
+        "cell": "AK1",
+        "value": "combination"
+      },
+      {
+        "cell": "A2",
+        "value": "Robot"
+      },
+      {
+        "cell": "D2",
+        "value": "Robot"
+      },
+      {
+        "cell": "E2",
+        "value": "Mage"
+      },
+      {
+        "cell": "F2",
+        "value": "Artificer"
+      },
+      {
+        "cell": "G2",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "J2",
+        "value": "Artificer"
+      },
+      {
+        "cell": "K2",
+        "value": "Pirate"
+      },
+      {
+        "cell": "L2",
+        "value": "Arms dealer"
+      },
+      {
+        "cell": "M2",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "P2",
+        "value": "Alien"
+      },
+      {
+        "cell": "Q2",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R2",
+        "value": "Prophet"
+      },
+      {
+        "cell": "S2",
+        "value": "Faith"
+      },
+      {
+        "cell": "X2",
+        "value": "Prophet"
+      },
+      {
+        "cell": "Y2",
+        "value": "Warlock"
+      },
+      {
+        "cell": "Z2",
+        "value": "Buddhist"
+      },
+      {
+        "cell": "AA2",
+        "value": "Faith"
+      },
+      {
+        "cell": "AB2",
+        "value": "Spawn"
+      },
+      {
+        "cell": "AC2",
+        "value": "Gains - or + karma when killing units. Reincarnates when he dies. Result depends on amount of karma"
+      },
+      {
+        "cell": "AF2",
+        "value": "Gandalf"
+      },
+      {
+        "cell": "AG2",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "AJ2",
+        "value": "gandolf"
+      },
+      {
+        "cell": "AK2",
+        "value": "battle mage/mage?????? + pathfinder?????"
+      },
+      {
+        "cell": "A3",
+        "value": "Alien"
+      },
+      {
+        "cell": "D3",
+        "value": "Robot"
+      },
+      {
+        "cell": "E3",
+        "value": "Engineer"
+      },
+      {
+        "cell": "F3",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "G3",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "J3",
+        "value": "Artificer"
+      },
+      {
+        "cell": "K3",
+        "value": "Heretic"
+      },
+      {
+        "cell": "L3",
+        "value": "Pyro"
+      },
+      {
+        "cell": "M3",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "P3",
+        "value": "Mage"
+      },
+      {
+        "cell": "Q3",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R3",
+        "value": "Cleric"
+      },
+      {
+        "cell": "S3",
+        "value": "Faith"
+      },
+      {
+        "cell": "X3",
+        "value": "Blob"
+      },
+      {
+        "cell": "Y3",
+        "value": "Warlock"
+      },
+      {
+        "cell": "Z3",
+        "value": "Corruptor"
+      },
+      {
+        "cell": "AA3",
+        "value": "Faith"
+      },
+      {
+        "cell": "AB3",
+        "value": "Spawn"
+      },
+      {
+        "cell": "AC3",
+        "value": "makes cultist(summon) when many cultist summon monster"
+      },
+      {
+        "cell": "AG3",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "A4",
+        "value": "Mage"
+      },
+      {
+        "cell": "D4",
+        "value": "Robot"
+      },
+      {
+        "cell": "E4",
+        "value": "Thief"
+      },
+      {
+        "cell": "F4",
+        "value": "Hacker"
+      },
+      {
+        "cell": "G4",
+        "value": "Modern"
+      },
+      {
+        "cell": "J4",
+        "value": "Artificer"
+      },
+      {
+        "cell": "K4",
+        "value": "Viking"
+      },
+      {
+        "cell": "L4",
+        "value": "Runesmith"
+      },
+      {
+        "cell": "M4",
+        "value": "Primal"
+      },
+      {
+        "cell": "P4",
+        "value": "Thief"
+      },
+      {
+        "cell": "Q4",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R4",
+        "value": "Templar"
+      },
+      {
+        "cell": "S4",
+        "value": "Faith"
+      },
+      {
+        "cell": "X4",
+        "value": "Prophet"
+      },
+      {
+        "cell": "Y4",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "Z4",
+        "value": "Hermit"
+      },
+      {
+        "cell": "AA4",
+        "value": "Faith"
+      },
+      {
+        "cell": "AF4",
+        "value": "Admiral Ackbar"
+      },
+      {
+        "cell": "AG4",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "AI4",
+        "value": "trap master"
+      },
+      {
+        "cell": "AJ4",
+        "value": "General Ackbar"
+      },
+      {
+        "cell": "A5",
+        "value": "Engineer"
+      },
+      {
+        "cell": "D5",
+        "value": "Robot"
+      },
+      {
+        "cell": "E5",
+        "value": "Raider"
+      },
+      {
+        "cell": "F5",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "G5",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "J5",
+        "value": "Artificer"
+      },
+      {
+        "cell": "K5",
+        "value": "Templar"
+      },
+      {
+        "cell": "L5",
+        "value": "Space monk"
+      },
+      {
+        "cell": "M5",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "P5",
+        "value": "Robot"
+      },
+      {
+        "cell": "Q5",
+        "value": "Mage"
+      },
+      {
+        "cell": "R5",
+        "value": "Artificer"
+      },
+      {
+        "cell": "S5",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X5",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "Y5",
+        "value": "Cleric"
+      },
+      {
+        "cell": "Z5",
+        "value": "Inquisitor"
+      },
+      {
+        "cell": "AA5",
+        "value": "Faith"
+      },
+      {
+        "cell": "AB5",
+        "value": "Burn"
+      },
+      {
+        "cell": "AC5",
+        "value": "burns people? Bonus damage to heathens"
+      },
+      {
+        "cell": "AF5",
+        "value": "Master Chief"
+      },
+      {
+        "cell": "AG5",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "AJ5",
+        "value": "Master chef(kokk)"
+      },
+      {
+        "cell": "A6",
+        "value": "Thief"
+      },
+      {
+        "cell": "D6",
+        "value": "Robot"
+      },
+      {
+        "cell": "E6",
+        "value": "Caveman"
+      },
+      {
+        "cell": "F6",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "G6",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "J6",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "K6",
+        "value": "Pirate"
+      },
+      {
+        "cell": "L6",
+        "value": "Cannoneer"
+      },
+      {
+        "cell": "M6",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "P6",
+        "value": "Mage"
+      },
+      {
+        "cell": "Q6",
+        "value": "Raider"
+      },
+      {
+        "cell": "R6",
+        "value": "Psychic"
+      },
+      {
+        "cell": "S6",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X6",
+        "value": "Explorer"
+      },
+      {
+        "cell": "Y6",
+        "value": "Cleric"
+      },
+      {
+        "cell": "Z6",
+        "value": "Missionary"
+      },
+      {
+        "cell": "AA6",
+        "value": "Faith"
+      },
+      {
+        "cell": "AC6",
+        "value": "Spreads faith buff to nearby slots"
+      },
+      {
+        "cell": "AF6",
+        "value": "Gaben"
+      },
+      {
+        "cell": "AG6",
+        "value": "Modern"
+      },
+      {
+        "cell": "AJ6",
+        "value": "Gaben"
+      },
+      {
+        "cell": "AK6",
+        "value": "CEO + pope"
+      },
+      {
+        "cell": "A7",
+        "value": "Raider"
+      },
+      {
+        "cell": "D7",
+        "value": "Robot"
+      },
+      {
+        "cell": "E7",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "F7",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "G7",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "J7",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "K7",
+        "value": "Heretic"
+      },
+      {
+        "cell": "L7",
+        "value": "Cowboy"
+      },
+      {
+        "cell": "M7",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "P7",
+        "value": "Mage"
+      },
+      {
+        "cell": "Q7",
+        "value": "Thief"
+      },
+      {
+        "cell": "R7",
+        "value": "Warlock"
+      },
+      {
+        "cell": "S7",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X7",
+        "value": "Oracle"
+      },
+      {
+        "cell": "Y7",
+        "value": "Templar"
+      },
+      {
+        "cell": "Z7",
+        "value": "Pope"
+      },
+      {
+        "cell": "AA7",
+        "value": "Faith"
+      },
+      {
+        "cell": "AF7",
+        "value": "Batman"
+      },
+      {
+        "cell": "AG7",
+        "value": "Modern"
+      },
+      {
+        "cell": "AJ7",
+        "value": "Batboy"
+      },
+      {
+        "cell": "AK7",
+        "value": "buisinessman/CEO + familyman?/sentinel / Prepper"
+      },
+      {
+        "cell": "A8",
+        "value": "Caveman"
+      },
+      {
+        "cell": "D8",
+        "value": "Alien"
+      },
+      {
+        "cell": "E8",
+        "value": "Mage"
+      },
+      {
+        "cell": "F8",
+        "value": "Oracle"
+      },
+      {
+        "cell": "G8",
+        "value": "Primal"
+      },
+      {
+        "cell": "J8",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "K8",
+        "value": "Viking"
+      },
+      {
+        "cell": "L8",
+        "value": "Shipwright"
+      },
+      {
+        "cell": "M8",
+        "value": "Primal"
+      },
+      {
+        "cell": "P8",
+        "value": "Engineer"
+      },
+      {
+        "cell": "Q8",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R8",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "S8",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X8",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "Y8",
+        "value": "Warlock"
+      },
+      {
+        "cell": "Z8",
+        "value": "Battlemage"
+      },
+      {
+        "cell": "AA8",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "AC8",
+        "value": "Melee ranged spells"
+      },
+      {
+        "cell": "AF8",
+        "value": "Terminator"
+      },
+      {
+        "cell": "AG8",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AJ8",
+        "value": "X-terminator"
+      },
+      {
+        "cell": "AK8",
+        "value": "inqusitor + robot"
+      },
+      {
+        "cell": "A9",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "D9",
+        "value": "Alien"
+      },
+      {
+        "cell": "E9",
+        "value": "Engineer"
+      },
+      {
+        "cell": "F9",
+        "value": "Scientist"
+      },
+      {
+        "cell": "G9",
+        "value": "Modern"
+      },
+      {
+        "cell": "J9",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "K9",
+        "value": "Templar"
+      },
+      {
+        "cell": "L9",
+        "value": "Mech"
+      },
+      {
+        "cell": "M9",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "P9",
+        "value": "Robot"
+      },
+      {
+        "cell": "Q9",
+        "value": "Engineer"
+      },
+      {
+        "cell": "R9",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "S9",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "X9",
+        "value": "Mutant"
+      },
+      {
+        "cell": "Y9",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "Z9",
+        "value": "Goblin"
+      },
+      {
+        "cell": "AA9",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "AF9",
+        "value": "Silverhand"
+      },
+      {
+        "cell": "AG9",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AI9",
+        "value": "rebel"
+      },
+      {
+        "cell": "AJ9",
+        "value": "Silverleg"
+      },
+      {
+        "cell": "AK9",
+        "value": "missionary + cyborg? \"terrorist\""
+      },
+      {
+        "cell": "D10",
+        "value": "Alien"
+      },
+      {
+        "cell": "E10",
+        "value": "Raider"
+      },
+      {
+        "cell": "F10",
+        "value": "Explorer"
+      },
+      {
+        "cell": "G10",
+        "value": "Primal"
+      },
+      {
+        "cell": "J10",
+        "value": "Oracle"
+      },
+      {
+        "cell": "K10",
+        "value": "Pirate"
+      },
+      {
+        "cell": "L10",
+        "value": "Mapmaker"
+      },
+      {
+        "cell": "M10",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "P10",
+        "value": "Robot"
+      },
+      {
+        "cell": "Q10",
+        "value": "Raider"
+      },
+      {
+        "cell": "R10",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "S10",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "X10",
+        "value": "Mutant"
+      },
+      {
+        "cell": "Y10",
+        "value": "Shaman"
+      },
+      {
+        "cell": "Z10",
+        "value": "Necromancer"
+      },
+      {
+        "cell": "AA10",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "AB10",
+        "value": "Spawn"
+      },
+      {
+        "cell": "AF10",
+        "value": "Jack Sparrow"
+      },
+      {
+        "cell": "AG10",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AI10",
+        "value": "special movement"
+      },
+      {
+        "cell": "AJ10",
+        "value": "Jack seagull"
+      },
+      {
+        "cell": "AK10",
+        "value": "brewer?? + pirate"
+      },
+      {
+        "cell": "D11",
+        "value": "Alien"
+      },
+      {
+        "cell": "E11",
+        "value": "Thief"
+      },
+      {
+        "cell": "F11",
+        "value": "Mutant"
+      },
+      {
+        "cell": "G11",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "J11",
+        "value": "Oracle"
+      },
+      {
+        "cell": "K11",
+        "value": "Heretic"
+      },
+      {
+        "cell": "L11",
+        "value": "Witch"
+      },
+      {
+        "cell": "M11",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "P11",
+        "value": "Robot"
+      },
+      {
+        "cell": "Q11",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R11",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "S11",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "X11",
+        "value": "Oracle"
+      },
+      {
+        "cell": "Y11",
+        "value": "Heretic"
+      },
+      {
+        "cell": "Z11",
+        "value": "Witch"
+      },
+      {
+        "cell": "AA11",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "AF11",
+        "value": "Robin hood"
+      },
+      {
+        "cell": "AG11",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AJ11",
+        "value": "Hood Robin"
+      },
+      {
+        "cell": "AK11",
+        "value": "goblin + sentinel"
+      },
+      {
+        "cell": "D12",
+        "value": "Alien"
+      },
+      {
+        "cell": "E12",
+        "value": "Caveman"
+      },
+      {
+        "cell": "F12",
+        "value": "Blob"
+      },
+      {
+        "cell": "G12",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "J12",
+        "value": "Oracle"
+      },
+      {
+        "cell": "K12",
+        "value": "Viking"
+      },
+      {
+        "cell": "L12",
+        "value": "Lorekeeper"
+      },
+      {
+        "cell": "M12",
+        "value": "Primal"
+      },
+      {
+        "cell": "P12",
+        "value": "Robot"
+      },
+      {
+        "cell": "Q12",
+        "value": "Thief"
+      },
+      {
+        "cell": "R12",
+        "value": "Hacker"
+      },
+      {
+        "cell": "S12",
+        "value": "Modern"
+      },
+      {
+        "cell": "X12",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "Y12",
+        "value": "Shaman"
+      },
+      {
+        "cell": "Z12",
+        "value": "Witch Hunter"
+      },
+      {
+        "cell": "AA12",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "AC12",
+        "value": "Damage buff against fantasy creatures"
+      },
+      {
+        "cell": "AF12",
+        "value": "Kratos?"
+      },
+      {
+        "cell": "AG12",
+        "value": "Faith"
+      },
+      {
+        "cell": "D13",
+        "value": "Alien"
+      },
+      {
+        "cell": "E13",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "F13",
+        "value": "Prophet"
+      },
+      {
+        "cell": "G13",
+        "value": "Faith"
+      },
+      {
+        "cell": "J13",
+        "value": "Oracle"
+      },
+      {
+        "cell": "K13",
+        "value": "Templar"
+      },
+      {
+        "cell": "L13",
+        "value": "Pope"
+      },
+      {
+        "cell": "M13",
+        "value": "Faith"
+      },
+      {
+        "cell": "P13",
+        "value": "Alien"
+      },
+      {
+        "cell": "Q13",
+        "value": "Engineer"
+      },
+      {
+        "cell": "R13",
+        "value": "Scientist"
+      },
+      {
+        "cell": "S13",
+        "value": "Modern"
+      },
+      {
+        "cell": "X13",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "Y13",
+        "value": "Psychic"
+      },
+      {
+        "cell": "Z13",
+        "value": "AI Girlfriend"
+      },
+      {
+        "cell": "AA13",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AB13",
+        "value": "Weaken"
+      },
+      {
+        "cell": "AC13",
+        "value": "Charm"
+      },
+      {
+        "cell": "AF13",
+        "value": "Thor"
+      },
+      {
+        "cell": "AG13",
+        "value": "Faith"
+      },
+      {
+        "cell": "D14",
+        "value": "Mage"
+      },
+      {
+        "cell": "E14",
+        "value": "Raider"
+      },
+      {
+        "cell": "F14",
+        "value": "Psychic"
+      },
+      {
+        "cell": "G14",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "J14",
+        "value": "Scientist"
+      },
+      {
+        "cell": "K14",
+        "value": "Pirate"
+      },
+      {
+        "cell": "L14",
+        "value": "Brewer"
+      },
+      {
+        "cell": "M14",
+        "value": "Modern"
+      },
+      {
+        "cell": "P14",
+        "value": "Engineer"
+      },
+      {
+        "cell": "Q14",
+        "value": "Raider"
+      },
+      {
+        "cell": "R14",
+        "value": "Businessman"
+      },
+      {
+        "cell": "S14",
+        "value": "Modern"
+      },
+      {
+        "cell": "X14",
+        "value": "Hacker"
+      },
+      {
+        "cell": "Y14",
+        "value": "Leader"
+      },
+      {
+        "cell": "Z14",
+        "value": "Architect"
+      },
+      {
+        "cell": "AA14",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AF14",
+        "value": "Tarzan"
+      },
+      {
+        "cell": "AG14",
+        "value": "Primal"
+      },
+      {
+        "cell": "AI14",
+        "value": "banana"
+      },
+      {
+        "cell": "AJ14",
+        "value": "Apeman"
+      },
+      {
+        "cell": "AK14",
+        "value": "caveman + hermit?"
+      },
+      {
+        "cell": "D15",
+        "value": "Mage"
+      },
+      {
+        "cell": "E15",
+        "value": "Thief"
+      },
+      {
+        "cell": "F15",
+        "value": "Warlock"
+      },
+      {
+        "cell": "G15",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "J15",
+        "value": "Scientist"
+      },
+      {
+        "cell": "K15",
+        "value": "Heretic"
+      },
+      {
+        "cell": "L15",
+        "value": "Alchemist"
+      },
+      {
+        "cell": "M15",
+        "value": "Primal"
+      },
+      {
+        "cell": "P15",
+        "value": "Engineer"
+      },
+      {
+        "cell": "Q15",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R15",
+        "value": "Leader"
+      },
+      {
+        "cell": "S15",
+        "value": "Modern"
+      },
+      {
+        "cell": "X15",
+        "value": "Scientist"
+      },
+      {
+        "cell": "Y15",
+        "value": "Viking"
+      },
+      {
+        "cell": "Z15",
+        "value": "Bioengineer"
+      },
+      {
+        "cell": "AA15",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AG15",
+        "value": "Primal"
+      },
+      {
+        "cell": "D16",
+        "value": "Mage"
+      },
+      {
+        "cell": "E16",
+        "value": "Caveman"
+      },
+      {
+        "cell": "F16",
+        "value": "Shaman"
+      },
+      {
+        "cell": "G16",
+        "value": "Primal"
+      },
+      {
+        "cell": "J16",
+        "value": "Scientist"
+      },
+      {
+        "cell": "K16",
+        "value": "Viking"
+      },
+      {
+        "cell": "L16",
+        "value": "Bioengineer"
+      },
+      {
+        "cell": "M16",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "P16",
+        "value": "Raider"
+      },
+      {
+        "cell": "Q16",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R16",
+        "value": "Pirate"
+      },
+      {
+        "cell": "S16",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "X16",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "Y16",
+        "value": "Psychic"
+      },
+      {
+        "cell": "Z16",
+        "value": "Mindguard"
+      },
+      {
+        "cell": "AA16",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AB16",
+        "value": "Mindshield"
+      },
+      {
+        "cell": "AC16",
+        "value": "Gives protection from psychic or magic or some"
+      },
+      {
+        "cell": "AF16",
+        "value": "Mad Max"
+      },
+      {
+        "cell": "AG16",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AI16",
+        "value": "eller max mad (helt rød)"
+      },
+      {
+        "cell": "AJ16",
+        "value": "Mad Maximilian"
+      },
+      {
+        "cell": "AK16",
+        "value": "scavenger + mechanic"
+      },
+      {
+        "cell": "D17",
+        "value": "Mage"
+      },
+      {
+        "cell": "E17",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "F17",
+        "value": "Cleric"
+      },
+      {
+        "cell": "G17",
+        "value": "Faith"
+      },
+      {
+        "cell": "J17",
+        "value": "Scientist"
+      },
+      {
+        "cell": "K17",
+        "value": "Templar"
+      },
+      {
+        "cell": "L17",
+        "value": "Specialist"
+      },
+      {
+        "cell": "M17",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "P17",
+        "value": "Raider"
+      },
+      {
+        "cell": "Q17",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R17",
+        "value": "Heretic"
+      },
+      {
+        "cell": "S17",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "X17",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "Y17",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "Z17",
+        "value": "Posthuman"
+      },
+      {
+        "cell": "AA17",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AF17",
+        "value": "Indiana jones?????"
+      },
+      {
+        "cell": "AG17",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AI17",
+        "value": "finds artifacts ?? when played discover/ chose one artifact for this battle"
+      },
+      {
+        "cell": "AJ17",
+        "value": "Indian Jones"
+      },
+      {
+        "cell": "D18",
+        "value": "Engineer"
+      },
+      {
+        "cell": "E18",
+        "value": "Raider"
+      },
+      {
+        "cell": "F18",
+        "value": "Businessman"
+      },
+      {
+        "cell": "G18",
+        "value": "Modern"
+      },
+      {
+        "cell": "P18",
+        "value": "Alien"
+      },
+      {
+        "cell": "Q18",
+        "value": "Mage"
+      },
+      {
+        "cell": "R18",
+        "value": "Oracle"
+      },
+      {
+        "cell": "S18",
+        "value": "Primal"
+      },
+      {
+        "cell": "X18",
+        "value": "Scientist"
+      },
+      {
+        "cell": "Y18",
+        "value": "Templar"
+      },
+      {
+        "cell": "Z18",
+        "value": "Specialist"
+      },
+      {
+        "cell": "AA18",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "AC18",
+        "value": "copy / choose abilities/ RNG or CHOICE"
+      },
+      {
+        "cell": "D19",
+        "value": "Engineer"
+      },
+      {
+        "cell": "E19",
+        "value": "Thief"
+      },
+      {
+        "cell": "F19",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "G19",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "J19",
+        "value": "Hacker"
+      },
+      {
+        "cell": "K19",
+        "value": "Shaman"
+      },
+      {
+        "cell": "L19",
+        "value": "Dreamweaver"
+      },
+      {
+        "cell": "M19",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "P19",
+        "value": "Alien"
+      },
+      {
+        "cell": "Q19",
+        "value": "Raider"
+      },
+      {
+        "cell": "R19",
+        "value": "Explorer"
+      },
+      {
+        "cell": "S19",
+        "value": "Primal"
+      },
+      {
+        "cell": "X19",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "Y19",
+        "value": "Businessman"
+      },
+      {
+        "cell": "Z19",
+        "value": "Agent"
+      },
+      {
+        "cell": "AA19",
+        "value": "Modern"
+      },
+      {
+        "cell": "D20",
+        "value": "Engineer"
+      },
+      {
+        "cell": "E20",
+        "value": "Caveman"
+      },
+      {
+        "cell": "F20",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "G20",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "J20",
+        "value": "Hacker"
+      },
+      {
+        "cell": "K20",
+        "value": "Cleric"
+      },
+      {
+        "cell": "L20",
+        "value": "Machine-priest"
+      },
+      {
+        "cell": "M20",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "P20",
+        "value": "Mage"
+      },
+      {
+        "cell": "Q20",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R20",
+        "value": "Shaman"
+      },
+      {
+        "cell": "S20",
+        "value": "Primal"
+      },
+      {
+        "cell": "X20",
+        "value": "Scientist"
+      },
+      {
+        "cell": "Y20",
+        "value": "Pirate"
+      },
+      {
+        "cell": "Z20",
+        "value": "Brewer"
+      },
+      {
+        "cell": "AA20",
+        "value": "Modern"
+      },
+      {
+        "cell": "AC20",
+        "value": "Makes beer. Beer makes cards drunk. Stacks"
+      },
+      {
+        "cell": "D21",
+        "value": "Engineer"
+      },
+      {
+        "cell": "E21",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "F21",
+        "value": "Leader"
+      },
+      {
+        "cell": "G21",
+        "value": "Modern"
+      },
+      {
+        "cell": "J21",
+        "value": "Hacker"
+      },
+      {
+        "cell": "K21",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "L21",
+        "value": "Data miner"
+      },
+      {
+        "cell": "M21",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "P21",
+        "value": "Thief"
+      },
+      {
+        "cell": "Q21",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R21",
+        "value": "Viking"
+      },
+      {
+        "cell": "S21",
+        "value": "Primal"
+      },
+      {
+        "cell": "T21",
+        "value": "Aggressive, Fury, "
+      },
+      {
+        "cell": "U21",
+        "value": "rushes 1 tile on attack action, fury(kill increse stats +1 +1)"
+      },
+      {
+        "cell": "X21",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "Y21",
+        "value": "Businessman"
+      },
+      {
+        "cell": "Z21",
+        "value": "CEO"
+      },
+      {
+        "cell": "AA21",
+        "value": "Modern"
+      },
+      {
+        "cell": "D22",
+        "value": "Raider"
+      },
+      {
+        "cell": "E22",
+        "value": "Caveman"
+      },
+      {
+        "cell": "F22",
+        "value": "Pirate"
+      },
+      {
+        "cell": "G22",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "J22",
+        "value": "Hacker"
+      },
+      {
+        "cell": "K22",
+        "value": "Leader"
+      },
+      {
+        "cell": "L22",
+        "value": "Architect"
+      },
+      {
+        "cell": "M22",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "P22",
+        "value": "Robot"
+      },
+      {
+        "cell": "Q22",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R22",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "S22",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "T22",
+        "value": "Retaliate"
+      },
+      {
+        "cell": "U22",
+        "value": "Deals damage back to attackers"
+      },
+      {
+        "cell": "X22",
+        "value": "Prophet"
+      },
+      {
+        "cell": "Y22",
+        "value": "Businessman"
+      },
+      {
+        "cell": "Z22",
+        "value": "Crypto Dude"
+      },
+      {
+        "cell": "AA22",
+        "value": "Modern"
+      },
+      {
+        "cell": "AC22",
+        "value": "Gambling mechanic. Either win or lose money"
+      },
+      {
+        "cell": "D23",
+        "value": "Raider"
+      },
+      {
+        "cell": "E23",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "F23",
+        "value": "Heretic"
+      },
+      {
+        "cell": "G23",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "J23",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "K23",
+        "value": "Shaman"
+      },
+      {
+        "cell": "L23",
+        "value": "Witch Hunter"
+      },
+      {
+        "cell": "M23",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "P23",
+        "value": "Alien"
+      },
+      {
+        "cell": "Q23",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R23",
+        "value": "Blob"
+      },
+      {
+        "cell": "S23",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "U23",
+        "value": "Merge with other blobs to make bigger blob"
+      },
+      {
+        "cell": "X23",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "Y23",
+        "value": "Leader"
+      },
+      {
+        "cell": "Z23",
+        "value": "Family Man"
+      },
+      {
+        "cell": "AA23",
+        "value": "Modern"
+      },
+      {
+        "cell": "AB23",
+        "value": "Spawn"
+      },
+      {
+        "cell": "AC23",
+        "value": "Spawns wife and child"
+      },
+      {
+        "cell": "D24",
+        "value": "Thief"
+      },
+      {
+        "cell": "E24",
+        "value": "Caveman"
+      },
+      {
+        "cell": "F24",
+        "value": "Viking"
+      },
+      {
+        "cell": "G24",
+        "value": "Primal"
+      },
+      {
+        "cell": "J24",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "K24",
+        "value": "Cleric"
+      },
+      {
+        "cell": "L24",
+        "value": "Inquisitor"
+      },
+      {
+        "cell": "M24",
+        "value": "Faith"
+      },
+      {
+        "cell": "P24",
+        "value": "Alien"
+      },
+      {
+        "cell": "Q24",
+        "value": "Thief"
+      },
+      {
+        "cell": "R24",
+        "value": "Mutant"
+      },
+      {
+        "cell": "S24",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "X24",
+        "value": "Scientist"
+      },
+      {
+        "cell": "Y24",
+        "value": "Heretic"
+      },
+      {
+        "cell": "Z24",
+        "value": "Alchemist"
+      },
+      {
+        "cell": "AA24",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AC24",
+        "value": "Makes poisonous potions"
+      },
+      {
+        "cell": "D25",
+        "value": "Thief"
+      },
+      {
+        "cell": "E25",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "F25",
+        "value": "Templar"
+      },
+      {
+        "cell": "G25",
+        "value": "Faith"
+      },
+      {
+        "cell": "J25",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "K25",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "L25",
+        "value": "Sheriff"
+      },
+      {
+        "cell": "M25",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "P25",
+        "value": "Engineer"
+      },
+      {
+        "cell": "Q25",
+        "value": "Thief"
+      },
+      {
+        "cell": "R25",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "S25",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "X25",
+        "value": "Artificer"
+      },
+      {
+        "cell": "Y25",
+        "value": "Pirate"
+      },
+      {
+        "cell": "Z25",
+        "value": "Arms Dealer"
+      },
+      {
+        "cell": "AA25",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AC25",
+        "value": "Summons guns / Buffs gun users"
+      },
+      {
+        "cell": "J26",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "K26",
+        "value": "Leader"
+      },
+      {
+        "cell": "L26",
+        "value": "Family man"
+      },
+      {
+        "cell": "M26",
+        "value": "Modern"
+      },
+      {
+        "cell": "X26",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "Y26",
+        "value": "Pirate"
+      },
+      {
+        "cell": "Z26",
+        "value": "Cannoneer"
+      },
+      {
+        "cell": "AA26",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AB26",
+        "value": "Ranged"
+      },
+      {
+        "cell": "J27",
+        "value": "Explorer"
+      },
+      {
+        "cell": "K27",
+        "value": "Shaman"
+      },
+      {
+        "cell": "L27",
+        "value": "Pathfinder"
+      },
+      {
+        "cell": "M27",
+        "value": "Primal"
+      },
+      {
+        "cell": "X27",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "Y27",
+        "value": "Heretic"
+      },
+      {
+        "cell": "Z27",
+        "value": "Cowboy"
+      },
+      {
+        "cell": "AA27",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AC27",
+        "value": "Shoot lot of gun and ride horse"
+      },
+      {
+        "cell": "J28",
+        "value": "Explorer"
+      },
+      {
+        "cell": "K28",
+        "value": "Cleric"
+      },
+      {
+        "cell": "L28",
+        "value": "Missionary"
+      },
+      {
+        "cell": "M28",
+        "value": "Faith"
+      },
+      {
+        "cell": "X28",
+        "value": "Hacker"
+      },
+      {
+        "cell": "Y28",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "Z28",
+        "value": "Data Miner"
+      },
+      {
+        "cell": "AA28",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "J29",
+        "value": "Explorer"
+      },
+      {
+        "cell": "K29",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "L29",
+        "value": "Miner"
+      },
+      {
+        "cell": "M29",
+        "value": "Modern"
+      },
+      {
+        "cell": "X29",
+        "value": "Blob"
+      },
+      {
+        "cell": "Y29",
+        "value": "Businessman"
+      },
+      {
+        "cell": "Z29",
+        "value": "Drug Dealer"
+      },
+      {
+        "cell": "AA29",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AB29",
+        "value": "Spawn"
+      },
+      {
+        "cell": "AC29",
+        "value": "Summons drug addicts"
+      },
+      {
+        "cell": "J30",
+        "value": "Explorer"
+      },
+      {
+        "cell": "K30",
+        "value": "Leader"
+      },
+      {
+        "cell": "L30",
+        "value": "Conqueror"
+      },
+      {
+        "cell": "M30",
+        "value": "Primal"
+      },
+      {
+        "cell": "X30",
+        "value": "Oracle"
+      },
+      {
+        "cell": "Y30",
+        "value": "Pirate"
+      },
+      {
+        "cell": "Z30",
+        "value": "Mapmaker"
+      },
+      {
+        "cell": "AA30",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "AC30",
+        "value": "Can reveal which enemy card is spawning"
+      },
+      {
+        "cell": "J31",
+        "value": "Mutant"
+      },
+      {
+        "cell": "K31",
+        "value": "Shaman"
+      },
+      {
+        "cell": "L31",
+        "value": "Necromancer"
+      },
+      {
+        "cell": "M31",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X31",
+        "value": "Explorer"
+      },
+      {
+        "cell": "Y31",
+        "value": "Leader"
+      },
+      {
+        "cell": "Z31",
+        "value": "Conqueror"
+      },
+      {
+        "cell": "AA31",
+        "value": "Primal"
+      },
+      {
+        "cell": "AC31",
+        "value": "Damage buff for each slot you have control over"
+      },
+      {
+        "cell": "J32",
+        "value": "Mutant"
+      },
+      {
+        "cell": "K32",
+        "value": "Cleric"
+      },
+      {
+        "cell": "L32",
+        "value": "Abomination"
+      },
+      {
+        "cell": "M32",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "X32",
+        "value": "Oracle"
+      },
+      {
+        "cell": "Y32",
+        "value": "Viking"
+      },
+      {
+        "cell": "Z32",
+        "value": "Lorekeeper"
+      },
+      {
+        "cell": "AA32",
+        "value": "Primal"
+      },
+      {
+        "cell": "J33",
+        "value": "Mutant"
+      },
+      {
+        "cell": "K33",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "L33",
+        "value": "Goblin"
+      },
+      {
+        "cell": "M33",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X33",
+        "value": "Explorer"
+      },
+      {
+        "cell": "Y33",
+        "value": "Shaman"
+      },
+      {
+        "cell": "Z33",
+        "value": "Pathfinder"
+      },
+      {
+        "cell": "AA33",
+        "value": "Primal"
+      },
+      {
+        "cell": "J34",
+        "value": "Mutant"
+      },
+      {
+        "cell": "K34",
+        "value": "Leader"
+      },
+      {
+        "cell": "L34",
+        "value": "Warlord"
+      },
+      {
+        "cell": "M34",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "X34",
+        "value": "Artificer"
+      },
+      {
+        "cell": "Y34",
+        "value": "Viking"
+      },
+      {
+        "cell": "Z34",
+        "value": "Runesmith"
+      },
+      {
+        "cell": "AA34",
+        "value": "Primal"
+      },
+      {
+        "cell": "X35",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "Y35",
+        "value": "Viking"
+      },
+      {
+        "cell": "Z35",
+        "value": "Shipwright"
+      },
+      {
+        "cell": "AA35",
+        "value": "Primal"
+      },
+      {
+        "cell": "AB35",
+        "value": "Spawn"
+      },
+      {
+        "cell": "J36",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "K36",
+        "value": "Psychic"
+      },
+      {
+        "cell": "L36",
+        "value": "AI Girlfriend"
+      },
+      {
+        "cell": "M36",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "X36",
+        "value": "Hacker"
+      },
+      {
+        "cell": "Y36",
+        "value": "Shaman"
+      },
+      {
+        "cell": "Z36",
+        "value": "Dreamweaver"
+      },
+      {
+        "cell": "AA36",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "J37",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "K37",
+        "value": "Warlock"
+      },
+      {
+        "cell": "L37",
+        "value": "Technomancer"
+      },
+      {
+        "cell": "M37",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "X37",
+        "value": "Hacker"
+      },
+      {
+        "cell": "Y37",
+        "value": "Cleric"
+      },
+      {
+        "cell": "Z37",
+        "value": "Machine-priest"
+      },
+      {
+        "cell": "AA37",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "AC37",
+        "value": "Gives faith buff to tech cards"
+      },
+      {
+        "cell": "J38",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "K38",
+        "value": "Businessman"
+      },
+      {
+        "cell": "L38",
+        "value": "CEO"
+      },
+      {
+        "cell": "M38",
+        "value": "Modern"
+      },
+      {
+        "cell": "X38",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "Y38",
+        "value": "Templar"
+      },
+      {
+        "cell": "Z38",
+        "value": "Mech"
+      },
+      {
+        "cell": "AA38",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "AB38",
+        "value": "Ranged"
+      },
+      {
+        "cell": "AC38",
+        "value": "When it dies maybe \"explode in cross\", summons Mechpilot"
+      },
+      {
+        "cell": "J39",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "K39",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "L39",
+        "value": "Posthuman"
+      },
+      {
+        "cell": "M39",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "X39",
+        "value": "Prophet"
+      },
+      {
+        "cell": "Y39",
+        "value": "Psychic"
+      },
+      {
+        "cell": "Z39",
+        "value": "Seer"
+      },
+      {
+        "cell": "AA39",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "J40",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "K40",
+        "value": "Psychic"
+      },
+      {
+        "cell": "L40",
+        "value": "Mindguard"
+      },
+      {
+        "cell": "M40",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X40",
+        "value": "Artificer"
+      },
+      {
+        "cell": "Y40",
+        "value": "Templar"
+      },
+      {
+        "cell": "Z40",
+        "value": "Space monk"
+      },
+      {
+        "cell": "AA40",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "J41",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "K41",
+        "value": "Warlock"
+      },
+      {
+        "cell": "L41",
+        "value": "Battlemage"
+      },
+      {
+        "cell": "M41",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "X41",
+        "value": "Blob"
+      },
+      {
+        "cell": "Y41",
+        "value": "Psychic"
+      },
+      {
+        "cell": "Z41",
+        "value": "Symbiote"
+      },
+      {
+        "cell": "AA41",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "AC41",
+        "value": "makes a bond with another card"
+      },
+      {
+        "cell": "J42",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "K42",
+        "value": "Businessman"
+      },
+      {
+        "cell": "L42",
+        "value": "Agent"
+      },
+      {
+        "cell": "M42",
+        "value": "Modern"
+      },
+      {
+        "cell": "X42",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "Y42",
+        "value": "Warlock"
+      },
+      {
+        "cell": "Z42",
+        "value": "Technomancer"
+      },
+      {
+        "cell": "AA42",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "J43",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "K43",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "L43",
+        "value": "Prepper"
+      },
+      {
+        "cell": "M43",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "X43",
+        "value": "Mutant"
+      },
+      {
+        "cell": "Y43",
+        "value": "Cleric"
+      },
+      {
+        "cell": "Z43",
+        "value": "Abomination"
+      },
+      {
+        "cell": "AA43",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AC43",
+        "value": "applies fear"
+      },
+      {
+        "cell": "J44",
+        "value": "Blob"
+      },
+      {
+        "cell": "K44",
+        "value": "Psychic"
+      },
+      {
+        "cell": "L44",
+        "value": "Symbiote"
+      },
+      {
+        "cell": "M44",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "X44",
+        "value": "Blob"
+      },
+      {
+        "cell": "Y44",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "Z44",
+        "value": "Cannibal"
+      },
+      {
+        "cell": "AA44",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AC44",
+        "value": "Eats friendly unit. Gains their stats"
+      },
+      {
+        "cell": "J45",
+        "value": "Blob"
+      },
+      {
+        "cell": "K45",
+        "value": "Warlock"
+      },
+      {
+        "cell": "L45",
+        "value": "Corruptor"
+      },
+      {
+        "cell": "M45",
+        "value": "Faith"
+      },
+      {
+        "cell": "X45",
+        "value": "Explorer"
+      },
+      {
+        "cell": "Y45",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "Z45",
+        "value": "Miner"
+      },
+      {
+        "cell": "AA45",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "J46",
+        "value": "Blob"
+      },
+      {
+        "cell": "K46",
+        "value": "Businessman"
+      },
+      {
+        "cell": "L46",
+        "value": "Drug Dealer"
+      },
+      {
+        "cell": "M46",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "X46",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "Y46",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "Z46",
+        "value": "Prepper"
+      },
+      {
+        "cell": "AA46",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AB46",
+        "value": "Stationary, "
+      },
+      {
+        "cell": "AC46",
+        "value": "protects all tiles with 1 range, verry maybe ranged"
+      },
+      {
+        "cell": "J47",
+        "value": "Blob"
+      },
+      {
+        "cell": "K47",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "L47",
+        "value": "Cannibal"
+      },
+      {
+        "cell": "M47",
+        "value": "Primal"
+      },
+      {
+        "cell": "X47",
+        "value": "Artificer"
+      },
+      {
+        "cell": "Y47",
+        "value": "Heretic"
+      },
+      {
+        "cell": "Z47",
+        "value": "Pyro"
+      },
+      {
+        "cell": "AA47",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AB47",
+        "value": "Burn"
+      },
+      {
+        "cell": "AC47",
+        "value": "AoE attack, "
+      },
+      {
+        "cell": "J48",
+        "value": "Prophet"
+      },
+      {
+        "cell": "K48",
+        "value": "Psychic"
+      },
+      {
+        "cell": "L48",
+        "value": "Seer"
+      },
+      {
+        "cell": "M48",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "X48",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "Y48",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "Z48",
+        "value": "Sheriff"
+      },
+      {
+        "cell": "AA48",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "AC48",
+        "value": "Sets bounties. Bonus gold when completing"
+      },
+      {
+        "cell": "J49",
+        "value": "Prophet"
+      },
+      {
+        "cell": "K49",
+        "value": "Warlock"
+      },
+      {
+        "cell": "L49",
+        "value": "Buddhist"
+      },
+      {
+        "cell": "M49",
+        "value": "Faith"
+      },
+      {
+        "cell": "X49",
+        "value": "Mutant"
+      },
+      {
+        "cell": "Y49",
+        "value": "Leader"
+      },
+      {
+        "cell": "Z49",
+        "value": "Warlord"
+      },
+      {
+        "cell": "AA49",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "J50",
+        "value": "Prophet"
+      },
+      {
+        "cell": "K50",
+        "value": "Businessman"
+      },
+      {
+        "cell": "L50",
+        "value": "Crypto Dude"
+      },
+      {
+        "cell": "M50",
+        "value": "Modern"
+      },
+      {
+        "cell": "J51",
+        "value": "Prophet"
+      },
+      {
+        "cell": "K51",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "L51",
+        "value": "Hermit"
+      },
+      {
+        "cell": "M51",
+        "value": "Faith"
+      }
+    ],
+    "keywords": [
+      {
+        "cell": "A1",
+        "value": "Keywords"
+      },
+      {
+        "cell": "B1",
+        "value": "trigger type"
+      },
+      {
+        "cell": "C1",
+        "value": "description"
+      },
+      {
+        "cell": "D1",
+        "value": "effect"
+      },
+      {
+        "cell": "F1",
+        "value": "triggers"
+      },
+      {
+        "cell": "G1",
+        "value": "description"
+      },
+      {
+        "cell": "I1",
+        "value": "Abilites"
+      },
+      {
+        "cell": "J1",
+        "value": "trigger type"
+      },
+      {
+        "cell": "K1",
+        "value": "description"
+      },
+      {
+        "cell": "M1",
+        "value": "Debuffs"
+      },
+      {
+        "cell": "N1",
+        "value": "Description"
+      },
+      {
+        "cell": "Q1",
+        "value": "Cards"
+      },
+      {
+        "cell": "R1",
+        "value": "theme"
+      },
+      {
+        "cell": "S1",
+        "value": "Subgroup"
+      },
+      {
+        "cell": "T1",
+        "value": "Keyword"
+      },
+      {
+        "cell": "U1",
+        "value": "Keyword."
+      },
+      {
+        "cell": "V1",
+        "value": "Keyword.."
+      },
+      {
+        "cell": "W1",
+        "value": "Description"
+      },
+      {
+        "cell": "A2",
+        "value": "Fury"
+      },
+      {
+        "cell": "B2",
+        "value": "kill"
+      },
+      {
+        "cell": "C2",
+        "value": "Increase hp and atk"
+      },
+      {
+        "cell": "F2",
+        "value": "passive"
+      },
+      {
+        "cell": "G2",
+        "value": "special behavier"
+      },
+      {
+        "cell": "I2",
+        "value": "Spawn"
+      },
+      {
+        "cell": "J2",
+        "value": "any"
+      },
+      {
+        "cell": "K2",
+        "value": "Creates unit"
+      },
+      {
+        "cell": "M2",
+        "value": "Burn"
+      },
+      {
+        "cell": "N2",
+        "value": "Takes fire damage each turn"
+      },
+      {
+        "cell": "Q2",
+        "value": "Symbiote"
+      },
+      {
+        "cell": "R2",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "S2",
+        "value": "Alien"
+      },
+      {
+        "cell": "T2",
+        "value": "Armor (1)"
+      },
+      {
+        "cell": "W2",
+        "value": "makes a bond with another card, shared HP eller no (5 + 3 = 8 for eksempel)"
+      },
+      {
+        "cell": "A3",
+        "value": "Ranged"
+      },
+      {
+        "cell": "B3",
+        "value": "passive"
+      },
+      {
+        "cell": "C3",
+        "value": "Increased range on attack"
+      },
+      {
+        "cell": "D3",
+        "value": "attack modifier"
+      },
+      {
+        "cell": "F3",
+        "value": "death"
+      },
+      {
+        "cell": "G3",
+        "value": "when card dies"
+      },
+      {
+        "cell": "I3",
+        "value": "Stun"
+      },
+      {
+        "cell": "J3",
+        "value": "any"
+      },
+      {
+        "cell": "K3",
+        "value": "makes unit not act 1 turn"
+      },
+      {
+        "cell": "M3",
+        "value": "Frozen"
+      },
+      {
+        "cell": "N3",
+        "value": "Can't move"
+      },
+      {
+        "cell": "Q3",
+        "value": "Alien"
+      },
+      {
+        "cell": "R3",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "S3",
+        "value": "Alien"
+      },
+      {
+        "cell": "W3",
+        "value": "does alien stuff"
+      },
+      {
+        "cell": "A4",
+        "value": "Ignite"
+      },
+      {
+        "cell": "B4",
+        "value": "on hit"
+      },
+      {
+        "cell": "C4",
+        "value": "applys burn"
+      },
+      {
+        "cell": "D4",
+        "value": "debuff"
+      },
+      {
+        "cell": "F4",
+        "value": "kill"
+      },
+      {
+        "cell": "G4",
+        "value": "when card kills"
+      },
+      {
+        "cell": "I4",
+        "value": "choice"
+      },
+      {
+        "cell": "J4",
+        "value": "any"
+      },
+      {
+        "cell": "K4",
+        "value": "gets 2 or 3 choices to make"
+      },
+      {
+        "cell": "M4",
+        "value": "Weakened"
+      },
+      {
+        "cell": "N4",
+        "value": "Deals less damage"
+      },
+      {
+        "cell": "Q4",
+        "value": "Blob"
+      },
+      {
+        "cell": "R4",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "S4",
+        "value": "Alien"
+      },
+      {
+        "cell": "W4",
+        "value": "can merge with itself to get stats, exstra stat increse on merge maybe"
+      },
+      {
+        "cell": "A5",
+        "value": "Stationary"
+      },
+      {
+        "cell": "B5",
+        "value": "passive"
+      },
+      {
+        "cell": "C5",
+        "value": "Can't move"
+      },
+      {
+        "cell": "F5",
+        "value": "play"
+      },
+      {
+        "cell": "G5",
+        "value": "when card is played"
+      },
+      {
+        "cell": "I5",
+        "value": "Execute"
+      },
+      {
+        "cell": "J5",
+        "value": "any"
+      },
+      {
+        "cell": "K5",
+        "value": "Kills target"
+      },
+      {
+        "cell": "M5",
+        "value": "Silenced"
+      },
+      {
+        "cell": "N5",
+        "value": "Keywords and abilities has no effect"
+      },
+      {
+        "cell": "Q5",
+        "value": "Witch Hunter"
+      },
+      {
+        "cell": "R5",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S5",
+        "value": "Arcane"
+      },
+      {
+        "cell": "T5",
+        "value": "Exploit"
+      },
+      {
+        "cell": "W5",
+        "value": "Damage buff against fantasy creatures"
+      },
+      {
+        "cell": "A6",
+        "value": "Rush"
+      },
+      {
+        "cell": "B6",
+        "value": "passive"
+      },
+      {
+        "cell": "C6",
+        "value": "Move and attack on same turn"
+      },
+      {
+        "cell": "D6",
+        "value": "attack modifier"
+      },
+      {
+        "cell": "F6",
+        "value": "on hit"
+      },
+      {
+        "cell": "G6",
+        "value": "when card strikes another card"
+      },
+      {
+        "cell": "I6",
+        "value": "stat increase"
+      },
+      {
+        "cell": "J6",
+        "value": "any"
+      },
+      {
+        "cell": "K6",
+        "value": "more stats"
+      },
+      {
+        "cell": "M6",
+        "value": "drunk"
+      },
+      {
+        "cell": "N6",
+        "value": "????????????????????"
+      },
+      {
+        "cell": "Q6",
+        "value": "Psychic"
+      },
+      {
+        "cell": "R6",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S6",
+        "value": "Arcane"
+      },
+      {
+        "cell": "T6",
+        "value": "Weaken"
+      },
+      {
+        "cell": "A7",
+        "value": "Retaliate"
+      },
+      {
+        "cell": "B7",
+        "value": "When hit"
+      },
+      {
+        "cell": "C7",
+        "value": "Hits back when struck"
+      },
+      {
+        "cell": "F7",
+        "value": "When hit"
+      },
+      {
+        "cell": "G7",
+        "value": "When struck by card"
+      },
+      {
+        "cell": "I7",
+        "value": "Infect"
+      },
+      {
+        "cell": "J7",
+        "value": "on hit"
+      },
+      {
+        "cell": "K7",
+        "value": "Turns your card into a weaker version when it dies\nSets damage to 1, card turns green to indicate it's zombie"
+      },
+      {
+        "cell": "M7",
+        "value": "Disarmed"
+      },
+      {
+        "cell": "N7",
+        "value": "Deals 0 damage for 1 turn"
+      },
+      {
+        "cell": "Q7",
+        "value": "Artificer"
+      },
+      {
+        "cell": "R7",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S7",
+        "value": "Arcane"
+      },
+      {
+        "cell": "A8",
+        "value": "Pull"
+      },
+      {
+        "cell": "B8",
+        "value": "on hit"
+      },
+      {
+        "cell": "C8",
+        "value": "If no enemy in front. Then pull enemy closer and hit"
+      },
+      {
+        "cell": "I8",
+        "value": "inflict"
+      },
+      {
+        "cell": "J8",
+        "value": "any"
+      },
+      {
+        "cell": "K8",
+        "value": "inflicts a effect on a target like stun or burn"
+      },
+      {
+        "cell": "M8",
+        "value": "Bleed"
+      },
+      {
+        "cell": "N8",
+        "value": "Takes damage = 20% of the inflicter's ATK each turn"
+      },
+      {
+        "cell": "Q8",
+        "value": "Battlemage"
+      },
+      {
+        "cell": "R8",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S8",
+        "value": "Arcane"
+      },
+      {
+        "cell": "W8",
+        "value": "single target flames, can flames spread on death, does the tile burn after target moves ?????"
+      },
+      {
+        "cell": "A9",
+        "value": "Mirror"
+      },
+      {
+        "cell": "B9",
+        "value": "passive"
+      },
+      {
+        "cell": "C9",
+        "value": "Copies a keyword from an adjacent unit"
+      },
+      {
+        "cell": "M9",
+        "value": "Poison"
+      },
+      {
+        "cell": "N9",
+        "value": "Lose 20% of max HP each turn"
+      },
+      {
+        "cell": "Q9",
+        "value": "Mage"
+      },
+      {
+        "cell": "R9",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S9",
+        "value": "Arcane"
+      },
+      {
+        "cell": "W9",
+        "value": "increse mana by 1 as long as alive"
+      },
+      {
+        "cell": "A10",
+        "value": "Weaken"
+      },
+      {
+        "cell": "B10",
+        "value": "on hit"
+      },
+      {
+        "cell": "C10",
+        "value": "The card that's hit deals less damage"
+      },
+      {
+        "cell": "D10",
+        "value": "debuff"
+      },
+      {
+        "cell": "Q10",
+        "value": "CEO"
+      },
+      {
+        "cell": "R10",
+        "value": "Modern"
+      },
+      {
+        "cell": "S10",
+        "value": "Corporate"
+      },
+      {
+        "cell": "T10",
+        "value": "Exploit"
+      },
+      {
+        "cell": "W10",
+        "value": "big boss, buffs workers effeciencie ???     /    Earns money based on amount of corporate units"
+      },
+      {
+        "cell": "A11",
+        "value": "Blink"
+      },
+      {
+        "cell": "B11",
+        "value": "kill"
+      },
+      {
+        "cell": "C11",
+        "value": "Teleports forward 1 tile after killing a unit"
+      },
+      {
+        "cell": "Q11",
+        "value": "Family Man"
+      },
+      {
+        "cell": "R11",
+        "value": "Modern"
+      },
+      {
+        "cell": "S11",
+        "value": "Corporate"
+      },
+      {
+        "cell": "T11",
+        "value": "Spawn"
+      },
+      {
+        "cell": "W11",
+        "value": "Spawns wife and child"
+      },
+      {
+        "cell": "A12",
+        "value": "Silence"
+      },
+      {
+        "cell": "B12",
+        "value": "on hit"
+      },
+      {
+        "cell": "C12",
+        "value": "Removes all keyword from the target, until caster dies"
+      },
+      {
+        "cell": "D12",
+        "value": "debuff"
+      },
+      {
+        "cell": "Q12",
+        "value": "Businessman"
+      },
+      {
+        "cell": "R12",
+        "value": "Modern"
+      },
+      {
+        "cell": "S12",
+        "value": "Corporate"
+      },
+      {
+        "cell": "W12",
+        "value": "makes money!!! slow and steady income pasive?"
+      },
+      {
+        "cell": "A13",
+        "value": "Rage"
+      },
+      {
+        "cell": "B13",
+        "value": "Passive"
+      },
+      {
+        "cell": "C13",
+        "value": "More damage on lower health"
+      },
+      {
+        "cell": "Q13",
+        "value": "Crypto Dude"
+      },
+      {
+        "cell": "R13",
+        "value": "Modern"
+      },
+      {
+        "cell": "S13",
+        "value": "Corporate"
+      },
+      {
+        "cell": "W13",
+        "value": "Gambling mechanic. Either win or lose money"
+      },
+      {
+        "cell": "A14",
+        "value": "Lifesteal"
+      },
+      {
+        "cell": "B14",
+        "value": "on hit"
+      },
+      {
+        "cell": "C14",
+        "value": "Heal for damage"
+      },
+      {
+        "cell": "D14",
+        "value": "attack modifier"
+      },
+      {
+        "cell": "Q14",
+        "value": "Corruptor"
+      },
+      {
+        "cell": "R14",
+        "value": "Faith"
+      },
+      {
+        "cell": "S14",
+        "value": "Cursed"
+      },
+      {
+        "cell": "T14",
+        "value": "Exploit"
+      },
+      {
+        "cell": "W14",
+        "value": "makes cultist(summon) when many cultist summon Demon, aura square - 2 faith on hit - 1 faith\nAura: Adjacent enemies take -1 Faith per turn."
+      },
+      {
+        "cell": "A15",
+        "value": "Freeze"
+      },
+      {
+        "cell": "B15",
+        "value": "on hit"
+      },
+      {
+        "cell": "C15",
+        "value": "Applies frozen"
+      },
+      {
+        "cell": "D15",
+        "value": "debuff"
+      },
+      {
+        "cell": "Q15",
+        "value": "Warlock"
+      },
+      {
+        "cell": "R15",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S15",
+        "value": "Cursed"
+      },
+      {
+        "cell": "T15",
+        "value": "Exploit"
+      },
+      {
+        "cell": "W15",
+        "value": "evil wizard corrupt mechanics ??"
+      },
+      {
+        "cell": "A16",
+        "value": "Armor"
+      },
+      {
+        "cell": "B16",
+        "value": "passive"
+      },
+      {
+        "cell": "C16",
+        "value": "reduces physical damage taken with X amount of stacks\nBypasses armor: Poison, Bleed, Burn, Psychic"
+      },
+      {
+        "cell": "D16",
+        "value": "hp modifier"
+      },
+      {
+        "cell": "Q16",
+        "value": "Abomination"
+      },
+      {
+        "cell": "R16",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "S16",
+        "value": "Cursed"
+      },
+      {
+        "cell": "T16",
+        "value": "Fear"
+      },
+      {
+        "cell": "W16",
+        "value": "applies fear"
+      },
+      {
+        "cell": "A17",
+        "value": "bomb"
+      },
+      {
+        "cell": "B17",
+        "value": "when killed"
+      },
+      {
+        "cell": "C17",
+        "value": "deals damage in cross"
+      },
+      {
+        "cell": "Q17",
+        "value": "Necromancer"
+      },
+      {
+        "cell": "R17",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S17",
+        "value": "Cursed"
+      },
+      {
+        "cell": "T17",
+        "value": "Spawn"
+      },
+      {
+        "cell": "W17",
+        "value": "when in play, every unit that is killed by allied units is replaced with a 1-1 skeleton"
+      },
+      {
+        "cell": "A18",
+        "value": "Disarm"
+      },
+      {
+        "cell": "B18",
+        "value": "on hit"
+      },
+      {
+        "cell": "C18",
+        "value": "Applies Disarmed"
+      },
+      {
+        "cell": "D18",
+        "value": "debuff"
+      },
+      {
+        "cell": "Q18",
+        "value": "Witch"
+      },
+      {
+        "cell": "R18",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "S18",
+        "value": "Cursed"
+      },
+      {
+        "cell": "T18",
+        "value": "Weaken"
+      },
+      {
+        "cell": "U18",
+        "value": "Silence"
+      },
+      {
+        "cell": "A19",
+        "value": "Overkill"
+      },
+      {
+        "cell": "B19",
+        "value": "on kill"
+      },
+      {
+        "cell": "C19",
+        "value": "The rest of the damage goes to target behind"
+      },
+      {
+        "cell": "Q19",
+        "value": "Heretic"
+      },
+      {
+        "cell": "R19",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S19",
+        "value": "Cursed"
+      },
+      {
+        "cell": "W19",
+        "value": "on hit - 2 faith"
+      },
+      {
+        "cell": "A20",
+        "value": "Flank"
+      },
+      {
+        "cell": "B20",
+        "value": "on hit"
+      },
+      {
+        "cell": "C20",
+        "value": "30% more damage if target has ally adjacent"
+      },
+      {
+        "cell": "Q20",
+        "value": "Cannoneer"
+      },
+      {
+        "cell": "R20",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S20",
+        "value": "Gunslinger"
+      },
+      {
+        "cell": "T20",
+        "value": "Ranged ∞"
+      },
+      {
+        "cell": "U20",
+        "value": "Overkill"
+      },
+      {
+        "cell": "W20",
+        "value": "deals exess damage is dealt to unit behind targeted unit until damage is depleated"
+      },
+      {
+        "cell": "A21",
+        "value": "Exploit"
+      },
+      {
+        "cell": "B21",
+        "value": "on hit"
+      },
+      {
+        "cell": "C21",
+        "value": "Deals 30 % more damage to units that have debuff"
+      },
+      {
+        "cell": "Q21",
+        "value": "Cowboy"
+      },
+      {
+        "cell": "R21",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S21",
+        "value": "Gunslinger"
+      },
+      {
+        "cell": "T21",
+        "value": "Rush"
+      },
+      {
+        "cell": "W21",
+        "value": "Shoot lot of gun and ride horse"
+      },
+      {
+        "cell": "A22",
+        "value": "Venom"
+      },
+      {
+        "cell": "B22",
+        "value": "on hit"
+      },
+      {
+        "cell": "C22",
+        "value": "Applies poison"
+      },
+      {
+        "cell": "Q22",
+        "value": "Arms Dealer"
+      },
+      {
+        "cell": "R22",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S22",
+        "value": "Gunslinger"
+      },
+      {
+        "cell": "W22",
+        "value": "Summons guns / Buffs gun users"
+      },
+      {
+        "cell": "A23",
+        "value": "Rend"
+      },
+      {
+        "cell": "B23",
+        "value": "on hit"
+      },
+      {
+        "cell": "C23",
+        "value": "Applies bleed"
+      },
+      {
+        "cell": "Q23",
+        "value": "Pirate"
+      },
+      {
+        "cell": "R23",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S23",
+        "value": "Gunslinger"
+      },
+      {
+        "cell": "W23",
+        "value": "when killing card, inflict fear to surronding enemy cards/ when killing shoot bullet whith range +1"
+      },
+      {
+        "cell": "A24",
+        "value": "Sunder"
+      },
+      {
+        "cell": "B24",
+        "value": "on hit"
+      },
+      {
+        "cell": "C24",
+        "value": "Removes Armor"
+      },
+      {
+        "cell": "Q24",
+        "value": "Sheriff"
+      },
+      {
+        "cell": "R24",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "S24",
+        "value": "Gunslinger"
+      },
+      {
+        "cell": "W24",
+        "value": "Sets bounties. Bonus gold when completing"
+      },
+      {
+        "cell": "Q25",
+        "value": "Templar"
+      },
+      {
+        "cell": "R25",
+        "value": "Faith"
+      },
+      {
+        "cell": "S25",
+        "value": "Holy"
+      },
+      {
+        "cell": "T25",
+        "value": "Armor (2)"
+      },
+      {
+        "cell": "W25",
+        "value": "have better armor keyword and incresed faith"
+      },
+      {
+        "cell": "Q26",
+        "value": "Inquisitor"
+      },
+      {
+        "cell": "R26",
+        "value": "Faith"
+      },
+      {
+        "cell": "S26",
+        "value": "Holy"
+      },
+      {
+        "cell": "T26",
+        "value": "Execute"
+      },
+      {
+        "cell": "W26",
+        "value": "burns people? Bonus damage on cursed"
+      },
+      {
+        "cell": "Q27",
+        "value": "Acolyte"
+      },
+      {
+        "cell": "R27",
+        "value": "Faith"
+      },
+      {
+        "cell": "S27",
+        "value": "Holy"
+      },
+      {
+        "cell": "W27",
+        "value": "support ? faith buffer? healer? other type of support?"
+      },
+      {
+        "cell": "Q28",
+        "value": "Cleric"
+      },
+      {
+        "cell": "R28",
+        "value": "Faith"
+      },
+      {
+        "cell": "S28",
+        "value": "Holy"
+      },
+      {
+        "cell": "W28",
+        "value": "Uses own faith to heal nearby friendly unit"
+      },
+      {
+        "cell": "Q29",
+        "value": "Missionary"
+      },
+      {
+        "cell": "R29",
+        "value": "Faith"
+      },
+      {
+        "cell": "S29",
+        "value": "Holy"
+      },
+      {
+        "cell": "W29",
+        "value": "Spreads faith buff to nearby slots"
+      },
+      {
+        "cell": "Q30",
+        "value": "Pope"
+      },
+      {
+        "cell": "R30",
+        "value": "Faith"
+      },
+      {
+        "cell": "S30",
+        "value": "Holy"
+      },
+      {
+        "cell": "W30",
+        "value": "something with faith protection or something"
+      },
+      {
+        "cell": "Q31",
+        "value": "Prophet"
+      },
+      {
+        "cell": "R31",
+        "value": "Faith"
+      },
+      {
+        "cell": "S31",
+        "value": "Holy"
+      },
+      {
+        "cell": "Q32",
+        "value": "Prepper"
+      },
+      {
+        "cell": "R32",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "S32",
+        "value": "Outcast"
+      },
+      {
+        "cell": "T32",
+        "value": "Armor (2)"
+      },
+      {
+        "cell": "U32",
+        "value": "Stationary"
+      },
+      {
+        "cell": "V32",
+        "value": "ranged??"
+      },
+      {
+        "cell": "W32",
+        "value": "protects all tiles with 1 range"
+      },
+      {
+        "cell": "Q33",
+        "value": "Cannibal"
+      },
+      {
+        "cell": "R33",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "S33",
+        "value": "Outcast"
+      },
+      {
+        "cell": "T33",
+        "value": "Lifesteal"
+      },
+      {
+        "cell": "W33",
+        "value": "Eats friendly unit. Gains their stats"
+      },
+      {
+        "cell": "O34",
+        "value": " "
+      },
+      {
+        "cell": "Q34",
+        "value": "Hermit"
+      },
+      {
+        "cell": "R34",
+        "value": "Faith"
+      },
+      {
+        "cell": "S34",
+        "value": "Outcast"
+      },
+      {
+        "cell": "Q35",
+        "value": "Thief"
+      },
+      {
+        "cell": "R35",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S35",
+        "value": "Outcast"
+      },
+      {
+        "cell": "W35",
+        "value": "stealth: Can't be targeted before he attacks"
+      },
+      {
+        "cell": "Q36",
+        "value": "Scavenger"
+      },
+      {
+        "cell": "R36",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "S36",
+        "value": "Outcast"
+      },
+      {
+        "cell": "W36",
+        "value": "??????when attacks building or simmilar increse stats????????????"
+      },
+      {
+        "cell": "Q37",
+        "value": "Agent"
+      },
+      {
+        "cell": "R37",
+        "value": "Modern"
+      },
+      {
+        "cell": "S37",
+        "value": "Tactician"
+      },
+      {
+        "cell": "W37",
+        "value": "can be placed anywhere on map.   Can not attack enemy base on first turn"
+      },
+      {
+        "cell": "Q38",
+        "value": "Cyborg"
+      },
+      {
+        "cell": "R38",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "S38",
+        "value": "Tech"
+      },
+      {
+        "cell": "T38",
+        "value": "Armor (1)"
+      },
+      {
+        "cell": "Q39",
+        "value": "Machine-priest"
+      },
+      {
+        "cell": "R39",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "S39",
+        "value": "Tech"
+      },
+      {
+        "cell": "T39",
+        "value": "Armor (2)"
+      },
+      {
+        "cell": "W39",
+        "value": "Uses own faith to buff tech cards"
+      },
+      {
+        "cell": "Q40",
+        "value": "Posthuman"
+      },
+      {
+        "cell": "R40",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "S40",
+        "value": "Tech"
+      },
+      {
+        "cell": "T40",
+        "value": "Armor (3)"
+      },
+      {
+        "cell": "W40",
+        "value": "??"
+      },
+      {
+        "cell": "Q41",
+        "value": "Hacker"
+      },
+      {
+        "cell": "R41",
+        "value": "Modern"
+      },
+      {
+        "cell": "S41",
+        "value": "Tech"
+      },
+      {
+        "cell": "T41",
+        "value": "Flank"
+      },
+      {
+        "cell": "W41",
+        "value": "Steals a random keyword"
+      },
+      {
+        "cell": "Q42",
+        "value": "Data Miner"
+      },
+      {
+        "cell": "R42",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "S42",
+        "value": "Tech"
+      },
+      {
+        "cell": "T42",
+        "value": "Flank"
+      },
+      {
+        "cell": "W42",
+        "value": "???"
+      },
+      {
+        "cell": "Q43",
+        "value": "Sentinel"
+      },
+      {
+        "cell": "R43",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "S43",
+        "value": "Tech"
+      },
+      {
+        "cell": "T43",
+        "value": "Retaliate"
+      },
+      {
+        "cell": "Q44",
+        "value": "Robot"
+      },
+      {
+        "cell": "R44",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "S44",
+        "value": "Tech"
+      },
+      {
+        "cell": "Q45",
+        "value": "Technomancer"
+      },
+      {
+        "cell": "R45",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "S45",
+        "value": "Tech"
+      },
+      {
+        "cell": "Q46",
+        "value": "Dwarf"
+      },
+      {
+        "cell": "R46",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "T46",
+        "value": "Armor (1)"
+      },
+      {
+        "cell": "W46",
+        "value": "short lil guy, forge supp? "
+      },
+      {
+        "cell": "Q47",
+        "value": "Scientist"
+      },
+      {
+        "cell": "R47",
+        "value": "Modern"
+      },
+      {
+        "cell": "T47",
+        "value": "Exploit"
+      },
+      {
+        "cell": "W47",
+        "value": "Experiment: On hit, apply random debuff to target"
+      },
+      {
+        "cell": "Q48",
+        "value": "Mutant"
+      },
+      {
+        "cell": "R48",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "T48",
+        "value": "Flank"
+      },
+      {
+        "cell": "U48",
+        "value": "Venom"
+      },
+      {
+        "cell": "W48",
+        "value": "?"
+      },
+      {
+        "cell": "Q49",
+        "value": "Goblin"
+      },
+      {
+        "cell": "R49",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "T49",
+        "value": "Flank"
+      },
+      {
+        "cell": "W49",
+        "value": "greedy lill guy"
+      },
+      {
+        "cell": "Q50",
+        "value": "Pyro"
+      },
+      {
+        "cell": "R50",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "T50",
+        "value": "Ignite"
+      },
+      {
+        "cell": "W50",
+        "value": "AoE attack, hits whith one range three slots like a T"
+      },
+      {
+        "cell": "Q51",
+        "value": "Mindguard"
+      },
+      {
+        "cell": "R51",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "T51",
+        "value": "Mindshield"
+      },
+      {
+        "cell": "W51",
+        "value": "Gives protection from psychic or magic or some"
+      },
+      {
+        "cell": "Q52",
+        "value": "Specialist"
+      },
+      {
+        "cell": "R52",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "T52",
+        "value": "Mirror"
+      },
+      {
+        "cell": "W52",
+        "value": "copy / choose abilities"
+      },
+      {
+        "cell": "Q53",
+        "value": "Space monk"
+      },
+      {
+        "cell": "R53",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "T53",
+        "value": "Pull"
+      },
+      {
+        "cell": "W53",
+        "value": "Blocks ranged attacks"
+      },
+      {
+        "cell": "Q54",
+        "value": "Viking"
+      },
+      {
+        "cell": "R54",
+        "value": "Primal"
+      },
+      {
+        "cell": "T54",
+        "value": "Rush"
+      },
+      {
+        "cell": "U54",
+        "value": "Fury"
+      },
+      {
+        "cell": "W54",
+        "value": "RAAAUURHRGGG"
+      },
+      {
+        "cell": "Q55",
+        "value": "Raider"
+      },
+      {
+        "cell": "R55",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "T55",
+        "value": "Rush"
+      },
+      {
+        "cell": "W55",
+        "value": "runs(to simmilar to viking?)"
+      },
+      {
+        "cell": "Q56",
+        "value": "Mech"
+      },
+      {
+        "cell": "R56",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "T56",
+        "value": "Spawn"
+      },
+      {
+        "cell": "U56",
+        "value": "Bomb"
+      },
+      {
+        "cell": "V56",
+        "value": "Armor (1)"
+      },
+      {
+        "cell": "W56",
+        "value": "When mech is killed mech pilot are summond in its place??"
+      },
+      {
+        "cell": "Q57",
+        "value": "Buddhist"
+      },
+      {
+        "cell": "R57",
+        "value": "Faith"
+      },
+      {
+        "cell": "T57",
+        "value": "Spawn"
+      },
+      {
+        "cell": "W57",
+        "value": "Gains - or + karma when killing units. Reincarnates when he dies. Result depends on amount of karma"
+      },
+      {
+        "cell": "Q58",
+        "value": "Drug Dealer"
+      },
+      {
+        "cell": "R58",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "T58",
+        "value": "Spawn"
+      },
+      {
+        "cell": "W58",
+        "value": "Summons drug addicts"
+      },
+      {
+        "cell": "Q59",
+        "value": "Shipwright"
+      },
+      {
+        "cell": "R59",
+        "value": "Primal"
+      },
+      {
+        "cell": "T59",
+        "value": "Spawn"
+      },
+      {
+        "cell": "W59",
+        "value": "Summons boat"
+      },
+      {
+        "cell": "Q60",
+        "value": "Warlord"
+      },
+      {
+        "cell": "R60",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "T60",
+        "value": "Stat increase?"
+      },
+      {
+        "cell": "W60",
+        "value": "buffs primal cards | maby in lower tiers"
+      },
+      {
+        "cell": "Q61",
+        "value": "Miner"
+      },
+      {
+        "cell": "R61",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "T61",
+        "value": "stationary?"
+      },
+      {
+        "cell": "W61",
+        "value": "digs for items/consumables, finds one every turn "
+      },
+      {
+        "cell": "Q62",
+        "value": "Alchemist"
+      },
+      {
+        "cell": "R62",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "T62",
+        "value": "Venom"
+      },
+      {
+        "cell": "W62",
+        "value": "Makes poisonous potions"
+      },
+      {
+        "cell": "Q63",
+        "value": "Bioengineer"
+      },
+      {
+        "cell": "R63",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "T63",
+        "value": "Venom"
+      },
+      {
+        "cell": "Q64",
+        "value": "AI Girlfriend"
+      },
+      {
+        "cell": "R64",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "T64",
+        "value": "Weaken"
+      },
+      {
+        "cell": "W64",
+        "value": "Charm"
+      },
+      {
+        "cell": "Q65",
+        "value": "Architect"
+      },
+      {
+        "cell": "R65",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "W65",
+        "value": "makes building / defense or some not sure"
+      },
+      {
+        "cell": "Q66",
+        "value": "Brewer"
+      },
+      {
+        "cell": "R66",
+        "value": "Modern"
+      },
+      {
+        "cell": "W66",
+        "value": "Makes beer. Beer makes cards drunk. Stacks"
+      },
+      {
+        "cell": "Q67",
+        "value": "Caveman"
+      },
+      {
+        "cell": "R67",
+        "value": "Primal"
+      },
+      {
+        "cell": "W67",
+        "value": "pure stats"
+      },
+      {
+        "cell": "Q68",
+        "value": "Conqueror"
+      },
+      {
+        "cell": "R68",
+        "value": "Primal"
+      },
+      {
+        "cell": "W68",
+        "value": "Damage buff for each slot you have control over"
+      },
+      {
+        "cell": "Q69",
+        "value": "Dreamweaver"
+      },
+      {
+        "cell": "R69",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "W69",
+        "value": "psychic alien wizard"
+      },
+      {
+        "cell": "Q70",
+        "value": "Enforcer"
+      },
+      {
+        "cell": "R70",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "Q71",
+        "value": "Engineer"
+      },
+      {
+        "cell": "R71",
+        "value": "Modern"
+      },
+      {
+        "cell": "W71",
+        "value": "big brain"
+      },
+      {
+        "cell": "Q72",
+        "value": "Explorer"
+      },
+      {
+        "cell": "R72",
+        "value": "Primal"
+      },
+      {
+        "cell": "W72",
+        "value": "???"
+      },
+      {
+        "cell": "Q73",
+        "value": "Leader"
+      },
+      {
+        "cell": "R73",
+        "value": "Modern"
+      },
+      {
+        "cell": "W73",
+        "value": "buffs allies in same row?"
+      },
+      {
+        "cell": "Q74",
+        "value": "Lorekeeper"
+      },
+      {
+        "cell": "R74",
+        "value": "Primal"
+      },
+      {
+        "cell": "W74",
+        "value": "when played chose one keyword, all allied cards in same row as lorekeeper learns keyword for that battle"
+      },
+      {
+        "cell": "Q75",
+        "value": "Mapmaker"
+      },
+      {
+        "cell": "R75",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "W75",
+        "value": "Can reveal which enemy card is spawning"
+      },
+      {
+        "cell": "Q76",
+        "value": "Mechanic"
+      },
+      {
+        "cell": "R76",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "W76",
+        "value": "Gives armor keyword to nearby ally card"
+      },
+      {
+        "cell": "Q77",
+        "value": "Oracle"
+      },
+      {
+        "cell": "R77",
+        "value": "Primal"
+      },
+      {
+        "cell": "Q78",
+        "value": "Pathfinder"
+      },
+      {
+        "cell": "R78",
+        "value": "Primal"
+      },
+      {
+        "cell": "W78",
+        "value": "makes path ?? if card follows path can travel 1 extra tile "
+      },
+      {
+        "cell": "Q79",
+        "value": "Runesmith"
+      },
+      {
+        "cell": "R79",
+        "value": "Primal"
+      },
+      {
+        "cell": "Q80",
+        "value": "Seer"
+      },
+      {
+        "cell": "R80",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "W80",
+        "value": "three eyes?"
+      },
+      {
+        "cell": "Q81",
+        "value": "Shaman"
+      },
+      {
+        "cell": "R81",
+        "value": "Primal"
+      }
+    ],
+    "Enemy": [
+      {
+        "cell": "B1",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "C1",
+        "value": "Faith"
+      },
+      {
+        "cell": "D1",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "E1",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "F1",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "G1",
+        "value": "Primal"
+      },
+      {
+        "cell": "H1",
+        "value": "Modern"
+      },
+      {
+        "cell": "I1",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "K1",
+        "value": "Cards"
+      },
+      {
+        "cell": "L1",
+        "value": "Theme"
+      },
+      {
+        "cell": "M1",
+        "value": "Keywords"
+      },
+      {
+        "cell": "N1",
+        "value": "Description"
+      },
+      {
+        "cell": "B2",
+        "value": "Bandit"
+      },
+      {
+        "cell": "D2",
+        "value": "Vampire"
+      },
+      {
+        "cell": "E2",
+        "value": "Stalker"
+      },
+      {
+        "cell": "F2",
+        "value": "Jammer"
+      },
+      {
+        "cell": "G2",
+        "value": "Berserker"
+      },
+      {
+        "cell": "H2",
+        "value": "Mafia"
+      },
+      {
+        "cell": "I2",
+        "value": "Toxic Spitter"
+      },
+      {
+        "cell": "L2",
+        "value": "Faith"
+      },
+      {
+        "cell": "D3",
+        "value": "Orc"
+      },
+      {
+        "cell": "G3",
+        "value": "Hunter"
+      },
+      {
+        "cell": "H3",
+        "value": "Street Thug"
+      },
+      {
+        "cell": "L3",
+        "value": "Faith"
+      },
+      {
+        "cell": "D4",
+        "value": "Zombie"
+      },
+      {
+        "cell": "G4",
+        "value": "Beastmaster"
+      },
+      {
+        "cell": "H4",
+        "value": "Police"
+      },
+      {
+        "cell": "L4",
+        "value": "Faith"
+      },
+      {
+        "cell": "K5",
+        "value": "Vampire"
+      },
+      {
+        "cell": "L5",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "M5",
+        "value": "Lifesteal"
+      },
+      {
+        "cell": "K6",
+        "value": "Orc"
+      },
+      {
+        "cell": "L6",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "M6",
+        "value": "Aggressive"
+      },
+      {
+        "cell": "K7",
+        "value": "Zombie"
+      },
+      {
+        "cell": "L7",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "M7",
+        "value": "Infect (spawn?)"
+      },
+      {
+        "cell": "N7",
+        "value": "When killing a unit, transforms it into a zombie. "
+      },
+      {
+        "cell": "L8",
+        "value": "Fantasy"
+      },
+      {
+        "cell": "K9",
+        "value": "Jammer"
+      },
+      {
+        "cell": "L9",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "M9",
+        "value": "Silence"
+      },
+      {
+        "cell": "L10",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "L11",
+        "value": "Futuristic"
+      },
+      {
+        "cell": "K12",
+        "value": "Mafia"
+      },
+      {
+        "cell": "L12",
+        "value": "Modern"
+      },
+      {
+        "cell": "K13",
+        "value": "Street Thug"
+      },
+      {
+        "cell": "L13",
+        "value": "Modern"
+      },
+      {
+        "cell": "K14",
+        "value": "Police"
+      },
+      {
+        "cell": "L14",
+        "value": "Modern"
+      },
+      {
+        "cell": "L15",
+        "value": "Modern"
+      },
+      {
+        "cell": "K16",
+        "value": "Bandit"
+      },
+      {
+        "cell": "L16",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "L17",
+        "value": "Outlaw"
+      },
+      {
+        "cell": "K18",
+        "value": "Berserker"
+      },
+      {
+        "cell": "L18",
+        "value": "Primal"
+      },
+      {
+        "cell": "M18",
+        "value": "Rage"
+      },
+      {
+        "cell": "K19",
+        "value": "Hunter"
+      },
+      {
+        "cell": "L19",
+        "value": "Primal"
+      },
+      {
+        "cell": "M19",
+        "value": "Ranged"
+      },
+      {
+        "cell": "K20",
+        "value": "Beastmaster"
+      },
+      {
+        "cell": "L20",
+        "value": "Primal"
+      },
+      {
+        "cell": "M20",
+        "value": "Spawn"
+      },
+      {
+        "cell": "N20",
+        "value": "Spawns beasts"
+      },
+      {
+        "cell": "L21",
+        "value": "Primal"
+      },
+      {
+        "cell": "K22",
+        "value": "Stalker"
+      },
+      {
+        "cell": "L22",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "M22",
+        "value": "Blink"
+      },
+      {
+        "cell": "L23",
+        "value": "Sci fi"
+      },
+      {
+        "cell": "K24",
+        "value": "Toxic Spitter"
+      },
+      {
+        "cell": "L24",
+        "value": "Wasteland"
+      },
+      {
+        "cell": "L25",
+        "value": "Wasteland"
+      }
+    ],
+    "artifacts": [
+      {
+        "cell": "A1",
+        "value": "name"
+      },
+      {
+        "cell": "B1",
+        "value": "description"
+      },
+      {
+        "cell": "C1",
+        "value": "stats"
+      },
+      {
+        "cell": "D1",
+        "value": "availability"
+      },
+      {
+        "cell": "E1",
+        "value": "rarety"
+      },
+      {
+        "cell": "F1",
+        "value": "stackable"
+      },
+      {
+        "cell": "I1",
+        "value": "availability"
+      },
+      {
+        "cell": "A2",
+        "value": "eks."
+      },
+      {
+        "cell": "B2",
+        "value": "makes cards of type do some thing"
+      },
+      {
+        "cell": "C2",
+        "value": "1+ 1+ stat increse"
+      },
+      {
+        "cell": "D2",
+        "value": "boss reward"
+      },
+      {
+        "cell": "E2",
+        "value": "epic"
+      },
+      {
+        "cell": "I2",
+        "value": "special interactions"
+      },
+      {
+        "cell": "A3",
+        "value": "Cross"
+      },
+      {
+        "cell": "C3",
+        "value": "1+ faith to all units"
+      },
+      {
+        "cell": "F3",
+        "value": "YES"
+      },
+      {
+        "cell": "I3",
+        "value": "miniboss battles"
+      },
+      {
+        "cell": "A4",
+        "value": "Sniper scope"
+      },
+      {
+        "cell": "C4",
+        "value": "1+ range to ranged units"
+      },
+      {
+        "cell": "F4",
+        "value": "NO"
+      },
+      {
+        "cell": "I4",
+        "value": "shop"
+      },
+      {
+        "cell": "A5",
+        "value": "Murder hole"
+      },
+      {
+        "cell": "B5",
+        "value": "Enemies in melee range of base takes damage"
+      },
+      {
+        "cell": "F5",
+        "value": "NO"
+      },
+      {
+        "cell": "I5",
+        "value": "boss reward"
+      },
+      {
+        "cell": "A6",
+        "value": "???"
+      },
+      {
+        "cell": "B6",
+        "value": "boss/Legendary relics can now appear in shop"
+      },
+      {
+        "cell": "D6",
+        "value": "boss reward ??"
+      },
+      {
+        "cell": "F6",
+        "value": "NO"
+      },
+      {
+        "cell": "I6",
+        "value": "unit inian jones"
+      },
+      {
+        "cell": "A7",
+        "value": "Wildcard?"
+      },
+      {
+        "cell": "B7",
+        "value": "cards in shop can come whith extra keywords"
+      },
+      {
+        "cell": "D7",
+        "value": "boss reward ??"
+      },
+      {
+        "cell": "F7",
+        "value": "NO"
+      },
+      {
+        "cell": "A8",
+        "value": "Ogaboga"
+      },
+      {
+        "cell": "B8",
+        "value": "all primal cards have the rush keyword during combat"
+      },
+      {
+        "cell": "D8",
+        "value": "IDK"
+      },
+      {
+        "cell": "F8",
+        "value": "NO"
+      },
+      {
+        "cell": "A9",
+        "value": "Lonewolf"
+      },
+      {
+        "cell": "B9",
+        "value": "cards that dont have any ally cards in same row get stat increase"
+      },
+      {
+        "cell": "D9",
+        "value": "shop"
+      },
+      {
+        "cell": "F9",
+        "value": "maybe"
+      },
+      {
+        "cell": "A10",
+        "value": "Bone amulet"
+      },
+      {
+        "cell": "B10",
+        "value": "summons get increse in stats"
+      },
+      {
+        "cell": "D10",
+        "value": "IDK"
+      },
+      {
+        "cell": "F10",
+        "value": "YES"
+      },
+      {
+        "cell": "A11",
+        "value": "cursed thingi"
+      },
+      {
+        "cell": "B11",
+        "value": "when \"allied\" units attack they inflict - faith"
+      },
+      {
+        "cell": "C11",
+        "value": "inflict -1 faith on hit"
+      },
+      {
+        "cell": "D11",
+        "value": "IDK"
+      },
+      {
+        "cell": "F11",
+        "value": "maybe"
+      },
+      {
+        "cell": "I11",
+        "value": "kan man selge artifacts ??"
+      },
+      {
+        "cell": "A12",
+        "value": "another curse"
+      },
+      {
+        "cell": "B12",
+        "value": "cursed units ar buffed instead of curesed or some idk"
+      }
+    ]
+  }
+}

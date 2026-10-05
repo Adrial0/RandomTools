@@ -1,0 +1,474 @@
+{
+  "schemaVersion": 1,
+  "keywords": [
+    {
+      "id": "fury",
+      "name": "Fury",
+      "source": {
+        "sheet": "keywords",
+        "range": "A2:D2"
+      },
+      "trigger": "kill",
+      "description": "Increase hp and atk",
+      "effectCategory": null
+    },
+    {
+      "id": "ranged",
+      "name": "Ranged",
+      "source": {
+        "sheet": "keywords",
+        "range": "A3:D3"
+      },
+      "trigger": "passive",
+      "description": "Increased range on attack",
+      "effectCategory": "attack modifier"
+    },
+    {
+      "id": "ignite",
+      "name": "Ignite",
+      "source": {
+        "sheet": "keywords",
+        "range": "A4:D4"
+      },
+      "trigger": "on hit",
+      "description": "applys burn",
+      "effectCategory": "debuff"
+    },
+    {
+      "id": "stationary",
+      "name": "Stationary",
+      "source": {
+        "sheet": "keywords",
+        "range": "A5:D5"
+      },
+      "trigger": "passive",
+      "description": "Can't move",
+      "effectCategory": null
+    },
+    {
+      "id": "rush",
+      "name": "Rush",
+      "source": {
+        "sheet": "keywords",
+        "range": "A6:D6"
+      },
+      "trigger": "passive",
+      "description": "Move and attack on same turn",
+      "effectCategory": "attack modifier"
+    },
+    {
+      "id": "retaliate",
+      "name": "Retaliate",
+      "source": {
+        "sheet": "keywords",
+        "range": "A7:D7"
+      },
+      "trigger": "When hit",
+      "description": "Hits back when struck",
+      "effectCategory": null
+    },
+    {
+      "id": "pull",
+      "name": "Pull",
+      "source": {
+        "sheet": "keywords",
+        "range": "A8:D8"
+      },
+      "trigger": "on hit",
+      "description": "If no enemy in front. Then pull enemy closer and hit",
+      "effectCategory": null
+    },
+    {
+      "id": "mirror",
+      "name": "Mirror",
+      "source": {
+        "sheet": "keywords",
+        "range": "A9:D9"
+      },
+      "trigger": "passive",
+      "description": "Copies a keyword from an adjacent unit",
+      "effectCategory": null
+    },
+    {
+      "id": "weaken",
+      "name": "Weaken",
+      "source": {
+        "sheet": "keywords",
+        "range": "A10:D10"
+      },
+      "trigger": "on hit",
+      "description": "The card that's hit deals less damage",
+      "effectCategory": "debuff"
+    },
+    {
+      "id": "blink",
+      "name": "Blink",
+      "source": {
+        "sheet": "keywords",
+        "range": "A11:D11"
+      },
+      "trigger": "kill",
+      "description": "Teleports forward 1 tile after killing a unit",
+      "effectCategory": null
+    },
+    {
+      "id": "silence",
+      "name": "Silence",
+      "source": {
+        "sheet": "keywords",
+        "range": "A12:D12"
+      },
+      "trigger": "on hit",
+      "description": "Removes all keyword from the target, until caster dies",
+      "effectCategory": "debuff"
+    },
+    {
+      "id": "rage",
+      "name": "Rage",
+      "source": {
+        "sheet": "keywords",
+        "range": "A13:D13"
+      },
+      "trigger": "Passive",
+      "description": "More damage on lower health",
+      "effectCategory": null
+    },
+    {
+      "id": "lifesteal",
+      "name": "Lifesteal",
+      "source": {
+        "sheet": "keywords",
+        "range": "A14:D14"
+      },
+      "trigger": "on hit",
+      "description": "Heal for damage",
+      "effectCategory": "attack modifier"
+    },
+    {
+      "id": "freeze",
+      "name": "Freeze",
+      "source": {
+        "sheet": "keywords",
+        "range": "A15:D15"
+      },
+      "trigger": "on hit",
+      "description": "Applies frozen",
+      "effectCategory": "debuff"
+    },
+    {
+      "id": "armor",
+      "name": "Armor",
+      "source": {
+        "sheet": "keywords",
+        "range": "A16:D16"
+      },
+      "trigger": "passive",
+      "description": "reduces physical damage taken with X amount of stacks\nBypasses armor: Poison, Bleed, Burn, Psychic",
+      "effectCategory": "hp modifier"
+    },
+    {
+      "id": "bomb",
+      "name": "bomb",
+      "source": {
+        "sheet": "keywords",
+        "range": "A17:D17"
+      },
+      "trigger": "when killed",
+      "description": "deals damage in cross",
+      "effectCategory": null
+    },
+    {
+      "id": "disarm",
+      "name": "Disarm",
+      "source": {
+        "sheet": "keywords",
+        "range": "A18:D18"
+      },
+      "trigger": "on hit",
+      "description": "Applies Disarmed",
+      "effectCategory": "debuff"
+    },
+    {
+      "id": "overkill",
+      "name": "Overkill",
+      "source": {
+        "sheet": "keywords",
+        "range": "A19:D19"
+      },
+      "trigger": "on kill",
+      "description": "The rest of the damage goes to target behind",
+      "effectCategory": null
+    },
+    {
+      "id": "flank",
+      "name": "Flank",
+      "source": {
+        "sheet": "keywords",
+        "range": "A20:D20"
+      },
+      "trigger": "on hit",
+      "description": "30% more damage if target has ally adjacent",
+      "effectCategory": null
+    },
+    {
+      "id": "exploit",
+      "name": "Exploit",
+      "source": {
+        "sheet": "keywords",
+        "range": "A21:D21"
+      },
+      "trigger": "on hit",
+      "description": "Deals 30 % more damage to units that have debuff",
+      "effectCategory": null
+    },
+    {
+      "id": "venom",
+      "name": "Venom",
+      "source": {
+        "sheet": "keywords",
+        "range": "A22:D22"
+      },
+      "trigger": "on hit",
+      "description": "Applies poison",
+      "effectCategory": null
+    },
+    {
+      "id": "rend",
+      "name": "Rend",
+      "source": {
+        "sheet": "keywords",
+        "range": "A23:D23"
+      },
+      "trigger": "on hit",
+      "description": "Applies bleed",
+      "effectCategory": null
+    },
+    {
+      "id": "sunder",
+      "name": "Sunder",
+      "source": {
+        "sheet": "keywords",
+        "range": "A24:D24"
+      },
+      "trigger": "on hit",
+      "description": "Removes Armor",
+      "effectCategory": null
+    },
+    {
+      "id": "mindshield",
+      "name": "Mindshield",
+      "trigger": "passive",
+      "description": "Immunity to mental attacks. Mindguard grants it to friendly units in the eight surrounding tiles.",
+      "effectCategory": "immunity",
+      "source": {
+        "type": "user-design",
+        "date": "2026-10-05"
+      },
+      "openQuestions": [
+        "Define which attacks count as mental."
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "id": "passive",
+      "name": "passive",
+      "source": {
+        "sheet": "keywords",
+        "range": "F2:G2"
+      },
+      "description": "special behavier"
+    },
+    {
+      "id": "death",
+      "name": "death",
+      "source": {
+        "sheet": "keywords",
+        "range": "F3:G3"
+      },
+      "description": "when card dies"
+    },
+    {
+      "id": "kill",
+      "name": "kill",
+      "source": {
+        "sheet": "keywords",
+        "range": "F4:G4"
+      },
+      "description": "when card kills"
+    },
+    {
+      "id": "play",
+      "name": "play",
+      "source": {
+        "sheet": "keywords",
+        "range": "F5:G5"
+      },
+      "description": "when card is played"
+    },
+    {
+      "id": "on-hit",
+      "name": "on hit",
+      "source": {
+        "sheet": "keywords",
+        "range": "F6:G6"
+      },
+      "description": "when card strikes another card"
+    },
+    {
+      "id": "when-hit",
+      "name": "When hit",
+      "source": {
+        "sheet": "keywords",
+        "range": "F7:G7"
+      },
+      "description": "When struck by card"
+    }
+  ],
+  "abilityTypes": [
+    {
+      "id": "spawn",
+      "name": "Spawn",
+      "source": {
+        "sheet": "keywords",
+        "range": "I2:K2"
+      },
+      "trigger": "any",
+      "description": "Creates unit"
+    },
+    {
+      "id": "stun",
+      "name": "Stun",
+      "source": {
+        "sheet": "keywords",
+        "range": "I3:K3"
+      },
+      "trigger": "any",
+      "description": "makes unit not act 1 turn"
+    },
+    {
+      "id": "choice",
+      "name": "choice",
+      "source": {
+        "sheet": "keywords",
+        "range": "I4:K4"
+      },
+      "trigger": "any",
+      "description": "gets 2 or 3 choices to make"
+    },
+    {
+      "id": "execute",
+      "name": "Execute",
+      "source": {
+        "sheet": "keywords",
+        "range": "I5:K5"
+      },
+      "trigger": "any",
+      "description": "Kills target"
+    },
+    {
+      "id": "stat-increase",
+      "name": "stat increase",
+      "source": {
+        "sheet": "keywords",
+        "range": "I6:K6"
+      },
+      "trigger": "any",
+      "description": "more stats"
+    },
+    {
+      "id": "infect",
+      "name": "Infect",
+      "source": {
+        "sheet": "keywords",
+        "range": "I7:K7"
+      },
+      "trigger": "on hit",
+      "description": "Turns your card into a weaker version when it dies\nSets damage to 1, card turns green to indicate it's zombie"
+    },
+    {
+      "id": "inflict",
+      "name": "inflict",
+      "source": {
+        "sheet": "keywords",
+        "range": "I8:K8"
+      },
+      "trigger": "any",
+      "description": "inflicts a effect on a target like stun or burn"
+    }
+  ],
+  "debuffs": [
+    {
+      "id": "burn",
+      "name": "Burn",
+      "source": {
+        "sheet": "keywords",
+        "range": "M2:N2"
+      },
+      "description": "Takes fire damage each turn"
+    },
+    {
+      "id": "frozen",
+      "name": "Frozen",
+      "source": {
+        "sheet": "keywords",
+        "range": "M3:N3"
+      },
+      "description": "Can't move"
+    },
+    {
+      "id": "weakened",
+      "name": "Weakened",
+      "source": {
+        "sheet": "keywords",
+        "range": "M4:N4"
+      },
+      "description": "Deals less damage"
+    },
+    {
+      "id": "silenced",
+      "name": "Silenced",
+      "source": {
+        "sheet": "keywords",
+        "range": "M5:N5"
+      },
+      "description": "Keywords and abilities has no effect"
+    },
+    {
+      "id": "drunk",
+      "name": "drunk",
+      "source": {
+        "sheet": "keywords",
+        "range": "M6:N6"
+      },
+      "description": "????????????????????"
+    },
+    {
+      "id": "disarmed",
+      "name": "Disarmed",
+      "source": {
+        "sheet": "keywords",
+        "range": "M7:N7"
+      },
+      "description": "Deals 0 damage for 1 turn"
+    },
+    {
+      "id": "bleed",
+      "name": "Bleed",
+      "source": {
+        "sheet": "keywords",
+        "range": "M8:N8"
+      },
+      "description": "Takes damage = 20% of the inflicter's ATK each turn"
+    },
+    {
+      "id": "poison",
+      "name": "Poison",
+      "source": {
+        "sheet": "keywords",
+        "range": "M9:N9"
+      },
+      "description": "Lose 20% of max HP each turn"
+    }
+  ]
+}

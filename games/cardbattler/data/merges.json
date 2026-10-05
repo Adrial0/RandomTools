@@ -1,0 +1,1449 @@
+{
+  "schemaVersion": 1,
+  "recipes": [
+    {
+      "id": "robot--mage",
+      "ingredients": [
+        "robot",
+        "mage"
+      ],
+      "result": "artificer",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D2:G2"
+        },
+        {
+          "sheet": "Main",
+          "range": "P5:U5"
+        }
+      ]
+    },
+    {
+      "id": "artificer--pirate",
+      "ingredients": [
+        "artificer",
+        "pirate"
+      ],
+      "result": "arms-dealer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J2:M2"
+        },
+        {
+          "sheet": "Main",
+          "range": "X25:AC25"
+        }
+      ]
+    },
+    {
+      "id": "alien--acolyte",
+      "ingredients": [
+        "alien",
+        "acolyte"
+      ],
+      "result": "prophet",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P2:U2"
+        },
+        {
+          "sheet": "Main",
+          "range": "D13:G13"
+        }
+      ]
+    },
+    {
+      "id": "prophet--warlock",
+      "ingredients": [
+        "prophet",
+        "warlock"
+      ],
+      "result": "buddhist",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X2:AC2"
+        },
+        {
+          "sheet": "Main",
+          "range": "J49:M49"
+        }
+      ]
+    },
+    {
+      "id": "robot--engineer",
+      "ingredients": [
+        "robot",
+        "engineer"
+      ],
+      "result": "mechanic",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D3:G3"
+        },
+        {
+          "sheet": "Main",
+          "range": "P9:U9"
+        }
+      ]
+    },
+    {
+      "id": "artificer--heretic",
+      "ingredients": [
+        "artificer",
+        "heretic"
+      ],
+      "result": "pyro",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J3:M3"
+        },
+        {
+          "sheet": "Main",
+          "range": "X47:AC47"
+        }
+      ]
+    },
+    {
+      "id": "mage--acolyte",
+      "ingredients": [
+        "mage",
+        "acolyte"
+      ],
+      "result": "cleric",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P3:U3"
+        },
+        {
+          "sheet": "Main",
+          "range": "D17:G17"
+        }
+      ]
+    },
+    {
+      "id": "blob--warlock",
+      "ingredients": [
+        "blob",
+        "warlock"
+      ],
+      "result": "corruptor",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X3:AC3"
+        },
+        {
+          "sheet": "Main",
+          "range": "J45:M45"
+        }
+      ]
+    },
+    {
+      "id": "robot--thief",
+      "ingredients": [
+        "robot",
+        "thief"
+      ],
+      "result": "hacker",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D4:G4"
+        },
+        {
+          "sheet": "Main",
+          "range": "P12:U12"
+        }
+      ]
+    },
+    {
+      "id": "artificer--viking",
+      "ingredients": [
+        "artificer",
+        "viking"
+      ],
+      "result": "runesmith",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J4:M4"
+        },
+        {
+          "sheet": "Main",
+          "range": "X34:AC34"
+        }
+      ]
+    },
+    {
+      "id": "thief--acolyte",
+      "ingredients": [
+        "thief",
+        "acolyte"
+      ],
+      "result": "templar",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P4:U4"
+        },
+        {
+          "sheet": "Main",
+          "range": "D25:G25"
+        }
+      ]
+    },
+    {
+      "id": "prophet--scavenger",
+      "ingredients": [
+        "prophet",
+        "scavenger"
+      ],
+      "result": "hermit",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X4:AC4"
+        },
+        {
+          "sheet": "Main",
+          "range": "J51:M51"
+        }
+      ]
+    },
+    {
+      "id": "robot--raider",
+      "ingredients": [
+        "robot",
+        "raider"
+      ],
+      "result": "enforcer",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D5:G5"
+        },
+        {
+          "sheet": "Main",
+          "range": "P10:U10"
+        }
+      ]
+    },
+    {
+      "id": "artificer--templar",
+      "ingredients": [
+        "artificer",
+        "templar"
+      ],
+      "result": "space-monk",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J5:M5"
+        },
+        {
+          "sheet": "Main",
+          "range": "X40:AC40"
+        }
+      ]
+    },
+    {
+      "id": "enforcer--cleric",
+      "ingredients": [
+        "enforcer",
+        "cleric"
+      ],
+      "result": "inquisitor",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X5:AC5"
+        },
+        {
+          "sheet": "Main",
+          "range": "J24:M24"
+        }
+      ]
+    },
+    {
+      "id": "robot--caveman",
+      "ingredients": [
+        "robot",
+        "caveman"
+      ],
+      "result": "cyborg",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D6:G6"
+        },
+        {
+          "sheet": "Main",
+          "range": "P11:U11"
+        }
+      ]
+    },
+    {
+      "id": "mechanic--pirate",
+      "ingredients": [
+        "mechanic",
+        "pirate"
+      ],
+      "result": "cannoneer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J6:M6"
+        },
+        {
+          "sheet": "Main",
+          "range": "X26:AC26"
+        }
+      ]
+    },
+    {
+      "id": "mage--raider",
+      "ingredients": [
+        "mage",
+        "raider"
+      ],
+      "result": "psychic",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P6:U6"
+        },
+        {
+          "sheet": "Main",
+          "range": "D14:G14"
+        }
+      ]
+    },
+    {
+      "id": "explorer--cleric",
+      "ingredients": [
+        "explorer",
+        "cleric"
+      ],
+      "result": "missionary",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X6:AC6"
+        },
+        {
+          "sheet": "Main",
+          "range": "J28:M28"
+        }
+      ]
+    },
+    {
+      "id": "robot--acolyte",
+      "ingredients": [
+        "robot",
+        "acolyte"
+      ],
+      "result": "sentinel",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D7:G7"
+        },
+        {
+          "sheet": "Main",
+          "range": "P22:U22"
+        }
+      ]
+    },
+    {
+      "id": "mechanic--heretic",
+      "ingredients": [
+        "mechanic",
+        "heretic"
+      ],
+      "result": "cowboy",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J7:M7"
+        },
+        {
+          "sheet": "Main",
+          "range": "X27:AC27"
+        }
+      ]
+    },
+    {
+      "id": "mage--thief",
+      "ingredients": [
+        "mage",
+        "thief"
+      ],
+      "result": "warlock",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P7:U7"
+        },
+        {
+          "sheet": "Main",
+          "range": "D15:G15"
+        }
+      ]
+    },
+    {
+      "id": "oracle--templar",
+      "ingredients": [
+        "oracle",
+        "templar"
+      ],
+      "result": "pope",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X7:AC7"
+        },
+        {
+          "sheet": "Main",
+          "range": "J13:M13"
+        }
+      ]
+    },
+    {
+      "id": "alien--mage",
+      "ingredients": [
+        "alien",
+        "mage"
+      ],
+      "result": "oracle",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D8:G8"
+        },
+        {
+          "sheet": "Main",
+          "range": "P18:U18"
+        }
+      ]
+    },
+    {
+      "id": "mechanic--viking",
+      "ingredients": [
+        "mechanic",
+        "viking"
+      ],
+      "result": "shipwright",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J8:M8"
+        },
+        {
+          "sheet": "Main",
+          "range": "X35:AC35"
+        }
+      ]
+    },
+    {
+      "id": "engineer--caveman",
+      "ingredients": [
+        "engineer",
+        "caveman"
+      ],
+      "result": "dwarf",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P8:U8"
+        },
+        {
+          "sheet": "Main",
+          "range": "D20:G20"
+        }
+      ]
+    },
+    {
+      "id": "sentinel--warlock",
+      "ingredients": [
+        "sentinel",
+        "warlock"
+      ],
+      "result": "battlemage",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X8:AC8"
+        },
+        {
+          "sheet": "Main",
+          "range": "J41:M41"
+        }
+      ]
+    },
+    {
+      "id": "alien--engineer",
+      "ingredients": [
+        "alien",
+        "engineer"
+      ],
+      "result": "scientist",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D9:G9"
+        },
+        {
+          "sheet": "Main",
+          "range": "P13:U13"
+        }
+      ]
+    },
+    {
+      "id": "mechanic--templar",
+      "ingredients": [
+        "mechanic",
+        "templar"
+      ],
+      "result": "mech",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J9:M9"
+        },
+        {
+          "sheet": "Main",
+          "range": "X38:AC38"
+        }
+      ]
+    },
+    {
+      "id": "mutant--dwarf",
+      "ingredients": [
+        "mutant",
+        "dwarf"
+      ],
+      "result": "goblin",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X9:AC9"
+        },
+        {
+          "sheet": "Main",
+          "range": "J33:M33"
+        }
+      ]
+    },
+    {
+      "id": "alien--raider",
+      "ingredients": [
+        "alien",
+        "raider"
+      ],
+      "result": "explorer",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D10:G10"
+        },
+        {
+          "sheet": "Main",
+          "range": "P19:U19"
+        }
+      ]
+    },
+    {
+      "id": "oracle--pirate",
+      "ingredients": [
+        "oracle",
+        "pirate"
+      ],
+      "result": "mapmaker",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J10:M10"
+        },
+        {
+          "sheet": "Main",
+          "range": "X30:AC30"
+        }
+      ]
+    },
+    {
+      "id": "mutant--shaman",
+      "ingredients": [
+        "mutant",
+        "shaman"
+      ],
+      "result": "necromancer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X10:AC10"
+        },
+        {
+          "sheet": "Main",
+          "range": "J31:M31"
+        }
+      ]
+    },
+    {
+      "id": "alien--thief",
+      "ingredients": [
+        "alien",
+        "thief"
+      ],
+      "result": "mutant",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D11:G11"
+        },
+        {
+          "sheet": "Main",
+          "range": "P24:U24"
+        }
+      ]
+    },
+    {
+      "id": "oracle--heretic",
+      "ingredients": [
+        "oracle",
+        "heretic"
+      ],
+      "result": "witch",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J11:M11"
+        },
+        {
+          "sheet": "Main",
+          "range": "X11:AC11"
+        }
+      ]
+    },
+    {
+      "id": "alien--caveman",
+      "ingredients": [
+        "alien",
+        "caveman"
+      ],
+      "result": "blob",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D12:G12"
+        },
+        {
+          "sheet": "Main",
+          "range": "P23:U23"
+        }
+      ]
+    },
+    {
+      "id": "oracle--viking",
+      "ingredients": [
+        "oracle",
+        "viking"
+      ],
+      "result": "lorekeeper",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J12:M12"
+        },
+        {
+          "sheet": "Main",
+          "range": "X32:AC32"
+        }
+      ]
+    },
+    {
+      "id": "enforcer--shaman",
+      "ingredients": [
+        "enforcer",
+        "shaman"
+      ],
+      "result": "witch-hunter",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X12:AC12"
+        },
+        {
+          "sheet": "Main",
+          "range": "J23:M23"
+        }
+      ]
+    },
+    {
+      "id": "cyborg--psychic",
+      "ingredients": [
+        "cyborg",
+        "psychic"
+      ],
+      "result": "ai-girlfriend",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X13:AC13"
+        },
+        {
+          "sheet": "Main",
+          "range": "J36:M36"
+        }
+      ]
+    },
+    {
+      "id": "scientist--pirate",
+      "ingredients": [
+        "scientist",
+        "pirate"
+      ],
+      "result": "brewer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J14:M14"
+        },
+        {
+          "sheet": "Main",
+          "range": "X20:AC20"
+        }
+      ]
+    },
+    {
+      "id": "engineer--raider",
+      "ingredients": [
+        "engineer",
+        "raider"
+      ],
+      "result": "businessman",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P14:U14"
+        },
+        {
+          "sheet": "Main",
+          "range": "D18:G18"
+        }
+      ]
+    },
+    {
+      "id": "hacker--leader",
+      "ingredients": [
+        "hacker",
+        "leader"
+      ],
+      "result": "architect",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X14:AC14"
+        },
+        {
+          "sheet": "Main",
+          "range": "J22:M22"
+        }
+      ]
+    },
+    {
+      "id": "scientist--heretic",
+      "ingredients": [
+        "scientist",
+        "heretic"
+      ],
+      "result": "alchemist",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J15:M15"
+        },
+        {
+          "sheet": "Main",
+          "range": "X24:AC24"
+        }
+      ]
+    },
+    {
+      "id": "engineer--acolyte",
+      "ingredients": [
+        "engineer",
+        "acolyte"
+      ],
+      "result": "leader",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P15:U15"
+        },
+        {
+          "sheet": "Main",
+          "range": "D21:G21"
+        }
+      ]
+    },
+    {
+      "id": "scientist--viking",
+      "ingredients": [
+        "scientist",
+        "viking"
+      ],
+      "result": "bioengineer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X15:AC15"
+        },
+        {
+          "sheet": "Main",
+          "range": "J16:M16"
+        }
+      ]
+    },
+    {
+      "id": "mage--caveman",
+      "ingredients": [
+        "mage",
+        "caveman"
+      ],
+      "result": "shaman",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D16:G16"
+        },
+        {
+          "sheet": "Main",
+          "range": "P20:U20"
+        }
+      ]
+    },
+    {
+      "id": "raider--caveman",
+      "ingredients": [
+        "raider",
+        "caveman"
+      ],
+      "result": "pirate",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P16:U16"
+        },
+        {
+          "sheet": "Main",
+          "range": "D22:G22"
+        }
+      ]
+    },
+    {
+      "id": "sentinel--psychic",
+      "ingredients": [
+        "sentinel",
+        "psychic"
+      ],
+      "result": "mindguard",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X16:AC16"
+        },
+        {
+          "sheet": "Main",
+          "range": "J40:M40"
+        }
+      ]
+    },
+    {
+      "id": "scientist--templar",
+      "ingredients": [
+        "scientist",
+        "templar"
+      ],
+      "result": "specialist",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J17:M17"
+        },
+        {
+          "sheet": "Main",
+          "range": "X18:AC18"
+        }
+      ]
+    },
+    {
+      "id": "raider--acolyte",
+      "ingredients": [
+        "raider",
+        "acolyte"
+      ],
+      "result": "heretic",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P17:U17"
+        },
+        {
+          "sheet": "Main",
+          "range": "D23:G23"
+        }
+      ]
+    },
+    {
+      "id": "cyborg--scavenger",
+      "ingredients": [
+        "cyborg",
+        "scavenger"
+      ],
+      "result": "posthuman",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X17:AC17"
+        },
+        {
+          "sheet": "Main",
+          "range": "J39:M39"
+        }
+      ]
+    },
+    {
+      "id": "engineer--thief",
+      "ingredients": [
+        "engineer",
+        "thief"
+      ],
+      "result": "scavenger",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "D19:G19"
+        },
+        {
+          "sheet": "Main",
+          "range": "P25:U25"
+        }
+      ]
+    },
+    {
+      "id": "hacker--shaman",
+      "ingredients": [
+        "hacker",
+        "shaman"
+      ],
+      "result": "dreamweaver",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J19:M19"
+        },
+        {
+          "sheet": "Main",
+          "range": "X36:AC36"
+        }
+      ]
+    },
+    {
+      "id": "sentinel--businessman",
+      "ingredients": [
+        "sentinel",
+        "businessman"
+      ],
+      "result": "agent",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X19:AC19"
+        },
+        {
+          "sheet": "Main",
+          "range": "J42:M42"
+        }
+      ]
+    },
+    {
+      "id": "hacker--cleric",
+      "ingredients": [
+        "hacker",
+        "cleric"
+      ],
+      "result": "machine-priest",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J20:M20"
+        },
+        {
+          "sheet": "Main",
+          "range": "X37:AC37"
+        }
+      ]
+    },
+    {
+      "id": "hacker--dwarf",
+      "ingredients": [
+        "hacker",
+        "dwarf"
+      ],
+      "result": "data-miner",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J21:M21"
+        },
+        {
+          "sheet": "Main",
+          "range": "X28:AC28"
+        }
+      ]
+    },
+    {
+      "id": "thief--caveman",
+      "ingredients": [
+        "thief",
+        "caveman"
+      ],
+      "result": "viking",
+      "resultTier": 2,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "P21:U21"
+        },
+        {
+          "sheet": "Main",
+          "range": "D24:G24"
+        }
+      ]
+    },
+    {
+      "id": "cyborg--businessman",
+      "ingredients": [
+        "cyborg",
+        "businessman"
+      ],
+      "result": "ceo",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X21:AC21"
+        },
+        {
+          "sheet": "Main",
+          "range": "J38:M38"
+        }
+      ]
+    },
+    {
+      "id": "prophet--businessman",
+      "ingredients": [
+        "prophet",
+        "businessman"
+      ],
+      "result": "crypto-dude",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X22:AC22"
+        },
+        {
+          "sheet": "Main",
+          "range": "J50:M50"
+        }
+      ]
+    },
+    {
+      "id": "enforcer--leader",
+      "ingredients": [
+        "enforcer",
+        "leader"
+      ],
+      "result": "family-man",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X23:AC23"
+        },
+        {
+          "sheet": "Main",
+          "range": "J26:M26"
+        }
+      ]
+    },
+    {
+      "id": "enforcer--dwarf",
+      "ingredients": [
+        "enforcer",
+        "dwarf"
+      ],
+      "result": "sheriff",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J25:M25"
+        },
+        {
+          "sheet": "Main",
+          "range": "X48:AC48"
+        }
+      ]
+    },
+    {
+      "id": "explorer--shaman",
+      "ingredients": [
+        "explorer",
+        "shaman"
+      ],
+      "result": "pathfinder",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J27:M27"
+        },
+        {
+          "sheet": "Main",
+          "range": "X33:AC33"
+        }
+      ]
+    },
+    {
+      "id": "explorer--dwarf",
+      "ingredients": [
+        "explorer",
+        "dwarf"
+      ],
+      "result": "miner",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J29:M29"
+        },
+        {
+          "sheet": "Main",
+          "range": "X45:AC45"
+        }
+      ]
+    },
+    {
+      "id": "blob--businessman",
+      "ingredients": [
+        "blob",
+        "businessman"
+      ],
+      "result": "drug-dealer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X29:AC29"
+        },
+        {
+          "sheet": "Main",
+          "range": "J46:M46"
+        }
+      ]
+    },
+    {
+      "id": "explorer--leader",
+      "ingredients": [
+        "explorer",
+        "leader"
+      ],
+      "result": "conqueror",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J30:M30"
+        },
+        {
+          "sheet": "Main",
+          "range": "X31:AC31"
+        }
+      ]
+    },
+    {
+      "id": "mutant--cleric",
+      "ingredients": [
+        "mutant",
+        "cleric"
+      ],
+      "result": "abomination",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J32:M32"
+        },
+        {
+          "sheet": "Main",
+          "range": "X43:AC43"
+        }
+      ]
+    },
+    {
+      "id": "mutant--leader",
+      "ingredients": [
+        "mutant",
+        "leader"
+      ],
+      "result": "warlord",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J34:M34"
+        },
+        {
+          "sheet": "Main",
+          "range": "X49:AC49"
+        }
+      ]
+    },
+    {
+      "id": "cyborg--warlock",
+      "ingredients": [
+        "cyborg",
+        "warlock"
+      ],
+      "result": "technomancer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J37:M37"
+        },
+        {
+          "sheet": "Main",
+          "range": "X42:AC42"
+        }
+      ]
+    },
+    {
+      "id": "prophet--psychic",
+      "ingredients": [
+        "prophet",
+        "psychic"
+      ],
+      "result": "seer",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X39:AC39"
+        },
+        {
+          "sheet": "Main",
+          "range": "J48:M48"
+        }
+      ]
+    },
+    {
+      "id": "blob--psychic",
+      "ingredients": [
+        "blob",
+        "psychic"
+      ],
+      "result": "symbiote",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X41:AC41"
+        },
+        {
+          "sheet": "Main",
+          "range": "J44:M44"
+        }
+      ]
+    },
+    {
+      "id": "sentinel--scavenger",
+      "ingredients": [
+        "sentinel",
+        "scavenger"
+      ],
+      "result": "prepper",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "J43:M43"
+        },
+        {
+          "sheet": "Main",
+          "range": "X46:AC46"
+        }
+      ]
+    },
+    {
+      "id": "blob--scavenger",
+      "ingredients": [
+        "blob",
+        "scavenger"
+      ],
+      "result": "cannibal",
+      "resultTier": 3,
+      "status": "draft",
+      "sources": [
+        {
+          "sheet": "Main",
+          "range": "X44:AC44"
+        },
+        {
+          "sheet": "Main",
+          "range": "J47:M47"
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "ingredientOrderMatters": null,
+    "cost": null
+  }
+}

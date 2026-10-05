@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "enemies": [
+    {
+      "id": "vampire",
+      "name": "Vampire",
+      "theme": "Fantasy",
+      "keywordNotes": "Lifesteal",
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K5:N5"
+      }
+    },
+    {
+      "id": "orc",
+      "name": "Orc",
+      "theme": "Fantasy",
+      "keywordNotes": "Aggressive",
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K6:N6"
+      }
+    },
+    {
+      "id": "zombie",
+      "name": "Zombie",
+      "theme": "Fantasy",
+      "keywordNotes": "Infect (spawn?)",
+      "designNotes": "When killing a unit, transforms it into a zombie. ",
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K7:N7"
+      }
+    },
+    {
+      "id": "jammer",
+      "name": "Jammer",
+      "theme": "Futuristic",
+      "keywordNotes": "Silence",
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K9:N9"
+      }
+    },
+    {
+      "id": "mafia",
+      "name": "Mafia",
+      "theme": "Modern",
+      "keywordNotes": null,
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K12:N12"
+      }
+    },
+    {
+      "id": "street-thug",
+      "name": "Street Thug",
+      "theme": "Modern",
+      "keywordNotes": null,
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K13:N13"
+      }
+    },
+    {
+      "id": "police",
+      "name": "Police",
+      "theme": "Modern",
+      "keywordNotes": null,
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K14:N14"
+      }
+    },
+    {
+      "id": "bandit",
+      "name": "Bandit",
+      "theme": "Outlaw",
+      "keywordNotes": null,
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K16:N16"
+      }
+    },
+    {
+      "id": "berserker",
+      "name": "Berserker",
+      "theme": "Primal",
+      "keywordNotes": "Rage",
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K18:N18"
+      }
+    },
+    {
+      "id": "hunter",
+      "name": "Hunter",
+      "theme": "Primal",
+      "keywordNotes": "Ranged",
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K19:N19"
+      }
+    },
+    {
+      "id": "beastmaster",
+      "name": "Beastmaster",
+      "theme": "Primal",
+      "keywordNotes": "Spawn",
+      "designNotes": "Spawns beasts",
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K20:N20"
+      }
+    },
+    {
+      "id": "stalker",
+      "name": "Stalker",
+      "theme": "Sci fi",
+      "keywordNotes": "Blink",
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K22:N22"
+      }
+    },
+    {
+      "id": "toxic-spitter",
+      "name": "Toxic Spitter",
+      "theme": "Wasteland",
+      "keywordNotes": null,
+      "designNotes": null,
+      "stats": {
+        "health": null,
+        "attack": null,
+        "movement": 1
+      },
+      "ability": null,
+      "status": "draft",
+      "source": {
+        "sheet": "Enemy",
+        "range": "K24:N24"
+      }
+    }
+  ]
+}

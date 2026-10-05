@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "artifacts": [
+    {
+      "id": "cross",
+      "name": "Cross",
+      "description": null,
+      "statNotes": "1+ faith to all units",
+      "availabilityNotes": null,
+      "rarity": null,
+      "stackable": true,
+      "stackableNotes": "YES",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A3:F3"
+      }
+    },
+    {
+      "id": "sniper-scope",
+      "name": "Sniper scope",
+      "description": null,
+      "statNotes": "1+ range to ranged units",
+      "availabilityNotes": null,
+      "rarity": null,
+      "stackable": false,
+      "stackableNotes": "NO",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A4:F4"
+      }
+    },
+    {
+      "id": "murder-hole",
+      "name": "Murder hole",
+      "description": "Enemies in melee range of base takes damage",
+      "statNotes": null,
+      "availabilityNotes": null,
+      "rarity": null,
+      "stackable": false,
+      "stackableNotes": "NO",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A5:F5"
+      }
+    },
+    {
+      "id": "unnamed-artifact-6",
+      "name": "???",
+      "description": "boss/Legendary relics can now appear in shop",
+      "statNotes": null,
+      "availabilityNotes": "boss reward ??",
+      "rarity": null,
+      "stackable": false,
+      "stackableNotes": "NO",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A6:F6"
+      }
+    },
+    {
+      "id": "wildcard",
+      "name": "Wildcard?",
+      "description": "cards in shop can come whith extra keywords",
+      "statNotes": null,
+      "availabilityNotes": "boss reward ??",
+      "rarity": null,
+      "stackable": false,
+      "stackableNotes": "NO",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A7:F7"
+      }
+    },
+    {
+      "id": "ogaboga",
+      "name": "Ogaboga",
+      "description": "all primal cards have the rush keyword during combat",
+      "statNotes": null,
+      "availabilityNotes": "IDK",
+      "rarity": null,
+      "stackable": false,
+      "stackableNotes": "NO",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A8:F8"
+      }
+    },
+    {
+      "id": "lonewolf",
+      "name": "Lonewolf",
+      "description": "cards that dont have any ally cards in same row get stat increase",
+      "statNotes": null,
+      "availabilityNotes": "shop",
+      "rarity": null,
+      "stackable": null,
+      "stackableNotes": "maybe",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A9:F9"
+      }
+    },
+    {
+      "id": "bone-amulet",
+      "name": "Bone amulet",
+      "description": "summons get increse in stats",
+      "statNotes": null,
+      "availabilityNotes": "IDK",
+      "rarity": null,
+      "stackable": true,
+      "stackableNotes": "YES",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A10:F10"
+      }
+    },
+    {
+      "id": "cursed-thingi",
+      "name": "cursed thingi",
+      "description": "when \"allied\" units attack they inflict - faith",
+      "statNotes": "inflict -1 faith on hit",
+      "availabilityNotes": "IDK",
+      "rarity": null,
+      "stackable": null,
+      "stackableNotes": "maybe",
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A11:F11"
+      }
+    },
+    {
+      "id": "another-curse",
+      "name": "another curse",
+      "description": "cursed units ar buffed instead of curesed or some idk",
+      "statNotes": null,
+      "availabilityNotes": null,
+      "rarity": null,
+      "stackable": null,
+      "stackableNotes": null,
+      "status": "draft",
+      "source": {
+        "sheet": "artifacts",
+        "range": "A12:F12"
+      }
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "gameType": "roguelike-cardbattler",
+  "board": {
+    "rows": 6,
+    "columns": 6,
+    "coordinates": "Zero-based; row 0 is the top, column 0 is the left.",
+    "player": {
+      "baseRow": 5,
+      "deploymentRows": [
+        3,
+        4,
+        5
+      ],
+      "movementRowDelta": -1
+    },
+    "enemy": {
+      "baseRow": 0,
+      "deploymentRows": [
+        0,
+        1,
+        2
+      ],
+      "movementRowDelta": 1
+    },
+    "friendlyUnitsMayOccupyOwnBaseRow": true,
+    "mayEnterOpposingBaseRow": false,
+    "defenderBlocksBaseDamageInItsColumn": true
+  },
+  "turns": {
+    "mode": "alternating",
+    "playerControls": [
+      "play-from-hand",
+      "merge"
+    ],
+    "activationOrder": {
+      "player": "ascending row, then ascending column",
+      "enemy": "descending row, then descending column",
+      "snapshotAtActionPhaseStart": true,
+      "maximumActivationsPerExistingUnitPerTurn": 1
+    },
+    "defaultAction": "Attack an enemy directly ahead, or an exposed opposing base row directly ahead; otherwise move forward one tile if empty. Move or attack, not both.",
+    "rush": "May move and then attack on the same turn."
+  },
+  "merging": {
+    "separateSlotRow": true,
+    "slotCount": null
+  },
+  "undecided": {
+    "openingHandSize": null,
+    "cardsDrawnPerTurn": null,
+    "cardPlayLimit": null,
+    "resourceSystem": null,
+    "baseHealth": null,
+    "startingSide": null,
+    "newlyPlayedUnitsActImmediately": null,
+    "summonsActOnSpawnTurn": null,
+    "mergeTimingAndCosts": null,
+    "runProgression": null
+  },
+  "designGuidelines": {
+    "mageAttacks": {
+      "description": "Mages and other mage types typically have some kind of AoE attack.",
+      "scope": "general direction; not a mandatory assignment to every mage",
+      "source": {
+        "type": "user-design",
+        "date": "2026-10-05"
+      }
+    }
+  }
+}

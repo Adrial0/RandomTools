@@ -1,0 +1,173 @@
+{
+  "schemaVersion": 1,
+  "characterIdeas": [
+    {
+      "referenceName": "Gandalf",
+      "theme": "Fantasy",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": "gandolf",
+      "combinationNotes": "battle mage/mage?????? + pathfinder?????",
+      "source": {
+        "sheet": "Main",
+        "range": "AF2:AK2"
+      }
+    },
+    {
+      "referenceName": "Admiral Ackbar",
+      "theme": "Sci fi",
+      "keywordNotes": null,
+      "designNotes": "trap master",
+      "proposedName": "General Ackbar",
+      "combinationNotes": null,
+      "source": {
+        "sheet": "Main",
+        "range": "AF4:AK4"
+      }
+    },
+    {
+      "referenceName": "Master Chief",
+      "theme": "Sci fi",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": "Master chef(kokk)",
+      "combinationNotes": null,
+      "source": {
+        "sheet": "Main",
+        "range": "AF5:AK5"
+      }
+    },
+    {
+      "referenceName": "Gaben",
+      "theme": "Modern",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": "Gaben",
+      "combinationNotes": "CEO + pope",
+      "source": {
+        "sheet": "Main",
+        "range": "AF6:AK6"
+      }
+    },
+    {
+      "referenceName": "Batman",
+      "theme": "Modern",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": "Batboy",
+      "combinationNotes": "buisinessman/CEO + familyman?/sentinel / Prepper",
+      "source": {
+        "sheet": "Main",
+        "range": "AF7:AK7"
+      }
+    },
+    {
+      "referenceName": "Terminator",
+      "theme": "Futuristic",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": "X-terminator",
+      "combinationNotes": "inqusitor + robot",
+      "source": {
+        "sheet": "Main",
+        "range": "AF8:AK8"
+      }
+    },
+    {
+      "referenceName": "Silverhand",
+      "theme": "Futuristic",
+      "keywordNotes": null,
+      "designNotes": "rebel",
+      "proposedName": "Silverleg",
+      "combinationNotes": "missionary + cyborg? \"terrorist\"",
+      "source": {
+        "sheet": "Main",
+        "range": "AF9:AK9"
+      }
+    },
+    {
+      "referenceName": "Jack Sparrow",
+      "theme": "Outlaw",
+      "keywordNotes": null,
+      "designNotes": "special movement",
+      "proposedName": "Jack seagull",
+      "combinationNotes": "brewer?? + pirate",
+      "source": {
+        "sheet": "Main",
+        "range": "AF10:AK10"
+      }
+    },
+    {
+      "referenceName": "Robin hood",
+      "theme": "Outlaw",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": "Hood Robin",
+      "combinationNotes": "goblin + sentinel",
+      "source": {
+        "sheet": "Main",
+        "range": "AF11:AK11"
+      }
+    },
+    {
+      "referenceName": "Kratos?",
+      "theme": "Faith",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": null,
+      "combinationNotes": null,
+      "source": {
+        "sheet": "Main",
+        "range": "AF12:AK12"
+      }
+    },
+    {
+      "referenceName": "Thor",
+      "theme": "Faith",
+      "keywordNotes": null,
+      "designNotes": null,
+      "proposedName": null,
+      "combinationNotes": null,
+      "source": {
+        "sheet": "Main",
+        "range": "AF13:AK13"
+      }
+    },
+    {
+      "referenceName": "Tarzan",
+      "theme": "Primal",
+      "keywordNotes": null,
+      "designNotes": "banana",
+      "proposedName": "Apeman",
+      "combinationNotes": "caveman + hermit?",
+      "source": {
+        "sheet": "Main",
+        "range": "AF14:AK14"
+      }
+    },
+    {
+      "referenceName": "Mad Max",
+      "theme": "Wasteland",
+      "keywordNotes": null,
+      "designNotes": "eller max mad (helt rød)",
+      "proposedName": "Mad Maximilian",
+      "combinationNotes": "scavenger + mechanic",
+      "source": {
+        "sheet": "Main",
+        "range": "AF16:AK16"
+      }
+    },
+    {
+      "referenceName": "Indiana jones?????",
+      "theme": "Wasteland",
+      "keywordNotes": null,
+      "designNotes": "finds artifacts ?? when played discover/ chose one artifact for this battle",
+      "proposedName": "Indian Jones",
+      "combinationNotes": null,
+      "source": {
+        "sheet": "Main",
+        "range": "AF17:AK17"
+      }
+    }
+  ]
+}
