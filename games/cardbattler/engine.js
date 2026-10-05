@@ -8,9 +8,11 @@
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const symbols = {robot:'▣',alien:'♧',mage:'✦',engineer:'⚒',thief:'♠',raider:'⚔',caveman:'◆',acolyte:'✝',pyro:'♨',mech:'▣',warlord:'♛',necromancer:'☠',cleric:'✝',templar:'♜',inquisitor:'✠',mindguard:'◉',witch:'✧',battlemage:'✦',viking:'⚔',shaman:'❋',sentinel:'▥',mechanic:'⚙',artificer:'⚒',enforcer:'♜',cyborg:'▣',psychic:'◉',warlock:'✧',mutant:'♧',leader:'♛',heretic:'☠',pirate:'⚑',scientist:'⚗',blob:'●'};
   const implementedKeywords = new Set(['armor','ranged','stationary','rush','retaliate','weaken','silence','lifesteal','ignite','venom','fury','flank','exploit','freeze','rend','sunder','disarm','rage','blink','overkill','pull','mirror','fear']);
-  const keywordDescriptions={armor:'Reduces physical damage by its armor amount, to a minimum of 1.',ranged:'Attacks the first enemy in its column within range; allies block shots.',stationary:'Cannot move forward.',rush:'Can move and then attack in the same activation.',retaliate:'Returns an attack after surviving an enemy attack.',weaken:'Reduces target damage by 30% for its next activation.',silence:'Disables target abilities and keywords until the source dies.',lifesteal:'Heals for damage dealt, up to maximum health.',ignite:'Applies Burn: 2 damage on each of the next 2 activations.',venom:'Applies Poison: 20% maximum health damage on each of the next 2 activations.',fury:'A kill grants +1 attack, +1 maximum health, and +1 health.',flank:'Deals 30% more damage when a friendly unit is adjacent to the target.',exploit:'Deals 30% more damage to afflicted targets.',freeze:'Skips the target’s next activation.',rend:'Applies Bleed: 20% of attack damage on the next 2 activations.',sunder:'Removes 1 armor on hit.',disarm:'Prevents the target’s next attack.',rage:'Gains up to 50% damage as health falls.',blink:'Moves one tile forward after a kill if empty, without entering the opposing base.',overkill:'Excess damage continues through enemies behind the target in its column.',pull:'Pulls a target one tile closer before attacking if the destination is empty.',mirror:'Copies a keyword it lacks from an adjacent ally before acting.',fear:'Target retreats one tile instead of acting on its next activation if space is free.',spawn:'Summons units according to the card’s ability.',bomb:'Mech explodes for 5 damage into all 8 neighboring tiles, including friendlies.',mindshield:'Immunity to mental attacks; Mindguard shares it with its 8 neighboring allies.'};
+  const keywordDescriptions={armor:'Reduces physical damage by its armor amount, to a minimum of 1.',ranged:'Attacks the first enemy in its column within range; shots pass through friendly units.',stationary:'Cannot move forward.',rush:'Can move and then attack in the same activation.',retaliate:'Returns an attack after surviving an enemy attack.',weaken:'Reduces target damage by 30% for its next activation.',silence:'Disables target abilities and keywords until the source dies.',lifesteal:'Heals for damage dealt, up to maximum health.',ignite:'Applies Burn: 2 damage on each of the next 2 activations.',venom:'Applies Poison: 20% maximum health damage on each of the next 2 activations.',fury:'A kill grants +1 attack, +1 maximum health, and +1 health.',flank:'Deals 30% more damage when a friendly unit is adjacent to the target.',exploit:'Deals 30% more damage to afflicted targets.',freeze:'Skips the target’s next activation.',rend:'Applies Bleed: 20% of attack damage on the next 2 activations.',sunder:'Removes 1 armor on hit.',disarm:'Prevents the target’s next attack.',rage:'Gains up to 50% damage as health falls.',blink:'Moves one tile forward after a kill if empty, without entering the opposing base.',overkill:'Excess damage continues through enemies behind the target in its column.',pull:'Pulls a target one tile closer before attacking if the destination is empty.',mirror:'Copies a keyword it lacks from an adjacent ally before acting.',fear:'Target retreats one tile instead of acting on its next activation if space is free.',spawn:'Summons units according to the card’s ability.',bomb:'Mech explodes for 5 damage into all 8 neighboring tiles, including friendlies.',mindshield:'Immunity to mental attacks; Mindguard shares it with its 8 neighboring allies.'};
   const abilityTexts = {
-    mage:'Arcane splash hits its target and the tiles on either side. Each living Mage supplies 1 mana; arcane attacks spend 1 mana to cast their splash, otherwise they attack a single target.',
+    robot:'Armor (1): reduces incoming physical damage by 1, to a minimum of 1. No additional unique ability.',
+    alien:'Venom: attacks poison the target for 20% of maximum health on each of its next 2 activations.',
+    mage:'Melee splash: attacks the enemy directly ahead and enemies immediately to the left and right of that target. Range 1. Uses no mana.',
     acolyte:'Support: heals the most injured adjacent ally for 2 before acting.',
     cleric:'Spends up to 4 of its own Faith to heal the most injured adjacent ally before acting. Starts with 3 Faith.',
     mechanic:'Repair: grants an adjacent ally 1 armor before acting (up to +2).',
@@ -118,6 +120,7 @@
       if(id==='demon')Object.assign(stats,{health:12,attack:5});
       if(['space-monk','ai-girlfriend'].includes(id))stats.range=3;
       if(id==='alchemist')stats.range=3;
+      if(id==='mage')stats.range=1;
       const handledByAbility={spawn:['mech','necromancer','family-man','buddhist','drug-dealer'],bomb:['mech'],mindshield:['mindguard']};
       const pendingKeywords=keywords.filter(keyword=>!implementedKeywords.has(keyword)&&!(handledByAbility[keyword]||[]).includes(id));
       const implementedDescription=abilityTexts[card.baseId||id];
@@ -126,7 +129,7 @@
       return {...stats,price:tier===1?10:tier===2?30:50,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:60,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,tierOneRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:60,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -247,7 +250,6 @@
       const {row,col,team,cardId}=target;this.state.units=this.state.units.filter(u=>u!==target);
       const owner=target.originalTeam||team;
       if(owner==='player'&&this.isCard(cardId)){const owned=this.state.deck.indexOf(cardId);if(owned>=0)this.state.deck.splice(owned,1);}
-      if(cardId==='mage'){const manaKey=team==='player'?'mana':'enemyMana';this.state[manaKey]=Math.max(0,(this.state[manaKey]||0)-1);}
       for(const unit of this.state.units){
         if(unit.silenceSource===target.uid){unit.silence=0;delete unit.silenceSource;}
         if(unit.hostId===target.uid){
@@ -320,7 +322,8 @@
       for(let step=1;step<=range;step++) {
         const row=unit.row+direction*step;if(row<0||row>5)break;
         const target=this.unitAt(row,unit.col);
-        if(target) return target.team===unit.team||target.stealth?null:target;
+        if(target&&target.team===unit.team)continue;
+        if(target)return target.stealth?null:target;
       }
       return null;
     }
@@ -329,7 +332,7 @@
       const mental=!unit.silence&&['mage','artificer','shaman','warlock','psychic'].includes(unit.cardId);
       const manaKey=unit.team==='player'?'mana':'enemyMana';
       let aoe=!unit.silence&&['mage','artificer','shaman','warlock','battlemage','pyro'].includes(unit.cardId);
-      if(aoe&&mental){if((this.state[manaKey]||0)>0)this.state[manaKey]--;else aoe=false;}
+      if(aoe&&mental&&unit.cardId!=='mage'){if((this.state[manaKey]||0)>0)this.state[manaKey]--;else aoe=false;}
       const targets=aoe?[target,...[-1,1].map(offset=>this.unitAt(target.row,target.col+offset)).filter(other=>other&&other.team!==unit.team)]:[target];
       this.log(this.definition(unit.cardId).name+' attacks '+this.definition(target.cardId).name+'.',true);
       for(const other of targets) {
@@ -423,7 +426,7 @@
       if(unit.weaken)unit.weaken--;if(unit.silence&&!unit.silenceSource)unit.silence--;
     }
     activate(team) {
-      const manaKey=team==='player'?'mana':'enemyMana';this.state[manaKey]=3+this.state.units.filter(u=>u.team===team&&u.cardId==='mage'&&!u.silence).length;
+      const manaKey=team==='player'?'mana':'enemyMana';this.state[manaKey]=3;
       const snapshot=this.state.units.filter(u=>u.team===team).sort((a,b)=>team==='player'?a.row-b.row||a.col-b.col:b.row-a.row||b.col-a.col);
       for(const unit of snapshot){if(this.state.playerHP<=0||this.state.enemyHP<=0)break;if(unit.team!==team)continue;this.action(unit);if(this.alive(unit)&&unit.charmed){unit.team=unit.originalTeam;delete unit.originalTeam;unit.charmed=false;unit.weaken=1;this.log('Charm ends; '+this.definition(unit.cardId).name+' is weakened.',true);}}
     }
@@ -485,9 +488,11 @@
         const previous=this.state.enemyMaxHP;this.state.enemyMaxHP=48+this.state.encounter*12;this.state.enemyHP=Math.round(this.state.enemyHP*this.state.enemyMaxHP/previous);this.state.enemyDifficultyRevision=2;
       }
       if((this.state.mergeInteractionRevision||1)<2){this.state.hand.push(...this.state.merge.filter(Boolean));this.state.merge=Array(6).fill(null);this.state.mergeInteractionRevision=2;}
+      if((this.state.tierOneRevision||1)<2){for(const unit of this.state.units){if(unit.cardId==='robot'){unit.armor=Math.max(1,unit.armor);if(!unit.keywords.includes('armor'))unit.keywords.push('armor');}if(unit.cardId==='alien'&&!unit.keywords.includes('venom'))unit.keywords.push('venom');if(unit.cardId==='mage'){unit.range=1;unit.keywords=unit.keywords.filter(k=>k!=='ranged');}}this.state.tierOneRevision=2;}
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;
     }
   }
   return {Game,symbols};
 });
+

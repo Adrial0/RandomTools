@@ -146,5 +146,44 @@
     "deploymentRequiresHold": false,
     "invalidDropPreservesCard": true,
     "mouseAndTouch": true
+  },
+  "confirmedTierOneRoles": {
+    "robot": {
+      "keywords": {
+        "armor": 1
+      }
+    },
+    "alien": {
+      "keywords": [
+        "venom"
+      ]
+    },
+    "mage": {
+      "ability": "melee-splash",
+      "range": 1,
+      "ranged": false,
+      "usesMana": false,
+      "generatesMana": false
+    },
+    "engineer": {
+      "ability": "undecided",
+      "scope": "broad"
+    },
+    "thief": {
+      "ability": "stealth-until-first-attack"
+    },
+    "raider": {
+      "keywords": [
+        "rush"
+      ]
+    },
+    "caveman": {
+      "ability": null,
+      "keywords": [],
+      "role": "high-stats"
+    },
+    "acolyte": {
+      "ability": "adjacent-healing"
+    }
   }
 }

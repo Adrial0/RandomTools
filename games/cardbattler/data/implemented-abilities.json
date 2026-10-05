@@ -28,9 +28,15 @@
     {
       "id": "alien",
       "name": "Alien",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
-      "abilityPending": true,
-      "keywords": [],
+      "description": "Venom: attacks poison the target for 20% of maximum health on each of its next 2 activations.",
+      "abilityPending": false,
+      "keywords": [
+        {
+          "id": "venom",
+          "description": "Applies Poison: 20% maximum health damage on each of the next 2 activations.",
+          "pending": false
+        }
+      ],
       "prototypeStats": {
         "health": 8,
         "attack": 3,
@@ -124,14 +130,14 @@
     {
       "id": "mage",
       "name": "Mage",
-      "description": "Arcane splash hits its target and the tiles on either side. Each living Mage supplies 1 mana; arcane attacks spend 1 mana to cast their splash, otherwise they attack a single target.",
+      "description": "Melee splash: attacks the enemy directly ahead and enemies immediately to the left and right of that target. Range 1. Uses no mana.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
         "health": 6,
         "attack": 3,
         "armor": 0,
-        "range": 2,
+        "range": 1,
         "goldPrice": 10
       }
     },
@@ -330,7 +336,7 @@
       "keywords": [
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
           "pending": false
         },
         {
@@ -360,7 +366,7 @@
         },
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
           "pending": false
         }
       ],
@@ -536,7 +542,7 @@
         },
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
           "pending": false
         }
       ],
@@ -747,13 +753,19 @@
     {
       "id": "robot",
       "name": "Robot",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "Armor (1): reduces incoming physical damage by 1, to a minimum of 1. No additional unique ability.",
       "abilityPending": false,
-      "keywords": [],
+      "keywords": [
+        {
+          "id": "armor",
+          "description": "Reduces physical damage by its armor amount, to a minimum of 1.",
+          "pending": false
+        }
+      ],
       "prototypeStats": {
         "health": 8,
         "attack": 3,
-        "armor": 0,
+        "armor": 1,
         "range": 1,
         "goldPrice": 10
       }
@@ -1005,7 +1017,7 @@
         },
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
           "pending": false
         }
       ],
@@ -1113,7 +1125,7 @@
       "keywords": [
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; allies block shots.",
+          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
           "pending": false
         },
         {

@@ -148,8 +148,14 @@
         "cost": null
       },
       "ability": null,
-      "keywords": [],
-      "designNotes": "does alien stuff",
+      "keywords": [
+        {
+          "id": "venom",
+          "status": "specified",
+          "sourceText": "Venom"
+        }
+      ],
+      "designNotes": "Venom, no additional ability.",
       "status": "draft",
       "source": {
         "sheet": "keywords",
@@ -164,7 +170,21 @@
         "sheet": "Main",
         "cell": "A3",
         "fontColor": "#CC0000"
-      }
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": "does alien stuff"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
+      },
+      "abilityStatus": "intentionally-none"
     },
     {
       "id": "blob",
@@ -506,9 +526,17 @@
         "movement": 1,
         "cost": null
       },
-      "ability": null,
+      "ability": {
+        "description": "Melee splash attack: hits the enemy directly ahead and enemies immediately to either side of the target. No mana cost or mana generation.",
+        "mechanics": {
+          "range": 1,
+          "splash": "target and left/right neighbors",
+          "usesMana": false,
+          "generatesMana": false
+        }
+      },
       "keywords": [],
-      "designNotes": "increse mana by 1 as long as alive",
+      "designNotes": "Melee splash attack: hits the enemy directly ahead and enemies immediately to either side of the target. No mana cost or mana generation.",
       "status": "draft",
       "source": {
         "sheet": "keywords",
@@ -523,7 +551,22 @@
         "sheet": "Main",
         "cell": "A4",
         "fontColor": "#073763"
-      }
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": "increse mana by 1 as long as alive"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
+      },
+      "abilityStatus": "specified",
+      "openQuestions": []
     },
     {
       "id": "ceo",
@@ -1772,6 +1815,19 @@
         "sheet": "Main",
         "cell": "A9",
         "fontColor": "#BF9000"
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": "support ? faith buffer? healer? other type of support?"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
       }
     },
     {
@@ -2315,6 +2371,19 @@
         "sheet": "Main",
         "cell": "A6",
         "fontColor": "#38761D"
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": "stealth: Can't be targeted before he attacks"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
       }
     },
     {
@@ -2909,8 +2978,15 @@
         "cost": null
       },
       "ability": null,
-      "keywords": [],
-      "designNotes": null,
+      "keywords": [
+        {
+          "id": "armor",
+          "value": 1,
+          "status": "specified",
+          "sourceText": "Armor (1)"
+        }
+      ],
+      "designNotes": "Armor (1), no additional ability.",
       "status": "draft",
       "source": {
         "sheet": "keywords",
@@ -2925,7 +3001,21 @@
         "sheet": "Main",
         "cell": "A2",
         "fontColor": "#CC0000"
-      }
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": null
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
+      },
+      "abilityStatus": "intentionally-none"
     },
     {
       "id": "technomancer",
@@ -3826,6 +3916,30 @@
         "sheet": "Main",
         "cell": "A7",
         "fontColor": "#38761D"
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [
+            {
+              "id": "rush",
+              "value": null,
+              "status": "draft",
+              "sourceText": "Rush",
+              "source": {
+                "sheet": "keywords",
+                "range": "T55"
+              }
+            }
+          ],
+          "designNotes": "runs(to simmilar to viking?)"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
       }
     },
     {
@@ -5047,7 +5161,21 @@
         "sheet": "Main",
         "cell": "A8",
         "fontColor": "#BF9000"
-      }
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": "pure stats"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
+      },
+      "abilityStatus": "intentionally-none"
     },
     {
       "id": "conqueror",
@@ -5259,7 +5387,24 @@
         "sheet": "Main",
         "cell": "A5",
         "fontColor": "#073763"
-      }
+      },
+      "designHistory": [
+        {
+          "source": "prior design",
+          "ability": null,
+          "keywords": [],
+          "designNotes": "big brain"
+        }
+      ],
+      "lastUpdatedFrom": {
+        "type": "user-design",
+        "date": "2026-10-05",
+        "description": "Confirmed broad tier-one roles; Engineer remains undecided."
+      },
+      "abilityStatus": "undecided",
+      "openQuestions": [
+        "Choose a broad tier-one role; no repair ability has been approved."
+      ]
     },
     {
       "id": "explorer",

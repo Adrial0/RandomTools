@@ -5,6 +5,15 @@ const path = require('node:path');
 const {Game} = require('./engine.js');
 const data = {cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
 function fresh(){const g=new Game(data,{random:()=>.3});g.newRun();g.state.deck=['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'];g.state.units=[];g.state.log=[];return g;}
+test('both sides shoot through allies but stop at the nearest enemy within range',()=>{
+ for(const team of ['player','enemy']){const g=fresh(),other=team==='player'?'enemy':'player',row=team==='player'?5:0,direction=team==='player'?-1:1;const shooter=g.spawn('prepper',team,row,2),ally=g.spawn('robot',team,row+direction,2),near=g.spawn('posthuman',other,row+direction*2,2),far=g.spawn('posthuman',other,row+direction*3,2);assert.equal(g.findTarget(shooter),near);const hp=near.hp,allyHP=ally.hp,farHP=far.hp;g.action(shooter);assert.ok(near.hp<hp);assert.equal(ally.hp,allyHP);assert.equal(far.hp,farHP);near.row=row+direction*4;far.row=row+direction*5;assert.equal(g.findTarget(shooter),null);}
+});
+test('confirmed tier-one roles give Robot armor, Alien poison, and Mage melee splash without mana',()=>{
+ const g=fresh();const robot=g.spawn('robot','player',5,0);assert.equal(robot.armor,1);const hp=robot.hp;g.damage(robot,3,null,'physical');assert.equal(robot.hp,hp-2);
+ const alien=g.spawn('alien','player',4,0),victim=g.spawn('posthuman','enemy',3,0);g.action(alien);assert.equal(victim.poison,2);
+ g.state.units=[];const mage=g.spawn('mage','player',4,2);assert.equal(mage.range,1);assert.ok(!mage.keywords.includes('ranged'));const targets=[1,2,3].map(col=>g.spawn('posthuman','enemy',3,col));g.state.mana=0;g.action(mage);assert.ok(targets.every(u=>u.hp<u.maxHP));assert.equal(g.state.mana,0);
+ g.state.units=[];const distantMage=g.spawn('mage','player',4,2),distant=g.spawn('posthuman','enemy',2,2);g.action(distantMage);assert.equal(distant.hp,distant.maxHP);assert.equal(distantMage.row,3);g.state.mana=4;g.damage(distantMage,100,null,'area');assert.equal(g.state.mana,4);assert.equal(g.profile('engineer').pendingAbility,true);assert.deepEqual(g.profile('caveman').keywords,[]);
+});
 test('retired merge-row saves return stored cards to the hand exactly once',()=>{
  const g=fresh();delete g.state.mergeInteractionRevision;g.state.hand=['robot'];g.state.merge=['blob:3','mage',null,null,null,null];g.state.deck=['robot','blob:3','mage'];const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.deepEqual(loaded.state.hand,['robot','blob:3','mage']);assert.ok(loaded.state.merge.every(id=>id===null));assert.deepEqual(loaded.state.deck,g.state.deck);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.hand,loaded.state.hand);
 });
