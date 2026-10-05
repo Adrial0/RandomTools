@@ -29,7 +29,7 @@
   }
   function render() {
     const s=uiState();
-    $('run-bar').innerHTML=encounterNames.map((name,i)=>`<div class="run-node ${i===s.encounter?'current':i<s.encounter?'done':''}">${i<s.encounter?'✓':String(i+1).padStart(2,'0')} &nbsp; ${escape(name)}</div>`).join('');
+    $('run-bar').innerHTML=encounterNames.map((name,i)=>`<div class="run-node ${i===s.encounter?'current':i<s.encounter?'done':''}" title="${escape(name)}"><span class="run-step">${i<s.encounter?'✓':i+1}</span> &nbsp; ${escape(name)}</div>`).join('');
     $('encounter-title').textContent=encounterNames[s.encounter];$('encounter-note').textContent=encounterNotes[s.encounter];
     $('resources').innerHTML=`<div class="resource">GOLD<strong class="mana">${s.gold}</strong></div><div class="resource">ROUND INCOME<strong>+${game.income()} <span class="small">gold</span></strong></div>`;
     $('enemy-hp').textContent=s.enemyHP+' / '+s.enemyMaxHP;$('player-hp').textContent=s.playerHP+' / '+s.playerMaxHP;
@@ -144,6 +144,8 @@
     finally {visual=null;busy=false;render();showPhase();}
   });
   $('new-run').addEventListener('click',()=>{if(busy)return;dialog('<h2>Start a new expedition?</h2><p>This replaces your current saved run.</p><div class="dialog-actions"><button class="primary" data-action="restart">Start new run</button><button data-action="close">Keep playing</button></div>');});
+  $('journal-button').addEventListener('click',()=>{if(busy||$('overlay').open)return;dialog(`<h2>Battle log</h2><ol class="full-journal">${game.state.log.map(line=>`<li>${escape(line)}</li>`).join('')}</ol><button data-action="close">Back to battle</button>`);});
+  $('details-button').addEventListener('click',()=>{if(busy||$('overlay').open)return;dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">Back to battle</button>`);});
   $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">FULL ROSTER</p><h2>${game.playable().length} playable cards</h2><p>Every card is available for deployment, rewards, and recipe-based merging. Unfinished cards use provisional stats and implemented keywords while their abilities are being designed. Hover or focus a card to read its current behavior.</p><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
   $('overlay-content').addEventListener('click',event=>{
     const action=event.target.closest('[data-action]')?.dataset.action;

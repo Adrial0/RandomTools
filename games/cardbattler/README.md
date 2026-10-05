@@ -6,6 +6,8 @@ Working directory for the roguelike cardbattler. The game does not have a final 
 
 Open `index.html` in a browser, or serve this folder with the existing static website. No installation, network access, or build step is needed to play. The game lives at `/games/cardbattler/` when hosted.
 
+The compact layout keeps the battlefield, shop, resources, turn controls, merge row, and hand within the viewport. The battle log opens from the header. Desktop card descriptions appear in the inspector; on phones, select a card or unit and use Card details. Long hands scroll horizontally, and full descriptions and the catalog remain available without expanding the page.
+
 - Select a hand card, then select an empty tile in your bottom three rows. The bottom row is also your base row and can hold defenders.
 - Buy cards from the six-card shop to add them to your hand, then deploy for free. There are no automatic draws. Start with 6 gold; earn 1 gold each completed round, plus 1 per surviving unsilenced Miner or Businessman. Base cards cost 1 gold, two-color cards 3, and four-color cards 5. The shop refreshes free each round; manual reroll costs 1 gold. Purchases require fewer than 10 cards in hand.
 - The six-slot merge row sits below combat. Drag hand cards into empty slots, or drop a card directly onto another compatible card in the hand or row to merge instantly. The result stays at the destination and replaces its ingredients permanently in the deck. Click a stored card to return it to your hand. For click/keyboard use, select a hand card and click an empty slot to store it or an occupied slot to merge.
