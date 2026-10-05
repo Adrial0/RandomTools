@@ -5,6 +5,9 @@ const path = require('node:path');
 const {Game} = require('./engine.js');
 const data = {cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
 function fresh(){const g=new Game(data,{random:()=>.3});g.newRun();g.state.deck=['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'];g.state.units=[];g.state.log=[];return g;}
+test('gold scaling migrates saved balances once and charges scaled shop and artifact prices',()=>{
+ const g=fresh();g.state.economyRevision=2;g.state.gold=17;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.gold,170);assert.equal(loaded.state.economyRevision,3);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.equal(again.state.gold,170);assert.equal(again.profile('robot').price,10);assert.equal(again.profile('cleric').price,30);assert.equal(again.profile('posthuman').price,50);assert.ok(again.rerollShop());assert.equal(again.state.gold,160);again.state.phase='camp';assert.ok(again.buyCamp('war-banner'));assert.equal(again.state.gold,80);
+});
 test('Blob self-merges repeatedly, retains colors and upgrades, and survives saving',()=>{
  const g=fresh();g.state.hand=['blob','blob','blob'];g.state.deck=[...g.state.hand];
  assert.ok(g.mergeCards({zone:'hand',index:0},{zone:'hand',index:1}));
@@ -72,10 +75,10 @@ test('new skeletons do not activate during the snapshot in which they are spawne
  const g=fresh();g.spawn('necromancer','player',4,0);const attacker=g.spawn('caveman','player',3,2);const target=g.spawn('robot','enemy',2,2);target.hp=1;g.activate('player');const skeleton=g.state.units.find(u=>u.cardId==='skeleton');assert.ok(skeleton);assert.equal(skeleton.row,2);assert.equal(skeleton.col,2);
 });
 test('turn alternates both armies, grants gold, and refreshes shop without drawing',()=>{
- const g=fresh();const a=g.spawn('robot','player',5,5),b=g.spawn('robot','enemy',0,4);const hand=g.state.hand.length,gold=g.state.gold;assert.ok(g.endTurn().length);assert.equal(a.row,4);assert.equal(b.row,1);assert.equal(g.state.turn,2);assert.equal(g.state.gold,gold+1);assert.equal(g.state.shop.length,6);assert.equal(g.state.hand.length,hand);assert.equal(g.state.phase,'planning');
+ const g=fresh();const a=g.spawn('robot','player',5,5),b=g.spawn('robot','enemy',0,4);const hand=g.state.hand.length,gold=g.state.gold;assert.ok(g.endTurn().length);assert.equal(a.row,4);assert.equal(b.row,1);assert.equal(g.state.turn,2);assert.equal(g.state.gold,gold+10);assert.equal(g.state.shop.length,6);assert.equal(g.state.hand.length,hand);assert.equal(g.state.phase,'planning');
 });
 test('victory preserves lives and gold but resets health and every card zone for the next battle',()=>{
- const g=fresh();g.state.enemyHP=0;g.state.playerHP=30;g.state.hand=['robot'];g.state.merge[0]='blob:3';g.spawn('mage','player',5,0);const gold=g.state.gold;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'camp');assert.equal(g.state.lives,3);assert.equal(g.state.gold,gold+5);g.checkOutcome();assert.equal(g.state.gold,gold+5);assert.equal(g.buyCamp('heal'),false);assert.ok(g.continueRun());assert.equal(g.state.playerHP,45);assert.equal(g.state.encounter,1);assert.deepEqual(g.state.hand,[]);assert.deepEqual(g.state.deck,[]);assert.ok(g.state.merge.every(id=>id===null));assert.ok(g.state.units.every(u=>u.team==='enemy'));assert.equal(g.state.shop.length,6);
+ const g=fresh();g.state.enemyHP=0;g.state.playerHP=30;g.state.hand=['robot'];g.state.merge[0]='blob:3';g.spawn('mage','player',5,0);const gold=g.state.gold;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'camp');assert.equal(g.state.lives,3);assert.equal(g.state.gold,gold+50);g.checkOutcome();assert.equal(g.state.gold,gold+50);assert.equal(g.buyCamp('heal'),false);assert.ok(g.continueRun());assert.equal(g.state.playerHP,45);assert.equal(g.state.encounter,1);assert.deepEqual(g.state.hand,[]);assert.deepEqual(g.state.deck,[]);assert.ok(g.state.merge.every(id=>id===null));assert.ok(g.state.units.every(u=>u.team==='enemy'));assert.equal(g.state.shop.length,6);
 });
 test('final battle victory and defeat terminate the run',()=>{
  const g=fresh();g.state.encounter=4;g.state.enemyHP=0;g.checkOutcome();assert.equal(g.state.phase,'won');const h=fresh();h.state.lives=1;h.state.playerHP=0;h.checkOutcome();assert.equal(h.state.phase,'lost');assert.equal(h.state.lives,0);assert.equal(h.continueRun(),false);assert.deepEqual(h.endTurn(),[]);
@@ -133,15 +136,15 @@ test('all row slots accept cards; moving a card preserves deck and unrelated slo
  const g=fresh();g.state.hand=['robot','mage'];const deck=[...g.state.deck];assert.ok(g.store(0,5));assert.ok(g.store(0,3));assert.ok(g.moveMergeCard({zone:'merge',index:5},1));assert.equal(g.state.merge[1],'robot');assert.equal(g.state.merge[3],'mage');assert.equal(g.state.merge[5],null);assert.deepEqual(g.state.deck,deck);
 });
 test('shop replaces opening draws and charges once for a purchased card',()=>{
- const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(g.state.hand.length,0);assert.equal(g.state.gold,6);assert.equal(g.state.shop.length,6);
- const id=g.state.shop[0],price=g.profile(id).price;assert.ok(g.buyCard(0));assert.equal(g.state.gold,6-price);assert.deepEqual(g.state.hand,[id]);assert.deepEqual(g.state.deck,[id]);assert.equal(g.buyCard(0),false);
+ const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(g.state.hand.length,0);assert.equal(g.state.gold,60);assert.equal(g.state.shop.length,6);
+ const id=g.state.shop[0],price=g.profile(id).price;assert.ok(g.buyCard(0));assert.equal(g.state.gold,60-price);assert.deepEqual(g.state.hand,[id]);assert.deepEqual(g.state.deck,[id]);assert.equal(g.buyCard(0),false);
  const gold=g.state.gold;assert.ok(g.deploy(0,5,0));assert.equal(g.state.gold,gold);assert.equal(g.state.hand.length,0);
 });
 test('shop rejects unaffordable cards, full hands, and out-of-phase purchases',()=>{
- const g=fresh();g.state.shop=['posthuman'];g.state.gold=4;assert.equal(g.buyCard(0),false);assert.equal(g.state.gold,4);g.state.gold=5;g.state.hand=Array(10).fill('robot');assert.equal(g.buyCard(0),false);g.state.hand=[];g.state.phase='enemy-action';assert.equal(g.buyCard(0),false);
+ const g=fresh();g.state.shop=['posthuman'];g.state.gold=49;assert.equal(g.buyCard(0),false);assert.equal(g.state.gold,49);g.state.gold=50;g.state.hand=Array(10).fill('robot');assert.equal(g.buyCard(0),false);g.state.hand=[];g.state.phase='enemy-action';assert.equal(g.buyCard(0),false);
 });
-test('round income is 1 plus each surviving unsilenced Miner and Businessman',()=>{
- const g=fresh();g.spawn('miner','player',5,0);g.spawn('businessman','player',5,1);const disabled=g.spawn('businessman','player',5,2);disabled.silence=99;g.spawn('miner','enemy',0,0);assert.equal(g.income(),3);const gold=g.state.gold;g.endTurn();assert.equal(g.state.gold,gold+3);
+test('round income is 10 plus each surviving unsilenced Miner and Businessman',()=>{
+ const g=fresh();g.spawn('miner','player',5,0);g.spawn('businessman','player',5,1);const disabled=g.spawn('businessman','player',5,2);disabled.silence=99;g.spawn('miner','enemy',0,0);assert.equal(g.income(),12);const gold=g.state.gold;g.endTurn();assert.equal(g.state.gold,gold+12);
 });
 test('stronger enemy stats do not change player stats',()=>{
  const g=fresh();const player=g.spawn('robot','player',5,0),enemy=g.spawnEnemy('robot',0,0);assert.ok(enemy.hp>player.hp);assert.ok(enemy.attack>player.attack);assert.equal(player.maxHP,8);
@@ -180,8 +183,10 @@ test('Silence ends when its source dies and Overkill reaches the unit behind',()
  const g=fresh();const witch=g.spawn('witch','player',4,0),target=g.spawn('posthuman','enemy',3,0);g.action(witch);assert.equal(target.silenceSource,witch.uid);g.damage(witch,100,null,'area');assert.equal(target.silence,0);const cannon=g.spawn('cannoneer','player',4,2),front=g.spawn('robot','enemy',3,2),back=g.spawn('robot','enemy',2,2);front.hp=1;const hp=back.hp;g.action(cannon);assert.ok(back.hp<hp);
 });
 test('a battle loss consumes exactly one life and permits a fresh retry of the same encounter',()=>{
- const g=fresh();g.state.encounter=2;g.state.deck=['robot'];g.state.hand=['robot'];g.deploy(0,5,0);g.state.merge[0]='blob';g.state.gold=0;g.state.playerHP=0;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'battle-lost');assert.equal(g.state.lives,2);g.checkOutcome();assert.equal(g.state.lives,2);const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.lives,2);assert.ok(loaded.continueRun());assert.equal(loaded.state.encounter,2);assert.equal(loaded.state.playerHP,45);assert.equal(loaded.state.gold,6);assert.deepEqual(loaded.state.hand,[]);assert.deepEqual(loaded.state.deck,[]);assert.ok(loaded.state.merge.every(id=>id===null));loaded.state.playerHP=0;loaded.checkOutcome();assert.equal(loaded.state.lives,1);loaded.continueRun();loaded.state.playerHP=0;loaded.checkOutcome();assert.equal(loaded.state.lives,0);assert.equal(loaded.state.phase,'lost');
+ const g=fresh();g.state.encounter=2;g.state.deck=['robot'];g.state.hand=['robot'];g.deploy(0,5,0);g.state.merge[0]='blob';g.state.gold=0;g.state.playerHP=0;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'battle-lost');assert.equal(g.state.lives,2);g.checkOutcome();assert.equal(g.state.lives,2);const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.lives,2);assert.ok(loaded.continueRun());assert.equal(loaded.state.encounter,2);assert.equal(loaded.state.playerHP,45);assert.equal(loaded.state.gold,60);assert.deepEqual(loaded.state.hand,[]);assert.deepEqual(loaded.state.deck,[]);assert.ok(loaded.state.merge.every(id=>id===null));loaded.state.playerHP=0;loaded.checkOutcome();assert.equal(loaded.state.lives,1);loaded.continueRun();loaded.state.playerHP=0;loaded.checkOutcome();assert.equal(loaded.state.lives,0);assert.equal(loaded.state.phase,'lost');
 });
 test('legacy saves migrate to lives without resetting an ongoing battle',()=>{
  const g=fresh();delete g.state.progressionRevision;delete g.state.lives;g.state.playerHP=20;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.lives,3);assert.equal(loaded.state.playerHP,20);g.state.phase='lost';g.state.playerHP=0;assert.ok(loaded.restore(g.state));assert.equal(loaded.state.phase,'battle-lost');assert.equal(loaded.state.lives,2);g.state.phase='reward';assert.ok(loaded.restore(g.state));assert.equal(loaded.state.phase,'camp');
 });
+
+

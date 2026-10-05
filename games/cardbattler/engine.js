@@ -123,10 +123,10 @@
       const implementedDescription=abilityTexts[card.baseId||id];
       const pendingAbility=!implementedDescription&&card.abilityStatus!=='intentionally-none'&&Boolean(card.ability||card.designNotes&&card.designNotes!=='pure stats');
       const description=implementedDescription || (id==='posthuman'?'No unique ability. Has the highest base stats in the roster.':pendingAbility?'Uses stats and implemented keywords for now. Its unique ability is not implemented yet.':'Uses its stats and implemented keywords. No unique ability is assigned yet.');
-      return {...stats,price:tier===1?1:tier===2?3:5,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
+      return {...stats,price:tier===1?10:tier===2?30:50,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:2,progressionRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:6,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:60,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -147,13 +147,13 @@
     neighbors(unit,team) { return this.state.units.filter(u=>u.uid!==unit.uid&&u.hp>0&&!u.hostId&&(!team||u.team===team)&&Math.max(Math.abs(u.row-unit.row),Math.abs(u.col-unit.col))===1); }
     beginEncounter() {
       const s=this.state;
-      s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(6,s.gold);
+      s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(60,s.gold);
       s.phase='planning';s.turn=1;s.mana=0;s.units=[];s.draw=[];s.discard=[];s.selected=null;s.pendingChoice=null;s.enemyMaxHP=32+s.encounter*9;s.enemyHP=s.enemyMaxHP;
       const opening=[['caveman','raider'],['robot','mage','raider'],['templar','viking','mage'],['cyborg','witch','cleric'],['mech','warlord','necromancer']][s.encounter];
       opening.forEach((id,i)=>this.spawnEnemy(id,i%2,[1,4,2][i]));
       s.nextEnemyCard=this.pick(this.enemyPool());this.refreshShop();this.log('Battle '+(s.encounter+1)+': buy cards with gold, then deploy for free.');
     }
-    income() {return 1+this.state.units.filter(u=>u.team==='player'&&u.hp>0&&!u.silence&&['miner','businessman'].includes(u.cardId)).length;}
+    income() {return 10+this.state.units.filter(u=>u.team==='player'&&u.hp>0&&!u.silence&&['miner','businessman'].includes(u.cardId)).length;}
     refreshShop() {
       const maxTier=this.state.encounter>=2||this.state.turn>=6?3:2;
       const base=this.shuffle(this.playable().filter(c=>c.tier===1)).slice(0,4).map(c=>c.id);
@@ -165,7 +165,7 @@
       const id=s.shop[index],price=this.profile(id).price;if(s.gold<price)return false;
       s.gold-=price;s.hand.push(id);s.deck.push(id);s.shop[index]=null;this.log('Bought '+this.definition(id).name+' for '+price+' gold.');return true;
     }
-    rerollShop() {const s=this.state;if(s.phase!=='planning'||s.pendingChoice||s.gold<1)return false;s.gold--;this.refreshShop();return true;}
+    rerollShop() {const s=this.state;if(s.phase!=='planning'||s.pendingChoice||s.gold<10)return false;s.gold-=10;this.refreshShop();return true;}
     enemyPool() {return [['caveman','raider','alien'],['robot','mage','raider'],['templar','viking','psychic'],['cyborg','witch','cleric'],['mech','warlord','necromancer','mage']][this.state.encounter];}
     spawnEnemy(id,row,col) {const u=this.spawn(id,'enemy',row,col);if(u){u.maxHP=Math.ceil(u.maxHP*(1.25+this.state.encounter*.05));u.hp=u.maxHP;u.attack+=1+Math.floor(this.state.encounter/2);}return u;}
     deploy(handIndex,row,col) {
@@ -446,7 +446,7 @@
       if(['camp','battle-lost','won','lost'].includes(s.phase))return true;
       if(s.playerHP<=0){s.lives=Math.max(0,s.lives-1);s.phase=s.lives===0?'lost':'battle-lost';this.log(s.lives===0?'All three lives are gone. The expedition ends.':'Battle lost. '+s.lives+' lives remain. Rebuild your army and try again.',true);return true;}
       if(s.enemyHP<=0) {
-        s.gold+=5+s.encounter*2;
+        s.gold+=50+s.encounter*20;
         if(s.encounter===4){s.phase='won';this.log('The final base falls. Expedition complete!',true);}
         else {s.phase='camp';s.rewards=[];this.log('Victory! Your next battle starts with full health and a new army.',true);}
         return true;
@@ -462,7 +462,7 @@
     }
     buyCamp(item) {
       const s=this.state;if(s.phase!=='camp')return false;
-      if(item==='war-banner'&&s.gold>=8&&!s.artifacts.includes(item)){s.gold-=8;s.artifacts.push(item);return true;}
+      if(item==='war-banner'&&s.gold>=80&&!s.artifacts.includes(item)){s.gold-=80;s.artifacts.push(item);return true;}
       return false;
     }
     continueRun() {if(!['camp','battle-lost'].includes(this.state.phase)||this.state.lives<=0)return false;if(this.state.phase==='camp')this.state.encounter++;this.beginEncounter();return true;}
@@ -478,6 +478,7 @@
         this.state.balanceRevision=2;
       }
       if((this.state.economyRevision||1)<2){this.state.economyRevision=2;this.state.gold=Math.max(6,this.state.gold);this.state.deck=[...this.state.hand,...this.state.merge.filter(Boolean),...this.state.units.filter(u=>u.team==='player'&&this.isCard(u.cardId)).map(u=>u.cardId)];this.state.draw=[];this.state.discard=[];this.state.pendingChoice=null;this.refreshShop();}
+      if(this.state.economyRevision<3){this.state.gold*=10;this.state.economyRevision=3;}
       this.state.shop=this.state.shop||[];this.state.nextEnemyCard=this.state.nextEnemyCard||this.pick(this.enemyPool());
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;

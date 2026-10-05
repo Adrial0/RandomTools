@@ -73,20 +73,20 @@
   },
   "economy": {
     "system": "gold-shop",
-    "baseGoldPerRound": 1,
+    "baseGoldPerRound": 10,
     "additionalGoldPerLivingMiner": 1,
     "additionalGoldPerLivingBusinessman": 1,
     "automaticCardDraws": false,
     "deploymentCost": 0,
     "prototype": {
-      "startingGold": 6,
+      "startingGold": 60,
       "shopSlots": 6,
       "pricesByColorCount": {
-        "1": 1,
-        "2": 3,
-        "4": 5
+        "1": 10,
+        "2": 30,
+        "4": 50
       },
-      "rerollGoldCost": 1,
+      "rerollGoldCost": 10,
       "refreshEachRound": true,
       "handPurchaseLimit": 10,
       "survivingPurchasedUnitsReturnBetweenBattles": false
@@ -103,9 +103,10 @@
       "retrySameEncounterAfterDefeat": true,
       "goldCarriesBetweenBattles": true,
       "artifactsCarryBetweenBattles": true,
-      "minimumStartingGoldEachBattle": 6,
+      "minimumStartingGoldEachBattle": 60,
       "cardRewardsBetweenBattles": false,
       "baseRepairBetweenBattles": false
     }
   }
 }
+

@@ -65,7 +65,7 @@
     $('merge-preview').textContent='Drag a card onto another to combine. Shared colors cannot merge, except Blob with Blob.';
     $('shop').innerHTML=(s.shop||[]).map((id,index)=>id?cardMarkup(id,null,'shop-card').replace(`data-choice="${escape(id)}"`,`data-shop="${index}"`):'<div class="sold-card">Sold</div>').join('');
     $('shop').querySelectorAll('[data-shop]').forEach(button=>{const id=s.shop[Number(button.dataset.shop)];button.disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.hand.length>=10||s.gold<game.profile(id).price;});
-    $('reroll-shop').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.gold<1;
+    $('reroll-shop').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.gold<10;
     $('shop-note').textContent='Refreshes each round';
     const mapmaker=s.units.some(u=>u.team==='player'&&u.cardId==='mapmaker'&&!u.silence);
     $('forecast').textContent=mapmaker&&s.nextEnemyCard?'Mapmaker reveals the next reinforcement: '+game.definition(s.nextEnemyCard).name+'.':'Buy a card to add it to your hand. Deployment is free.';
@@ -83,7 +83,7 @@
   }
   function showCamp() {
     const s=game.state;
-    dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><p>Your next battle starts at full base health with an empty hand and merge row. All cards reset; gold and artifacts remain.</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<8||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 8 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
+    dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><p>Your next battle starts at full base health with an empty hand and merge row. All cards reset; gold and artifacts remain.</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<80||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 80 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
   }
   function revealMobileDetails() {if(matchMedia('(max-width:720px)').matches&&!$('overlay').open)dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">${selected!==null?'Back to board · place card':'Back to battle'}</button>`);}
   $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy||Date.now()<suppressClickUntil)return;const i=Number(button.dataset.card);selected=selected===i?null:i;inspected=null;render();if(selected!==null)revealMobileDetails();});
@@ -178,3 +178,4 @@
   // Small read-only-facing entry point for local development and smoke verification.
   window.cardbattler={game,render};
 })();
+
