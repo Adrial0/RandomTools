@@ -18,15 +18,16 @@
   try {const stored=localStorage.getItem(SAVE);if(!stored||!game.restore(JSON.parse(stored)))game.newRun();}catch{game.newRun();saveAvailable=false;}
   const imageSources=new Map();
   const imageExtensions=['png','webp','jpg','jpeg'];
+  function portraitPath(id){const card=game.definition(id);return (card.enemyOnly?'assets/enemies/':'assets/characters/')+encodeURIComponent(card.imageId||card.baseId||id);}
   function portrait(id,kind='detail') {
     const card=game.definition(id),base=card.baseId||id,key=encodeURIComponent(base),source=imageSources.get(base);
-    const path=source===undefined?'assets/characters/'+key+'.png':source;
+    const path=source===undefined?portraitPath(base)+'.png':source;
     return `<span class="portrait portrait-${kind}" role="img" aria-label="${escape(card.name)}"><span class="portrait-placeholder" aria-hidden="true"><svg viewBox="0 0 80 100"><circle cx="40" cy="29" r="16"/><path d="M10 95v-18a30 30 0 0 1 60 0v18z"/></svg></span>${path?`<img src="${escape(path)}" data-portrait="${escape(base)}" data-image-index="0" alt="" draggable="false">`:''}</span>`;
   }
   document.addEventListener('error',event=>{
     const img=event.target;if(!img.matches?.('img[data-portrait]'))return;
     const base=img.dataset.portrait,next=Number(img.dataset.imageIndex)+1;
-    if(next<imageExtensions.length){img.dataset.imageIndex=String(next);img.src='assets/characters/'+encodeURIComponent(base)+'.'+imageExtensions[next];}
+    if(next<imageExtensions.length){img.dataset.imageIndex=String(next);img.src=portraitPath(base)+'.'+imageExtensions[next];}
     else{imageSources.set(base,null);img.remove();}
   },true);
   document.addEventListener('load',event=>{const img=event.target;if(img.matches?.('img[data-portrait]'))imageSources.set(img.dataset.portrait,img.getAttribute('src'));},true);
@@ -34,10 +35,11 @@
     const card=game.definition(id), p=game.profile(id);
     const partner=null;
     const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
-    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price} gold to buy, ${p.attack} attack, ${p.health} health">${colorStrip(id)}<span class="cost">${p.price}g</span><span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
+    return `<button class="card ${extra} ${compatibility}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price===null?'enemy unit':p.price+' gold to buy'}, ${p.attack} attack, ${p.health} health">${colorStrip(id)}${p.price===null?'':`<span class="cost">${p.price}g</span>`}<span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
   function mergeDetails(id) {
     const card=game.definition(id),baseId=card.baseId||id;
+    if(card.enemyOnly)return '<p class="small enemy-note">Enemy unit · unavailable in the shop or merge recipes.</p>';
     const name=other=>`<span class="recipe-card">${colorStrip(other)}${escape(game.definition(other).name)}</span>`;
     const built=game.recipes.filter(r=>r.result===baseId);
     const next=game.recipes.filter(r=>r.ingredients.includes(baseId)).filter(r=>game.recipesFor(id,r.ingredients.find(partner=>partner!==baseId)||baseId).some(option=>option.result===r.result));
@@ -49,7 +51,7 @@
   function inspect(id,unit) {
     if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p>';return;}
     const card=game.definition(id),p=game.profile(id);
-    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">${unit?unit.attack:p.attack} damage · ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1} · Shop ${p.price} gold${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
+    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">${unit?unit.attack:p.attack} damage · ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1}${p.price===null?'':' · Shop '+p.price+' gold'}${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
     $('inspector').querySelector('.stat-line').insertAdjacentHTML('afterend',mergeDetails(id));
   }
   function render() {
@@ -179,9 +181,11 @@
   $('new-run').addEventListener('click',()=>{if(busy)return;dialog('<h2>Start a new expedition?</h2><p>This replaces your current saved run.</p><div class="dialog-actions"><button class="primary" data-action="restart">Start new run</button><button data-action="close">Keep playing</button></div>');});
   $('journal-button').addEventListener('click',()=>{if(busy||$('overlay').open)return;dialog(`<h2>Battle log</h2><ol class="full-journal">${game.state.log.map(line=>`<li>${escape(line)}</li>`).join('')}</ol><button data-action="close">Back to battle</button>`);});
   $('details-button').addEventListener('click',()=>{if(busy||$('overlay').open)return;dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">Back to battle</button>`);});
-  $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">FULL ROSTER</p><h2>${game.playable().length} playable cards</h2><p>Every card is available for deployment, rewards, and recipe-based merging. Unfinished cards use provisional stats and implemented keywords while their abilities are being designed. Hover or focus a card to read its current behavior.</p><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
+  $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">FULL ROSTER</p><h2>${game.playable().length} playable cards</h2><p>Every card is available for deployment, rewards, and recipe-based merging. Unfinished cards use provisional stats and implemented keywords while their abilities are being designed. Hover or focus a card to read its current behavior.</p><button data-action="enemy-catalog">View enemy roster</button><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
   $('overlay-content').addEventListener('click',event=>{
     const action=event.target.closest('[data-action]')?.dataset.action;
+    if(action==='enemy-catalog')dialog(`<p class="eyebrow">ENEMY ROSTER</p><h2>${game.data.enemies.length} enemy units</h2><p>Enemy-only units from all eight themes. Hover, focus, or click to read keywords and special abilities.</p><div id="choice-detail"></div><div class="catalog enemy-catalog">${game.data.enemies.map(c=>cardMarkup(c.id,null,'enemy-card')).join('')}</div><button data-action="player-catalog">Player cards</button> <button data-action="close">Back to battle</button>`);
+    if(action==='player-catalog')$('catalog-button').click();
     if(action==='close')$('overlay').close();
     if(action==='restart'){game.newRun();selected=null;inspected=null;$('overlay').close();save();render();}
     if(action==='continue'){game.continueRun();selected=null;inspected=null;$('overlay').close();save();render();}

@@ -3,8 +3,29 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {Game} = require('./engine.js');
-const data = {cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
+const enemyData=JSON.parse(fs.readFileSync(path.join(__dirname,'data/enemies.json'),'utf8'));
+const data = {enemies:enemyData.enemies,enemySummons:enemyData.summons,cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
 function fresh(){const g=new Game(data,{random:()=>.3});g.newRun();g.state.deck=['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'];g.state.units=[];g.state.log=[];return g;}
+test('all 24 enemies are distinct from player cards, cover eight themes, and appear only in enemy formations',()=>{
+ const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(data.enemies.length,24);assert.equal(new Set(data.enemies.map(e=>e.theme)).size,8);assert.equal(g.playable().length,80);for(const enemy of data.enemies){assert.equal(g.isCard(enemy.id),false);assert.equal(g.profile(enemy.id).price,null);assert.deepEqual(g.profile(enemy.id).pendingKeywords,[]);g.state.units=[];const u=g.spawnEnemy(enemy.id,1,2);g.action(u);}
+ for(let encounter=0;encounter<5;encounter++){g.state.encounter=encounter;g.beginEncounter();assert.ok(g.state.units.every(u=>g.definition(u.cardId).enemyOnly));g.enemyDeploy();assert.ok(g.state.units.every(u=>g.definition(u.cardId).enemyOnly));assert.ok(g.state.shop.filter(Boolean).every(id=>g.isCard(id)));}
+ assert.ok(g.profile('posthuman').price>g.profile('cleric').price*2);
+});
+test('Zombie reanimates once at half health and Silence prevents it',()=>{
+ const g=fresh();const zombie=g.spawn('enemy-zombie','enemy',2,2);g.damage(zombie,100,null,'area');assert.ok(g.alive(zombie));assert.equal(zombie.hp,Math.ceil(zombie.maxHP/2));g.damage(zombie,100,null,'area');assert.equal(g.alive(zombie),false);const silenced=g.spawn('enemy-zombie','enemy',2,2);silenced.silence=1;g.damage(silenced,100,null,'area');assert.equal(g.alive(silenced),false);
+});
+test('Gang Boss grants only adjacent allies +1 damage while unsilenced',()=>{
+ const g=fresh();const boss=g.spawn('enemy-gang-boss','enemy',1,1),ally=g.spawn('enemy-bandit','enemy',2,2),far=g.spawn('enemy-bandit','enemy',3,3),opponent=g.spawn('robot','player',1,2);assert.equal(g.effectiveAttack(ally),ally.attack+1);assert.equal(g.effectiveAttack(far),far.attack);assert.equal(g.effectiveAttack(opponent),opponent.attack);boss.silence=1;assert.equal(g.effectiveAttack(ally),ally.attack);
+});
+test('Broodmother hatches every third activation and summons wait for the next snapshot',()=>{
+ const g=fresh();const mother=g.spawn('enemy-broodmother','enemy',0,2);g.action(mother);g.action(mother);assert.equal(g.state.units.length,1);g.activate('enemy');const brood=g.state.units.find(u=>u.cardId==='enemy-broodling');assert.ok(brood);assert.equal(brood.activations,0);assert.equal(brood.maxHP,4);mother.silence=1;mother.activations=5;g.action(mother);assert.equal(g.state.units.filter(u=>u.cardId==='enemy-broodling').length,1);
+});
+test('Fallen Angel splashes on its third unit attack without mana',()=>{
+ const g=fresh();const angel=g.spawn('enemy-fallen-angel','enemy',2,2),targets=[1,2,3].map(col=>g.spawn('posthuman','player',3,col));g.state.enemyMana=0;g.attack(angel,targets[1]);g.attack(angel,targets[1]);assert.equal(targets[0].hp,targets[0].maxHP);g.attack(angel,targets[1]);assert.ok(targets[0].hp<targets[0].maxHP);assert.ok(targets[2].hp<targets[2].maxHP);assert.equal(g.state.enemyMana,0);
+});
+test('legacy enemy player-card identities migrate once, including reinforcement forecast',()=>{
+ const g=fresh();delete g.state.enemyRosterRevision;const legacy=g.spawn('mage','enemy',1,2);legacy.hp=Math.ceil(legacy.maxHP/2);g.state.nextEnemyCard='robot';const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.units[0].cardId,'enemy-mercenary');assert.ok(loaded.definition(loaded.state.nextEnemyCard).enemyOnly);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.units,loaded.state.units);
+});
 test('both sides shoot through allies but stop at the nearest enemy within range',()=>{
  for(const team of ['player','enemy']){const g=fresh(),other=team==='player'?'enemy':'player',row=team==='player'?5:0,direction=team==='player'?-1:1;const shooter=g.spawn('prepper',team,row,2),ally=g.spawn('robot',team,row+direction,2),near=g.spawn('posthuman',other,row+direction*2,2),far=g.spawn('posthuman',other,row+direction*3,2);assert.equal(g.findTarget(shooter),near);const hp=near.hp,allyHP=ally.hp,farHP=far.hp;g.action(shooter);assert.ok(near.hp<hp);assert.equal(ally.hp,allyHP);assert.equal(far.hp,farHP);near.row=row+direction*4;far.row=row+direction*5;assert.equal(g.findTarget(shooter),null);}
 });
@@ -18,7 +39,7 @@ test('retired merge-row saves return stored cards to the hand exactly once',()=>
  const g=fresh();delete g.state.mergeInteractionRevision;g.state.hand=['robot'];g.state.merge=['blob:3','mage',null,null,null,null];g.state.deck=['robot','blob:3','mage'];const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.deepEqual(loaded.state.hand,['robot','blob:3','mage']);assert.ok(loaded.state.merge.every(id=>id===null));assert.deepEqual(loaded.state.deck,g.state.deck);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.hand,loaded.state.hand);
 });
 test('gold scaling migrates saved balances once and charges scaled shop and artifact prices',()=>{
- const g=fresh();g.state.economyRevision=2;g.state.gold=17;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.gold,170);assert.equal(loaded.state.economyRevision,3);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.equal(again.state.gold,170);assert.equal(again.profile('robot').price,10);assert.equal(again.profile('cleric').price,30);assert.equal(again.profile('posthuman').price,50);assert.ok(again.rerollShop());assert.equal(again.state.gold,160);again.state.phase='camp';assert.ok(again.buyCamp('war-banner'));assert.equal(again.state.gold,80);
+ const g=fresh();g.state.economyRevision=2;g.state.gold=17;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.gold,170);assert.equal(loaded.state.economyRevision,3);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.equal(again.state.gold,170);assert.equal(again.profile('robot').price,10);assert.equal(again.profile('cleric').price,30);assert.equal(again.profile('posthuman').price,70);assert.ok(again.rerollShop());assert.equal(again.state.gold,160);again.state.phase='camp';assert.ok(again.buyCamp('war-banner'));assert.equal(again.state.gold,80);
 });
 test('Blob self-merges repeatedly, retains colors and upgrades, and survives saving',()=>{
  const g=fresh();g.state.hand=['blob','blob','blob'];g.state.deck=[...g.state.hand];
@@ -153,7 +174,7 @@ test('shop replaces opening draws and charges once for a purchased card',()=>{
  const gold=g.state.gold;assert.ok(g.deploy(0,5,0));assert.equal(g.state.gold,gold);assert.equal(g.state.hand.length,0);
 });
 test('shop rejects unaffordable cards, full hands, and out-of-phase purchases',()=>{
- const g=fresh();g.state.shop=['posthuman'];g.state.gold=49;assert.equal(g.buyCard(0),false);assert.equal(g.state.gold,49);g.state.gold=50;g.state.hand=Array(10).fill('robot');assert.equal(g.buyCard(0),false);g.state.hand=[];g.state.phase='enemy-action';assert.equal(g.buyCard(0),false);
+ const g=fresh();g.state.shop=['posthuman'];g.state.gold=69;assert.equal(g.buyCard(0),false);assert.equal(g.state.gold,69);g.state.gold=70;g.state.hand=Array(10).fill('robot');assert.equal(g.buyCard(0),false);g.state.hand=[];g.state.phase='enemy-action';assert.equal(g.buyCard(0),false);
 });
 test('round income is 10 plus each surviving unsilenced Miner and Businessman',()=>{
  const g=fresh();g.spawn('miner','player',5,0);g.spawn('businessman','player',5,1);const disabled=g.spawn('businessman','player',5,2);disabled.silence=99;g.spawn('miner','enemy',0,0);assert.equal(g.income(),12);const gold=g.state.gold;g.endTurn();assert.equal(g.state.gold,gold+12);

@@ -1,6 +1,658 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "enemies": [
+    {
+      "id": "enemy-orc",
+      "imageId": "orc",
+      "name": "Orc",
+      "theme": "Fantasy",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 9,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "fury"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-vampire",
+      "imageId": "vampire",
+      "name": "Vampire",
+      "theme": "Fantasy",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": "Cursed",
+      "stats": {
+        "health": 8,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "lifesteal"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-zombie",
+      "imageId": "zombie",
+      "name": "Zombie",
+      "theme": "Fantasy",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": "Cursed",
+      "stats": {
+        "health": 10,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [],
+      "ability": {
+        "id": "reanimate",
+        "description": "Returns once at half maximum HP after dying. Silence prevents reanimation."
+      },
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-bandit",
+      "imageId": "bandit",
+      "name": "Bandit",
+      "theme": "Outlaw",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 8,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "flank"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-hitman",
+      "imageId": "hitman",
+      "name": "Hitman",
+      "theme": "Outlaw",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 6,
+        "attack": 4,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "ranged"
+        },
+        {
+          "id": "exploit"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-gang-boss",
+      "imageId": "gang-boss",
+      "name": "Gang Boss",
+      "theme": "Outlaw",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 10,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [],
+      "ability": {
+        "id": "orders",
+        "description": "Adjacent allies gain +1 damage while this unit is alive and unsilenced."
+      },
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-riot-officer",
+      "imageId": "riot-officer",
+      "name": "Riot Officer",
+      "theme": "Modern",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 11,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "armor",
+          "value": 2
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-attack-dog",
+      "imageId": "attack-dog",
+      "name": "Attack Dog",
+      "theme": "Modern",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 6,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "rush"
+        },
+        {
+          "id": "rend"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-mercenary",
+      "imageId": "mercenary",
+      "name": "Mercenary",
+      "theme": "Modern",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 7,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "ranged"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-combat-drone",
+      "imageId": "combat-drone",
+      "name": "Combat Drone",
+      "theme": "Futuristic",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 6,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "ranged"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-turret",
+      "imageId": "turret",
+      "name": "Turret",
+      "theme": "Futuristic",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 10,
+        "attack": 3,
+        "movement": 0
+      },
+      "keywords": [
+        {
+          "id": "stationary"
+        },
+        {
+          "id": "ranged"
+        },
+        {
+          "id": "armor",
+          "value": 1
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-jammer",
+      "imageId": "jammer",
+      "name": "Jammer",
+      "theme": "Futuristic",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 7,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "silence"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-wolf",
+      "imageId": "wolf",
+      "name": "Wolf",
+      "theme": "Primal",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 7,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "flank"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-mammoth",
+      "imageId": "mammoth",
+      "name": "Mammoth",
+      "theme": "Primal",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 15,
+        "attack": 4,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "armor",
+          "value": 1
+        },
+        {
+          "id": "overkill"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-berserker",
+      "imageId": "berserker",
+      "name": "Berserker",
+      "theme": "Primal",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 9,
+        "attack": 4,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "rage"
+        },
+        {
+          "id": "retaliate"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-stalker",
+      "imageId": "stalker",
+      "name": "Stalker",
+      "theme": "Sci fi",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 7,
+        "attack": 4,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "blink"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-spitter",
+      "imageId": "spitter",
+      "name": "Spitter",
+      "theme": "Sci fi",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 6,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "ranged"
+        },
+        {
+          "id": "venom"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-broodmother",
+      "imageId": "broodmother",
+      "name": "Broodmother",
+      "theme": "Sci fi",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 12,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [],
+      "ability": {
+        "id": "hatch",
+        "description": "Summons a weak melee Broodling in an empty neighboring tile every third activation."
+      },
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-feral",
+      "imageId": "feral",
+      "name": "Feral",
+      "theme": "Wasteland",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 6,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "rush"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-toxic-spitter",
+      "imageId": "toxic-spitter",
+      "name": "Toxic Spitter",
+      "theme": "Wasteland",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 8,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "ranged"
+        },
+        {
+          "id": "venom"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-marauder",
+      "imageId": "marauder",
+      "name": "Marauder",
+      "theme": "Wasteland",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 10,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "fury"
+        },
+        {
+          "id": "armor",
+          "value": 1
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-zealot",
+      "imageId": "zealot",
+      "name": "Zealot",
+      "theme": "Faith",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 8,
+        "attack": 3,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "rage"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-flagellant",
+      "imageId": "flagellant",
+      "name": "Flagellant",
+      "theme": "Faith",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 10,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [
+        {
+          "id": "retaliate"
+        }
+      ],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    },
+    {
+      "id": "enemy-fallen-angel",
+      "imageId": "fallen-angel",
+      "name": "Fallen Angel",
+      "theme": "Faith",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": "Cursed",
+      "stats": {
+        "health": 11,
+        "attack": 4,
+        "movement": 1
+      },
+      "keywords": [],
+      "ability": {
+        "id": "judgment",
+        "description": "Every third attack against a unit also hits enemies immediately to the left and right of its target."
+      },
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    }
+  ],
+  "summons": [
+    {
+      "id": "enemy-broodling",
+      "imageId": "broodling",
+      "name": "Broodling",
+      "theme": "Sci fi",
+      "enemyOnly": true,
+      "tier": 1,
+      "subgroup": null,
+      "stats": {
+        "health": 4,
+        "attack": 2,
+        "movement": 1
+      },
+      "keywords": [],
+      "ability": null,
+      "status": "prototype",
+      "source": {
+        "type": "user-approved-roster",
+        "date": "2026-10-05"
+      }
+    }
+  ],
+  "sourceWorkbookEnemies": [
     {
       "id": "vampire",
       "name": "Vampire",

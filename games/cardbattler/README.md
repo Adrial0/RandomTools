@@ -13,7 +13,7 @@ Encounter name, lives, gold, and income share a status bar above the battlefield
 Selecting a card shows its ingredient recipes and its possible merge partners and results, with color markers. All alternative recipes are listed. Blob's self-merge and upgraded forms are included. On phones, selecting a card opens these details; closing them returns to the battlefield; drag from the hand to deploy. The catalog and shop inspections show recipes too.
 
 - Drag a hand card onto an empty tile in your bottom three rows to deploy. The bottom row is also your base row and can hold defenders. Clicking a hand card or battlefield unit only opens its details; it never places a card.
-- Buy cards from the six-card shop to add them to your hand, then deploy for free. There are no automatic draws. Start with 60 gold; earn 10 gold each completed round, plus 1 per surviving unsilenced Miner or Businessman. Base cards cost 10 gold, two-color cards 30, and four-color cards 50. The shop refreshes free each round; manual reroll costs 10 gold. Purchases require fewer than 10 cards in hand.
+- Buy cards from the six-card shop to add them to your hand, then deploy for free. There are no automatic draws. Start with 60 gold; earn 10 gold each completed round, plus 1 per surviving unsilenced Miner or Businessman. Base cards cost 10 gold, two-color cards 30, and four-color cards 70. The shop refreshes free each round; manual reroll costs 10 gold. Purchases require fewer than 10 cards in hand.
 - Drag a hand card over a compatible hand card and hold for 0.9 seconds. A circular indicator fills and shows a checkmark when ready. Release on that same card to merge; completing the hold alone never merges. Leaving the target or switching cards restarts the timer. Early release, release elsewhere, Escape, interrupted pointers, or losing window focus cancel without changing cards.
 - Cards show their ingredient colors instead of a tier number. Cards sharing any color cannot merge, except Blob with another Blob. A recipe is otherwise required; compatible hand cards are highlighted while dragging a hand card.
 - Dragging highlights compatible hand cards. Mouse and touch use the same hold-and-release gesture. The merge row is removed; cards in old saved storage slots return to your hand once without changing ownership.
@@ -106,3 +106,9 @@ During the player's action phase, units activate by ascending row and then ascen
 The current prototype uses a shop, a ten-card purchase limit for the hand, free deployment and merging, and no separate merge storage. Numerical balance values remain adjustable.
 
 
+
+## Enemy roster
+
+The 24 enemy-only units cover all eight themes and are separate from the 80 player cards, shop, and merge recipes. Most use keywords; Zombie reanimates once, Gang Boss grants adjacent allies +1 damage, Broodmother summons a weak Broodling every third activation, and Fallen Angel splashes every third unit attack. Silence suppresses these abilities. Enemies and summoned Broodlings can still be charmed. Existing saved enemy armies migrate to distinct enemy units once.
+
+Enemy portraits belong in `assets/enemies/` using names such as `orc.png`, `vampire.png`, and `gang-boss.png`. The folder contains the full filename list. PNG, WebP, JPG, and JPEG are supported. The enemy definitions and prototype stats are in `data/enemies.json`; workbook draft entries are retained under `sourceWorkbookEnemies`. Enemy stats receive the existing encounter difficulty scaling. Tier-three player cards now cost 70 gold, exceeding two tier-two purchases at 30 each.

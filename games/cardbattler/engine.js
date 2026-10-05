@@ -74,6 +74,7 @@
       this.data = data;
       this.random = options.random || Math.random;
       this.cards = new Map(data.cards.map(c => [c.id, c]));
+      this.enemies=new Map([...(data.enemies||[]),...(data.enemySummons||[])].map(c=>[c.id,c]));
       this.recipes = data.recipes.filter(r => this.cards.has(r.result) && r.ingredients.every(id => this.cards.has(id)));
       this.state = null;
       this.frames = [];
@@ -81,6 +82,7 @@
     pick(list) { return list[Math.floor(this.random() * list.length)]; }
     shuffle(list) { const result = [...list]; for (let i=result.length-1;i>0;i--) {const j=Math.floor(this.random()*(i+1)); [result[i],result[j]]=[result[j],result[i]];} return result; }
     definition(id) {
+      if(this.enemies.has(id))return this.enemies.get(id);
       const blobMatch=/^blob:(\d+)$/.exec(id);
       if(blobMatch){const mass=Number(blobMatch[1]);if(mass>=2&&mass<=128)return {...this.cards.get('blob'),id,baseId:'blob',mass,name:'Blob ×'+mass};return undefined;}
       if (id === 'skeleton') return {id,name:'Skeleton',theme:'Fantasy',subgroup:'Cursed',tier:1,keywords:[]};
@@ -94,6 +96,10 @@
     profile(id) {
       const card = this.definition(id);
       if (!card) throw new Error('Unknown card: '+id);
+      if(card.enemyOnly){
+        const keywords=card.keywords.map(k=>k.id),armor=card.keywords.find(k=>k.id==='armor')?.value||0;
+        return {health:card.stats.health,attack:card.stats.attack,range:keywords.includes('ranged')?3:1,armor,cost:0,price:null,colors:[],keywords,keywordDescriptions,pendingKeywords:[],pendingAbility:false,description:card.ability?.description||keywords.map(k=>keywordDescriptions[k]).join(' ')||'Weak melee creature. No unique ability.',symbol:'◇'};
+      }
       const tier = card.tier || 1;
       const stats = {health:7+tier*4,attack:2+tier,cost:tier===1?1:tier===2?2:3,range:1,armor:0};
       const keywords = (card.keywords || []).filter(k=>k.status!=='tentative').map(k=>k.id);
@@ -126,10 +132,10 @@
       const implementedDescription=abilityTexts[card.baseId||id];
       const pendingAbility=!implementedDescription&&card.abilityStatus!=='intentionally-none'&&Boolean(card.ability||card.designNotes&&card.designNotes!=='pure stats');
       const description=implementedDescription || (id==='posthuman'?'No unique ability. Has the highest base stats in the roster.':pendingAbility?'Uses stats and implemented keywords for now. Its unique ability is not implemented yet.':'Uses its stats and implemented keywords. No unique ability is assigned yet.');
-      return {...stats,price:tier===1?10:tier===2?30:50,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
+      return {...stats,price:tier===1?10:tier===2?30:70,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,tierOneRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:60,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:60,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -152,7 +158,7 @@
       const s=this.state;
       s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(60,s.gold);
       s.phase='planning';s.turn=1;s.mana=0;s.units=[];s.draw=[];s.discard=[];s.selected=null;s.pendingChoice=null;s.enemyMaxHP=48+s.encounter*12;s.enemyHP=s.enemyMaxHP;
-      const opening=[['caveman','raider','robot','mage'],['robot','mage','raider','viking','cleric'],['templar','viking','mage','warlord','raider'],['cyborg','witch','cleric','warlord','viking','mage'],['mech','warlord','necromancer','templar','witch','raider']][s.encounter];
+      const opening=[['enemy-orc','enemy-bandit','enemy-feral','enemy-mercenary'],['enemy-riot-officer','enemy-combat-drone','enemy-hitman','enemy-jammer','enemy-gang-boss'],['enemy-mammoth','enemy-berserker','enemy-wolf','enemy-vampire','enemy-zombie'],['enemy-marauder','enemy-toxic-spitter','enemy-stalker','enemy-broodmother','enemy-spitter','enemy-turret'],['enemy-fallen-angel','enemy-zealot','enemy-flagellant','enemy-broodmother','enemy-vampire','enemy-gang-boss']][s.encounter];
       opening.forEach((id,i)=>this.spawnEnemy(id,i<3?1:0,[0,2,4,5,1,3][i]));
       s.nextEnemyCard=this.pick(this.enemyPool());this.refreshShop();this.log('Battle '+(s.encounter+1)+': buy cards with gold, then deploy for free.');
     }
@@ -165,15 +171,16 @@
     }
     buyCard(index) {
       const s=this.state;if(s.phase!=='planning'||s.pendingChoice||!Number.isInteger(index)||!s.shop[index]||s.hand.length>=10)return false;
+      if(!this.isCard(s.shop[index]))return false;
       const id=s.shop[index],price=this.profile(id).price;if(s.gold<price)return false;
       s.gold-=price;s.hand.push(id);s.deck.push(id);s.shop[index]=null;this.log('Bought '+this.definition(id).name+' for '+price+' gold.');return true;
     }
     rerollShop() {const s=this.state;if(s.phase!=='planning'||s.pendingChoice||s.gold<10)return false;s.gold-=10;this.refreshShop();return true;}
-    enemyPool() {return [['caveman','raider','alien'],['robot','mage','raider'],['templar','viking','psychic'],['cyborg','witch','cleric'],['mech','warlord','necromancer','mage']][this.state.encounter];}
+    enemyPool() {return this.data.enemies.filter(c=>[['Fantasy','Outlaw','Wasteland','Modern'],['Modern','Futuristic','Outlaw'],['Primal','Fantasy'],['Wasteland','Sci fi','Futuristic'],['Faith','Sci fi','Fantasy','Outlaw']][this.state.encounter].includes(c.theme)).map(c=>c.id);}
     spawnEnemy(id,row,col) {const u=this.spawn(id,'enemy',row,col);if(u){u.maxHP=Math.ceil(u.maxHP*(1.65+this.state.encounter*.1));u.hp=u.maxHP;u.attack+=2+Math.floor(this.state.encounter/2);}return u;}
     deploy(handIndex,row,col) {
       const s=this.state;
-      const id=s.hand[handIndex];if(!id)return false;
+      const id=s.hand[handIndex];if(!id||!this.isCard(id))return false;
       if(s.phase!=='planning'||s.pendingChoice||!Number.isInteger(handIndex)||!Number.isInteger(row)||!Number.isInteger(col)||row<(id==='agent'?1:3)||row>5||col<0||col>5||this.unitAt(row,col)) return false;
       s.hand.splice(handIndex,1);const unit=this.spawn(id,'player',row,col);s.selected=null;
       if(id==='lorekeeper')s.pendingChoice={type:'lorekeeper',uid:unit.uid};
@@ -230,7 +237,8 @@
         if(unit.keywords.includes('rage'))multiplier+=(1-unit.hp/unit.maxHP)*.5;
       }
       if(this.state.artifacts.includes('war-banner')&&unit.team==='player')multiplier+=.15;
-      const attachmentBonus=this.state.units.filter(u=>u.hostId===unit.uid&&!u.silence).length*2;
+      const ordersBonus=!unit.silence?this.neighbors(unit,unit.team).filter(u=>u.cardId==='enemy-gang-boss'&&!u.silence).length:0;
+      const attachmentBonus=ordersBonus+this.state.units.filter(u=>u.hostId===unit.uid&&!u.silence).length*2;
       return Math.max(1,Math.round((unit.attack+attachmentBonus)*multiplier));
     }
     mentalImmune(unit) {return !unit.silence&&unit.cardId==='mindguard'||this.neighbors(unit,unit.team).some(u=>u.cardId==='mindguard'&&!u.silence);}
@@ -259,6 +267,7 @@
         }
         if(unit.cardId==='buddhist'&&!unit.silence){const definition=this.definition(cardId);const good=definition.theme==='Faith'||definition.subgroup==='Holy';const bad=definition.theme==='Outlaw'||definition.subgroup==='Cursed';unit.karma=(unit.karma||0)+(good?-1:bad?1:0);}
       }
+      if(cardId==='enemy-zombie'&&!target.reanimated&&!target.silence&&!this.unitAt(row,col)){target.reanimated=true;target.hp=Math.ceil(target.maxHP/2);this.state.units.push(target);this.log('Zombie reanimates at half health.',true);}
       if(target.bountyTeam&&source&&source.team===target.bountyTeam&&source.team==='player'){this.state.gold+=2;this.log('Bounty collected: +2 gold.',true);}
       this.log(this.definition(cardId).name+' falls.',true);
       if(source&&this.alive(source)&&!source.silence) {
@@ -281,6 +290,7 @@
     }
     support(unit) {
       if(unit.silence)return;
+      if(unit.cardId==='enemy-broodmother'&&unit.activations%3===0)this.summonNear(unit,'enemy-broodling');
       if(['acolyte','cleric','wife'].includes(unit.cardId)) {
         const ally=this.neighbors(unit,unit.team).filter(u=>u.hp<u.maxHP).sort((a,b)=>(b.maxHP-b.hp)-(a.maxHP-a.hp))[0];
         if(ally){let amount=unit.cardId==='cleric'?Math.min(4,unit.faith||0,ally.maxHP-ally.hp):unit.cardId==='wife'?1:2;if(unit.cardId==='cleric')unit.faith-=amount;if(amount){ally.hp=Math.min(ally.maxHP,ally.hp+amount);this.log(this.definition(unit.cardId).name+' heals '+this.definition(ally.cardId).name+'.',true);}}
@@ -328,10 +338,10 @@
       return null;
     }
     attack(unit,target) {
-      unit.stealth=false;
+      unit.stealth=false;unit.attackCount=(unit.attackCount||0)+1;
       const mental=!unit.silence&&['mage','artificer','shaman','warlock','psychic'].includes(unit.cardId);
       const manaKey=unit.team==='player'?'mana':'enemyMana';
-      let aoe=!unit.silence&&['mage','artificer','shaman','warlock','battlemage','pyro'].includes(unit.cardId);
+      let aoe=!unit.silence&&(['mage','artificer','shaman','warlock','battlemage','pyro'].includes(unit.cardId)||unit.cardId==='enemy-fallen-angel'&&unit.attackCount%3===0);
       if(aoe&&mental&&unit.cardId!=='mage'){if((this.state[manaKey]||0)>0)this.state[manaKey]--;else aoe=false;}
       const targets=aoe?[target,...[-1,1].map(offset=>this.unitAt(target.row,target.col+offset)).filter(other=>other&&other.team!==unit.team)]:[target];
       this.log(this.definition(unit.cardId).name+' attacks '+this.definition(target.cardId).name+'.',true);
@@ -431,7 +441,7 @@
       for(const unit of snapshot){if(this.state.playerHP<=0||this.state.enemyHP<=0)break;if(unit.team!==team)continue;this.action(unit);if(this.alive(unit)&&unit.charmed){unit.team=unit.originalTeam;delete unit.originalTeam;unit.charmed=false;unit.weaken=1;this.log('Charm ends; '+this.definition(unit.cardId).name+' is weakened.',true);}}
     }
     enemyDeploy() {
-      const s=this.state;const pools=[['caveman','raider','alien'],['robot','mage','raider'],['templar','viking','psychic'],['cyborg','witch','cleric'],['mech','warlord','necromancer','mage']];
+      const s=this.state;const pool=this.enemyPool();
       // Constant pressure, with extra waves in the later encounters.
       const count=s.encounter>=2&&s.turn%2===0?2:1;
       for(let i=0;i<count;i++) {
@@ -440,7 +450,7 @@
         const threats=s.units.filter(u=>u.team==='player'&&u.row<=2);
         const defend=spaces.filter(p=>p.row===0&&threats.some(u=>u.col===p.col));
         const space=this.pick(defend.length?defend:spaces.filter(p=>p.row===0).length?spaces.filter(p=>p.row===0):spaces);
-        const id=s.nextEnemyCard||this.pick(pools[s.encounter]);this.spawnEnemy(id,space.row,space.col);s.nextEnemyCard=this.pick(pools[s.encounter]);this.log('Enemy deploys '+this.definition(id).name+'.',true);
+        const id=s.nextEnemyCard||this.pick(pool);this.spawnEnemy(id,space.row,space.col);s.nextEnemyCard=this.pick(pool);this.log('Enemy deploys '+this.definition(id).name+'.',true);
       }
     }
     checkOutcome() {
@@ -489,6 +499,12 @@
       }
       if((this.state.mergeInteractionRevision||1)<2){this.state.hand.push(...this.state.merge.filter(Boolean));this.state.merge=Array(6).fill(null);this.state.mergeInteractionRevision=2;}
       if((this.state.tierOneRevision||1)<2){for(const unit of this.state.units){if(unit.cardId==='robot'){unit.armor=Math.max(1,unit.armor);if(!unit.keywords.includes('armor'))unit.keywords.push('armor');}if(unit.cardId==='alien'&&!unit.keywords.includes('venom'))unit.keywords.push('venom');if(unit.cardId==='mage'){unit.range=1;unit.keywords=unit.keywords.filter(k=>k!=='ranged');}}this.state.tierOneRevision=2;}
+      if((this.state.enemyRosterRevision||1)<2){
+        const mapping={robot:'enemy-riot-officer',alien:'enemy-spitter',mage:'enemy-mercenary',raider:'enemy-feral',caveman:'enemy-orc',templar:'enemy-riot-officer',viking:'enemy-berserker',psychic:'enemy-jammer',cyborg:'enemy-combat-drone',witch:'enemy-jammer',cleric:'enemy-gang-boss',mech:'enemy-mammoth',warlord:'enemy-gang-boss',necromancer:'enemy-broodmother'};
+        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='enemy'||!this.isCard(unit.cardId))continue;const id=mapping[unit.cardId]||this.pick(this.enemyPool()),p=this.profile(id),ratio=unit.hp/unit.maxHP;unit.cardId=id;unit.maxHP=Math.ceil(p.health*(1.65+this.state.encounter*.1));unit.hp=Math.max(1,Math.round(unit.maxHP*ratio));unit.attack=p.attack+2+Math.floor(this.state.encounter/2);unit.armor=p.armor;unit.range=p.range;unit.keywords=p.keywords;unit.stealth=false;}
+        this.state.enemyRosterRevision=2;
+      }
+      if(!this.enemies.has(this.state.nextEnemyCard))this.state.nextEnemyCard=this.pick(this.enemyPool());
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;
     }

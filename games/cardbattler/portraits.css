@@ -6,6 +6,7 @@
 .tile.occupied{padding:0;overflow:hidden}.tile .portrait-unit{position:absolute;inset:0;border-radius:4px}
 .tile .unit-damage,.tile .unit-health{position:absolute;bottom:2px;font-size:10px;font-weight:700;background:#101612dc;border-radius:3px;padding:2px 4px;z-index:2;line-height:1.1;color:var(--text)}
 .tile .unit-damage{left:2px;color:var(--lime)}.tile .unit-health{right:2px;color:#f0b4a2}
+.tile.occupied.enemy{border:2px solid #da7865}.tile.enemy .portrait{background:linear-gradient(140deg,#583b37,#281917)}.tile.occupied.player{border:2px solid #91ba79}
 .tile .order,.tile .conditions{z-index:2;background:#101612bf;border-radius:2px;padding:1px 3px;color:var(--text)}
 .hand-panel .hand{display:flex}.hand-panel .hand::before,.hand-panel .hand::after{content:"";margin:auto;flex-shrink:0}
 .hand-panel .card{flex:0 0 110px;min-width:110px}

@@ -91,7 +91,7 @@
       "pricesByColorCount": {
         "1": 10,
         "2": 30,
-        "4": 50
+        "4": 70
       },
       "rerollGoldCost": 10,
       "refreshEachRound": true,
@@ -185,5 +185,17 @@
     "acolyte": {
       "ability": "adjacent-healing"
     }
+  },
+  "enemyRoster": {
+    "enemyOnlyUnits": 24,
+    "themes": 8,
+    "separatePortraitFolder": "assets/enemies/",
+    "uniqueAbilities": [
+      "reanimate",
+      "orders",
+      "hatch",
+      "judgment"
+    ],
+    "specialAbilityAmountsArePrototype": true
   }
 }
