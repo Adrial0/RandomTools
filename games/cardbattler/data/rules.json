@@ -89,7 +89,23 @@
       "rerollGoldCost": 1,
       "refreshEachRound": true,
       "handPurchaseLimit": 10,
-      "survivingPurchasedUnitsReturnBetweenBattles": true
+      "survivingPurchasedUnitsReturnBetweenBattles": false
+    }
+  },
+  "runProgression": {
+    "startingLives": 3,
+    "lifeLostPerDefeat": 1,
+    "gameOverAtLives": 0,
+    "baseHealthResetsEachBattle": true,
+    "cardsCarryBetweenBattles": false,
+    "resetCardZones": ["hand", "merge", "deck", "draw", "discard", "units"],
+    "prototype": {
+      "retrySameEncounterAfterDefeat": true,
+      "goldCarriesBetweenBattles": true,
+      "artifactsCarryBetweenBattles": true,
+      "minimumStartingGoldEachBattle": 6,
+      "cardRewardsBetweenBattles": false,
+      "baseRepairBetweenBattles": false
     }
   }
 }

@@ -126,7 +126,7 @@
       return {...stats,price:tier===1?1:tier===2?3:5,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:2, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:6,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:2,progressionRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:32,enemyMaxHP:32,mana:0,gold:6,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -147,7 +147,7 @@
     neighbors(unit,team) { return this.state.units.filter(u=>u.uid!==unit.uid&&u.hp>0&&!u.hostId&&(!team||u.team===team)&&Math.max(Math.abs(u.row-unit.row),Math.abs(u.col-unit.col))===1); }
     beginEncounter() {
       const s=this.state;
-      s.hand.push(...s.units.filter(u=>(u.originalTeam||u.team)==='player'&&this.isCard(u.cardId)).map(u=>u.cardId));
+      s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(6,s.gold);
       s.phase='planning';s.turn=1;s.mana=0;s.units=[];s.draw=[];s.discard=[];s.selected=null;s.pendingChoice=null;s.enemyMaxHP=32+s.encounter*9;s.enemyHP=s.enemyMaxHP;
       const opening=[['caveman','raider'],['robot','mage','raider'],['templar','viking','mage'],['cyborg','witch','cleric'],['mech','warlord','necromancer']][s.encounter];
       opening.forEach((id,i)=>this.spawnEnemy(id,i%2,[1,4,2][i]));
@@ -443,11 +443,12 @@
     }
     checkOutcome() {
       const s=this.state;
-      if(s.playerHP<=0){s.phase='lost';this.log('Your base has fallen. The expedition ends.',true);return true;}
+      if(['camp','battle-lost','won','lost'].includes(s.phase))return true;
+      if(s.playerHP<=0){s.lives=Math.max(0,s.lives-1);s.phase=s.lives===0?'lost':'battle-lost';this.log(s.lives===0?'All three lives are gone. The expedition ends.':'Battle lost. '+s.lives+' lives remain. Rebuild your army and try again.',true);return true;}
       if(s.enemyHP<=0) {
         s.gold+=5+s.encounter*2;
         if(s.encounter===4){s.phase='won';this.log('The final base falls. Expedition complete!',true);}
-        else {s.phase='reward';s.rewards=this.shuffle(this.playable().filter(c=>c.tier<=Math.min(3,2+Math.floor(s.encounter/2)))).slice(0,3).map(c=>c.id);this.log('Victory! Choose a card for your deck.',true);}
+        else {s.phase='camp';s.rewards=[];this.log('Victory! Your next battle starts with full health and a new army.',true);}
         return true;
       }return false;
     }
@@ -459,21 +460,18 @@
       if(this.checkOutcome())return this.frames;
       this.state.turn++;const income=this.income();this.state.gold+=income;this.refreshShop();this.state.phase='planning';this.log('Turn '+this.state.turn+': +'+income+' gold. Shop refreshed.',true);return this.frames;
     }
-    chooseReward(id) {
-      const s=this.state;if(s.phase!=='reward'||!s.rewards.includes(id))return false;
-      s.deck.push(id);s.hand.push(id);s.phase='camp';s.rewards=[];this.log(this.definition(id).name+' joins your hand.');return true;
-    }
     buyCamp(item) {
       const s=this.state;if(s.phase!=='camp')return false;
-      if(item==='heal'&&s.gold>=4&&s.playerHP<s.playerMaxHP){s.gold-=4;s.playerHP=Math.min(s.playerMaxHP,s.playerHP+10);return true;}
       if(item==='war-banner'&&s.gold>=8&&!s.artifacts.includes(item)){s.gold-=8;s.artifacts.push(item);return true;}
       return false;
     }
-    continueRun() {if(this.state.phase!=='camp')return false;this.state.encounter++;this.beginEncounter();return true;}
+    continueRun() {if(!['camp','battle-lost'].includes(this.state.phase)||this.state.lives<=0)return false;if(this.state.phase==='camp')this.state.encounter++;this.beginEncounter();return true;}
     restore(value) {
-      if(!value||value.version!==1||!['planning','reward','camp','won','lost'].includes(value.phase)||!Number.isInteger(value.encounter)||value.encounter<0||value.encounter>4||!Array.isArray(value.deck)||!value.deck.every(id=>this.isCard(id))||!Array.isArray(value.units))return false;
+      if(!value||value.version!==1||!['planning','reward','camp','battle-lost','won','lost'].includes(value.phase)||!Number.isInteger(value.encounter)||value.encounter<0||value.encounter>4||!Array.isArray(value.deck)||!value.deck.every(id=>this.isCard(id))||!Array.isArray(value.units))return false;
+      if(value.progressionRevision>=2&&(!Number.isInteger(value.lives)||value.lives<0||value.lives>3||value.phase==='lost'&&value.lives!==0||value.phase!=='lost'&&value.lives===0))return false;
       const seen=new Set();for(const u of value.units){const key=u.row+','+u.col;if(!this.definition(u.cardId)||!u.hostId&&seen.has(key)||u.row<0||u.row>5||u.col<0||u.col>5||!['player','enemy'].includes(u.team))return false;if(!u.hostId)seen.add(key);}
       this.state=copy(value);this.state.selected=null;
+      if((this.state.progressionRevision||1)<2){this.state.progressionRevision=2;this.state.lives=this.state.phase==='lost'?2:3;if(this.state.phase==='lost')this.state.phase='battle-lost';if(this.state.phase==='reward')this.state.phase='camp';this.state.rewards=[];}
       this.state.merge=Array.from({length:6},(_,index)=>(this.state.merge||[])[index]||null);
       if((this.state.balanceRevision||1)<2) {
         for(const unit of this.state.units){unit.maxHP=Math.max(2,Math.round(unit.maxHP*.75));unit.hp=Math.max(1,Math.min(unit.maxHP,Math.round(unit.hp*.75)));}

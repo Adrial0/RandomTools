@@ -74,11 +74,11 @@ test('new skeletons do not activate during the snapshot in which they are spawne
 test('turn alternates both armies, grants gold, and refreshes shop without drawing',()=>{
  const g=fresh();const a=g.spawn('robot','player',5,5),b=g.spawn('robot','enemy',0,4);const hand=g.state.hand.length,gold=g.state.gold;assert.ok(g.endTurn().length);assert.equal(a.row,4);assert.equal(b.row,1);assert.equal(g.state.turn,2);assert.equal(g.state.gold,gold+1);assert.equal(g.state.shop.length,6);assert.equal(g.state.hand.length,hand);assert.equal(g.state.phase,'planning');
 });
-test('victory grants rewards; camp repair spends gold and carries health to next battle',()=>{
- const g=fresh();g.state.enemyHP=0;g.state.playerHP=30;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'reward');const reward=g.state.rewards[0];assert.ok(g.chooseReward(reward));assert.ok(g.state.deck.includes(reward));assert.ok(g.buyCamp('heal'));assert.equal(g.state.playerHP,40);assert.ok(g.continueRun());assert.equal(g.state.playerHP,40);assert.equal(g.state.encounter,1);
+test('victory preserves lives and gold but resets health and every card zone for the next battle',()=>{
+ const g=fresh();g.state.enemyHP=0;g.state.playerHP=30;g.state.hand=['robot'];g.state.merge[0]='blob:3';g.spawn('mage','player',5,0);const gold=g.state.gold;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'camp');assert.equal(g.state.lives,3);assert.equal(g.state.gold,gold+5);g.checkOutcome();assert.equal(g.state.gold,gold+5);assert.equal(g.buyCamp('heal'),false);assert.ok(g.continueRun());assert.equal(g.state.playerHP,45);assert.equal(g.state.encounter,1);assert.deepEqual(g.state.hand,[]);assert.deepEqual(g.state.deck,[]);assert.ok(g.state.merge.every(id=>id===null));assert.ok(g.state.units.every(u=>u.team==='enemy'));assert.equal(g.state.shop.length,6);
 });
 test('final battle victory and defeat terminate the run',()=>{
- const g=fresh();g.state.encounter=4;g.state.enemyHP=0;g.checkOutcome();assert.equal(g.state.phase,'won');const h=fresh();h.state.playerHP=0;h.checkOutcome();assert.equal(h.state.phase,'lost');assert.deepEqual(h.endTurn(),[]);
+ const g=fresh();g.state.encounter=4;g.state.enemyHP=0;g.checkOutcome();assert.equal(g.state.phase,'won');const h=fresh();h.state.lives=1;h.state.playerHP=0;h.checkOutcome();assert.equal(h.state.phase,'lost');assert.equal(h.state.lives,0);assert.equal(h.continueRun(),false);assert.deepEqual(h.endTurn(),[]);
 });
 test('saved runs round trip and overlapping or unknown units are rejected',()=>{
  const g=fresh();g.spawn('robot','player',5,0);const h=new Game(data);assert.ok(h.restore(JSON.parse(JSON.stringify(g.state))));assert.equal(h.state.units[0].cardId,'robot');const invalid=JSON.parse(JSON.stringify(g.state));invalid.units.push({...invalid.units[0],uid:999});assert.equal(h.restore(invalid),false);
@@ -179,6 +179,9 @@ test('Sheriff bounty pays on allied kill; Cannibal consumes an ally only once',(
 test('Silence ends when its source dies and Overkill reaches the unit behind',()=>{
  const g=fresh();const witch=g.spawn('witch','player',4,0),target=g.spawn('posthuman','enemy',3,0);g.action(witch);assert.equal(target.silenceSource,witch.uid);g.damage(witch,100,null,'area');assert.equal(target.silence,0);const cannon=g.spawn('cannoneer','player',4,2),front=g.spawn('robot','enemy',3,2),back=g.spawn('robot','enemy',2,2);front.hp=1;const hp=back.hp;g.action(cannon);assert.ok(back.hp<hp);
 });
-test('surviving bought units return between battles without generating free copies',()=>{
- const g=fresh();g.state.deck=['robot'];g.state.hand=['robot'];g.deploy(0,5,0);g.state.phase='camp';assert.ok(g.continueRun());assert.deepEqual(g.state.hand,['robot']);assert.deepEqual(g.state.deck,['robot']);
+test('a battle loss consumes exactly one life and permits a fresh retry of the same encounter',()=>{
+ const g=fresh();g.state.encounter=2;g.state.deck=['robot'];g.state.hand=['robot'];g.deploy(0,5,0);g.state.merge[0]='blob';g.state.gold=0;g.state.playerHP=0;assert.ok(g.checkOutcome());assert.equal(g.state.phase,'battle-lost');assert.equal(g.state.lives,2);g.checkOutcome();assert.equal(g.state.lives,2);const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.lives,2);assert.ok(loaded.continueRun());assert.equal(loaded.state.encounter,2);assert.equal(loaded.state.playerHP,45);assert.equal(loaded.state.gold,6);assert.deepEqual(loaded.state.hand,[]);assert.deepEqual(loaded.state.deck,[]);assert.ok(loaded.state.merge.every(id=>id===null));loaded.state.playerHP=0;loaded.checkOutcome();assert.equal(loaded.state.lives,1);loaded.continueRun();loaded.state.playerHP=0;loaded.checkOutcome();assert.equal(loaded.state.lives,0);assert.equal(loaded.state.phase,'lost');
+});
+test('legacy saves migrate to lives without resetting an ongoing battle',()=>{
+ const g=fresh();delete g.state.progressionRevision;delete g.state.lives;g.state.playerHP=20;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.lives,3);assert.equal(loaded.state.playerHP,20);g.state.phase='lost';g.state.playerHP=0;assert.ok(loaded.restore(g.state));assert.equal(loaded.state.phase,'battle-lost');assert.equal(loaded.state.lives,2);g.state.phase='reward';assert.ok(loaded.restore(g.state));assert.equal(loaded.state.phase,'camp');
 });
