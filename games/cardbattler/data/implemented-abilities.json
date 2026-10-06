@@ -18,8 +18,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 5,
-        "attack": 1,
+        "health": 8,
+        "attack": 2,
         "armor": 1,
         "range": 1,
         "goldPrice": 35
@@ -52,7 +52,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -72,8 +72,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -92,7 +92,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 9,
+        "health": 11,
         "attack": 4,
         "armor": 0,
         "range": 2,
@@ -106,7 +106,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 9,
+        "health": 11,
         "attack": 4,
         "armor": 0,
         "range": 2,
@@ -120,8 +120,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 12,
-        "attack": 5,
+        "health": 15,
+        "attack": 6,
         "armor": 0,
         "range": 2,
         "goldPrice": 35
@@ -154,8 +154,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -174,8 +174,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -188,7 +188,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -202,8 +202,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -222,8 +222,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -242,7 +242,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 9,
+        "health": 11,
         "attack": 4,
         "armor": 0,
         "range": 2,
@@ -262,8 +262,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -282,8 +282,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -307,8 +307,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 12,
-        "attack": 5,
+        "health": 15,
+        "attack": 6,
         "armor": 0,
         "range": 2,
         "goldPrice": 35
@@ -321,7 +321,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -346,8 +346,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 6,
         "goldPrice": 35
@@ -371,8 +371,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 3,
         "goldPrice": 35
@@ -385,8 +385,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -399,7 +399,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -413,8 +413,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -433,7 +433,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
+        "health": 16,
         "attack": 4,
         "armor": 2,
         "range": 1,
@@ -447,8 +447,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -475,7 +475,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 2,
         "armor": 0,
         "range": 1,
@@ -489,8 +489,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -503,8 +503,8 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -517,7 +517,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -547,8 +547,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 2,
         "range": 3,
         "goldPrice": 35
@@ -567,8 +567,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -581,8 +581,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -609,7 +609,7 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -623,8 +623,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -643,7 +643,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
+        "health": 16,
         "attack": 4,
         "armor": 1,
         "range": 1,
@@ -663,8 +663,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 2,
         "range": 1,
         "goldPrice": 35
@@ -683,8 +683,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 30,
-        "attack": 9,
+        "health": 33,
+        "attack": 10,
         "armor": 3,
         "range": 1,
         "goldPrice": 35
@@ -703,7 +703,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -723,8 +723,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -743,7 +743,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
+        "health": 16,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -777,8 +777,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -797,7 +797,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 1,
         "range": 1,
@@ -817,7 +817,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 9,
+        "health": 11,
         "attack": 4,
         "armor": 0,
         "range": 2,
@@ -842,7 +842,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -862,8 +862,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -882,8 +882,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -902,8 +902,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -922,8 +922,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -942,8 +942,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 3,
         "goldPrice": 35
@@ -967,7 +967,7 @@
         }
       ],
       "prototypeStats": {
-        "health": 10,
+        "health": 12,
         "attack": 5,
         "armor": 0,
         "range": 1,
@@ -1022,8 +1022,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 17,
-        "attack": 5,
+        "health": 20,
+        "attack": 6,
         "armor": 1,
         "range": 3,
         "goldPrice": 35
@@ -1042,8 +1042,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1062,8 +1062,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1082,8 +1082,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1096,8 +1096,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1110,8 +1110,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1135,8 +1135,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 3,
         "goldPrice": 35
@@ -1155,8 +1155,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1175,8 +1175,8 @@
         }
       ],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 3,
         "goldPrice": 35
@@ -1189,8 +1189,8 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1203,8 +1203,8 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1231,8 +1231,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1245,8 +1245,8 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1259,7 +1259,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
+        "health": 16,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -1287,7 +1287,7 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -1301,7 +1301,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 2,
         "armor": 0,
         "range": 1,
@@ -1315,8 +1315,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1329,8 +1329,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1343,7 +1343,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 2,
         "armor": 0,
         "range": 1,
@@ -1357,7 +1357,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 11,
+        "health": 13,
         "attack": 4,
         "armor": 0,
         "range": 1,
@@ -1371,8 +1371,8 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1385,8 +1385,8 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1399,8 +1399,8 @@
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
-        "health": 14,
-        "attack": 5,
+        "health": 17,
+        "attack": 6,
         "armor": 0,
         "range": 1,
         "goldPrice": 35
@@ -1413,7 +1413,7 @@
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
-        "health": 9,
+        "health": 11,
         "attack": 4,
         "armor": 0,
         "range": 2,

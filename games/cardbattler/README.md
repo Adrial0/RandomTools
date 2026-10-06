@@ -30,6 +30,8 @@ The four base colors come from font formatting in `cards (4).xlsx`, `Main!A2:A9`
 
 Robot has Armor (1). Alien has Venom. Mage has a range-one melee splash that hits the target and enemies on its left and right, without mana. Engineer's broad ability remains undecided; repair is not assigned. Thief retains Stealth, Raider retains Rush, Caveman relies on stats without an ability or keywords, and Acolyte retains adjacent healing.
 
+Higher-tier player cards receive modest prototype stat bonuses: tier two gains +2 HP; tier three gains +3 HP and +1 damage. Tier one, shop prices, enemies, and summoned creatures are unchanged. Bonuses apply before upgraded Blob scaling. Existing battlefield cards migrate once while preserving their proportion of remaining health and other accumulated buffs.
+
 ### Temporary balance and behavior
 
 `engine.js` owns prototype stats, shop prices, enemy encounters, and ability implementations. The inspector, card tooltips, and catalog describe the exact current behavior. Enemy units have 65% extra health in battle one, increasing by 10 percentage points each battle, and +2 attack, rising to +4 by battle five. Enemy bases have 48 health plus 12 per later battle. Opening formations contain four to six units across different lanes. Reinforcements arrive every round, with two on even rounds from battle three onward. Existing saves migrate once while preserving proportional enemy damage.

@@ -6,6 +6,11 @@ const {Game} = require('./engine.js');
 const enemyData=JSON.parse(fs.readFileSync(path.join(__dirname,'data/enemies.json'),'utf8'));
 const data = {enemies:enemyData.enemies,enemySummons:enemyData.summons,cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
 function fresh(){const g=new Game(data,{random:()=>.3});g.newRun();g.state.deck=['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'];g.state.units=[];g.state.log=[];return g;}
+test('higher-tier stat boosts are modest and saved units gain them exactly once',()=>{
+ const g=fresh();assert.equal(g.profile('robot').health,8);assert.equal(g.profile('robot').attack,3);assert.equal(g.profile('hacker').health,13);assert.equal(g.profile('hacker').attack,4);assert.equal(g.profile('warlord').health,17);assert.equal(g.profile('warlord').attack,6);assert.equal(g.profile('posthuman').price,35);
+ delete g.state.tierStatRevision;const hacker=g.spawn('hacker','player',4,0);hacker.maxHP=11;hacker.hp=5;const posthuman=g.spawn('posthuman','player',4,1);posthuman.maxHP=30;posthuman.hp=15;posthuman.attack=9;const blob=g.spawn('blob:2','player',4,2);blob.maxHP=24;blob.hp=12;const enemy=g.spawn('enemy-orc','enemy',1,0),enemyHP=enemy.maxHP;
+ const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.units[0].maxHP,13);assert.equal(loaded.state.units[0].hp,6);assert.equal(loaded.state.units[1].maxHP,33);assert.equal(loaded.state.units[1].attack,10);assert.equal(loaded.state.units[2].maxHP,g.profile('blob:2').health);assert.equal(loaded.state.units[3].maxHP,enemyHP);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.units,loaded.state.units);
+});
 test('all 24 enemies are distinct from player cards, cover eight themes, and appear only in enemy formations',()=>{
  const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(data.enemies.length,24);assert.equal(new Set(data.enemies.map(e=>e.theme)).size,8);assert.equal(g.playable().length,80);for(const enemy of data.enemies){assert.equal(g.isCard(enemy.id),false);assert.equal(g.profile(enemy.id).price,null);assert.deepEqual(g.profile(enemy.id).pendingKeywords,[]);g.state.units=[];const u=g.spawnEnemy(enemy.id,1,2);g.action(u);}
  for(let encounter=0;encounter<5;encounter++){g.state.encounter=encounter;g.beginEncounter();assert.ok(g.state.units.every(u=>g.definition(u.cardId).enemyOnly));g.enemyDeploy();assert.ok(g.state.units.every(u=>g.definition(u.cardId).enemyOnly));assert.ok(g.state.shop.filter(Boolean).every(id=>g.isCard(id)));}
@@ -147,7 +152,7 @@ test('shared colors block merges even if an overlapping recipe is supplied',()=>
  const g=fresh();g.recipes.push({ingredients:['robot','artificer'],result:'mech'});g.state.merge=['robot','artificer'];assert.deepEqual(g.mergeOptions(),[]);assert.equal(g.merge(),false);
 });
 test('health is lower and old saved units migrate once without restarting the run',()=>{
- const g=fresh();assert.equal(g.profile('robot').health,8);assert.equal(g.profile('caveman').health,11);assert.equal(g.profile('mech').health,17);assert.equal(g.profile('posthuman').health,30);
+ const g=fresh();assert.equal(g.profile('robot').health,8);assert.equal(g.profile('caveman').health,11);assert.equal(g.profile('mech').health,20);assert.equal(g.profile('posthuman').health,33);
  const unit=g.spawn('robot','player',5,0);unit.maxHP=11;unit.hp=6;delete g.state.balanceRevision;
  const h=new Game(data);assert.ok(h.restore(g.state));assert.equal(h.state.units[0].maxHP,8);assert.equal(h.state.units[0].hp,5);assert.equal(h.state.balanceRevision,2);
  const j=new Game(data);assert.ok(j.restore(h.state));assert.equal(j.state.units[0].maxHP,8);

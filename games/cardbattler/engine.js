@@ -117,7 +117,7 @@
       if (id==='mech') {stats.health=22;stats.attack=5;stats.range=3;}
       if (id==='posthuman') Object.assign(stats,{health:40,attack:9});
       stats.health=Math.max(2,Math.round(stats.health*.75));
-      if(card.mass){stats.health=Math.round(stats.health*card.mass*1.1);stats.attack=Math.round(stats.attack*card.mass*1.1);}
+
       if(id==='skeleton')Object.assign(stats,{health:1,attack:1});
       if(id==='symbiote')Object.assign(stats,{health:5,attack:1});
       if(id==='wife')Object.assign(stats,{health:5,attack:1});
@@ -127,6 +127,8 @@
       if(['space-monk','ai-girlfriend'].includes(id))stats.range=3;
       if(id==='alchemist')stats.range=3;
       if(id==='mage')stats.range=1;
+      if(this.isCard(id)){if(tier===2)stats.health+=2;if(tier===3){stats.health+=3;stats.attack+=1;}}
+      if(card.mass){stats.health=Math.round(stats.health*card.mass*1.1);stats.attack=Math.round(stats.attack*card.mass*1.1);}
       const handledByAbility={spawn:['mech','necromancer','family-man','buddhist','drug-dealer'],bomb:['mech'],mindshield:['mindguard']};
       const pendingKeywords=keywords.filter(keyword=>!implementedKeywords.has(keyword)&&!(handledByAbility[keyword]||[]).includes(id));
       const implementedDescription=abilityTexts[card.baseId||id];
@@ -135,7 +137,7 @@
       return {...stats,price:tier===1?5:tier===2?15:35,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:30,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,tierStatRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:30,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -505,6 +507,10 @@
         this.state.enemyRosterRevision=2;
       }
       if(!this.enemies.has(this.state.nextEnemyCard))this.state.nextEnemyCard=this.pick(this.enemyPool());
+      if((this.state.tierStatRevision||1)<2){
+        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='player'||!this.isCard(unit.cardId))continue;const card=this.definition(unit.cardId),tier=card.tier;if(tier<2)continue;const bonus=tier===2?2:3,profile=this.profile(unit.cardId);let previousBase=profile.health-bonus;if(card.mass){const base=this.profile('blob').health-bonus;previousBase=Math.round(base*card.mass*1.1);}const delta=profile.health-previousBase,previousMax=unit.maxHP;unit.maxHP+=delta;unit.hp=Math.min(unit.maxHP,Math.max(1,Math.round(unit.hp*unit.maxHP/previousMax)));if(tier===3)unit.attack+=1;}
+        this.state.tierStatRevision=2;
+      }
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;
     }

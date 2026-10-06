@@ -197,5 +197,21 @@
       "judgment"
     ],
     "specialAbilityAmountsArePrototype": true
+  },
+  "prototypeTierStatBonuses": {
+    "tier1": {
+      "health": 0,
+      "attack": 0
+    },
+    "tier2": {
+      "health": 2,
+      "attack": 0
+    },
+    "tier3": {
+      "health": 3,
+      "attack": 1
+    },
+    "scope": "player cards only; before upgraded Blob scaling",
+    "savedUnitsMigrateOnce": true
   }
 }
