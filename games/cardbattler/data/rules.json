@@ -86,12 +86,12 @@
     "automaticCardDraws": false,
     "deploymentCost": 0,
     "prototype": {
-      "startingGold": 60,
+      "startingGold": 30,
       "shopSlots": 6,
       "pricesByColorCount": {
-        "1": 10,
-        "2": 30,
-        "4": 70
+        "1": 5,
+        "2": 15,
+        "4": 35
       },
       "rerollGoldCost": 10,
       "refreshEachRound": true,
@@ -117,7 +117,7 @@
       "retrySameEncounterAfterDefeat": true,
       "goldCarriesBetweenBattles": true,
       "artifactsCarryBetweenBattles": true,
-      "minimumStartingGoldEachBattle": 60,
+      "minimumStartingGoldEachBattle": 30,
       "cardRewardsBetweenBattles": false,
       "baseRepairBetweenBattles": false
     }

@@ -132,10 +132,10 @@
       const implementedDescription=abilityTexts[card.baseId||id];
       const pendingAbility=!implementedDescription&&card.abilityStatus!=='intentionally-none'&&Boolean(card.ability||card.designNotes&&card.designNotes!=='pure stats');
       const description=implementedDescription || (id==='posthuman'?'No unique ability. Has the highest base stats in the roster.':pendingAbility?'Uses stats and implemented keywords for now. Its unique ability is not implemented yet.':'Uses its stats and implemented keywords. No unique ability is assigned yet.');
-      return {...stats,price:tier===1?10:tier===2?30:70,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
+      return {...stats,price:tier===1?5:tier===2?15:35,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:60,shop:[],
+      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:30,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -156,7 +156,7 @@
     neighbors(unit,team) { return this.state.units.filter(u=>u.uid!==unit.uid&&u.hp>0&&!u.hostId&&(!team||u.team===team)&&Math.max(Math.abs(u.row-unit.row),Math.abs(u.col-unit.col))===1); }
     beginEncounter() {
       const s=this.state;
-      s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(60,s.gold);
+      s.playerHP=s.playerMaxHP;s.deck=[];s.hand=[];s.merge=Array(6).fill(null);s.rewards=[];s.gold=Math.max(30,s.gold);
       s.phase='planning';s.turn=1;s.mana=0;s.units=[];s.draw=[];s.discard=[];s.selected=null;s.pendingChoice=null;s.enemyMaxHP=48+s.encounter*12;s.enemyHP=s.enemyMaxHP;
       const opening=[['enemy-orc','enemy-bandit','enemy-feral','enemy-mercenary'],['enemy-riot-officer','enemy-combat-drone','enemy-hitman','enemy-jammer','enemy-gang-boss'],['enemy-mammoth','enemy-berserker','enemy-wolf','enemy-vampire','enemy-zombie'],['enemy-marauder','enemy-toxic-spitter','enemy-stalker','enemy-broodmother','enemy-spitter','enemy-turret'],['enemy-fallen-angel','enemy-zealot','enemy-flagellant','enemy-broodmother','enemy-vampire','enemy-gang-boss']][s.encounter];
       opening.forEach((id,i)=>this.spawnEnemy(id,i<3?1:0,[0,2,4,5,1,3][i]));
