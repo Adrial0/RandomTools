@@ -124,10 +124,9 @@
   },
   "enemyDifficulty": {
     "prototype": true,
-    "healthMultiplierFirstEncounter": 1.65,
-    "healthMultiplierGainPerEncounter": 0.1,
-    "attackBonusFirstEncounter": 2,
-    "additionalAttackBonusEveryTwoEncounters": 1,
+    "healthMultiplierFirstEncounter": 1.1,
+    "healthMultiplierGainPerEncounter": 0.05,
+    "attackBonusFirstEncounter": 0,
     "baseHealthFirstEncounter": 48,
     "baseHealthGainPerEncounter": 12,
     "openingUnitCounts": [
@@ -138,7 +137,8 @@
       6
     ],
     "reinforcementEveryRound": true,
-    "extraReinforcementOnEvenRoundsFromEncounter": 3
+    "extraReinforcementOnEvenRoundsFromEncounter": 3,
+    "additionalAttackBonusEveryThreeEncounters": 1
   },
   "deploymentInteraction": {
     "mode": "drag-hand-card-to-empty-legal-tile",
@@ -213,5 +213,6 @@
     },
     "scope": "player cards only; before upgraded Blob scaling",
     "savedUnitsMigrateOnce": true
-  }
+  },
+  "unitHealthMultiplier": 0.7
 }

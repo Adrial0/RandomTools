@@ -54,8 +54,8 @@
     'ai-girlfriend':'Once per battle, charms the first target in range instead of attacking. It fights for her side for its next activation, then returns to its original side and deals 30% less damage for its next activation.',
     symbiote:'Each activation tries to attach to an ally: front, behind, left, right. An attached Symbiote grants its host +2 attack and +1 armor. It detaches on host death and can attach again.',
     buddhist:'While alive, gains 1 Karma when an Outlaw or Cursed unit dies and loses 1 when a Faith or Holy unit dies. On death reincarnates into a random unit: tier 1 at Karma ≤0, tier 2 at 1–3, tier 3 at 4+. Stats change 5% per Karma, capped at ±30%.',
-    'drug-dealer':'Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 4 health, 2 attack, and Rush.',
-    corruptor:'Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Cultists have 3 health / 1 attack, Demons 12 health / 5 attack.'
+    'drug-dealer':'Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 3 health, 2 attack, and Rush.',
+    corruptor:'Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Cultists have 2 health / 1 attack, Demons 8 health / 5 attack.'
   };
   Object.assign(abilityTexts,{
     abomination:'',
@@ -93,12 +93,12 @@
     }
     isCard(id) {return this.cards.has(id)||/^blob:\d+$/.test(id)&&Boolean(this.definition(id));}
     playable() { return [...this.cards.values()]; }
-    profile(id) {
+    profile(id, legacyHealth=false) {
       const card = this.definition(id);
       if (!card) throw new Error('Unknown card: '+id);
       if(card.enemyOnly){
         const keywords=card.keywords.map(k=>k.id),armor=card.keywords.find(k=>k.id==='armor')?.value||0;
-        return {health:card.stats.health,attack:card.stats.attack,range:keywords.includes('ranged')?3:1,armor,cost:0,price:null,colors:[],keywords,keywordDescriptions,pendingKeywords:[],pendingAbility:false,description:card.ability?.description||'',symbol:'◇'};
+        return {health:legacyHealth?card.stats.health:Math.max(1,Math.round(card.stats.health*.7)),attack:card.stats.attack,range:keywords.includes('ranged')?3:1,armor,cost:0,price:null,colors:[],keywords,keywordDescriptions,pendingKeywords:[],pendingAbility:false,description:card.ability?.description||'',symbol:'◇'};
       }
       const tier = card.tier || 1;
       const stats = {health:7+tier*4,attack:2+tier,cost:tier===1?1:tier===2?2:3,range:1,armor:0};
@@ -128,6 +128,7 @@
       if(id==='alchemist')stats.range=3;
       if(id==='mage')stats.range=1;
       if(this.isCard(id)){if(tier===2)stats.health+=2;if(tier===3){stats.health+=3;stats.attack+=1;}}
+      if(!legacyHealth)stats.health=Math.max(1,Math.round(stats.health*.7));
       if(card.mass){stats.health=Math.round(stats.health*card.mass*1.1);stats.attack=Math.round(stats.attack*card.mass*1.1);}
       const handledByAbility={spawn:['mech','necromancer','family-man','buddhist','drug-dealer'],bomb:['mech'],mindshield:['mindguard']};
       const pendingKeywords=keywords.filter(keyword=>!implementedKeywords.has(keyword)&&!(handledByAbility[keyword]||[]).includes(id));
@@ -137,7 +138,7 @@
       return {...stats,price:tier===1?5:tier===2?15:35,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {
-      this.state = {version:1,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,tierStatRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:30,shop:[],
+      this.state = {version:1,combatStatRevision:2,balanceRevision:2,economyRevision:3,progressionRevision:2,mergeInteractionRevision:2,enemyDifficultyRevision:2,enemyRosterRevision:2,tierOneRevision:2,tierStatRevision:2,lives:3, phase:'planning',encounter:0,turn:1,playerHP:45,playerMaxHP:45,enemyHP:48,enemyMaxHP:48,mana:0,gold:30,shop:[],
         deck:[],draw:[],discard:[],hand:[],merge:Array(6).fill(null),units:[],nextId:1,log:[],rewards:[],artifacts:[],selected:null,pendingChoice:null};
       this.beginEncounter();
       return this.state;
@@ -179,7 +180,7 @@
     }
     rerollShop() {const s=this.state;if(s.phase!=='planning'||s.pendingChoice||s.gold<10)return false;s.gold-=10;this.refreshShop();return true;}
     enemyPool() {return this.data.enemies.filter(c=>[['Fantasy','Outlaw','Wasteland','Modern'],['Modern','Futuristic','Outlaw'],['Primal','Fantasy'],['Wasteland','Sci fi','Futuristic'],['Faith','Sci fi','Fantasy','Outlaw']][this.state.encounter].includes(c.theme)).map(c=>c.id);}
-    spawnEnemy(id,row,col) {const u=this.spawn(id,'enemy',row,col);if(u){u.maxHP=Math.ceil(u.maxHP*(1.65+this.state.encounter*.1));u.hp=u.maxHP;u.attack+=2+Math.floor(this.state.encounter/2);}return u;}
+    spawnEnemy(id,row,col) {const u=this.spawn(id,'enemy',row,col);if(u){u.maxHP=Math.ceil(u.maxHP*(1.1+this.state.encounter*.05));u.hp=u.maxHP;u.attack+=Math.floor(this.state.encounter/3);}return u;}
     deploy(handIndex,row,col) {
       const s=this.state;
       const id=s.hand[handIndex];if(!id||!this.isCard(id))return false;
@@ -503,13 +504,24 @@
       if((this.state.tierOneRevision||1)<2){for(const unit of this.state.units){if(unit.cardId==='robot'){unit.armor=Math.max(1,unit.armor);if(!unit.keywords.includes('armor'))unit.keywords.push('armor');}if(unit.cardId==='alien'&&!unit.keywords.includes('venom'))unit.keywords.push('venom');if(unit.cardId==='mage'){unit.range=1;unit.keywords=unit.keywords.filter(k=>k!=='ranged');}}this.state.tierOneRevision=2;}
       if((this.state.enemyRosterRevision||1)<2){
         const mapping={robot:'enemy-riot-officer',alien:'enemy-spitter',mage:'enemy-mercenary',raider:'enemy-feral',caveman:'enemy-orc',templar:'enemy-riot-officer',viking:'enemy-berserker',psychic:'enemy-jammer',cyborg:'enemy-combat-drone',witch:'enemy-jammer',cleric:'enemy-gang-boss',mech:'enemy-mammoth',warlord:'enemy-gang-boss',necromancer:'enemy-broodmother'};
-        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='enemy'||!this.isCard(unit.cardId))continue;const id=mapping[unit.cardId]||this.pick(this.enemyPool()),p=this.profile(id),ratio=unit.hp/unit.maxHP;unit.cardId=id;unit.maxHP=Math.ceil(p.health*(1.65+this.state.encounter*.1));unit.hp=Math.max(1,Math.round(unit.maxHP*ratio));unit.attack=p.attack+2+Math.floor(this.state.encounter/2);unit.armor=p.armor;unit.range=p.range;unit.keywords=p.keywords;unit.stealth=false;}
+        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='enemy'||!this.isCard(unit.cardId))continue;const id=mapping[unit.cardId]||this.pick(this.enemyPool()),p=this.profile(id,true),ratio=unit.hp/unit.maxHP;unit.cardId=id;unit.maxHP=Math.ceil(p.health*(1.65+this.state.encounter*.1));unit.hp=Math.max(1,Math.round(unit.maxHP*ratio));unit.attack=p.attack+2+Math.floor(this.state.encounter/2);unit.armor=p.armor;unit.range=p.range;unit.keywords=p.keywords;unit.stealth=false;}
         this.state.enemyRosterRevision=2;
       }
       if(!this.enemies.has(this.state.nextEnemyCard))this.state.nextEnemyCard=this.pick(this.enemyPool());
       if((this.state.tierStatRevision||1)<2){
-        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='player'||!this.isCard(unit.cardId))continue;const card=this.definition(unit.cardId),tier=card.tier;if(tier<2)continue;const bonus=tier===2?2:3,profile=this.profile(unit.cardId);let previousBase=profile.health-bonus;if(card.mass){const base=this.profile('blob').health-bonus;previousBase=Math.round(base*card.mass*1.1);}const delta=profile.health-previousBase,previousMax=unit.maxHP;unit.maxHP+=delta;unit.hp=Math.min(unit.maxHP,Math.max(1,Math.round(unit.hp*unit.maxHP/previousMax)));if(tier===3)unit.attack+=1;}
+        for(const unit of this.state.units){if((unit.originalTeam||unit.team)!=='player'||!this.isCard(unit.cardId))continue;const card=this.definition(unit.cardId),tier=card.tier;if(tier<2)continue;const bonus=tier===2?2:3,profile=this.profile(unit.cardId,true);let previousBase=profile.health-bonus;if(card.mass){const base=this.profile('blob',true).health-bonus;previousBase=Math.round(base*card.mass*1.1);}const delta=profile.health-previousBase,previousMax=unit.maxHP;unit.maxHP+=delta;unit.hp=Math.min(unit.maxHP,Math.max(1,Math.round(unit.hp*unit.maxHP/previousMax)));if(tier===3)unit.attack+=1;}
         this.state.tierStatRevision=2;
+      }
+      if((this.state.combatStatRevision||1)<2){
+        for(const unit of this.state.units){
+          const previous=unit.maxHP, enemy=(unit.originalTeam||unit.team)==='enemy'&&this.enemies.has(unit.cardId)&&!this.data.enemySummons?.some(card=>card.id===unit.cardId);
+          const oldProfile=this.profile(unit.cardId,true),profile=this.profile(unit.cardId);
+          const healthRatio=enemy?Math.ceil(profile.health*(1.1+this.state.encounter*.05))/Math.ceil(oldProfile.health*(1.65+this.state.encounter*.1)):profile.health/oldProfile.health;
+          unit.maxHP=Math.max(1,Math.round(previous*healthRatio));
+          unit.hp=Math.min(unit.maxHP,Math.max(1,Math.round(unit.hp*unit.maxHP/previous)));
+          if(enemy)unit.attack=Math.max(1,unit.attack-2-Math.floor(this.state.encounter/2)+Math.floor(this.state.encounter/3));
+        }
+        this.state.combatStatRevision=2;
       }
       for(const unit of this.state.units){unit.faith=unit.faith??(this.definition(unit.cardId).theme==='Faith'?3:0);unit.activations=unit.activations||0;}
       return true;

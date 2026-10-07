@@ -7,9 +7,9 @@ const enemyData=JSON.parse(fs.readFileSync(path.join(__dirname,'data/enemies.jso
 const data = {enemies:enemyData.enemies,enemySummons:enemyData.summons,cards:JSON.parse(fs.readFileSync(path.join(__dirname,'data/cards.json'),'utf8')).cards,recipes:JSON.parse(fs.readFileSync(path.join(__dirname,'data/merges.json'),'utf8')).recipes};
 function fresh(){const g=new Game(data,{random:()=>.3});g.newRun();g.state.deck=['robot','alien','mage','engineer','thief','raider','caveman','acolyte','robot','mage','caveman','acolyte'];g.state.units=[];g.state.log=[];return g;}
 test('higher-tier stat boosts are modest and saved units gain them exactly once',()=>{
- const g=fresh();assert.equal(g.profile('robot').health,8);assert.equal(g.profile('robot').attack,3);assert.equal(g.profile('hacker').health,13);assert.equal(g.profile('hacker').attack,4);assert.equal(g.profile('warlord').health,17);assert.equal(g.profile('warlord').attack,6);assert.equal(g.profile('posthuman').price,35);
+ const g=fresh();assert.equal(g.profile('robot').health,6);assert.equal(g.profile('robot').attack,3);assert.equal(g.profile('hacker').health,9);assert.equal(g.profile('hacker').attack,4);assert.equal(g.profile('warlord').health,12);assert.equal(g.profile('warlord').attack,6);assert.equal(g.profile('posthuman').price,35);
  delete g.state.tierStatRevision;const hacker=g.spawn('hacker','player',4,0);hacker.maxHP=11;hacker.hp=5;const posthuman=g.spawn('posthuman','player',4,1);posthuman.maxHP=30;posthuman.hp=15;posthuman.attack=9;const blob=g.spawn('blob:2','player',4,2);blob.maxHP=24;blob.hp=12;const enemy=g.spawn('enemy-orc','enemy',1,0),enemyHP=enemy.maxHP;
- const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.units[0].maxHP,13);assert.equal(loaded.state.units[0].hp,6);assert.equal(loaded.state.units[1].maxHP,33);assert.equal(loaded.state.units[1].attack,10);assert.equal(loaded.state.units[2].maxHP,g.profile('blob:2').health);assert.equal(loaded.state.units[3].maxHP,enemyHP);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.units,loaded.state.units);
+ const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.units[0].maxHP,13);assert.equal(loaded.state.units[0].hp,6);assert.equal(loaded.state.units[1].maxHP,33);assert.equal(loaded.state.units[1].attack,10);assert.equal(loaded.state.units[2].maxHP,g.profile('blob:2',true).health);assert.equal(loaded.state.units[3].maxHP,enemyHP);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.units,loaded.state.units);
 });
 test('all 24 enemies are distinct from player cards, cover eight themes, and appear only in enemy formations',()=>{
  const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(data.enemies.length,24);assert.equal(new Set(data.enemies.map(e=>e.theme)).size,8);assert.equal(g.playable().length,80);for(const enemy of data.enemies){assert.equal(g.isCard(enemy.id),false);assert.equal(g.profile(enemy.id).price,null);assert.deepEqual(g.profile(enemy.id).pendingKeywords,[]);g.state.units=[];const u=g.spawnEnemy(enemy.id,1,2);g.action(u);}
@@ -23,7 +23,7 @@ test('Gang Boss grants only adjacent allies +1 damage while unsilenced',()=>{
  const g=fresh();const boss=g.spawn('enemy-gang-boss','enemy',1,1),ally=g.spawn('enemy-bandit','enemy',2,2),far=g.spawn('enemy-bandit','enemy',3,3),opponent=g.spawn('robot','player',1,2);assert.equal(g.effectiveAttack(ally),ally.attack+1);assert.equal(g.effectiveAttack(far),far.attack);assert.equal(g.effectiveAttack(opponent),opponent.attack);boss.silence=1;assert.equal(g.effectiveAttack(ally),ally.attack);
 });
 test('Broodmother hatches every third activation and summons wait for the next snapshot',()=>{
- const g=fresh();const mother=g.spawn('enemy-broodmother','enemy',0,2);g.action(mother);g.action(mother);assert.equal(g.state.units.length,1);g.activate('enemy');const brood=g.state.units.find(u=>u.cardId==='enemy-broodling');assert.ok(brood);assert.equal(brood.activations,0);assert.equal(brood.maxHP,4);mother.silence=1;mother.activations=5;g.action(mother);assert.equal(g.state.units.filter(u=>u.cardId==='enemy-broodling').length,1);
+ const g=fresh();const mother=g.spawn('enemy-broodmother','enemy',0,2);g.action(mother);g.action(mother);assert.equal(g.state.units.length,1);g.activate('enemy');const brood=g.state.units.find(u=>u.cardId==='enemy-broodling');assert.ok(brood);assert.equal(brood.activations,0);assert.equal(brood.maxHP,3);mother.silence=1;mother.activations=5;g.action(mother);assert.equal(g.state.units.filter(u=>u.cardId==='enemy-broodling').length,1);
 });
 test('Fallen Angel splashes on its third unit attack without mana',()=>{
  const g=fresh();const angel=g.spawn('enemy-fallen-angel','enemy',2,2),targets=[1,2,3].map(col=>g.spawn('posthuman','player',3,col));g.state.enemyMana=0;g.attack(angel,targets[1]);g.attack(angel,targets[1]);assert.equal(targets[0].hp,targets[0].maxHP);g.attack(angel,targets[1]);assert.ok(targets[0].hp<targets[0].maxHP);assert.ok(targets[2].hp<targets[2].maxHP);assert.equal(g.state.enemyMana,0);
@@ -152,7 +152,7 @@ test('shared colors block merges even if an overlapping recipe is supplied',()=>
  const g=fresh();g.recipes.push({ingredients:['robot','artificer'],result:'mech'});g.state.merge=['robot','artificer'];assert.deepEqual(g.mergeOptions(),[]);assert.equal(g.merge(),false);
 });
 test('health is lower and old saved units migrate once without restarting the run',()=>{
- const g=fresh();assert.equal(g.profile('robot').health,8);assert.equal(g.profile('caveman').health,11);assert.equal(g.profile('mech').health,20);assert.equal(g.profile('posthuman').health,33);
+ const g=fresh();assert.equal(g.profile('robot').health,6);assert.equal(g.profile('caveman').health,8);assert.equal(g.profile('mech').health,14);assert.equal(g.profile('posthuman').health,23);
  const unit=g.spawn('robot','player',5,0);unit.maxHP=11;unit.hp=6;delete g.state.balanceRevision;
  const h=new Game(data);assert.ok(h.restore(g.state));assert.equal(h.state.units[0].maxHP,8);assert.equal(h.state.units[0].hp,5);assert.equal(h.state.balanceRevision,2);
  const j=new Game(data);assert.ok(j.restore(h.state));assert.equal(j.state.units[0].maxHP,8);
@@ -184,11 +184,11 @@ test('shop rejects unaffordable cards, full hands, and out-of-phase purchases',(
 test('round income is 10 plus each surviving unsilenced Miner and Businessman',()=>{
  const g=fresh();g.spawn('miner','player',5,0);g.spawn('businessman','player',5,1);const disabled=g.spawn('businessman','player',5,2);disabled.silence=99;g.spawn('miner','enemy',0,0);assert.equal(g.income(),12);const gold=g.state.gold;g.endTurn();assert.equal(g.state.gold,gold+12);
 });
-test('stronger enemy stats do not change player stats',()=>{
- const g=fresh();const player=g.spawn('robot','player',5,0),enemy=g.spawnEnemy('robot',0,0);assert.ok(enemy.hp>player.hp);assert.ok(enemy.attack>player.attack);assert.equal(player.maxHP,8);
+test('enemy stats stay close to player stats',()=>{
+ const g=fresh();const player=g.spawn('robot','player',5,0),enemy=g.spawnEnemy('robot',0,0);assert.ok(enemy.hp>player.hp);assert.equal(enemy.attack,player.attack);assert.equal(enemy.maxHP,7);assert.equal(player.maxHP,6);
 });
 test('harder encounters cover more lanes and reinforce every round, with extra later waves',()=>{
- const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(g.state.enemyMaxHP,48);assert.equal(g.state.units.length,4);assert.equal(new Set(g.state.units.map(u=>u.col)).size,4);g.state.units=[];g.state.turn=2;g.enemyDeploy();assert.equal(g.state.units.length,1);g.state.encounter=2;g.state.units=[];g.enemyDeploy();assert.equal(g.state.units.length,2);const enemy=g.state.units[0],profile=g.profile(enemy.cardId);assert.equal(enemy.maxHP,Math.ceil(profile.health*1.85));assert.equal(enemy.attack,profile.attack+3);
+ const g=new Game(data,{random:()=>.3});g.newRun();assert.equal(g.state.enemyMaxHP,48);assert.equal(g.state.units.length,4);assert.equal(new Set(g.state.units.map(u=>u.col)).size,4);g.state.units=[];g.state.turn=2;g.enemyDeploy();assert.equal(g.state.units.length,1);g.state.encounter=2;g.state.units=[];g.enemyDeploy();assert.equal(g.state.units.length,2);const enemy=g.state.units[0],profile=g.profile(enemy.cardId);assert.equal(enemy.maxHP,Math.ceil(profile.health*1.2));assert.equal(enemy.attack,profile.attack);
 });
 test('saved enemy difficulty upgrades once and preserves proportional base damage',()=>{
  const g=fresh();delete g.state.enemyDifficultyRevision;g.state.enemyMaxHP=32;g.state.enemyHP=16;const enemy=g.spawn('robot','enemy',1,0);enemy.maxHP=10;enemy.hp=5;enemy.attack=4;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.enemyMaxHP,48);assert.equal(loaded.state.enemyHP,24);assert.equal(loaded.state.units[0].maxHP,14);assert.equal(loaded.state.units[0].hp,7);assert.equal(loaded.state.units[0].attack,5);const again=new Game(data);assert.ok(again.restore(loaded.state));assert.equal(again.state.units[0].attack,5);
@@ -233,4 +233,18 @@ test('legacy saves migrate to lives without resetting an ongoing battle',()=>{
  const g=fresh();delete g.state.progressionRevision;delete g.state.lives;g.state.playerHP=20;const loaded=new Game(data);assert.ok(loaded.restore(g.state));assert.equal(loaded.state.lives,3);assert.equal(loaded.state.playerHP,20);g.state.phase='lost';g.state.playerHP=0;assert.ok(loaded.restore(g.state));assert.equal(loaded.state.phase,'battle-lost');assert.equal(loaded.state.lives,2);g.state.phase='reward';assert.ok(loaded.restore(g.state));assert.equal(loaded.state.phase,'camp');
 });
 
+
+
+test('lower unit health and enemy bonuses migrate damaged and charmed units once',()=>{
+ const g=fresh();delete g.state.combatStatRevision;
+ const player=g.spawn('robot','player',5,0);player.maxHP=10;player.hp=5;player.attack=5;
+ const enemy=g.spawnEnemy('enemy-orc',1,0);enemy.maxHP=15;enemy.hp=8;enemy.attack=6;enemy.team='player';enemy.originalTeam='enemy';
+ const summon=g.spawn('enemy-broodling','enemy',1,1);summon.maxHP=4;summon.hp=2;
+ const loaded=new Game(data);assert.ok(loaded.restore(g.state));
+ assert.equal(loaded.state.units[0].maxHP,8);assert.equal(loaded.state.units[0].hp,4);assert.equal(loaded.state.units[0].attack,5);
+ assert.equal(loaded.state.units[1].maxHP,7);assert.equal(loaded.state.units[1].hp,4);assert.equal(loaded.state.units[1].attack,4);
+ assert.equal(loaded.state.units[2].maxHP,3);assert.equal(loaded.state.units[2].hp,2);
+ const again=new Game(data);assert.ok(again.restore(loaded.state));assert.deepEqual(again.state.units,loaded.state.units);
+ for(const card of [...data.cards,...data.enemies,...data.enemySummons])assert.equal(g.profile(card.id).health,Math.max(1,Math.round(g.profile(card.id,true).health*.7)),card.id);
+});
 
