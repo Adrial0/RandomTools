@@ -8,67 +8,67 @@
   const clamp = (value, low, high) => Math.max(low, Math.min(high, value));
   const symbols = {robot:'▣',alien:'♧',mage:'✦',engineer:'⚒',thief:'♠',raider:'⚔',caveman:'◆',acolyte:'✝',pyro:'♨',mech:'▣',warlord:'♛',necromancer:'☠',cleric:'✝',templar:'♜',inquisitor:'✠',mindguard:'◉',witch:'✧',battlemage:'✦',viking:'⚔',shaman:'❋',sentinel:'▥',mechanic:'⚙',artificer:'⚒',enforcer:'♜',cyborg:'▣',psychic:'◉',warlock:'✧',mutant:'♧',leader:'♛',heretic:'☠',pirate:'⚑',scientist:'⚗',blob:'●'};
   const implementedKeywords = new Set(['armor','ranged','stationary','rush','retaliate','weaken','silence','lifesteal','ignite','venom','fury','flank','exploit','freeze','rend','sunder','disarm','rage','blink','overkill','pull','mirror','fear']);
-  const keywordDescriptions={armor:'Reduces physical damage by its armor amount, to a minimum of 1.',ranged:'Attacks the first enemy in its column within range; shots pass through friendly units.',stationary:'Cannot move forward.',rush:'Can move and then attack in the same activation.',retaliate:'Returns an attack after surviving an enemy attack.',weaken:'Reduces target damage by 30% for its next activation.',silence:'Disables target abilities and keywords until the source dies.',lifesteal:'Heals for damage dealt, up to maximum health.',ignite:'Applies Burn: 2 damage on each of the next 2 activations.',venom:'Applies Poison: 20% maximum health damage on each of the next 2 activations.',fury:'A kill grants +1 attack, +1 maximum health, and +1 health.',flank:'Deals 30% more damage when a friendly unit is adjacent to the target.',exploit:'Deals 30% more damage to afflicted targets.',freeze:'Skips the target’s next activation.',rend:'Applies Bleed: 20% of attack damage on the next 2 activations.',sunder:'Removes 1 armor on hit.',disarm:'Prevents the target’s next attack.',rage:'Gains up to 50% damage as health falls.',blink:'Moves one tile forward after a kill if empty, without entering the opposing base.',overkill:'Excess damage continues through enemies behind the target in its column.',pull:'Pulls a target one tile closer before attacking if the destination is empty.',mirror:'Copies a keyword it lacks from an adjacent ally before acting.',fear:'Target retreats one tile instead of acting on its next activation if space is free.',spawn:'Summons units according to the card’s ability.',bomb:'Mech explodes for 5 damage into all 8 neighboring tiles, including friendlies.',mindshield:'Immunity to mental attacks; Mindguard shares it with its 8 neighboring allies.'};
+  const keywordDescriptions={armor:'Reduces physical damage by its armor amount, to a minimum of 1.',ranged:'Attacks the first enemy in its column within range.',stationary:'Cannot move forward.',rush:'Can move and then attack in the same activation.',retaliate:'Returns an attack after surviving an enemy attack.',weaken:'Reduces target damage by 30% for its next activation.',silence:'Disables target abilities and keywords until the source dies.',lifesteal:'Heals for damage dealt, up to maximum health.',ignite:'Applies Burn: 2 damage on each of the next 2 activations.',venom:'Applies Poison: 20% maximum health damage on each of the next 2 activations.',fury:'A kill grants +1 attack, +1 maximum health, and +1 health.',flank:'Deals 30% more damage when a friendly unit is adjacent to the target.',exploit:'Deals 30% more damage to afflicted targets.',freeze:'Skips the target’s next activation.',rend:'Applies Bleed: 20% of attack damage on the next 2 activations.',sunder:'Removes 1 armor on hit.',disarm:'Prevents the target’s next attack.',rage:'Gains up to 50% damage as health falls.',blink:'Moves one tile forward after a kill if empty, without entering the opposing base.',overkill:'Excess damage continues through enemies behind the target in its column.',pull:'Pulls a target one tile closer before attacking if the destination is empty.',mirror:'Copies a keyword it lacks from an adjacent ally before acting.',fear:'Target retreats one tile instead of acting on its next activation if space is free.',spawn:'Summons units according to the card’s ability.',bomb:'Mech explodes for 5 damage into all 8 neighboring tiles, including friendlies.',mindshield:'Immunity to mental attacks; Mindguard shares it with its 8 neighboring allies.'};
   const abilityTexts = {
-    robot:'Armor (1): reduces incoming physical damage by 1, to a minimum of 1. No additional unique ability.',
-    alien:'Venom: attacks poison the target for 20% of maximum health on each of its next 2 activations.',
-    mage:'Melee splash: attacks the enemy directly ahead and enemies immediately to the left and right of that target. Range 1. Uses no mana.',
+    robot:'',
+    alien:'',
+    mage:'Melee splash: attacks the enemy directly ahead and enemies immediately to the left and right of that target.',
     acolyte:'Support: heals the most injured adjacent ally for 2 before acting.',
     cleric:'Spends up to 4 of its own Faith to heal the most injured adjacent ally before acting. Starts with 3 Faith.',
     mechanic:'Repair: grants an adjacent ally 1 armor before acting (up to +2).',
     hacker:'On a successful hit, steals one random keyword it does not already have from a surviving target.',
     artificer:'Arcane splash: hits its target and the tiles on either side.',
-    psychic:'Mental attack. Weakens its target for its next activation.',
+    psychic:'Mental attacks.',
     shaman:'Arcane splash: hits its target and the tiles on either side.',
-    warlock:'Arcane splash. Exploit deals 30% more damage to afflicted targets.',
-    leader:'Command: allies in its row deal 10% more damage. Prototype value.',
+    warlock:'Hits its target and enemies on either side.',
+    leader:'Command: allies in its row deal 10% more damage.',
     heretic:'On hit, removes 2 Faith from its target.',
     pirate:'After a kill, applies Fear to neighboring enemies: they retreat one tile on their next activation if space is free.',
     scientist:'Experiment: attacks randomly burn, freeze, or weaken the target.',
-    witch:'Attacks weaken their target by 30% and silence its keywords and abilities until the Witch dies.',
+    witch:'',
     battlemage:'Flame splash: hits its target and the tiles on either side, applying burn.',
     pyro:'Burns the unit ahead and units to the left and right of that target.',
-    mech:'Ranged. On death, explodes into all 8 neighboring tiles, hitting both sides, then ejects a pilot.',
+    mech:'On death, explodes into all 8 neighboring tiles, hitting both sides, then ejects a pilot.',
     warlord:'Allies in the 8 neighboring tiles deal 20% more damage.',
     necromancer:'Enemy deaths caused by its team leave a 1 health / 1 attack allied skeleton on eligible empty tiles.',
     mindguard:'Immune to mental attacks; shares immunity with the 8 neighboring allies.',
     inquisitor:'Bonus damage against Cursed. Double damage against burning units.',
     thief:'Stealth: untargetable until its first attack.',
-    businessman:'Generates +1 gold each round while alive and not silenced. Each Businessman stacks.',
-    miner:'Generates +1 gold each round while alive and not silenced. Each Miner stacks.',
-    'witch-hunter':'Deals 50% bonus damage against Fantasy units. Prototype bonus.',
-    'family-man':'On its first activation, summons a Wife and Child into nearby empty tiles. Wife heals an adjacent ally for 1; Child has Rush. Prototype summon stats.',
-    'crypto-dude':'Each activation, flips a coin: gain 1 gold or lose 1 gold, without going below zero. Prototype amounts.',
-    ceo:'Each activation, earns 1 gold per other living friendly Corporate unit. Prototype rate.',
+    businessman:'Generates +1 gold each round.',
+    miner:'Generates +1 gold each round.',
+    'witch-hunter':'Deals 50% bonus damage against Fantasy units.',
+    'family-man':'On its first activation, summons a Wife and Child into nearby empty tiles. Wife heals an adjacent ally for 1; Child has Rush.',
+    'crypto-dude':'Each activation, flips a coin: gain 1 gold or lose 1 gold, without going below zero.',
+    ceo:'Each activation, earns 1 gold per other living friendly Corporate unit.',
     missionary:'Each activation, gives 1 Faith to all allies in the eight surrounding tiles.',
     'machine-priest':'Spends 1 Faith to give an adjacent Tech ally 1 armor before acting, up to 2 extra armor per ally. Starts with 3 Faith.',
-    'arms-dealer':'Friendly Gunslingers in the eight surrounding tiles deal 20% more damage. Uses the gun-user buff idea; gun summoning is unfinished.',
-    sheriff:'Marks the lowest-health visible enemy with a bounty. When its team kills that target, gains 2 gold. One active bounty per Sheriff. Prototype reward.',
+    'arms-dealer':'Friendly Gunslingers in the eight surrounding tiles deal 20% more damage.',
+    sheriff:'Marks the lowest-health visible enemy with a bounty. When its team kills that target, gains 2 gold. One active bounty per Sheriff.',
     cannibal:'Once per battle, eats the weakest adjacent friendly unit and gains its current health, maximum health, and attack. Eating consumes its action.',
     agent:'Can deploy on any empty tile except the opposing base row. Cannot damage the enemy base on the turn it is deployed.',
-    conqueror:'Deals 5% more damage per tile occupied by its team. Prototype bonus.',
+    conqueror:'Deals 5% more damage per tile occupied by its team.',
     lorekeeper:'On deployment, choose Armor, Ranged, Rush, Ignite, Retaliate, or Venom. All current allies in its row learn that keyword for the battle.',
-    mapmaker:'Reveals the next enemy reinforcement card while alive and not silenced.',
-    'space-monk':'Immune to single-target ranged attacks. Melee and AoE can hit it. Pulls the first enemy in its column one tile closer, if the destination is empty, before attacking. Pull range: 3.',
-    alchemist:'Ranged attacks always apply Venom and randomly apply Freeze, Sunder, Rend, or Silence. Sunder removes 1 armor; Rend bleeds for 20% of attack for 2 activations; Freeze skips 1 activation; Silence lasts until the Alchemist dies.',
+    mapmaker:'Reveals the next enemy reinforcement card.',
+    'space-monk':'Immune to single-target ranged attacks. Pulls the first enemy in its column one tile closer, if the destination is empty, before attacking. Pull range: 3.',
+    alchemist:'Ranged attacks always apply Venom and randomly apply Freeze, Sunder, Rend, or Silence.',
     'ai-girlfriend':'Once per battle, charms the first target in range instead of attacking. It fights for her side for its next activation, then returns to its original side and deals 30% less damage for its next activation.',
-    symbiote:'Each activation tries to attach to an ally: front, behind, left, right. An attached Symbiote grants its host +2 attack and +1 armor. It detaches on host death and can attach again. Unattached: 5 health, 1 attack. Host bonuses are prototype values.',
-    buddhist:'While alive, gains 1 Karma when an Outlaw or Cursed unit dies and loses 1 when a Faith or Holy unit dies. On death reincarnates into a random unit: tier 1 at Karma ≤0, tier 2 at 1–3, tier 3 at 4+. Stats change 5% per Karma, capped at ±30%. Unclassified characters are neutral.',
-    'drug-dealer':'Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 4 health, 2 attack, and Rush. Prototype timing and stats.',
-    corruptor:'Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Prototype thresholds; Cultists have 3 health / 1 attack, Demons 12 health / 5 attack.'
+    symbiote:'Each activation tries to attach to an ally: front, behind, left, right. An attached Symbiote grants its host +2 attack and +1 armor. It detaches on host death and can attach again.',
+    buddhist:'While alive, gains 1 Karma when an Outlaw or Cursed unit dies and loses 1 when a Faith or Holy unit dies. On death reincarnates into a random unit: tier 1 at Karma ≤0, tier 2 at 1–3, tier 3 at 4+. Stats change 5% per Karma, capped at ±30%.',
+    'drug-dealer':'Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 4 health, 2 attack, and Rush.',
+    corruptor:'Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Cultists have 3 health / 1 attack, Demons 12 health / 5 attack.'
   };
   Object.assign(abilityTexts,{
-    abomination:'On hit, applies Fear: the target retreats one tile instead of acting on its next activation if space is free.',
-    prepper:'Cannot move. Attacks the first enemy in its column within 3 tiles. Has 2 armor.',
-    templar:'Has 2 armor, extra health, and starts with 5 Faith. No additional unique ability.',
-    viking:'Rush allows movement and an attack together. Each kill grants +1 attack, +1 maximum health, and +1 health through Fury.',
-    raider:'Rush allows movement and an attack together. No additional unique ability.',
-    mutant:'Venom poisons targets for 20% of maximum health for 2 activations. Flank deals 30% more damage when a friendly unit is adjacent to its target.',
-    sentinel:'Retaliate: after surviving an attack, immediately attacks the attacker.',
-    cowboy:'Ranged attacks within 3 tiles. Rush allows it to move and fire in the same activation.',
-    caveman:'No ability or keywords. Relies on its higher health.'
+    abomination:'',
+    prepper:'',
+    templar:'Starts with 5 Faith.',
+    viking:'',
+    raider:'',
+    mutant:'',
+    sentinel:'',
+    cowboy:'',
+    caveman:''
   });
-  abilityTexts.blob='Can merge with another Blob despite shared colors. Grows in proportion to absorbed Blobs, with a 10% bonus over their combined base health and attack. This exception also works with already merged Blobs.';
+  abilityTexts.blob='Can merge with another Blob despite shared colors. Grows in proportion to absorbed Blobs, with a 10% bonus over their combined base health and attack.';
   class Game {
     constructor(data, options = {}) {
       this.data = data;
@@ -98,7 +98,7 @@
       if (!card) throw new Error('Unknown card: '+id);
       if(card.enemyOnly){
         const keywords=card.keywords.map(k=>k.id),armor=card.keywords.find(k=>k.id==='armor')?.value||0;
-        return {health:card.stats.health,attack:card.stats.attack,range:keywords.includes('ranged')?3:1,armor,cost:0,price:null,colors:[],keywords,keywordDescriptions,pendingKeywords:[],pendingAbility:false,description:card.ability?.description||keywords.map(k=>keywordDescriptions[k]).join(' ')||'Weak melee creature. No unique ability.',symbol:'◇'};
+        return {health:card.stats.health,attack:card.stats.attack,range:keywords.includes('ranged')?3:1,armor,cost:0,price:null,colors:[],keywords,keywordDescriptions,pendingKeywords:[],pendingAbility:false,description:card.ability?.description||'',symbol:'◇'};
       }
       const tier = card.tier || 1;
       const stats = {health:7+tier*4,attack:2+tier,cost:tier===1?1:tier===2?2:3,range:1,armor:0};
@@ -132,8 +132,8 @@
       const handledByAbility={spawn:['mech','necromancer','family-man','buddhist','drug-dealer'],bomb:['mech'],mindshield:['mindguard']};
       const pendingKeywords=keywords.filter(keyword=>!implementedKeywords.has(keyword)&&!(handledByAbility[keyword]||[]).includes(id));
       const implementedDescription=abilityTexts[card.baseId||id];
-      const pendingAbility=!implementedDescription&&card.abilityStatus!=='intentionally-none'&&Boolean(card.ability||card.designNotes&&card.designNotes!=='pure stats');
-      const description=implementedDescription || (id==='posthuman'?'No unique ability. Has the highest base stats in the roster.':pendingAbility?'Uses stats and implemented keywords for now. Its unique ability is not implemented yet.':'Uses its stats and implemented keywords. No unique ability is assigned yet.');
+      const pendingAbility=!Object.prototype.hasOwnProperty.call(abilityTexts,card.baseId||id)&&card.abilityStatus!=='intentionally-none'&&Boolean(card.ability||card.designNotes&&card.designNotes!=='pure stats');
+      const description=implementedDescription || '';
       return {...stats,price:tier===1?5:tier===2?15:35,colors:card.colors||[],keywords,keywordDescriptions,pendingKeywords,pendingAbility,description,symbol:symbols[id] || '◇'};
     }
     newRun() {

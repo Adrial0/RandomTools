@@ -35,23 +35,23 @@
     const card=game.definition(id), p=game.profile(id);
     const partner=null;
     const compatibility=partner?game.recipesFor(partner,id).length?'merge-compatible':game.sharedColors(partner,id).length?'merge-conflict':'':'';
-    return `<button class="card ${extra} ${compatibility} ${index!==null?'hand-card':''}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price===null?'enemy unit':p.price+' gold to buy'}, ${p.attack} attack, ${p.health} health">${colorStrip(id)}${index!==null?portrait(id,'hand'):''}${p.price===null?'':`<span class="cost">${p.price}g</span>`}<span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'No keywords')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
+    return `<button class="card ${extra} ${compatibility} ${index!==null?'hand-card':''}" ${index!==null?`data-card="${index}"`:`data-choice="${escape(id)}"`} title="${escape(p.description)}" aria-label="${escape(card.name)}, colors ${escape(p.colors.join(' + '))}, ${p.price===null?'enemy unit':p.price+' gold to buy'}, ${p.attack} attack, ${p.health} health">${colorStrip(id)}${index!==null?portrait(id,'hand'):''}${p.price===null?'':`<span class="cost">${p.price}g</span>`}<span class="symbol" aria-hidden="true">${p.symbol}</span><strong>${escape(card.name)}</strong><span class="theme">${escape(card.theme)}</span><span class="ability-summary">${escape(p.description)}</span><span class="card-stats"><span class="card-damage" aria-label="${p.attack} damage">${p.attack}</span><span class="card-health" aria-label="${p.health} health">${p.health}</span></span><span class="card-keywords">${escape(p.keywords.join(' · ')||'')}</span>${compatibility==='merge-compatible'?'<span class="merge-match">✓ Can combine</span>':''}</button>`;
   }
   function mergeDetails(id) {
     const card=game.definition(id),baseId=card.baseId||id;
-    if(card.enemyOnly)return '<p class="small enemy-note">Enemy unit · unavailable in the shop or merge recipes.</p>';
+    if(card.enemyOnly)return '';
     const name=other=>`<span class="recipe-card">${colorStrip(other)}${escape(game.definition(other).name)}</span>`;
     const built=game.recipes.filter(r=>r.result===baseId);
     const next=game.recipes.filter(r=>r.ingredients.includes(baseId)).filter(r=>game.recipesFor(id,r.ingredients.find(partner=>partner!==baseId)||baseId).some(option=>option.result===r.result));
     const origins=card.mass?`<li>Combined Blobs · ${card.mass} Blobs absorbed</li>`:built.map(r=>`<li>${name(r.ingredients[0])} <span>+</span> ${name(r.ingredients[1])}</li>`).join('');
     const upgrades=next.map(r=>`<li>${name(r.ingredients.find(partner=>partner!==baseId)||baseId)} <span>→</span> ${name(r.result)}</li>`);
     if(baseId==='blob'&&(card.mass||1)<128)upgrades.unshift(`<li>${name('blob')} <span>→</span> ${name('blob:'+((card.mass||1)+1))}<small>Self-merge exception</small></li>`);
-    return `<section class="recipe-details"><h4>Created from</h4>${origins?`<ul>${origins}</ul>`:'<p class="small">Base card · no ingredients.</p>'}<h4>Merge with → result</h4>${upgrades.length?`<ul>${upgrades.join('')}</ul>`:'<p class="small">No further merge recipes.</p>'}</section>`;
+    return origins||upgrades.length?`<section class="recipe-details">${origins?`<h4>Created from</h4><ul>${origins}</ul>`:''}${upgrades.length?`<h4>Merge with → result</h4><ul>${upgrades.join('')}</ul>`:''}</section>`:'';
   }
   function inspect(id,unit) {
-    if(!id){$('inspector').innerHTML='<p>Select a card or a unit to inspect its stats and prototype behavior.</p>';return;}
+    if(!id){$('inspector').innerHTML='<p>Select a card.</p>';return;}
     const card=game.definition(id),p=game.profile(id);
-    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">${unit?unit.attack:p.attack} damage · ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1}${p.price===null?'':' · Shop '+p.price+' gold'}${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div><p>${escape(p.description)}</p>${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}<p class="small">Unspecified amounts and timing use prototype values.</p>`;
+    $('inspector').innerHTML=`${portrait(id)}<h3>${escape(card.name)}</h3>${colorStrip(id)}<span class="tag">${escape(card.theme)}</span>${card.subgroup?`<span class="tag">${escape(card.subgroup)}</span>`:''}<div class="stat-line">${unit?unit.attack:p.attack} damage · ${unit?unit.hp+'/'+unit.maxHP:p.health} health<br>Range ${unit?unit.range:p.range} · Armor ${unit?unit.armor:p.armor} · Move ${p.keywords.includes('stationary')?0:1}${p.price===null?'':' · Shop '+p.price+' gold'}${unit&&unit.faith?' · Faith '+unit.faith:''}${unit&&unit.karma!==undefined?' · Karma '+unit.karma:''}</div>${p.description?`<p>${escape(p.description)}</p>`:''}${p.keywords.map(k=>`<span class="tag" title="${escape(p.keywordDescriptions[k]||'Pending definition')}">${escape(k)}${p.pendingKeywords.includes(k)?' · pending':''}</span>`).join('')}<div class="keyword-notes">${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}</div>`;
     $('inspector').querySelector('.stat-line').insertAdjacentHTML('afterend',mergeDetails(id));
   }
   function render() {
@@ -72,7 +72,7 @@
     const phases={'planning':'Your turn','player-action':'Your army acts','enemy-action':'Enemy turn','battle-lost':'Battle lost','camp':'Victory','won':'Expedition complete','lost':'No lives left'};
     $('phase').textContent=phases[s.phase];$('turn-note').textContent='Battle '+(s.encounter+1)+' · Turn '+s.turn+(busy?' · resolving':'');
     $('end-turn').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice);
-    $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent='Deployment is free · '+s.deck.length+' cards owned';
+    $('hand-count').textContent='('+s.hand.length+')';$('deck-count').textContent=s.deck.length+' cards owned';
     $('hand').innerHTML=s.hand.length?s.hand.map((id,i)=>cardMarkup(id,i,selected===i?'selected':'')).join(''):'<div class="empty-hand">Buy cards from the shop to fill your hand.</div>';
     $('hand').querySelectorAll('button').forEach(b=>b.disabled=busy||s.phase!=='planning');
     $('shop').innerHTML=(s.shop||[]).map((id,index)=>id?cardMarkup(id,null,'shop-card').replace(`data-choice="${escape(id)}"`,`data-shop="${index}"`):'<div class="sold-card">Sold</div>').join('');
@@ -80,7 +80,7 @@
     $('reroll-shop').disabled=busy||s.phase!=='planning'||Boolean(s.pendingChoice)||s.gold<10;
     $('shop-note').textContent='Refreshes each round';
     const mapmaker=s.units.some(u=>u.team==='player'&&u.cardId==='mapmaker'&&!u.silence);
-    $('forecast').textContent=mapmaker&&s.nextEnemyCard?'Mapmaker reveals the next reinforcement: '+game.definition(s.nextEnemyCard).name+'.':'Buy a card to add it to your hand. Deployment is free.';
+    $('forecast').textContent=mapmaker&&s.nextEnemyCard?'Mapmaker reveals the next reinforcement: '+game.definition(s.nextEnemyCard).name+'.':'';
     $('journal').innerHTML=s.log.slice(0,14).map(line=>`<li>${escape(line)}</li>`).join('');
     if(inspected){const u=s.units.find(u=>u.uid===inspected.uid);inspect(inspected.id,u);}else inspect(selected!==null?s.hand[selected]:null);
   }
@@ -89,13 +89,13 @@
   function showPhase() {
     const s=game.state;
     if(s.pendingChoice)dialog(`<p class="eyebrow">LOREKEEPER</p><h2>Teach your row</h2><p>Choose a keyword for all current allies in the Lorekeeper's row.</p><div class="dialog-actions">${['armor','ranged','rush','ignite','retaliate','venom'].map(keyword=>`<button data-teach="${keyword}">${keyword}</button>`).join('')}</div>`);
-    else if(s.phase==='battle-lost')dialog(`<p class="eyebrow">BATTLE LOST</p><h2>${s.lives} ${s.lives===1?'life':'lives'} remaining</h2><p>Your base fell. Retry this battle with full base health, an empty hand, and a fresh shop. No cards carry over.</p><button class="primary" data-action="continue">Retry battle →</button>`);
+    else if(s.phase==='battle-lost')dialog(`<p class="eyebrow">BATTLE LOST</p><h2>${s.lives} ${s.lives===1?'life':'lives'} remaining</h2><button class="primary" data-action="continue">Retry battle →</button>`);
     else if(s.phase==='camp')showCamp();
     else if(['won','lost'].includes(s.phase))dialog(`<p class="eyebrow">${s.phase==='won'?'EXPEDITION COMPLETE':'EXPEDITION ENDED'}</p><h2>${s.phase==='won'?'You held the line.':'All three lives are gone.'}</h2><p>${s.phase==='won'?'All five strongholds defeated with '+s.lives+' lives remaining.':'Reached battle '+(s.encounter+1)+' of 5.'}</p><div class="dialog-actions"><button class="primary" data-action="restart">Start a new run</button><button class="secondary" data-action="close">Inspect battlefield</button></div>`);
   }
   function showCamp() {
     const s=game.state;
-    dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><p>Your next battle starts at full base health with an empty hand. All cards reset; gold and artifacts remain.</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<80||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 80 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
+    dialog(`<p class="eyebrow">BATTLE WON</p><h2>Prepare for the next battle</h2><p>${s.lives} / 3 lives · ${s.gold} gold</p><div class="dialog-actions"><button data-buy="war-banner" ${s.gold<80||s.artifacts.includes('war-banner')?'disabled':''}>War banner +15% damage · 80 gold${s.artifacts.includes('war-banner')?' · owned':''}</button></div><button class="primary" data-action="continue">Next battle →</button>`);
   }
   function revealMobileDetails() {if(matchMedia('(max-width:720px)').matches&&!$('overlay').open)dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">${selected!==null?'Back to board · place card':'Back to battle'}</button>`);}
   $('hand').addEventListener('click',event=>{const button=event.target.closest('[data-card]');if(!button||busy||Date.now()<suppressClickUntil)return;const i=Number(button.dataset.card);selected=null;inspected={id:game.state.hand[i]};render();revealMobileDetails();});
@@ -181,10 +181,10 @@
   $('new-run').addEventListener('click',()=>{if(busy)return;dialog('<h2>Start a new expedition?</h2><p>This replaces your current saved run.</p><div class="dialog-actions"><button class="primary" data-action="restart">Start new run</button><button data-action="close">Keep playing</button></div>');});
   $('journal-button').addEventListener('click',()=>{if(busy||$('overlay').open)return;dialog(`<h2>Battle log</h2><ol class="full-journal">${game.state.log.map(line=>`<li>${escape(line)}</li>`).join('')}</ol><button data-action="close">Back to battle</button>`);});
   $('details-button').addEventListener('click',()=>{if(busy||$('overlay').open)return;dialog(`<h2>Card details</h2>${$('inspector').innerHTML}<button data-action="close">Back to battle</button>`);});
-  $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">FULL ROSTER</p><h2>${game.playable().length} playable cards</h2><p>Every card is available for deployment, rewards, and recipe-based merging. Unfinished cards use provisional stats and implemented keywords while their abilities are being designed. Hover or focus a card to read its current behavior.</p><button data-action="enemy-catalog">View enemy roster</button><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
+  $('catalog-button').addEventListener('click',()=>dialog(`<p class="eyebrow">FULL ROSTER</p><h2>${game.playable().length} playable cards</h2><button data-action="enemy-catalog">View enemy roster</button><div id="choice-detail"></div><div class="catalog">${game.playable().map(c=>cardMarkup(c.id,null)).join('')}</div><button data-action="close">Back to battle</button>`));
   $('overlay-content').addEventListener('click',event=>{
     const action=event.target.closest('[data-action]')?.dataset.action;
-    if(action==='enemy-catalog')dialog(`<p class="eyebrow">ENEMY ROSTER</p><h2>${game.data.enemies.length} enemy units</h2><p>Enemy-only units from all eight themes. Hover, focus, or click to read keywords and special abilities.</p><div id="choice-detail"></div><div class="catalog enemy-catalog">${game.data.enemies.map(c=>cardMarkup(c.id,null,'enemy-card')).join('')}</div><button data-action="player-catalog">Player cards</button> <button data-action="close">Back to battle</button>`);
+    if(action==='enemy-catalog')dialog(`<p class="eyebrow">ENEMY ROSTER</p><h2>${game.data.enemies.length} enemy units</h2><div id="choice-detail"></div><div class="catalog enemy-catalog">${game.data.enemies.map(c=>cardMarkup(c.id,null,'enemy-card')).join('')}</div><button data-action="player-catalog">Player cards</button> <button data-action="close">Back to battle</button>`);
     if(action==='player-catalog')$('catalog-button').click();
     if(action==='close')$('overlay').close();
     if(action==='restart'){game.newRun();selected=null;inspected=null;$('overlay').close();save();render();}
@@ -194,7 +194,7 @@
     const choice=event.target.closest('[data-choice]')?.dataset.choice;
     if(choice&&$('overlay-content').querySelector('h2')?.textContent==='Choose your combination'){game.merge(choice);selected=null;$('overlay').close();save();render();}
   });
-  function showChoice(event) {const id=event.target.closest('[data-choice]')?.dataset.choice;const detail=$('choice-detail');if(id&&detail){const p=game.profile(id),card=game.definition(id);detail.innerHTML=`<strong>${escape(card.name)}</strong><p>${escape(p.description)}</p>${p.pendingKeywords.length?`<p class="small">Keywords pending implementation: ${escape(p.pendingKeywords.join(', '))}</p>`:''}${p.pendingAbility&&card.designNotes?`<p class="small">Planned ability: ${escape(card.designNotes)}</p>`:''}`;}}
+  function showChoice(event) {const id=event.target.closest('[data-choice]')?.dataset.choice;const detail=$('choice-detail');if(id&&detail){const p=game.profile(id),card=game.definition(id);detail.innerHTML=`<strong>${escape(card.name)}</strong>${p.description?`<p>${escape(p.description)}</p>`:''}${p.keywords.filter(k=>!p.pendingKeywords.includes(k)&&p.keywordDescriptions[k]).map(k=>`<p class="small"><strong>${escape(k)}:</strong> ${escape(p.keywordDescriptions[k])}</p>`).join('')}`;}}
   function showChoiceRecipes(event) {showChoice(event);const id=event.target.closest('[data-choice]')?.dataset.choice,detail=$('choice-detail');if(id&&detail)detail.insertAdjacentHTML('beforeend',mergeDetails(id));}
   $('overlay-content').addEventListener('mouseover',showChoiceRecipes);$('overlay-content').addEventListener('focusin',showChoiceRecipes);$('overlay-content').addEventListener('click',showChoiceRecipes);
   $('overlay').addEventListener('cancel',event=>{if(['battle-lost','camp'].includes(game.state.phase)||game.state.pendingChoice)event.preventDefault();});

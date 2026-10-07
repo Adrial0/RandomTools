@@ -67,7 +67,7 @@
       "keywords": [],
       "ability": {
         "id": "reanimate",
-        "description": "Returns once at half maximum HP after dying. Silence prevents reanimation."
+        "description": "Returns once at half maximum HP after dying."
       },
       "status": "prototype",
       "source": {
@@ -144,7 +144,7 @@
       "keywords": [],
       "ability": {
         "id": "orders",
-        "description": "Adjacent allies gain +1 damage while this unit is alive and unsilenced."
+        "description": "Adjacent allies gain +1 damage."
       },
       "status": "prototype",
       "source": {

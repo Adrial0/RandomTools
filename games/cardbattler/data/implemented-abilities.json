@@ -8,7 +8,7 @@
     {
       "id": "symbiote",
       "name": "Symbiote",
-      "description": "Each activation tries to attach to an ally: front, behind, left, right. An attached Symbiote grants its host +2 attack and +1 armor. It detaches on host death and can attach again. Unattached: 5 health, 1 attack. Host bonuses are prototype values.",
+      "description": "Each activation tries to attach to an ally: front, behind, left, right. An attached Symbiote grants its host +2 attack and +1 armor. It detaches on host death and can attach again.",
       "abilityPending": false,
       "keywords": [
         {
@@ -28,7 +28,7 @@
     {
       "id": "alien",
       "name": "Alien",
-      "description": "Venom: attacks poison the target for 20% of maximum health on each of its next 2 activations.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -48,7 +48,7 @@
     {
       "id": "blob",
       "name": "Blob",
-      "description": "Can merge with another Blob despite shared colors. Grows in proportion to absorbed Blobs, with a 10% bonus over their combined base health and attack. This exception also works with already merged Blobs.",
+      "description": "Can merge with another Blob despite shared colors. Grows in proportion to absorbed Blobs, with a 10% bonus over their combined base health and attack.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -62,7 +62,7 @@
     {
       "id": "witch-hunter",
       "name": "Witch Hunter",
-      "description": "Deals 50% bonus damage against Fantasy units. Prototype bonus.",
+      "description": "Deals 50% bonus damage against Fantasy units.",
       "abilityPending": false,
       "keywords": [
         {
@@ -82,7 +82,7 @@
     {
       "id": "psychic",
       "name": "Psychic",
-      "description": "Mental attack. Weakens its target for its next activation.",
+      "description": "Mental attacks.",
       "abilityPending": false,
       "keywords": [
         {
@@ -130,7 +130,7 @@
     {
       "id": "mage",
       "name": "Mage",
-      "description": "Melee splash: attacks the enemy directly ahead and enemies immediately to the left and right of that target. Range 1. Uses no mana.",
+      "description": "Melee splash: attacks the enemy directly ahead and enemies immediately to the left and right of that target.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -144,7 +144,7 @@
     {
       "id": "ceo",
       "name": "CEO",
-      "description": "Each activation, earns 1 gold per other living friendly Corporate unit. Prototype rate.",
+      "description": "Each activation, earns 1 gold per other living friendly Corporate unit.",
       "abilityPending": false,
       "keywords": [
         {
@@ -164,7 +164,7 @@
     {
       "id": "family-man",
       "name": "Family Man",
-      "description": "On its first activation, summons a Wife and Child into nearby empty tiles. Wife heals an adjacent ally for 1; Child has Rush. Prototype summon stats.",
+      "description": "On its first activation, summons a Wife and Child into nearby empty tiles. Wife heals an adjacent ally for 1; Child has Rush.",
       "abilityPending": false,
       "keywords": [
         {
@@ -184,7 +184,7 @@
     {
       "id": "businessman",
       "name": "Businessman",
-      "description": "Generates +1 gold each round while alive and not silenced. Each Businessman stacks.",
+      "description": "Generates +1 gold each round.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -198,7 +198,7 @@
     {
       "id": "crypto-dude",
       "name": "Crypto Dude",
-      "description": "Each activation, flips a coin: gain 1 gold or lose 1 gold, without going below zero. Prototype amounts.",
+      "description": "Each activation, flips a coin: gain 1 gold or lose 1 gold, without going below zero.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -212,7 +212,7 @@
     {
       "id": "corruptor",
       "name": "Corruptor",
-      "description": "Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Prototype thresholds; Cultists have 3 health / 1 attack, Demons 12 health / 5 attack.",
+      "description": "Each activation removes 1 Faith from adjacent enemies. Every second activation summons a Cultist. With three nearby Cultists, consumes them and summons a Demon. Cultists have 3 health / 1 attack, Demons 12 health / 5 attack.",
       "abilityPending": false,
       "keywords": [
         {
@@ -232,7 +232,7 @@
     {
       "id": "warlock",
       "name": "Warlock",
-      "description": "Arcane splash. Exploit deals 30% more damage to afflicted targets.",
+      "description": "Hits its target and enemies on either side.",
       "abilityPending": false,
       "keywords": [
         {
@@ -252,7 +252,7 @@
     {
       "id": "abomination",
       "name": "Abomination",
-      "description": "On hit, applies Fear: the target retreats one tile instead of acting on its next activation if space is free.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -292,7 +292,7 @@
     {
       "id": "witch",
       "name": "Witch",
-      "description": "Attacks weaken their target by 30% and silence its keywords and abilities until the Witch dies.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -331,12 +331,12 @@
     {
       "id": "cannoneer",
       "name": "Cannoneer",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
+          "description": "Attacks the first enemy in its column within range.",
           "pending": false
         },
         {
@@ -356,7 +356,7 @@
     {
       "id": "cowboy",
       "name": "Cowboy",
-      "description": "Ranged attacks within 3 tiles. Rush allows it to move and fire in the same activation.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -366,7 +366,7 @@
         },
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
+          "description": "Attacks the first enemy in its column within range.",
           "pending": false
         }
       ],
@@ -381,7 +381,7 @@
     {
       "id": "arms-dealer",
       "name": "Arms Dealer",
-      "description": "Friendly Gunslingers in the eight surrounding tiles deal 20% more damage. Uses the gun-user buff idea; gun summoning is unfinished.",
+      "description": "Friendly Gunslingers in the eight surrounding tiles deal 20% more damage.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -409,7 +409,7 @@
     {
       "id": "sheriff",
       "name": "Sheriff",
-      "description": "Marks the lowest-health visible enemy with a bounty. When its team kills that target, gains 2 gold. One active bounty per Sheriff. Prototype reward.",
+      "description": "Marks the lowest-health visible enemy with a bounty. When its team kills that target, gains 2 gold. One active bounty per Sheriff.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -423,7 +423,7 @@
     {
       "id": "templar",
       "name": "Templar",
-      "description": "Has 2 armor, extra health, and starts with 5 Faith. No additional unique ability.",
+      "description": "Starts with 5 Faith.",
       "abilityPending": false,
       "keywords": [
         {
@@ -499,7 +499,7 @@
     {
       "id": "pope",
       "name": "Pope",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -513,7 +513,7 @@
     {
       "id": "prophet",
       "name": "Prophet",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -527,7 +527,7 @@
     {
       "id": "prepper",
       "name": "Prepper",
-      "description": "Cannot move. Attacks the first enemy in its column within 3 tiles. Has 2 armor.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -542,7 +542,7 @@
         },
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
+          "description": "Attacks the first enemy in its column within range.",
           "pending": false
         }
       ],
@@ -577,7 +577,7 @@
     {
       "id": "hermit",
       "name": "Hermit",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -605,7 +605,7 @@
     {
       "id": "scavenger",
       "name": "Scavenger",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -633,7 +633,7 @@
     {
       "id": "cyborg",
       "name": "Cyborg",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -673,7 +673,7 @@
     {
       "id": "posthuman",
       "name": "Posthuman",
-      "description": "No unique ability. Has the highest base stats in the roster.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -713,7 +713,7 @@
     {
       "id": "data-miner",
       "name": "Data Miner",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [
         {
@@ -733,7 +733,7 @@
     {
       "id": "sentinel",
       "name": "Sentinel",
-      "description": "Retaliate: after surviving an attack, immediately attacks the attacker.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -753,7 +753,7 @@
     {
       "id": "robot",
       "name": "Robot",
-      "description": "Armor (1): reduces incoming physical damage by 1, to a minimum of 1. No additional unique ability.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -773,7 +773,7 @@
     {
       "id": "technomancer",
       "name": "Technomancer",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -787,7 +787,7 @@
     {
       "id": "dwarf",
       "name": "Dwarf",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [
         {
@@ -827,7 +827,7 @@
     {
       "id": "mutant",
       "name": "Mutant",
-      "description": "Venom poisons targets for 20% of maximum health for 2 activations. Flank deals 30% more damage when a friendly unit is adjacent to its target.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -852,7 +852,7 @@
     {
       "id": "goblin",
       "name": "Goblin",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [
         {
@@ -912,7 +912,7 @@
     {
       "id": "specialist",
       "name": "Specialist",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [
         {
@@ -932,7 +932,7 @@
     {
       "id": "space-monk",
       "name": "Space monk",
-      "description": "Immune to single-target ranged attacks. Melee and AoE can hit it. Pulls the first enemy in its column one tile closer, if the destination is empty, before attacking. Pull range: 3.",
+      "description": "Immune to single-target ranged attacks. Pulls the first enemy in its column one tile closer, if the destination is empty, before attacking. Pull range: 3.",
       "abilityPending": false,
       "keywords": [
         {
@@ -952,7 +952,7 @@
     {
       "id": "viking",
       "name": "Viking",
-      "description": "Rush allows movement and an attack together. Each kill grants +1 attack, +1 maximum health, and +1 health through Fury.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -977,7 +977,7 @@
     {
       "id": "raider",
       "name": "Raider",
-      "description": "Rush allows movement and an attack together. No additional unique ability.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -997,7 +997,7 @@
     {
       "id": "mech",
       "name": "Mech",
-      "description": "Ranged. On death, explodes into all 8 neighboring tiles, hitting both sides, then ejects a pilot.",
+      "description": "On death, explodes into all 8 neighboring tiles, hitting both sides, then ejects a pilot.",
       "abilityPending": false,
       "keywords": [
         {
@@ -1017,7 +1017,7 @@
         },
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
+          "description": "Attacks the first enemy in its column within range.",
           "pending": false
         }
       ],
@@ -1032,7 +1032,7 @@
     {
       "id": "buddhist",
       "name": "Buddhist",
-      "description": "While alive, gains 1 Karma when an Outlaw or Cursed unit dies and loses 1 when a Faith or Holy unit dies. On death reincarnates into a random unit: tier 1 at Karma ≤0, tier 2 at 1–3, tier 3 at 4+. Stats change 5% per Karma, capped at ±30%. Unclassified characters are neutral.",
+      "description": "While alive, gains 1 Karma when an Outlaw or Cursed unit dies and loses 1 when a Faith or Holy unit dies. On death reincarnates into a random unit: tier 1 at Karma ≤0, tier 2 at 1–3, tier 3 at 4+. Stats change 5% per Karma, capped at ±30%.",
       "abilityPending": false,
       "keywords": [
         {
@@ -1052,7 +1052,7 @@
     {
       "id": "drug-dealer",
       "name": "Drug Dealer",
-      "description": "Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 4 health, 2 attack, and Rush. Prototype timing and stats.",
+      "description": "Every third activation summons a Drug Addict into a nearby empty tile. Addicts have 4 health, 2 attack, and Rush.",
       "abilityPending": false,
       "keywords": [
         {
@@ -1072,7 +1072,7 @@
     {
       "id": "shipwright",
       "name": "Shipwright",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [
         {
@@ -1106,7 +1106,7 @@
     {
       "id": "miner",
       "name": "Miner",
-      "description": "Generates +1 gold each round while alive and not silenced. Each Miner stacks.",
+      "description": "Generates +1 gold each round.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1120,12 +1120,12 @@
     {
       "id": "alchemist",
       "name": "Alchemist",
-      "description": "Ranged attacks always apply Venom and randomly apply Freeze, Sunder, Rend, or Silence. Sunder removes 1 armor; Rend bleeds for 20% of attack for 2 activations; Freeze skips 1 activation; Silence lasts until the Alchemist dies.",
+      "description": "Ranged attacks always apply Venom and randomly apply Freeze, Sunder, Rend, or Silence.",
       "abilityPending": false,
       "keywords": [
         {
           "id": "ranged",
-          "description": "Attacks the first enemy in its column within range; shots pass through friendly units.",
+          "description": "Attacks the first enemy in its column within range.",
           "pending": false
         },
         {
@@ -1145,7 +1145,7 @@
     {
       "id": "bioengineer",
       "name": "Bioengineer",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [
         {
@@ -1185,7 +1185,7 @@
     {
       "id": "architect",
       "name": "Architect",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -1199,7 +1199,7 @@
     {
       "id": "brewer",
       "name": "Brewer",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -1213,7 +1213,7 @@
     {
       "id": "caveman",
       "name": "Caveman",
-      "description": "No ability or keywords. Relies on its higher health.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1227,7 +1227,7 @@
     {
       "id": "conqueror",
       "name": "Conqueror",
-      "description": "Deals 5% more damage per tile occupied by its team. Prototype bonus.",
+      "description": "Deals 5% more damage per tile occupied by its team.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1241,7 +1241,7 @@
     {
       "id": "dreamweaver",
       "name": "Dreamweaver",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -1255,7 +1255,7 @@
     {
       "id": "enforcer",
       "name": "Enforcer",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1269,7 +1269,7 @@
     {
       "id": "engineer",
       "name": "Engineer",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -1283,7 +1283,7 @@
     {
       "id": "explorer",
       "name": "Explorer",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -1297,7 +1297,7 @@
     {
       "id": "leader",
       "name": "Leader",
-      "description": "Command: allies in its row deal 10% more damage. Prototype value.",
+      "description": "Command: allies in its row deal 10% more damage.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1325,7 +1325,7 @@
     {
       "id": "mapmaker",
       "name": "Mapmaker",
-      "description": "Reveals the next enemy reinforcement card while alive and not silenced.",
+      "description": "Reveals the next enemy reinforcement card.",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1353,7 +1353,7 @@
     {
       "id": "oracle",
       "name": "Oracle",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1367,7 +1367,7 @@
     {
       "id": "pathfinder",
       "name": "Pathfinder",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
@@ -1381,7 +1381,7 @@
     {
       "id": "runesmith",
       "name": "Runesmith",
-      "description": "Uses its stats and implemented keywords. No unique ability is assigned yet.",
+      "description": "",
       "abilityPending": false,
       "keywords": [],
       "prototypeStats": {
@@ -1395,7 +1395,7 @@
     {
       "id": "seer",
       "name": "Seer",
-      "description": "Uses stats and implemented keywords for now. Its unique ability is not implemented yet.",
+      "description": "",
       "abilityPending": true,
       "keywords": [],
       "prototypeStats": {
